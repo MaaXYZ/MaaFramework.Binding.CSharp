@@ -3,124 +3,110 @@ using System.Text;
 
 namespace MaaCommon.Interop
 {
-    using MaaAdbControllerType = Int32;
-    using MaaBool = Byte;
-    using MaaCallbackTransparentArg = IntPtr;
-    using MaaControllerHandle = IntPtr;
-    using MaaId = Int64;
-    using MaaInstanceHandle = IntPtr;
-    using MaaOption = Int32;
-    using MaaOptionValue = IntPtr;
-    using MaaOptionValueSize = UInt64;
-    using MaaResourceHandle = IntPtr;
-    using MaaSize = UInt64;
-    using MaaStatus = Int32;
-    using MaaString = IntPtr;
-
     public class MaaProxy
     {
         private class MaaAPI
         {
-            public delegate void MaaCallbackDelegate(MaaString msg, MaaString details_json, MaaCallbackTransparentArg callback_arg);
+            public delegate void MaaCallbackDelegate(IntPtr msg, IntPtr details_json, IntPtr callback_arg);
 
             /* Resource */
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaResourceHandle MaaResourceCreate(MaaString user_path, MaaCallbackDelegate callback, MaaCallbackTransparentArg callbac_arg);
+            public static unsafe extern IntPtr MaaResourceCreate(IntPtr user_path, MaaCallbackDelegate callback, IntPtr callbac_arg);
             [DllImport("MaaFramework")]
-            public static unsafe extern void MaaResourceDestroy(MaaResourceHandle* res_handle);
+            public static unsafe extern void MaaResourceDestroy(IntPtr res_handle);
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaId MaaResourcePostResource(MaaResourceHandle res_handle, MaaString path);
+            public static unsafe extern Int64 MaaResourcePostResource(IntPtr res_handle, IntPtr path);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaStatus MaaResourceStatus(MaaResourceHandle res_handle, MaaId id);
+            public static unsafe extern Int32 MaaResourceStatus(IntPtr res_handle, Int64 id);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaStatus MaaResourceWait(MaaResourceHandle res_handle, MaaId id);
+            public static unsafe extern Int32 MaaResourceWait(IntPtr res_handle, Int64 id);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaResourceLoaded(MaaResourceHandle res_handle);
+            public static unsafe extern Byte MaaResourceLoaded(IntPtr res_handle);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaResourceSetOption(MaaResourceHandle res_handle, MaaOption option, MaaOptionValue value, MaaOptionValueSize value_size);
+            public static unsafe extern Byte MaaResourceSetOption(IntPtr res_handle, Int32 option, IntPtr value, UInt64 value_size);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaSize MaaResourceGetHash(MaaResourceHandle res_handle, byte* buff, MaaSize buff_size);
+            public static unsafe extern UInt64 MaaResourceGetHash(IntPtr res_handle, IntPtr buff, UInt64 buff_size);
 
             /* Controller */
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaControllerHandle MaaAdbControllerCreate(MaaString adb_path, MaaString address, MaaAdbControllerType type,
-                   MaaString config, MaaCallbackDelegate callback,
-                   MaaCallbackTransparentArg callback_arg);
+            public static unsafe extern IntPtr MaaAdbControllerCreate(IntPtr adb_path, IntPtr address, Int32 type,
+                   IntPtr config, MaaCallbackDelegate callback,
+                   IntPtr callback_arg);
             [DllImport("MaaFramework")]
-            public static unsafe extern void MaaControllerDestroy(MaaControllerHandle* ctrl_handle);
+            public static unsafe extern void MaaControllerDestroy(IntPtr ctrl_handle);
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaControllerSetOption(MaaControllerHandle ctrl_handle, MaaOption option, MaaOptionValue value, MaaOptionValueSize value_size);
+            public static unsafe extern Byte MaaControllerSetOption(IntPtr ctrl_handle, Int32 option, IntPtr value, UInt64 value_size);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaId MaaControllerPostConnection(MaaControllerHandle ctrl_handle);
+            public static unsafe extern Int64 MaaControllerPostConnection(IntPtr ctrl_handle);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaId MaaControllerPostClick(MaaControllerHandle ctrl_handle, Int32 x, Int32 y);
+            public static unsafe extern Int64 MaaControllerPostClick(IntPtr ctrl_handle, Int32 x, Int32 y);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaId MaaControllerPostSwipe(MaaControllerHandle ctrl_handle, Int32* x_steps, Int32* y_steps, Int32* step_delays, MaaSize buff_size);
+            public static unsafe extern Int64 MaaControllerPostSwipe(IntPtr ctrl_handle, Int32* x_steps, Int32* y_steps, Int32* step_delays, UInt64 buff_size);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaId MaaControllerPostScreencap(MaaControllerHandle ctrl_handle);
+            public static unsafe extern Int64 MaaControllerPostScreencap(IntPtr ctrl_handle);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaStatus MaaControllerStatus(MaaControllerHandle ctrl_handle, MaaId id);
+            public static unsafe extern Int32 MaaControllerStatus(IntPtr ctrl_handle, Int64 id);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaStatus MaaControllerWait(MaaControllerHandle ctrl_handle, MaaId id);
+            public static unsafe extern Int32 MaaControllerWait(IntPtr ctrl_handle, Int64 id);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaControllerConnected(MaaControllerHandle ctrl_handle);
+            public static unsafe extern Byte MaaControllerConnected(IntPtr ctrl_handle);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaSize MaaControllerGetImage(MaaControllerHandle ctrl_handle, IntPtr buff, MaaSize buff_size);
+            public static unsafe extern UInt64 MaaControllerGetImage(IntPtr ctrl_handle, IntPtr buff, UInt64 buff_size);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaSize MaaControllerGetUUID(MaaControllerHandle ctrl_handle, IntPtr buff, MaaSize buff_size);
+            public static unsafe extern UInt64 MaaControllerGetUUID(IntPtr ctrl_handle, IntPtr buff, UInt64 buff_size);
 
             /* Instance */
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaInstanceHandle MaaInstanceCreate(MaaCallbackDelegate callback, MaaCallbackTransparentArg callback_arg);
+            public static unsafe extern IntPtr MaaInstanceCreate(MaaCallbackDelegate callback, IntPtr callback_arg);
             [DllImport("MaaFramework")]
-            public static unsafe extern void MaaInstanceDestroy(MaaInstanceHandle* inst_handle);
+            public static unsafe extern void MaaInstanceDestroy(IntPtr inst_handle);
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaInstanceSetOption(MaaInstanceHandle inst_handle, MaaOption option, MaaOptionValue value, MaaOptionValueSize value_size);
+            public static unsafe extern Byte MaaInstanceSetOption(IntPtr inst_handle, Int32 option, IntPtr value, UInt64 value_size);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaBindResource(MaaInstanceHandle inst_handle, MaaResourceHandle resource_handle);
+            public static unsafe extern Byte MaaBindResource(IntPtr inst_handle, IntPtr resource_handle);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaBindController(MaaInstanceHandle inst_handle, MaaControllerHandle controller_handle);
+            public static unsafe extern Byte MaaBindController(IntPtr inst_handle, IntPtr controller_handle);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaInited(MaaInstanceHandle inst_handle);
+            public static unsafe extern Byte MaaInited(IntPtr inst_handle);
 
             [DllImport("MaaFramework")]
-            public static unsafe extern void MaaRegisterCustomTask(MaaInstanceHandle inst_handle, MaaString name, IntPtr task);
+            public static unsafe extern void MaaRegisterCustomTask(IntPtr inst_handle, IntPtr name, IntPtr task);
             [DllImport("MaaFramework")]
-            public static unsafe extern void MaaUnregisterCustomTask(MaaInstanceHandle inst_handle, MaaString name);
+            public static unsafe extern void MaaUnregisterCustomTask(IntPtr inst_handle, IntPtr name);
             [DllImport("MaaFramework")]
-            public static unsafe extern void MaaClearCustomTask(MaaInstanceHandle inst_handle);
+            public static unsafe extern void MaaClearCustomTask(IntPtr inst_handle);
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaId MaaInstancePostTask(MaaInstanceHandle inst_handle, MaaString name, MaaString args);
+            public static unsafe extern Int64 MaaInstancePostTask(IntPtr inst_handle, IntPtr name, IntPtr args);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaSetTaskParam(MaaInstanceHandle inst_handle, MaaId id, MaaString args);
+            public static unsafe extern Byte MaaSetTaskParam(IntPtr inst_handle, Int64 id, IntPtr args);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaStatus MaaTaskStatus(MaaInstanceHandle inst_handle, MaaId id);
+            public static unsafe extern Int32 MaaTaskStatus(IntPtr inst_handle, Int64 id);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaStatus MaaTaskWait(MaaInstanceHandle inst_handle, MaaId id);
+            public static unsafe extern Int32 MaaTaskWait(IntPtr inst_handle, Int64 id);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaTaskAllFinished(MaaInstanceHandle inst_handle);
+            public static unsafe extern Byte MaaTaskAllFinished(IntPtr inst_handle);
 
             [DllImport("MaaFramework")]
-            public static unsafe extern void MaaStop(MaaInstanceHandle inst_handle);
+            public static unsafe extern void MaaStop(IntPtr inst_handle);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaResourceHandle MaaGetResource(MaaInstanceHandle inst_handle);
+            public static unsafe extern IntPtr MaaGetResource(IntPtr inst_handle);
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaControllerHandle MaaGetController(MaaInstanceHandle inst_handle);
+            public static unsafe extern IntPtr MaaGetController(IntPtr inst_handle);
 
             /* Utils */
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaBool MaaSetGlobalOption(MaaOption option, MaaOptionValue value, MaaOptionValueSize value_size);
+            public static unsafe extern Byte MaaSetGlobalOption(Int32 option, IntPtr value, UInt64 value_size);
 
             [DllImport("MaaFramework")]
-            public static unsafe extern MaaString MaaVersion();
+            public static unsafe extern IntPtr MaaVersion();
         }
 
         private class NativeString
@@ -183,82 +169,78 @@ namespace MaaCommon.Interop
                 Touch_MaaTouch | Key_MaaTouch,
         };
 
-        public delegate void CallbackDelegate(string msg, string details_json, MaaCallbackTransparentArg callback_arg);
-        public static MaaControllerHandle MaaAdbControllerCreate(string adb_path, string address, AdbControllerType type, string config, CallbackDelegate callback, MaaCallbackTransparentArg callback_arg)
+        public delegate void CallbackDelegate(string msg, string details_json, IntPtr callback_arg);
+        public static IntPtr MaaAdbControllerCreate(string adb_path, string address, AdbControllerType type, string config, CallbackDelegate callback, IntPtr callback_arg)
         {
             var adb_path_native = new NativeString(adb_path);
             var address_native = new NativeString(address);
             var config_native = new NativeString(config);
-            return MaaAPI.MaaAdbControllerCreate(adb_path_native.str, address_native.str, (MaaAdbControllerType)type, config_native.str, (msg, detail, arg) => { callback(Marshal.PtrToStringUTF8(msg) ?? "", Marshal.PtrToStringUTF8(detail) ?? "{}", arg); }, callback_arg);
+            return MaaAPI.MaaAdbControllerCreate(adb_path_native.str, address_native.str, (Int32)type, config_native.str, (msg, detail, arg) => { callback(Marshal.PtrToStringUTF8(msg) ?? "", Marshal.PtrToStringUTF8(detail) ?? "{}", arg); }, callback_arg);
         }
 
-        public static void MaaControllerDestroy(MaaControllerHandle handle)
+        public static void MaaControllerDestroy(IntPtr handle)
         {
-            unsafe
-            {
-                // 下面这玩意真的能用吗 好吧，确实能用
-                MaaAPI.MaaControllerDestroy(&handle);
-            }
+            MaaAPI.MaaControllerDestroy(handle);
         }
 
-        public static bool MaaControllerSetScreenshotTargetWidth(MaaControllerHandle handle, int width)
+        public static bool MaaControllerSetScreenshotTargetWidth(IntPtr handle, int width)
         {
-            return 0 != MaaAPI.MaaControllerSetOption(handle, (MaaOption)CtrlOption.ScreenshotTargetWidth, width, sizeof(int));
+            return 0 != MaaAPI.MaaControllerSetOption(handle, (Int32)CtrlOption.ScreenshotTargetWidth, width, sizeof(int));
         }
 
-        public static bool MaaControllerSetScreenshotTargetHeight(MaaControllerHandle handle, int height)
+        public static bool MaaControllerSetScreenshotTargetHeight(IntPtr handle, int height)
         {
-            return 0 != MaaAPI.MaaControllerSetOption(handle, (MaaOption)CtrlOption.ScreenshotTargetHeight, height, sizeof(int));
+            return 0 != MaaAPI.MaaControllerSetOption(handle, (Int32)CtrlOption.ScreenshotTargetHeight, height, sizeof(int));
         }
 
-        public static bool MaaControllerSetDefaultAppPackageEntry(MaaControllerHandle handle, string entry)
+        public static bool MaaControllerSetDefaultAppPackageEntry(IntPtr handle, string entry)
         {
             var entry_native = new NativeString(entry);
-            return 0 != MaaAPI.MaaControllerSetOption(handle, (MaaOption)CtrlOption.DefaultAppPackageEntry, entry_native.str, (MaaOptionValueSize)entry_native.len);
+            return 0 != MaaAPI.MaaControllerSetOption(handle, (Int32)CtrlOption.DefaultAppPackageEntry, entry_native.str, (UInt64)entry_native.len);
         }
 
-        public static bool MaaControllerSetDefaultAppPackage(MaaControllerHandle handle, string package)
+        public static bool MaaControllerSetDefaultAppPackage(IntPtr handle, string package)
         {
             var package_native = new NativeString(package);
-            return 0 != MaaAPI.MaaControllerSetOption(handle, (MaaOption)CtrlOption.DefaultAppPackage, package_native.str, (MaaOptionValueSize)package_native.len);
+            return 0 != MaaAPI.MaaControllerSetOption(handle, (Int32)CtrlOption.DefaultAppPackage, package_native.str, (UInt64)package_native.len);
         }
 
-        public static MaaId MaaControllerPostConnection(MaaControllerHandle ctrl_handle)
+        public static Int64 MaaControllerPostConnection(IntPtr ctrl_handle)
         {
             return MaaAPI.MaaControllerPostConnection(ctrl_handle);
         }
 
-        public static  MaaId MaaControllerPostClick(MaaControllerHandle ctrl_handle, Int32 x, Int32 y)
+        public static  Int64 MaaControllerPostClick(IntPtr ctrl_handle, Int32 x, Int32 y)
         {
             return MaaAPI.MaaControllerPostClick(ctrl_handle, x, y);
         }
 
-        // public static  MaaId MaaControllerPostSwipe(MaaControllerHandle ctrl_handle, Int32* x_steps, Int32* y_steps, Int32* step_delays, MaaSize buff_size);
+        // public static  Int64 MaaControllerPostSwipe(IntPtr ctrl_handle, Int32* x_steps, Int32* y_steps, Int32* step_delays, UInt64 buff_size);
 
-        public static MaaId MaaControllerPostScreencap(MaaControllerHandle ctrl_handle)
+        public static Int64 MaaControllerPostScreencap(IntPtr ctrl_handle)
         {
             return MaaAPI.MaaControllerPostScreencap(ctrl_handle);
         }
 
-        public static MaaStatus MaaControllerStatus(MaaControllerHandle ctrl_handle, MaaId id)
+        public static Int32 MaaControllerStatus(IntPtr ctrl_handle, Int64 id)
         {
             return MaaAPI.MaaControllerStatus(ctrl_handle, id);
         }
 
-        public static MaaStatus MaaControllerWait(MaaControllerHandle ctrl_handle, MaaId id)
+        public static Int32 MaaControllerWait(IntPtr ctrl_handle, Int64 id)
         {
             return MaaAPI.MaaControllerWait(ctrl_handle, id);
         }
 
-        public static bool MaaControllerConnected(MaaControllerHandle ctrl_handle)
+        public static bool MaaControllerConnected(IntPtr ctrl_handle)
         {
             return 0 != MaaAPI.MaaControllerConnected(ctrl_handle);
         }
 
-        public static byte[]? MaaControllerGetImage(MaaControllerHandle ctrl_handle, int buffer_size = 3 << 20)
+        public static byte[]? MaaControllerGetImage(IntPtr ctrl_handle, int buffer_size = 3 << 20)
         {
             IntPtr buf = Marshal.AllocHGlobal(buffer_size);
-            MaaSize size = MaaAPI.MaaControllerGetImage(ctrl_handle, buf, (MaaSize)buffer_size);
+            UInt64 size = MaaAPI.MaaControllerGetImage(ctrl_handle, buf, (UInt64)buffer_size);
             if (size == 0xFFFFFFFFFFFFFFFF)
             {
                 Marshal.FreeHGlobal(buf);
@@ -273,10 +255,10 @@ namespace MaaCommon.Interop
             }
         }
 
-        public static string? MaaControllerGetUUID(MaaControllerHandle ctrl_handle, int buffer_size = 64) // 16
+        public static string? MaaControllerGetUUID(IntPtr ctrl_handle, int buffer_size = 64) // 16
         {
             IntPtr buf = Marshal.AllocHGlobal(buffer_size);
-            MaaSize size = MaaAPI.MaaControllerGetUUID(ctrl_handle, buf, (MaaSize)buffer_size);
+            UInt64 size = MaaAPI.MaaControllerGetUUID(ctrl_handle, buf, (UInt64)buffer_size);
             if (size == 0xFFFFFFFFFFFFFFFF)
             {
                 Marshal.FreeHGlobal(buf);
@@ -293,7 +275,7 @@ namespace MaaCommon.Interop
         public static bool SetLogging(string path)
         {
             var path_native = new NativeString(path);
-            return 0 != MaaAPI.MaaSetGlobalOption((MaaOption)GlobalOption.Logging, path_native.str, (MaaOptionValueSize)path_native.len);
+            return 0 != MaaAPI.MaaSetGlobalOption((Int32)GlobalOption.Logging, path_native.str, (UInt64)path_native.len);
         }
 
         public static string Version()
