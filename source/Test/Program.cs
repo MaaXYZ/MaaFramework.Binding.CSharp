@@ -210,23 +210,22 @@ var config = """
 
 Console.WriteLine(MaaProxy.Version());
 
-var ctrl = MaaProxy.MaaAdbControllerCreate("adb.exe", "127.0.0.1:16384", MaaProxy.AdbControllerType.Input_Preset_Adb | MaaProxy.AdbControllerType.Screencap_RawByNetcat, config, (msg, detail, arg) =>
+using (var ctrl = new MaaController(MaaProxy.MaaAdbControllerCreate("adb.exe", "127.0.0.1:16384", MaaProxy.AdbControllerType.Input_Preset_Adb | MaaProxy.AdbControllerType.Screencap_RawByNetcat, config, (msg, detail, arg) =>
 {
     Console.WriteLine("@@@ CALLBACK: {0} {1}", msg, detail);
-}, 0);
-
-var id = MaaProxy.MaaControllerPostConnection(ctrl);
-MaaProxy.MaaControllerWait(ctrl, id);
-
-Console.WriteLine("@@@ UUID: {0}", MaaProxy.MaaControllerGetUUID(ctrl));
-
-id = MaaProxy.MaaControllerPostScreencap(ctrl);
-MaaProxy.MaaControllerWait(ctrl, id);
-
-var arr = MaaProxy.MaaControllerGetImage(ctrl);
-if (arr != null)
+}, 0)))
 {
-    File.WriteAllBytes("test.png", arr);
-}
+    var id = MaaProxy.MaaControllerPostConnection(ctrl.GetHandle());
+    MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
 
-MaaProxy.MaaControllerDestroy(ctrl);
+    Console.WriteLine("@@@ UUID: {0}", MaaProxy.MaaControllerGetUUID(ctrl.GetHandle()));
+
+    id = MaaProxy.MaaControllerPostScreencap(ctrl.GetHandle());
+    MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
+
+    var arr = MaaProxy.MaaControllerGetImage(ctrl.GetHandle());
+    if (arr != null)
+    {
+        File.WriteAllBytes("test.png", arr);
+    }
+}

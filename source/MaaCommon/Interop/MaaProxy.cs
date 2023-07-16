@@ -12,7 +12,7 @@ namespace MaaCommon.Interop
             /* Resource */
 
             [DllImport("MaaFramework")]
-            public static unsafe extern IntPtr MaaResourceCreate(IntPtr user_path, MaaCallbackDelegate callback, IntPtr callbac_arg);
+            public static unsafe extern IntPtr MaaResourceCreate(IntPtr user_path, MaaCallbackDelegate callback, IntPtr callback_arg);
             [DllImport("MaaFramework")]
             public static unsafe extern void MaaResourceDestroy(IntPtr res_handle);
 
@@ -169,13 +169,57 @@ namespace MaaCommon.Interop
                 Touch_MaaTouch | Key_MaaTouch,
         };
 
-        public delegate void CallbackDelegate(string msg, string details_json, IntPtr callback_arg);
-        public static IntPtr MaaAdbControllerCreate(string adb_path, string address, AdbControllerType type, string config, CallbackDelegate callback, IntPtr callback_arg)
+        public delegate void MaaCallbackDelegate(string msg, string details_json, IntPtr callback_arg);
+
+        private static MaaAPI.MaaCallbackDelegate WrapCallback(MaaCallbackDelegate callback)
+        {
+            return (msg, detail, arg) => { callback(Marshal.PtrToStringUTF8(msg) ?? "", Marshal.PtrToStringUTF8(detail) ?? "{}", arg); };
+        }
+
+        public static IntPtr MaaResourceCreate(string user_path, MaaCallbackDelegate callback, IntPtr callback_arg)
+        {
+            var user_path_native = new NativeString(user_path);
+            return MaaAPI.MaaResourceCreate(user_path_native.str, WrapCallback(callback), callback_arg);
+        }
+
+        public static void MaaResourceDestroy(IntPtr res_handle)
+        {
+            MaaResourceDestroy(res_handle);
+        }
+
+        public static Int64 MaaResourcePostResource(IntPtr res_handle, string path)
+        {
+            var path_native = new NativeString(path);
+            return MaaAPI.MaaResourcePostResource(res_handle, path_native.str);
+        }
+
+        public static Int32 MaaResourceStatus(IntPtr res_handle, Int64 id)
+        {
+            return MaaAPI.MaaResourceStatus(res_handle, id);
+        }
+
+        public static Int32 MaaResourceWait(IntPtr res_handle, Int64 id)
+        {
+            return MaaAPI.MaaResourceWait(res_handle, id);
+        }
+
+        public static bool MaaResourceLoaded(IntPtr res_handle)
+        {
+            return 0 != MaaAPI.MaaResourceLoaded(res_handle);
+        }
+
+        // 没有可选的Option，乐
+        // public static bool MaaResourceSetOption(IntPtr res_handle, Int32 option, IntPtr value, UInt64 value_size)
+
+        // 没人实现
+        // public static string MaaResourceGetHash(IntPtr res_handle, UInt64 buffer_size);
+
+        public static IntPtr MaaAdbControllerCreate(string adb_path, string address, AdbControllerType type, string config, MaaCallbackDelegate callback, IntPtr callback_arg)
         {
             var adb_path_native = new NativeString(adb_path);
             var address_native = new NativeString(address);
             var config_native = new NativeString(config);
-            return MaaAPI.MaaAdbControllerCreate(adb_path_native.str, address_native.str, (Int32)type, config_native.str, (msg, detail, arg) => { callback(Marshal.PtrToStringUTF8(msg) ?? "", Marshal.PtrToStringUTF8(detail) ?? "{}", arg); }, callback_arg);
+            return MaaAPI.MaaAdbControllerCreate(adb_path_native.str, address_native.str, (Int32)type, config_native.str, WrapCallback(callback), callback_arg);
         }
 
         public static void MaaControllerDestroy(IntPtr handle)
@@ -210,7 +254,7 @@ namespace MaaCommon.Interop
             return MaaAPI.MaaControllerPostConnection(ctrl_handle);
         }
 
-        public static  Int64 MaaControllerPostClick(IntPtr ctrl_handle, Int32 x, Int32 y)
+        public static Int64 MaaControllerPostClick(IntPtr ctrl_handle, Int32 x, Int32 y)
         {
             return MaaAPI.MaaControllerPostClick(ctrl_handle, x, y);
         }
@@ -270,6 +314,80 @@ namespace MaaCommon.Interop
                 Marshal.FreeHGlobal(buf);
                 return ret;
             }
+        }
+
+        public static IntPtr MaaInstanceCreate(MaaCallbackDelegate callback, IntPtr callback_arg)
+        {
+            return MaaAPI.MaaInstanceCreate(WrapCallback(callback), callback_arg);
+        }
+
+        public static void MaaInstanceDestroy(IntPtr inst_handle)
+        {
+            MaaAPI.MaaInstanceDestroy(inst_handle);
+        }
+
+        // public static bool MaaInstanceSetOption(IntPtr inst_handle, Int32 option, IntPtr value, UInt64 value_size);
+
+        public static bool MaaBindResource(IntPtr inst_handle, IntPtr resource_handle)
+        {
+            return 0 != MaaAPI.MaaBindResource(inst_handle, resource_handle);
+        }
+
+        public static bool MaaBindController(IntPtr inst_handle, IntPtr controller_handle)
+        {
+            return 0 != MaaAPI.MaaBindController(inst_handle, controller_handle);
+        }
+
+        public static bool MaaInited(IntPtr inst_handle)
+        {
+            return 0 != MaaAPI.MaaInited(inst_handle);
+        }
+
+        // public static void MaaRegisterCustomTask(IntPtr inst_handle, IntPtr name, IntPtr task)
+        // public static void MaaUnregisterCustomTask(IntPtr inst_handle, IntPtr name);
+        // public static void MaaClearCustomTask(IntPtr inst_handle);
+
+        public static Int64 MaaInstancePostTask(IntPtr inst_handle, string name, string args)
+        {
+            var name_native = new NativeString(name);
+            var args_native = new NativeString(args);
+            return MaaAPI.MaaInstancePostTask(inst_handle, name_native.str, args_native.str);
+        }
+
+        public static bool MaaSetTaskParam(IntPtr inst_handle, Int64 id, string args)
+        {
+            var args_native = new NativeString(args);
+            return 0 != MaaAPI.MaaSetTaskParam(inst_handle, id, args_native.str);
+        }
+
+        public static Int32 MaaTaskStatus(IntPtr inst_handle, Int64 id)
+        {
+            return MaaAPI.MaaTaskStatus(inst_handle, id);
+        }
+
+        public static Int32 MaaTaskWait(IntPtr inst_handle, Int64 id)
+        {
+            return MaaAPI.MaaTaskWait(inst_handle, id);
+        }
+
+        public static bool MaaTaskAllFinished(IntPtr inst_handle)
+        {
+            return 0 != MaaAPI.MaaTaskAllFinished(inst_handle);
+        }
+
+        public static void MaaStop(IntPtr inst_handle)
+        {
+            MaaAPI.MaaStop(inst_handle);
+        }
+
+        public static IntPtr MaaGetResource(IntPtr inst_handle)
+        {
+            return MaaAPI.MaaGetResource(inst_handle);
+        }
+
+        public static IntPtr MaaGetController(IntPtr inst_handle)
+        {
+            return MaaAPI.MaaGetController(inst_handle);
         }
 
         public static bool SetLogging(string path)
