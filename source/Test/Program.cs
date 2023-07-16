@@ -1,6 +1,22 @@
 ﻿using MaaCommon.Interop;
 
-var config = """
+class ControllerLogger : MaaControllerResponser
+{
+    public void ConnectSuccess(string uuid, int width, int height)
+    {
+        Console.WriteLine("### Connect Success! uuid: {0}  resolution: {1}x{2}", uuid, width, height);
+    }
+    public void ConnectFailed(string why)
+    {
+        Console.WriteLine("### Connect Failed! why:{0}", why);
+    }
+}
+
+class MaaCommonTest
+{
+    public static void Main(string[] args)
+    {
+        var config = """
  {
     "prebuilt": {
         "minicap": {
@@ -208,24 +224,23 @@ var config = """
 }
 """;
 
-Console.WriteLine(MaaProxy.Version());
+        Console.WriteLine(MaaProxy.Version());
 
-using (var ctrl = new MaaController(MaaProxy.MaaAdbControllerCreate("adb.exe", "127.0.0.1:16384", MaaProxy.AdbControllerType.Input_Preset_Adb | MaaProxy.AdbControllerType.Screencap_RawByNetcat, config, (msg, detail, arg) =>
-{
-    Console.WriteLine("@@@ CALLBACK: {0} {1}", msg, detail);
-}, 0)))
-{
-    var id = MaaProxy.MaaControllerPostConnection(ctrl.GetHandle());
-    MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
+        using (var ctrl = MaaController.CreateAdb("adb.exe", "127.0.0.1:16384", MaaProxy.AdbControllerType.Input_Preset_Adb | MaaProxy.AdbControllerType.Screencap_RawByNetcat, config, new ControllerLogger()))
+        {
+            var id = MaaProxy.MaaControllerPostConnection(ctrl.GetHandle());
+            MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
 
-    Console.WriteLine("@@@ UUID: {0}", MaaProxy.MaaControllerGetUUID(ctrl.GetHandle()));
+            Console.WriteLine("@@@ UUID: {0}", MaaProxy.MaaControllerGetUUID(ctrl.GetHandle()));
 
-    id = MaaProxy.MaaControllerPostScreencap(ctrl.GetHandle());
-    MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
+            id = MaaProxy.MaaControllerPostScreencap(ctrl.GetHandle());
+            MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
 
-    var arr = MaaProxy.MaaControllerGetImage(ctrl.GetHandle());
-    if (arr != null)
-    {
-        File.WriteAllBytes("test.png", arr);
+            var arr = MaaProxy.MaaControllerGetImage(ctrl.GetHandle());
+            if (arr != null)
+            {
+                File.WriteAllBytes("test.png", arr);
+            }
+        }
     }
 }
