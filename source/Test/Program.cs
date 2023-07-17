@@ -1,4 +1,5 @@
 ﻿using MaaCommon.Interop;
+using MaaCommon.Server;
 
 class ControllerLogger : MaaControllerResponser
 {
@@ -224,23 +225,30 @@ class MaaCommonTest
 }
 """;
 
-        Console.WriteLine(MaaProxy.Version());
+        Console.WriteLine(MaaProxy.MaaVersion());
 
-        using (var ctrl = MaaController.CreateAdb("adb.exe", "127.0.0.1:16384", MaaProxy.AdbControllerType.Input_Preset_Adb | MaaProxy.AdbControllerType.Screencap_RawByNetcat, config, new ControllerLogger()))
+        //using (var ctrl = MaaController.CreateAdb("adb", "emulator-5554", MaaProxy.AdbControllerType.Input_Preset_Adb | MaaProxy.AdbControllerType.Screencap_RawByNetcat, config, new ControllerLogger()))
+        //{
+        //    var id = MaaProxy.MaaControllerPostConnection(ctrl.GetHandle());
+        //    MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
+
+        //    Console.WriteLine("@@@ UUID: {0}", MaaProxy.MaaControllerGetUUID(ctrl.GetHandle()));
+
+        //    id = MaaProxy.MaaControllerPostScreencap(ctrl.GetHandle());
+        //    MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
+
+        //    var arr = MaaProxy.MaaControllerGetImage(ctrl.GetHandle());
+        //    if (arr != null)
+        //    {
+        //        File.WriteAllBytes("test.png", arr);
+        //    }
+        //}
+
+        HttpService service = new HttpService();
+        service.listen();
+        while(true)
         {
-            var id = MaaProxy.MaaControllerPostConnection(ctrl.GetHandle());
-            MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
-
-            Console.WriteLine("@@@ UUID: {0}", MaaProxy.MaaControllerGetUUID(ctrl.GetHandle()));
-
-            id = MaaProxy.MaaControllerPostScreencap(ctrl.GetHandle());
-            MaaProxy.MaaControllerWait(ctrl.GetHandle(), id);
-
-            var arr = MaaProxy.MaaControllerGetImage(ctrl.GetHandle());
-            if (arr != null)
-            {
-                File.WriteAllBytes("test.png", arr);
-            }
+            Thread.Sleep(5000);
         }
     }
 }

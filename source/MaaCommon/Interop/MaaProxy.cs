@@ -390,13 +390,13 @@ namespace MaaCommon.Interop
             return MaaAPI.MaaGetController(inst_handle);
         }
 
-        public static bool SetLogging(string path)
+        public static bool MaaSetLogging(string path)
         {
             var path_native = new NativeString(path);
             return 0 != MaaAPI.MaaSetGlobalOption((Int32)GlobalOption.Logging, path_native.str, (UInt64)path_native.len);
         }
 
-        public static string Version()
+        public static string MaaVersion()
         {
             return Marshal.PtrToStringUTF8(MaaAPI.MaaVersion()) ?? "";
         }
