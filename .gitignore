@@ -438,3 +438,5 @@ enc_temp_folder/*
 
 # Nuke
 .nuke/temp/*
+
+.DS_Store
