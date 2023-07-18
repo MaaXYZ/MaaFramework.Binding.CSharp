@@ -33,6 +33,9 @@ indent_size = 2
 end_of_line = lf
 indent_size = 2
 
+[*.g.cs]
+generated_code = true
+
 [*.{cs,vb}]
 #### Naming styles ####
 
