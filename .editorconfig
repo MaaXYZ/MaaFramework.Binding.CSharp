@@ -167,6 +167,6 @@ dotnet_diagnostic.CA1715.severity = silent
 dotnet_diagnostic.CA1724.severity = silent
 dotnet_diagnostic.S3925.severity = silent
 dotnet_diagnostic.S125.severity = silent
-dotnet_diagnostic.S1134.severity = hint
+dotnet_diagnostic.S1134.severity = suggestion
 
 dotnet_diagnostic.CA5392.severity = silent
