@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace MaaCommon.Enums;
 
@@ -6,7 +6,7 @@ namespace MaaCommon.Enums;
 /// 
 /// </summary>
 [SuppressMessage("Design", "CA1008:Enums should have zero value")]
-public enum ControllerOptions
+public enum ControllerOption
 {
     /// <summary>
     ///     

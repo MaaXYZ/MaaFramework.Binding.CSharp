@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace MaaCommon.Enums;
 
@@ -6,7 +6,7 @@ namespace MaaCommon.Enums;
 ///     Global options
 /// </summary>
 [SuppressMessage("Design", "CA1008:Enums should have zero value")]
-public enum GlobalOptions
+public enum GlobalOption
 {
     /// <summary>
     ///     Whether to enable logging

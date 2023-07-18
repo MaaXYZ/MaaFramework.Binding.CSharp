@@ -176,7 +176,7 @@ public static class MaaApiWrapper
         var packageNative = Encoding.UTF8.GetBytes(package);
         return 0 != MaaApi.MaaControllerSetOption(
             handle,
-            (int)ControllerOptions.DefaultAppPackage,
+            ControllerOption.DefaultAppPackage,
             ref packageNative[0],
             (ulong)packageNative.Length);
     }
@@ -436,7 +436,7 @@ public static class MaaApiWrapper
     {
         var pathNative = Encoding.UTF8.GetBytes(path);
         return 0 != MaaApi.MaaSetGlobalOption(
-            (int)GlobalOptions.Logging,
+            GlobalOption.Logging,
             ref pathNative[0],
             (ulong)pathNative.Length);
     }

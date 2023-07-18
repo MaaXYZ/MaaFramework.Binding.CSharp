@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using MaaCommon.Enums;
+using System.Runtime.InteropServices;
 
 // P/Invoke method should not be visible
 #pragma warning disable CA1401
@@ -62,9 +63,9 @@ public static partial class MaaApi
     public static partial void MaaControllerDestroy(IntPtr ctrl_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, int option, IntPtr value, ulong value_size);
+    public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, ControllerOption option, IntPtr value, ulong value_size);
     [LibraryImport("MaaFramework")]
-    public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, int option, ref byte value, ulong value_size);
+    public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, ControllerOption option, ref byte value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
     public static partial long MaaControllerPostConnection(IntPtr ctrl_handle);
@@ -149,9 +150,9 @@ public static partial class MaaApi
     /* Utils */
 
     [LibraryImport("MaaFramework")]
-    public static partial byte MaaSetGlobalOption(int option, IntPtr value, ulong value_size);
+    public static partial byte MaaSetGlobalOption(GlobalOption option, IntPtr value, ulong value_size);
     [LibraryImport("MaaFramework")]
-    public static partial byte MaaSetGlobalOption(int option, ref byte value, ulong value_size);
+    public static partial byte MaaSetGlobalOption(GlobalOption option, ref byte value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
     public static partial IntPtr MaaVersion();
