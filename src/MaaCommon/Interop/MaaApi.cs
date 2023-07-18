@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 // P/Invoke method should not be visible
 #pragma warning disable CA1401
@@ -28,13 +28,13 @@ public static partial class MaaApi
     /* Resource */
 
     [LibraryImport("MaaFramework")]
-    public static partial IntPtr MaaResourceCreate(IntPtr user_path, MaaCallback callback, IntPtr callback_arg);
+    public static partial IntPtr MaaResourceCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string user_path, MaaCallback callback, IntPtr callback_arg);
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaResourceDestroy(IntPtr res_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int64 MaaResourcePostResource(IntPtr res_handle, IntPtr path);
+    public static partial Int64 MaaResourcePostResource(IntPtr res_handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string path);
 
     [LibraryImport("MaaFramework")]
     public static partial Int32 MaaResourceStatus(IntPtr res_handle, Int64 id);
@@ -54,8 +54,8 @@ public static partial class MaaApi
     /* Controller */
 
     [LibraryImport("MaaFramework")]
-    public static partial IntPtr MaaAdbControllerCreate(IntPtr adb_path, IntPtr address, Int32 type,
-        IntPtr config, MaaCallback callback,
+    public static partial IntPtr MaaAdbControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string address, Int32 type,
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaCallback callback,
         IntPtr callback_arg);
 
     [LibraryImport("MaaFramework")]
@@ -63,6 +63,8 @@ public static partial class MaaApi
 
     [LibraryImport("MaaFramework")]
     public static partial Byte MaaControllerSetOption(IntPtr ctrl_handle, Int32 option, IntPtr value, UInt64 value_size);
+    [LibraryImport("MaaFramework")]
+    public static partial Byte MaaControllerSetOption(IntPtr ctrl_handle, Int32 option, ref byte value, UInt64 value_size);
 
     [LibraryImport("MaaFramework")]
     public static partial Int64 MaaControllerPostConnection(IntPtr ctrl_handle);
@@ -121,10 +123,10 @@ public static partial class MaaApi
     public static partial void MaaClearCustomTask(IntPtr inst_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int64 MaaInstancePostTask(IntPtr inst_handle, IntPtr name, IntPtr args);
+    public static partial Int64 MaaInstancePostTask(IntPtr inst_handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaSetTaskParam(IntPtr inst_handle, Int64 id, IntPtr args);
+    public static partial Byte MaaSetTaskParam(IntPtr inst_handle, long id, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);
 
     [LibraryImport("MaaFramework")]
     public static partial Int32 MaaTaskStatus(IntPtr inst_handle, Int64 id);
@@ -148,6 +150,8 @@ public static partial class MaaApi
 
     [LibraryImport("MaaFramework")]
     public static partial Byte MaaSetGlobalOption(Int32 option, IntPtr value, UInt64 value_size);
+    [LibraryImport("MaaFramework")]
+    public static partial Byte MaaSetGlobalOption(int option, ref byte value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
     public static partial IntPtr MaaVersion();

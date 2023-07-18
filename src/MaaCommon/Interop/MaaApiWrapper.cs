@@ -1,7 +1,6 @@
-using System.Runtime.InteropServices;
-using MaaCommon.Common;
+﻿using System.Runtime.InteropServices;
+using System.Text;
 using MaaCommon.Enums;
-using MaaCommon.Extensions;
 
 namespace MaaCommon.Interop;
 
@@ -29,8 +28,7 @@ public static class MaaApiWrapper
     {
         ArgumentNullException.ThrowIfNull(userPath);
         
-        var userPathNative = new NativeString(userPath);
-        return MaaApi.MaaResourceCreate(userPathNative.Value, callback.Wrap(), callbackArgument);
+        return MaaApi.MaaResourceCreate(userPath, callback.Wrap(), callbackArgument);
     }
 
     /// <summary>
@@ -52,8 +50,7 @@ public static class MaaApiWrapper
     {
         ArgumentNullException.ThrowIfNull(path);
         
-        var pathNative = new NativeString(path);
-        return MaaApi.MaaResourcePostResource(resourceHandle, pathNative.Value);
+        return MaaApi.MaaResourcePostResource(resourceHandle, path);
     }
 
     /// <summary>
@@ -105,10 +102,10 @@ public static class MaaApiWrapper
         ArgumentNullException.ThrowIfNull(config);
         
         return MaaApi.MaaAdbControllerCreate(
-            adbPath.ToNativePtr(),
-            address.ToNativePtr(),
+            adbPath,
+            address,
             (int)type,
-            config.ToNativePtr(),
+            config,
             callback.Wrap(),
             callbackArgument);
     }
@@ -132,7 +129,7 @@ public static class MaaApiWrapper
     {
         return MaaApi.MaaControllerSetOption(
             handle,
-            (int)ControllerOptions.ScreenshotTargetWidth,
+            ControllerOption.ScreenshotTargetWidth,
             width, 
             sizeof(int)) != 0;
     }
@@ -147,7 +144,7 @@ public static class MaaApiWrapper
     {
         return MaaApi.MaaControllerSetOption(
             handle,
-            (int)ControllerOptions.ScreenshotTargetHeight, 
+            ControllerOption.ScreenshotTargetHeight, 
             height, 
             sizeof(int)) != 0;
     }
@@ -160,11 +157,11 @@ public static class MaaApiWrapper
     /// <returns></returns>
     public static bool MaaControllerSetDefaultAppPackageEntry(IntPtr handle, string entry)
     {
-        var entryNative = entry.ToNative();
+        var entryNative = Encoding.UTF8.GetBytes(entry);
         return MaaApi.MaaControllerSetOption(
             handle,
-            (int)ControllerOptions.DefaultAppPackageEntry, 
-            entryNative.Value,
+            ControllerOption.DefaultAppPackageEntry, 
+            ref entryNative[0],
             (UInt64)entryNative.Length) != 0;
     }
 
@@ -176,11 +173,11 @@ public static class MaaApiWrapper
     /// <returns></returns>
     public static bool MaaControllerSetDefaultAppPackage(IntPtr handle, string package)
     {
-        var packageNative = package.ToNative();
+        var packageNative = Encoding.UTF8.GetBytes(package);
         return 0 != MaaApi.MaaControllerSetOption(
             handle,
             (Int32)ControllerOptions.DefaultAppPackage,
-            packageNative.Value,
+            ref packageNative[0],
             (UInt64)packageNative.Length);
     }
 
@@ -354,7 +351,7 @@ public static class MaaApiWrapper
     /// <returns></returns>
     public static Int64 MaaInstancePostTask(IntPtr instanceHandler, string name, string args)
     {
-        return MaaApi.MaaInstancePostTask(instanceHandler, name.ToNativePtr(), args.ToNativePtr());
+        return MaaApi.MaaInstancePostTask(instanceHandler, name, args);
     }
 
     /// <summary>
@@ -366,7 +363,7 @@ public static class MaaApiWrapper
     /// <returns></returns>
     public static bool MaaSetTaskParam(IntPtr instanceHandler, Int64 id, string args)
     {
-        return 0 != MaaApi.MaaSetTaskParam(instanceHandler, id, args.ToNativePtr());
+        return 0 != MaaApi.MaaSetTaskParam(instanceHandler, id, args);
     }
 
     /// <summary>
@@ -437,10 +434,10 @@ public static class MaaApiWrapper
     /// <returns></returns>
     public static bool MaaSetLogging(string path)
     {
-        var pathNative = path.ToNative();
+        var pathNative = Encoding.UTF8.GetBytes(path);
         return 0 != MaaApi.MaaSetGlobalOption(
             (Int32)GlobalOptions.Logging,
-            pathNative.Value,
+            ref pathNative[0],
             (UInt64)pathNative.Length);
     }
 
