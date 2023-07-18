@@ -5,48 +5,97 @@ using MaaCommon.Enums;
 namespace MaaCommon.Interop;
 
 /// <summary>
-///     MAA DLL interop proxy
+///     A wrapper of <see cref="MaaApi"/>. This class is intended to make the API more .NET style.
+///     Prefer to use this class instead of <see cref="MaaApi"/> directly if you want to use MAA API.
 /// </summary>
 public static class MaaApiWrapper
 {
     /// <summary>
     ///     MAA callback delegate
     /// </summary>
-    public delegate void MaaCallback(string msg, string detailsJson, IntPtr callbackArgument);
+    public delegate void MaaCallback(string msg, string detailsJson, string identifier);
 
     private static MaaApi.MaaCallback Wrap(this MaaCallback callback) => (msg, detail, arg) =>
-        callback(Marshal.PtrToStringUTF8(msg) ?? string.Empty, Marshal.PtrToStringUTF8(detail) ?? "{}", arg);
+        callback(
+            Marshal.PtrToStringUTF8(msg) ?? string.Empty, 
+            Marshal.PtrToStringUTF8(detail) ?? "{}", 
+            Marshal.PtrToStringUTF8(arg) ?? string.Empty);
 
+    #region Miscellaneous
+
+    /// <summary>
+    ///     Get Maa version
+    /// </summary>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaVersion"/>
+    /// </remarks>
+    public static string GetMaaVersion()
+    {
+        var ptr = MaaApi.MaaVersion();
+        var version = Marshal.PtrToStringUTF8(ptr);
+        Marshal.FreeHGlobal(ptr);
+        return version!;
+    }
+
+    /// <summary>
+    ///     Set global option
+    /// </summary>
+    /// <param name="option">The option name</param>
+    /// <param name="value">The option value</param>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaSetGlobalOption(int, ref byte, ulong)"/>
+    /// </remarks>
+    public static bool SetGlobalOption(GlobalOption option, string value)
+    {
+        var bytes = Encoding.UTF8.GetBytes(value);
+        return MaaApi.MaaSetGlobalOption((int)option, ref bytes[0], (ulong)bytes.Length) != 0;
+    }
+    
+    #endregion
+    
+    #region Resource
+    
     /// <summary>
     ///     Create Maa Resource instance
     /// </summary>
     /// <param name="userPath"></param>
     /// <param name="callback"></param>
-    /// <param name="callbackArgument"></param>
+    /// <param name="identifier"></param>
     /// <returns></returns>
-    public static IntPtr MaaResourceCreate(string userPath, MaaCallback callback, IntPtr callbackArgument)
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaResourceCreate"/>
+    /// </remarks>
+    public static IntPtr CreateMaaResource(string userPath, MaaCallback callback, string identifier)
     {
         ArgumentNullException.ThrowIfNull(userPath);
-        
-        return MaaApi.MaaResourceCreate(userPath, callback.Wrap(), callbackArgument);
+        var bytes = Encoding.UTF8.GetBytes(identifier);
+        return MaaApi.MaaResourceCreate(userPath, callback.Wrap(), ref bytes[0]);
     }
 
     /// <summary>
-    ///     Destroy Maa Resource instance
+    ///     Dispose Maa Resource instance
     /// </summary>
-    /// <param name="resourceHandle"></param>
-    public static void MaaResourceDestroy(IntPtr resourceHandle)
+    /// <param name="resourceHandle">The MAA Resource instance handle</param>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaResourceDestroy"/>
+    /// </remarks>
+    public static void DisposeMaaResource(IntPtr resourceHandle)
     {
         MaaApi.MaaResourceDestroy(resourceHandle);
     }
 
     /// <summary>
-    ///     
+    ///     Append a load resource async job, could be called multiple times
     /// </summary>
-    /// <param name="resourceHandle"></param>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public static long MaaResourcePostResource(IntPtr resourceHandle, string path)
+    /// <param name="resourceHandle">The Maa Resource instance handle</param>
+    /// <param name="path">The resource path</param>
+    /// <returns>A resource load task id</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaResourcePostResource"/>
+    /// </remarks>
+    public static long AppendAddResourceJob(IntPtr resourceHandle, string path)
     {
         ArgumentNullException.ThrowIfNull(path);
         
@@ -54,37 +103,87 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    ///     Get resource status
+    ///     Get resource loading status
     /// </summary>
-    /// <param name="resourceHandle"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public static int MaaResourceStatus(IntPtr resourceHandle, long id)
+    /// <param name="resourceHandle">The Maa Resource instance handle</param>
+    /// <param name="id">The load resource async job id you got from <see cref="AppendAddResourceJob"/></param>
+    /// <returns>The status of the resource loading job</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaResourceStatus"/>
+    /// </remarks>
+    public static int GetResourceStatus(IntPtr resourceHandle, long id)
     {
         return MaaApi.MaaResourceStatus(resourceHandle, id);
     }
 
     /// <summary>
-    ///     Wait for resource
+    ///     Wait for load resource job
     /// </summary>
-    /// <param name="resourceHandle"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public static int MaaResourceWait(IntPtr resourceHandle, long id)
+    /// <param name="resourceHandle">The Maa Resource instance handle</param>
+    /// <param name="id">The load resource async job id you got from <see cref="AppendAddResourceJob"/></param>
+    /// <returns>The status of the resource loading job</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaResourceWait"/>
+    /// </remarks>
+    public static int WaitResourceJob(IntPtr resourceHandle, long id)
     {
         return MaaApi.MaaResourceWait(resourceHandle, id);
     }
 
     /// <summary>
-    ///     Resource loaded
+    ///     Check if resource is fully loaded
     /// </summary>
-    /// <param name="resourceHandle"></param>
+    /// <param name="resourceHandle">The Maa Resource instance handle</param>
     /// <returns></returns>
-    public static bool MaaResourceLoaded(IntPtr resourceHandle)
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaResourceLoaded"/>
+    /// </remarks>
+    public static bool IsResourceLoaded(IntPtr resourceHandle)
     {
         return MaaApi.MaaResourceLoaded(resourceHandle) != 0;
     }
 
+    /// <summary>
+    ///     Set resource option
+    /// </summary>
+    /// <param name="resourceHandle">The Maa Resource instance handle</param>
+    /// <param name="option">The option id</param>
+    /// <param name="value">The option value</param>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaResourceSetOption(IntPtr, int, ref byte, ulong)"/>
+    /// </remarks>
+    public static bool SetResourceOption(IntPtr resourceHandle, ResourceOption option, string value)
+    {
+        var bytes = Encoding.UTF8.GetBytes(value);
+        return MaaApi.MaaResourceSetOption(resourceHandle, (int)option, ref bytes[0], (ulong)bytes.Length) != 0;
+    }
+
+    /// <summary>
+    ///     Get resource hash
+    /// </summary>
+    /// <param name="resourceHandle">The Maa Resource instance handle</param>
+    /// <returns>Null if failed to get hash, or a UTF-8 string represent of hash</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaResourceGetHash"/>
+    /// </remarks>
+    public static string? GetResourceHash(IntPtr resourceHandle)
+    {
+        const int buffSize = 1024;
+        var buff = Marshal.AllocHGlobal(buffSize);
+        var size = MaaApi.MaaResourceGetHash(resourceHandle, buff, buffSize);
+        if (size == ulong.MaxValue)
+        {
+            return null;
+        }
+
+        var hash = Marshal.PtrToStringUTF8(buff, (int)size);
+        Marshal.FreeHGlobal(buff);
+        return hash;
+    }
+
+    #endregion
+    
     /// <summary>
     ///     Create an MAA ADB Controller instance
     /// </summary>
@@ -95,7 +194,7 @@ public static class MaaApiWrapper
     /// <param name="callback"></param>
     /// <param name="callbackArgument"></param>
     /// <returns></returns>
-    public static IntPtr MaaAdbControllerCreate(string adbPath, string address, AdbControllerTypes type, string config, MaaCallback callback, IntPtr callbackArgument)
+    public static IntPtr MaaAdbControllerCreate(string adbPath, string address, AdbControllerType type, string config, MaaCallback callback, IntPtr callbackArgument)
     {
         ArgumentNullException.ThrowIfNull(adbPath);
         ArgumentNullException.ThrowIfNull(address);
@@ -425,28 +524,5 @@ public static class MaaApiWrapper
     public static IntPtr MaaGetController(IntPtr instanceHandler)
     {
         return MaaApi.MaaGetController(instanceHandler);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public static bool MaaSetLogging(string path)
-    {
-        var pathNative = Encoding.UTF8.GetBytes(path);
-        return 0 != MaaApi.MaaSetGlobalOption(
-            GlobalOption.Logging,
-            ref pathNative[0],
-            (ulong)pathNative.Length);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public static string MaaVersion()
-    {
-        return Marshal.PtrToStringUTF8(MaaApi.MaaVersion()) ?? string.Empty;
     }
 }

@@ -29,7 +29,7 @@ public static partial class MaaApi
     /* Resource */
 
     [LibraryImport("MaaFramework")]
-    public static partial IntPtr MaaResourceCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string user_path, MaaCallback callback, IntPtr callback_arg);
+    public static partial IntPtr MaaResourceCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string user_path, MaaCallback callback, ref byte callback_arg);
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaResourceDestroy(IntPtr res_handle);
@@ -48,7 +48,9 @@ public static partial class MaaApi
 
     [LibraryImport("MaaFramework")]
     public static partial byte MaaResourceSetOption(IntPtr res_handle, int option, IntPtr value, ulong value_size);
-
+    [LibraryImport("MaaFramework")]
+    public static partial byte MaaResourceSetOption(IntPtr res_handle, int option, ref byte value, ulong value_size);
+    
     [LibraryImport("MaaFramework")]
     public static partial ulong MaaResourceGetHash(IntPtr res_handle, IntPtr buff, ulong buff_size);
 
@@ -150,9 +152,9 @@ public static partial class MaaApi
     /* Utils */
 
     [LibraryImport("MaaFramework")]
-    public static partial byte MaaSetGlobalOption(GlobalOption option, IntPtr value, ulong value_size);
+    public static partial byte MaaSetGlobalOption(int option, IntPtr value, ulong value_size);
     [LibraryImport("MaaFramework")]
-    public static partial byte MaaSetGlobalOption(GlobalOption option, ref byte value, ulong value_size);
+    public static partial byte MaaSetGlobalOption(int option, ref byte value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
     public static partial IntPtr MaaVersion();

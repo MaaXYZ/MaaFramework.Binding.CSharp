@@ -6,7 +6,7 @@ namespace MaaCommon.Enums;
 /// 
 /// </summary>
 [SuppressMessage("Design", "CA1008:Enums should have zero value")]
-public enum AdbControllerTypes
+public enum AdbControllerType
 {
     /// <summary>
     ///     

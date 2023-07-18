@@ -1,15 +1,17 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace MaaCommon.Enums;
+﻿namespace MaaCommon.Enums;
 
 /// <summary>
 ///     Global options
 /// </summary>
-[SuppressMessage("Design", "CA1008:Enums should have zero value")]
 public enum GlobalOption
 {
     /// <summary>
-    ///     Whether to enable logging
+    ///     Invalid option
+    /// </summary>
+    Invalid = 0,
+    
+    /// <summary>
+    ///     The logging option, value is the path to the log directory
     /// </summary>
     Logging = 1
 }
