@@ -46,7 +46,7 @@ public static class MaaApiWrapper
     /// <param name="resourceHandle"></param>
     /// <param name="path"></param>
     /// <returns></returns>
-    public static Int64 MaaResourcePostResource(IntPtr resourceHandle, string path)
+    public static long MaaResourcePostResource(IntPtr resourceHandle, string path)
     {
         ArgumentNullException.ThrowIfNull(path);
         
@@ -59,7 +59,7 @@ public static class MaaApiWrapper
     /// <param name="resourceHandle"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static Int32 MaaResourceStatus(IntPtr resourceHandle, Int64 id)
+    public static int MaaResourceStatus(IntPtr resourceHandle, long id)
     {
         return MaaApi.MaaResourceStatus(resourceHandle, id);
     }
@@ -70,7 +70,7 @@ public static class MaaApiWrapper
     /// <param name="resourceHandle"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static Int32 MaaResourceWait(IntPtr resourceHandle, Int64 id)
+    public static int MaaResourceWait(IntPtr resourceHandle, long id)
     {
         return MaaApi.MaaResourceWait(resourceHandle, id);
     }
@@ -162,7 +162,7 @@ public static class MaaApiWrapper
             handle,
             ControllerOption.DefaultAppPackageEntry, 
             ref entryNative[0],
-            (UInt64)entryNative.Length) != 0;
+            (ulong)entryNative.Length) != 0;
     }
 
     /// <summary>
@@ -176,9 +176,9 @@ public static class MaaApiWrapper
         var packageNative = Encoding.UTF8.GetBytes(package);
         return 0 != MaaApi.MaaControllerSetOption(
             handle,
-            (Int32)ControllerOptions.DefaultAppPackage,
+            (int)ControllerOptions.DefaultAppPackage,
             ref packageNative[0],
-            (UInt64)packageNative.Length);
+            (ulong)packageNative.Length);
     }
 
     /// <summary>
@@ -186,7 +186,7 @@ public static class MaaApiWrapper
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <returns></returns>
-    public static Int64 MaaControllerPostConnection(IntPtr controllerHandler)
+    public static long MaaControllerPostConnection(IntPtr controllerHandler)
     {
         return MaaApi.MaaControllerPostConnection(controllerHandler);
     }
@@ -198,7 +198,7 @@ public static class MaaApiWrapper
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
-    public static Int64 MaaControllerPostClick(IntPtr controllerHandler, Int32 x, Int32 y)
+    public static long MaaControllerPostClick(IntPtr controllerHandler, int x, int y)
     {
         return MaaApi.MaaControllerPostClick(controllerHandler, x, y);
     }
@@ -210,7 +210,7 @@ public static class MaaApiWrapper
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <returns></returns>
-    public static Int64 MaaControllerPostScreencap(IntPtr controllerHandler)
+    public static long MaaControllerPostScreencap(IntPtr controllerHandler)
     {
         return MaaApi.MaaControllerPostScreencap(controllerHandler);
     }
@@ -221,7 +221,7 @@ public static class MaaApiWrapper
     /// <param name="controllerHandler"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static Int32 MaaControllerStatus(IntPtr controllerHandler, Int64 id)
+    public static int MaaControllerStatus(IntPtr controllerHandler, long id)
     {
         return MaaApi.MaaControllerStatus(controllerHandler, id);
     }
@@ -232,7 +232,7 @@ public static class MaaApiWrapper
     /// <param name="controllerHandler"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static Int32 MaaControllerWait(IntPtr controllerHandler, Int64 id)
+    public static int MaaControllerWait(IntPtr controllerHandler, long id)
     {
         return MaaApi.MaaControllerWait(controllerHandler, id);
     }
@@ -256,7 +256,7 @@ public static class MaaApiWrapper
     public static byte[]? MaaControllerGetImage(IntPtr controllerHandler, int bufferSize = 3 << 20)
     {
         var buf = Marshal.AllocHGlobal(bufferSize);
-        var size = MaaApi.MaaControllerGetImage(controllerHandler, buf, (UInt64)bufferSize);
+        var size = MaaApi.MaaControllerGetImage(controllerHandler, buf, (ulong)bufferSize);
         if (size == 0xFFFFFFFFFFFFFFFF)
         {
             Marshal.FreeHGlobal(buf);
@@ -278,7 +278,7 @@ public static class MaaApiWrapper
     public static string? MaaControllerGetUuid(IntPtr controllerHandler, int bufferSize = 64) // 16
     {
         var buf = Marshal.AllocHGlobal(bufferSize);
-        var size = MaaApi.MaaControllerGetUUID(controllerHandler, buf, (UInt64)bufferSize);
+        var size = MaaApi.MaaControllerGetUUID(controllerHandler, buf, (ulong)bufferSize);
         if (size == 0xFFFFFFFFFFFFFFFF)
         {
             Marshal.FreeHGlobal(buf);
@@ -349,7 +349,7 @@ public static class MaaApiWrapper
     /// <param name="name"></param>
     /// <param name="args"></param>
     /// <returns></returns>
-    public static Int64 MaaInstancePostTask(IntPtr instanceHandler, string name, string args)
+    public static long MaaInstancePostTask(IntPtr instanceHandler, string name, string args)
     {
         return MaaApi.MaaInstancePostTask(instanceHandler, name, args);
     }
@@ -361,7 +361,7 @@ public static class MaaApiWrapper
     /// <param name="id"></param>
     /// <param name="args"></param>
     /// <returns></returns>
-    public static bool MaaSetTaskParam(IntPtr instanceHandler, Int64 id, string args)
+    public static bool MaaSetTaskParam(IntPtr instanceHandler, long id, string args)
     {
         return 0 != MaaApi.MaaSetTaskParam(instanceHandler, id, args);
     }
@@ -372,7 +372,7 @@ public static class MaaApiWrapper
     /// <param name="instanceHandler"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static Int32 MaaTaskStatus(IntPtr instanceHandler, Int64 id)
+    public static int MaaTaskStatus(IntPtr instanceHandler, long id)
     {
         return MaaApi.MaaTaskStatus(instanceHandler, id);
     }
@@ -383,7 +383,7 @@ public static class MaaApiWrapper
     /// <param name="instanceHandler"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static Int32 MaaTaskWait(IntPtr instanceHandler, Int64 id)
+    public static int MaaTaskWait(IntPtr instanceHandler, long id)
     {
         return MaaApi.MaaTaskWait(instanceHandler, id);
     }
@@ -436,9 +436,9 @@ public static class MaaApiWrapper
     {
         var pathNative = Encoding.UTF8.GetBytes(path);
         return 0 != MaaApi.MaaSetGlobalOption(
-            (Int32)GlobalOptions.Logging,
+            (int)GlobalOptions.Logging,
             ref pathNative[0],
-            (UInt64)pathNative.Length);
+            (ulong)pathNative.Length);
     }
 
     /// <summary>

@@ -34,27 +34,27 @@ public static partial class MaaApi
     public static partial void MaaResourceDestroy(IntPtr res_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int64 MaaResourcePostResource(IntPtr res_handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string path);
+    public static partial long MaaResourcePostResource(IntPtr res_handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string path);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int32 MaaResourceStatus(IntPtr res_handle, Int64 id);
+    public static partial int MaaResourceStatus(IntPtr res_handle, long id);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int32 MaaResourceWait(IntPtr res_handle, Int64 id);
+    public static partial int MaaResourceWait(IntPtr res_handle, long id);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaResourceLoaded(IntPtr res_handle);
+    public static partial byte MaaResourceLoaded(IntPtr res_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaResourceSetOption(IntPtr res_handle, Int32 option, IntPtr value, UInt64 value_size);
+    public static partial byte MaaResourceSetOption(IntPtr res_handle, int option, IntPtr value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
-    public static partial UInt64 MaaResourceGetHash(IntPtr res_handle, IntPtr buff, UInt64 buff_size);
+    public static partial ulong MaaResourceGetHash(IntPtr res_handle, IntPtr buff, ulong buff_size);
 
     /* Controller */
 
     [LibraryImport("MaaFramework")]
-    public static partial IntPtr MaaAdbControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string address, Int32 type,
+    public static partial IntPtr MaaAdbControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string address, int type,
         [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaCallback callback,
         IntPtr callback_arg);
 
@@ -62,36 +62,36 @@ public static partial class MaaApi
     public static partial void MaaControllerDestroy(IntPtr ctrl_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaControllerSetOption(IntPtr ctrl_handle, Int32 option, IntPtr value, UInt64 value_size);
+    public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, int option, IntPtr value, ulong value_size);
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaControllerSetOption(IntPtr ctrl_handle, Int32 option, ref byte value, UInt64 value_size);
+    public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, int option, ref byte value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int64 MaaControllerPostConnection(IntPtr ctrl_handle);
+    public static partial long MaaControllerPostConnection(IntPtr ctrl_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int64 MaaControllerPostClick(IntPtr ctrl_handle, Int32 x, Int32 y);
+    public static partial long MaaControllerPostClick(IntPtr ctrl_handle, int x, int y);
 
     [LibraryImport("MaaFramework")]
-    public static unsafe partial Int64 MaaControllerPostSwipe(IntPtr ctrl_handle, Int32* x_steps, Int32* y_steps, Int32* step_delays, UInt64 buff_size);
+    public static unsafe partial long MaaControllerPostSwipe(IntPtr ctrl_handle, int* x_steps, int* y_steps, int* step_delays, ulong buff_size);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int64 MaaControllerPostScreencap(IntPtr ctrl_handle);
+    public static partial long MaaControllerPostScreencap(IntPtr ctrl_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int32 MaaControllerStatus(IntPtr ctrl_handle, Int64 id);
+    public static partial int MaaControllerStatus(IntPtr ctrl_handle, long id);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int32 MaaControllerWait(IntPtr ctrl_handle, Int64 id);
+    public static partial int MaaControllerWait(IntPtr ctrl_handle, long id);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaControllerConnected(IntPtr ctrl_handle);
+    public static partial byte MaaControllerConnected(IntPtr ctrl_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial UInt64 MaaControllerGetImage(IntPtr ctrl_handle, IntPtr buff, UInt64 buff_size);
+    public static partial ulong MaaControllerGetImage(IntPtr ctrl_handle, IntPtr buff, ulong buff_size);
 
     [LibraryImport("MaaFramework")]
-    public static partial UInt64 MaaControllerGetUUID(IntPtr ctrl_handle, IntPtr buff, UInt64 buff_size);
+    public static partial ulong MaaControllerGetUUID(IntPtr ctrl_handle, IntPtr buff, ulong buff_size);
 
     /* Instance */
 
@@ -102,16 +102,16 @@ public static partial class MaaApi
     public static partial void MaaInstanceDestroy(IntPtr inst_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaInstanceSetOption(IntPtr inst_handle, Int32 option, IntPtr value, UInt64 value_size);
+    public static partial byte MaaInstanceSetOption(IntPtr inst_handle, int option, IntPtr value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaBindResource(IntPtr inst_handle, IntPtr resource_handle);
+    public static partial byte MaaBindResource(IntPtr inst_handle, IntPtr resource_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaBindController(IntPtr inst_handle, IntPtr controller_handle);
+    public static partial byte MaaBindController(IntPtr inst_handle, IntPtr controller_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaInited(IntPtr inst_handle);
+    public static partial byte MaaInited(IntPtr inst_handle);
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaRegisterCustomTask(IntPtr inst_handle, IntPtr name, IntPtr task);
@@ -123,19 +123,19 @@ public static partial class MaaApi
     public static partial void MaaClearCustomTask(IntPtr inst_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int64 MaaInstancePostTask(IntPtr inst_handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);
+    public static partial long MaaInstancePostTask(IntPtr inst_handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaSetTaskParam(IntPtr inst_handle, long id, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);
+    public static partial byte MaaSetTaskParam(IntPtr inst_handle, long id, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int32 MaaTaskStatus(IntPtr inst_handle, Int64 id);
+    public static partial int MaaTaskStatus(IntPtr inst_handle, long id);
 
     [LibraryImport("MaaFramework")]
-    public static partial Int32 MaaTaskWait(IntPtr inst_handle, Int64 id);
+    public static partial int MaaTaskWait(IntPtr inst_handle, long id);
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaTaskAllFinished(IntPtr inst_handle);
+    public static partial byte MaaTaskAllFinished(IntPtr inst_handle);
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaStop(IntPtr inst_handle);
@@ -149,9 +149,9 @@ public static partial class MaaApi
     /* Utils */
 
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaSetGlobalOption(Int32 option, IntPtr value, UInt64 value_size);
+    public static partial byte MaaSetGlobalOption(int option, IntPtr value, ulong value_size);
     [LibraryImport("MaaFramework")]
-    public static partial Byte MaaSetGlobalOption(int option, ref byte value, ulong value_size);
+    public static partial byte MaaSetGlobalOption(int option, ref byte value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
     public static partial IntPtr MaaVersion();
