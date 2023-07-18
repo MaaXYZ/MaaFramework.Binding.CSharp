@@ -1,0 +1,43 @@
+<Project>
+  
+  <!-- General Properties -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>11</LangVersion>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- XML Documentation -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  
+  <!-- Analyzer Properties -->
+  <PropertyGroup>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>All</AnalysisMode>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+  
+  <!-- Global Packages -->
+  <ItemGroup>
+    <PackageReference Include="SonarAnalyzer.CSharp" Condition="$(MSBuildProjectExtension) == '.csproj'">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+  <!-- Assembly Metadata -->
+  <PropertyGroup>
+    <Authors>MAA Team</Authors>
+    <Owners>MAA Team</Owners>
+    <Company>MAA Assistant Arknights</Company>
+    <Copyright>Copyright © 2023 MAA Team and Contributers. All rights reserved.</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>zh-CN</NeutralLanguage>
+  </PropertyGroup>
+
+</Project>
