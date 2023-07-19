@@ -1,4 +1,4 @@
-﻿namespace MaaCommon.Enums;
+﻿namespace MaaToolKit.Enums;
 
 /// <summary>
 ///     Resource options

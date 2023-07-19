@@ -1,4 +1,4 @@
-﻿namespace MaaCommon.Enums;
+﻿namespace MaaToolKit.Enums;
 
 /// <summary>
 ///     Global options
@@ -9,7 +9,7 @@ public enum GlobalOption
     ///     Invalid option
     /// </summary>
     Invalid = 0,
-    
+
     /// <summary>
     ///     The logging option, value is the path to the log directory
     /// </summary>

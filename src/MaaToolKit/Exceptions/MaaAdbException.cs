@@ -1,4 +1,4 @@
-namespace MaaCommon.Exceptions;
+namespace MaaToolKit.Exceptions;
 
 /// <summary>
 ///     Exception for MAA adb operations

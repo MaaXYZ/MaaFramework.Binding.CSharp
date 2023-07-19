@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
-using MaaCommon.Enums;
+using MaaToolKit.Enums;
 
-namespace MaaCommon.Interop;
+namespace MaaToolKit.Interop;
 
 /// <summary>
 ///     A wrapper of <see cref="MaaApi"/>. This class is intended to make the API more .NET style.
@@ -17,8 +17,8 @@ public static class MaaApiWrapper
 
     private static MaaApi.MaaCallback Wrap(this MaaCallback callback) => (msg, detail, arg) =>
         callback(
-            Marshal.PtrToStringUTF8(msg) ?? string.Empty, 
-            Marshal.PtrToStringUTF8(detail) ?? "{}", 
+            Marshal.PtrToStringUTF8(msg) ?? string.Empty,
+            Marshal.PtrToStringUTF8(detail) ?? "{}",
             arg);
 
     #region Miscellaneous
@@ -52,11 +52,11 @@ public static class MaaApiWrapper
         var bytes = Encoding.UTF8.GetBytes(value);
         return MaaApi.MaaSetGlobalOption((int)option, ref bytes[0], (ulong)bytes.Length) != 0;
     }
-    
+
     #endregion
-    
+
     #region Resource
-    
+
     /// <summary>
     ///     Create Maa Resource instance
     /// </summary>
@@ -98,7 +98,7 @@ public static class MaaApiWrapper
     public static long AppendAddResourceJob(IntPtr resourceHandle, string path)
     {
         ArgumentNullException.ThrowIfNull(path);
-        
+
         return MaaApi.MaaResourcePostResource(resourceHandle, path);
     }
 
@@ -201,7 +201,7 @@ public static class MaaApiWrapper
         ArgumentNullException.ThrowIfNull(adbPath);
         ArgumentNullException.ThrowIfNull(address);
         ArgumentNullException.ThrowIfNull(config);
-        
+
         return MaaApi.MaaAdbControllerCreate(
             adbPath,
             address,
@@ -231,7 +231,7 @@ public static class MaaApiWrapper
         return MaaApi.MaaControllerSetOption(
             handle,
             ControllerOption.ScreenshotTargetWidth,
-            width, 
+            width,
             sizeof(int)) != 0;
     }
 
@@ -245,13 +245,13 @@ public static class MaaApiWrapper
     {
         return MaaApi.MaaControllerSetOption(
             handle,
-            ControllerOption.ScreenshotTargetHeight, 
-            height, 
+            ControllerOption.ScreenshotTargetHeight,
+            height,
             sizeof(int)) != 0;
     }
 
     /// <summary>
-    ///     
+    ///
     /// </summary>
     /// <param name="handle"></param>
     /// <param name="entry"></param>
@@ -261,7 +261,7 @@ public static class MaaApiWrapper
         var entryNative = Encoding.UTF8.GetBytes(entry);
         return MaaApi.MaaControllerSetOption(
             handle,
-            ControllerOption.DefaultAppPackageEntry, 
+            ControllerOption.DefaultAppPackageEntry,
             ref entryNative[0],
             (ulong)entryNative.Length) != 0;
     }
@@ -283,7 +283,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <returns></returns>
@@ -293,7 +293,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <param name="x"></param>
@@ -307,7 +307,7 @@ public static class MaaApiWrapper
     // public static  Int64 MaaControllerPostSwipe(IntPtr controllerHandler, Int32* x_steps, Int32* y_steps, Int32* step_delays, UInt64 buff_size);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <returns></returns>
@@ -317,7 +317,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <param name="id"></param>
@@ -328,7 +328,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <param name="id"></param>
@@ -339,7 +339,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <returns></returns>
@@ -349,7 +349,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <param name="bufferSize"></param>
@@ -371,7 +371,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="controllerHandler"></param>
     /// <param name="bufferSize"></param>
@@ -396,7 +396,7 @@ public static class MaaApiWrapper
     #region Instance
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="callback"></param>
     /// <param name="callbackArgument"></param>
@@ -427,7 +427,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    ///     
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <param name="controllerHandle"></param>
@@ -438,7 +438,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    ///     
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <returns></returns>
@@ -448,7 +448,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <param name="name"></param>
@@ -460,7 +460,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    ///     
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <param name="id"></param>
@@ -472,7 +472,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <param name="id"></param>
@@ -483,7 +483,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <param name="id"></param>
@@ -494,7 +494,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <returns></returns>
@@ -504,7 +504,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     public static void MaaStop(IntPtr instanceHandler)
@@ -513,7 +513,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <returns></returns>
@@ -523,7 +523,7 @@ public static class MaaApiWrapper
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="instanceHandler"></param>
     /// <returns></returns>

@@ -1,4 +1,4 @@
-﻿using MaaCommon.Enums;
+﻿using MaaToolKit.Enums;
 using System.Runtime.InteropServices;
 
 // P/Invoke method should not be visible
@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 // ReSharper disable InconsistentNaming
 // ReSharper disable IdentifierTypo
 
-namespace MaaCommon.Interop;
+namespace MaaToolKit.Interop;
 
 /// <summary>
 ///     The base P/Invoke methods for MaaFramework, use this class to call all the native methods.
@@ -50,7 +50,7 @@ public static partial class MaaApi
     public static partial byte MaaResourceSetOption(IntPtr res_handle, int option, IntPtr value, ulong value_size);
     [LibraryImport("MaaFramework")]
     public static partial byte MaaResourceSetOption(IntPtr res_handle, int option, ref byte value, ulong value_size);
-    
+
     [LibraryImport("MaaFramework")]
     public static partial ulong MaaResourceGetHash(IntPtr res_handle, IntPtr buff, ulong buff_size);
 
