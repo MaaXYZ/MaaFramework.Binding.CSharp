@@ -13,13 +13,13 @@ public static class MaaApiWrapper
     /// <summary>
     ///     MAA callback delegate
     /// </summary>
-    public delegate void MaaCallback(string msg, string detailsJson, string identifier);
+    public delegate void MaaCallback(string msg, string detailsJson, IntPtr identifier);
 
     private static MaaApi.MaaCallback Wrap(this MaaCallback callback) => (msg, detail, arg) =>
         callback(
             Marshal.PtrToStringUTF8(msg) ?? string.Empty, 
             Marshal.PtrToStringUTF8(detail) ?? "{}", 
-            Marshal.PtrToStringUTF8(arg) ?? string.Empty);
+            arg);
 
     #region Miscellaneous
 
@@ -183,7 +183,9 @@ public static class MaaApiWrapper
     }
 
     #endregion
-    
+
+    #region Controller
+
     /// <summary>
     ///     Create an MAA ADB Controller instance
     /// </summary>
@@ -389,6 +391,10 @@ public static class MaaApiWrapper
         return ret;
     }
 
+    #endregion
+
+    #region Instance
+
     /// <summary>
     /// 
     /// </summary>
@@ -525,4 +531,7 @@ public static class MaaApiWrapper
     {
         return MaaApi.MaaGetController(instanceHandler);
     }
+
+    #endregion
+
 }
