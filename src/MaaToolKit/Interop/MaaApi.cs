@@ -29,7 +29,7 @@ public static partial class MaaApi
     /* Resource */
 
     [LibraryImport("MaaFramework")]
-    public static partial IntPtr MaaResourceCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string user_path, MaaCallback callback, ref byte callback_arg);
+    public static partial IntPtr MaaResourceCreate(MaaCallback callback, ref byte callback_arg);
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaResourceDestroy(IntPtr res_handle);
@@ -99,13 +99,13 @@ public static partial class MaaApi
     /* Instance */
 
     [LibraryImport("MaaFramework")]
-    public static partial IntPtr MaaInstanceCreate(MaaCallback callback, IntPtr callback_arg);
+    public static partial IntPtr MaaCreate(MaaCallback callback, IntPtr callback_arg);
 
     [LibraryImport("MaaFramework")]
-    public static partial void MaaInstanceDestroy(IntPtr inst_handle);
+    public static partial void MaaDestroy(IntPtr inst_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial byte MaaInstanceSetOption(IntPtr inst_handle, int option, IntPtr value, ulong value_size);
+    public static partial byte MaaSetOption(IntPtr inst_handle, int option, IntPtr value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
     public static partial byte MaaBindResource(IntPtr inst_handle, IntPtr resource_handle);
@@ -126,7 +126,7 @@ public static partial class MaaApi
     public static partial void MaaClearCustomTask(IntPtr inst_handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial long MaaInstancePostTask(IntPtr inst_handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);
+    public static partial long MaaPostTask(IntPtr inst_handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);
 
     [LibraryImport("MaaFramework")]
     public static partial byte MaaSetTaskParam(IntPtr inst_handle, long id, [MarshalAs(UnmanagedType.LPUTF8Str)] string args);

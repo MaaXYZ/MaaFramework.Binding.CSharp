@@ -60,18 +60,16 @@ public static class MaaApiWrapper
     /// <summary>
     ///     Create Maa Resource instance
     /// </summary>
-    /// <param name="userPath"></param>
     /// <param name="callback"></param>
     /// <param name="identifier"></param>
     /// <returns></returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaApi.MaaResourceCreate"/>
     /// </remarks>
-    public static IntPtr CreateMaaResource(string userPath, MaaCallback callback, string identifier)
+    public static IntPtr CreateMaaResource(MaaCallback callback, string identifier)
     {
-        ArgumentNullException.ThrowIfNull(userPath);
         var bytes = Encoding.UTF8.GetBytes(identifier);
-        return MaaApi.MaaResourceCreate(userPath, callback.Wrap(), ref bytes[0]);
+        return MaaApi.MaaResourceCreate(callback.Wrap(), ref bytes[0]);
     }
 
     /// <summary>
@@ -403,7 +401,7 @@ public static class MaaApiWrapper
     /// <returns></returns>
     public static IntPtr MaaInstanceCreate(MaaCallback callback, IntPtr callbackArgument)
     {
-        return MaaApi.MaaInstanceCreate(callback.Wrap(), callbackArgument);
+        return MaaApi.MaaCreate(callback.Wrap(), callbackArgument);
     }
 
     /// <summary>
@@ -412,7 +410,7 @@ public static class MaaApiWrapper
     /// <param name="instanceHandler"></param>
     public static void MaaInstanceDestroy(IntPtr instanceHandler)
     {
-        MaaApi.MaaInstanceDestroy(instanceHandler);
+        MaaApi.MaaDestroy(instanceHandler);
     }
 
     /// <summary>
@@ -456,7 +454,7 @@ public static class MaaApiWrapper
     /// <returns></returns>
     public static long MaaInstancePostTask(IntPtr instanceHandler, string name, string args)
     {
-        return MaaApi.MaaInstancePostTask(instanceHandler, name, args);
+        return MaaApi.MaaPostTask(instanceHandler, name, args);
     }
 
     /// <summary>
