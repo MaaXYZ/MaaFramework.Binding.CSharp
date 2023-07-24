@@ -229,7 +229,7 @@ public static class MaaApiWrapper
         return MaaApi.MaaControllerSetOption(
             handle,
             ControllerOption.ScreenshotTargetWidth,
-            width,
+            ref width,
             sizeof(int)) != 0;
     }
 
@@ -244,7 +244,7 @@ public static class MaaApiWrapper
         return MaaApi.MaaControllerSetOption(
             handle,
             ControllerOption.ScreenshotTargetHeight,
-            height,
+            ref height,
             sizeof(int)) != 0;
     }
 

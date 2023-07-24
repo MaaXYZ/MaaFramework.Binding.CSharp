@@ -13,7 +13,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		LICENSE = LICENSE
+		Directory.ruleset = Directory.ruleset
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaToolKit.Extensions", "src\MaaToolKit.Extensions\MaaToolKit.Extensions.csproj", "{6DCE6397-F051-4710-8103-D125B5698D06}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaToolkit.Extensions.Test", "tests\MaaToolkit.Extensions.Test\MaaToolkit.Extensions.Test.csproj", "{02A37AB6-F381-4A27-8FE2-DC6914D70B25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +30,14 @@ Global
 		{F15504A2-1A15-4574-BF63-CF2282BCA69B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F15504A2-1A15-4574-BF63-CF2282BCA69B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F15504A2-1A15-4574-BF63-CF2282BCA69B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DCE6397-F051-4710-8103-D125B5698D06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DCE6397-F051-4710-8103-D125B5698D06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DCE6397-F051-4710-8103-D125B5698D06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DCE6397-F051-4710-8103-D125B5698D06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02A37AB6-F381-4A27-8FE2-DC6914D70B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02A37AB6-F381-4A27-8FE2-DC6914D70B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02A37AB6-F381-4A27-8FE2-DC6914D70B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02A37AB6-F381-4A27-8FE2-DC6914D70B25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

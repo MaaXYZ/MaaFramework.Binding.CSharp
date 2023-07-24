@@ -1,18 +1,34 @@
 <Project>
-  
+
   <!-- General Properties -->
   <PropertyGroup>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>11</LangVersion>
     <TargetFramework>net7.0</TargetFramework>
+    <CodeAnalysisRuleSet>$(SolutionDir)Directory.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <!-- Unit Test Properties -->
+  <PropertyGroup>
+    <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="$(IsTestProject)">
+      <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <IsPublishable>false</IsPublishable>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+    </Otherwise>
+  </Choose>
 
   <!-- XML Documentation -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  
+
   <!-- Analyzer Properties -->
   <PropertyGroup>
     <AnalysisLevel>preview</AnalysisLevel>
@@ -21,7 +37,7 @@
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
-  
+
   <!-- Global Packages -->
   <ItemGroup>
     <PackageReference Include="SonarAnalyzer.CSharp" Condition="$(MSBuildProjectExtension) == '.csproj'">
@@ -29,7 +45,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  
+
   <!-- Assembly Metadata -->
   <PropertyGroup>
     <Authors>MAA Team</Authors>

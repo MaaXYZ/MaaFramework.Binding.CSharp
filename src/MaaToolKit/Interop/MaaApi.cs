@@ -67,6 +67,8 @@ public static partial class MaaApi
     [LibraryImport("MaaFramework")]
     public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, ControllerOption option, IntPtr value, ulong value_size);
     [LibraryImport("MaaFramework")]
+    public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, ControllerOption option, ref int value, ulong value_size);
+    [LibraryImport("MaaFramework")]
     public static partial byte MaaControllerSetOption(IntPtr ctrl_handle, ControllerOption option, ref byte value, ulong value_size);
 
     [LibraryImport("MaaFramework")]
