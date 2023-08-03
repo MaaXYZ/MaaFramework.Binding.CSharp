@@ -1,5 +1,6 @@
 ﻿using MaaToolKit.Enums;
 using MaaToolKit.Extensions.Exceptions;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static MaaToolKit.Interop.MaaApiWrapper;
 
@@ -30,7 +31,7 @@ public class MaaObject
     ///     Gets or sets the path to the MaaFramework log directory.
     /// </summary>
     /// <remarks>
-    ///     Wrapper of <see cref="SetGlobalOption"/>.
+    ///     Wrapper of <see cref="SetGlobalOption(GlobalOption, string)"/>.
     /// </remarks>
     public static string FrameworkLogDir
     {
@@ -55,6 +56,27 @@ public class MaaObject
         {
             var path = Path.GetFullPath(value);
             s_toolkitLogDir = path;
+        }
+    }
+
+    private static bool debugMode;
+
+    /// <summary>
+    ///     Gets or sets whether turns on the debug mode.
+    /// </summary>
+    /// <remarks>
+    ///     Wrapper of <see cref="SetGlobalOption(GlobalOption, bool)"/>.
+    /// </remarks>
+    public static bool DebugMode
+    {
+        get => debugMode;
+        set
+        {
+            var setted = SetGlobalOption(GlobalOption.DebugMode, value);
+            if (setted)
+            {
+                debugMode = value;
+            }
         }
     }
 
@@ -117,7 +139,7 @@ public class MaaObject
     /// <exception cref="ArgumentNullException" />
     [SetsRequiredMembers]
     public MaaObject(string adbPath, string address, AdbControllerType type, string adbConfig)
-        : this(new(IntPtr.Zero), new(string.Empty), new(adbPath, address, type, adbConfig, IntPtr.Zero))
+        : this(new(IntPtr.Zero), new(nameof(MaaObject)), new(adbPath, address, type, adbConfig, IntPtr.Zero))
     {
         Controller
             .LinkStart()

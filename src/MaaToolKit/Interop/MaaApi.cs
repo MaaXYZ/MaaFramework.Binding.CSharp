@@ -137,7 +137,7 @@ public static partial class MaaApi
     public static partial int MaaTaskStatus(IntPtr inst_handle, long id);
 
     [LibraryImport("MaaFramework")]
-    public static partial int MaaTaskWait(IntPtr inst_handle, long id);
+    public static partial int MaaWaitTask(IntPtr inst_handle, long id);
 
     [LibraryImport("MaaFramework")]
     public static partial byte MaaTaskAllFinished(IntPtr inst_handle);

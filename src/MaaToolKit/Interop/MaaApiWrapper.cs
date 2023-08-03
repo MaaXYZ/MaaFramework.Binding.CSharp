@@ -53,6 +53,21 @@ public static class MaaApiWrapper
         return MaaApi.MaaSetGlobalOption((int)option, ref bytes[0], (ulong)bytes.Length) != 0;
     }
 
+    /// <summary>
+    ///     Set global option
+    /// </summary>
+    /// <param name="option">The option name</param>
+    /// <param name="value">The option value</param>
+    /// <returns></returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaApi.MaaSetGlobalOption(int, ref byte, ulong)"/>
+    /// </remarks>
+    public static bool SetGlobalOption(GlobalOption option, bool value)
+    {
+        var bytes = BitConverter.GetBytes(value);
+        return MaaApi.MaaSetGlobalOption((int)option, ref bytes[0], (ulong)bytes.Length) != 0;
+    }
+
     #endregion
 
     #region Resource
@@ -486,9 +501,9 @@ public static class MaaApiWrapper
     /// <param name="instanceHandler"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static int MaaTaskWait(IntPtr instanceHandler, long id)
+    public static int MaaWaitTask(IntPtr instanceHandler, long id)
     {
-        return MaaApi.MaaTaskWait(instanceHandler, id);
+        return MaaApi.MaaWaitTask(instanceHandler, id);
     }
 
     /// <summary>

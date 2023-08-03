@@ -40,6 +40,7 @@ public class Test_ComponentModel
     {
         MaaObject_Property_GetSet_FrameworkLogDir();
         MaaObject_Property_GetSet_ToolkitLogDir();
+        MaaObject_Property_GetSet_DebugMode();
         MaaResource_Method_Constructor();
         MaaController_Method_Constructor(context);
         MaaInstance_Method_Constructor();
@@ -80,6 +81,13 @@ public class Test_ComponentModel
     {
         MaaObject.ToolkitLogDir = s_debug;
         Assert.AreNotEqual(string.Empty, MaaObject.ToolkitLogDir);
+    }
+
+    /// <summary> Tests the static member of the <see cref="MaaObject"/>. </summary>
+    public static void MaaObject_Property_GetSet_DebugMode()
+    {
+        MaaObject.DebugMode = true;
+        Assert.IsTrue(MaaObject.DebugMode);
     }
 
     /// <summary> Tests the static member of the <see cref="MaaObject"/>. </summary>

@@ -118,7 +118,7 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaInstancePostTask"/>.
     /// </remarks>
-    public MaaJob AppendTask(string taskName, string taskParam)
+    public MaaJob AppendTask(string taskName, string taskParam = "{}")
     {
         var id = MaaInstancePostTask(_handle, taskName, taskParam);
         return new(id, this);
@@ -140,10 +140,10 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaTaskWait"/>.
+    ///     Wrapper of <see cref="MaaWaitTask"/>.
     /// </remarks>
     public MaaJobStatus Wait(MaaJob job)
-        => (MaaJobStatus)MaaTaskWait(_handle, job);
+        => (MaaJobStatus)MaaWaitTask(_handle, job);
 
     /// <summary>
     ///     Gets whether the all maa tasks finished.
