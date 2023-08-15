@@ -1,6 +1,7 @@
 ﻿using MaaToolKit.Enums;
 using MaaToolKit.Extensions.Interfaces;
 using MaaToolKit.Interop;
+using System.Runtime.InteropServices;
 using static MaaToolKit.Interop.MaaApiWrapper;
 
 namespace MaaToolKit.Extensions.ComponentModel;
@@ -17,11 +18,17 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
 
     /// <inheritdoc/>
     public event MaaCallback? Notify;
+    private readonly MaaApi.MaaCallback callback;
 
-    /// <inheritdoc/>
-    public void OnNotify(string msg, string detailsJson, IntPtr identifier)
+    /// <summary>
+    ///     Creates a <see cref="MaaController"/> instance.
+    /// </summary>
+    private MaaController()
     {
-        Notify?.Invoke(msg, detailsJson, identifier);
+        callback = (msg, detail, arg) => Notify?.Invoke(
+            Marshal.PtrToStringUTF8(msg) ?? string.Empty,
+            Marshal.PtrToStringUTF8(detail) ?? "{}",
+            arg);
     }
 
     /// <summary>
@@ -35,8 +42,9 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
     /// </remarks>
     public MaaController(string adbPath, string address, AdbControllerType type, string adbConfig)
+        : this()
     {
-        _handle = MaaAdbControllerCreate(adbPath, address, type, adbConfig, OnNotify, IntPtr.Zero);
+        _handle = MaaAdbControllerCreate(adbPath, address, type, adbConfig, callback, IntPtr.Zero);
         _controllers.Add(this);
     }
 
@@ -52,8 +60,9 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
     /// </remarks>
     public MaaController(string adbPath, string address, AdbControllerType type, string adbConfig, IntPtr identifier)
+        : this()
     {
-        _handle = MaaAdbControllerCreate(adbPath, address, type, adbConfig, OnNotify, identifier);
+        _handle = MaaAdbControllerCreate(adbPath, address, type, adbConfig, callback, identifier);
         _controllers.Add(this);
     }
 

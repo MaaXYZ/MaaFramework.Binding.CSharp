@@ -1,6 +1,7 @@
 ﻿using MaaToolKit.Enums;
 using MaaToolKit.Extensions.Interfaces;
 using MaaToolKit.Interop;
+using System.Runtime.InteropServices;
 using static MaaToolKit.Interop.MaaApiWrapper;
 
 namespace MaaToolKit.Extensions.ComponentModel;
@@ -17,12 +18,9 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
 
     /// <inheritdoc/>
     public event MaaCallback? Notify;
-
-    /// <inheritdoc/>
-    public void OnNotify(string msg, string detailsJson, IntPtr identifier)
-    {
-        Notify?.Invoke(msg, detailsJson, identifier);
-    }
+#pragma warning disable S1450 // Private fields only used as local variables in methods should become local variables
+    private readonly MaaApi.MaaCallback _callback;
+#pragma warning restore S1450 // Private fields only used as local variables in methods should become local variables
 
     /// <summary>
     ///     Creates a <see cref="MaaInstance"/> instance.
@@ -30,10 +28,8 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaInstanceCreate"/>.
     /// </remarks>
-    public MaaInstance()
+    public MaaInstance() : this(IntPtr.Zero)
     {
-        _handle = MaaInstanceCreate(OnNotify, IntPtr.Zero);
-        _instances.Add(this);
     }
 
     /// <summary>
@@ -45,7 +41,11 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// </remarks>
     public MaaInstance(IntPtr identifier)
     {
-        _handle = MaaInstanceCreate(OnNotify, identifier);
+        _callback = (msg, detail, arg) => Notify?.Invoke(
+            Marshal.PtrToStringUTF8(msg) ?? string.Empty,
+            Marshal.PtrToStringUTF8(detail) ?? "{}",
+            arg);
+        _handle = MaaInstanceCreate(_callback, identifier);
         _instances.Add(this);
     }
 

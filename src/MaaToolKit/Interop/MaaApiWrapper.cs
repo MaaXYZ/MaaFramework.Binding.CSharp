@@ -15,12 +15,6 @@ public static class MaaApiWrapper
     /// </summary>
     public delegate void MaaCallback(string msg, string detailsJson, IntPtr identifier);
 
-    private static MaaApi.MaaCallback Wrap(this MaaCallback callback) => (msg, detail, arg) =>
-        callback(
-            Marshal.PtrToStringUTF8(msg) ?? string.Empty,
-            Marshal.PtrToStringUTF8(detail) ?? "{}",
-            arg);
-
     #region Miscellaneous
 
     /// <summary>
@@ -81,10 +75,10 @@ public static class MaaApiWrapper
     /// <remarks>
     ///     Wrapper of <see cref="MaaApi.MaaResourceCreate"/>
     /// </remarks>
-    public static IntPtr CreateMaaResource(MaaCallback callback, string identifier)
+    public static IntPtr CreateMaaResource(MaaApi.MaaCallback callback, string identifier)
     {
         var bytes = Encoding.UTF8.GetBytes(identifier);
-        return MaaApi.MaaResourceCreate(callback.Wrap(), ref bytes[0]);
+        return MaaApi.MaaResourceCreate(callback, ref bytes[0]);
     }
 
     /// <summary>
@@ -209,7 +203,7 @@ public static class MaaApiWrapper
     /// <param name="callback"></param>
     /// <param name="callbackArgument"></param>
     /// <returns></returns>
-    public static IntPtr MaaAdbControllerCreate(string adbPath, string address, AdbControllerType type, string config, MaaCallback callback, IntPtr callbackArgument)
+    public static IntPtr MaaAdbControllerCreate(string adbPath, string address, AdbControllerType type, string config, MaaApi.MaaCallback callback, IntPtr callbackArgument)
     {
         ArgumentNullException.ThrowIfNull(adbPath);
         ArgumentNullException.ThrowIfNull(address);
@@ -220,7 +214,7 @@ public static class MaaApiWrapper
             address,
             (int)type,
             config,
-            callback.Wrap(),
+            callback,
             callbackArgument);
     }
 
@@ -414,9 +408,9 @@ public static class MaaApiWrapper
     /// <param name="callback"></param>
     /// <param name="callbackArgument"></param>
     /// <returns></returns>
-    public static IntPtr MaaInstanceCreate(MaaCallback callback, IntPtr callbackArgument)
+    public static IntPtr MaaInstanceCreate(MaaApi.MaaCallback callback, IntPtr callbackArgument)
     {
-        return MaaApi.MaaCreate(callback.Wrap(), callbackArgument);
+        return MaaApi.MaaCreate(callback, callbackArgument);
     }
 
     /// <summary>

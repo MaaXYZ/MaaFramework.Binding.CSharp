@@ -1,6 +1,7 @@
 ﻿using MaaToolKit.Enums;
 using MaaToolKit.Extensions.Interfaces;
 using MaaToolKit.Interop;
+using System.Runtime.InteropServices;
 using static MaaToolKit.Interop.MaaApiWrapper;
 
 namespace MaaToolKit.Extensions.ComponentModel;
@@ -17,12 +18,9 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
 
     /// <inheritdoc/>
     public event MaaCallback? Notify;
-
-    /// <inheritdoc/>
-    public void OnNotify(string msg, string detailsJson, IntPtr identifier)
-    {
-        Notify?.Invoke(msg, detailsJson, identifier);
-    }
+#pragma warning disable S1450 // Private fields only used as local variables in methods should become local variables
+    private readonly MaaApi.MaaCallback _callback;
+#pragma warning restore S1450 // Private fields only used as local variables in methods should become local variables
 
     /// <summary>
     ///     Creates a <see cref="MaaResource"/> instance.
@@ -45,7 +43,11 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     {
         ArgumentException.ThrowIfNullOrEmpty(identifier);
 
-        _handle = CreateMaaResource(OnNotify, identifier);
+        _callback = (msg, detail, arg) => Notify?.Invoke(
+            Marshal.PtrToStringUTF8(msg) ?? string.Empty,
+            Marshal.PtrToStringUTF8(detail) ?? "{}",
+            arg);
+        _handle = CreateMaaResource(_callback, identifier);
         _resources.Add(this);
     }
 
