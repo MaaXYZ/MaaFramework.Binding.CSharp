@@ -1,51 +1,47 @@
-﻿using MaaToolKit.Enums;
+﻿using MaaToolKit.Extensions.Enums;
+using MaaToolKit.Extensions.Exceptions;
 using MaaToolKit.Extensions.Interfaces;
-using MaaToolKit.Interop;
+using MaaToolKit.Extensions.Interop;
 using System.Runtime.InteropServices;
-using static MaaToolKit.Interop.MaaApiWrapper;
+using static MaaToolKit.Extensions.Interop.MaaApi;
 
 namespace MaaToolKit.Extensions.ComponentModel;
 
 /// <summary>
-///     A class providing a reference implementation for Maa Controller section of <see cref="MaaApiWrapper"/>.
+///     A class providing a reference implementation for Maa Controller section of <see cref="MaaApi"/>.
 /// </summary>
 public class MaaController : IMaaNotify, IMaaPost, IDisposable
 {
-    internal IntPtr _handle;
+    internal MaaControllerHandle _handle;
 
-    private static readonly HashSet<MaaController> _controllers = new HashSet<MaaController>();
-    internal static MaaController GetMaaController(IntPtr handle) => _controllers.First(x => x._handle == handle);
+    internal static readonly HashSet<MaaController> _controllers = new HashSet<MaaController>();
+    internal static MaaController Get(IntPtr handle)
+    {
+        var ret = _controllers.FirstOrDefault(x => x._handle == handle);
+        if (ret == null)
+        {
+            ret = new() { _handle = handle };
+            _controllers.Add(ret);
+        }
+        return ret;
+    }
 
     /// <inheritdoc/>
-    public event MaaCallback? Notify;
-    private readonly MaaApi.MaaCallback callback;
+    public event IMaaNotify.MaaCallback? Callback;
+    internal readonly MaaControllerCallback _callback;
 
-    /// <summary>
-    ///     Creates a <see cref="MaaController"/> instance.
-    /// </summary>
-    private MaaController()
+    internal MaaController()
     {
-        callback = (msg, detail, arg) => Notify?.Invoke(
+        _callback = (msg, detail, arg) => Callback?.Invoke(
             Marshal.PtrToStringUTF8(msg) ?? string.Empty,
             Marshal.PtrToStringUTF8(detail) ?? "{}",
             arg);
     }
 
-    /// <summary>
-    ///     Creates a <see cref="MaaController"/> instance.
-    /// </summary>
-    /// <param name="adbPath"></param>
-    /// <param name="address"></param>
-    /// <param name="type"></param>
-    /// <param name="adbConfig"></param>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
-    /// </remarks>
-    public MaaController(string adbPath, string address, AdbControllerType type, string adbConfig)
-        : this()
+    /// <inheritdoc cref="MaaController(string, string, AdbControllerType, string, MaaCallbackTransparentArg, bool)"/>
+    public MaaController(string adbPath, string address, AdbControllerType type, string adbConfig, bool linkStart = false)
+        : this(adbPath, address, type, adbConfig, MaaCallbackTransparentArg.Zero, linkStart)
     {
-        _handle = MaaAdbControllerCreate(adbPath, address, type, adbConfig, callback, IntPtr.Zero);
-        _controllers.Add(this);
     }
 
     /// <summary>
@@ -55,15 +51,24 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <param name="address"></param>
     /// <param name="type"></param>
     /// <param name="adbConfig"></param>
-    /// <param name="identifier"></param>
+    /// <param name="maaCallbackTransparentArg"></param>
+    /// <param name="linkStart">Whether to execute <see cref="LinkStart"/></param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
     /// </remarks>
-    public MaaController(string adbPath, string address, AdbControllerType type, string adbConfig, IntPtr identifier)
+    /// <exception cref="MaaJobStatusException" />
+    public MaaController(string adbPath, string address, AdbControllerType type, string adbConfig, MaaCallbackTransparentArg maaCallbackTransparentArg, bool linkStart = false)
         : this()
     {
-        _handle = MaaAdbControllerCreate(adbPath, address, type, adbConfig, callback, identifier);
+        _handle = MaaAdbControllerCreate(adbPath, address, (int)type, adbConfig, _callback, maaCallbackTransparentArg);
         _controllers.Add(this);
+
+        if (linkStart)
+        {
+            this.LinkStart()
+                .Wait()
+                .ThrowIfNot(MaaJobStatus.Success);
+        }
     }
 
     /// <inheritdoc/>
@@ -82,95 +87,35 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// </remarks>
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
+        if (disposing && _handle != MaaControllerHandle.Zero)
         {
             MaaControllerDestroy(_handle);
-            _handle = IntPtr.Zero;
-        }
-    }
-
-    private int _screenshotWidth;
-    private int _screenshotHeight;
-
-    /// <summary>
-    ///     Get or sets the target width of screenshots with original aspect ratio.
-    /// </summary>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerSetScreenshotTargetWidth"/>.
-    /// </remarks>
-    public int ScreenshotWidth
-    {
-        get => _screenshotWidth;
-        set
-        {
-            var setted = MaaControllerSetScreenshotTargetWidth(_handle, value);
-            if (setted)
-            {
-                _screenshotWidth = value;
-                _screenshotHeight = 0;
-            }
+            _handle = MaaControllerHandle.Zero;
         }
     }
 
     /// <summary>
-    ///     Get or sets the target height of screenshots with original aspect ratio.
+    ///     Sets <paramref name="value"/> to a option of the <see cref="MaaController"/>.
     /// </summary>
+    /// <param name="option">The option.</param>
+    /// <param name="value">The value.</param>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerSetScreenshotTargetHeight"/>.
+    ///     Wrapper of <see cref="MaaControllerSetOption"/>.
     /// </remarks>
-    public int ScreenshotHeight
-    {
-        get => _screenshotHeight;
-        set
-        {
-            var setted = MaaControllerSetScreenshotTargetHeight(_handle, value);
-            if (setted)
-            {
-                _screenshotWidth = 0;
-                _screenshotHeight = value;
-            }
-        }
-    }
+    /// <returns>true if the option was successfully setted; otherwise, false.</returns>
+    private bool SetOption(ControllerOption option, MaaOptionValue[] value)
+        => MaaControllerSetOption(_handle, (MaaCtrlOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
 
-    private string _defaultAppPackageEntry = string.Empty;
-    private string _defaultAppPackage = string.Empty;
+    /// <inheritdoc cref="SetOption(ControllerOption, MaaOptionValue[])"/>
+    public bool SetOption(ControllerOption option, int value)
+        => SetOption(option, value.ToMaaOptionValues());
 
-    /// <summary>
-    ///     Get or sets a default app package name for starting the app.
-    /// </summary>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerSetDefaultAppPackageEntry"/>.
-    /// </remarks>
-    public string DefaultAppPackageEntry
+    /// <inheritdoc cref="SetOption(ControllerOption, MaaOptionValue[])"/>
+    /// <exception cref="ArgumentException" />
+    public bool SetOption(ControllerOption option, string value)
     {
-        get => _defaultAppPackageEntry;
-        set
-        {
-            var setted = MaaControllerSetDefaultAppPackageEntry(_handle, value);
-            if (setted)
-            {
-                _defaultAppPackageEntry = value;
-            }
-        }
-    }
-
-    /// <summary>
-    ///     Get or sets a default app package name for stopping the app.
-    /// </summary>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerSetDefaultAppPackage"/>.
-    /// </remarks>
-    public string DefaultAppPackage
-    {
-        get => _defaultAppPackage;
-        set
-        {
-            var setted = MaaControllerSetDefaultAppPackage(_handle, value);
-            if (setted)
-            {
-                _defaultAppPackage = value;
-            }
-        }
+        ArgumentException.ThrowIfNullOrEmpty(value);
+        return SetOption(option, value.ToMaaOptionValues());
     }
 
     /// <summary>
@@ -201,12 +146,27 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
         return new(id, this);
     }
 
-    // public MaaJob Swipe()
+    /// <summary>
+    ///     Swipe in steps.
+    /// </summary>
+    /// <param name="xSteps">The x-coordinate of the point in steps.</param>
+    /// <param name="ySteps">The y-coordinate of the point in steps.</param>
+    /// <param name="stepsDelay">The swipe delay between steps.</param>
+    /// <param name="stepsLength">The length of steps.</param>
+    /// <returns>A swipe job.</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostSwipe"/>.
+    /// </remarks>
+    public MaaJob Swipe(int[] xSteps, int[] ySteps, int[] stepsDelay, ulong stepsLength)
+    {
+        var id = MaaControllerPostSwipe(_handle, ref xSteps[0], ref ySteps[0], ref stepsDelay[0], stepsLength);
+        return new(id, this);
+    }
 
     /// <summary>
-    ///     
+    ///     Take a screenshot.
     /// </summary>
-    /// <returns>A screencap job.</returns>
+    /// <returns>A screen capture job.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostScreencap"/>.
     /// </remarks>
@@ -240,22 +200,24 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <summary>
     ///     Ends the connection of the address specified by the constructor.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>true if the connection was successfully ended; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerConnected"/>.
     /// </remarks>
     public bool LinkStop()
-        => MaaControllerConnected(_handle);
+        => MaaControllerConnected(_handle).ToBoolean();
 
     /// <summary>
     ///     Gets a image.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Byte array of the image if got successfully; otherwise, null.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerGetImage"/>.
     /// </remarks>
-    public byte[]? GetImage(int bufferSize = 3 << 20)
-        => MaaControllerGetImage(_handle, bufferSize);
+    public byte[]? GetImage(MaaSize bufferSize = 3 << 20)
+        => _handle.GetBytesFromFuncWithBuffer(
+            MaaControllerGetImage,
+            bufferSize);
 
     /// <summary>
     ///     Gets the uuid string of the <see cref="MaaController"/>.
@@ -264,7 +226,9 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     ///     Null if failed to get uuid, or a UTF-8 string represent of uuid
     /// </value>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerGetUuid"/>.
+    ///     Wrapper of <see cref="MaaControllerGetUUID"/>.
     /// </remarks>
-    public string? Uuid => MaaControllerGetUuid(_handle);
+    public string? Uuid => _handle.GetStringFromFuncWithBuffer(
+        MaaControllerGetUUID,
+        bufferSize: 1 << 7);
 }

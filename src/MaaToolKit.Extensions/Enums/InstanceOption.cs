@@ -1,9 +1,9 @@
-﻿namespace MaaToolKit.Enums;
+﻿namespace MaaToolKit.Extensions.Enums;
 
 /// <summary>
-///     Resource options
+///     Instance options
 /// </summary>
-public enum ResourceOption
+public enum InstanceOption
 {
     /// <summary>
     ///     Invalid option

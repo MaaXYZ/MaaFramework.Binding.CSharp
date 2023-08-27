@@ -1,8 +1,8 @@
-﻿using MaaToolKit.Enums;
+﻿using MaaToolKit.Extensions.Enums;
 using MaaToolKit.Extensions.Exceptions;
-using System.Diagnostics;
+using MaaToolKit.Extensions.Interop;
 using System.Diagnostics.CodeAnalysis;
-using static MaaToolKit.Interop.MaaApiWrapper;
+using static MaaToolKit.Extensions.Interop.MaaApi;
 
 namespace MaaToolKit.Extensions.ComponentModel;
 
@@ -12,12 +12,24 @@ namespace MaaToolKit.Extensions.ComponentModel;
 public class MaaObject
 {
     /// <summary>
+    ///     Sets <paramref name="value"/> to a option of the <see cref="MaaObject"/>.
+    /// </summary>
+    /// <param name="option">The option.</param>
+    /// <param name="value">The value.</param>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaSetGlobalOption"/>.
+    /// </remarks>
+    /// <returns>true if the option was successfully setted; otherwise, false.</returns>
+    private static bool SetOption(GlobalOption option, MaaOptionValue[] value)
+        => MaaSetGlobalOption((MaaGlobalOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+
+    /// <summary>
     ///     Gets the MaaFramework version.
     /// </summary>
     /// <remarks>
-    ///     Wrapper of <see cref="GetMaaVersion"/>.
+    ///     Wrapper of <see cref="MaaVersion"/>.
     /// </remarks>
-    public static string FrameworkVersion => GetMaaVersion();
+    public static string FrameworkVersion => MaaVersion().ToStringUTF8();
 
     /// <summary>
     ///     Gets the MaaToolkit version.
@@ -25,39 +37,30 @@ public class MaaObject
     public static string ToolkitVersion => "0.0.0.0";
 
     private static string s_frameworkLogDir = string.Empty;
-    private static string s_toolkitLogDir = string.Empty;
 
     /// <summary>
     ///     Gets or sets the path to the MaaFramework log directory.
     /// </summary>
     /// <remarks>
-    ///     Wrapper of <see cref="SetGlobalOption(GlobalOption, string)"/>.
+    ///     Wrapper of <see cref="MaaSetGlobalOption"/>.
     /// </remarks>
     public static string FrameworkLogDir
     {
         get => s_frameworkLogDir;
         set
         {
-            var path = Path.GetFullPath(value);
-            var setted = SetGlobalOption(GlobalOption.Logging, path);
+            var setted = SetOption(GlobalOption.Logging, value.ToMaaOptionValues());
             if (setted)
             {
-                s_frameworkLogDir = path;
+                s_frameworkLogDir = value;
             }
         }
     }
+
     /// <summary>
     ///     Gets or sets the path to the MaaToolkit log directory.
     /// </summary>
-    public static string ToolkitLogDir
-    {
-        get => s_toolkitLogDir;
-        set
-        {
-            var path = Path.GetFullPath(value);
-            s_toolkitLogDir = path;
-        }
-    }
+    public static string ToolkitLogDir { get; set; } = string.Empty;
 
     private static bool debugMode;
 
@@ -65,14 +68,14 @@ public class MaaObject
     ///     Gets or sets whether turns on the debug mode.
     /// </summary>
     /// <remarks>
-    ///     Wrapper of <see cref="SetGlobalOption(GlobalOption, bool)"/>.
+    ///     Wrapper of <see cref="MaaSetGlobalOption"/>.
     /// </remarks>
     public static bool DebugMode
     {
         get => debugMode;
         set
         {
-            var setted = SetGlobalOption(GlobalOption.DebugMode, value);
+            var setted = SetOption(GlobalOption.DebugMode, value.ToMaaOptionValues());
             if (setted)
             {
                 debugMode = value;
@@ -96,9 +99,10 @@ public class MaaObject
     public required MaaController Controller { get; init; }
 
     /// <summary>
-    ///     Binds the <see cref="Resource"/> and the <see cref="Controller"/> to the <see cref="MaaInstance"/>.
+    ///     Wraps a <see cref="MaaInstance"/>, a <see cref="MaaResource"/> and a <see cref="MaaController"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException" />
+    /// <exception cref="MaaBindException" />
     public MaaObject()
     {
         ArgumentNullException.ThrowIfNull(Instance);
@@ -110,13 +114,11 @@ public class MaaObject
             Instance.BindController(Controller));
     }
 
-    /// <summary>
-    ///     Wraps a <see cref="MaaInstance"/>, a <see cref="MaaResource"/> and a <see cref="MaaController"/>.
-    /// </summary>
+    /// <inheritdoc cref="MaaObject"/>
     /// <param name="instance">The wrapped <see cref="MaaInstance"/>.</param>
     /// <param name="resource">The wrapped <see cref="MaaResource"/>.</param>
     /// <param name="controller">The wrapped <see cref="MaaController"/>.</param>
-    /// <exception cref="ArgumentNullException" />
+    /// <exception cref="MaaBindException" />
     [SetsRequiredMembers]
     public MaaObject(MaaInstance instance, MaaResource resource, MaaController controller)
     {
@@ -129,42 +131,18 @@ public class MaaObject
             Instance.BindController(Controller));
     }
 
-    /// <summary>
-    ///     Wraps a <see cref="MaaInstance"/>, a <see cref="MaaResource"/> and a <see cref="MaaController"/>.
-    /// </summary>
+    /// <inheritdoc cref="MaaObject(MaaInstance, MaaResource, MaaController)"/>
     /// <param name="adbPath"></param>
     /// <param name="address"></param>
     /// <param name="type"></param>
     /// <param name="adbConfig"></param>
-    /// <exception cref="ArgumentNullException" />
+    /// <param name="resourcePaths"></param>
+    /// <exception cref="MaaJobStatusException" />
     [SetsRequiredMembers]
-    public MaaObject(string adbPath, string address, AdbControllerType type, string adbConfig)
-        : this(new(IntPtr.Zero), new(nameof(MaaObject)), new(adbPath, address, type, adbConfig, IntPtr.Zero))
+    public MaaObject(string adbPath, string address, AdbControllerType type, string adbConfig, params string[] resourcePaths)
+        : this(new MaaInstance(),
+               new MaaResource(resourcePaths),
+               new MaaController(adbPath, address, type, adbConfig, linkStart: true))
     {
-        Controller
-            .LinkStart()
-            .Wait()
-            .ThrowIfNot(MaaJobStatus.Success);
-    }
-
-    /// <summary>
-    ///     Wraps a <see cref="MaaInstance"/>, a <see cref="MaaResource"/> and a <see cref="MaaController"/>.
-    /// </summary>
-    /// <param name="adbPath"></param>
-    /// <param name="address"></param>
-    /// <param name="type"></param>
-    /// <param name="adbConfig"></param>
-    /// <param name="resourcePath"></param>
-    /// <exception cref="ArgumentNullException" />
-    /// <exception cref="ArgumentNullException" />
-    [SetsRequiredMembers]
-    public MaaObject(string adbPath, string address, AdbControllerType type, string adbConfig,
-                     string resourcePath)
-        : this(adbPath, address, type, adbConfig)
-    {
-        Resource
-            .Append(Path.GetFullPath(resourcePath))
-            .Wait()
-            .ThrowIfNot(MaaJobStatus.Success);
     }
 }

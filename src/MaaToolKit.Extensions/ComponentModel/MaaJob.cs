@@ -11,9 +11,9 @@ public class MaaJob
     /// 
     /// </summary>
     /// <param name="job"></param>
-    public static implicit operator long(MaaJob job) => job._id;
+    public static implicit operator MaaId(MaaJob job) => job._id;
 
-    private readonly long _id;
+    private readonly MaaId _id;
     private readonly IMaaPost _maaPost;
 
     /// <summary>
@@ -21,7 +21,7 @@ public class MaaJob
     /// </summary>
     /// <param name="id"></param>
     /// <param name="maaPost"></param>
-    public MaaJob(long id, IMaaPost maaPost)
+    public MaaJob(MaaId id, IMaaPost maaPost)
     {
         _id = id;
         _maaPost = maaPost;

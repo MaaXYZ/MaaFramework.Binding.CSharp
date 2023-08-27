@@ -1,11 +1,12 @@
-﻿using MaaToolKit.Enums;
-using MaaToolKit.Extensions.ComponentModel;
+﻿using MaaToolKit.Extensions.ComponentModel;
+using MaaToolKit.Extensions.Enums;
 using MaaToolKit.Extensions.Exceptions;
+using MaaToolKit.Extensions.Interop;
 
-namespace MaaToolkit.Extensions.Test;
+namespace MaaToolKit.Extensions.Test;
 
 /// <summary>
-///     Test <see cref="MaaToolKit.Extensions.ComponentModel"/>.
+///     Test <see cref="ComponentModel"/>.
 /// </summary>
 [TestClass]
 public class Test_ComponentModel
@@ -20,15 +21,20 @@ public class Test_ComponentModel
     private static MaaJob ResourceJob { get; set; }
     private static MaaJob ControllerJob { get; set; }
     private static MaaJob InstanceJob { get; set; }
+
+    private static MaaActionApi.Run Run { get; set; } =
+        (nint a, string b, string c, out MaaRect d) => { d = default; return 1; };
+
+    private static MaaActionApi.Stop Stop { get; set; } =
+        () => { };
+
+    private static MaaRecognizerApi.Analyze Analyze { get; set; } =
+        (nint a, MaaImage b, string c, string d, out MaaRecognitionResult e) => { e = default; return 1; };
 #pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 
-    private static void OnNotify(string msg, string detailsJson, nint identifier)
+    private static void OnCallback(string msg, string detailsJson, nint identifier)
     {
-        Assert.IsNotNull(msg);
-        Assert.IsNotNull(detailsJson);
-        Assert.IsNotNull(identifier);
-
-        Console.WriteLine(msg);
+        Console.WriteLine($"msg: {msg}\ndetailsJson: {detailsJson}\nidentifier: {identifier}");
     }
 
     /// <summary>
@@ -113,7 +119,7 @@ public class Test_ComponentModel
     public static void MaaResource_Method_Constructor()
     {
         Resource = new MaaResource();
-        Resource.Notify += OnNotify;
+        Resource.Callback += OnCallback;
     }
 
     /// <summary> Test a member of the <see cref="MaaResource"/>. </summary>
@@ -150,12 +156,13 @@ public class Test_ComponentModel
     public void C_MaaResource_Property_Get_Loaded()
         => Assert.IsTrue(
             Resource.Loaded);
-
+    /*
     /// <summary> Test a member of the <see cref="MaaResource"/>. </summary>
     [TestMethod]
     public void C_MaaResource_Method_SetOption()
         => Assert.IsFalse(
             Resource.SetOption(ResourceOption.Invalid, "test"));
+    */
 
     /// <summary> Test a member of the <see cref="MaaResource"/>. </summary>
     [TestMethod]
@@ -181,7 +188,7 @@ public class Test_ComponentModel
         ArgumentNullException.ThrowIfNull(address);
 
         Controller = new MaaController(adbPath, address, s_input | s_screenCap, s_adbConfig);
-        Controller.Notify += OnNotify;
+        Controller.Callback += OnCallback;
     }
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
@@ -190,38 +197,42 @@ public class Test_ComponentModel
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
-    public void H_MaaController_Property_GetSet_ScreenshotWidth()
+    public void H_MaaController_Method_SetOption()
     {
-        Controller.ScreenshotHeight = 114514;
-        Controller.ScreenshotWidth = 114514;
-        Assert.AreEqual(0, Controller.ScreenshotHeight);
-        Assert.AreNotEqual(0, Controller.ScreenshotWidth);
+        static void action() => Controller.SetOption(ControllerOption.Invalid, string.Empty);
+        Assert.ThrowsException<ArgumentException>(action);
     }
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
-    public void H_MaaController_Property_GetSet_ScreenshotHeight()
+    public void H_MaaController_Method_SetOption_ScreenshotTargetLongSide()
     {
-        Controller.ScreenshotWidth = 114514;
-        Controller.ScreenshotHeight = 114514;
-        Assert.AreEqual(0, Controller.ScreenshotWidth);
-        Assert.AreNotEqual(0, Controller.ScreenshotHeight);
+        var ret = Controller.SetOption(ControllerOption.ScreenshotTargetLongSide, 1920);
+        Assert.IsTrue(ret);
     }
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
-    public void H_MaaController_Property_GetSet_DefaultAppPackageEntry()
+    public void H_MaaController_Method_SetOption_ScreenshotTargetShortSide()
     {
-        Controller.DefaultAppPackageEntry = 114514.ToString();
-        Assert.AreNotEqual(string.Empty, Controller.DefaultAppPackageEntry);
+        var ret = Controller.SetOption(ControllerOption.ScreenshotTargetShortSide, 1080);
+        Assert.IsTrue(ret);
     }
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
-    public void H_MaaController_Property_GetSet_DefaultAppPackage()
+    public void H_MaaController_Method_SetOption_DefaultAppPackage()
     {
-        Controller.DefaultAppPackage = 114514.ToString();
-        Assert.AreNotEqual(string.Empty, Controller.DefaultAppPackage);
+        var ret = Controller.SetOption(ControllerOption.DefaultAppPackage, "114514");
+        Assert.IsTrue(ret);
+    }
+
+    /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
+    [TestMethod]
+    public void H_MaaController_Method_SetOption_DefaultAppPackageEntry()
+    {
+        var ret = Controller.SetOption(ControllerOption.DefaultAppPackageEntry, "114514");
+        Assert.IsTrue(ret);
     }
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
@@ -236,6 +247,15 @@ public class Test_ComponentModel
     public void H_MaaController_Method_Click()
         => Assert.IsNotNull(
             Controller.Click(0, 0));
+
+    /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
+    [TestMethod]
+    public void H_MaaController_Method_Swipe()
+        => Assert.IsNotNull(
+            Controller.Swipe(new int[2] { 0, 1 },
+                             new int[2] { 0, 1 },
+                             new int[2] { 0, 1 },
+                             2));
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
@@ -270,8 +290,13 @@ public class Test_ComponentModel
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
     public void I_MaaController_Method_GetImage()
-        => Assert.IsNotNull(
-            Controller.GetImage());
+    {
+        var job = Controller.Screencap();
+        var ret = job.Wait();
+        ret.ThrowIfNot(MaaJobStatus.Success);
+        Assert.IsNotNull(
+                Controller.GetImage());
+    }
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
@@ -287,7 +312,7 @@ public class Test_ComponentModel
     public static void MaaInstance_Method_Constructor()
     {
         Instance = new MaaInstance();
-        Instance.Notify += OnNotify;
+        Instance.Callback += OnCallback;
     }
 
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
@@ -309,13 +334,56 @@ public class Test_ComponentModel
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
     [TestMethod]
     public void O_MaaInstance_Property_Get_Initialized()
+    {
+        var instance = new MaaInstance();
+        Assert.IsTrue(
+            instance.BindResource(Resource));
+        Assert.IsTrue(
+            instance.BindController(Controller));
+        Assert.IsTrue(
+            instance.Initialized);
+    }
+
+    /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
+    [TestMethod]
+    public void N_MaaInstance_Method_Register_MaaCustomRecognizer()
         => Assert.IsTrue(
-            Instance.Initialized);
+            Instance.Register("114514", new MaaCustomRecognizerApi() { Analyze = Analyze }));
+
+    /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
+    [TestMethod]
+    public void N_MaaInstance_Method_Unregister_MaaCustomRecognizer()
+        => Assert.IsTrue(
+            Instance.Unregister<MaaCustomRecognizerApi>("114514"));
+
+    /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
+    [TestMethod]
+    public void N_MaaInstance_Method_Clear_MaaCustomRecognizer()
+        => Assert.IsTrue(
+            Instance.Clear<MaaCustomRecognizerApi>());
+
+    /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
+    [TestMethod]
+    public void N_MaaInstance_Method_Register_MaaCustomAction()
+        => Assert.IsTrue(
+            Instance.Register("114514", new MaaCustomActionApi() { Run = Run, Stop = Stop }));
+
+    /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
+    [TestMethod]
+    public void N_MaaInstance_Method_Unregister_MaaCustomAction()
+        => Assert.IsTrue(
+            Instance.Unregister<MaaCustomActionApi>("114514"));
+
+    /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
+    [TestMethod]
+    public void N_MaaInstance_Method_Clear_MaaCustomAction()
+        => Assert.IsTrue(
+            Instance.Clear<MaaCustomActionApi>());
 
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
     public static void MaaInstance_Method_AppendTask()
     {
-        InstanceJob = Instance.AppendTask(114514.ToString(), string.Empty);
+        InstanceJob = Instance.AppendTask("114514", string.Empty);
         Assert.IsNotNull(InstanceJob);
     }
 
