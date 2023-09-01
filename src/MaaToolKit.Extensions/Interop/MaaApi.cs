@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace MaaToolKit.Extensions.Interop;
 
@@ -9,10 +10,15 @@ namespace MaaToolKit.Extensions.Interop;
 /// <summary>
 ///     The base P/Invoke methods for MaaFramework, use this class to call all the native methods.
 ///     If you do not known what you are doing, do not use this class. In most situations, you
-///     should use <see cref="MaaToolKit.Extensions.ComponentModel"/> instead.
+///     should use <see cref="ComponentModel"/> instead.
 /// </summary>
 public static partial class MaaApi
 {
+    static MaaApi()
+    {
+        NativeLibrary.Init();
+    }
+
     #region include/MaaFramework/MaaAPI.h, commit hash: 1cbe20a55e43f22a092f4c62a2b869c0200f50b5.
 
     [LibraryImport("MaaFramework")]

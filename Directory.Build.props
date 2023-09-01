@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>11</LangVersion>
+    <LangVersion>preview</LangVersion>
     <TargetFramework>net7.0</TargetFramework>
     <CodeAnalysisRuleSet>$(SolutionDir)Directory.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
