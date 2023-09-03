@@ -8,4 +8,8 @@
         <Compile Include="..\Common\NativeLibraryForNetcoreapp3.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Maa.Framework.Runtimes" />
+    </ItemGroup>
+
 </Project>
