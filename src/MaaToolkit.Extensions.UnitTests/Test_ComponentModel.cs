@@ -184,7 +184,7 @@ public class Test_ComponentModel
     private static readonly string s_controllerConfig = Path.GetFullPath($"{s_resource}/controller_config.json");
     private static readonly string s_adbConfig = File.ReadAllText(s_controllerConfig);
     private static readonly AdbControllerType s_input = AdbControllerType.InputPresetAdb;
-    private static readonly AdbControllerType s_screenCap = AdbControllerType.ScreenCapRawWithGzip;
+    private static readonly AdbControllerType s_screenCap = AdbControllerType.ScreenCapEncode;
 
     /// <summary> Tests the constructor of the <see cref="MaaController"/>. </summary>
     public static void MaaController_Method_Constructor(TestContext testContext)
@@ -299,9 +299,7 @@ public class Test_ComponentModel
     [TestMethod]
     public void I_MaaController_Method_GetImage()
     {
-        var job = Controller.Screencap();
-        var ret = job.Wait();
-        ret.ThrowIfNot(MaaJobStatus.Success);
+        Controller.Screencap().Wait().ThrowIfNot(MaaJobStatus.Success);
         Assert.IsNotNull(
                 Controller.GetImage());
     }
@@ -309,8 +307,11 @@ public class Test_ComponentModel
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
     public void H_MaaController_Property_Get_Uuid()
-        => Assert.IsNotNull(
-            Controller.Uuid);
+    {
+        Controller.LinkStart().Wait().ThrowIfNot(MaaJobStatus.Success);
+        Assert.IsNotNull(
+                Controller.Uuid);
+    }
 
     #endregion
 
@@ -361,8 +362,12 @@ public class Test_ComponentModel
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
     [TestMethod]
     public void N_MaaInstance_Method_Unregister_MaaCustomRecognizer()
-        => Assert.IsTrue(
-            Instance.Unregister<MaaCustomRecognizerApi>("114514"));
+    {
+        Assert.IsTrue(
+            Instance.Register("1919810", new MaaCustomRecognizerApi() { Analyze = Analyze }));
+        Assert.IsTrue(
+                Instance.Unregister<MaaCustomRecognizerApi>("1919810"));
+    }
 
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
     [TestMethod]
@@ -379,8 +384,12 @@ public class Test_ComponentModel
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
     [TestMethod]
     public void N_MaaInstance_Method_Unregister_MaaCustomAction()
-        => Assert.IsTrue(
-            Instance.Unregister<MaaCustomActionApi>("114514"));
+    {
+        Assert.IsTrue(
+            Instance.Register("1919810", new MaaCustomActionApi() { Run = Run, Stop = Stop }));
+        Assert.IsTrue(
+                Instance.Unregister<MaaCustomActionApi>("1919810"));
+    }
 
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
     [TestMethod]
@@ -429,12 +438,24 @@ public class Test_ComponentModel
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
     [TestMethod]
     public void O_MaaInstance_Method_GetBindedResource()
-        => Assert.AreSame(Resource, Instance.GetBindedResource());
+    {
+        var instance = new MaaInstance();
+        Assert.IsTrue(
+            instance.BindResource(Resource));
+        Assert.AreSame(Resource,
+            instance.GetBindedResource());
+    }
 
     /// <summary> Test a member of the <see cref="MaaInstance"/>. </summary>
     [TestMethod]
     public void O_MaaInstance_Method_GetBindedController()
-        => Assert.AreSame(Controller, Instance.GetBindedController());
+    {
+        var instance = new MaaInstance();
+        Assert.IsTrue(
+            instance.BindController(Controller));
+        Assert.AreSame(Controller,
+            instance.GetBindedController());
+    }
 
     #endregion
 }
