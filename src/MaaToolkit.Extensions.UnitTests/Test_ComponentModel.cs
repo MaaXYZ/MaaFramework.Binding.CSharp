@@ -3,15 +3,27 @@ using MaaToolKit.Extensions.Enums;
 using MaaToolKit.Extensions.Exceptions;
 using MaaToolKit.Extensions.Interop;
 
-namespace MaaToolKit.Extensions.Test;
+namespace MaaToolkit.Extensions.UnitTests;
 
 /// <summary>
-///     Test <see cref="ComponentModel"/>.
+///     Test <see cref="MaaToolKit.Extensions.ComponentModel"/>.
 /// </summary>
 [TestClass]
 public class Test_ComponentModel
 {
-    private const string MaaPath = "./maa";
+    /// <summary>
+    ///     Assembly initialize
+    /// </summary>
+    /// <param name="testContext"></param>
+    [AssemblyInitialize]
+    public static void AssemblyInitialize(TestContext testContext)
+    {
+        s_debug = testContext.TestDir ?? s_debug;
+        s_resource = Path.Combine(Environment.CurrentDirectory, "SampleResource");
+    }
+
+    private static string s_debug = Path.GetFullPath("./debug");
+    private static string s_resource = Path.GetFullPath("./SampleResource");
 
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
     private static MaaResource Resource { get; set; }
@@ -73,8 +85,6 @@ public class Test_ComponentModel
 
     #region static MaaObject
 
-    private static readonly string s_debug = Path.GetFullPath($"{MaaPath}/debug");
-
     /// <summary> Tests the static member of the <see cref="MaaObject"/>. </summary>
     public static void MaaObject_Property_GetSet_FrameworkLogDir()
     {
@@ -111,9 +121,6 @@ public class Test_ComponentModel
     #endregion
 
     #region MaaResource
-
-    private static readonly string s_resource = Path.GetFullPath($"{MaaPath}/resource");
-
 
     /// <summary> Tests the constructor of the <see cref="MaaResource"/>. </summary>
     public static void MaaResource_Method_Constructor()
@@ -182,6 +189,7 @@ public class Test_ComponentModel
     /// <summary> Tests the constructor of the <see cref="MaaController"/>. </summary>
     public static void MaaController_Method_Constructor(TestContext testContext)
     {
+        // 请修改 TestParam.runsettings
         var adbPath = testContext.Properties["adbPath"] as string;
         var address = testContext.Properties["address"] as string;
         ArgumentNullException.ThrowIfNull(adbPath);

@@ -10,4 +10,10 @@
         <ProjectReference Include="..\..\src\MaaToolKit.Extensions\MaaToolKit.Extensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\Common\TestParam.runsettings" />
+        <None Include="SampleResource\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 </Project>

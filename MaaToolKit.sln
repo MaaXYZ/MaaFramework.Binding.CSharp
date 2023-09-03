@@ -16,12 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaToolKit.Extensions", "src\MaaToolKit.Extensions\MaaToolKit.Extensions.csproj", "{F15504A2-1A15-4574-BF63-CF2282BCA69B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaToolkit.Extensions.Test", "src\MaaToolkit.Extensions.UnitTests\MaaToolkit.Extensions.UnitTests.csproj", "{02A37AB6-F381-4A27-8FE2-DC6914D70B25}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{F189E2C3-6DEB-4FBD-907F-AA9105E14F38}"
-	ProjectSection(SolutionItems) = preProject
-		src\Common\NativeLibraryForNetcoreapp3.cs = src\Common\NativeLibraryForNetcoreapp3.cs
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaToolkit.Extensions.UnitTests", "src\MaaToolkit.Extensions.UnitTests\MaaToolkit.Extensions.UnitTests.csproj", "{02A37AB6-F381-4A27-8FE2-DC6914D70B25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
