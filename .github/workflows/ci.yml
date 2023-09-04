@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "**"
+    paths:
+      - ".github/workflows/ci.yml"
+      - "src/**"
+      - "*.sln"
+      - "*.props"
+
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - ".github/workflows/ci.yml"
+      - "src/**"
+      - "*.sln"
+      - "*.props"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        arch: [aarch64, x86_64]
+        dotnet: [ '7.0.x' ]
+      fail-fast: false
+#    env:
+#      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+      - run: dotnet restore --locked-mode
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore

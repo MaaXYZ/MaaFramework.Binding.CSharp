@@ -11,20 +11,6 @@ namespace MaaToolkit.Extensions.UnitTests;
 [TestClass]
 public class Test_ComponentModel
 {
-    /// <summary>
-    ///     Assembly initialize
-    /// </summary>
-    /// <param name="testContext"></param>
-    [AssemblyInitialize]
-    public static void AssemblyInitialize(TestContext testContext)
-    {
-        s_debug = testContext.TestDir ?? s_debug;
-        s_resource = Path.Combine(Environment.CurrentDirectory, "SampleResource");
-    }
-
-    private static string s_debug = Path.GetFullPath("./debug");
-    private static string s_resource = Path.GetFullPath("./SampleResource");
-
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
     private static MaaResource Resource { get; set; }
     private static MaaController Controller { get; set; }
@@ -60,7 +46,7 @@ public class Test_ComponentModel
         MaaObject_Property_GetSet_ToolkitLogDir();
         MaaObject_Property_GetSet_DebugMode();
         MaaResource_Method_Constructor();
-        MaaController_Method_Constructor(context);
+        MaaController_Method_Constructor();
         MaaInstance_Method_Constructor();
 
         MaaResource_Method_Append();
@@ -88,14 +74,14 @@ public class Test_ComponentModel
     /// <summary> Tests the static member of the <see cref="MaaObject"/>. </summary>
     public static void MaaObject_Property_GetSet_FrameworkLogDir()
     {
-        MaaObject.FrameworkLogDir = s_debug;
+        MaaObject.FrameworkLogDir = GlobalInfo.DebugPath;
         Assert.AreNotEqual(string.Empty, MaaObject.FrameworkLogDir);
     }
 
     /// <summary> Tests the static member of the <see cref="MaaObject"/>. </summary>
     public static void MaaObject_Property_GetSet_ToolkitLogDir()
     {
-        MaaObject.ToolkitLogDir = s_debug;
+        MaaObject.ToolkitLogDir = GlobalInfo.DebugPath;
         Assert.AreNotEqual(string.Empty, MaaObject.ToolkitLogDir);
     }
 
@@ -136,7 +122,7 @@ public class Test_ComponentModel
     /// <summary> Test a member of the <see cref="MaaResource"/>. </summary>
     public static void MaaResource_Method_Append()
     {
-        ResourceJob = Resource.Append(s_resource);
+        ResourceJob = Resource.Append(GlobalInfo.ResourcePath);
         Assert.IsNotNull(ResourceJob);
     }
 
@@ -181,21 +167,15 @@ public class Test_ComponentModel
 
     #region MaaController
 
-    private static readonly string s_controllerConfig = Path.GetFullPath($"{s_resource}/controller_config.json");
+    private static readonly string s_controllerConfig = Path.GetFullPath($"{GlobalInfo.ResourcePath}/controller_config.json");
     private static readonly string s_adbConfig = File.ReadAllText(s_controllerConfig);
     private static readonly AdbControllerType s_input = AdbControllerType.InputPresetAdb;
     private static readonly AdbControllerType s_screenCap = AdbControllerType.ScreenCapEncode;
 
     /// <summary> Tests the constructor of the <see cref="MaaController"/>. </summary>
-    public static void MaaController_Method_Constructor(TestContext testContext)
+    public static void MaaController_Method_Constructor()
     {
-        // 请修改 TestParam.runsettings
-        var adbPath = testContext.Properties["adbPath"] as string;
-        var address = testContext.Properties["address"] as string;
-        ArgumentNullException.ThrowIfNull(adbPath);
-        ArgumentNullException.ThrowIfNull(address);
-
-        Controller = new MaaController(adbPath, address, s_input | s_screenCap, s_adbConfig);
+        Controller = new MaaController(GlobalInfo.AdbPath, GlobalInfo.Address, s_input | s_screenCap, s_adbConfig);
         Controller.Callback += OnCallback;
     }
 

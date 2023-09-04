@@ -1,0 +1,69 @@
+name: test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "**"
+    paths:
+      - ".github/workflows/smoke-testing.yml"
+      - "src/**"
+      - "*.sln"
+      - "*.props"
+
+jobs:
+  test:
+    runs-on: macos-latest
+    env:
+      API_LEVEL: 29
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0'
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+      - run: dotnet restore --locked-mode
+
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ env.API_LEVEL }}
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ env.API_LEVEL }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Test
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          AdbPath: adb
+          Address: emulator-5554
+          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 0
+        with:
+          api-level: ${{ env.API_LEVEL }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: dotnet test --no-restore --logger trx --verbosity normal
+
+      - name: Upload TestResults
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: TestResults
+          path: ./**/TestResults
