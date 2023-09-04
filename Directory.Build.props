@@ -46,14 +46,34 @@
     </PackageReference>
   </ItemGroup>
 
+  <!-- Metadata Variable -->
+  <PropertyGroup>
+    <CurrentYear>$([System.DateTime]::Now.Year)</CurrentYear>
+  </PropertyGroup>
+
   <!-- Assembly Metadata -->
   <PropertyGroup>
     <Authors>MAA Team</Authors>
     <Owners>MAA Team</Owners>
     <Company>MAA Assistant Arknights</Company>
-    <Copyright>Copyright © 2023 MAA Team and Contributers. All rights reserved.</Copyright>
-    <RepositoryType>git</RepositoryType>
+    <Copyright>Copyright © 2021-$(CurrentYear) MAA Team and Contributers. All rights reserved.</Copyright>
     <NeutralLanguage>zh-CN</NeutralLanguage>
   </PropertyGroup>
+
+  <!-- NuGet Package Metadata -->
+  <PropertyGroup>
+    <Version Condition="'$(Version)' == ''">1.0.0-dev</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>LGPL-2.1-only</PackageLicenseExpression>
+    <PackageIcon>maa-logo_128x128.png</PackageIcon>
+    <PackageReleaseNotes>Release notes are at https://github.com/moomiji/MaaToolKit.Extensions/releases.</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/moomiji/MaaToolKit.Extensions</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>$(RepositoryBranch)</RepositoryBranch>
+    <RepositoryCommit>$(RepositoryCommit)</RepositoryCommit>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Visible="false" Include="..\Common\PackageFiles\**" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
