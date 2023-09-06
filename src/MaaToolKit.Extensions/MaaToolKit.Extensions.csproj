@@ -2,7 +2,7 @@
 
     <!-- Package Properties -->
     <PropertyGroup>
-        <PackageId>MAA.ToolKit.Extensions</PackageId>
+        <PackageId>Maa.ToolKit.Extensions</PackageId>
         <Title>MAA ToolKit Extensions</Title>
         <description>MaaToolKit.Extensions is a common package of MaaFramework for .NET 7.</description>
         <PackageTags>MAA;COM;c-sharp;cross-platform;dotnet</PackageTags>
