@@ -9,8 +9,10 @@ namespace MaaToolKit.Extensions.ComponentModel;
 /// <summary>
 ///     A class wrapping a <see cref="MaaInstance"/>, a <see cref="MaaResource"/> and a <see cref="MaaController"/>.
 /// </summary>
-public class MaaObject
+public class MaaObject : IDisposable
 {
+    private bool disposed;
+
     /// <summary>
     ///     Sets <paramref name="value"/> to a option of the <see cref="MaaObject"/>.
     /// </summary>
@@ -144,5 +146,34 @@ public class MaaObject
                new MaaResource(resourcePaths),
                new MaaController(adbPath, address, type, adbConfig, linkStart: true))
     {
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    ///     Disposes the <see cref="MaaObject"/> instance.
+    /// </summary>
+    /// <param name="disposing"></param>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaController.Dispose()"/>, <see cref="MaaInstance.Dispose()"/>, <see cref="MaaResource.Dispose()"/>.
+    /// </remarks>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposed)
+        {
+            if (disposing)
+            {
+                Controller.Dispose();
+                Instance.Dispose();
+                Resource.Dispose();
+            }
+
+            disposed = true;
+        }
     }
 }

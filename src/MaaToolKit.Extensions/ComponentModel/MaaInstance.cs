@@ -12,6 +12,7 @@ namespace MaaToolKit.Extensions.ComponentModel;
 public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
 {
     internal MaaInstanceHandle _handle;
+    private bool disposed;
 
     /// <inheritdoc/>
     public event IMaaNotify.MaaCallback? Callback;
@@ -61,10 +62,12 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// </remarks>
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing && _handle != MaaInstanceHandle.Zero)
+        if (!disposed)
         {
+            // if (disposing) Dispose managed resources.
             MaaDestroy(_handle);
             _handle = MaaInstanceHandle.Zero;
+            disposed = true;
         }
     }
 

@@ -13,6 +13,7 @@ namespace MaaToolKit.Extensions.ComponentModel;
 public class MaaController : IMaaNotify, IMaaPost, IDisposable
 {
     internal MaaControllerHandle _handle;
+    private bool disposed;
 
     internal static readonly HashSet<MaaController> _controllers = new HashSet<MaaController>();
     internal static MaaController Get(IntPtr handle)
@@ -87,10 +88,12 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// </remarks>
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing && _handle != MaaControllerHandle.Zero)
+        if (!disposed)
         {
+            // if (disposing) Dispose managed resources.
             MaaControllerDestroy(_handle);
             _handle = MaaControllerHandle.Zero;
+            disposed = true;
         }
     }
 

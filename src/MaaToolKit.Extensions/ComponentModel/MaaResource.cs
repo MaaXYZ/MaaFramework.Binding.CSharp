@@ -15,6 +15,7 @@ namespace MaaToolKit.Extensions.ComponentModel;
 public class MaaResource : IMaaNotify, IMaaPost, IDisposable
 {
     internal MaaResourceHandle _handle;
+    private bool disposed;
 
     private static readonly HashSet<MaaResource> _resources = new();
     internal static MaaResource Get(IntPtr handle)
@@ -98,10 +99,12 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     /// </remarks>
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing && _handle != MaaResourceHandle.Zero)
+        if (!disposed)
         {
+            // if (disposing) Dispose managed resources.
             MaaResourceDestroy(_handle);
             _handle = MaaResourceHandle.Zero;
+            disposed = true;
         }
     }
 
