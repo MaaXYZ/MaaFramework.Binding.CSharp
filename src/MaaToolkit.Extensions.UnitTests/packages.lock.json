@@ -68,17 +68,17 @@
         "resolved": "1.6.0",
         "contentHash": "COC1aiAJjCoA5GBF+QKL2uLqEBew4JsCkQmoHKbN3TlOZKa2fKLz5CpiRQKDz0RsAOEGsVKqOD5bomsXq/4STQ=="
       },
-      "MAA.ToolKit.Extensions": {
+      "Maa.ToolKit.Extensions": {
         "type": "Project",
         "dependencies": {
-          "Maa.Framework.Runtimes": "[0.3.7, )"
+          "Maa.Framework.Runtimes": "[0.6.0-beta.1, )"
         }
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
-        "requested": "[0.3.7, )",
-        "resolved": "0.3.7",
-        "contentHash": "GfcKrwhrJGDtgXdf/B6xQezkdAXKixck2B3XMnZynGjf9YB+Mpmji9457/zdJ9q910QqPD+TId8lNF0LkbY0/w=="
+        "requested": "[0.6.0-beta.1, )",
+        "resolved": "0.6.0-beta.1",
+        "contentHash": "aXkvpmPOa4zkguYaOOqWz0Pvfk0aexplmz6OGhfV7exREKw52ZArJqQE1jd1e/oBZ88q5Qhz3IYDeH2RppwQiA=="
       }
     }
   }

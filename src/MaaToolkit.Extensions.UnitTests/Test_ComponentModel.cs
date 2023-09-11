@@ -2,6 +2,7 @@
 using MaaToolKit.Extensions.Enums;
 using MaaToolKit.Extensions.Exceptions;
 using MaaToolKit.Extensions.Interop;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MaaToolkit.Extensions.UnitTests;
 
@@ -19,15 +20,39 @@ public class Test_ComponentModel
     private static MaaJob ResourceJob { get; set; }
     private static MaaJob ControllerJob { get; set; }
     private static MaaJob InstanceJob { get; set; }
+    private static MaaImage Image { get; set; }
 
-    private static MaaActionApi.Run Run { get; set; } =
-        (nint a, string b, string c, out MaaRect d) => { d = default; return 1; };
+    private static MaaActionApi.Run Run { get; set; } = (
+        /* MaaSyncContextHandle */  nint syncContext,
+        /* MaaStringView */         nint taskName,
+        /* MaaStringView */         nint customActionParam,
+                                    ref MaaRectApi currentBox,
+        /* MaaStringView */         nint curRecDetail) =>
+    {
+        currentBox.X = 0;
+        currentBox.Y = 0;
+        currentBox.Width = 1920;
+        currentBox.Width = 1080;
+        return 1;
+    };
 
     private static MaaActionApi.Stop Stop { get; set; } =
         () => { };
 
-    private static MaaRecognizerApi.Analyze Analyze { get; set; } =
-        (nint a, MaaImage b, string c, string d, out MaaRecognitionResult e) => { e = default; return 1; };
+    private static MaaRecognizerApi.Analyze Analyze { get; set; } = (
+        /* MaaSyncContextHandle */  nint syncContext,
+        /* MaaImageBufferHandle */  nint image,
+        /* MaaStringView */         nint taskName,
+        /* MaaStringView */         nint customRecognitionParam,
+                                    ref MaaRectApi outBox,
+        /* MaaStringBufferHandle */ nint detailBuff) =>
+    {
+        outBox.X = 0;
+        outBox.Y = 0;
+        outBox.Width = 1920;
+        outBox.Width = 1080;
+        return 1;
+    };
 #pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 
     private static void OnCallback(string msg, string detailsJson, nint identifier)
@@ -48,6 +73,7 @@ public class Test_ComponentModel
         MaaResource_Method_Constructor();
         MaaController_Method_Constructor();
         MaaInstance_Method_Constructor();
+        MaaImage_Method_Constructor();
 
         MaaResource_Method_Append();
         MaaController_Method_LinkStart();
@@ -67,6 +93,7 @@ public class Test_ComponentModel
         MaaResource_Method_Dispose();
         MaaController_Method_Dispose();
         MaaInstance_Method_Dispose();
+        MaaImage_Method_Dispose();
     }
 
     #region static MaaObject
@@ -122,7 +149,7 @@ public class Test_ComponentModel
     /// <summary> Test a member of the <see cref="MaaResource"/>. </summary>
     public static void MaaResource_Method_Append()
     {
-        ResourceJob = Resource.Append(GlobalInfo.ResourcePath);
+        ResourceJob = Resource.AppendPath(GlobalInfo.ResourcePath);
         Assert.IsNotNull(ResourceJob);
     }
 
@@ -280,8 +307,8 @@ public class Test_ComponentModel
     public void I_MaaController_Method_GetImage()
     {
         Controller.Screencap().Wait().ThrowIfNot(MaaJobStatus.Success);
-        Assert.IsNotNull(
-                Controller.GetImage());
+        Assert.IsTrue(
+                Controller.GetImage(Image));
     }
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
@@ -438,4 +465,90 @@ public class Test_ComponentModel
     }
 
     #endregion
+
+    #region MaaImage
+
+    /// <summary> Tests the constructor of the <see cref="MaaImage"/>. </summary>
+    public static void MaaImage_Method_Constructor()
+    {
+        Image = new MaaImage();
+    }
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    public static void MaaImage_Method_Dispose()
+        => Image.Dispose();
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    [TestMethod]
+    public void K_MaaImage_Method_GetRawData()
+    {
+        Assert.IsNotNull(
+                Image.GetRawData());
+    }
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    [TestMethod]
+    public void K_MaaImage_Property_Get_Width()
+    {
+        Assert.IsNotNull(
+                Image.Width);
+    }
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    [TestMethod]
+    public void K_MaaImage_Property_Get_Height()
+    {
+        Assert.IsNotNull(
+                Image.Height);
+    }
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    [TestMethod]
+    public void K_MaaImage_Property_Get_Type()
+    {
+        Assert.IsNotNull(
+                Image.Type);
+    }
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    [TestMethod]
+    public void L_MaaImage_Method_SetRawData()
+    {
+        Assert.IsNotNull(
+                Image.SetRawData(nint.Zero, 0, 0, 0));
+    }
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    [TestMethod]
+    public void J_MaaImage_Method_GetEncodedData()
+    {
+        using var image = new MaaImage();
+        Controller.Screencap().Wait().ThrowIfNot(MaaJobStatus.Success);
+        Assert.IsTrue(
+                Controller.GetImage(image));
+        Assert.IsNotNull(
+                Image.GetEncodedData());
+    }
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    [TestMethod]
+    public void J_MaaImage_Property_Get_Size()
+    {
+        using var image = new MaaImage();
+        Controller.Screencap().Wait().ThrowIfNot(MaaJobStatus.Success);
+        Assert.IsTrue(
+                Controller.GetImage(image));
+        Assert.IsNotNull(
+                Image.Size);
+    }
+
+    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    [TestMethod]
+    public void L_MaaImage_Method_SetEncodedData()
+    {
+        Assert.IsNotNull(
+                Image.SetEncodedData(nint.Zero, 0));
+    }
+
+    #endregion 
 }

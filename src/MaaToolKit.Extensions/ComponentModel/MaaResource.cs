@@ -77,7 +77,7 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     {
         foreach (var path in paths)
         {
-            this.Append(path)
+            this.AppendPath(path)
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Success);
         }
@@ -114,11 +114,11 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     /// <param name="resourcePath">The resource path.</param>
     /// <returns>A resource load job.</returns>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourcePostResource"/>.
+    ///     Wrapper of <see cref="MaaResourcePostPath"/>.
     /// </remarks>
-    public MaaJob Append(string resourcePath)
+    public MaaJob AppendPath(string resourcePath)
     {
-        var id = MaaResourcePostResource(_handle, resourcePath);
+        var id = MaaResourcePostPath(_handle, resourcePath);
         return new(id, this);
     }
 
@@ -177,7 +177,6 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceGetHash"/>.
     /// </remarks>
-    public string? Hash => _handle.GetStringFromFuncWithBuffer(
-        MaaResourceGetHash,
-        bufferSize: 1 << 10);
+    public string? Hash => _handle.GetStringFromFuncWithMaaStringBuffer(
+        MaaResourceGetHash);
 }

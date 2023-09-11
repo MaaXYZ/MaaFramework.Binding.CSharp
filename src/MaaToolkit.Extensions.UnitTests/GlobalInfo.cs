@@ -19,7 +19,8 @@ public static class GlobalInfo
     [AssemblyInitialize]
     public static void AssemblyInitialize(TestContext testContext)
     {
-        // 请修改 TestParam.runsettings
+        // 请修改 TestParam.runsettings，并在测试资源管理器——设置——配置运行设置
+        // 选择解决方案范围内的 runsettings 文件：src\Common\TestParam.runsettings
         var adbPath = testContext.Properties["adbPath"] as string
             ?? Environment.GetEnvironmentVariable("AdbPath");
         var address = testContext.Properties["address"] as string

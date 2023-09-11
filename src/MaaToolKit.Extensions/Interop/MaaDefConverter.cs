@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using static MaaToolKit.Extensions.Interop.MaaApi;
 
 namespace MaaToolKit.Extensions.Interop;
 
@@ -10,10 +11,10 @@ namespace MaaToolKit.Extensions.Interop;
 public static class MaaDefConverter
 {
     /// <summary>
-    ///     Converts a MaaString (<see cref="MaaString"/>) to a <see cref="string"/>.
+    ///     Converts a MaaStringView (<see cref="MaaStringView"/>) to a <see cref="string"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException"></exception>
-    public static string ToStringUTF8(this MaaString value)
+    public static string ToStringUTF8(this MaaStringView value)
         => Marshal.PtrToStringUTF8(value)
         ?? throw new ArgumentNullException(nameof(value));
 
@@ -41,44 +42,20 @@ public static class MaaDefConverter
     public static MaaOptionValue[] ToMaaOptionValues(this int value)
         => BitConverter.GetBytes(value);
 
-    internal static byte[]? GetBytesFromFuncWithBuffer(this nint handle, Func<nint, nint, MaaSize, MaaSize> func, MaaSize bufferSize)
+    internal static string? GetStringFromFuncWithMaaStringBuffer(this nint handle, Func<nint, nint, MaaBool> func)
     {
-        MaaSize size;
-        var buffer = Marshal.AllocHGlobal((int)bufferSize);
-        try
+        var buffer = MaaCreateStringBuffer();
+        if (!func(handle, buffer).ToBoolean())
         {
-            size = func(handle, buffer, bufferSize);
-        }
-        catch (SEHException seh)
-        {
-            Debug.WriteLine(seh);
-            throw;
-        }
-
-        if (size == MaaDef.MaaNullSize)
-        {
-            Marshal.FreeHGlobal(buffer);
+            MaaDestroyStringBuffer(buffer);
             return null;
         }
 
-        var result = new byte[size];
-        Marshal.Copy(buffer, result, 0, (int)size);
-        Marshal.FreeHGlobal(buffer);
-        return result;
-    }
-
-    internal static string? GetStringFromFuncWithBuffer(this nint handle, Func<nint, nint, MaaSize, MaaSize> func, MaaSize bufferSize)
-    {
-        var buffer = Marshal.AllocHGlobal((int)bufferSize);
-        var size = func(handle, buffer, bufferSize);
-        if (size == MaaDef.MaaNullSize)
-        {
-            Marshal.FreeHGlobal(buffer);
-            return null;
-        }
-
-        var result = Marshal.PtrToStringUTF8(buffer, (int)size);
-        Marshal.FreeHGlobal(buffer);
+        var view = MaaGetString(buffer);
+        // var size = (int)MaaGetStringSize(buffer);
+        // var result = Marshal.PtrToStringUTF8(view, size);
+        var result = Marshal.PtrToStringUTF8(view);
+        MaaDestroyStringBuffer(buffer);
         return result;
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace MaaToolKit.Extensions.Interop;
 
@@ -19,10 +18,58 @@ public static partial class MaaApi
         NativeLibrary.Init();
     }
 
-    #region include/MaaFramework/MaaAPI.h, commit hash: 1cbe20a55e43f22a092f4c62a2b869c0200f50b5.
+    #region include/MaaFramework/MaaAPI.h, commit title: chore: 移除struct API的导出宏, commit hash: c0630377a4c959f324d684106a001ef38807b4ca.
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaString MaaVersion();
+    public static partial MaaStringView MaaVersion();
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaStringBufferHandle MaaCreateStringBuffer();
+
+    [LibraryImport("MaaFramework")]
+    public static partial void MaaDestroyStringBuffer(MaaStringBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaStringView MaaGetString(MaaStringBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaSize MaaGetStringSize(MaaStringBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSetString(MaaStringBufferHandle handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string str);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSetStringEx(MaaStringBufferHandle handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string str, MaaSize size);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaImageBufferHandle MaaCreateImageBuffer();
+
+    [LibraryImport("MaaFramework")]
+    public static partial void MaaDestroyImageBuffer(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaImageRawData MaaGetImageRawData(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial int32_t MaaGetImageWidth(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial int32_t MaaGetImageHeight(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial int32_t MaaGetImageType(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSetImageRawData(MaaImageBufferHandle handle, MaaImageRawData data, int32_t width, int32_t height, int32_t type);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaImageEncodedData MaaGetImageEncoded(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaSize MaaGetImageEncodedSize(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSetImageEncoded(MaaImageBufferHandle handle, MaaImageEncodedData data, MaaSize size);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaSetGlobalOption(MaaGlobalOption key, ref MaaOptionValue value, MaaOptionValueSize val_size);
@@ -34,7 +81,7 @@ public static partial class MaaApi
     public static partial void MaaResourceDestroy(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaResId MaaResourcePostResource(MaaResourceHandle res, [MarshalAs(UnmanagedType.LPUTF8Str)] string path);
+    public static partial MaaResId MaaResourcePostPath(MaaResourceHandle res, [MarshalAs(UnmanagedType.LPUTF8Str)] string path);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaStatus MaaResourceStatus(MaaResourceHandle res, MaaResId id);
@@ -49,13 +96,13 @@ public static partial class MaaApi
     public static partial MaaBool MaaResourceSetOption(MaaResourceHandle res, MaaResOption key, ref MaaOptionValue value, MaaOptionValueSize val_size);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaSize MaaResourceGetHash(MaaResourceHandle res, nint buff, MaaSize buff_size);
+    public static partial MaaBool MaaResourceGetHash(MaaResourceHandle res, /* out */ MaaStringBufferHandle buffer);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaControllerHandle MaaAdbControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string address, MaaAdbControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaControllerHandle MaaCustomControllerCreate(ref MaaCustomControllerApi controller, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
+    public static partial MaaControllerHandle MaaCustomControllerCreate(ref MaaCustomControllerApi handle, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaControllerHandle MaaThriftControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string param, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
@@ -88,10 +135,10 @@ public static partial class MaaApi
     public static partial MaaBool MaaControllerConnected(MaaControllerHandle ctrl);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaSize MaaControllerGetImage(MaaControllerHandle ctrl, nint buff, MaaSize buff_size);
+    public static partial MaaBool MaaControllerGetImage(MaaControllerHandle ctrl, /* out */ MaaImageBufferHandle buffer);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaSize MaaControllerGetUUID(MaaControllerHandle ctrl, nint buff, MaaSize buff_size);
+    public static partial MaaBool MaaControllerGetUUID(MaaControllerHandle ctrl, /* out */ MaaStringBufferHandle buffer);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaInstanceHandle MaaCreate(MaaInstanceCallback callback, MaaCallbackTransparentArg callback_arg);
@@ -157,16 +204,23 @@ public static partial class MaaApi
     public static partial MaaBool MaaSyncContextRunTask(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string param);
 
     [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSyncContextRunRecognizer(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, ref MaaRectApi out_box, /* out */ MaaStringBufferHandle detail_buff);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSyncContextRunAction(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, MaaRectApi cur_box, [MarshalAs(UnmanagedType.LPUTF8Str)] string cur_rec_detail);
+
+    [LibraryImport("MaaFramework")]
     public static partial void MaaSyncContextClick(MaaSyncContextHandle sync_context, int32_t x, int32_t y);
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaSyncContextSwipe(MaaSyncContextHandle sync_context, ref int32_t x_steps_buff, ref int32_t y_steps_buff, ref int32_t step_delay_buff, MaaSize buff_size);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaSize MaaSyncContextScreencap(MaaSyncContextHandle sync_context, nint buff, MaaSize buff_size);
+    public static partial MaaBool MaaSyncContextScreencap(MaaSyncContextHandle sync_context, /* out */ MaaImageBufferHandle buffer);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaSize MaaSyncContextGetTaskResult(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, nint buff, MaaSize buff_size);
+    public static partial MaaBool MaaSyncContextGetTaskResult(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, /* out */ MaaStringBufferHandle buffer);
 
     #endregion
+
 }

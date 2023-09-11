@@ -4,9 +4,9 @@
     "net7.0": {
       "Maa.Framework.Runtimes": {
         "type": "Direct",
-        "requested": "[0.3.7, )",
-        "resolved": "0.3.7",
-        "contentHash": "GfcKrwhrJGDtgXdf/B6xQezkdAXKixck2B3XMnZynGjf9YB+Mpmji9457/zdJ9q910QqPD+TId8lNF0LkbY0/w=="
+        "requested": "[0.6.0-beta.1, )",
+        "resolved": "0.6.0-beta.1",
+        "contentHash": "aXkvpmPOa4zkguYaOOqWz0Pvfk0aexplmz6OGhfV7exREKw52ZArJqQE1jd1e/oBZ88q5Qhz3IYDeH2RppwQiA=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",

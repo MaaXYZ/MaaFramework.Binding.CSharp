@@ -9,7 +9,8 @@ def convert_cpp_header_to_csharp(header_path: str):
     repo_url = f'https://api.github.com/repos/MaaAssistantArknights/MaaFramework/commits?path={header_path}'
     response = requests.get(repo_url)
     commit_hash = response.json()[0]['sha']
-    csharp_codes.append(f'\n#region {header_path}, commit hash: {commit_hash}.\n')
+    commit_title = response.json()[0]['commit']['message']  # 获取 commit 的标题
+    csharp_codes.append(f'\n#region {header_path}, commit title: {commit_title}, commit hash: {commit_hash}.\n')
 
     # 获取文件
     url = f'https://raw.githubusercontent.com/MaaAssistantArknights/MaaFramework/main/{header_path}'
@@ -31,10 +32,11 @@ def convert_cpp_header_to_csharp(header_path: str):
         parameters = parameters.replace('char*', 'nint')
         parameters = parameters.replace('void*', 'nint')
         parameters = re.sub(r'\bMaaOptionValue\b', 'ref MaaOptionValue', parameters)
-        parameters = parameters.replace('MaaCustomRecognizerHandle', 'ref MaaCustomRecognizer')
-        parameters = parameters.replace('MaaCustomActionHandle', 'ref MaaCustomAction')
-        parameters = parameters.replace('MaaString', '[MarshalAs(UnmanagedType.LPUTF8Str)] string')
-        parameters = parameters.replace('MaaJsonString', '[MarshalAs(UnmanagedType.LPUTF8Str)] string')
+        parameters = parameters.replace('MaaCustomActionHandle', 'ref MaaCustomActionApi')
+        parameters = parameters.replace('MaaCustomControllerHandle', 'ref MaaCustomControllerApi')
+        parameters = parameters.replace('MaaCustomRecognizerHandle', 'ref MaaCustomRecognizerApi')
+        parameters = parameters.replace('MaaRectHandle', 'ref MaaRectApi')
+        parameters = parameters.replace('MaaStringView', '[MarshalAs(UnmanagedType.LPUTF8Str)] string')
 
         csharp_code = f'    [LibraryImport("MaaFramework")]\n    public static partial {return_type} {function_name}({parameters});\n'
         csharp_codes.append(csharp_code)

@@ -1,4 +1,4 @@
-﻿using static MaaToolKit.Extensions.Interop.MaaDef;
+﻿using MaaToolKit.Extensions.Interop;
 
 namespace MaaToolKit.Extensions.Interfaces;
 

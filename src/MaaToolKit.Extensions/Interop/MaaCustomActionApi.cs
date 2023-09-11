@@ -5,17 +5,26 @@ namespace MaaToolKit.Extensions.Interop;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
+// chore: 移除struct API的导出宏 c063037
+
+/// <summary>
+///     A static class provides the delegates of <see cref="MaaCustomActionApi" />.
+/// </summary>
 public static class MaaActionApi
 {
     public delegate MaaBool Run(
         MaaSyncContextHandle syncContext,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string taskName,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionParam,
-        out MaaRect currentBox);
+        MaaStringView taskName,
+        MaaStringView customActionParam,
+        ref MaaRectApi currentBox,
+        MaaStringView curRecDetail);
 
     public delegate void Stop();
 }
 
+/// <summary>
+///     MaaCustomActionApi
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 [NativeMarshalling(typeof(MaaCustomActionApiMarshaller))]
 public struct MaaCustomActionApi : IMaaDefStruct
@@ -24,7 +33,9 @@ public struct MaaCustomActionApi : IMaaDefStruct
     public required MaaActionApi.Stop Stop;
 }
 
-
+/// <summary>
+///     A static class providing a reference implementation of marshaller for <see cref="MaaCustomActionApi" />.
+/// </summary>
 [CustomMarshaller(typeof(MaaCustomActionApi), MarshalMode.Default, typeof(MaaCustomActionApiMarshaller))]
 internal static class MaaCustomActionApiMarshaller
 {

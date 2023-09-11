@@ -213,14 +213,12 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <summary>
     ///     Gets a image.
     /// </summary>
-    /// <returns>Byte array of the image if got successfully; otherwise, null.</returns>
+    /// <returns>true if the image was successfully got; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerGetImage"/>.
     /// </remarks>
-    public byte[]? GetImage(MaaSize bufferSize = 3 << 20)
-        => _handle.GetBytesFromFuncWithBuffer(
-            MaaControllerGetImage,
-            bufferSize);
+    public bool GetImage(MaaImage maaImage)
+        => MaaControllerGetImage(_handle, maaImage._handle).ToBoolean();
 
     /// <summary>
     ///     Gets the uuid string of the <see cref="MaaController"/>.
@@ -231,7 +229,6 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerGetUUID"/>.
     /// </remarks>
-    public string? Uuid => _handle.GetStringFromFuncWithBuffer(
-        MaaControllerGetUUID,
-        bufferSize: 1 << 7);
+    public string? Uuid => _handle.GetStringFromFuncWithMaaStringBuffer(
+        MaaControllerGetUUID);
 }

@@ -6,21 +6,28 @@ namespace MaaToolKit.Extensions.Interop;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 // TODOa: 缺失测试用例
+// chore: 移除struct API的导出宏 c063037
 
+/// <summary>
+///     A static class provides the delegates of <see cref="MaaCustomControllerApi" />.
+/// </summary>
 public static class MaaControllerApi
 {
-    public delegate MaaBool SetOption(MaaCtrlOption key, MaaString value);
+    public delegate MaaBool SetOption(MaaCtrlOption key, MaaStringView value);
     public delegate MaaBool Connect();
     public delegate MaaBool Click(int32_t x, int32_t y);
-    public delegate MaaBool Swipe(ref int32_t x_steps_buff, ref int32_t y_steps_buff, ref int32_t step_delay_buff, MaaSize buff_size);
+    public delegate MaaBool Swipe(nint x_steps_buff, nint y_steps_buff, nint step_delay_buff, MaaSize buff_size);
     public delegate MaaBool PressKey(int32_t keycode);
-    public delegate MaaBool StartApp(MaaString package_name);
-    public delegate MaaBool StopApp(MaaString package_name);
-    public delegate MaaBool GetResolution(ref int32_t width, ref int32_t height);
+    public delegate MaaBool StartApp(MaaStringView package_name);
+    public delegate MaaBool StopApp(MaaStringView package_name);
+    public delegate MaaBool GetResolution(nint width, nint height);
     public delegate MaaBool GetImage(nint buff, MaaSize buff_size);
     public delegate MaaBool GetUuid(nint buff, MaaSize buff_size);
 }
 
+/// <summary>
+///     MaaCustomControllerApi
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 [NativeMarshalling(typeof(MaaCustomControllerApiMarshaller))]
 public struct MaaCustomControllerApi : IMaaDefStruct
@@ -37,7 +44,9 @@ public struct MaaCustomControllerApi : IMaaDefStruct
     public required MaaControllerApi.GetUuid GetUuid;
 }
 
-
+/// <summary>
+///     A static class providing a reference implementation of marshaller for <see cref="MaaCustomControllerApi" />.
+/// </summary>
 [CustomMarshaller(typeof(MaaCustomControllerApi), MarshalMode.Default, typeof(MaaCustomControllerApiMarshaller))]
 internal static class MaaCustomControllerApiMarshaller
 {
