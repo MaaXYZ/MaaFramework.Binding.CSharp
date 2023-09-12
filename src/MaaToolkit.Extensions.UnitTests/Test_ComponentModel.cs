@@ -90,6 +90,7 @@ public class Test_ComponentModel
     [ClassCleanup]
     public static void CleanUpClass()
     {
+        MaaController_Method_LinkStop();
         MaaResource_Method_Dispose();
         MaaController_Method_Dispose();
         MaaInstance_Method_Dispose();
@@ -297,8 +298,7 @@ public class Test_ComponentModel
         => ControllerJob.Status.ThrowIfNot(MaaJobStatus.Failed);
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
-    [TestMethod]
-    public void P_MaaController_Method_LinkStop()
+    public static void MaaController_Method_LinkStop()
         => Assert.IsTrue(
             Controller.LinkStop());
 
@@ -527,7 +527,7 @@ public class Test_ComponentModel
         Assert.IsTrue(
                 Controller.GetImage(image));
         Assert.IsNotNull(
-                Image.GetEncodedData());
+                image.GetEncodedData());
     }
 
     /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
@@ -539,7 +539,7 @@ public class Test_ComponentModel
         Assert.IsTrue(
                 Controller.GetImage(image));
         Assert.IsNotNull(
-                Image.Size);
+                image.Size);
     }
 
     /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
