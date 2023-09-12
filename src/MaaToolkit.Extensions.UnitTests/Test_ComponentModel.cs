@@ -20,6 +20,7 @@ public class Test_ComponentModel
     private static MaaJob ResourceJob { get; set; }
     private static MaaJob ControllerJob { get; set; }
     private static MaaJob InstanceJob { get; set; }
+    private static MaaJob ScreencapJob { get; set; }
     private static MaaImage Image { get; set; }
 
     private static MaaActionApi.Run Run { get; set; } = (
@@ -78,10 +79,12 @@ public class Test_ComponentModel
         MaaResource_Method_Append();
         MaaController_Method_LinkStart();
         MaaInstance_Method_AppendTask();
+        MaaController_Method_Screencap();
 
-        _ = ResourceJob.Wait();
-        _ = ControllerJob.Wait();
-        _ = InstanceJob.Wait();
+        ResourceJob.Wait().ThrowIfNot(MaaJobStatus.Success);
+        ControllerJob.Wait().ThrowIfNot(MaaJobStatus.Success);
+        InstanceJob.Wait();
+        ScreencapJob.Wait().ThrowIfNot(MaaJobStatus.Success);
     }
 
     /// <summary>
@@ -274,10 +277,12 @@ public class Test_ComponentModel
                              2));
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
-    [TestMethod]
-    public void H_MaaController_Method_Screencap()
-        => Assert.IsNotNull(
-            Controller.Screencap());
+    public static void MaaController_Method_Screencap()
+    {
+        ScreencapJob = Controller.Screencap();
+        Assert.IsNotNull(
+                ScreencapJob);
+    }
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     [TestMethod]
@@ -306,7 +311,6 @@ public class Test_ComponentModel
     [TestMethod]
     public void I_MaaController_Method_GetImage()
     {
-        Controller.Screencap().Wait().ThrowIfNot(MaaJobStatus.Success);
         Assert.IsTrue(
                 Controller.GetImage(Image));
     }
@@ -523,7 +527,6 @@ public class Test_ComponentModel
     public void J_MaaImage_Method_GetEncodedData()
     {
         using var image = new MaaImage();
-        Controller.Screencap().Wait().ThrowIfNot(MaaJobStatus.Success);
         Assert.IsTrue(
                 Controller.GetImage(image));
         Assert.IsNotNull(
@@ -535,7 +538,6 @@ public class Test_ComponentModel
     public void J_MaaImage_Property_Get_Size()
     {
         using var image = new MaaImage();
-        Controller.Screencap().Wait().ThrowIfNot(MaaJobStatus.Success);
         Assert.IsTrue(
                 Controller.GetImage(image));
         Assert.IsNotNull(
