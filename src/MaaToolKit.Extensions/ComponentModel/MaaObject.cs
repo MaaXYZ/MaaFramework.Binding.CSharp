@@ -21,7 +21,7 @@ public class MaaObject : IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetGlobalOption"/>.
     /// </remarks>
-    /// <returns>true if the option was successfully setted; otherwise, false.</returns>
+    /// <returns>true if the option was setted successfully; otherwise, false.</returns>
     private static bool SetOption(GlobalOption option, MaaOptionValue[] value)
         => MaaSetGlobalOption((MaaGlobalOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
 

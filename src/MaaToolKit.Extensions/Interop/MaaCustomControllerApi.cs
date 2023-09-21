@@ -6,7 +6,7 @@ namespace MaaToolKit.Extensions.Interop;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 // TODOa: 缺失测试用例
-// chore: 移除struct API的导出宏 c063037
+// b49ea8d6: refactor: 重构模板匹配实现
 
 /// <summary>
 ///     A static class provides the delegates of <see cref="MaaCustomControllerApi" />.
@@ -16,13 +16,16 @@ public static class MaaControllerApi
     public delegate MaaBool SetOption(MaaCtrlOption key, MaaStringView value);
     public delegate MaaBool Connect();
     public delegate MaaBool Click(int32_t x, int32_t y);
-    public delegate MaaBool Swipe(nint x_steps_buff, nint y_steps_buff, nint step_delay_buff, MaaSize buff_size);
+    public delegate MaaBool Swipe(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t duration);
+    public delegate MaaBool TouchDown(int32_t contact, int32_t x, int32_t y, int32_t pressure);
+    public delegate MaaBool TouchMove(int32_t contact, int32_t x, int32_t y, int32_t pressure);
+    public delegate MaaBool TouchUp(int32_t contact);
     public delegate MaaBool PressKey(int32_t keycode);
     public delegate MaaBool StartApp(MaaStringView package_name);
     public delegate MaaBool StopApp(MaaStringView package_name);
     public delegate MaaBool GetResolution(nint width, nint height);
-    public delegate MaaBool GetImage(nint buff, MaaSize buff_size);
-    public delegate MaaBool GetUuid(nint buff, MaaSize buff_size);
+    public delegate MaaBool GetImage(MaaImageBufferHandle buffer);
+    public delegate MaaBool GetUuid(MaaStringBufferHandle buffer);
 }
 
 /// <summary>
@@ -36,6 +39,9 @@ public struct MaaCustomControllerApi : IMaaDefStruct
     public required MaaControllerApi.Connect Connect;
     public required MaaControllerApi.Click Click;
     public required MaaControllerApi.Swipe Swipe;
+    public required MaaControllerApi.TouchDown TouchDown;
+    public required MaaControllerApi.TouchMove TouchMove;
+    public required MaaControllerApi.TouchUp TouchUp;
     public required MaaControllerApi.PressKey PressKey;
     public required MaaControllerApi.StartApp StartApp;
     public required MaaControllerApi.StopApp StopApp;
@@ -57,6 +63,9 @@ internal static class MaaCustomControllerApiMarshaller
             Connect = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.Connect>(managed.Connect),
             Click = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.Click>(managed.Click),
             Swipe = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.Swipe>(managed.Swipe),
+            TouchDown = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.TouchDown>(managed.TouchDown),
+            TouchMove = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.TouchMove>(managed.TouchMove),
+            TouchUp = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.TouchUp>(managed.TouchUp),
             PressKey = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.PressKey>(managed.PressKey),
             StartApp = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.StartApp>(managed.StartApp),
             StopApp = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.StopApp>(managed.StopApp),
@@ -72,6 +81,9 @@ internal static class MaaCustomControllerApiMarshaller
             Connect = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.Connect>(unmanaged.Connect),
             Click = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.Click>(unmanaged.Click),
             Swipe = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.Swipe>(unmanaged.Swipe),
+            TouchDown = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.TouchDown>(unmanaged.TouchDown),
+            TouchMove = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.TouchMove>(unmanaged.TouchMove),
+            TouchUp = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.TouchUp>(unmanaged.TouchUp),
             PressKey = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.PressKey>(unmanaged.PressKey),
             StartApp = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.StartApp>(unmanaged.StartApp),
             StopApp = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.StopApp>(unmanaged.StopApp),
@@ -87,15 +99,18 @@ internal static class MaaCustomControllerApiMarshaller
 
     internal struct Unmanaged
     {
-        public nint SetOption;
-        public nint Connect;
-        public nint Click;
-        public nint Swipe;
-        public nint PressKey;
-        public nint StartApp;
-        public nint StopApp;
-        public nint GetResolution;
-        public nint GetImage;
-        public nint GetUuid;
+        public required nint SetOption;
+        public required nint Connect;
+        public required nint Click;
+        public required nint Swipe;
+        public required nint TouchDown;
+        public required nint TouchMove;
+        public required nint TouchUp;
+        public required nint PressKey;
+        public required nint StartApp;
+        public required nint StopApp;
+        public required nint GetResolution;
+        public required nint GetImage;
+        public required nint GetUuid;
     }
 }

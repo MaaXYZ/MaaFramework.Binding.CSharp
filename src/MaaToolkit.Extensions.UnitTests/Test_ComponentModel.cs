@@ -21,7 +21,7 @@ public class Test_ComponentModel
     private static MaaJob ControllerJob { get; set; }
     private static MaaJob InstanceJob { get; set; }
     private static MaaJob ScreencapJob { get; set; }
-    private static MaaImage Image { get; set; }
+    private static MaaImageBuffer Image { get; set; }
 
     private static MaaActionApi.Run Run { get; set; } = (
         /* MaaSyncContextHandle */  nint syncContext,
@@ -271,10 +271,7 @@ public class Test_ComponentModel
     [TestMethod]
     public void H_MaaController_Method_Swipe()
         => Assert.IsNotNull(
-            Controller.Swipe(new int[2] { 0, 1 },
-                             new int[2] { 0, 1 },
-                             new int[2] { 0, 1 },
-                             2));
+            Controller.Swipe(0, 0, 1, 1, 1));
 
     /// <summary> Test a member of the <see cref="MaaController"/>. </summary>
     public static void MaaController_Method_Screencap()
@@ -472,17 +469,17 @@ public class Test_ComponentModel
 
     #region MaaImage
 
-    /// <summary> Tests the constructor of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Tests the constructor of the <see cref="MaaImageBuffer"/>. </summary>
     public static void MaaImage_Method_Constructor()
     {
-        Image = new MaaImage();
+        Image = new MaaImageBuffer();
     }
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     public static void MaaImage_Method_Dispose()
         => Image.Dispose();
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     [TestMethod]
     public void K_MaaImage_Method_GetRawData()
     {
@@ -490,7 +487,7 @@ public class Test_ComponentModel
                 Image.GetRawData());
     }
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     [TestMethod]
     public void K_MaaImage_Property_Get_Width()
     {
@@ -498,7 +495,7 @@ public class Test_ComponentModel
                 Image.Width);
     }
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     [TestMethod]
     public void K_MaaImage_Property_Get_Height()
     {
@@ -506,7 +503,7 @@ public class Test_ComponentModel
                 Image.Height);
     }
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     [TestMethod]
     public void K_MaaImage_Property_Get_Type()
     {
@@ -514,7 +511,7 @@ public class Test_ComponentModel
                 Image.Type);
     }
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     [TestMethod]
     public void L_MaaImage_Method_SetRawData()
     {
@@ -522,29 +519,29 @@ public class Test_ComponentModel
                 Image.SetRawData(nint.Zero, 0, 0, 0));
     }
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     [TestMethod]
     public void J_MaaImage_Method_GetEncodedData()
     {
-        using var image = new MaaImage();
+        using var image = new MaaImageBuffer();
         Assert.IsTrue(
                 Controller.GetImage(image));
         Assert.IsNotNull(
                 image.GetEncodedData());
     }
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     [TestMethod]
     public void J_MaaImage_Property_Get_Size()
     {
-        using var image = new MaaImage();
+        using var image = new MaaImageBuffer();
         Assert.IsTrue(
                 Controller.GetImage(image));
         Assert.IsNotNull(
                 image.Size);
     }
 
-    /// <summary> Test a member of the <see cref="MaaImage"/>. </summary>
+    /// <summary> Test a member of the <see cref="MaaImageBuffer"/>. </summary>
     [TestMethod]
     public void L_MaaImage_Method_SetEncodedData()
     {

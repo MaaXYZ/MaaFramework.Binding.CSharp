@@ -71,14 +71,14 @@
       "Maa.ToolKit.Extensions": {
         "type": "Project",
         "dependencies": {
-          "Maa.Framework.Runtimes": "[0.6.0-beta.1, )"
+          "Maa.Framework.Runtimes": "[1.0.0-beta.2, )"
         }
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
-        "requested": "[0.6.0-beta.1, )",
-        "resolved": "0.6.0-beta.1",
-        "contentHash": "aXkvpmPOa4zkguYaOOqWz0Pvfk0aexplmz6OGhfV7exREKw52ZArJqQE1jd1e/oBZ88q5Qhz3IYDeH2RppwQiA=="
+        "requested": "[1.0.0-beta.2, )",
+        "resolved": "1.0.0-beta.2",
+        "contentHash": "QKOddDHKVdSeps/l1qw8AAI4hxhGEisRNIZE8YEHVB1Q9vliM3Lo8C+UEOLdvWS7yZhUlRq9oUo7ju9hhOlk+A=="
       }
     }
   }

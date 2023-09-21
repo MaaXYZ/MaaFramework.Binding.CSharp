@@ -105,7 +105,7 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerSetOption"/>.
     /// </remarks>
-    /// <returns>true if the option was successfully setted; otherwise, false.</returns>
+    /// <returns>true if the option was setted successfully; otherwise, false.</returns>
     private bool SetOption(ControllerOption option, MaaOptionValue[] value)
         => MaaControllerSetOption(_handle, (MaaCtrlOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
 
@@ -150,24 +150,87 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     }
 
     /// <summary>
-    ///     Swipe in steps.
+    ///     Swipes from a starting point to a ending point with duration.
     /// </summary>
-    /// <param name="xSteps">The x-coordinate of the point in steps.</param>
-    /// <param name="ySteps">The y-coordinate of the point in steps.</param>
-    /// <param name="stepsDelay">The swipe delay between steps.</param>
-    /// <param name="stepsLength">The length of steps.</param>
+    /// <param name="x1">The x-coordinate of the starting point.</param>
+    /// <param name="y1">The y-coordinate of the starting point.</param>
+    /// <param name="x2">The x-coordinate of the ending point.</param>
+    /// <param name="y2">The x-coordinate of the ending point.</param>
+    /// <param name="duration">The duration.</param>
     /// <returns>A swipe job.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostSwipe"/>.
     /// </remarks>
-    public MaaJob Swipe(int[] xSteps, int[] ySteps, int[] stepsDelay, ulong stepsLength)
+    public MaaJob Swipe(int x1, int y1, int x2, int y2, int duration)
     {
-        var id = MaaControllerPostSwipe(_handle, ref xSteps[0], ref ySteps[0], ref stepsDelay[0], stepsLength);
+        var id = MaaControllerPostSwipe(_handle, x1, y1, x2, y2, duration);
         return new(id, this);
     }
 
     /// <summary>
-    ///     Take a screenshot.
+    ///     Presses a key.
+    /// </summary>
+    /// <param name="keyCode">The code of the key.</param>
+    /// <returns>A press key job.</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostPressKey"/>.
+    /// </remarks>
+    public MaaJob PressKey(int keyCode)
+    {
+        var id = MaaControllerPostPressKey(_handle, keyCode);
+        return new(id, this);
+    }
+
+    /// <summary>
+    ///     Usage: TouchDown -> TouchMove -> TouchUp.
+    /// </summary>
+    /// <param name="contact">The contact id.</param>
+    /// <param name="x">The x-coordinate of the starting point.</param>
+    /// <param name="y">The y-coordinate of the starting point.</param>
+    /// <param name="pressure">The pressure.</param>
+    /// <returns>A touch down job.</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostTouchDown"/>.
+    /// </remarks>
+    public MaaJob TouchDown(int contact, int x, int y, int pressure)
+    {
+        var id = MaaControllerPostTouchDown(_handle, contact, x, y, pressure);
+        return new(id, this);
+    }
+
+    /// <summary>
+    ///     Usage: TouchDown -> TouchMove -> TouchUp.
+    /// </summary>
+    /// <param name="contact">The contact id.</param>
+    /// <param name="x">The x-coordinate of the ending point.</param>
+    /// <param name="y">The y-coordinate of the ending point.</param>
+    /// <param name="pressure">The pressure.</param>
+    /// <returns>A touch move job.</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostTouchMove"/>.
+    /// </remarks>
+    public MaaJob TouchMove(int contact, int x, int y, int pressure)
+    {
+        var id = MaaControllerPostTouchMove(_handle, contact, x, y, pressure);
+        return new(id, this);
+    }
+
+    /// <summary>
+    ///     Usage: TouchDown -> TouchMove -> TouchUp.
+    /// </summary>
+    /// <param name="contact">The contact id.</param>
+    /// <returns>A touch up job.</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostTouchUp"/>.
+    /// </remarks>
+    public MaaJob TouchUp(int contact)
+    {
+        var id = MaaControllerPostTouchUp(_handle, contact);
+        return new(id, this);
+    }
+
+    /// <summary>
+    ///     Takes a screenshot.
     /// </summary>
     /// <returns>A screen capture job.</returns>
     /// <remarks>
@@ -203,7 +266,7 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <summary>
     ///     Ends the connection of the address specified by the constructor.
     /// </summary>
-    /// <returns>true if the connection was successfully ended; otherwise, false.</returns>
+    /// <returns>true if the connection was ended successfully; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerConnected"/>.
     /// </remarks>
@@ -213,22 +276,29 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <summary>
     ///     Gets a image.
     /// </summary>
-    /// <returns>true if the image was successfully got; otherwise, false.</returns>
+    /// <returns>true if the image was got successfully; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerGetImage"/>.
     /// </remarks>
-    public bool GetImage(MaaImage maaImage)
+    public bool GetImage(MaaImageBuffer maaImage)
         => MaaControllerGetImage(_handle, maaImage._handle).ToBoolean();
 
     /// <summary>
     ///     Gets the uuid string of the <see cref="MaaController"/>.
     /// </summary>
     /// <value>
-    ///     Null if failed to get uuid, or a UTF-8 string represent of uuid
+    ///     A string if the hash was successfully got; otherwise, null.
     /// </value>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerGetUUID"/>.
     /// </remarks>
-    public string? Uuid => _handle.GetStringFromFuncWithMaaStringBuffer(
-        MaaControllerGetUUID);
+    public string? Uuid
+    {
+        get
+        {
+            using var buffer = new MaaStringBuffer();
+            var ret = MaaControllerGetUUID(_handle, buffer._handle).ToBoolean();
+            return ret ? buffer.ToString() : null;
+        }
+    }
 }

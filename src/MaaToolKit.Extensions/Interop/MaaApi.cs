@@ -18,7 +18,7 @@ public static partial class MaaApi
         NativeLibrary.Init();
     }
 
-    #region include/MaaFramework/MaaAPI.h, commit title: chore: 移除struct API的导出宏, commit hash: c0630377a4c959f324d684106a001ef38807b4ca.
+    #region include/MaaFramework/MaaAPI.h, commit title: styles: remove empty line, commit hash: 1eca0675b642b8e3c41467f99be4ddd98d032682.
 
     [LibraryImport("MaaFramework")]
     public static partial MaaStringView MaaVersion();
@@ -28,6 +28,12 @@ public static partial class MaaApi
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaDestroyStringBuffer(MaaStringBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaIsStringEmpty(MaaStringBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaClearString(MaaStringBufferHandle handle);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaStringView MaaGetString(MaaStringBufferHandle handle);
@@ -46,6 +52,12 @@ public static partial class MaaApi
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaDestroyImageBuffer(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaIsImageEmpty(MaaImageBufferHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaClearImage(MaaImageBufferHandle handle);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaImageRawData MaaGetImageRawData(MaaImageBufferHandle handle);
@@ -120,7 +132,19 @@ public static partial class MaaApi
     public static partial MaaCtrlId MaaControllerPostClick(MaaControllerHandle ctrl, int32_t x, int32_t y);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaCtrlId MaaControllerPostSwipe(MaaControllerHandle ctrl, ref int32_t x_steps_buff, ref int32_t y_steps_buff, ref int32_t step_delay_buff, MaaSize buff_size);
+    public static partial MaaCtrlId MaaControllerPostSwipe(MaaControllerHandle ctrl, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t duration);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaCtrlId MaaControllerPostPressKey(MaaControllerHandle ctrl, int32_t keycode);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaCtrlId MaaControllerPostTouchDown(MaaControllerHandle ctrl, int32_t contact, int32_t x, int32_t y, int32_t pressure);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaCtrlId MaaControllerPostTouchMove(MaaControllerHandle ctrl, int32_t contact, int32_t x, int32_t y, int32_t pressure);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaCtrlId MaaControllerPostTouchUp(MaaControllerHandle ctrl, int32_t contact);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaCtrlId MaaControllerPostScreencap(MaaControllerHandle ctrl);
@@ -192,7 +216,7 @@ public static partial class MaaApi
     public static partial MaaBool MaaTaskAllFinished(MaaInstanceHandle inst);
 
     [LibraryImport("MaaFramework")]
-    public static partial void MaaStop(MaaInstanceHandle inst);
+    public static partial MaaBool MaaStop(MaaInstanceHandle inst);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaResourceHandle MaaGetResource(MaaInstanceHandle inst);
@@ -204,16 +228,28 @@ public static partial class MaaApi
     public static partial MaaBool MaaSyncContextRunTask(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string param);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextRunRecognizer(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, ref MaaRectApi out_box, /* out */ MaaStringBufferHandle detail_buff);
+    public static partial MaaBool MaaSyncContextRunRecognizer(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, /* out */ ref MaaRectApi out_box, /* out */ MaaStringBufferHandle detail_buff);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextRunAction(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, MaaRectApi cur_box, [MarshalAs(UnmanagedType.LPUTF8Str)] string cur_rec_detail);
+    public static partial MaaBool MaaSyncContextRunAction(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, ref MaaRectApi cur_box, [MarshalAs(UnmanagedType.LPUTF8Str)] string cur_rec_detail);
 
     [LibraryImport("MaaFramework")]
-    public static partial void MaaSyncContextClick(MaaSyncContextHandle sync_context, int32_t x, int32_t y);
+    public static partial MaaBool MaaSyncContextClick(MaaSyncContextHandle sync_context, int32_t x, int32_t y);
 
     [LibraryImport("MaaFramework")]
-    public static partial void MaaSyncContextSwipe(MaaSyncContextHandle sync_context, ref int32_t x_steps_buff, ref int32_t y_steps_buff, ref int32_t step_delay_buff, MaaSize buff_size);
+    public static partial MaaBool MaaSyncContextSwipe(MaaSyncContextHandle sync_context, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t duration);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSyncContextPressKey(MaaSyncContextHandle sync_context, int32_t keycode);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSyncContextTouchDown(MaaSyncContextHandle sync_context, int32_t contact, int32_t x, int32_t y, int32_t pressure);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSyncContextTouchMove(MaaSyncContextHandle sync_context, int32_t contact, int32_t x, int32_t y, int32_t pressure);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSyncContextTouchUp(MaaSyncContextHandle sync_context, int32_t contact);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaSyncContextScreencap(MaaSyncContextHandle sync_context, /* out */ MaaImageBufferHandle buffer);

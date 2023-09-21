@@ -4,20 +4,20 @@ using static MaaToolKit.Extensions.Interop.MaaApi;
 namespace MaaToolKit.Extensions.ComponentModel;
 
 /// <summary>
-///     A class providing a reference implementation for Maa Image section of <see cref="MaaApi"/>.
+///     A class providing a reference implementation for Maa Image Buffer section of <see cref="MaaApi"/>.
 /// </summary>
-public class MaaImage : IDisposable
+public class MaaImageBuffer : IDisposable
 {
     internal MaaImageBufferHandle _handle;
     private bool disposed;
 
     /// <summary>
-    ///     Creates a <see cref="MaaImage"/> instance.
+    ///     Creates a <see cref="MaaImageBuffer"/> instance.
     /// </summary>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCreateImageBuffer"/>.
     /// </remarks>
-    public MaaImage()
+    public MaaImageBuffer()
     {
         _handle = MaaCreateImageBuffer();
     }
@@ -30,7 +30,7 @@ public class MaaImage : IDisposable
     }
 
     /// <summary>
-    ///     Disposes the <see cref="MaaImage"/> instance.
+    ///     Disposes the <see cref="MaaImageBuffer"/> instance.
     /// </summary>
     /// <param name="disposing"></param>
     /// <remarks>
@@ -47,7 +47,31 @@ public class MaaImage : IDisposable
     }
 
     /// <summary>
-    ///     Gets the image raw data of <see cref="MaaImage"/>.
+    ///     Indicates whether the image of the <see cref="MaaImageBuffer" /> is empty.
+    /// </summary>
+    /// <returns>
+    ///     true if the image is empty; otherwise, false.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaIsImageEmpty"/>.
+    /// </remarks>
+    public bool IsEmpty()
+        => MaaIsImageEmpty(_handle).ToBoolean();
+
+    /// <summary>
+    ///     Clears the image of the <see cref="MaaImageBuffer" />.
+    /// </summary>
+    /// <returns>
+    ///     true if the image was cleared successfully; otherwise, false.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaClearImage"/>.
+    /// </remarks>
+    public bool Clear()
+        => MaaClearImage(_handle).ToBoolean();
+
+    /// <summary>
+    ///     Gets the image raw data.
     /// </summary>
     /// <returns>
     ///     The raw data of image.
@@ -59,7 +83,7 @@ public class MaaImage : IDisposable
         => MaaGetImageRawData(_handle);
 
     /// <summary>
-    ///     Gets the image width of <see cref="MaaImage"/>.
+    ///     Gets the image width.
     /// </summary>
     /// <value>
     ///     The width of image.
@@ -70,7 +94,7 @@ public class MaaImage : IDisposable
     public int Width => MaaGetImageWidth(_handle);
 
     /// <summary>
-    ///     Gets the image height of <see cref="MaaImage"/>.
+    ///     Gets the image height.
     /// </summary>
     /// <value>
     ///     The height of image.
@@ -81,7 +105,7 @@ public class MaaImage : IDisposable
     public int Height => MaaGetImageHeight(_handle);
 
     /// <summary>
-    ///     Gets the image type of <see cref="MaaImage"/>.
+    ///     Gets the image type.
     /// </summary>
     /// <value>
     ///     The type of image.
@@ -92,14 +116,14 @@ public class MaaImage : IDisposable
     public int Type => MaaGetImageType(_handle);
 
     /// <summary>
-    ///     Sets the image raw data of <see cref="MaaImage"/>.
+    ///     Sets the image raw data.
     /// </summary>
     /// <param name="data">The raw data of image.</param>
     /// <param name="width">The width of image.</param>
     /// <param name="height">The height of image.</param>
     /// <param name="type">The type of image.</param>
     /// <returns>
-    ///     true if the image raw data was successfully setted; otherwise, false.
+    ///     true if the image raw data was setted successfully; otherwise, false.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetImageRawData"/>.
@@ -108,7 +132,7 @@ public class MaaImage : IDisposable
         => MaaSetImageRawData(_handle, data, width, height, type).ToBoolean();
 
     /// <summary>
-    ///     Gets the image encoded data of <see cref="MaaImage"/>.
+    ///     Gets the image encoded data.
     /// </summary>
     /// <returns>The encoded data of image.</returns>
     /// <remarks>
@@ -118,7 +142,7 @@ public class MaaImage : IDisposable
         => MaaGetImageEncoded(_handle);
 
     /// <summary>
-    ///     Gets the image encoded size of <see cref="MaaImage"/>.
+    ///     Gets the image encoded size.
     /// </summary>
     /// <value>
     ///     The encoded size of image.
@@ -129,12 +153,12 @@ public class MaaImage : IDisposable
     public ulong Size => MaaGetImageEncodedSize(_handle);
 
     /// <summary>
-    ///     Sets the image encoded data of <see cref="MaaImage"/>.
+    ///     Sets the image encoded data.
     /// </summary>
     /// <param name="data">The encoded data of image.</param>
     /// <param name="size">The encoded size of image.</param>
     /// <returns>
-    ///     true if the image encoded data was successfully setted; otherwise, false.
+    ///     true if the image encoded data was setted successfully; otherwise, false.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetImageEncoded"/>.

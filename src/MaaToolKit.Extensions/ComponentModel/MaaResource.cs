@@ -163,7 +163,7 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceSetOption"/>.
     /// </remarks>
-    /// <returns>true if the option was successfully setted; otherwise, false.</returns>
+    /// <returns>true if the option was setted successfully; otherwise, false.</returns>
     private bool SetOption(ResourceOption option, MaaOptionValue[] value)
         => MaaResourceSetOption(_handle, (MaaResOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
 #pragma warning restore
@@ -172,11 +172,18 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     ///     Gets the hash string of the <see cref="MaaResource"/>.
     /// </summary>
     /// <value>
-    ///     Null if failed to get hash, or a UTF-8 string represent of hash
+    ///     A string if the hash was successfully got; otherwise, null.
     /// </value>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceGetHash"/>.
     /// </remarks>
-    public string? Hash => _handle.GetStringFromFuncWithMaaStringBuffer(
-        MaaResourceGetHash);
+    public string? Hash
+    {
+        get
+        {
+            using var buffer = new MaaStringBuffer();
+            var ret = MaaResourceGetHash(_handle, buffer._handle).ToBoolean();
+            return ret ? buffer.ToString() : null;
+        }
+    }
 }

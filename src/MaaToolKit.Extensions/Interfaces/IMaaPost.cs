@@ -12,7 +12,7 @@ public interface IMaaPost
     /// </summary>
     /// <param name="job">The MaaJob.</param>
     /// <param name="param">The param, which could be parsed to a JSON.</param>
-    /// <returns>true if the <paramref name="param"/> were successfully set in the <paramref name="job"/>; otherwise, false.</returns>
+    /// <returns>true if the <paramref name="param"/> were setted successfully in the <paramref name="job"/>; otherwise, false.</returns>
     bool SetParam(MaaJob job, string param);
 
     /// <summary>

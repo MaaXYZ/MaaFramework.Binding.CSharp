@@ -41,21 +41,4 @@ public static class MaaDefConverter
     /// </summary>
     public static MaaOptionValue[] ToMaaOptionValues(this int value)
         => BitConverter.GetBytes(value);
-
-    internal static string? GetStringFromFuncWithMaaStringBuffer(this nint handle, Func<nint, nint, MaaBool> func)
-    {
-        var buffer = MaaCreateStringBuffer();
-        if (!func(handle, buffer).ToBoolean())
-        {
-            MaaDestroyStringBuffer(buffer);
-            return null;
-        }
-
-        var view = MaaGetString(buffer);
-        // var size = (int)MaaGetStringSize(buffer);
-        // var result = Marshal.PtrToStringUTF8(view, size);
-        var result = Marshal.PtrToStringUTF8(view);
-        MaaDestroyStringBuffer(buffer);
-        return result;
-    }
 }

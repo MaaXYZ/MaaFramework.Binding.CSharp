@@ -81,7 +81,7 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// </summary>
     /// <param name="resource">The <see cref="MaaResource"/>.</param>
     /// <returns>
-    ///     true if the <see cref="MaaResource"/> was successfully binded; otherwise, false.
+    ///     true if the <see cref="MaaResource"/> was binded successfully; otherwise, false.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaBindResource"/>.
@@ -94,7 +94,7 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// </summary>
     /// <param name="controller">The <see cref="MaaController"/>.</param>
     /// <returns>
-    ///     true if the <see cref="MaaController"/> was successfully binded; otherwise, false.
+    ///     true if the <see cref="MaaController"/> was binded successfully; otherwise, false.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaBindController"/>.
@@ -123,7 +123,7 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// <param name="custom">The MaaCustomRecognizerApi or MaaCustomActionApi.</param>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <returns>
-    ///     true if the <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> was successfully registered; otherwise, false.
+    ///     true if the <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> was registered successfully; otherwise, false.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRegisterCustomRecognizer"/> and <see cref="MaaRegisterCustomAction"/>.
@@ -153,7 +153,7 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// <param name="name">The name of recognizer.</param>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <returns>
-    ///     true if the <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> was successfully unregistered; otherwise, false.
+    ///     true if the <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> was unregistered successfully; otherwise, false.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaUnregisterCustomRecognizer"/> and <see cref="MaaUnregisterCustomAction"/>.
@@ -183,7 +183,7 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// </summary>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <returns>
-    ///     true if <see cref="MaaCustomRecognizerApi"/>s or <see cref="MaaCustomActionApi"/>s were successfully cleared; otherwise, false.
+    ///     true if <see cref="MaaCustomRecognizerApi"/>s or <see cref="MaaCustomActionApi"/>s were cleared successfully; otherwise, false.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaClearCustomRecognizer"/> and <see cref="MaaClearCustomAction"/>.
@@ -261,8 +261,8 @@ public class MaaInstance : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaStop"/>.
     /// </remarks>
-    public void Stop()
-        => MaaStop(_handle);
+    public bool Stop()
+        => MaaStop(_handle).ToBoolean();
 
     /// <summary>
     ///     Gets the <see cref="MaaResource"/> binded to this <see cref="MaaInstance"/>.
