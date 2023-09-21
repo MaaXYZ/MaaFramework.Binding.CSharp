@@ -1,6 +1,4 @@
-﻿using MaaToolKit.Extensions.ComponentModel;
-
-namespace MaaToolKit.Extensions.Exceptions;
+﻿namespace MaaToolKit.Extensions.Exceptions;
 
 /// <summary>
 ///     The exception that is thrown when a <see cref="MaaInstance"/> fails to bind a <see cref="MaaResource"/> or a <see cref="MaaController"/>.

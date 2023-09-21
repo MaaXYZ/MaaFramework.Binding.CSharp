@@ -5,7 +5,7 @@ using MaaToolKit.Extensions.Interop;
 using System.Runtime.InteropServices;
 using static MaaToolKit.Extensions.Interop.MaaApi;
 
-namespace MaaToolKit.Extensions.ComponentModel;
+namespace MaaToolKit.Extensions;
 
 #pragma warning disable S1450 // Private fields only used as local variables in methods should become local variables
 
@@ -18,7 +18,7 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     private bool disposed;
 
     private static readonly HashSet<MaaResource> _resources = new();
-    internal static MaaResource Get(IntPtr handle)
+    internal static MaaResource Get(MaaResourceHandle handle)
     {
         var ret = _resources.FirstOrDefault(x => x._handle == handle);
         if (ret == null)
@@ -77,7 +77,7 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     {
         foreach (var path in paths)
         {
-            this.AppendPath(path)
+            AppendPath(path)
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Success);
         }

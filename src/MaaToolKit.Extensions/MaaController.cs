@@ -5,7 +5,7 @@ using MaaToolKit.Extensions.Interop;
 using System.Runtime.InteropServices;
 using static MaaToolKit.Extensions.Interop.MaaApi;
 
-namespace MaaToolKit.Extensions.ComponentModel;
+namespace MaaToolKit.Extensions;
 
 /// <summary>
 ///     A class providing a reference implementation for Maa Controller section of <see cref="MaaApi"/>.
@@ -16,7 +16,7 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     private bool disposed;
 
     internal static readonly HashSet<MaaController> _controllers = new HashSet<MaaController>();
-    internal static MaaController Get(IntPtr handle)
+    internal static MaaController Get(MaaControllerHandle handle)
     {
         var ret = _controllers.FirstOrDefault(x => x._handle == handle);
         if (ret == null)
@@ -66,7 +66,7 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
 
         if (linkStart)
         {
-            this.LinkStart()
+            LinkStart()
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Success);
         }

@@ -1,13 +1,12 @@
-﻿using MaaToolKit.Extensions.ComponentModel;
+﻿using MaaToolKit.Extensions;
 using MaaToolKit.Extensions.Enums;
 using MaaToolKit.Extensions.Exceptions;
 using MaaToolKit.Extensions.Interop;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MaaToolkit.Extensions.UnitTests;
 
 /// <summary>
-///     Test <see cref="MaaToolKit.Extensions.ComponentModel"/>.
+///     Test <see cref="MaaToolKit.Extensions"/>.
 /// </summary>
 [TestClass]
 public class Test_ComponentModel

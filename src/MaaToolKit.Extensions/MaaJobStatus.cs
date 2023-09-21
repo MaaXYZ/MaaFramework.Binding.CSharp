@@ -1,6 +1,6 @@
 ﻿using MaaToolKit.Extensions.Exceptions;
 
-namespace MaaToolKit.Extensions.ComponentModel;
+namespace MaaToolKit.Extensions;
 
 /// <summary>
 /// 

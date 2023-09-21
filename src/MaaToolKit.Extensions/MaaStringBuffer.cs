@@ -1,7 +1,7 @@
 ﻿using MaaToolKit.Extensions.Interop;
 using static MaaToolKit.Extensions.Interop.MaaApi;
 
-namespace MaaToolKit.Extensions.ComponentModel;
+namespace MaaToolKit.Extensions;
 
 /// <summary>
 ///     A class providing a reference implementation for Maa String Buffer section of <see cref="MaaApi"/>.

@@ -4,7 +4,7 @@ using MaaToolKit.Extensions.Interop;
 using System.Runtime.InteropServices;
 using static MaaToolKit.Extensions.Interop.MaaApi;
 
-namespace MaaToolKit.Extensions.ComponentModel;
+namespace MaaToolKit.Extensions;
 
 /// <summary>
 ///     A class providing a reference implementation for Maa Controller section of <see cref="MaaDefConverter"/>.

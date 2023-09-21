@@ -1,6 +1,4 @@
-﻿using MaaToolKit.Extensions.ComponentModel;
-
-namespace MaaToolKit.Extensions.Exceptions;
+﻿namespace MaaToolKit.Extensions.Exceptions;
 
 /// <summary>
 ///     The exception that is thrown when the <see cref="MaaJobStatus"/> of a <see cref="MaaJob"/> is incorrect.

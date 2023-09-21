@@ -1,6 +1,6 @@
 ﻿using MaaToolKit.Extensions.Interfaces;
 
-namespace MaaToolKit.Extensions.ComponentModel;
+namespace MaaToolKit.Extensions;
 
 /// <summary>
 /// A class providing a reference implementation for return value of Maa Post method.

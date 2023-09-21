@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MaaToolKit.Extensions;
+namespace MaaToolKit.Extensions.Interop;
 
 internal static partial class NativeLibrary
 {

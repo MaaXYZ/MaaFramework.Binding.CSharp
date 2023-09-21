@@ -9,7 +9,7 @@ namespace MaaToolKit.Extensions.Interop;
 /// <summary>
 ///     The base P/Invoke methods for MaaFramework, use this class to call all the native methods.
 ///     If you do not known what you are doing, do not use this class. In most situations, you
-///     should use <see cref="ComponentModel"/> instead.
+///     should use <see cref="Extensions"/> instead.
 /// </summary>
 public static partial class MaaApi
 {

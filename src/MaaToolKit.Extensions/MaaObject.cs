@@ -4,7 +4,7 @@ using MaaToolKit.Extensions.Interop;
 using System.Diagnostics.CodeAnalysis;
 using static MaaToolKit.Extensions.Interop.MaaApi;
 
-namespace MaaToolKit.Extensions.ComponentModel;
+namespace MaaToolKit.Extensions;
 
 /// <summary>
 ///     A class wrapping a <see cref="MaaInstance"/>, a <see cref="MaaResource"/> and a <see cref="MaaController"/>.

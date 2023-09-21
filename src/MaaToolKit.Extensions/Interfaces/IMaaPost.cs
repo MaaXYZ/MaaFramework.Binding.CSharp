@@ -1,6 +1,4 @@
-﻿using MaaToolKit.Extensions.ComponentModel;
-
-namespace MaaToolKit.Extensions.Interfaces;
+﻿namespace MaaToolKit.Extensions.Interfaces;
 
 /// <summary>
 ///     A interface of Maa Post method.
