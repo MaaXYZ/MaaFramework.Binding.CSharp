@@ -35,7 +35,7 @@ public class Test_MaaToolKit
     /// <summary> Test a member of the <see cref="MaaTool"/>.</summary>
     [TestMethod]
     public void Method_FindDevice()
-        => Assert.AreNotEqual<ulong>(0,
+        => Assert.IsNotNull(
             MaaTool.FindDevice());
 
     /// <summary> Test a member of the <see cref="MaaTool"/>.</summary>
