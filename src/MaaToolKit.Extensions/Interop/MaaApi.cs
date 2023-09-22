@@ -18,6 +18,37 @@ public static partial class MaaApi
         NativeLibrary.Init();
     }
 
+    // 先只整 device 部分，config 部分没文档看着懵
+    #region include/MaaToolKit/MaaToolKitAPI.h, commit title: feat(toolkit): custom info, commit hash: 48c74b5b0dafcb6d9b3ab65093b7dd545e9098fa.
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaBool MaaToolKitInit();
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaBool MaaToolKitUninit();
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaSize MaaToolKitFindDevice();
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaSize MaaToolKitFindDeviceWithAdb([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path);
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaStringView MaaToolKitGetDeviceName(MaaSize index);
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaStringView MaaToolKitGetDeviceAdbPath(MaaSize index);
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaStringView MaaToolKitGetDeviceAdbSerial(MaaSize index);
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaAdbControllerType MaaToolKitGetDeviceAdbControllerType(MaaSize index);
+
+    [LibraryImport("MaaToolKit")]
+    public static partial MaaStringView MaaToolKitGetDeviceAdbConfig(MaaSize index);
+    #endregion
+
     #region include/MaaFramework/MaaAPI.h, commit title: styles: remove empty line, commit hash: 1eca0675b642b8e3c41467f99be4ddd98d032682.
 
     [LibraryImport("MaaFramework")]
