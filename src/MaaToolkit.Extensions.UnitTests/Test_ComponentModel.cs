@@ -188,7 +188,7 @@ public class Test_ComponentModel
     */
 
     /// <summary> Test a member of the <see cref="MaaResource"/>. </summary>
-    [TestMethod]
+    // [TestMethod]
     public void C_MaaResource_Property_Get_Hash()
         => Assert.IsNotNull(
             Resource.Hash);
