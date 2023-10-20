@@ -1,24 +1,31 @@
+import os
 import re
 import requests
 import pyperclip
+'''
+include/MaaFramework/Utility/MaaUtility.h Press any key to continue.
+include/MaaFramework/Utility/MaaUtility.h Copied to clipboard.
+include/MaaRpc/MaaFramework/MaaDef.h Press any key to continue.
+include/MaaRpc/MaaFramework/MaaDef.h Copied to clipboard.
+include/MaaToolKit/MaaToolKitDef.h Press any key to continue.
+'''
+repo = 'MaaAssistantArknights/MaaFramework'
+api_path = [
+    'include/MaaFramework/MaaAPI.h',
+    'include/MaaRpc/MaaRpc.h',
+    'include/MaaToolKit/MaaToolKitAPI.h'
+]
 
 def convert_cpp_header_to_csharp(header_path: str):
+    dll_name = header_path.split('/')[1]
     csharp_codes = []
-
-    # 获取文件的最新 Commit 值
-    repo_url = f'https://api.github.com/repos/MaaAssistantArknights/MaaFramework/commits?path={header_path}'
-    response = requests.get(repo_url)
-    commit_hash = response.json()[0]['sha']
-    commit_title = response.json()[0]['commit']['message']  # 获取 commit 的标题
-    csharp_codes.append(f'\n#region {header_path}, commit title: {commit_title}, commit hash: {commit_hash}.\n')
+    csharp_codes.append(f'\n#region {header_path}, version: {version}.\n')
 
     # 获取文件
-    url = f'https://raw.githubusercontent.com/MaaAssistantArknights/MaaFramework/main/{header_path}'
-    response = requests.get(url)
-    content = response.text
+    content = get_header(header_path)
 
     # 匹配函数声明
-    pattern = re.compile(r'(\w+)\s+(?:MAA_FRAMEWORK_API|MAA_TOOLKIT_API)\s+(\w+)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
+    pattern = pattern = re.compile(r'(\w+)\s+(?:MAA_.*?_API)\s+(\w+)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
     matches = pattern.finditer(content)
 
     # 转换为 C# 代码
@@ -38,11 +45,37 @@ def convert_cpp_header_to_csharp(header_path: str):
         parameters = parameters.replace('MaaRectHandle', 'ref MaaRectApi')
         parameters = parameters.replace('MaaStringView', '[MarshalAs(UnmanagedType.LPUTF8Str)] string')
 
-        csharp_code = f'    [LibraryImport("MaaFramework")]\n    public static partial {return_type} {function_name}({parameters});\n'
+        csharp_code = f'    [LibraryImport("{dll_name}")]\n    public static partial {return_type} {function_name}({parameters});\n'
         csharp_codes.append(csharp_code)
 
     csharp_codes.append(f'#endregion\n')
     pyperclip.copy('\n'.join(csharp_codes))
-    print('Copied to clipboard.')
+    print(f'{header_path} Copied to clipboard.')
+    input(f'Press any key to continue.')
 
-convert_cpp_header_to_csharp('include/MaaFramework/MaaAPI.h')
+def get_version() -> str:
+    url = f'https://api.github.com/repos/{repo}/releases/latest'
+    json = requests.get(url).json()
+    try:
+        print(json['message']) 
+        exit(1)
+        # return 'main'
+    except:
+        return json['tag_name']
+
+def get_header(header_path: str):
+    url = f'https://raw.githubusercontent.com/{repo}/{version}/{header_path}'
+    return requests.get(url).text
+
+def get_includes(header_path: str) -> list[str]:
+    lines = get_header(header_path).split('\n')
+    path = os.path.split(header_path)[0] + '/'
+    return [ path + line.split(' ')[1].strip('"') for line in lines if line.startswith('#include')]
+
+
+version = get_version()
+for path in api_path:
+    convert_cpp_header_to_csharp(path)
+    includes = get_includes(path)
+    for include in includes:
+        convert_cpp_header_to_csharp(include)

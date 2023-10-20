@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
+﻿using System.Runtime.InteropServices.Marshalling;
+using System.Runtime.InteropServices;
 
-namespace MaaToolKit.Extensions.Interop;
+namespace MaaToolKit.Extensions.Interop.Framework.Task;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
@@ -10,13 +10,15 @@ namespace MaaToolKit.Extensions.Interop;
 /// </summary>
 public static class MaaRecognizerApi
 {
-    public delegate MaaBool Analyze(
-        MaaSyncContextHandle syncContext,
-        MaaImageBufferHandle image,
-        MaaStringView taskName,
-        MaaStringView customRecognitionParam,
-        ref MaaRectApi outBox,
-        MaaStringBufferHandle detailBuff);
+
+    #region include/MaaFramework/Task/MaaCustomRecognizer.h, version: v1.1.0.
+
+    #endregion
+
+    public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name,
+                           MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg,
+                           /*out*/ ref MaaRect out_box,
+                           /*out*/ MaaStringBufferHandle detail_buff);
 }
 
 /// <summary>
@@ -35,6 +37,11 @@ public struct MaaCustomRecognizerApi : IMaaDefStruct
 [CustomMarshaller(typeof(MaaCustomRecognizerApi), MarshalMode.Default, typeof(MaaCustomRecognizerApiMarshaller))]
 internal static class MaaCustomRecognizerApiMarshaller
 {
+    internal struct Unmanaged
+    {
+        public nint Analyze;
+    }
+
     public static Unmanaged ConvertToUnmanaged(MaaCustomRecognizerApi managed)
         => new() { Analyze = Marshal.GetFunctionPointerForDelegate<MaaRecognizerApi.Analyze>(managed.Analyze) };
 
@@ -44,10 +51,5 @@ internal static class MaaCustomRecognizerApiMarshaller
     public static void Free(Unmanaged unmanaged)
     {
         // Method intentionally left empty.
-    }
-
-    internal struct Unmanaged
-    {
-        public nint Analyze;
     }
 }

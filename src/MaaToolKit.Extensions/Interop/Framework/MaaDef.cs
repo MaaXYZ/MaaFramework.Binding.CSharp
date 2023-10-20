@@ -1,9 +1,4 @@
-﻿// Default value: https://github.com/MaaAssistantArknights/MaaFramework/blob/main/source/MaaFramework/API/MaaTypes.h
-// MaaFramework/MaaDef.h
-// SHA-1: c0630377a4c959f324d684106a001ef38807b4ca
-// * chore: 移除struct API的导出宏
-
-global using MaaStringBufferHandle = nint;
+﻿global using MaaStringBufferHandle = nint;
 global using MaaImageBufferHandle = nint;
 global using MaaResourceHandle = nint;
 global using MaaControllerHandle = nint;
@@ -40,32 +35,37 @@ global using MaaInstOption = System.Int32;
 global using MaaAdbControllerType = System.Int32;
 // enum AdbControllerType
 
+global using MaaTransparentArg = nint;
 global using MaaCallbackTransparentArg = nint;
 
-global using MaaResourceCallback = MaaToolKit.Extensions.Interop.MaaApiCallback;
-global using MaaControllerCallback = MaaToolKit.Extensions.Interop.MaaApiCallback;
-global using MaaInstanceCallback = MaaToolKit.Extensions.Interop.MaaApiCallback;
+global using MaaResourceCallback = MaaToolKit.Extensions.Interop.Framework.MaaApiCallback;
+global using MaaControllerCallback = MaaToolKit.Extensions.Interop.Framework.MaaApiCallback;
+global using MaaInstanceCallback = MaaToolKit.Extensions.Interop.Framework.MaaApiCallback;
 
 global using MaaCustomControllerHandle = nint;
 global using MaaCustomRecognizerHandle = nint;
 global using MaaCustomActionHandle = nint;
 global using MaaSyncContextHandle = nint;
 
-global using MaaImageRawData = nint;
-global using MaaImageEncodedData = nint;
-
 global using int32_t = System.Int32;
 
 // Consider using SafeHandle
 using System.Runtime.InteropServices;
 
-namespace MaaToolKit.Extensions.Interop;
+namespace MaaToolKit.Extensions.Interop.Framework;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 public static class MaaDef
 {
-    // MaaFramework/MaaDef.h
+    #region include/MaaFramework/MaaAPI.h, version: v1.1.0.
+
+    #endregion
+
+    #region include/MaaFramework/MaaDef.h, version: v1.1.0.
+
+    #endregion
+
     internal const MaaSize MaaNullSize = MaaSize.MaxValue;
     internal const MaaId MaaInvalidId = 0;
     internal const string EmptyMaaTaskParam = "{}";
@@ -74,7 +74,7 @@ public static class MaaDef
 public delegate void MaaApiCallback(MaaStringView msg, MaaStringView details_json, MaaCallbackTransparentArg callback_arg);
 
 [StructLayout(LayoutKind.Sequential)]
-public struct MaaRectApi : IMaaDefStruct
+public struct MaaRect : IMaaDefStruct
 {
     public int32_t X;
     public int32_t Y;
