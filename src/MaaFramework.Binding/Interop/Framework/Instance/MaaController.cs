@@ -30,6 +30,9 @@ public static partial class MaaController
     public static partial MaaControllerHandle MaaThriftControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string param, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 
     [LibraryImport("MaaFramework")]
+    public static partial MaaControllerHandle MaaDebuggingControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string read_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string write_path, MaaDebuggingControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
+
+    [LibraryImport("MaaFramework")]
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);
 
     [LibraryImport("MaaFramework")]
