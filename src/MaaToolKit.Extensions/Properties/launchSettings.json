@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "MaaToolKit.Extensions": {
-      "commandName": "Project",
-      "nativeDebugging": true
-    }
-  }
-}

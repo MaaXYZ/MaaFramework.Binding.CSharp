@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using SNL = System.Runtime.InteropServices.NativeLibrary;
 
-namespace MaaToolKit.Extensions.Interop;
+namespace MaaFramework.Binding.Interop;
 
 /// <inheritdoc cref="SNL" />
 internal static partial class NativeLibrary

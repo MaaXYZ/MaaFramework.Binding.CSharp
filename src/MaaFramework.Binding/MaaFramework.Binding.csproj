@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- Package Properties -->
+    <PropertyGroup>
+        <PackageId>Maa.Framework.Binding.CSharp</PackageId>
+        <Title>Maa Framework CSharp Binding</Title>
+        <description>MaaFramework.Binding.CSharp is a common binding package of MaaFramework for .NET 7.</description>
+        <PackageTags>MAA;c-sharp;cross-platform;dotnet</PackageTags>
+
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <IncludeSymbols>True</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\Common\NativeLibraryForNetcoreapp3.cs" Link="Interop\NativeLibraryForNetcoreapp3.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Maa.Framework.Runtimes" />
+    </ItemGroup>
+
+</Project>

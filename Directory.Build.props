@@ -66,8 +66,8 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>LGPL-2.1-only</PackageLicenseExpression>
     <PackageIcon>maa-logo_128x128.png</PackageIcon>
-    <PackageReleaseNotes>Release notes are at https://github.com/moomiji/MaaToolKit.Extensions/releases.</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/moomiji/MaaToolKit.Extensions</RepositoryUrl>
+    <PackageReleaseNotes>Release notes are at https://github.com/moomiji/MaaFramework.Binding.CSharp/releases.</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/moomiji/MaaFramework.Binding.CSharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryBranch>$(RepositoryBranch)</RepositoryBranch>
     <RepositoryCommit>$(RepositoryCommit)</RepositoryCommit>

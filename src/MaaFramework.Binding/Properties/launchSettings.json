@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MaaFramework.Binding": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

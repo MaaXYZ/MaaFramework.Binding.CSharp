@@ -14,9 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaToolKit.Extensions", "src\MaaToolKit.Extensions\MaaToolKit.Extensions.csproj", "{F15504A2-1A15-4574-BF63-CF2282BCA69B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Binding", "src\MaaFramework.Binding\MaaFramework.Binding.csproj", "{F15504A2-1A15-4574-BF63-CF2282BCA69B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaToolkit.Extensions.UnitTests", "src\MaaToolkit.Extensions.UnitTests\MaaToolkit.Extensions.UnitTests.csproj", "{02A37AB6-F381-4A27-8FE2-DC6914D70B25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Binding.UnitTests", "src\MaaFramework.Binding.UnitTests\MaaFramework.Binding.UnitTests.csproj", "{02A37AB6-F381-4A27-8FE2-DC6914D70B25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
