@@ -24,9 +24,9 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        arch: [aarch64, x86_64]
-        dotnet: [ '7.0.x' ]
+        os: windows-latest # [windows-latest, ubuntu-latest, macos-latest]
+        arch: x86_64 # [aarch64, x86_64]
+        dotnet: '7.0.x' # [ '7.0.x' ]
       fail-fast: false
 #    env:
 #      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
