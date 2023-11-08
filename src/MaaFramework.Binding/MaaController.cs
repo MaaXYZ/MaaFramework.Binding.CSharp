@@ -15,22 +15,6 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     internal MaaControllerHandle _handle;
     private bool disposed;
 
-    internal static readonly HashSet<MaaController> _controllers = new();
-    internal static MaaController Get(MaaControllerHandle handle)
-    {
-        var ret = _controllers.FirstOrDefault(x => x._handle == handle);
-        if (ret == null)
-        {
-            ret = new() { _handle = handle };
-            _controllers.Add(ret);
-        }
-        return ret;
-    }
-
-    /// <inheritdoc/>
-    public event IMaaNotify.MaaCallback? Callback;
-    internal readonly MaaControllerCallback _callback;
-
     internal MaaController()
     {
         _callback = (msg, detail, arg) => Callback?.Invoke(
@@ -63,7 +47,6 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
         : this()
     {
         _handle = MaaAdbControllerCreateV2(adbPath, address, (int)type, adbConfig, agentPath, _callback, maaCallbackTransparentArg);
-        _controllers.Add(this);
 
         if (linkStart)
         {

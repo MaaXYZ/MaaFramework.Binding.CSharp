@@ -19,6 +19,5 @@ public class MaaThriftController : MaaController
         : base()
     {
         _handle = MaaThriftControllerCreate(param, _callback, maaCallbackTransparentArg);
-        _controllers.Add(this);
     }
 }

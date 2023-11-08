@@ -17,33 +17,9 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
     internal MaaResourceHandle _handle;
     private bool disposed;
 
-    private static readonly HashSet<MaaResource> _resources = new();
-    internal static MaaResource Get(MaaResourceHandle handle)
-    {
-        var ret = _resources.FirstOrDefault(x => x._handle == handle);
-        if (ret == null)
-        {
-            ret = new(); // { _handle = handle };
-
-            // TODOO: MaaResource() 应该为 internal, 但 MaaCallbackTransparentArg 还没有更好的替代
-            // 不过只从该程序集调用 FW, ret 不可能为 null
-            ret.Dispose(true);
-            ret._handle = handle;
-            _resources.Add(ret);
-        }
-
-        return ret;
-    }
-
-    /// <inheritdoc/>
-    public event IMaaNotify.MaaCallback? Callback;
-    private readonly MaaResourceCallback _callback;
-
     /// <inheritdoc cref="MaaResource(MaaCallbackTransparentArg)"/>
     public MaaResource()
         : this(MaaCallbackTransparentArg.Zero)
-    {
-    }
 
     /// <summary>
     ///     Creates a <see cref="MaaResource"/> instance.
@@ -59,7 +35,6 @@ public class MaaResource : IMaaNotify, IMaaPost, IDisposable
             Marshal.PtrToStringUTF8(detail) ?? "{}",
             arg);
         _handle = MaaResourceCreate(_callback, maaCallbackTransparentArg);
-        _resources.Add(this);
     }
 
     /// <inheritdoc cref="MaaResource(MaaCallbackTransparentArg, string[])"/>
