@@ -33,7 +33,7 @@ global using MaaInstOption = System.Int32;
 // enum InstanceOption
 // const MaaTaskParam_Empty
 global using MaaAdbControllerType = System.Int32;
-// enum AdbControllerType
+// enum AdbControllerTypes
 global using MaaDebuggingControllerType = System.Int32;
 // enum DebuggingControllerType
 
@@ -48,15 +48,19 @@ global using MaaCustomControllerHandle = nint;
 global using MaaCustomRecognizerHandle = nint;
 global using MaaCustomActionHandle = nint;
 global using MaaSyncContextHandle = nint;
+global using MaaRectHandle = nint;
 
 global using int32_t = System.Int32;
 
 // Consider using SafeHandle
 using System.Runtime.InteropServices;
 
-namespace MaaFramework.Binding.Interop.Framework;
-
+#pragma warning disable S1133 // Deprecated code should be removed
+#pragma warning disable S4200 // Native methods should be wrapped
+#pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+namespace MaaFramework.Binding.Interop.Framework;
 
 public static class MaaDef
 {

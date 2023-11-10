@@ -12,9 +12,10 @@ public static class MaaDefConverter
     ///     Converts a MaaStringView (<see cref="MaaStringView"/>) to a <see cref="string"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException"></exception>
-    public static string ToStringUTF8(this MaaStringView value)
-        => Marshal.PtrToStringUTF8(value)
-        ?? throw new ArgumentNullException(nameof(value));
+    public static string ToStringUTF8(this MaaStringView value, MaaSize size = MaaSize.MinValue)
+        => size == MaaSize.MinValue
+        ? Marshal.PtrToStringUTF8(value) ?? throw new ArgumentNullException(nameof(value))
+        : Marshal.PtrToStringUTF8(value, (int)size);
 
     /// <summary>
     ///     Converts a MaaBool (<see cref="MaaBool"/>) to a <see cref="bool"/>.
@@ -23,10 +24,10 @@ public static class MaaDefConverter
         => 0 != value;
 
     /// <summary>
-    ///     Converts a <see cref="string"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
+    ///     Converts a <see cref="int"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
     /// </summary>
-    public static MaaOptionValue[] ToMaaOptionValues(this string value)
-        => Encoding.UTF8.GetBytes(value);
+    public static MaaOptionValue[] ToMaaOptionValues(this int value)
+        => BitConverter.GetBytes(value);
 
     /// <summary>
     ///     Converts a <see cref="bool"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
@@ -35,8 +36,17 @@ public static class MaaDefConverter
         => BitConverter.GetBytes(value);
 
     /// <summary>
-    ///     Converts a <see cref="int"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
+    ///     Converts a <see cref="string"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
     /// </summary>
-    public static MaaOptionValue[] ToMaaOptionValues(this int value)
-        => BitConverter.GetBytes(value);
+    public static MaaOptionValue[] ToMaaOptionValues(this string value)
+        => Encoding.UTF8.GetBytes(value);
+
+    /// <summary>
+    ///     Converts a <see cref="string"/> to a <see cref="byte"/>[].
+    /// </summary>
+    /// <remarks>
+    ///     Passes byte[] to avoid garbage collection.
+    /// </remarks>
+    public static byte[] ToBytes(this string value)
+        => Encoding.UTF8.GetBytes(value);
 }

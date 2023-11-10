@@ -1,13 +1,14 @@
 ﻿using MaaFramework.Binding.Enums;
 using MaaFramework.Binding.Interop;
-using static MaaFramework.Binding.Interop.MaaApi;
+using static MaaFramework.Binding.Interop.ToolKit.MaaToolKitConfig;
+using static MaaFramework.Binding.Interop.ToolKit.MaaToolKitDevice;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A static class providing a reference implementation for Maa ToolKit section of <see cref="MaaApi"/>.
+///     A static class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.ToolKit"/>.
 /// </summary>
-public static class MaaTool
+public static class MaaToolKit
 {
     /// <summary>
     ///     Initializes Maa ToolKit.
@@ -98,17 +99,17 @@ public static class MaaTool
         => MaaToolKitGetDeviceAdbSerial(index).ToStringUTF8();
 
     /// <summary>
-    ///     Get the <see cref="AdbControllerType"/> of a device.
+    ///     Get the <see cref="AdbControllerTypes"/> of a device.
     /// </summary>
     /// <param name="index">The index of the device.</param>
     /// <returns>
-    ///     The <see cref="AdbControllerType"/>.
+    ///     The <see cref="AdbControllerTypes"/>.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolKitGetDeviceAdbControllerType"/>.
     /// </remarks>
-    public static AdbControllerType GetDeviceAdbControllerType(ulong index)
-        => (AdbControllerType)MaaToolKitGetDeviceAdbControllerType(index);
+    public static AdbControllerTypes GetDeviceAdbControllerType(ulong index)
+        => (AdbControllerTypes)MaaToolKitGetDeviceAdbControllerType(index);
 
     /// <summary>
     ///     Get the adb config of a device.

@@ -1,5 +1,5 @@
-﻿using MaaFramework.Binding.Enums;
-using MaaFramework.Binding.Interfaces;
+﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Enums;
 
 namespace MaaFramework.Binding;
 
@@ -15,17 +15,17 @@ public class MaaJob
     public static implicit operator MaaId(MaaJob job) => job._id;
 
     private readonly MaaId _id;
-    private readonly IMaaPost _maaPost;
+    private readonly IMaaPost _maa;
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="maaPost"></param>
-    public MaaJob(MaaId id, IMaaPost maaPost)
+    /// <param name="maa"></param>
+    public MaaJob(MaaId id, IMaaPost maa)
     {
         _id = id;
-        _maaPost = maaPost;
+        _maa = maa;
     }
 
     /// <summary>
@@ -34,18 +34,18 @@ public class MaaJob
     /// <remarks>
     ///     Calls <see cref="IMaaPost.GetStatus"/>.
     /// </remarks>
-    public MaaJobStatus Status => _maaPost.GetStatus(this);
+    public MaaJobStatus Status => _maa.GetStatus(this);
 
     /// <summary>
     ///     Calls <see cref="IMaaPost.Wait"/>.
     /// </summary>
     /// <returns></returns>
-    public MaaJobStatus Wait() => _maaPost.Wait(this);
+    public MaaJobStatus Wait() => _maa.Wait(this);
 
     /// <summary>
     ///     Calls <see cref="IMaaPost.SetParam"/>.
     /// </summary>
     /// <param name="param"></param>
     /// <returns></returns>
-    public bool SetParam(string param) => _maaPost.SetParam(this, param);
+    public bool SetParam(string param) => _maa.SetParam(this, param);
 }

@@ -2,6 +2,7 @@
 
 namespace MaaFramework.Binding.Interop.Framework;
 
+#pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped
 #pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -20,10 +21,10 @@ public static partial class MaaSyncContext
     public static partial MaaBool MaaSyncContextRunTask(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string param);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextRunRecognizer(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, /* out */ ref MaaRectApi out_box, /* out */ MaaStringBufferHandle detail_buff);
+    public static partial MaaBool MaaSyncContextRunRecognizer(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, /* out */ MaaRectHandle out_box, /* out */ MaaStringBufferHandle detail_buff);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextRunAction(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, ref MaaRectApi cur_box, [MarshalAs(UnmanagedType.LPUTF8Str)] string cur_rec_detail);
+    public static partial MaaBool MaaSyncContextRunAction(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, MaaRectHandle cur_box, [MarshalAs(UnmanagedType.LPUTF8Str)] string cur_rec_detail);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaSyncContextClick(MaaSyncContextHandle sync_context, int32_t x, int32_t y);

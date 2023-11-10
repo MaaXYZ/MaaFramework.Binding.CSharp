@@ -1,10 +1,10 @@
 ﻿using MaaFramework.Binding.Interop;
-using static MaaFramework.Binding.Interop.Framework.MaaUtility;
+using static MaaFramework.Binding.Interop.Framework.MaaBuffer;
 
-namespace MaaFramework.Binding;
+namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
-///     A class providing a reference implementation for Maa Image Buffer section of <see cref="MaaApi"/>.
+///     A class providing a reference implementation for Maa Image Buffer section of <see cref="MaaFramework.Binding.Interop.Framework.MaaBuffer"/>.
 /// </summary>
 public class MaaImageBuffer : IDisposable
 {
@@ -49,9 +49,7 @@ public class MaaImageBuffer : IDisposable
     /// <summary>
     ///     Indicates whether the image of the <see cref="MaaImageBuffer" /> is empty.
     /// </summary>
-    /// <returns>
-    ///     true if the image is empty; otherwise, false.
-    /// </returns>
+    /// <returns>true if the image is empty; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaIsImageEmpty"/>.
     /// </remarks>
@@ -61,9 +59,7 @@ public class MaaImageBuffer : IDisposable
     /// <summary>
     ///     Clears the image of the <see cref="MaaImageBuffer" />.
     /// </summary>
-    /// <returns>
-    ///     true if the image was cleared successfully; otherwise, false.
-    /// </returns>
+    /// <returns>true if the image was cleared successfully; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaClearImage"/>.
     /// </remarks>
@@ -73,9 +69,7 @@ public class MaaImageBuffer : IDisposable
     /// <summary>
     ///     Gets the image raw data.
     /// </summary>
-    /// <returns>
-    ///     The raw data of image.
-    /// </returns>
+    /// <returns>The raw data of image.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetImageRawData"/>.
     /// </remarks>
@@ -122,9 +116,7 @@ public class MaaImageBuffer : IDisposable
     /// <param name="width">The width of image.</param>
     /// <param name="height">The height of image.</param>
     /// <param name="type">The type of image.</param>
-    /// <returns>
-    ///     true if the image raw data was setted successfully; otherwise, false.
-    /// </returns>
+    /// <returns>true if the image raw data was setted successfully; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetImageRawData"/>.
     /// </remarks>
@@ -157,9 +149,7 @@ public class MaaImageBuffer : IDisposable
     /// </summary>
     /// <param name="data">The encoded data of image.</param>
     /// <param name="size">The encoded size of image.</param>
-    /// <returns>
-    ///     true if the image encoded data was setted successfully; otherwise, false.
-    /// </returns>
+    /// <returns>true if the image encoded data was setted successfully; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetImageEncoded"/>.
     /// </remarks>

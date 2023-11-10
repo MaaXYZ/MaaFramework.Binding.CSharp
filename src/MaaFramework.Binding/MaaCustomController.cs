@@ -4,7 +4,7 @@ using static MaaFramework.Binding.Interop.Framework.MaaController;
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing a reference implementation for <see cref="MaaCustomControllerApi"/>.
+///     A class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Framework.MaaCustomControllerApi"/>.
 /// </summary>
 public class MaaCustomController : MaaController
 {
@@ -26,7 +26,7 @@ public class MaaCustomController : MaaController
     public MaaCustomController(MaaCustomControllerApi customController, MaaTransparentArg handleArg, MaaCallbackTransparentArg maaCallbackTransparentArg)
         : base()
     {
-        _handle = MaaCustomControllerCreate(ref controller, handleArg, _callback, maaCallbackTransparentArg);
+        _handle = MaaCustomControllerCreate(ref customController, handleArg, MaaApiCallback, maaCallbackTransparentArg);
         _customController = customController;
     }
 }

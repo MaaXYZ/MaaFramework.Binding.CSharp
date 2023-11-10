@@ -3,7 +3,7 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing a reference implementation for Maa Thrift Controller section of <see cref="MaaThriftControllerCreate"/>.
+///     A class providing a reference implementation for <see cref="MaaThriftControllerCreate"/>.
 /// </summary>
 public class MaaThriftController : MaaController
 {
@@ -18,6 +18,6 @@ public class MaaThriftController : MaaController
     public MaaThriftController(string param, MaaCallbackTransparentArg maaCallbackTransparentArg)
         : base()
     {
-        _handle = MaaThriftControllerCreate(param, _callback, maaCallbackTransparentArg);
+        _handle = MaaThriftControllerCreate(param, MaaApiCallback, maaCallbackTransparentArg);
     }
 }

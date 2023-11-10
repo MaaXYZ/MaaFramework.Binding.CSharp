@@ -2,6 +2,7 @@
 
 namespace MaaFramework.Binding.Interop.Framework;
 
+#pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped
 #pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -16,7 +17,7 @@ public static partial class MaaController
 
     #region include/MaaFramework/Instance/MaaController.h, version: v1.1.1.
 
-    [Obsolete("Replaced by MaaAdbControllerCreateV2")]
+    [Obsolete("This API MaaAdbControllerCreate is about to be deprecated. Please use MaaAdbControllerCreateV2 instead.")]
     [LibraryImport("MaaFramework")]
     public static partial MaaControllerHandle MaaAdbControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string address, MaaAdbControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 

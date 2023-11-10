@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding.Enums;
 
 /// <summary>
-///     Controller options
+///     Controller option.
 /// </summary>
 public enum ControllerOption
 {

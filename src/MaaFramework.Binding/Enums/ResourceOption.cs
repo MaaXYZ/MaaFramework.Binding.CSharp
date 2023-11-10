@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding.Enums;
 
 /// <summary>
-///     Resource options
+///     Resource option.
 /// </summary>
 public enum ResourceOption
 {

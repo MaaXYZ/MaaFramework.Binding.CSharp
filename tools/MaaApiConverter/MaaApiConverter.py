@@ -34,16 +34,34 @@ def convert_cpp_header_to_csharp(header_path: str):
         function_name = match.group(2)
         parameters = ' '.join(match.group(3).split())
 
-        # 转换参数类型
-        parameters = parameters.replace('int32_t*', 'ref int32_t')
-        parameters = parameters.replace('char*', 'nint')
-        parameters = parameters.replace('void*', 'nint')
-        parameters = re.sub(r'\bMaaOptionValue\b', 'ref MaaOptionValue', parameters)
-        parameters = parameters.replace('MaaCustomActionHandle', 'ref MaaCustomActionApi')
-        parameters = parameters.replace('MaaCustomControllerHandle', 'ref MaaCustomControllerApi')
-        parameters = parameters.replace('MaaCustomRecognizerHandle', 'ref MaaCustomRecognizerApi')
-        parameters = parameters.replace('MaaRectHandle', 'ref MaaRectApi')
-        parameters = parameters.replace('MaaStringView', '[MarshalAs(UnmanagedType.LPUTF8Str)] string')
+        # 特定 API
+        special_api_dict = {
+            'MaaSetStringEx': {'MaaStringView': 'ref byte'},
+        }
+        if function_name in special_api_dict.keys():
+            ps = special_api_dict['MaaSetStringEx']
+            while len(ps):
+                p1, p2 = ps.popitem()
+                parameters = parameters.replace(p1, p2)
+        else:
+            # 转换参数类型
+            parameters = parameters.replace('int32_t*', 'ref int32_t')
+            parameters = parameters.replace('char*', 'nint')
+            parameters = parameters.replace('void*', 'nint')
+            parameters = re.sub(r'\bMaaOptionValue\b', 'ref MaaOptionValue', parameters) # MaaOptionValue 而不是 MaaOptionValueSize
+            parameters = parameters.replace('MaaCustomActionHandle', 'ref MaaCustomActionApi')
+            parameters = parameters.replace('MaaCustomControllerHandle', 'ref MaaCustomControllerApi')
+            parameters = parameters.replace('MaaCustomRecognizerHandle', 'ref MaaCustomRecognizerApi')
+            # parameters = parameters.replace('MaaRectHandle', 'ref MaaRect')
+            parameters = parameters.replace('MaaStringView', '[MarshalAs(UnmanagedType.LPUTF8Str)] string')
+
+        # 过时 API
+        obsolete_api_dict = {
+            'MaaAdbControllerCreate': 'MaaAdbControllerCreateV2',
+        }
+        if function_name in obsolete_api_dict.keys():
+            obsolete_explanation = f'    [Obsolete("This API {function_name} is about to be deprecated. Please use {obsolete_api_dict[function_name]} instead.")]'
+            csharp_codes.append(obsolete_explanation)
 
         csharp_code = f'    [LibraryImport("{dll_name}")]\n    public static partial {return_type} {function_name}({parameters});\n'
         csharp_codes.append(csharp_code)

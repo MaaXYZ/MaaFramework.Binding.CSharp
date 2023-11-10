@@ -3,6 +3,9 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Framework;
 
+#pragma warning disable S1133 // Deprecated code should be removed
+#pragma warning disable S4200 // Native methods should be wrapped
+#pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 // TODOa: 缺失测试用例

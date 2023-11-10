@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace MaaFramework.Binding.Interop.Framework;
 
+#pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped
 #pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -41,7 +42,7 @@ public static partial class MaaBuffer
     public static partial MaaBool MaaSetString(MaaStringBufferHandle handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string str);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSetStringEx(MaaStringBufferHandle handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string str, MaaSize size);
+    public static partial MaaBool MaaSetStringEx(MaaStringBufferHandle handle, ref byte str, MaaSize size);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaImageBufferHandle MaaCreateImageBuffer();
@@ -83,31 +84,31 @@ public static partial class MaaBuffer
     public static partial MaaRectHandle MaaCreateRectBuffer();
 
     [LibraryImport("MaaFramework")]
-    public static partial void MaaDestroyRectBuffer(ref MaaRectApi handle);
+    public static partial void MaaDestroyRectBuffer(MaaRectHandle handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial int32_t MaaGetRectX(ref MaaRectApi handle);
+    public static partial int32_t MaaGetRectX(MaaRectHandle handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial int32_t MaaGetRectY(ref MaaRectApi handle);
+    public static partial int32_t MaaGetRectY(MaaRectHandle handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial int32_t MaaGetRectW(ref MaaRectApi handle);
+    public static partial int32_t MaaGetRectW(MaaRectHandle handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial int32_t MaaGetRectH(ref MaaRectApi handle);
+    public static partial int32_t MaaGetRectH(MaaRectHandle handle);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSetRectX(ref MaaRectApi handle, int32_t value);
+    public static partial MaaBool MaaSetRectX(MaaRectHandle handle, int32_t value);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSetRectY(ref MaaRectApi handle, int32_t value);
+    public static partial MaaBool MaaSetRectY(MaaRectHandle handle, int32_t value);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSetRectW(ref MaaRectApi handle, int32_t value);
+    public static partial MaaBool MaaSetRectW(MaaRectHandle handle, int32_t value);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSetRectH(ref MaaRectApi handle, int32_t value);
+    public static partial MaaBool MaaSetRectH(MaaRectHandle handle, int32_t value);
 
     #endregion
 

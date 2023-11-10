@@ -1,66 +1,75 @@
-﻿using MaaFramework.Binding.Enums;
+﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Enums;
 using MaaFramework.Binding.Exceptions;
-using MaaFramework.Binding.Interfaces;
 using MaaFramework.Binding.Interop;
-using System.Runtime.InteropServices;
 using static MaaFramework.Binding.Interop.Framework.MaaController;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing a reference implementation for <see cref="Interop.Framework.MaaController"/>.
+///     A class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Framework.MaaController"/>.
 /// </summary>
-public class MaaController : IMaaNotify, IMaaPost, IDisposable
+public class MaaController : MaaCommon<ControllerOption>
 {
     internal MaaControllerHandle _handle;
     private bool disposed;
 
     internal MaaController()
     {
-        _callback = (msg, detail, arg) => Callback?.Invoke(
-            Marshal.PtrToStringUTF8(msg) ?? string.Empty,
-            Marshal.PtrToStringUTF8(detail) ?? "{}",
-            arg);
     }
 
-    /// <inheritdoc cref="MaaController(string, string, AdbControllerType, string, string, MaaCallbackTransparentArg, bool)"/>
-    public MaaController(string adbPath, string address, AdbControllerType type, string adbConfig, string agentPath, bool linkStart = false)
-        : this(adbPath, address, type, adbConfig, agentPath, MaaCallbackTransparentArg.Zero, linkStart)
+    /// <inheritdoc cref="MaaController(string, string, AdbControllerTypes, string, string, MaaCallbackTransparentArg, CheckStatusOption, LinkOption)"/>
+    public MaaController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPathh, MaaCallbackTransparentArg maaCallbackTransparentArg)
+        : this(adbPath, address, type, adbConfig, agentPathh, maaCallbackTransparentArg, CheckStatusOption.ThrowIfNotSuccess, LinkOption.Start)
+    {
+    }
+
+    /// <inheritdoc cref="MaaController(string, string, AdbControllerTypes, string, string, LinkOption)"/>
+    public MaaController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath)
+        : this(adbPath, address, type, adbConfig, agentPath, LinkOption.Start)
+    {
+    }
+
+    /// <inheritdoc cref="MaaController(string, string, AdbControllerTypes, string, string, CheckStatusOption, LinkOption)"/>
+    public MaaController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link)
+        : this(adbPath, address, type, adbConfig, agentPath, CheckStatusOption.ThrowIfNotSuccess, link)
+    {
+    }
+
+    /// <inheritdoc cref="MaaController(string, string, AdbControllerTypes, string, string, MaaCallbackTransparentArg, CheckStatusOption, LinkOption)"/>
+    public MaaController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, CheckStatusOption check, LinkOption link)
+        : this(adbPath, address, type, adbConfig, agentPath, MaaCallbackTransparentArg.Zero, check, link)
     {
     }
 
     /// <summary>
     ///     Creates a <see cref="MaaController"/> instance.
     /// </summary>
-    /// <param name="adbPath"></param>
-    /// <param name="address"></param>
-    /// <param name="type"></param>
-    /// <param name="adbConfig"></param>
-    /// <param name="agentPath"></param>
-    /// <param name="maaCallbackTransparentArg"></param>
-    /// <param name="linkStart">Whether to execute <see cref="LinkStart"/></param>
+    /// <param name="adbPath">The path of adb executable file.</param>
+    /// <param name="address">The device address.</param>
+    /// <param name="type">The AdbControllerTypes including touch type, key type and screencap type.</param>
+    /// <param name="adbConfig">The path of adb config file.</param>
+    /// <param name="agentPath">The path of agent directory.</param>
+    /// <param name="maaCallbackTransparentArg">The maaCallbackTransparentArg.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if true; otherwise, not check.</param>
+    /// <param name="link">Executes <see cref="LinkStart"/> if true; otherwise, not link.</param>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
+    ///     Wrapper of <see cref="MaaAdbControllerCreateV2"/>.
     /// </remarks>
     /// <exception cref="MaaJobStatusException" />
-    public MaaController(string adbPath, string address, AdbControllerType type, string adbConfig, string agentPath, MaaCallbackTransparentArg maaCallbackTransparentArg, bool linkStart = false)
-        : this()
+    public MaaController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, MaaCallbackTransparentArg maaCallbackTransparentArg, CheckStatusOption check, LinkOption link)
     {
-        _handle = MaaAdbControllerCreateV2(adbPath, address, (int)type, adbConfig, agentPath, _callback, maaCallbackTransparentArg);
+        _handle = MaaAdbControllerCreateV2(adbPath, address, (int)type, adbConfig, agentPath, MaaApiCallback, maaCallbackTransparentArg);
 
-        if (linkStart)
+        if (link == LinkOption.Start)
         {
-            LinkStart()
-                .Wait()
-                .ThrowIfNot(MaaJobStatus.Success);
+            var status = LinkStart().Wait();
+            if (check == CheckStatusOption.ThrowIfNotSuccess)
+            {
+                status.ThrowIfMaaControllerNotSuccess();
+            }
         }
-    }
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -70,7 +79,7 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerDestroy"/>.
     /// </remarks>
-    protected virtual void Dispose(bool disposing)
+    protected override void Dispose(bool disposing)
     {
         if (!disposed)
         {
@@ -81,29 +90,12 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
         }
     }
 
-    /// <summary>
-    ///     Sets <paramref name="value"/> to a option of the <see cref="MaaController"/>.
-    /// </summary>
-    /// <param name="option">The option.</param>
-    /// <param name="value">The value.</param>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerSetOption"/>.
     /// </remarks>
-    /// <returns>true if the option was setted successfully; otherwise, false.</returns>
-    private bool SetOption(ControllerOption option, MaaOptionValue[] value)
+    internal override bool SetOption(ControllerOption option, MaaOptionValue[] value)
         => MaaControllerSetOption(_handle, (MaaCtrlOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
-
-    /// <inheritdoc cref="SetOption(ControllerOption, MaaOptionValue[])"/>
-    public bool SetOption(ControllerOption option, int value)
-        => SetOption(option, value.ToMaaOptionValues());
-
-    /// <inheritdoc cref="SetOption(ControllerOption, MaaOptionValue[])"/>
-    /// <exception cref="ArgumentException" />
-    public bool SetOption(ControllerOption option, string value)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(value);
-        return SetOption(option, value.ToMaaOptionValues());
-    }
 
     /// <summary>
     ///     Connects the address specified by the constructor.
@@ -121,8 +113,8 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <summary>
     ///     Clicks a point.
     /// </summary>
-    /// <param name="x">The x-coordinate of the point.</param>
-    /// <param name="y">The y-coordinate of the point.</param>
+    /// <param name="x">The horizontal coordinate of the point.</param>
+    /// <param name="y">The vertical coordinate of the point.</param>
     /// <returns>A click job.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostClick"/>.
@@ -136,10 +128,10 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <summary>
     ///     Swipes from a starting point to a ending point with duration.
     /// </summary>
-    /// <param name="x1">The x-coordinate of the starting point.</param>
-    /// <param name="y1">The y-coordinate of the starting point.</param>
-    /// <param name="x2">The x-coordinate of the ending point.</param>
-    /// <param name="y2">The x-coordinate of the ending point.</param>
+    /// <param name="x1">The horizontal coordinate of the starting point.</param>
+    /// <param name="y1">The vertical coordinate of the starting point.</param>
+    /// <param name="x2">The horizontal coordinate of the ending point.</param>
+    /// <param name="y2">The horizontal coordinate of the ending point.</param>
     /// <param name="duration">The duration.</param>
     /// <returns>A swipe job.</returns>
     /// <remarks>
@@ -169,8 +161,8 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
     /// </summary>
     /// <param name="contact">The contact id.</param>
-    /// <param name="x">The x-coordinate of the starting point.</param>
-    /// <param name="y">The y-coordinate of the starting point.</param>
+    /// <param name="x">The horizontal coordinate of the starting point.</param>
+    /// <param name="y">The vertical coordinate of the starting point.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>A touch down job.</returns>
     /// <remarks>
@@ -186,8 +178,8 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
     /// </summary>
     /// <param name="contact">The contact id.</param>
-    /// <param name="x">The x-coordinate of the ending point.</param>
-    /// <param name="y">The y-coordinate of the ending point.</param>
+    /// <param name="x">The horizontal coordinate of the ending point.</param>
+    /// <param name="y">The vertical coordinate of the ending point.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>A touch move job.</returns>
     /// <remarks>
@@ -230,21 +222,21 @@ public class MaaController : IMaaNotify, IMaaPost, IDisposable
     /// <remarks>
     ///     Always return false.
     /// </remarks>
-    public bool SetParam(MaaJob job, string param)
+    public override bool SetParam(MaaJob job, string param)
         => false;
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerStatus"/>.
     /// </remarks>
-    public MaaJobStatus GetStatus(MaaJob job)
+    public override MaaJobStatus GetStatus(MaaJob job)
         => (MaaJobStatus)MaaControllerStatus(_handle, job);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerWait"/>.
     /// </remarks>
-    public MaaJobStatus Wait(MaaJob job)
+    public override MaaJobStatus Wait(MaaJob job)
         => (MaaJobStatus)MaaControllerWait(_handle, job);
 
     /// <summary>

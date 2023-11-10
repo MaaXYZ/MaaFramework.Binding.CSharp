@@ -1,9 +1,9 @@
 ﻿using MaaFramework.Binding.Enums;
 
-namespace MaaFramework.Binding.Interfaces;
+namespace MaaFramework.Binding.Abstractions;
 
 /// <summary>
-///     A interface of Maa Post method.
+///     A interface of Maa post method.
 /// </summary>
 public interface IMaaPost
 {

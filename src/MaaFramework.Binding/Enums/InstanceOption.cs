@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding.Enums;
 
 /// <summary>
-///     Instance options
+///     Instance option.
 /// </summary>
 public enum InstanceOption
 {

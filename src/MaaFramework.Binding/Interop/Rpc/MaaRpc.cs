@@ -2,6 +2,7 @@
 
 namespace MaaFramework.Binding.Interop.Rpc;
 
+#pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped
 #pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -26,6 +27,7 @@ public static partial class MaaRpc
     public static partial void MaaRpcWait();
 
     #endregion
+
 
     #region include/MaaRpc/MaaFramework/MaaDef.h, version: v1.1.1.
 

@@ -2,7 +2,13 @@
 
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
-public enum AdbControllerType
+/// <summary>
+///     Adb controller types.
+/// </summary>
+/// <remarks>
+///     <see cref="AdbControllerTypes"/> combines TouchType, KeyType and ScreencapType.
+/// </remarks>
+public enum AdbControllerTypes
 {
     Invalid = 0,
 

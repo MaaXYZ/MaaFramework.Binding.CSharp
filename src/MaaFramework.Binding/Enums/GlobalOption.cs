@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding.Enums;
 
 /// <summary>
-///     Global options
+///     Global option.
 /// </summary>
 public enum GlobalOption
 {
