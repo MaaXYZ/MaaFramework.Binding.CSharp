@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\MaaFramework.Binding\MaaFramework.Binding.csproj" />
+  </ItemGroup>
+</Project>
