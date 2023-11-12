@@ -1,6 +1,8 @@
-﻿namespace MaaFramework.Binding.Enums;
+﻿namespace MaaFramework.Binding;
 
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
+#pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
+#pragma warning disable S4070 // Non-flags enums should not be marked with "FlagsAttribute"
 
 /// <summary>
 ///     Debugging controller types.
@@ -8,6 +10,7 @@
 /// <remarks>
 ///     <see cref="DebuggingControllerTypes"/> combines TouchType, KeyType and ScreencapType.
 /// </remarks>
+[Flags]
 public enum DebuggingControllerTypes
 {
     Invalid = 0,
@@ -20,6 +23,6 @@ public enum DebuggingControllerTypes
 
     InputPresetIgnore = TouchIgnore | KeyIgnore,
 
-    ScreencapReadIndex = 1 << 16,
-    ScreencapMask = 0xFF0000,
+    ScreenCapReadIndex = 1 << 16,
+    ScreenCapMask = 0xFF0000,
 }

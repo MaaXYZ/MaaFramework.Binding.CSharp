@@ -40,9 +40,9 @@ global using MaaDebuggingControllerType = System.Int32;
 global using MaaTransparentArg = nint;
 global using MaaCallbackTransparentArg = nint;
 
-global using MaaResourceCallback = MaaFramework.Binding.Native.Interop.Framework.MaaApiCallback;
-global using MaaControllerCallback = MaaFramework.Binding.Native.Interop.Framework.MaaApiCallback;
-global using MaaInstanceCallback = MaaFramework.Binding.Native.Interop.Framework.MaaApiCallback;
+global using MaaResourceCallback = MaaFramework.Binding.Native.Interop.MaaApiCallback;
+global using MaaControllerCallback = MaaFramework.Binding.Native.Interop.MaaApiCallback;
+global using MaaInstanceCallback = MaaFramework.Binding.Native.Interop.MaaApiCallback;
 
 global using MaaCustomControllerHandle = nint;
 global using MaaCustomRecognizerHandle = nint;
@@ -52,15 +52,12 @@ global using MaaRectHandle = nint;
 
 global using int32_t = System.Int32;
 
-// Consider using SafeHandle
-using System.Runtime.InteropServices;
-
 #pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped
 #pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-namespace MaaFramework.Binding.Native.Interop.Framework;
+namespace MaaFramework.Binding.Native.Interop;
 
 public static class MaaDef
 {
@@ -80,17 +77,3 @@ public static class MaaDef
 }
 
 public delegate void MaaApiCallback(MaaStringView msg, MaaStringView details_json, MaaCallbackTransparentArg callback_arg);
-
-[StructLayout(LayoutKind.Sequential)]
-public struct MaaRect : IMaaDefStruct
-{
-    public int32_t X;
-    public int32_t Y;
-    public int32_t Width;
-    public int32_t Height;
-}
-
-public interface IMaaDefStruct
-{
-
-}

@@ -1,34 +1,32 @@
-﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Enums;
-using MaaFramework.Binding.Exceptions;
+﻿using MaaFramework.Binding.Native.Abstractions;
 using MaaFramework.Binding.Native.Interop;
-using MaaFramework.Binding.Native.Interop.Framework;
 using System.Diagnostics.CodeAnalysis;
-using static MaaFramework.Binding.Native.Interop.Framework.MaaInstance;
+using static MaaFramework.Binding.Native.Interop.MaaInstance;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.Framework.MaaInstance"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaInstance"/>.
 /// </summary>
-public class MaaInstance : MaaCommon<InstanceOption>
+public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance
 {
-    internal MaaInstanceHandle _handle;
-    private bool disposed;
-    private MaaResource _resource = new();
-    private MaaController _controller = new();
+    private IMaaResource _resource = default!;
+    private IMaaController _controller = default!;
 
-    /* 为 RPC 准备的
+    /// <summary>
+    ///     Converts a <see cref="IMaaInstance"/> instance to a <see cref="MaaInstance"/>.
+    /// </summary>
+    /// <param name="maaInstance">The <see cref="IMaaInstance"/> instance.</param>
+    /// <exception cref="ArgumentNullException"/>
     [SetsRequiredMembers]
-    public MaaInstance(MaaInstance maaInstance)
+    public MaaInstance(IMaaInstance maaInstance)
     {
-        _resource = maaInstance.Resource;
-        _controller = maaInstance.Controller;
+        _resource ??= new MaaResource(maaInstance.Resource);
+        _controller ??= new MaaController(maaInstance.Controller);
 
         if (Resource == null || Controller == null)
             throw new ArgumentNullException(nameof(maaInstance), "Resource and Controller cannot be null");
     }
-    */
 
     /// <inheritdoc cref="MaaInstance(MaaCallbackTransparentArg)"/>
     public MaaInstance()
@@ -39,46 +37,50 @@ public class MaaInstance : MaaCommon<InstanceOption>
     /// <summary>
     ///     Creates a <see cref="MaaInstance"/> instance.
     /// </summary>
-    /// <param name="maaCallbackTransparentArg"></param>
+    /// <param name="maaCallbackTransparentArg">The MaaCallbackTransparentArg.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCreate"/>.
     /// </remarks>
     public MaaInstance(MaaCallbackTransparentArg maaCallbackTransparentArg)
     {
-        _handle = MaaCreate(MaaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaCreate(maaApiCallback, maaCallbackTransparentArg);
+        SetHandle(handle);
     }
 
     /// <param name="resource">The resource.</param>
     /// <param name="controller">The controller.</param>
+    /// <param name="disposeOptions">The dispose options.</param>
     /// <inheritdoc cref="MaaInstance(MaaCallbackTransparentArg)"/>
     [SetsRequiredMembers]
-    public MaaInstance(MaaResource resource, MaaController controller)
+    public MaaInstance(IMaaResource resource, IMaaController controller, DisposeOptions disposeOptions)
         : this(MaaCallbackTransparentArg.Zero)
     {
         Resource = resource;
         Controller = controller;
+        DisposeOptions = disposeOptions;
     }
 
     /// <summary>
-    ///     Disposes the <see cref="MaaInstance"/> instance.
+    ///     Whether to dispose the <see cref="Resource"/> and the <see cref="Controller"/> when <see cref="IDisposable.Dispose"/> was invoked.
     /// </summary>
-    /// <param name="disposing"></param>
+    public required DisposeOptions DisposeOptions { get; set; }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaDestroy"/>.
     /// </remarks>
-    protected override void Dispose(bool disposing)
+    protected override void ReleaseHandle()
     {
-        if (!disposed)
-        {
-            if (disposing)
-            {
-                Controller.Dispose();
-                Resource.Dispose();
-            }
+        MaaDestroy(Handle);
 
-            MaaDestroy(_handle);
-            _handle = MaaInstanceHandle.Zero;
-            disposed = true;
+        if (DisposeOptions.Contains(DisposeOptions.Controller))
+        {
+            Controller.Dispose();
+        }
+
+        if (DisposeOptions.Contains(DisposeOptions.Resource))
+        {
+            Resource.Dispose();
         }
     }
 
@@ -86,69 +88,58 @@ public class MaaInstance : MaaCommon<InstanceOption>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetOption"/>.
     /// </remarks>
-    internal override bool SetOption(InstanceOption option, MaaOptionValue[] value)
-     => MaaSetOption(_handle, (MaaInstOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+    sealed protected override bool SetOption(InstanceOption option, MaaOptionValue[] value)
+     => MaaSetOption(Handle, (MaaInstOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
 
-    /// <summary>
-    ///     Gets the resource or inits to bind a <see cref="MaaResource"/>.
-    /// </summary>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaBindResource"/> and <see cref="MaaGetResource"/>.
     /// </remarks>
-    /// <exception cref="MaaBindException"/>
-    public required MaaResource Resource
+    public required IMaaResource Resource
     {
         get
         {
-            MaaBindException.ThrowIfFalse(
-                MaaGetResource(_handle) != _resource!._handle,
+            MaaBindException.ThrowIf(
+                MaaGetResource(Handle) != _resource.Handle,
                 MaaBindException.ResourceModifiedMessage);
             return _resource;
         }
         init
         {
-            MaaBindException.ThrowIfFalse(
-                MaaBindResource(_handle, value._handle).ToBoolean(),
+            MaaBindException.ThrowIf(
+                MaaBindResource(Handle, value.Handle).ToBoolean(),
                 MaaBindException.ResourceMessage);
             _resource = value;
         }
     }
 
-    /// <summary>
-    ///     Gets the controller or inits to bind a <see cref="MaaController"/>.
-    /// </summary>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaBindController"/> and <see cref="MaaGetController"/>.
     /// </remarks>
-    /// <exception cref="MaaBindException"/>
-    public required MaaController Controller
+    public required IMaaController Controller
     {
         get
         {
-            MaaBindException.ThrowIfFalse(
-                MaaGetController(_handle) != _controller!._handle,
+            MaaBindException.ThrowIf(
+                MaaGetController(Handle) != _controller.Handle,
                 MaaBindException.ControllerModifiedMessage);
             return _controller;
         }
         init
         {
-            MaaBindException.ThrowIfFalse(
-                MaaBindController(_handle, value._handle).ToBoolean(),
+            MaaBindException.ThrowIf(
+                MaaBindController(Handle, value.Handle).ToBoolean(),
                 MaaBindException.ControllerMessage);
             _controller = value;
         }
     }
 
-    /// <summary>
-    ///     Gets whether the <see cref="MaaInstance"/> is fully initialized.
-    /// </summary>
-    /// <value>
-    ///     true if the <see cref="MaaInstance"/> was fully initialized; otherwise, false.
-    /// </value>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaInited"/>.
     /// </remarks>
-    public bool Initialized => MaaInited(_handle).ToBoolean();
+    public bool Initialized => MaaInited(Handle).ToBoolean();
 
     private static readonly Dictionary<string, MaaCustomRecognizerApi> _recognizers = new();
     private static readonly Dictionary<string, MaaCustomActionApi> _actions = new();
@@ -156,13 +147,8 @@ public class MaaInstance : MaaCommon<InstanceOption>
     /// <summary>
     ///     Registers a <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> named <paramref name="name"/> in the <see cref="MaaInstance"/>.
     /// </summary>
-    /// <param name="name">The name.</param>
-    /// <param name="custom">The MaaCustomRecognizerApi or MaaCustomActionApi.</param>
-    /// <param name="arg"></param>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
-    /// <returns>
-    ///     true if the <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> was registered successfully; otherwise, false.
-    /// </returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRegisterCustomRecognizer"/> and <see cref="MaaRegisterCustomAction"/>.
     /// </remarks>
@@ -172,11 +158,11 @@ public class MaaInstance : MaaCommon<InstanceOption>
         switch (custom)
         {
             case MaaCustomRecognizerApi recognizer:
-                ret = MaaRegisterCustomRecognizer(_handle, name, ref recognizer, arg).ToBoolean();
+                ret = MaaRegisterCustomRecognizer(Handle, name, ref recognizer, arg).ToBoolean();
                 if (ret) _recognizers[name] = recognizer;
                 return ret;
             case MaaCustomActionApi action:
-                ret = MaaRegisterCustomAction(_handle, name, ref action, arg).ToBoolean();
+                ret = MaaRegisterCustomAction(Handle, name, ref action, arg).ToBoolean();
                 if (ret) _actions[name] = action;
                 return ret;
             default:
@@ -187,11 +173,8 @@ public class MaaInstance : MaaCommon<InstanceOption>
     /// <summary>
     ///     Unregisters a <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> named <paramref name="name"/> in the <see cref="MaaInstance"/>.
     /// </summary>
-    /// <param name="name">The name of recognizer.</param>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
-    /// <returns>
-    ///     true if the <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> was unregistered successfully; otherwise, false.
-    /// </returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaUnregisterCustomRecognizer"/> and <see cref="MaaUnregisterCustomAction"/>.
     /// </remarks>
@@ -201,11 +184,11 @@ public class MaaInstance : MaaCommon<InstanceOption>
         switch (typeof(T).Name)
         {
             case nameof(MaaCustomRecognizerApi):
-                ret = MaaUnregisterCustomRecognizer(_handle, name).ToBoolean();
+                ret = MaaUnregisterCustomRecognizer(Handle, name).ToBoolean();
                 if (ret) _recognizers.Remove(name);
                 return ret;
             case nameof(MaaCustomActionApi):
-                ret = MaaUnregisterCustomAction(_handle, name).ToBoolean();
+                ret = MaaUnregisterCustomAction(Handle, name).ToBoolean();
                 if (ret) _actions.Remove(name);
                 return ret;
             default:
@@ -217,9 +200,7 @@ public class MaaInstance : MaaCommon<InstanceOption>
     ///     Clears <see cref="MaaCustomRecognizerApi"/>s or <see cref="MaaCustomActionApi"/>s in the <see cref="MaaInstance"/>.
     /// </summary>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
-    /// <returns>
-    ///     true if <see cref="MaaCustomRecognizerApi"/>s or <see cref="MaaCustomActionApi"/>s were cleared successfully; otherwise, false.
-    /// </returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaClearCustomRecognizer"/> and <see cref="MaaClearCustomAction"/>.
     /// </remarks>
@@ -229,11 +210,11 @@ public class MaaInstance : MaaCommon<InstanceOption>
         switch (typeof(T).Name)
         {
             case nameof(MaaCustomRecognizerApi):
-                ret = MaaClearCustomRecognizer(_handle).ToBoolean();
+                ret = MaaClearCustomRecognizer(Handle).ToBoolean();
                 if (ret) _recognizers.Clear();
                 return ret;
             case nameof(MaaCustomActionApi):
-                ret = MaaClearCustomAction(_handle).ToBoolean();
+                ret = MaaClearCustomAction(Handle).ToBoolean();
                 if (ret) _actions.Clear();
                 return ret;
             default:
@@ -241,59 +222,47 @@ public class MaaInstance : MaaCommon<InstanceOption>
         }
     }
 
-    /// <summary>
-    ///     Appends a async job of executing a maa task, could be called multiple times.
-    /// </summary>
-    /// <param name="taskEntryName">The name of task entry.</param>
-    /// <param name="taskParam">The param of task, which could be parsed to a JSON.</param>
-    /// <returns></returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaPostTask"/>.
     /// </remarks>
-    public MaaJob AppendTask(string taskEntryName, string taskParam = MaaDef.EmptyMaaTaskParam)
+    public IMaaJob AppendTask(string taskEntryName, string taskParam = MaaDef.EmptyMaaTaskParam)
     {
-        var id = MaaPostTask(_handle, taskEntryName, taskParam);
-        return new(id, this);
+        var id = MaaPostTask(Handle, taskEntryName, taskParam);
+        return new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetTaskParam"/>.
     /// </remarks>
-    public override bool SetParam(MaaJob job, string param)
-        => MaaSetTaskParam(_handle, job, param).ToBoolean();
+    public bool SetParam(IMaaJob job, string param)
+        => MaaSetTaskParam(Handle, job.Id, param).ToBoolean();
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskStatus"/>.
     /// </remarks>
-    public override MaaJobStatus GetStatus(MaaJob job)
-        => (MaaJobStatus)MaaTaskStatus(_handle, job);
+    public MaaJobStatus GetStatus(IMaaJob job)
+        => (MaaJobStatus)MaaTaskStatus(Handle, job.Id);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaWaitTask"/>.
     /// </remarks>
-    public override MaaJobStatus Wait(MaaJob job)
-        => (MaaJobStatus)MaaWaitTask(_handle, job);
+    public MaaJobStatus Wait(IMaaJob job)
+        => (MaaJobStatus)MaaWaitTask(Handle, job.Id);
 
-    /// <summary>
-    ///     Gets whether the all maa tasks finished.
-    /// </summary>
-    /// <value>
-    ///     true if all tasks finished; otherwise, false.
-    /// </value>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskAllFinished"/>.
     /// </remarks>
-    public bool AllTasksFinished => MaaTaskAllFinished(_handle).ToBoolean();
+    public bool AllTasksFinished => MaaTaskAllFinished(Handle).ToBoolean();
 
-    /// <summary>
-    ///     Stops the binded <see cref="MaaResource"/>, the binded <see cref="MaaController"/>, all appended tasks. 
-    /// </summary>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStop"/>.
     /// </remarks>
     public bool Stop()
-        => MaaStop(_handle).ToBoolean();
+        => MaaStop(Handle).ToBoolean();
 }

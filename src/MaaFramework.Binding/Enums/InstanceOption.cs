@@ -1,4 +1,4 @@
-﻿namespace MaaFramework.Binding.Enums;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
 ///     Instance option.

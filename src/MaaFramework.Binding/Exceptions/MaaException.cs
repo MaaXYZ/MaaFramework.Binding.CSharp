@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace MaaFramework.Binding.Exceptions;
+namespace MaaFramework.Binding;
 
 /// <summary>
 ///     The exception that is the base class for custom exceptions in <see cref="MaaFramework.Binding"/>.

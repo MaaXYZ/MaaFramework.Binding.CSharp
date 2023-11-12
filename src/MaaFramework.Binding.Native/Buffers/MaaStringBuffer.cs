@@ -1,16 +1,14 @@
-﻿using MaaFramework.Binding.Native.Interop;
-using static MaaFramework.Binding.Native.Interop.Framework.MaaBuffer;
+﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Native.Interop;
+using static MaaFramework.Binding.Native.Interop.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
-///     A class providing a reference implementation for Maa String Buffer section of <see cref="MaaFramework.Binding.Native.Interop.Framework.MaaBuffer"/>.
+///     A class providing a reference implementation for Maa String Buffer section of <see cref="MaaFramework.Binding.Native.Interop.MaaBuffer"/>.
 /// </summary>
-public class MaaStringBuffer : IDisposable
+public class MaaStringBuffer : MaaDisposableHandle, IMaaStringBuffer
 {
-    internal MaaStringBufferHandle _handle;
-    private bool disposed;
-
     /// <inheritdoc cref="MaaRectBuffer(nint)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCreateStringBuffer"/>.
@@ -25,79 +23,46 @@ public class MaaStringBuffer : IDisposable
     /// </summary>
     /// <param name="handle">The MaaStringBufferHandle.</param>
     public MaaStringBuffer(MaaStringBufferHandle handle)
+        : base(invalidHandleValue: nint.Zero)
     {
-        _handle = handle;
+        SetHandle(handle);
     }
 
     /// <inheritdoc/>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    ///     Disposes the <see cref="MaaStringBuffer"/> instance.
-    /// </summary>
-    /// <param name="disposing"></param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaDestroyStringBuffer"/>.
     /// </remarks>
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposed)
-        {
-            // if (disposing) Dispose managed resources.
-            MaaDestroyStringBuffer(_handle);
-            disposed = true;
-        }
-    }
+    protected override void ReleaseHandle()
+        => MaaDestroyStringBuffer(Handle);
 
-    /// <summary>
-    ///     Indicates whether the string of the <see cref="MaaStringBuffer" /> is empty.
-    /// </summary>
-    /// <returns>true if the string is empty; otherwise, false.</returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaIsStringEmpty"/>.
     /// </remarks>
     public bool IsEmpty()
-        => MaaIsStringEmpty(_handle).ToBoolean();
+        => MaaIsStringEmpty(Handle).ToBoolean();
 
-    /// <summary>
-    ///     Clears the string of the <see cref="MaaStringBuffer" />.
-    /// </summary>
-    /// <returns>true if the string was cleared successfully; otherwise, false.</returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaClearString"/>.
     /// </remarks>
     public bool Clear()
-        => MaaClearString(_handle).ToBoolean();
+        => MaaClearString(Handle).ToBoolean();
 
-    /// <summary>
-    ///     Gets the string from the <see cref="MaaStringBuffer" />.
-    /// </summary>
-    /// <returns>The string.</returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetString"/>.
     /// </remarks>
     public string Get()
-        => IsEmpty() ? string.Empty : MaaGetString(_handle).ToStringUTF8(Size);
+        => IsEmpty() ? string.Empty : MaaGetString(Handle).ToStringUTF8(Size);
 
-    /// <summary>
-    ///     Gets the size of the string.
-    /// </summary>
-    /// <returns>The size.</returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetStringSize"/>.
     /// </remarks>
-    public ulong Size => MaaGetStringSize(_handle);
+    public ulong Size => MaaGetStringSize(Handle);
 
-    /// <summary>
-    ///     Sets a string into the <see cref="MaaStringBuffer" />.
-    /// </summary>
-    /// <param name="str">The string.</param>
-    /// <param name="useEx">Uses <see cref="MaaSetStringEx"/> if true; otherwise, Uses <see cref="MaaSetString"/>.</param>
-    /// <returns>true if the string was setted successfully; otherwise, false.</returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetString"/> and <see cref="MaaSetStringEx"/>.
     /// </remarks>
@@ -106,15 +71,13 @@ public class MaaStringBuffer : IDisposable
         if (useEx)
         {
             var bytes = str.ToBytes();
-            return MaaSetStringEx(_handle, ref bytes[0], (MaaSize)bytes.LongLength).ToBoolean();
+            return MaaSetStringEx(Handle, ref bytes[0], (MaaSize)bytes.LongLength).ToBoolean();
         }
 
-        return MaaSetString(_handle, str).ToBoolean();
+        return MaaSetString(Handle, str).ToBoolean();
     }
 
-    /// <summary>
-    ///     Gets or Sets the string of the <see cref="MaaStringBuffer" />.
-    /// </summary>
+    /// <inheritdoc/>
     public string String
     {
         get => Get();

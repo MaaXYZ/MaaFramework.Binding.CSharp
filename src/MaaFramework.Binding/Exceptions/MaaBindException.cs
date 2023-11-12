@@ -1,25 +1,50 @@
-﻿namespace MaaFramework.Binding.Exceptions;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     The exception that is thrown when a <see cref="MaaInstance"/> fails to bind a <see cref="MaaResource"/> or a <see cref="MaaController"/>.
+///     The exception is thrown when a <see cref="IMaaInstance"/> fails to bind a <see cref="IMaaResource"/> or a <see cref="IMaaController"/>.
 /// </summary>
 public class MaaBindException : MaaException
 {
-    internal const string DefaultMessage = "MaaInstance failed to bind MaaResource or MaaController.";
-    internal const string ResourceMessage = "MaaInstance failed to bind MaaResource.";
-    internal const string ControllerMessage = "MaaInstance failed to bind MaaController.";
-    internal const string ResourceModifiedMessage = "Binding MaaResource was modified.";
-    internal const string ControllerModifiedMessage = "Binding MaaController was modified.";
+    /// <summary>
+    ///     Default message.
+    /// </summary>
+    public const string DefaultMessage = "MaaInstance failed to bind MaaResource or MaaController.";
 
     /// <summary>
-    ///     The exception that is thrown when a <see cref="MaaInstance"/> fails to bind a <see cref="MaaResource"/> or a <see cref="MaaController"/>.
+    ///     Resource binding failed message.
     /// </summary>
-    public MaaBindException(string? message = DefaultMessage) : base(message)
+    public const string ResourceMessage = "MaaInstance failed to bind MaaResource.";
+
+    /// <summary>
+    ///     Controller binding failed message.
+    /// </summary>
+    public const string ControllerMessage = "MaaInstance failed to bind MaaController.";
+
+    /// <summary>
+    ///     Resource modified message.
+    /// </summary>
+    public const string ResourceModifiedMessage = "Binding MaaResource was modified.";
+
+    /// <summary>
+    ///     Controller modified message.
+    /// </summary>
+    public const string ControllerModifiedMessage = "Binding MaaController was modified.";
+
+    /// <summary>
+    ///     The exception is thrown when a <see cref="IMaaInstance"/> fails to bind a <see cref="IMaaResource"/> or a <see cref="IMaaController"/>.
+    /// </summary>
+    public MaaBindException(string message = DefaultMessage) : base(message)
     {
     }
 
-    internal static void ThrowIfFalse(bool condition, string message = DefaultMessage)
+    /// <summary>
+    ///     Throws a <see cref="MaaBindException"/> when a condition is true.
+    /// </summary>
+    /// <param name="condition">The condition.</param>
+    /// <param name="message">The message of <see cref="MaaBindException"/>.</param>
+    /// <exception cref="MaaBindException"/>
+    public static void ThrowIf(bool condition, string message = DefaultMessage)
     {
-        if (!condition) { throw new MaaBindException(message); }
+        if (condition) { throw new MaaBindException(message); }
     }
 }

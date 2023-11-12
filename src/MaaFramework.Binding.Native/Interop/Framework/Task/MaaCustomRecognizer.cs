@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices.Marshalling;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
-namespace MaaFramework.Binding.Native.Interop.Framework;
+namespace MaaFramework.Binding.Native.Interop;
 
 #pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped
@@ -18,9 +18,20 @@ public static class MaaRecognizerApi
 
     #endregion
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sync_context">The MaaSyncContextHandle.</param>
+    /// <param name="image">The MaaImageBufferHandle.</param>
+    /// <param name="task_name">The MaaStringView.</param>
+    /// <param name="custom_recognition_param">The MaaStringView.</param>
+    /// <param name="recognizer_arg">The MaaTransparentArg.</param>
+    /// <param name="out_box">The MaaRectHandle.</param>
+    /// <param name="detail_buff">The MaaStringBufferHandle.</param>
+    /// <returns></returns>
     public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name,
                            MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg,
-                           /*out*/ ref MaaRect out_box,
+                           /*out*/ MaaRectHandle out_box,
                            /*out*/ MaaStringBufferHandle detail_buff);
 }
 

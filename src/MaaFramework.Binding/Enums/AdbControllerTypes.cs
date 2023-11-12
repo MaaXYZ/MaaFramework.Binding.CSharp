@@ -1,6 +1,8 @@
-﻿namespace MaaFramework.Binding.Enums;
+﻿namespace MaaFramework.Binding;
 
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
+#pragma warning disable S2346 // Flags enumerations zero-value members should be named "None"
+#pragma warning disable S4070 // Non-flags enums should not be marked with "FlagsAttribute"
 
 /// <summary>
 ///     Adb controller types.
@@ -8,6 +10,7 @@
 /// <remarks>
 ///     <see cref="AdbControllerTypes"/> combines TouchType, KeyType and ScreencapType.
 /// </remarks>
+[Flags]
 public enum AdbControllerTypes
 {
     Invalid = 0,

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
-namespace MaaFramework.Binding.Native.Interop.Framework;
+namespace MaaFramework.Binding.Native.Interop;
 
 #pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped
@@ -15,7 +15,6 @@ namespace MaaFramework.Binding.Native.Interop.Framework;
 ///     " />.
 /// </summary>
 public struct MaaControllerApi
-
 {
 
     #region include/MaaFramework/Instance/MaaCustomController.h, version: v1.1.1.

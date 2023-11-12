@@ -1,10 +1,10 @@
-﻿using MaaFramework.Binding.Native.Interop.Framework;
-using static MaaFramework.Binding.Native.Interop.Framework.MaaController;
+﻿using MaaFramework.Binding.Native.Interop;
+using static MaaFramework.Binding.Native.Interop.MaaController;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.Framework.MaaCustomControllerApi"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaCustomControllerCreate"/>.
 /// </summary>
 public class MaaCustomController : MaaController
 {
@@ -17,16 +17,17 @@ public class MaaCustomController : MaaController
     /// <summary>
     ///     Creates a <see cref="MaaCustomController"/> instance.
     /// </summary>
-    /// <param name="customController"></param>
-    /// <param name="handleArg"></param>
-    /// <param name="maaCallbackTransparentArg"></param>
+    /// <param name="customController">The MaaCustomControllerApi.</param>
+    /// <param name="handleArg">The MaaTransparentArg.</param>
+    /// <param name="maaCallbackTransparentArg">The MaaCallbackTransparentArg.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCustomControllerCreate"/>.
     /// </remarks>
     public MaaCustomController(MaaCustomControllerApi customController, MaaTransparentArg handleArg, MaaCallbackTransparentArg maaCallbackTransparentArg)
         : base()
     {
-        _handle = MaaCustomControllerCreate(ref customController, handleArg, MaaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaCustomControllerCreate(ref customController, handleArg, maaApiCallback, maaCallbackTransparentArg);
+        SetHandle(handle);
         _customController = customController;
     }
 }

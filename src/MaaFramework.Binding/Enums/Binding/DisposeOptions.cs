@@ -1,7 +1,7 @@
-﻿namespace MaaFramework.Binding.Enums;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     <see cref="MaaInstance"/> dispose options.
+///     <see cref="IMaaInstance"/> dispose options.
 /// </summary>
 ///
 [Flags]

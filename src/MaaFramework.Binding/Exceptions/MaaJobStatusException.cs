@@ -1,40 +1,40 @@
-﻿using MaaFramework.Binding.Enums;
-
-namespace MaaFramework.Binding.Exceptions;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     The exception that is thrown when the <see cref="MaaJobStatus"/> of a <see cref="MaaJob"/> is incorrect.
+///     The exception is thrown when the <see cref="MaaJobStatus"/> of a <see cref="IMaaJob"/> is incorrect.
 /// </summary>
 public class MaaJobStatusException : MaaException
 {
     /// <summary>
-    /// 
+    ///     Maa controller message.
     /// </summary>
-    public MaaJobStatusException()
-        : base("MaaJobStatus was unexpected.")
+    public const string MaaControllerMessage = $"{nameof(IMaaController)} failed to connect to the device.";
+
+    /// <summary>
+    ///     Maa resource message.
+    /// </summary>
+    public const string MaaResourceMessage = $"{nameof(IMaaResource)} failed to load resources.";
+
+    /// <summary>
+    ///     The exception is thrown when a <see cref="MaaJobStatus"/> is unexpected.
+    /// </summary>
+    public MaaJobStatusException(string message = "MaaJobStatus was unexpected.") : base(message)
     {
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public MaaJobStatusException(string? message) : base(message)
+    public MaaJobStatusException(MaaJobStatus status, string message = "")
+        : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {status}." : $"{message} MaaJobStatus cannot be {status}.")
     {
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public MaaJobStatusException(MaaJobStatus status)
-        : this($"MaaJobStatus cannot be {status}.")
-    {
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public MaaJobStatusException(MaaJob job)
-        : this($"MaaJobStatus cannot be {job.Status}.")
+    public MaaJobStatusException(IMaaJob job, string message = "")
+        : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {job.Status}." : $"{message} MaaJobStatus cannot be {job.Status}.")
     {
     }
 }
@@ -49,10 +49,11 @@ public static class MaaJobStatusThrow
     /// </summary>
     /// <param name="current">The current status.</param>
     /// <param name="incorrect">The incorrect status.</param>
+    /// <param name="message">The message.</param>
     /// <exception cref="MaaJobStatusException"></exception>
-    public static void ThrowIf(this MaaJobStatus current, MaaJobStatus incorrect)
+    public static void ThrowIf(this MaaJobStatus current, MaaJobStatus incorrect, string message = "")
     {
-        if (current == incorrect) throw new MaaJobStatusException(current);
+        if (current == incorrect) throw new MaaJobStatusException(current, message);
     }
 
     /// <summary>
@@ -60,19 +61,10 @@ public static class MaaJobStatusThrow
     /// </summary>
     /// <param name="current">The current status.</param>
     /// <param name="correct">The correct status.</param>
+    /// <param name="message">The message.</param>
     /// <exception cref="MaaJobStatusException"></exception>
-    public static void ThrowIfNot(this MaaJobStatus current, MaaJobStatus correct)
+    public static void ThrowIfNot(this MaaJobStatus current, MaaJobStatus correct, string message = "")
     {
-        if (current != correct) throw new MaaJobStatusException(current);
-    }
-
-    internal static void ThrowIfMaaControllerNotSuccess(this MaaJobStatus current)
-    {
-        if (current != MaaJobStatus.Success) throw new MaaJobStatusException($"{nameof(MaaController)} failed to connect to the device. Connection status: {current}.");
-    }
-
-    internal static void ThrowIfMaaResourceNotSuccess(this MaaJobStatus current)
-    {
-        if (current != MaaJobStatus.Success) throw new MaaJobStatusException($"{nameof(MaaResource)} failed to connect to load resources. Loading status: {current}.");
+        if (current != correct) throw new MaaJobStatusException(current, message);
     }
 }

@@ -2,22 +2,14 @@
 
     <!-- Package Properties -->
     <PropertyGroup>
-        <PackageId>Maa.Framework.Binding.CSharp</PackageId>
-        <Title>Maa Framework CSharp Binding</Title>
-        <description>MaaFramework.Binding.CSharp is a common binding package of MaaFramework for .NET 7.</description>
-        <PackageTags>MAA;c-sharp;cross-platform;dotnet</PackageTags>
+        <PackageId>Maa.Framework.Binding</PackageId>
+        <Title>Maa Framework Binding (Abstractions)</Title>
+        <description>MaaFramework.Binding is a common interoperable API wrapper of MaaFramework for .NET 7.</description>
+        <PackageTags>MAA;c-sharp;cross-platform;dotnet;wrapper;abstractions</PackageTags>
 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <IncludeSymbols>True</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
-
-    <PropertyGroup>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Maa.Framework.Runtimes" />
-    </ItemGroup>
 
 </Project>

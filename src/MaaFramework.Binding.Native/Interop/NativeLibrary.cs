@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace MaaFramework.Binding.Native.Interop;
 
@@ -67,7 +66,7 @@ internal static partial class NativeLibrary
 
     private static (string arch, string exten) GetArchitectureNameAndExtensionName()
     {
-        var sb = new StringBuilder();
+        var sb = new System.Text.StringBuilder();
         if (IsWindows())
             sb.Append("win");
         else if (IsLinux())

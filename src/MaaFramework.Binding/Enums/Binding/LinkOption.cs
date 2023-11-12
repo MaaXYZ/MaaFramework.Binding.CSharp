@@ -1,7 +1,7 @@
-﻿namespace MaaFramework.Binding.Enums;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     <see cref="MaaController"/> link option.
+///     <see cref="IMaaController"/> link option.
 /// </summary>
 public enum LinkOption
 {

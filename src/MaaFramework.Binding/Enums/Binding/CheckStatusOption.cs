@@ -1,4 +1,4 @@
-﻿namespace MaaFramework.Binding.Enums;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
 ///     Checking <see cref="MaaJobStatus"/> option.
@@ -11,7 +11,7 @@ public enum CheckStatusOption
     None,
 
     /// <summary>
-    ///     Throw a <see cref="Exceptions.MaaJobStatusException"/> if the Status is not <see cref="MaaJobStatus.Success"/> .
+    ///     Throw a <see cref="MaaJobStatusException"/> if the Status is not <see cref="MaaJobStatus.Success"/> .
     /// </summary>
     ThrowIfNotSuccess,
 }

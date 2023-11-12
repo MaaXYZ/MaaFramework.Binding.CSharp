@@ -3,7 +3,7 @@ global using MaaImageEncodedData = nint; // uint8_t*
 
 using System.Runtime.InteropServices;
 
-namespace MaaFramework.Binding.Native.Interop.Framework;
+namespace MaaFramework.Binding.Native.Interop;
 
 #pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped

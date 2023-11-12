@@ -1,11 +1,9 @@
-﻿using MaaFramework.Binding.Exceptions;
-
-namespace MaaFramework.Binding.Enums;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
 ///     Maa job status.
 /// </summary>
-public enum MaaJobStatus
+public enum MaaJobStatus // MaaStatus is used to refer to System.Int32.
 {
     /// <summary>
     /// 

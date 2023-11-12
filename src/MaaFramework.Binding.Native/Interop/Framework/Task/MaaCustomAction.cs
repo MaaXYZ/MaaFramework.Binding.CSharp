@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices.Marshalling;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
-namespace MaaFramework.Binding.Native.Interop.Framework;
+namespace MaaFramework.Binding.Native.Interop;
 
 #pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped
@@ -18,8 +18,22 @@ public struct MaaActionApi
 
     #endregion
 
-    public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, ref MaaRect cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sync_context">The MaaSyncContextHandle.</param>
+    /// <param name="task_name">The MaaStringView.</param>
+    /// <param name="custom_action_param">The MaaStringView.</param>
+    /// <param name="cur_box">The MaaRectHandle.</param>
+    /// <param name="cur_rec_detail">The MaaStringView.</param>
+    /// <param name="action_arg">The MaaTransparentArg.</param>
+    /// <returns></returns>
+    public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="action_arg">The MaaTransparentArg.</param>
     public delegate void Stop(MaaTransparentArg action_arg);
 }
 

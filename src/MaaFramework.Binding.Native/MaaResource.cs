@@ -1,19 +1,23 @@
-﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Enums;
-using MaaFramework.Binding.Exceptions;
+﻿using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Native.Abstractions;
 using MaaFramework.Binding.Native.Interop;
-using static MaaFramework.Binding.Native.Interop.Framework.MaaResource;
+using static MaaFramework.Binding.Native.Interop.MaaResource;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.Framework.MaaResource"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaResource"/>.
 /// </summary>
-public class MaaResource : MaaCommon<ResourceOption>
+public class MaaResource : MaaCommon<ResourceOption>, IMaaResource
 {
-    internal MaaResourceHandle _handle;
-    private bool disposed;
+    /// <summary>
+    ///     Converts a <see cref="IMaaResource"/> instance to a <see cref="MaaResource"/>.
+    /// </summary>
+    /// <param name="maaResource">The <see cref="IMaaResource"/> instance.</param>
+    public MaaResource(IMaaResource maaResource)
+    {
+        SetHandle(maaResource.Handle);
+    }
 
     /// <inheritdoc cref="MaaResource(MaaCallbackTransparentArg)"/>
     public MaaResource()
@@ -30,7 +34,8 @@ public class MaaResource : MaaCommon<ResourceOption>
     /// </remarks>
     public MaaResource(MaaCallbackTransparentArg maaCallbackTransparentArg)
     {
-        _handle = MaaResourceCreate(MaaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaResourceCreate(maaApiCallback, maaCallbackTransparentArg);
+        SetHandle(handle);
     }
 
     /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
@@ -58,88 +63,63 @@ public class MaaResource : MaaCommon<ResourceOption>
             var status = AppendPath(path).Wait();
             if (check == CheckStatusOption.ThrowIfNotSuccess)
             {
-                status.ThrowIfMaaResourceNotSuccess();
+                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage);
             }
         }
     }
 
-    /// <summary>
-    ///     Disposes the <see cref="MaaResource"/> instance.
-    /// </summary>
-    /// <param name="disposing"></param>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceDestroy"/>.
     /// </remarks>
-    protected override void Dispose(bool disposing)
-    {
-        if (!disposed)
-        {
-            // if (disposing) Dispose managed resources.
-            MaaResourceDestroy(_handle);
-            _handle = MaaResourceHandle.Zero;
-            disposed = true;
-        }
-    }
+    protected override void ReleaseHandle()
+        => MaaResourceDestroy(Handle);
 
-    /// <summary>
-    ///     Appends a async job of loading resource from <paramref name="resourcePath"/> , could be called multiple times.
-    /// </summary>
-    /// <param name="resourcePath">The resource path.</param>
-    /// <returns>A resource load job.</returns>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourcePostPath"/>.
     /// </remarks>
-    public MaaJob AppendPath(string resourcePath)
+    public IMaaJob AppendPath(string resourcePath)
     {
-        var id = MaaResourcePostPath(_handle, resourcePath);
-        return new(id, this);
+        var id = MaaResourcePostPath(Handle, resourcePath);
+        return new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Always return false.
     /// </remarks>
-    public override bool SetParam(MaaJob job, string param)
+    public bool SetParam(IMaaJob job, string param)
         => false;
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceStatus"/>.
     /// </remarks>
-    public override MaaJobStatus GetStatus(MaaJob job)
-        => (MaaJobStatus)MaaResourceStatus(_handle, job);
+    public MaaJobStatus GetStatus(IMaaJob job)
+        => (MaaJobStatus)MaaResourceStatus(Handle, job.Id);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceWait"/>.
     /// </remarks>
-    public override MaaJobStatus Wait(MaaJob job)
-        => (MaaJobStatus)MaaResourceWait(_handle, job);
+    public MaaJobStatus Wait(IMaaJob job)
+        => (MaaJobStatus)MaaResourceWait(Handle, job.Id);
 
-    /// <summary>
-    ///     Gets whether the <see cref="MaaResource"/> is fully loaded.
-    /// </summary>
-    /// <value>
-    ///     true if the <see cref="MaaResource"/> is fully loaded; otherwise, false.
-    /// </value>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceLoaded"/>.
     /// </remarks>
-    public bool Loaded => MaaResourceLoaded(_handle).ToBoolean();
+    public bool Loaded => MaaResourceLoaded(Handle).ToBoolean();
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceSetOption"/>.
     /// </remarks>
-    internal override bool SetOption(ResourceOption option, MaaOptionValue[] value)
-        => MaaResourceSetOption(_handle, (MaaResOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+    sealed protected override bool SetOption(ResourceOption option, MaaOptionValue[] value)
+        => MaaResourceSetOption(Handle, (MaaResOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
 
-    /// <summary>
-    ///     Gets the hash string of the <see cref="MaaResource"/>.
-    /// </summary>
-    /// <value>
-    ///     A string if the hash was got successfully; otherwise, null.
-    /// </value>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceGetHash"/>.
     /// </remarks>
@@ -148,7 +128,7 @@ public class MaaResource : MaaCommon<ResourceOption>
         get
         {
             using var buffer = new MaaStringBuffer();
-            var ret = MaaResourceGetHash(_handle, buffer._handle).ToBoolean();
+            var ret = MaaResourceGetHash(Handle, buffer.Handle).ToBoolean();
             return ret ? buffer.ToString() : null;
         }
     }
