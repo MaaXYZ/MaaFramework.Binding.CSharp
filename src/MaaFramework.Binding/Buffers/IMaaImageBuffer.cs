@@ -69,16 +69,9 @@ public interface IMaaImageBuffer : IDisposable
     /// <summary>
     ///     Gets the image encoded data.
     /// </summary>
+    /// <param name="size">The image encoded size.</param>
     /// <returns>The encoded data of image.</returns>
-    nint GetEncodedData();
-
-    /// <summary>
-    ///     Gets the image encoded size.
-    /// </summary>
-    /// <value>
-    ///     The encoded size of image.
-    /// </value>
-    ulong Size { get; }
+    nint GetEncodedData(out ulong size);
 
     /// <summary>
     ///     Sets the image encoded data.

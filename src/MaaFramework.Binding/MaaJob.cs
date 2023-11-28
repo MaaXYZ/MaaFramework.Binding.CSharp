@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using System.Security.Principal;
 
 namespace MaaFramework.Binding;
 
@@ -20,8 +21,22 @@ public class MaaJob : IMaaJob
         _maa = maa;
     }
 
+    /// <summary>
+    ///     Creats a <see cref="MaaJob"/> instance.
+    /// </summary>
+    /// <param name="id">The MaaId.</param>
+    /// <param name="maa">The IMaaPost.</param>
+    public MaaJob(ulong id, IMaaPost maa)
+    {
+        IId = id;
+        _maa = maa;
+    }
+
     /// <inheritdoc/>
     public MaaId Id { get; }
+
+    /// <inheritdoc/>
+    public ulong IId { get; }
 
     /// <inheritdoc/>
     public MaaJobStatus Status => _maa.GetStatus(this);

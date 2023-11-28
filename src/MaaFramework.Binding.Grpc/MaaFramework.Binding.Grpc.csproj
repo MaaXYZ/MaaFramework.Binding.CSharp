@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- Package Properties -->
+    <PropertyGroup>
+        <PackageId>Maa.Framework.Binding.Grpc</PackageId>
+        <Title>Maa Framework Binding (Grpc)</Title>
+        <description>MaaFramework.Binding.Grpc is a common interoperable API wrapper of MaaFramework Grpc parts for .NET 7.</description>
+        <PackageTags>MAA;c-sharp;cross-platform;dotnet;wrapper;Grpc</PackageTags>
+
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <IncludeSymbols>True</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MaaFramework.Binding\MaaFramework.Binding.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Protos\*.proto" GrpcServices="Client" ProtoRoot="Protos" />
+
+        <PackageReference Include="Google.Protobuf" />
+        <PackageReference Include="Grpc.Net.Client" />
+        <PackageReference Include="Grpc.Tools" PrivateAssets="All" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+</Project>

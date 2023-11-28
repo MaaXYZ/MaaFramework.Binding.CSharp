@@ -37,6 +37,11 @@ public class MaaBindException : MaaException
     {
     }
 
+    /// <inheritdoc cref="MaaBindException(string)"/>
+    public MaaBindException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+
     /// <summary>
     ///     Throws a <see cref="MaaBindException"/> when a condition is true.
     /// </summary>

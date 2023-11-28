@@ -13,6 +13,14 @@ public interface IMaaJob
     MaaId Id { get; }
 
     /// <summary>
+    ///     Gets a MaaIId.
+    /// </summary>
+    /// <remarks>
+    ///     Fix: IId is uint64 in grpc proto.
+    /// </remarks>
+    ulong IId { get; }
+
+    /// <summary>
     ///     Gets the status of a <see cref="IMaaJob"/>.
     /// </summary>
     /// <remarks>

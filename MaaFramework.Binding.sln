@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Binding", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Binding.UnitTests", "src\MaaFramework.Binding.UnitTests\MaaFramework.Binding.UnitTests.csproj", "{02A37AB6-F381-4A27-8FE2-DC6914D70B25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaaFramework.Binding.Native", "src\MaaFramework.Binding.Native\MaaFramework.Binding.Native.csproj", "{24B24721-8ED3-4F64-8CB7-C479D6BAD56D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Binding.Native", "src\MaaFramework.Binding.Native\MaaFramework.Binding.Native.csproj", "{24B24721-8ED3-4F64-8CB7-C479D6BAD56D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Binding.Grpc", "src\MaaFramework.Binding.Grpc\MaaFramework.Binding.Grpc.csproj", "{0ECAD2D5-A482-4FC4-98CC-F7549EA0E491}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{24B24721-8ED3-4F64-8CB7-C479D6BAD56D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B24721-8ED3-4F64-8CB7-C479D6BAD56D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B24721-8ED3-4F64-8CB7-C479D6BAD56D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ECAD2D5-A482-4FC4-98CC-F7549EA0E491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ECAD2D5-A482-4FC4-98CC-F7549EA0E491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ECAD2D5-A482-4FC4-98CC-F7549EA0E491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ECAD2D5-A482-4FC4-98CC-F7549EA0E491}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

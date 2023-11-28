@@ -24,7 +24,8 @@ public abstract class MaaDisposableHandle<T> : MaaDisposable, IMaaDisposableHand
     {
         if (!_handle.Equals(_invalidHandle))
         {
-            ReleaseHandle();
+            if (_needReleased)
+                ReleaseHandle();
             _handle = _invalidHandle;
         }
     }
@@ -44,14 +45,17 @@ public abstract class MaaDisposableHandle<T> : MaaDisposable, IMaaDisposableHand
 
     private readonly T _invalidHandle;
     private T _handle;
+    private bool _needReleased;
 
     /// <summary>
     ///     Sets the handle to the specified pre-existing handle.
     /// </summary>
     /// <param name="handle">The pre-existing handle to use.</param>
-    protected void SetHandle(T handle)
+    /// <param name="needReleased">The value indicates whether the <paramref name="handle"/> needs to be released on <see cref="Dispose"/></param>
+    protected void SetHandle(T handle, bool needReleased)
     {
         _handle = handle;
+        _needReleased = needReleased;
     }
 
     /// <summary>

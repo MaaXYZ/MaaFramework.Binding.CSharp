@@ -141,13 +141,13 @@ _💫 A common interoperable API wrapper 💫_
 | --- | --- |
 | IMaaToolkit.Init() | MaaToolKitInit |
 | IMaaToolkit.Uninit() | MaaToolKitUninit |
-| IMaaToolkit.FindDevice() | MaaToolKitFindDevice |
-| IMaaToolkit.FindDevice() | MaaToolKitFindDeviceWithAdb |
-| IMaaToolkit.GetDeviceName() | MaaToolKitGetDeviceName |
-| IMaaToolkit.GetDeviceAdbPath() | MaaToolKitGetDeviceAdbPath |
-| IMaaToolkit.GetDeviceAdbSerial() | MaaToolKitGetDeviceAdbSerial |
-| IMaaToolkit.GetDeviceAdbControllerType() | MaaToolKitGetDeviceAdbControllerType |
-| IMaaToolkit.GetDeviceAdbConfig() | MaaToolKitGetDeviceAdbConfig |
+| IMaaToolKit.Find() | *The DeviceInfo Array.* |
+| MaaToolKit.FindDevice() | MaaToolKitFindDevice <br> MaaToolKitFindDeviceWithAdb |
+| MaaToolKit.GetDeviceName() | MaaToolKitGetDeviceName |
+| MaaToolKit.GetDeviceAdbPath() | MaaToolKitGetDeviceAdbPath |
+| MaaToolKit.GetDeviceAdbSerial() | MaaToolKitGetDeviceAdbSerial |
+| MaaToolKit.GetDeviceAdbControllerTypes() | MaaToolKitGetDeviceAdbControllerType |
+| MaaToolKit.GetDeviceAdbConfig() | MaaToolKitGetDeviceAdbConfig |
 
 ### MaaUtility : IMaaUtility
 

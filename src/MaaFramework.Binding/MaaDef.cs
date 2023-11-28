@@ -4,7 +4,7 @@ global using MaaId = System.Int64;
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class provides data for the <see cref="MaaFramework.Binding.Abstractions.IMaaCommon.Callback"/> event.
+///     A class providing data for the <see cref="MaaFramework.Binding.Abstractions.IMaaCommon.Callback"/> event.
 /// </summary>
 public class MaaCallbackEventArgs : EventArgs
 {
