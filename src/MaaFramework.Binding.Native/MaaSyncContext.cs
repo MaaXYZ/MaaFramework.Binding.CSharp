@@ -8,7 +8,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaSyncContext"/>.
 /// </summary>
-public class MaaSyncContext : IMaaSyncContext
+public class MaaSyncContext : IMaaSyncContext<nint>
 {
     /// <inheritdoc/>
     public required MaaSyncContextHandle Handle { get; init; }
@@ -40,6 +40,13 @@ public class MaaSyncContext : IMaaSyncContext
     ///     Wrapper of <see cref="MaaSyncContextRunRecognizer"/>.
     /// </remarks>
     public bool RunRecognizer(IMaaImageBuffer image, string task, string taskParam, IMaaRectBuffer outBox, IMaaStringBuffer detailBuff)
+        => RunRecognizer((IMaaImageBuffer<nint>)image, task, taskParam, (IMaaRectBuffer<nint>)outBox, (IMaaStringBuffer<nint>)detailBuff);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaSyncContextRunRecognizer"/>.
+    /// </remarks>
+    public bool RunRecognizer(IMaaImageBuffer<nint> image, string task, string taskParam, IMaaRectBuffer<nint> outBox, IMaaStringBuffer<nint> detailBuff)
         => MaaSyncContextRunRecognizer(Handle, image.Handle, task, taskParam, outBox.Handle, detailBuff.Handle).ToBoolean();
 
     /// <inheritdoc/>
@@ -47,6 +54,13 @@ public class MaaSyncContext : IMaaSyncContext
     ///     Wrapper of <see cref="MaaSyncContextRunAction"/>.
     /// </remarks>
     public bool RunAction(string task, string taskParam, IMaaRectBuffer curBox, string curRecDetail)
+        => RunAction(task, taskParam, (IMaaRectBuffer<nint>)curBox, curRecDetail);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaSyncContextRunAction"/>.
+    /// </remarks>
+    public bool RunAction(string task, string taskParam, IMaaRectBuffer<nint> curBox, string curRecDetail)
         => MaaSyncContextRunAction(Handle, task, taskParam, curBox.Handle, curRecDetail).ToBoolean();
 
     /// <inheritdoc/>
@@ -96,6 +110,13 @@ public class MaaSyncContext : IMaaSyncContext
     ///     Wrapper of <see cref="MaaSyncContextScreencap"/>.
     /// </remarks>
     public bool Screencap(IMaaImageBuffer buffer)
+        => Screencap((IMaaImageBuffer<nint>)buffer);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaSyncContextScreencap"/>.
+    /// </remarks>
+    public bool Screencap(IMaaImageBuffer<nint> buffer)
         => MaaSyncContextScreencap(Handle, buffer.Handle).ToBoolean();
 
     /// <inheritdoc/>
@@ -103,5 +124,12 @@ public class MaaSyncContext : IMaaSyncContext
     ///     Wrapper of <see cref="MaaSyncContextGetTaskResult"/>.
     /// </remarks>
     public bool GetTaskResult(string task, IMaaStringBuffer buffer)
+        => GetTaskResult(task, (IMaaStringBuffer<nint>)buffer);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaSyncContextGetTaskResult"/>.
+    /// </remarks>
+    public bool GetTaskResult(string task, IMaaStringBuffer<nint> buffer)
         => MaaSyncContextGetTaskResult(Handle, task, buffer.Handle).ToBoolean();
 }

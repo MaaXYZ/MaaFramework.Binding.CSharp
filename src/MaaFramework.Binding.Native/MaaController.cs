@@ -8,13 +8,13 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaController"/>.
 /// </summary>
-public class MaaController : MaaCommon<ControllerOption>, IMaaController
+public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
 {
     /// <summary>
-    ///     Converts a <see cref="IMaaController"/> instance to a <see cref="MaaController"/>.
+    ///     Converts a <see cref="IMaaController{nint}"/> instance to a <see cref="MaaController"/>.
     /// </summary>
-    /// <param name="maaController">The <see cref="IMaaController"/> instance.</param>
-    public MaaController(IMaaController maaController)
+    /// <param name="maaController">The <see cref="IMaaController{nint}"/> instance.</param>
+    public MaaController(IMaaController<nint> maaController)
     {
         SetHandle(maaController.Handle);
     }
@@ -153,6 +153,13 @@ public class MaaController : MaaCommon<ControllerOption>, IMaaController
     ///     Wrapper of <see cref="MaaControllerGetImage"/>.
     /// </remarks>
     public bool GetImage(IMaaImageBuffer maaImage)
+        => GetImage((IMaaImageBuffer<nint>)maaImage);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerGetImage"/>.
+    /// </remarks>
+    public bool GetImage(IMaaImageBuffer<nint> maaImage)
         => MaaControllerGetImage(Handle, maaImage.Handle).ToBoolean();
 
     /// <inheritdoc/>

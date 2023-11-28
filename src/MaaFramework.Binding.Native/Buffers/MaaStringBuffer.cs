@@ -7,7 +7,7 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa String Buffer section of <see cref="MaaFramework.Binding.Native.Interop.MaaBuffer"/>.
 /// </summary>
-public class MaaStringBuffer : MaaDisposableHandle, IMaaStringBuffer
+public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
 {
     /// <inheritdoc cref="MaaRectBuffer(nint)"/>
     /// <remarks>

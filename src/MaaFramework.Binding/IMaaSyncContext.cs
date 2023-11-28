@@ -3,15 +3,33 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     An interface defining wrapped members for MaaSyncContext.
+///     An interface defining wrapped members for MaaSyncContext with generic handle.
 /// </summary>
-public interface IMaaSyncContext
+public interface IMaaSyncContext<T> : IMaaSyncContext
 {
     /// <summary>
     ///     Gets or inits a MaaSyncContextHandle.
     /// </summary>
-    nint Handle { get; init; }
+    T Handle { get; init; }
 
+    /// <inheritdoc cref="IMaaSyncContext.RunRecognizer"/>
+    bool RunRecognizer(IMaaImageBuffer<T> image, string task, string taskParam, IMaaRectBuffer<T> outBox, IMaaStringBuffer<T> detailBuff);
+
+    /// <inheritdoc cref="IMaaSyncContext.RunAction"/>
+    bool RunAction(string task, string taskParam, IMaaRectBuffer<T> curBox, string curRecDetail);
+
+    /// <inheritdoc cref="IMaaSyncContext.Screencap"/>
+    bool Screencap(IMaaImageBuffer<T> buffer);
+
+    /// <inheritdoc cref="IMaaSyncContext.GetTaskResult"/>
+    bool GetTaskResult(string task, IMaaStringBuffer<T> buffer);
+}
+
+/// <summary>
+///     An interface defining wrapped members for MaaSyncContext.
+/// </summary>
+public interface IMaaSyncContext
+{
     /// <summary>
     ///     Runs a task.
     /// </summary>
@@ -58,14 +76,14 @@ public interface IMaaSyncContext
     /// <param name="y2">The horizontal coordinate of the ending point.</param>
     /// <param name="duration">The duration.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    public bool Swipe(int x1, int y1, int x2, int y2, int duration);
+    bool Swipe(int x1, int y1, int x2, int y2, int duration);
 
     /// <summary>
     ///     Presses a key.
     /// </summary>
     /// <param name="keyCode">The code of the key.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    public bool PressKey(int keyCode);
+    bool PressKey(int keyCode);
 
     /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
@@ -75,7 +93,7 @@ public interface IMaaSyncContext
     /// <param name="y">The vertical coordinate of the starting point.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    public bool TouchDown(int contact, int x, int y, int pressure);
+    bool TouchDown(int contact, int x, int y, int pressure);
 
     /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
@@ -85,21 +103,21 @@ public interface IMaaSyncContext
     /// <param name="y">The vertical coordinate of the ending point.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    public bool TouchMove(int contact, int x, int y, int pressure);
+    bool TouchMove(int contact, int x, int y, int pressure);
 
     /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
     /// </summary>
     /// <param name="contact">The contact id.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    public bool TouchUp(int contact);
+    bool TouchUp(int contact);
 
     /// <summary>
     ///     Takes a screenshot.
     /// </summary>
     /// <param name="buffer">The image buffer to receive the screenshot.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    public bool Screencap(IMaaImageBuffer buffer);
+    bool Screencap(IMaaImageBuffer buffer);
 
     /// <summary>
     ///     Gets a task result.
@@ -107,5 +125,5 @@ public interface IMaaSyncContext
     /// <param name="task">The task name.</param>
     /// <param name="buffer">The string buffer to receive the task result.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    public bool GetTaskResult(string task, IMaaStringBuffer buffer);
+    bool GetTaskResult(string task, IMaaStringBuffer buffer);
 }

@@ -3,9 +3,16 @@
 namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
-///     An interface defining wrapped members for MaaImageBuffer.
+///     An interface defining wrapped members for MaaRectBuffer with generic handle.
 /// </summary>
-public interface IMaaRectBuffer : IMaaDisposableHandle
+public interface IMaaRectBuffer<out T> : IMaaRectBuffer, IMaaDisposableHandle<T>
+{
+}
+
+/// <summary>
+///     An interface defining wrapped members for MaaRectBuffer.
+/// </summary>
+public interface IMaaRectBuffer : IDisposable
 {
     /// <summary>
     ///     Gets or Sets the horizontal coordinate.

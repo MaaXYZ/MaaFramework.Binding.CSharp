@@ -3,9 +3,16 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
+///     An interface defining wrapped members for MaaResource with generic handle.
+/// </summary>
+public interface IMaaResource<T> : IMaaResource, IMaaDisposableHandle<T>
+{
+}
+
+/// <summary>
 ///     An interface defining wrapped members for MaaInstance.
 /// </summary>
-public interface IMaaResource : IMaaCommon, IMaaDisposableHandle, IMaaOption<ResourceOption>, IMaaPost
+public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost, IDisposable
 {
     /// <summary>
     ///     Appends a async job of loading resource from <paramref name="resourcePath"/> , could be called multiple times.

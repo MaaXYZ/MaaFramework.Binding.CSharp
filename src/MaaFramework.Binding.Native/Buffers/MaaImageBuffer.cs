@@ -7,7 +7,7 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa Image Buffer section of <see cref="MaaFramework.Binding.Native.Interop.MaaBuffer"/>.
 /// </summary>
-public class MaaImageBuffer : MaaDisposableHandle, IMaaImageBuffer
+public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
 {
     /// <inheritdoc cref="MaaImageBuffer(nint)"/>
     /// <remarks>

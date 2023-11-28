@@ -3,9 +3,16 @@
 namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
+///     An interface defining wrapped members for MaaImageBuffer with generic handle.
+/// </summary>
+public interface IMaaImageBuffer<out T> : IMaaImageBuffer, IMaaDisposableHandle<T>
+{
+}
+
+/// <summary>
 ///     An interface defining wrapped members for MaaImageBuffer.
 /// </summary>
-public interface IMaaImageBuffer : IMaaDisposableHandle
+public interface IMaaImageBuffer : IDisposable
 {
     /// <summary>
     ///     Indicates whether the image of the MaaImageBuffer is empty.

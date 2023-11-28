@@ -3,10 +3,10 @@
 /// <summary>
 ///     An abstract class providing a common mechanism for releasing handles from <see cref="MaaFramework"/>.
 /// </summary>
-public abstract class MaaDisposableHandle : MaaDisposable, IMaaDisposableHandle
+public abstract class MaaDisposableHandle<T> : MaaDisposable, IMaaDisposableHandle<T> where T : IEquatable<T>
 {
     /// <inheritdoc/>
-    public nint Handle => _handle;
+    public T Handle => _handle;
 
 #pragma warning disable CA1816 // Dispose 方法应调用 SuppressFinalize
 #pragma warning disable S3971 // "GC.SuppressFinalize" should not be called
@@ -22,7 +22,7 @@ public abstract class MaaDisposableHandle : MaaDisposable, IMaaDisposableHandle
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
-        if (_handle != _invalidHandle)
+        if (!_handle.Equals(_invalidHandle))
         {
             ReleaseHandle();
             _handle = _invalidHandle;
@@ -30,26 +30,26 @@ public abstract class MaaDisposableHandle : MaaDisposable, IMaaDisposableHandle
     }
 
     /// <inheritdoc/>
-    public override bool IsInvalid => _handle == _invalidHandle;
+    public override bool IsInvalid => _handle.Equals(_invalidHandle);
 
     /// <summary>
-    ///     Creats a <see cref="MaaDisposableHandle"/> instance.
+    ///     Creats a <see cref="MaaDisposableHandle{T}"/> instance.
     /// </summary>
     /// <param name="invalidHandleValue">The invalid handle value.</param>
-    protected MaaDisposableHandle(nint invalidHandleValue)
+    protected MaaDisposableHandle(T invalidHandleValue)
     {
         _invalidHandle = invalidHandleValue;
         _handle = _invalidHandle;
     }
 
-    private readonly nint _invalidHandle;
-    private nint _handle;
+    private readonly T _invalidHandle;
+    private T _handle;
 
     /// <summary>
     ///     Sets the handle to the specified pre-existing handle.
     /// </summary>
     /// <param name="handle">The pre-existing handle to use.</param>
-    protected void SetHandle(nint handle)
+    protected void SetHandle(T handle)
     {
         _handle = handle;
     }

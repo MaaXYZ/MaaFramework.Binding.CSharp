@@ -8,13 +8,13 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaResource"/>.
 /// </summary>
-public class MaaResource : MaaCommon<ResourceOption>, IMaaResource
+public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
 {
     /// <summary>
-    ///     Converts a <see cref="IMaaResource"/> instance to a <see cref="MaaResource"/>.
+    ///     Converts a <see cref="IMaaResource{nint}"/> instance to a <see cref="MaaResource"/>.
     /// </summary>
-    /// <param name="maaResource">The <see cref="IMaaResource"/> instance.</param>
-    public MaaResource(IMaaResource maaResource)
+    /// <param name="maaResource">The <see cref="IMaaResource{nint}"/> instance.</param>
+    public MaaResource(IMaaResource<nint> maaResource)
     {
         SetHandle(maaResource.Handle);
     }

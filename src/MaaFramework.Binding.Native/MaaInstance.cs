@@ -8,18 +8,18 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaInstance"/>.
 /// </summary>
-public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance
+public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
 {
-    private IMaaResource _resource = default!;
-    private IMaaController _controller = default!;
+    private IMaaResource<nint> _resource = default!;
+    private IMaaController<nint> _controller = default!;
 
     /// <summary>
-    ///     Converts a <see cref="IMaaInstance"/> instance to a <see cref="MaaInstance"/>.
+    ///     Converts a <see cref="IMaaInstance{nint}"/> instance to a <see cref="MaaInstance"/>.
     /// </summary>
-    /// <param name="maaInstance">The <see cref="IMaaInstance"/> instance.</param>
+    /// <param name="maaInstance">The <see cref="IMaaInstance{nint}"/> instance.</param>
     /// <exception cref="ArgumentNullException"/>
     [SetsRequiredMembers]
-    public MaaInstance(IMaaInstance maaInstance)
+    public MaaInstance(IMaaInstance<nint> maaInstance)
     {
         _resource ??= new MaaResource(maaInstance.Resource);
         _controller ??= new MaaController(maaInstance.Controller);
@@ -52,7 +52,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance
     /// <param name="disposeOptions">The dispose options.</param>
     /// <inheritdoc cref="MaaInstance(MaaCallbackTransparentArg)"/>
     [SetsRequiredMembers]
-    public MaaInstance(IMaaResource resource, IMaaController controller, DisposeOptions disposeOptions)
+    public MaaInstance(IMaaResource<nint> resource, IMaaController<nint> controller, DisposeOptions disposeOptions)
         : this(MaaCallbackTransparentArg.Zero)
     {
         Resource = resource;
@@ -93,9 +93,21 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaGetResource"/>.
+    /// </remarks>
+    IMaaResource IMaaInstance.Resource => Resource;
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaGetController"/>.
+    /// </remarks>
+    IMaaController IMaaInstance.Controller => Controller;
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaBindResource"/> and <see cref="MaaGetResource"/>.
     /// </remarks>
-    public required IMaaResource Resource
+    public required IMaaResource<nint> Resource
     {
         get
         {
@@ -117,7 +129,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance
     /// <remarks>
     ///     Wrapper of <see cref="MaaBindController"/> and <see cref="MaaGetController"/>.
     /// </remarks>
-    public required IMaaController Controller
+    public required IMaaController<nint> Controller
     {
         get
         {

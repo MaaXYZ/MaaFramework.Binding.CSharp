@@ -3,12 +3,12 @@
 /// <summary>
 ///     An interface defining member about handles from <see cref="MaaFramework"/>.
 /// </summary>
-public interface IMaaDisposableHandle : IDisposable
+public interface IMaaDisposableHandle<out T> : IDisposable
 {
     /// <summary>
     ///     Gets the handle to be wrapped.
     /// </summary>
-    nint Handle { get; }
+    T Handle { get; }
 
     /// <summary>
     ///     Marks a handle as no longer used.

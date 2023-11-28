@@ -3,21 +3,39 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     An interface defining wrapped members for MaaInstance.
+///     An interface defining wrapped members for MaaInstance with generic handle.
 /// </summary>
-public interface IMaaInstance : IMaaCommon, IMaaDisposableHandle, IMaaOption<InstanceOption>, IMaaPost
+public interface IMaaInstance<T> : IMaaInstance, IMaaDisposableHandle<T>
 {
     /// <summary>
     ///     Gets the resource or inits to bind a <see cref="IMaaResource"/>.
     /// </summary>
     /// <exception cref="MaaBindException"/>
-    IMaaResource Resource { get; init; }
+    new IMaaResource<T> Resource { get; init; }
 
     /// <summary>
     ///     Gets the controller or inits to bind a <see cref="IMaaController"/>.
     /// </summary>
     /// <exception cref="MaaBindException"/>
-    IMaaController Controller { get; init; }
+    new IMaaController<T> Controller { get; init; }
+}
+
+/// <summary>
+///     An interface defining wrapped members for MaaInstance.
+/// </summary>
+public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost, IDisposable
+{
+    /// <summary>
+    ///     Gets the resource.
+    /// </summary>
+    /// <exception cref="MaaBindException"/>
+    IMaaResource Resource { get; }
+
+    /// <summary>
+    ///     Gets the controller.
+    /// </summary>
+    /// <exception cref="MaaBindException"/>
+    IMaaController Controller { get; }
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaInstance"/> is fully initialized.

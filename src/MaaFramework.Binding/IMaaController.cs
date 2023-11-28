@@ -4,9 +4,18 @@ using MaaFramework.Binding.Buffers;
 namespace MaaFramework.Binding;
 
 /// <summary>
+///     An interface defining wrapped members for MaaController with generic handle.
+/// </summary>
+public interface IMaaController<T> : IMaaController, IMaaDisposableHandle<T>
+{
+    /// <inheritdoc cref="IMaaController.GetImage"/>
+    bool GetImage(IMaaImageBuffer<T> maaImage);
+}
+
+/// <summary>
 ///     An interface defining wrapped members for MaaController.
 /// </summary>
-public interface IMaaController : IMaaCommon, IMaaDisposableHandle, IMaaOption<ControllerOption>, IMaaPost
+public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaaPost, IDisposable
 {
     /// <summary>
     ///     Connects the address specified by the constructor.
@@ -82,6 +91,7 @@ public interface IMaaController : IMaaCommon, IMaaDisposableHandle, IMaaOption<C
     /// <summary>
     ///     Gets a image.
     /// </summary>
+    /// <param name="maaImage">The MaaImageBuffer.</param>
     /// <returns>true if the image was got successfully; otherwise, false.</returns>
     bool GetImage(IMaaImageBuffer maaImage);
 

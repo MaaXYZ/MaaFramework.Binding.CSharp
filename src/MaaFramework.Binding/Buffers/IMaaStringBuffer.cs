@@ -3,9 +3,16 @@
 namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
+///     An interface defining wrapped members for MaaStringBuffer with generic handle.
+/// </summary>
+public interface IMaaStringBuffer<out T> : IMaaStringBuffer, IMaaDisposableHandle<T>
+{
+}
+
+/// <summary>
 ///     An interface defining wrapped members for MaaStringBuffer.
 /// </summary>
-public interface IMaaStringBuffer : IMaaDisposableHandle
+public interface IMaaStringBuffer : IDisposable
 {
     /// <summary>
     ///     Indicates whether the string of the MaaStringBuffer is empty.
