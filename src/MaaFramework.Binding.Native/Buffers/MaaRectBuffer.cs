@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Native.Interop;
+using System.Reflection.Metadata;
 using static MaaFramework.Binding.Native.Interop.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -14,8 +15,9 @@ public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
     ///     Wrapper of <see cref="MaaCreateRectBuffer"/>.
     /// </remarks>
     public MaaRectBuffer()
-        : this(MaaCreateRectBuffer())
+        : base(invalidHandleValue: nint.Zero)
     {
+        SetHandle(MaaCreateRectBuffer(), needReleased: true);
     }
 
     /// <summary>
@@ -25,7 +27,7 @@ public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
     public MaaRectBuffer(MaaRectHandle handle)
         : base(invalidHandleValue: nint.Zero)
     {
-        SetHandle(handle);
+        SetHandle(handle, needReleased: false);
     }
 
     /// <inheritdoc/>

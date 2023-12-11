@@ -16,7 +16,7 @@ public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
     /// <param name="maaController">The <see cref="IMaaController{nint}"/> instance.</param>
     public MaaController(IMaaController<nint> maaController)
     {
-        SetHandle(maaController.Handle);
+        SetHandle(maaController.Handle, needReleased: true);
     }
 
     /// <summary>

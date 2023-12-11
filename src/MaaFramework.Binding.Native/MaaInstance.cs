@@ -44,7 +44,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     public MaaInstance(MaaCallbackTransparentArg maaCallbackTransparentArg)
     {
         var handle = MaaCreate(maaApiCallback, maaCallbackTransparentArg);
-        SetHandle(handle);
+        SetHandle(handle, needReleased: true);
     }
 
     /// <param name="resource">The resource.</param>
@@ -73,12 +73,12 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     {
         MaaDestroy(Handle);
 
-        if (DisposeOptions.Contains(DisposeOptions.Controller))
+        if (DisposeOptions.HasFlag(DisposeOptions.Controller))
         {
             Controller.Dispose();
         }
 
-        if (DisposeOptions.Contains(DisposeOptions.Resource))
+        if (DisposeOptions.HasFlag(DisposeOptions.Resource))
         {
             Resource.Dispose();
         }
@@ -238,7 +238,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaPostTask"/>.
     /// </remarks>
-    public IMaaJob AppendTask(string taskEntryName, string taskParam = MaaDef.EmptyMaaTaskParam)
+    public IMaaJob AppendTask(string taskEntryName, string taskParam = "{}")
     {
         var id = MaaPostTask(Handle, taskEntryName, taskParam);
         return new MaaJob(id, this);

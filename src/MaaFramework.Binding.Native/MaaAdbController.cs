@@ -1,6 +1,6 @@
 ﻿using static MaaFramework.Binding.Native.Interop.MaaController;
 
-namespace MaaFramework.Binding.Native;
+namespace MaaFramework.Binding;
 
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaAdbControllerCreateV2"/>.
@@ -50,7 +50,7 @@ public class MaaAdbController : MaaController
         ArgumentException.ThrowIfNullOrEmpty(agentPath);
 
         var handle = MaaAdbControllerCreateV2(adbPath, address, (int)type, adbConfig, agentPath, maaApiCallback, maaCallbackTransparentArg);
-        SetHandle(handle);
+        SetHandle(handle, needReleased: true);
 
         if (link == LinkOption.Start)
         {

@@ -16,7 +16,7 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     /// <param name="maaResource">The <see cref="IMaaResource{nint}"/> instance.</param>
     public MaaResource(IMaaResource<nint> maaResource)
     {
-        SetHandle(maaResource.Handle);
+        SetHandle(maaResource.Handle, needReleased: true);
     }
 
     /// <inheritdoc cref="MaaResource(MaaCallbackTransparentArg)"/>
@@ -35,7 +35,7 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     public MaaResource(MaaCallbackTransparentArg maaCallbackTransparentArg)
     {
         var handle = MaaResourceCreate(maaApiCallback, maaCallbackTransparentArg);
-        SetHandle(handle);
+        SetHandle(handle, needReleased: true);
     }
 
     /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>

@@ -73,7 +73,7 @@ public static class MaaDef
 
     internal const MaaSize MaaNullSize = MaaSize.MaxValue;
     internal const MaaId MaaInvalidId = 0;
-    internal const string EmptyMaaTaskParam = "{}";
+    // internal const string EmptyMaaTaskParam = "{}";
 }
 
 public delegate void MaaApiCallback(MaaStringView msg, MaaStringView details_json, MaaCallbackTransparentArg callback_arg);

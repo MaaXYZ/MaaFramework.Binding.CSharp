@@ -52,7 +52,7 @@ public abstract class MaaCommon<TEnum> : MaaDisposableHandle<nint>, IMaaCommon, 
     protected readonly MaaApiCallback maaApiCallback;
 
     /// <summary>
-    ///     Initialize <see cref="maaApiCallback"/>.
+    ///     Initializes <see cref="maaApiCallback"/>.
     /// </summary>
     protected MaaCommon()
         : base(invalidHandleValue: nint.Zero)

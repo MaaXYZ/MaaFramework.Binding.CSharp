@@ -24,6 +24,6 @@ public class MaaThriftController : MaaController
     public MaaThriftController(string param, MaaCallbackTransparentArg maaCallbackTransparentArg)
     {
         var handle = MaaThriftControllerCreate(param, maaApiCallback, maaCallbackTransparentArg);
-        SetHandle(handle);
+        SetHandle(handle, needReleased: true);
     }
 }

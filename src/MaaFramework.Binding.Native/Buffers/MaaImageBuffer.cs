@@ -14,8 +14,9 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     ///     Wrapper of <see cref="MaaCreateImageBuffer"/>.
     /// </remarks>
     public MaaImageBuffer()
-        : this(MaaCreateImageBuffer())
+        : base(invalidHandleValue: nint.Zero)
     {
+        SetHandle(MaaCreateImageBuffer(), needReleased: true);
     }
 
     /// <summary>
@@ -25,7 +26,7 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     public MaaImageBuffer(MaaImageBufferHandle handle)
         : base(invalidHandleValue: nint.Zero)
     {
-        SetHandle(handle);
+        SetHandle(handle, needReleased: false);
     }
 
     /// <inheritdoc/>
@@ -83,16 +84,13 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaGetImageEncoded"/>.
+    ///     Wrapper of <see cref="MaaGetImageEncoded"/> and <see cref="MaaGetImageEncodedSize"/>.
     /// </remarks>
-    public MaaImageEncodedData GetEncodedData()
-        => MaaGetImageEncoded(Handle);
-
-    /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaGetImageEncodedSize"/>.
-    /// </remarks>
-    public ulong Size => MaaGetImageEncodedSize(Handle);
+    public MaaImageEncodedData GetEncodedData(out ulong size)
+    {
+        size = MaaGetImageEncodedSize(Handle);
+        return MaaGetImageEncoded(Handle);
+    }
 
     /// <inheritdoc/>
     /// <remarks>

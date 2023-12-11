@@ -27,7 +27,7 @@ public class MaaCustomController : MaaController
         : base()
     {
         var handle = MaaCustomControllerCreate(ref customController, handleArg, maaApiCallback, maaCallbackTransparentArg);
-        SetHandle(handle);
+        SetHandle(handle, needReleased: true);
         _customController = customController;
     }
 }

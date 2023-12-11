@@ -9,13 +9,14 @@ namespace MaaFramework.Binding.Buffers;
 /// </summary>
 public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
 {
-    /// <inheritdoc cref="MaaRectBuffer(nint)"/>
+    /// <inheritdoc cref="MaaStringBuffer(nint)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCreateStringBuffer"/>.
     /// </remarks>
     public MaaStringBuffer()
-        : this(MaaCreateStringBuffer())
+        : base(invalidHandleValue: nint.Zero)
     {
+        SetHandle(MaaCreateStringBuffer(), needReleased: true);
     }
 
     /// <summary>
@@ -25,7 +26,7 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     public MaaStringBuffer(MaaStringBufferHandle handle)
         : base(invalidHandleValue: nint.Zero)
     {
-        SetHandle(handle);
+        SetHandle(handle, needReleased: false);
     }
 
     /// <inheritdoc/>

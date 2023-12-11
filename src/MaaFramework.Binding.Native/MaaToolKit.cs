@@ -23,51 +23,102 @@ public class MaaToolKit : IMaaToolkit
         => MaaToolKitUninit().ToBoolean();
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaToolKitFindDevice"/>.
-    /// </remarks>
-    public ulong FindDevice()
-        => MaaToolKitFindDevice();
+    public DeviceInfo[] Find(string adbPath = "")
+    {
+        var size = FindDevice(adbPath);
+        var devices = new DeviceInfo[size];
+        for (ulong i = 0; i < size; i++)
+        {
+            devices[i] = new DeviceInfo
+            {
+                Name = GetDeviceName(i),
+                AdbConfig = GetDeviceAdbConfig(i),
+                AdbPath = GetDeviceAdbPath(i),
+                AdbSerial = GetDeviceAdbSerial(i),
+                AdbTypes = GetDeviceAdbControllerTypes(i),
+            };
+        }
 
-    /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaToolKitFindDeviceWithAdb"/>.
-    /// </remarks>
-    public ulong FindDevice(string adbPath)
-        => MaaToolKitFindDeviceWithAdb(adbPath);
+        return devices;
+    }
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Finds devices.
+    /// </summary>
+    /// <param name="adbPath">The adb path that devices connected to.</param>
+    /// <returns>
+    ///     The number of devices.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitFindDevice"/> and <see cref="MaaToolKitFindDeviceWithAdb"/>.
+    /// </remarks>
+    protected static ulong FindDevice(string adbPath = "")
+        => string.IsNullOrEmpty(adbPath)
+         ? MaaToolKitFindDevice()
+         : MaaToolKitFindDeviceWithAdb(adbPath);
+
+    /// <summary>
+    ///     Gets the name of a device.
+    /// </summary>
+    /// <param name="index">The index of the device.</param>
+    /// <returns>
+    ///     The name.
+    /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolKitGetDeviceName"/>.
     /// </remarks>
-    public string GetDeviceName(ulong index)
+    protected static string GetDeviceName(ulong index)
         => MaaToolKitGetDeviceName(index).ToStringUTF8();
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Gets the path of a adb that a device connected to.
+    /// </summary>
+    /// <param name="index">The index of the device.</param>
+    /// <returns>
+    ///     The path.
+    /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolKitGetDeviceAdbPath"/>.
     /// </remarks>
-    public string GetDeviceAdbPath(ulong index)
+    protected static string GetDeviceAdbPath(ulong index)
         => MaaToolKitGetDeviceAdbPath(index).ToStringUTF8();
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Get the adb serial of a device.
+    /// </summary>
+    /// <param name="index">The index of the device.</param>
+    /// <returns>
+    ///     The adb serial.
+    /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolKitGetDeviceAdbSerial"/>.
     /// </remarks>
-    public string GetDeviceAdbSerial(ulong index)
+    protected static string GetDeviceAdbSerial(ulong index)
         => MaaToolKitGetDeviceAdbSerial(index).ToStringUTF8();
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Get the <see cref="AdbControllerTypes"/> of a device.
+    /// </summary>
+    /// <param name="index">The index of the device.</param>
+    /// <returns>
+    ///     The <see cref="AdbControllerTypes"/>.
+    /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolKitGetDeviceAdbControllerType"/>.
     /// </remarks>
-    public AdbControllerTypes GetDeviceAdbControllerType(ulong index)
+    protected static AdbControllerTypes GetDeviceAdbControllerTypes(ulong index)
         => (AdbControllerTypes)MaaToolKitGetDeviceAdbControllerType(index);
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Get the adb config of a device.
+    /// </summary>
+    /// <param name="index">The index of the device.</param>
+    /// <returns>
+    ///     The adb config.
+    /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolKitGetDeviceAdbConfig"/>.
     /// </remarks>
-    public string GetDeviceAdbConfig(ulong index)
+    protected static string GetDeviceAdbConfig(ulong index)
         => MaaToolKitGetDeviceAdbConfig(index).ToStringUTF8();
 }

@@ -6,23 +6,6 @@
 public static class FlagsEnumExtension
 {
     /// <summary>
-    ///      Whether a flags enum contains another flags enum.
-    /// </summary>
-    /// <param name="flagsEnum">The flags enum.</param>
-    /// <param name="containedEnum">The another flags enum.</param>
-    /// <returns>true if the flags enum contains the another flags enum; otherwise, false.</returns>
-    public static bool Contains(this DisposeOptions flagsEnum, DisposeOptions containedEnum)
-        => (flagsEnum & containedEnum) == containedEnum;
-
-    /// <inheritdoc cref="Contains(DisposeOptions, DisposeOptions)"/>
-    public static bool Contains(this AdbControllerTypes flagsEnum, AdbControllerTypes containedEnum)
-        => (flagsEnum & containedEnum) == containedEnum;
-
-    /// <inheritdoc cref="Contains(DisposeOptions, DisposeOptions)"/>
-    public static bool Contains(this DebuggingControllerTypes flagsEnum, DebuggingControllerTypes containedEnum)
-        => (flagsEnum & containedEnum) == containedEnum;
-
-    /// <summary>
     ///     Whether a flags enum contains all necessary enumeration value. 
     /// </summary>
     /// <param name="flagsEnum">The flags enum.</param>
