@@ -12,7 +12,7 @@ public interface IMaaResource<T> : IMaaResource, IMaaDisposableHandle<T>
 /// <summary>
 ///     An interface defining wrapped members for MaaInstance.
 /// </summary>
-public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost, IDisposable
+public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost, IMaaDisposable
 {
     /// <summary>
     ///     Appends a async job of loading resource from <paramref name="resourcePath"/> , could be called multiple times.

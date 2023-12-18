@@ -15,7 +15,7 @@ public interface IMaaController<T> : IMaaController, IMaaDisposableHandle<T>
 /// <summary>
 ///     An interface defining wrapped members for MaaController.
 /// </summary>
-public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaaPost, IDisposable
+public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaaPost, IMaaDisposable
 {
     /// <summary>
     ///     Connects the address specified by the constructor.

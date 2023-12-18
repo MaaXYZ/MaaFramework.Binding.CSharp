@@ -3,7 +3,7 @@
 /// <summary>
 ///     An interface defining member about handles from <see cref="MaaFramework"/>.
 /// </summary>
-public interface IMaaDisposableHandle<out T> : IDisposable
+public interface IMaaDisposableHandle<out T> : IMaaDisposable
 {
     /// <summary>
     ///     Gets the handle to be wrapped.

@@ -23,7 +23,7 @@ public interface IMaaInstance<T> : IMaaInstance, IMaaDisposableHandle<T>
 /// <summary>
 ///     An interface defining wrapped members for MaaInstance.
 /// </summary>
-public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost, IDisposable
+public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost, IMaaDisposable
 {
     /// <summary>
     ///     Gets the resource.

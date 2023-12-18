@@ -75,6 +75,7 @@ _💫 A common interoperable API wrapper 💫_
 | IMaaController.GetImage() | MaaControllerGetImage |
 | IMaaController.Uuid | MaaControllerGetUUID |
 | IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
+| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
 | IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
 
@@ -98,6 +99,7 @@ _💫 A common interoperable API wrapper 💫_
 | IMaaInstance.AllTasksFinished | MaaTaskAllFinished |
 | IMaaInstance.Stop() | MaaStop |
 | IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
+| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
 | IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
 
@@ -115,6 +117,7 @@ _💫 A common interoperable API wrapper 💫_
 | IMaaOption.SetOption() | MaaResourceSetOption |
 | IMaaResource.Hash | MaaResourceGetHash |
 | IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
+| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
 | IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
 
