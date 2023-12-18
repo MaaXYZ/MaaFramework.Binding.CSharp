@@ -10,7 +10,7 @@ public class MaaCustomController : MaaController
 {
 #pragma warning disable S4487 // Unread "private" fields should be removed
 #pragma warning disable IDE0052 // 删除未读的私有成员
-    private MaaCustomControllerApi _customController;
+    private readonly MaaCustomControllerApi _customController;
 #pragma warning restore IDE0052 // 删除未读的私有成员
 #pragma warning restore S4487 // Unread "private" fields should be removed
 
@@ -26,7 +26,7 @@ public class MaaCustomController : MaaController
     public MaaCustomController(MaaCustomControllerApi customController, MaaTransparentArg handleArg, MaaCallbackTransparentArg maaCallbackTransparentArg)
         : base()
     {
-        var handle = MaaCustomControllerCreate(ref customController, handleArg, maaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaCustomControllerCreate(ref customController, handleArg, MaaApiCallback, maaCallbackTransparentArg);
         SetHandle(handle, needReleased: true);
         _customController = customController;
     }

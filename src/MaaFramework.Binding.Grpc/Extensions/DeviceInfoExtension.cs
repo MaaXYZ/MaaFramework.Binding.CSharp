@@ -1,4 +1,5 @@
 ﻿using Grpc.Net.Client;
+using System.Threading.Channels;
 
 namespace MaaFramework.Binding;
 
@@ -18,15 +19,16 @@ public static class DeviceInfoExtension
         string? adbConfig = null,
         CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess,
         LinkOption link = LinkOption.Start)
-        => new MaaAdbControllerGrpc(
-            adbPath ?? info.AdbPath,
-            address ?? info.AdbSerial,
-            type ?? info.AdbTypes,
-            adbConfig ?? info.AdbConfig,
-            agentPath,
-            check,
-            link)
-        {
-            Channel = grpcChannel,
-        };
+    {
+        ArgumentNullException.ThrowIfNull(info);
+
+        return new(grpcChannel,
+                   adbPath ?? info.AdbPath,
+                   address ?? info.AdbSerial,
+                   type ?? info.AdbTypes,
+                   adbConfig ?? info.AdbConfig,
+                   agentPath,
+                   check,
+                   link);
+    }
 }

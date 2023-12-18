@@ -15,12 +15,15 @@ public static class DeviceInfoExtension
         string? adbConfig = null,
         CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess,
         LinkOption link = LinkOption.Start)
-        => new MaaAdbController(
-            adbPath ?? info.AdbPath,
-            address ?? info.AdbSerial,
-            type ?? info.AdbTypes,
-            adbConfig ?? info.AdbConfig,
-            agentPath,
-            check,
-            link);
+    {
+        ArgumentNullException.ThrowIfNull(info);
+
+        return new(adbPath ?? info.AdbPath,
+                   address ?? info.AdbSerial,
+                   type ?? info.AdbTypes,
+                   adbConfig ?? info.AdbConfig,
+                   agentPath,
+                   check,
+                   link);
+    }
 }

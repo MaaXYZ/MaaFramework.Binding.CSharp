@@ -54,7 +54,7 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetString"/>.
     /// </remarks>
-    public string Get()
+    public string GetValue()
         => IsEmpty() ? string.Empty : MaaGetString(Handle).ToStringUTF8(Size);
 
     /// <inheritdoc/>
@@ -67,7 +67,7 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetString"/> and <see cref="MaaSetStringEx"/>.
     /// </remarks>
-    public bool Set(string str, bool useEx = true)
+    public bool SetValue(string str, bool useEx = true)
     {
         if (useEx)
         {
@@ -78,17 +78,7 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
         return MaaSetString(Handle, str).ToBoolean();
     }
 
-    /// <inheritdoc/>
-    public string String
-    {
-        get => Get();
-        set
-        {
-            if (!Set(value)) throw new InvalidOperationException();
-        }
-    }
-
-    /// <inheritdoc cref="Get"/>
+    /// <inheritdoc cref="GetValue"/>
     public override string ToString()
-        => Get();
+        => GetValue();
 }

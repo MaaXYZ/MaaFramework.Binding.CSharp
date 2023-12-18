@@ -7,14 +7,15 @@ namespace MaaFramework.Binding.Native.Interop;
 #pragma warning disable S4200 // Native methods should be wrapped
 #pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable CA1707 // 标识符不应包含下划线
 
 // TODOa: 缺失测试用例
 
 /// <summary>
-///     A struct provides the delegates of <see cref="MaaCustomControllerApi
+///     A static class provides the delegates of <see cref="MaaCustomControllerApi
 ///     " />.
 /// </summary>
-public struct MaaControllerApi
+public static class MaaControllerApi
 {
 
     #region include/MaaFramework/Instance/MaaCustomController.h, version: v1.1.1.
@@ -45,28 +46,27 @@ public struct MaaControllerApi
 /// <summary>
 ///     MaaCustomControllerApi
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
 [NativeMarshalling(typeof(MaaCustomControllerApiMarshaller))]
-public struct MaaCustomControllerApi : IMaaDefStruct
+public class MaaCustomControllerApi : IMaaDef
 {
-    public required MaaControllerApi.SetOption SetOption;
+    public required MaaControllerApi.SetOption SetOption { get; init; }
 
-    public required MaaControllerApi.Connect Connect;
-    public required MaaControllerApi.Click Click;
-    public required MaaControllerApi.Swipe Swipe;
-    public required MaaControllerApi.PressKey PressKey;
+    public required MaaControllerApi.Connect Connect { get; init; }
+    public required MaaControllerApi.Click Click { get; init; }
+    public required MaaControllerApi.Swipe Swipe { get; init; }
+    public required MaaControllerApi.PressKey PressKey { get; init; }
 
-    public required MaaControllerApi.TouchDown TouchDown;
-    public required MaaControllerApi.TouchMove TouchMove;
-    public required MaaControllerApi.TouchUp TouchUp;
+    public required MaaControllerApi.TouchDown TouchDown { get; init; }
+    public required MaaControllerApi.TouchMove TouchMove { get; init; }
+    public required MaaControllerApi.TouchUp TouchUp { get; init; }
 
-    public required MaaControllerApi.StartApp StartApp;
-    public required MaaControllerApi.StopApp StopApp;
+    public required MaaControllerApi.StartApp StartApp { get; init; }
+    public required MaaControllerApi.StopApp StopApp { get; init; }
 
-    public required MaaControllerApi.GetResolution GetResolution;
+    public required MaaControllerApi.GetResolution GetResolution { get; init; }
 
-    public required MaaControllerApi.GetImage GetImage;
-    public required MaaControllerApi.GetUuid GetUuid;
+    public required MaaControllerApi.GetImage GetImage { get; init; }
+    public required MaaControllerApi.GetUuid GetUuid { get; init; }
 }
 
 /// <summary>
@@ -75,6 +75,7 @@ public struct MaaCustomControllerApi : IMaaDefStruct
 [CustomMarshaller(typeof(MaaCustomControllerApi), MarshalMode.Default, typeof(MaaCustomControllerApiMarshaller))]
 internal static class MaaCustomControllerApiMarshaller
 {
+    [StructLayout(LayoutKind.Sequential)]
     internal struct Unmanaged
     {
         public required nint SetOption;

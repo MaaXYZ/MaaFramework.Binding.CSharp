@@ -106,15 +106,15 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
     public bool Loaded => _client.loaded(new HandleRequest { Handle = Handle, }).Bool;
 
     /// <inheritdoc/>
-    public bool SetOption(ResourceOption option, int value)
+    public bool SetOption(ResourceOption opt, int value)
         => false;
 
     /// <inheritdoc/>
-    public bool SetOption(ResourceOption option, bool value)
+    public bool SetOption(ResourceOption opt, bool value)
         => false;
 
     /// <inheritdoc/>
-    public bool SetOption(ResourceOption option, string value)
+    public bool SetOption(ResourceOption opt, string value)
         => false;
 
     /*

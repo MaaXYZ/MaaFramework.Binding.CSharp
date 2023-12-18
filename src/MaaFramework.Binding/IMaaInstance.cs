@@ -54,7 +54,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <returns>
     ///     true if the custom recognizer or action was registered successfully; otherwise, false.
     /// </returns>
-    bool Register<T>(string name, T custom, nint arg) where T : IMaaDefStruct;
+    bool Register<T>(string name, T custom, nint arg) where T : IMaaDef;
 
     /// <summary>
     ///     Unregisters a custom recognizer or action named <paramref name="name"/> in the <see cref="IMaaInstance"/>.
@@ -63,7 +63,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <returns>
     ///     true if the custom recognizer or action was unregistered successfully; otherwise, false.
     /// </returns>
-    bool Unregister<T>(string name) where T : IMaaDefStruct;
+    bool Unregister<T>(string name) where T : IMaaDef;
 
     /// <summary>
     ///     Clears custom recognizers or actions in the <see cref="IMaaInstance"/>.
@@ -71,7 +71,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <returns>
     ///     true if custom recognizers or actions were cleared successfully; otherwise, false.
     /// </returns>
-    bool Clear<T>() where T : IMaaDefStruct;
+    bool Clear<T>() where T : IMaaDef;
 
     /// <summary>
     ///     Appends a async job of executing a maa task, could be called multiple times.
@@ -92,5 +92,5 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <summary>
     ///     Stops the binded <see cref="IMaaResource"/>, the binded <see cref="IMaaController"/>, all appended tasks. 
     /// </summary>
-    bool Stop();
+    bool Abort();
 }

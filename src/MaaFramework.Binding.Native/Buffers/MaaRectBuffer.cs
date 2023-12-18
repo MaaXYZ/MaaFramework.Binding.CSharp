@@ -90,14 +90,14 @@ public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
     }
 
     /// <inheritdoc/>
-    public void Set(int x, int y, int width, int height)
+    public void SetValues(int x, int y, int width, int height)
         => Set(Handle, x, y, width, height);
 
     /// <inheritdoc/>
-    public void Get(out int x, out int y, out int width, out int height)
+    public void GetValues(out int x, out int y, out int width, out int height)
         => Get(Handle, out x, out y, out width, out height);
 
-    /// <inheritdoc cref="Set(int, int, int, int)"/>
+    /// <inheritdoc cref="SetValues(int, int, int, int)"/>
     public static void Set(MaaRectHandle handle, int x, int y, int width, int height)
     {
         if (!MaaSetRectX(handle, x).ToBoolean()) throw new InvalidOperationException();
@@ -106,7 +106,7 @@ public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
         if (!MaaSetRectH(handle, height).ToBoolean()) throw new InvalidOperationException();
     }
 
-    /// <inheritdoc cref="Get(out int, out int, out int, out int)"/>
+    /// <inheritdoc cref="GetValues(out int, out int, out int, out int)"/>
     public static void Get(MaaRectHandle handle, out int x, out int y, out int width, out int height)
     {
         x = MaaGetRectX(handle);

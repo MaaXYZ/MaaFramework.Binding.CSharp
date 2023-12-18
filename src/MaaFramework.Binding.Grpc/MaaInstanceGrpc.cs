@@ -91,15 +91,15 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     }
 
     /// <inheritdoc/>
-    public bool SetOption(InstanceOption option, int value)
+    public bool SetOption(InstanceOption opt, int value)
         => false;
 
     /// <inheritdoc/>
-    public bool SetOption(InstanceOption option, bool value)
+    public bool SetOption(InstanceOption opt, bool value)
         => false;
 
     /// <inheritdoc/>
-    public bool SetOption(InstanceOption option, string value)
+    public bool SetOption(InstanceOption opt, string value)
         => false;
 
     /*
@@ -137,6 +137,8 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         }
         init
         {
+            ArgumentNullException.ThrowIfNull(value);
+
             try
             {
                 _client.bind_resource(new HandleHandleRequest { Handle = Handle, AnotherHandle = value.Handle, });
@@ -161,6 +163,8 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         }
         init
         {
+            ArgumentNullException.ThrowIfNull(value);
+
             try
             {
                 _client.bind_controller(new HandleHandleRequest { Handle = Handle, AnotherHandle = value.Handle, });
@@ -181,7 +185,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// </summary>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <inheritdoc/>
-    public bool Register<T>(string name, T custom, nint arg) where T : IMaaDefStruct
+    public bool Register<T>(string name, T custom, nint arg) where T : IMaaDef
     {
         switch (custom)
         {
@@ -212,7 +216,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         await streamingCall.RequestStream.CompleteAsync();
     }
 
-    private async Task CallCustomRecognizer(
+    private static async Task CallCustomRecognizer(
         MaaCustomRecognizerApi recognizer,
         AsyncDuplexStreamingCall<CustomRecognizerRequest, CustomRecognizerResponse> streamingCall,
         nint arg)
@@ -222,31 +226,34 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
             switch (response.CommandCase)
             {
                 case CustomRecognizerResponse.CommandOneofCase.Analyze:
-                    var box = new MaaRectBufferGrpc();
-                    var str = new MaaStringBufferGrpc();
-                    var ret = recognizer.Analyze.Invoke(
-                        response.Analyze.Context,
-                        response.Analyze.ImageHandle,
-                        response.Analyze.Task,
-                        response.Analyze.Param,
-                        arg,
-                        box,
-                        str);
-
-                    await streamingCall.RequestStream.WriteAsync(new CustomRecognizerRequest
+                    using (var box = new MaaRectBufferGrpc())
                     {
-                        Ok = ret,
-                        Analyze = new CustomRecognizerAnalyzeResult
+                        using var str = new MaaStringBufferGrpc();
+
+                        var ret = recognizer.Analyze.Invoke(
+                            response.Analyze.Context,
+                            response.Analyze.ImageHandle,
+                            response.Analyze.Task,
+                            response.Analyze.Param,
+                            arg,
+                            box,
+                            str);
+
+                        await streamingCall.RequestStream.WriteAsync(new CustomRecognizerRequest
                         {
-                            Match = ret,
-                            Box = new Rect
+                            Ok = ret,
+                            Analyze = new CustomRecognizerAnalyzeResult
                             {
-                                Xy = new Point { X = box.X, Y = box.Y, },
-                                Wh = new Size { Width = box.Width, Height = box.Height, },
+                                Match = ret,
+                                Box = new Rect
+                                {
+                                    Xy = new Point { X = box.X, Y = box.Y, },
+                                    Wh = new Size { Width = box.Width, Height = box.Height, },
+                                },
+                                Detail = str.GetValue(),
                             },
-                            Detail = str.Get(),
-                        },
-                    });
+                        });
+                    }
                     break;
                 default:
                     break;
@@ -268,7 +275,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         await streamingCall.RequestStream.CompleteAsync();
     }
 
-    private async Task CallCustomAction(
+    private static async Task CallCustomAction(
         //string name,
         MaaCustomActionApi action,
         AsyncDuplexStreamingCall<CustomActionRequest, CustomActionResponse> streamingCall,
@@ -279,24 +286,27 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
             switch (response.CommandCase)
             {
                 case CustomActionResponse.CommandOneofCase.Run:
-                    var box = new MaaRectBufferGrpc();
-                    var str = new MaaStringBufferGrpc();
-                    var ret = action.Run.Invoke(
-                        response.Run.Context,
-                        response.Run.Task,
-                        response.Run.Param,
-                        box,
-                        str,
-                        arg);
-
-                    await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
+                    using (var box = new MaaRectBufferGrpc())
                     {
-                        Ok = ret,
-                        //Init = new CustomActionInit { Handle = Handle, Name = name },
-                    });
+                        using var str = new MaaStringBufferGrpc();
+
+                        var ret = action.Run.Invoke(
+                            response.Run.Context,
+                            response.Run.Task,
+                            response.Run.Param,
+                            box,
+                            str,
+                            arg);
+
+                        await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
+                        {
+                            Ok = ret,
+                            //Init = new CustomActionInit { Handle = Handle, Name = name },
+                        });
+                    }
                     break;
                 case CustomActionResponse.CommandOneofCase.Stop:
-                    action.Stop.Invoke(arg);
+                    action.Abort.Invoke(arg);
                     await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
                     {
                         // Ok = ret,
@@ -316,7 +326,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// </summary>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <inheritdoc/>
-    public bool Unregister<T>(string name) where T : IMaaDefStruct
+    public bool Unregister<T>(string name) where T : IMaaDef
     {
         switch (typeof(T).Name)
         {
@@ -336,7 +346,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// </summary>
     /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <inheritdoc/>
-    public bool Clear<T>() where T : IMaaDefStruct
+    public bool Clear<T>() where T : IMaaDef
     {
         switch (typeof(T).Name)
         {
@@ -361,6 +371,8 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// <inheritdoc/>
     public bool SetParam(IMaaJob job, string param)
     {
+        ArgumentNullException.ThrowIfNull(job);
+
         try
         {
             _client.set_task_param(new InstanceSetTaskParamRequest { Handle = Handle, Id = job.IId, Param = param, });
@@ -375,17 +387,25 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
 
     /// <inheritdoc/>
     public MaaJobStatus GetStatus(IMaaJob job)
-        => (MaaJobStatus)_client.status(new HandleIIdRequest { Handle = Handle, Id = job.IId, }).Status;
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return (MaaJobStatus)_client.status(new HandleIIdRequest { Handle = Handle, Id = job.IId, }).Status;
+    }
 
     /// <inheritdoc/>
     public MaaJobStatus Wait(IMaaJob job)
-        => (MaaJobStatus)_client.wait(new HandleIIdRequest { Handle = Handle, Id = job.IId, }).Status;
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return (MaaJobStatus)_client.wait(new HandleIIdRequest { Handle = Handle, Id = job.IId, }).Status;
+    }
 
     /// <inheritdoc/>
     public bool AllTasksFinished => _client.all_finished(new HandleRequest { Handle = Handle, }).Bool;
 
     /// <inheritdoc/>
-    public bool Stop()
+    public bool Abort()
     {
         try
         {

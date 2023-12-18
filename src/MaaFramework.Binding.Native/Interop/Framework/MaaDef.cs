@@ -56,6 +56,7 @@ global using int32_t = System.Int32;
 #pragma warning disable S4200 // Native methods should be wrapped
 #pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable CA1707 // 标识符不应包含下划线
 
 namespace MaaFramework.Binding.Native.Interop;
 

@@ -21,6 +21,8 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     [SetsRequiredMembers]
     public MaaInstance(IMaaInstance<nint> maaInstance)
     {
+        ArgumentNullException.ThrowIfNull(maaInstance);
+
         _resource ??= new MaaResource(maaInstance.Resource);
         _controller ??= new MaaController(maaInstance.Controller);
 
@@ -43,7 +45,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// </remarks>
     public MaaInstance(MaaCallbackTransparentArg maaCallbackTransparentArg)
     {
-        var handle = MaaCreate(maaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaCreate(MaaApiCallback, maaCallbackTransparentArg);
         SetHandle(handle, needReleased: true);
     }
 
@@ -88,8 +90,12 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetOption"/>.
     /// </remarks>
-    sealed protected override bool SetOption(InstanceOption option, MaaOptionValue[] value)
-     => MaaSetOption(Handle, (MaaInstOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+    sealed protected override bool SetOption(InstanceOption opt, MaaOptionValue[] value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        return MaaSetOption(Handle, (MaaInstOption)opt, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -118,6 +124,8 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
         }
         init
         {
+            ArgumentNullException.ThrowIfNull(value);
+
             MaaBindException.ThrowIf(
                 MaaBindResource(Handle, value.Handle).ToBoolean(),
                 MaaBindException.ResourceMessage);
@@ -140,6 +148,8 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
         }
         init
         {
+            ArgumentNullException.ThrowIfNull(value);
+
             MaaBindException.ThrowIf(
                 MaaBindController(Handle, value.Handle).ToBoolean(),
                 MaaBindException.ControllerMessage);
@@ -164,7 +174,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRegisterCustomRecognizer"/> and <see cref="MaaRegisterCustomAction"/>.
     /// </remarks>
-    public bool Register<T>(string name, T custom, nint arg) where T : IMaaDefStruct
+    public bool Register<T>(string name, T custom, nint arg) where T : IMaaDef
     {
         var ret = false;
         switch (custom)
@@ -190,7 +200,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaUnregisterCustomRecognizer"/> and <see cref="MaaUnregisterCustomAction"/>.
     /// </remarks>
-    public bool Unregister<T>(string name) where T : IMaaDefStruct
+    public bool Unregister<T>(string name) where T : IMaaDef
     {
         var ret = false;
         switch (typeof(T).Name)
@@ -216,7 +226,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaClearCustomRecognizer"/> and <see cref="MaaClearCustomAction"/>.
     /// </remarks>
-    public bool Clear<T>() where T : IMaaDefStruct
+    public bool Clear<T>() where T : IMaaDef
     {
         var ret = false;
         switch (typeof(T).Name)
@@ -249,21 +259,33 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     ///     Wrapper of <see cref="MaaSetTaskParam"/>.
     /// </remarks>
     public bool SetParam(IMaaJob job, string param)
-        => MaaSetTaskParam(Handle, job.Id, param).ToBoolean();
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return MaaSetTaskParam(Handle, job.Id, param).ToBoolean();
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskStatus"/>.
     /// </remarks>
     public MaaJobStatus GetStatus(IMaaJob job)
-        => (MaaJobStatus)MaaTaskStatus(Handle, job.Id);
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return (MaaJobStatus)MaaTaskStatus(Handle, job.Id);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaWaitTask"/>.
     /// </remarks>
     public MaaJobStatus Wait(IMaaJob job)
-        => (MaaJobStatus)MaaWaitTask(Handle, job.Id);
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return (MaaJobStatus)MaaWaitTask(Handle, job.Id);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -275,6 +297,6 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStop"/>.
     /// </remarks>
-    public bool Stop()
+    public bool Abort()
         => MaaStop(Handle).ToBoolean();
 }

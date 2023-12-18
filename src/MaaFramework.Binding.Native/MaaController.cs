@@ -16,6 +16,8 @@ public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
     /// <param name="maaController">The <see cref="IMaaController{nint}"/> instance.</param>
     public MaaController(IMaaController<nint> maaController)
     {
+        ArgumentNullException.ThrowIfNull(maaController);
+
         SetHandle(maaController.Handle, needReleased: true);
     }
 
@@ -37,8 +39,12 @@ public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerSetOption"/>.
     /// </remarks>
-    sealed protected override bool SetOption(ControllerOption option, MaaOptionValue[] value)
-        => MaaControllerSetOption(Handle, (MaaCtrlOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+    sealed protected override bool SetOption(ControllerOption opt, MaaOptionValue[] value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        return MaaControllerSetOption(Handle, (MaaCtrlOption)opt, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -132,14 +138,22 @@ public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
     ///     Wrapper of <see cref="MaaControllerStatus"/>.
     /// </remarks>
     public MaaJobStatus GetStatus(IMaaJob job)
-        => (MaaJobStatus)MaaControllerStatus(Handle, job.Id);
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return (MaaJobStatus)MaaControllerStatus(Handle, job.Id);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerWait"/>.
     /// </remarks>
     public MaaJobStatus Wait(IMaaJob job)
-        => (MaaJobStatus)MaaControllerWait(Handle, job.Id);
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return (MaaJobStatus)MaaControllerWait(Handle, job.Id);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -160,7 +174,11 @@ public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
     ///     Wrapper of <see cref="MaaControllerGetImage"/>.
     /// </remarks>
     public bool GetImage(IMaaImageBuffer<nint> maaImage)
-        => MaaControllerGetImage(Handle, maaImage.Handle).ToBoolean();
+    {
+        ArgumentNullException.ThrowIfNull(maaImage);
+
+        return MaaControllerGetImage(Handle, maaImage.Handle).ToBoolean();
+    }
 
     /// <inheritdoc/>
     /// <remarks>

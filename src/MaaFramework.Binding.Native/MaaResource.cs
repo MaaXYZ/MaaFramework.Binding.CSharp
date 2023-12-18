@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Native.Abstractions;
 using MaaFramework.Binding.Native.Interop;
+using System;
 using static MaaFramework.Binding.Native.Interop.MaaResource;
 
 namespace MaaFramework.Binding;
@@ -16,6 +17,8 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     /// <param name="maaResource">The <see cref="IMaaResource{nint}"/> instance.</param>
     public MaaResource(IMaaResource<nint> maaResource)
     {
+        ArgumentNullException.ThrowIfNull(maaResource);
+
         SetHandle(maaResource.Handle, needReleased: true);
     }
 
@@ -34,7 +37,7 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     /// </remarks>
     public MaaResource(MaaCallbackTransparentArg maaCallbackTransparentArg)
     {
-        var handle = MaaResourceCreate(maaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaResourceCreate(MaaApiCallback, maaCallbackTransparentArg);
         SetHandle(handle, needReleased: true);
     }
 
@@ -58,6 +61,8 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     public MaaResource(MaaCallbackTransparentArg maaCallbackTransparentArg, CheckStatusOption check, params string[] paths)
         : this(maaCallbackTransparentArg)
     {
+        ArgumentNullException.ThrowIfNull(paths);
+
         foreach (var path in paths)
         {
             var status = AppendPath(path).Wait();
@@ -97,14 +102,22 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     ///     Wrapper of <see cref="MaaResourceStatus"/>.
     /// </remarks>
     public MaaJobStatus GetStatus(IMaaJob job)
-        => (MaaJobStatus)MaaResourceStatus(Handle, job.Id);
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return (MaaJobStatus)MaaResourceStatus(Handle, job.Id);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceWait"/>.
     /// </remarks>
     public MaaJobStatus Wait(IMaaJob job)
-        => (MaaJobStatus)MaaResourceWait(Handle, job.Id);
+    {
+        ArgumentNullException.ThrowIfNull(job);
+
+        return (MaaJobStatus)MaaResourceWait(Handle, job.Id);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -116,8 +129,12 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceSetOption"/>.
     /// </remarks>
-    sealed protected override bool SetOption(ResourceOption option, MaaOptionValue[] value)
-        => MaaResourceSetOption(Handle, (MaaResOption)option, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+    sealed protected override bool SetOption(ResourceOption opt, MaaOptionValue[] value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        return MaaResourceSetOption(Handle, (MaaResOption)opt, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+    }
 
     /// <inheritdoc/>
     /// <remarks>

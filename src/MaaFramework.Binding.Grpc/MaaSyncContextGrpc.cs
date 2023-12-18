@@ -77,11 +77,11 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
                 Task = task,
                 Param = taskParam,
             });
-            outBox.X = response.Box.Xy.X;
-            outBox.Y = response.Box.Xy.Y;
-            outBox.Width = response.Box.Wh.Width;
-            outBox.Height = response.Box.Wh.Height;
-            detailBuff.String = response.Detail;
+            outBox.SetValues(x: response.Box.Xy.X,
+                             y: response.Box.Xy.Y,
+                             width: response.Box.Wh.Width,
+                             height: response.Box.Wh.Height);
+            detailBuff.SetValue(response.Detail);
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
         {
@@ -293,7 +293,7 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
 
         try
         {
-            _client.task_result(new HandleStringRequest { Handle = Handle, Str = buffer.String, });
+            _client.task_result(new HandleStringRequest { Handle = Handle, Str = buffer.ToString(), });
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
         {

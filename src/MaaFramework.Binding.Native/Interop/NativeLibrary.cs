@@ -13,9 +13,9 @@ internal static partial class NativeLibrary
     public static IntPtr NativeAssemblyResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
         var libHandle = IntPtr.Zero;
-        if (!libraryName.Equals("MaaFramework")
-         && !libraryName.Equals("MaaToolKit")
-         && !libraryName.Equals("MaaRpc"))
+        if (!libraryName.Equals("MaaFramework", StringComparison.Ordinal)
+         && !libraryName.Equals("MaaToolKit", StringComparison.Ordinal)
+         && !libraryName.Equals("MaaRpc", StringComparison.Ordinal))
         {
             return libHandle;
         }

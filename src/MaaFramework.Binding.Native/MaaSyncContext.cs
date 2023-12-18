@@ -47,7 +47,13 @@ public class MaaSyncContext : IMaaSyncContext<nint>
     ///     Wrapper of <see cref="MaaSyncContextRunRecognizer"/>.
     /// </remarks>
     public bool RunRecognizer(IMaaImageBuffer<nint> image, string task, string taskParam, IMaaRectBuffer<nint> outBox, IMaaStringBuffer<nint> detailBuff)
-        => MaaSyncContextRunRecognizer(Handle, image.Handle, task, taskParam, outBox.Handle, detailBuff.Handle).ToBoolean();
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        ArgumentNullException.ThrowIfNull(outBox);
+        ArgumentNullException.ThrowIfNull(detailBuff);
+
+        return MaaSyncContextRunRecognizer(Handle, image.Handle, task, taskParam, outBox.Handle, detailBuff.Handle).ToBoolean();
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -61,7 +67,10 @@ public class MaaSyncContext : IMaaSyncContext<nint>
     ///     Wrapper of <see cref="MaaSyncContextRunAction"/>.
     /// </remarks>
     public bool RunAction(string task, string taskParam, IMaaRectBuffer<nint> curBox, string curRecDetail)
-        => MaaSyncContextRunAction(Handle, task, taskParam, curBox.Handle, curRecDetail).ToBoolean();
+    {
+        ArgumentNullException.ThrowIfNull(curBox);
+        return MaaSyncContextRunAction(Handle, task, taskParam, curBox.Handle, curRecDetail).ToBoolean();
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -117,7 +126,10 @@ public class MaaSyncContext : IMaaSyncContext<nint>
     ///     Wrapper of <see cref="MaaSyncContextScreencap"/>.
     /// </remarks>
     public bool Screencap(IMaaImageBuffer<nint> buffer)
-        => MaaSyncContextScreencap(Handle, buffer.Handle).ToBoolean();
+    {
+        ArgumentNullException.ThrowIfNull(buffer);
+        return MaaSyncContextScreencap(Handle, buffer.Handle).ToBoolean();
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -131,5 +143,8 @@ public class MaaSyncContext : IMaaSyncContext<nint>
     ///     Wrapper of <see cref="MaaSyncContextGetTaskResult"/>.
     /// </remarks>
     public bool GetTaskResult(string task, IMaaStringBuffer<nint> buffer)
-        => MaaSyncContextGetTaskResult(Handle, task, buffer.Handle).ToBoolean();
+    {
+        ArgumentNullException.ThrowIfNull(buffer);
+        return MaaSyncContextGetTaskResult(Handle, task, buffer.Handle).ToBoolean();
+    }
 }

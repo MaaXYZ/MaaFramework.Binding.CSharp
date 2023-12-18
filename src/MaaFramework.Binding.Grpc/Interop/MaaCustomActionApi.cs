@@ -2,13 +2,14 @@
 
 namespace MaaFramework.Binding.Grpc.Interop;
 
+#pragma warning disable CA1707 // 标识符不应包含下划线
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 #pragma warning disable S1104 // Fields should not have public accessibility
 
 /// <summary>
-///     A struct provides the delegates of <see cref="MaaCustomActionApi" />.
+///     A static class provides the delegates of <see cref="MaaCustomActionApi" />.
 /// </summary>
-public struct MaaActionApi
+public static class MaaActionApi
 {
 
     /// <summary>
@@ -33,16 +34,16 @@ public struct MaaActionApi
     /// 
     /// </summary>
     /// <param name="arg">The MaaTransparentArg.</param>
-    public delegate void Stop(nint arg);
+    public delegate void Abort(nint arg);
 }
 
 /// <summary>
 ///     MaaCustomActionApi
 /// </summary>
-public struct MaaCustomActionApi : IMaaDefStruct
+public class MaaCustomActionApi : IMaaDef
 {
-    public required MaaActionApi.Run Run;
+    public required MaaActionApi.Run Run { get; init; }
 
-    public required MaaActionApi.Stop Stop;
+    public required MaaActionApi.Abort Abort { get; init; }
 }
 

@@ -23,7 +23,7 @@ public class MaaThriftController : MaaController
     /// </remarks>
     public MaaThriftController(string param, MaaCallbackTransparentArg maaCallbackTransparentArg)
     {
-        var handle = MaaThriftControllerCreate(param, maaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaThriftControllerCreate(param, MaaApiCallback, maaCallbackTransparentArg);
         SetHandle(handle, needReleased: true);
     }
 }

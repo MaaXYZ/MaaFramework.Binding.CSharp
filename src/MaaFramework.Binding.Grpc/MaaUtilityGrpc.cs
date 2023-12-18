@@ -33,14 +33,14 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
     public string Version => _client.version(new EmptyRequest()).Str;
 
     /// <inheritdoc/>
-    public bool SetOption(GlobalOption option, int value)
+    public bool SetOption(GlobalOption opt, int value)
         => false;
 
     /// <inheritdoc/>
-    public bool SetOption(GlobalOption option, bool value)
+    public bool SetOption(GlobalOption opt, bool value)
     {
         var request = new SetGlobalOptionRequest();
-        switch (option)
+        switch (opt)
         {
             case GlobalOption.DebugMode:
                 request.DebugMode = value;
@@ -53,12 +53,12 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
     }
 
     /// <inheritdoc/>
-    public bool SetOption(GlobalOption option, string value)
+    public bool SetOption(GlobalOption opt, string value)
     {
         ArgumentException.ThrowIfNullOrEmpty(value);
 
         var request = new SetGlobalOptionRequest();
-        switch (option)
+        switch (opt)
         {
             case GlobalOption.Logging:
                 request.Logging = value;

@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     The exception is thrown when the <see cref="MaaJobStatus"/> of a <see cref="IMaaJob"/> is incorrect.
+///     The exception is thrown when the <see cref="MaaJobStatus"/> of a <see cref="IMaaJob"/> is unexpected.
 /// </summary>
 public class MaaJobStatusException : MaaException
 {
@@ -16,25 +16,30 @@ public class MaaJobStatusException : MaaException
     public const string MaaResourceMessage = $"{nameof(IMaaResource)} failed to load resources.";
 
     /// <summary>
-    ///     The exception is thrown when a <see cref="MaaJobStatus"/> is unexpected.
+    ///     Creates a <see cref="MaaJobStatusException"/> instance.
     /// </summary>
+    /// <param name="message">The message that describes the error.</param>
     public MaaJobStatusException(string message = "MaaJobStatus was unexpected.") : base(message)
     {
     }
 
     /// <summary>
-    /// 
+    ///     Creates a <see cref="MaaJobStatusException"/> instance.
     /// </summary>
+    /// <param name="status">The MaaJobStatus.</param>
+    /// <param name="message">The message that describes the error.</param>
     public MaaJobStatusException(MaaJobStatus status, string message = "")
         : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {status}." : $"{message} MaaJobStatus cannot be {status}.")
     {
     }
 
     /// <summary>
-    /// 
+    ///     Creates a <see cref="MaaJobStatusException"/> instance.
     /// </summary>
+    /// <param name="job">The IMaaJob.</param>
+    /// <param name="message">The message that describes the error.</param>
     public MaaJobStatusException(IMaaJob job, string message = "")
-        : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {job.Status}." : $"{message} MaaJobStatus cannot be {job.Status}.")
+        : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {job?.Status}." : $"{message} MaaJobStatus cannot be {job?.Status}.")
     {
     }
 }

@@ -45,10 +45,10 @@ public class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
         => _client.destroy(new HandleRequest { Handle = Handle, });
 
     /// <inheritdoc/>
-    public bool SetOption(ControllerOption option, int value)
+    public bool SetOption(ControllerOption opt, int value)
     {
         var request = new ControllerSetOptionRequest { Handle = Handle, };
-        switch (option)
+        switch (opt)
         {
             case ControllerOption.ScreenshotTargetLongSide:
                 request.LongSide = value;
@@ -64,16 +64,16 @@ public class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
     }
 
     /// <inheritdoc/>
-    public bool SetOption(ControllerOption option, bool value)
+    public bool SetOption(ControllerOption opt, bool value)
         => false;
 
     /// <inheritdoc/>
-    public bool SetOption(ControllerOption option, string value)
+    public bool SetOption(ControllerOption opt, string value)
     {
         ArgumentException.ThrowIfNullOrEmpty(value);
 
         var request = new ControllerSetOptionRequest { Handle = Handle, };
-        switch (option)
+        switch (opt)
         {
             case ControllerOption.DefaultAppPackageEntry:
                 request.DefPackageEntry = value;

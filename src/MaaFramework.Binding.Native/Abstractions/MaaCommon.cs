@@ -9,22 +9,22 @@ namespace MaaFramework.Binding.Native.Abstractions;
 public abstract class MaaCommon<TEnum> : MaaDisposableHandle<nint>, IMaaCommon, IMaaOption<TEnum> where TEnum : Enum
 {
     /// <inheritdoc/>
-    public bool SetOption(TEnum option, int value)
-        => SetOption(option, value.ToMaaOptionValues());
+    public bool SetOption(TEnum opt, int value)
+        => SetOption(opt, value.ToMaaOptionValues());
 
     /// <inheritdoc/>
-    public bool SetOption(TEnum option, bool value)
-        => SetOption(option, value.ToMaaOptionValues());
+    public bool SetOption(TEnum opt, bool value)
+        => SetOption(opt, value.ToMaaOptionValues());
 
     /// <inheritdoc/>
-    public bool SetOption(TEnum option, string value)
+    public bool SetOption(TEnum opt, string value)
     {
         ArgumentException.ThrowIfNullOrEmpty(value);
-        return SetOption(option, value.ToMaaOptionValues());
+        return SetOption(opt, value.ToMaaOptionValues());
     }
 
     /// <inheritdoc cref="SetOption(TEnum, int)"/>
-    protected abstract bool SetOption(TEnum option, MaaOptionValue[] value);
+    protected abstract bool SetOption(TEnum opt, MaaOptionValue[] value);
 
     /// <inheritdoc/>
     public event EventHandler<MaaCallbackEventArgs>? Callback;
@@ -47,16 +47,16 @@ public abstract class MaaCommon<TEnum> : MaaDisposableHandle<nint>, IMaaCommon, 
     }
 
     /// <summary>
-    ///     A delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
+    ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
     /// </summary>
-    protected readonly MaaApiCallback maaApiCallback;
+    protected MaaApiCallback MaaApiCallback { get; }
 
     /// <summary>
-    ///     Initializes <see cref="maaApiCallback"/>.
+    ///     Initializes <see cref="MaaApiCallback"/>.
     /// </summary>
     protected MaaCommon()
         : base(invalidHandleValue: nint.Zero)
     {
-        maaApiCallback = OnCallback;
+        MaaApiCallback = OnCallback;
     }
 }

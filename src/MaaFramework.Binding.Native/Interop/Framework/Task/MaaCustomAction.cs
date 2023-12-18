@@ -7,11 +7,12 @@ namespace MaaFramework.Binding.Native.Interop;
 #pragma warning disable S4200 // Native methods should be wrapped
 #pragma warning disable CA1401 // P/Invoke method should not be visible
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable CA1707 // 标识符不应包含下划线
 
 /// <summary>
-///     A struct provides the delegates of <see cref="MaaCustomActionApi" />.
+///     A static class provides the delegates of <see cref="MaaCustomActionApi" />.
 /// </summary>
-public struct MaaActionApi
+public static class MaaActionApi
 {
 
     #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.1.1.
@@ -34,19 +35,18 @@ public struct MaaActionApi
     /// 
     /// </summary>
     /// <param name="action_arg">The MaaTransparentArg.</param>
-    public delegate void Stop(MaaTransparentArg action_arg);
+    public delegate void Abort(MaaTransparentArg action_arg);
 }
 
 /// <summary>
 ///     MaaCustomActionApi
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
 [NativeMarshalling(typeof(MaaCustomActionApiMarshaller))]
-public struct MaaCustomActionApi : IMaaDefStruct
+public class MaaCustomActionApi : IMaaDef
 {
-    public required MaaActionApi.Run Run;
+    public required MaaActionApi.Run Run { get; init; }
 
-    public required MaaActionApi.Stop Stop;
+    public required MaaActionApi.Abort Abort { get; init; }
 }
 
 /// <summary>
@@ -55,6 +55,7 @@ public struct MaaCustomActionApi : IMaaDefStruct
 [CustomMarshaller(typeof(MaaCustomActionApi), MarshalMode.Default, typeof(MaaCustomActionApiMarshaller))]
 internal static class MaaCustomActionApiMarshaller
 {
+    [StructLayout(LayoutKind.Sequential)]
     internal struct Unmanaged
     {
         public nint Run;
@@ -66,7 +67,7 @@ internal static class MaaCustomActionApiMarshaller
         {
             Run = Marshal.GetFunctionPointerForDelegate<MaaActionApi.Run>(managed.Run),
 
-            Stop = Marshal.GetFunctionPointerForDelegate<MaaActionApi.Stop>(managed.Stop)
+            Stop = Marshal.GetFunctionPointerForDelegate<MaaActionApi.Abort>(managed.Abort)
         };
 
     public static MaaCustomActionApi ConvertToManaged(Unmanaged unmanaged)
@@ -74,7 +75,7 @@ internal static class MaaCustomActionApiMarshaller
         {
             Run = Marshal.GetDelegateForFunctionPointer<MaaActionApi.Run>(unmanaged.Run),
 
-            Stop = Marshal.GetDelegateForFunctionPointer<MaaActionApi.Stop>(unmanaged.Stop)
+            Abort = Marshal.GetDelegateForFunctionPointer<MaaActionApi.Abort>(unmanaged.Stop)
         };
 
     public static void Free(Unmanaged unmanaged)

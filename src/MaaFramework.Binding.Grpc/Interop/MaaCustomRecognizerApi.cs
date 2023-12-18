@@ -2,6 +2,7 @@
 
 namespace MaaFramework.Binding.Grpc.Interop;
 
+#pragma warning disable CA1707 // 标识符不应包含下划线
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning disable S1104 // Fields should not have public accessibility
 
@@ -34,7 +35,7 @@ public static class MaaRecognizerApi
 /// <summary>
 ///     MaaCustomRecognizerApi
 /// </summary>
-public struct MaaCustomRecognizerApi : IMaaDefStruct
+public class MaaCustomRecognizerApi : IMaaDef
 {
-    public required MaaRecognizerApi.Analyze Analyze { get; set; }
+    public required MaaRecognizerApi.Analyze Analyze { get; init; }
 }

@@ -30,7 +30,7 @@ public interface IMaaStringBuffer : IDisposable
     ///     Gets the string from the MaaStringBuffer.
     /// </summary>
     /// <returns>The string.</returns>
-    string Get();
+    string GetValue();
 
     /// <summary>
     ///     Gets the size of the string.
@@ -44,11 +44,5 @@ public interface IMaaStringBuffer : IDisposable
     /// <param name="str">The string.</param>
     /// <param name="useEx">Uses MaaSetStringEx if true; otherwise, Uses MaaSetString.</param>
     /// <returns>true if the string was setted successfully; otherwise, false.</returns>
-    bool Set(string str, bool useEx = true);
-
-    /// <summary>
-    ///     Gets or Sets the string of the MaaStringBuffer.
-    /// </summary>
-    /// <exception cref="InvalidOperationException"/>
-    string String { get; set; }
+    bool SetValue(string str, bool useEx = true);
 }

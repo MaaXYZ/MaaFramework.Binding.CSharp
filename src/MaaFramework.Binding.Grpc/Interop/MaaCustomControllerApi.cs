@@ -2,13 +2,14 @@
 
 namespace MaaFramework.Binding.Grpc.Interop;
 
+#pragma warning disable CA1707 // 标识符不应包含下划线
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning disable S1104 // Fields should not have public accessibility
 
 /// <summary>
-///     A struct provides the delegates of <see cref="MaaCustomControllerApi" />.
+///     A static class provides the delegates of <see cref="MaaCustomControllerApi" />.
 /// </summary>
-public struct MaaControllerApi
+public static class MaaControllerApi
 {
     public delegate bool SetOption(ControllerOption key, string value, nint handle_arg);
 
@@ -34,24 +35,24 @@ public struct MaaControllerApi
 /// <summary>
 ///     MaaCustomControllerApi
 /// </summary>
-public struct MaaCustomControllerApi : IMaaDefStruct
+public class MaaCustomControllerApi : IMaaDef
 {
-    public required MaaControllerApi.SetOption SetOption;
+    public required MaaControllerApi.SetOption SetOption { get; init; }
 
-    public required MaaControllerApi.Connect Connect;
-    public required MaaControllerApi.Click Click;
-    public required MaaControllerApi.Swipe Swipe;
-    public required MaaControllerApi.PressKey PressKey;
+    public required MaaControllerApi.Connect Connect { get; init; }
+    public required MaaControllerApi.Click Click { get; init; }
+    public required MaaControllerApi.Swipe Swipe { get; init; }
+    public required MaaControllerApi.PressKey PressKey { get; init; }
 
-    public required MaaControllerApi.TouchDown TouchDown;
-    public required MaaControllerApi.TouchMove TouchMove;
-    public required MaaControllerApi.TouchUp TouchUp;
+    public required MaaControllerApi.TouchDown TouchDown { get; init; }
+    public required MaaControllerApi.TouchMove TouchMove { get; init; }
+    public required MaaControllerApi.TouchUp TouchUp { get; init; }
 
-    public required MaaControllerApi.StartApp StartApp;
-    public required MaaControllerApi.StopApp StopApp;
+    public required MaaControllerApi.StartApp StartApp { get; init; }
+    public required MaaControllerApi.StopApp StopApp { get; init; }
 
-    public required MaaControllerApi.GetResolution GetResolution;
+    public required MaaControllerApi.GetResolution GetResolution { get; init; }
 
-    public required MaaControllerApi.GetImage GetImage;
-    public required MaaControllerApi.GetUuid GetUuid;
+    public required MaaControllerApi.GetImage GetImage { get; init; }
+    public required MaaControllerApi.GetUuid GetUuid { get; init; }
 }

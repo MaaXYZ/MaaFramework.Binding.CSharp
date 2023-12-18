@@ -7,6 +7,8 @@ namespace MaaFramework.Binding.Buffers;
 /// </summary>
 public class MaaStringBufferGrpc : IMaaStringBuffer
 {
+    private string _str = string.Empty;
+
     /// <summary>
     ///     Creates a <see cref="MaaStringBufferGrpc"/> instance.
     /// </summary>
@@ -29,33 +31,30 @@ public class MaaStringBufferGrpc : IMaaStringBuffer
 
     /// <inheritdoc/>
     public bool IsEmpty()
-        => string.IsNullOrEmpty(String);
+        => string.IsNullOrEmpty(_str);
 
     /// <inheritdoc/>
     public bool Clear()
     {
-        String = string.Empty;
+        _str = string.Empty;
         return true;
     }
 
     /// <inheritdoc/>
-    public string Get()
-        => String;
+    public string GetValue()
+        => _str;
 
     /// <inheritdoc/>
-    public ulong Size => (ulong)String.Length;
+    public ulong Size => (ulong)_str.Length;
 
     /// <inheritdoc/>
-    public bool Set(string str, bool useEx = true)
+    public bool SetValue(string str, bool useEx = true)
     {
-        String = str;
+        _str = str;
         return true;
     }
 
-    /// <inheritdoc/>
-    public string String { get; set; } = string.Empty;
-
-    /// <inheritdoc cref="Get"/>
+    /// <inheritdoc cref="GetValue"/>
     public override string ToString()
-        => String;
+        => _str;
 }

@@ -40,7 +40,7 @@ public class MaaRectBufferGrpc : IMaaRectBuffer
     public int Height { get; set; }
 
     /// <inheritdoc/>
-    public void Set(int x, int y, int width, int height)
+    public void SetValues(int x, int y, int width, int height)
     {
         X = x;
         Y = y;
@@ -49,7 +49,7 @@ public class MaaRectBufferGrpc : IMaaRectBuffer
     }
 
     /// <inheritdoc/>
-    public void Get(out int x, out int y, out int width, out int height)
+    public void GetValues(out int x, out int y, out int width, out int height)
     {
         x = X;
         y = Y;
