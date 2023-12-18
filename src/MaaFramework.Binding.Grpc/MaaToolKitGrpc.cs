@@ -27,8 +27,8 @@ public class MaaToolKitGrpc : MaaGrpcChannel, IMaaToolkit
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
     public MaaToolKitGrpc(GrpcChannel channel)
+        : base(channel)
     {
-        Channel = channel;
     }
 
     /// <inheritdoc/>

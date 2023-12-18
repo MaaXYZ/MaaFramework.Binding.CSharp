@@ -25,8 +25,8 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
     public MaaUtilityGrpc(GrpcChannel channel)
+        : base(channel)
     {
-        Channel = channel;
     }
 
     /// <inheritdoc/>

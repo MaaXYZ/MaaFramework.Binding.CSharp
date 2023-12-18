@@ -40,9 +40,10 @@ public abstract class MaaCommonGrpc : MaaDisposableHandle<string>, IMaaCommon
     /// <summary>
     ///     Initializes MaaCommonGrpc.
     /// </summary>
-    protected MaaCommonGrpc()
+    protected MaaCommonGrpc(GrpcChannel channel)
         : base(invalidHandleValue: "")
     {
+        Channel = channel;
         CallbackId = RegisterCallback();
     }
 

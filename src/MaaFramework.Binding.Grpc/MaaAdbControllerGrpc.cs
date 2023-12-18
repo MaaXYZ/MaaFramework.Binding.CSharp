@@ -35,13 +35,13 @@ public class MaaAdbControllerGrpc : MaaControllerGrpc
     /// <exception cref="ArgumentException" />
     /// <exception cref="MaaJobStatusException" />
     public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, CheckStatusOption check, LinkOption link)
+        : base(channel)
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);
         ArgumentException.ThrowIfNullOrEmpty(address);
         type.Check();
         ArgumentException.ThrowIfNullOrEmpty(adbConfig);
         ArgumentException.ThrowIfNullOrEmpty(agentPath);
-        Channel = channel;
 
         var client = new ControllerClient(channel);
         var handle = client.create_adb(new AdbControllerRequest

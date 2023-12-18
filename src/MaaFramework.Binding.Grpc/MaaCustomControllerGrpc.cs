@@ -18,9 +18,8 @@ public class MaaCustomControllerGrpc : MaaControllerGrpc
     /// <param name="customController">The MaaCustomControllerApi.</param>
     /// <param name="arg">The MaaTransparentArg.</param>
     public MaaCustomControllerGrpc(GrpcChannel channel, MaaCustomControllerApi customController, nint arg)
+        : base(channel)
     {
-        Channel = channel;
-
         var client = new ControllerClient(channel);
         var streamingCall = client.create_custom();
         Task.Run(() => CallCustomController(arg, customController, streamingCall));

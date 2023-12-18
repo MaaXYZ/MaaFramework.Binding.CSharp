@@ -26,8 +26,8 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
 
     /// <inheritdoc cref="MaaSyncContextGrpc(GrpcChannel, string)"/>
     public MaaSyncContextGrpc(GrpcChannel channel)
+        : base(channel)
     {
-        Channel = channel;
     }
 
     /// <summary>
@@ -37,8 +37,8 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
     /// <param name="syncContextHandle">The MaaSyncContextHandle.</param>
     [SetsRequiredMembers]
     public MaaSyncContextGrpc(GrpcChannel channel, string syncContextHandle)
+        : base(channel)
     {
-        Channel = channel;
         Handle = syncContextHandle;
     }
 

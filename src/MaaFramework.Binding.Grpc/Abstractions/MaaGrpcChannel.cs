@@ -31,4 +31,12 @@ public abstract class MaaGrpcChannel
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
     protected abstract void OnChannelChanged(GrpcChannel channel);
+
+    /// <summary>
+    ///     Initializes MaaCommonGrpc.
+    /// </summary>
+    protected MaaGrpcChannel(GrpcChannel channel)
+    {
+        Channel = channel;
+    }
 }

@@ -31,9 +31,9 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// <exception cref="ArgumentNullException"/>
     [SetsRequiredMembers]
     public MaaInstanceGrpc(GrpcChannel channel, IMaaInstance<string> maaInstance)
+        : base(channel)
     {
         ArgumentNullException.ThrowIfNull(maaInstance);
-        Channel = channel;
 
         _resource ??= new MaaResourceGrpc(channel, maaInstance.Resource);
         _controller ??= new MaaControllerGrpc(channel, maaInstance.Controller);
@@ -47,9 +47,8 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
     public MaaInstanceGrpc(GrpcChannel channel)
+        : base(channel)
     {
-        Channel = channel;
-
         var handle = _client.create(new IdRequest { Id = CallbackId }).Handle;
         SetHandle(handle, needReleased: true);
     }
@@ -63,7 +62,6 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     public MaaInstanceGrpc(GrpcChannel channel, IMaaResource<string> resource, IMaaController<string> controller, DisposeOptions disposeOptions)
         : this(channel)
     {
-        // Channel = channel;
         Resource = resource;
         Controller = controller;
         DisposeOptions = disposeOptions;
