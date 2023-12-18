@@ -11,17 +11,6 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
 {
-    /// <summary>
-    ///     Converts a <see cref="IMaaResource{nint}"/> instance to a <see cref="MaaResource"/>.
-    /// </summary>
-    /// <param name="maaResource">The <see cref="IMaaResource{nint}"/> instance.</param>
-    public MaaResource(IMaaResource<nint> maaResource)
-    {
-        ArgumentNullException.ThrowIfNull(maaResource);
-
-        SetHandle(maaResource.Handle, needReleased: true);
-    }
-
     /// <inheritdoc cref="MaaResource(MaaCallbackTransparentArg)"/>
     public MaaResource()
         : this(MaaCallbackTransparentArg.Zero)

@@ -11,17 +11,6 @@ namespace MaaFramework.Binding;
 public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
 {
     /// <summary>
-    ///     Converts a <see cref="IMaaController{nint}"/> instance to a <see cref="MaaController"/>.
-    /// </summary>
-    /// <param name="maaController">The <see cref="IMaaController{nint}"/> instance.</param>
-    public MaaController(IMaaController<nint> maaController)
-    {
-        ArgumentNullException.ThrowIfNull(maaController);
-
-        SetHandle(maaController.Handle, needReleased: true);
-    }
-
-    /// <summary>
     ///     Creates a <see cref="MaaController"/> instance.
     /// </summary>
     protected MaaController()

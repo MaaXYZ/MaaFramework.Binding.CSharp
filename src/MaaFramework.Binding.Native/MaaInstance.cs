@@ -13,23 +13,6 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     private IMaaResource<nint> _resource = default!;
     private IMaaController<nint> _controller = default!;
 
-    /// <summary>
-    ///     Converts a <see cref="IMaaInstance{nint}"/> instance to a <see cref="MaaInstance"/>.
-    /// </summary>
-    /// <param name="maaInstance">The <see cref="IMaaInstance{nint}"/> instance.</param>
-    /// <exception cref="ArgumentNullException"/>
-    [SetsRequiredMembers]
-    public MaaInstance(IMaaInstance<nint> maaInstance)
-    {
-        ArgumentNullException.ThrowIfNull(maaInstance);
-
-        _resource ??= new MaaResource(maaInstance.Resource);
-        _controller ??= new MaaController(maaInstance.Controller);
-
-        if (Resource == null || Controller == null)
-            throw new ArgumentNullException(nameof(maaInstance), "Resource and Controller cannot be null");
-    }
-
     /// <inheritdoc cref="MaaInstance(MaaCallbackTransparentArg)"/>
     public MaaInstance()
         : this(MaaCallbackTransparentArg.Zero)

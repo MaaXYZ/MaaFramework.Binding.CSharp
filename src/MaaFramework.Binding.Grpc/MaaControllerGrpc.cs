@@ -21,19 +21,6 @@ public class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
     }
 
     /// <summary>
-    ///     Converts a <see cref="IMaaController{String}"/> instance to a <see cref="MaaControllerGrpc"/>.
-    /// </summary>
-    /// <param name="channel">The channel to use to make remote calls.</param>
-    /// <param name="maaController">The <see cref="IMaaController{String}"/> instance.</param>
-    public MaaControllerGrpc(GrpcChannel channel, IMaaController<string> maaController)
-        : base(channel)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(maaController?.Handle);
-
-        SetHandle(maaController.Handle, needReleased: true);
-    }
-
-    /// <summary>
     ///     Creates a <see cref="MaaControllerGrpc"/> instance.
     /// </summary>
     protected MaaControllerGrpc(GrpcChannel channel)

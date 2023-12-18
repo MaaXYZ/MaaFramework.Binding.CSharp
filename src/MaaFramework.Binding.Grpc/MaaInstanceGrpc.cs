@@ -24,25 +24,6 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     }
 
     /// <summary>
-    ///     Converts a <see cref="IMaaInstance{String}"/> instance to a <see cref="MaaInstanceGrpc"/>.
-    /// </summary>
-    /// <param name="channel">The channel to use to make remote calls.</param>
-    /// <param name="maaInstance">The <see cref="IMaaInstance{String}"/> instance.</param>
-    /// <exception cref="ArgumentNullException"/>
-    [SetsRequiredMembers]
-    public MaaInstanceGrpc(GrpcChannel channel, IMaaInstance<string> maaInstance)
-        : base(channel)
-    {
-        ArgumentNullException.ThrowIfNull(maaInstance);
-
-        _resource ??= new MaaResourceGrpc(channel, maaInstance.Resource);
-        _controller ??= new MaaControllerGrpc(channel, maaInstance.Controller);
-
-        if (Resource == null || Controller == null)
-            throw new ArgumentNullException(nameof(maaInstance), "Resource and Controller cannot be null");
-    }
-
-    /// <summary>
     ///     Creates a <see cref="MaaInstanceGrpc"/> instance.
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>

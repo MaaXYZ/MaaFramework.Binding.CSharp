@@ -20,19 +20,6 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
     }
 
     /// <summary>
-    ///     Converts a <see cref="IMaaResource{String}"/> instance to a <see cref="MaaResourceGrpc"/>.
-    /// </summary>
-    /// <param name="channel">The channel to use to make remote calls.</param>
-    /// <param name="maaResource">The <see cref="IMaaResource{String}"/> instance.</param>
-    public MaaResourceGrpc(GrpcChannel channel, IMaaResource<string> maaResource)
-        : base(channel)
-    {
-        ArgumentNullException.ThrowIfNull(maaResource);
-
-        SetHandle(maaResource.Handle, needReleased: true);
-    }
-
-    /// <summary>
     ///     Creates a <see cref="MaaResourceGrpc"/> instance.
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
