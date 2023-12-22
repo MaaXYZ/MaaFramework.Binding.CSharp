@@ -40,8 +40,7 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaIsStringEmpty"/>.
     /// </remarks>
-    public bool IsEmpty()
-        => MaaIsStringEmpty(Handle).ToBoolean();
+    public bool IsEmpty => MaaIsStringEmpty(Handle).ToBoolean();
 
     /// <inheritdoc/>
     /// <remarks>
@@ -55,7 +54,7 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     ///     Wrapper of <see cref="MaaGetString"/>.
     /// </remarks>
     public string GetValue()
-        => IsEmpty() ? string.Empty : MaaGetString(Handle).ToStringUTF8(Size);
+        => IsEmpty ? string.Empty : MaaGetString(Handle).ToStringUTF8(Size);
 
     /// <inheritdoc/>
     /// <remarks>

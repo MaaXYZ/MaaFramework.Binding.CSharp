@@ -15,10 +15,12 @@ public interface IMaaImageBuffer<out T> : IMaaImageBuffer, IMaaDisposableHandle<
 public interface IMaaImageBuffer : IDisposable
 {
     /// <summary>
-    ///     Indicates whether the image of the MaaImageBuffer is empty.
+    ///     Gets a value indicates whether the image of the MaaImageBuffer is empty.
     /// </summary>
-    /// <returns>true if the image is empty; otherwise, false.</returns>
-    bool IsEmpty();
+    /// <value>
+    ///     true if the image is empty; otherwise, false.
+    /// </value>
+    bool IsEmpty { get; }
 
     /// <summary>
     ///     Clears the image of the MaaImageBuffer.
@@ -33,28 +35,12 @@ public interface IMaaImageBuffer : IDisposable
     nint GetRawData();
 
     /// <summary>
-    ///     Gets the image width.
+    ///     Gets the image info.
     /// </summary>
     /// <value>
-    ///     The width of image.
+    ///     The info includes width, height, type.
     /// </value>
-    int Width { get; }
-
-    /// <summary>
-    ///     Gets the image height.
-    /// </summary>
-    /// <value>
-    ///     The height of image.
-    /// </value>
-    int Height { get; }
-
-    /// <summary>
-    ///     Gets the image type.
-    /// </summary>
-    /// <value>
-    ///     The type of image.
-    /// </value>
-    int Type { get; }
+    ImageInfo Info { get; }
 
     /// <summary>
     ///     Sets the image raw data.
@@ -64,6 +50,9 @@ public interface IMaaImageBuffer : IDisposable
     /// <param name="height">The height of image.</param>
     /// <param name="type">The type of image.</param>
     /// <returns>true if the image raw data was setted successfully; otherwise, false.</returns>
+    /// <remarks>
+    ///     The data is cv::Mat::data.
+    /// </remarks>
     bool SetRawData(nint data, int width, int height, int type);
 
     /// <summary>
@@ -71,6 +60,9 @@ public interface IMaaImageBuffer : IDisposable
     /// </summary>
     /// <param name="size">The image encoded size.</param>
     /// <returns>The encoded data of image.</returns>
+    /// <remarks>
+    ///     The data is a PNG image.
+    /// </remarks>
     nint GetEncodedData(out ulong size);
 
     /// <summary>

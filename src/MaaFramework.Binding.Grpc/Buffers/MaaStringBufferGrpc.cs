@@ -30,8 +30,7 @@ public class MaaStringBufferGrpc : IMaaStringBuffer
     }
 
     /// <inheritdoc/>
-    public bool IsEmpty()
-        => string.IsNullOrEmpty(_str);
+    public bool IsEmpty => string.IsNullOrEmpty(_str);
 
     /// <inheritdoc/>
     public bool Clear()

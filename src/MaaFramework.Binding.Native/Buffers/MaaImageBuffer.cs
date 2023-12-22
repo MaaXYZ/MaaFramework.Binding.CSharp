@@ -40,8 +40,7 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaIsImageEmpty"/>.
     /// </remarks>
-    public bool IsEmpty()
-        => MaaIsImageEmpty(Handle).ToBoolean();
+    public bool IsEmpty => MaaIsImageEmpty(Handle).ToBoolean();
 
     /// <inheritdoc/>
     /// <remarks>
@@ -58,18 +57,26 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
         => MaaGetImageRawData(Handle);
 
     /// <inheritdoc/>
+    public ImageInfo Info => new()
+    {
+        Width = MaaGetImageWidth(Handle),
+        Height = MaaGetImageHeight(Handle),
+        Type = MaaGetImageType(Handle),
+    };
+
+    /// <inheritdoc cref="ImageInfo.Width"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetImageWidth"/>.
     /// </remarks>
     public int Width => MaaGetImageWidth(Handle);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="ImageInfo.Height"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetImageHeight"/>.
     /// </remarks>
     public int Height => MaaGetImageHeight(Handle);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="ImageInfo.Type"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetImageType"/>.
     /// </remarks>

@@ -84,7 +84,7 @@ public class MaaToolKit : IMaaToolkit
         => MaaToolKitGetDeviceAdbPath(index).ToStringUTF8();
 
     /// <summary>
-    ///     Get the adb serial of a device.
+    ///     Gets the adb serial of a device.
     /// </summary>
     /// <param name="index">The index of the device.</param>
     /// <returns>
@@ -97,7 +97,7 @@ public class MaaToolKit : IMaaToolkit
         => MaaToolKitGetDeviceAdbSerial(index).ToStringUTF8();
 
     /// <summary>
-    ///     Get the <see cref="AdbControllerTypes"/> of a device.
+    ///     Gets the <see cref="AdbControllerTypes"/> of a device.
     /// </summary>
     /// <param name="index">The index of the device.</param>
     /// <returns>
@@ -110,7 +110,7 @@ public class MaaToolKit : IMaaToolkit
         => (AdbControllerTypes)MaaToolKitGetDeviceAdbControllerType(index);
 
     /// <summary>
-    ///     Get the adb config of a device.
+    ///     Gets the adb config of a device.
     /// </summary>
     /// <param name="index">The index of the device.</param>
     /// <returns>

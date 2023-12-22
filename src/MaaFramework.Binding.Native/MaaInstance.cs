@@ -110,7 +110,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
             ArgumentNullException.ThrowIfNull(value);
 
             MaaBindException.ThrowIf(
-                MaaBindResource(Handle, value.Handle).ToBoolean(),
+                MaaBindResource(Handle, value.Handle).ToBoolean() is not true,
                 MaaBindException.ResourceMessage);
             _resource = value;
         }
@@ -134,7 +134,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
             ArgumentNullException.ThrowIfNull(value);
 
             MaaBindException.ThrowIf(
-                MaaBindController(Handle, value.Handle).ToBoolean(),
+                MaaBindController(Handle, value.Handle).ToBoolean() is not true,
                 MaaBindException.ControllerMessage);
             _controller = value;
         }

@@ -70,7 +70,6 @@ public abstract class MaaCommonGrpc : MaaDisposableHandle<string>, IMaaCommon
                 throw new TaskCanceledException();
         });
 
-        CallbackId = id;
         return id;
     }
 

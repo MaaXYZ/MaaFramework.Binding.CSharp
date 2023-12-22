@@ -67,42 +67,44 @@ internal static partial class NativeLibrary
     private static (string arch, string exten) GetArchitectureNameAndExtensionName()
     {
         var sb = new System.Text.StringBuilder();
-        if (IsWindows())
+        if (IsWindows)
             sb.Append("win");
-        else if (IsLinux())
+        else if (IsLinux)
             sb.Append("linux");
-        else if (IsOSX())
+        else if (IsOSX)
             sb.Append("osx");
         else
             throw new NotImplementedException();
 
         sb.Append('-');
-        if (IsX64())
+        if (IsX64)
             sb.Append("x64");
-        else if (IsArm64())
+        else if (IsArm64)
             sb.Append("arm64");
         else
             throw new NotImplementedException();
 
         string exten;
-        if (IsWindows())
+        if (IsWindows)
             exten = "dll";
-        else if (IsLinux())
+        else if (IsLinux)
             exten = "so";
-        else
+        else if (IsOSX)
             exten = "dylib";
+        else
+            throw new NotImplementedException();
 
         return (sb.ToString(), exten);
     }
 
-    private static bool IsWindows()
+    private static bool IsWindows
         => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-    private static bool IsLinux()
+    private static bool IsLinux
         => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-    private static bool IsOSX()
+    private static bool IsOSX
         => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-    private static bool IsX64()
+    private static bool IsX64
         => RuntimeInformation.OSArchitecture == Architecture.X64;
-    private static bool IsArm64()
+    private static bool IsArm64
         => RuntimeInformation.OSArchitecture == Architecture.Arm64;
 }

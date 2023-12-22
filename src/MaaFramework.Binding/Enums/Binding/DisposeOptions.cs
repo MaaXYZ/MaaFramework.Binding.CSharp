@@ -8,17 +8,22 @@
 public enum DisposeOptions
 {
     /// <summary>
-    ///     None dispose.
+    ///     No additional disposal required.
     /// </summary>
     None = 0,
 
     /// <summary>
-    ///     Resource dispose.
+    ///     Disposes <see cref="IMaaResource"/> and <see cref="IMaaController"/>.
+    /// </summary>
+    All = Resource | Controller,
+
+    /// <summary>
+    ///     Disposes <see cref="IMaaResource"/>.
     /// </summary>
     Resource = 1 << 0,
 
     /// <summary>
-    ///     Controller dispose.
+    ///     Disposes <see cref="IMaaController"/>.
     /// </summary>
     Controller = 1 << 1,
 }

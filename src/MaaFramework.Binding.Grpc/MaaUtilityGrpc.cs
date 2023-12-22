@@ -86,18 +86,6 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
     }
 
     /// <summary>
-    ///     Acquires a id from MaaRpc.
-    /// </summary>
-    /// <param name="channel">The channel to use to make remote calls.</param>
-    /// <returns>The id.</returns>
-    protected static string AcquireId(GrpcChannel channel)
-        => new UtilityClient(channel).acquire_id(new EmptyRequest()).Id;
-
-    /// <inheritdoc cref="AcquireId(GrpcChannel)"/>
-    protected string AcquireId()
-        => _client.acquire_id(new EmptyRequest()).Id;
-
-    /// <summary>
     ///     Registers a callback.
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
@@ -123,7 +111,7 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
     /// <inheritdoc cref="RegisterCallback(GrpcChannel, out string, out AsyncServerStreamingCall{Callback}?)"/>
     public bool RegisterCallback(out string callbackId, [NotNullWhen(true)] out AsyncServerStreamingCall<Callback>? streamingCall)
     {
-        callbackId = AcquireId();
+        callbackId = _client.acquire_id(new EmptyRequest()).Id;
         try
         {
             streamingCall = _client.register_callback(new IdRequest { Id = callbackId });

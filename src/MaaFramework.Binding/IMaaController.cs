@@ -38,7 +38,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <param name="y1">The vertical coordinate of the starting point.</param>
     /// <param name="x2">The horizontal coordinate of the ending point.</param>
     /// <param name="y2">The horizontal coordinate of the ending point.</param>
-    /// <param name="duration">The duration.</param>
+    /// <param name="duration">The swipe duration(ms).</param>
     /// <returns>A swipe job.</returns>
     IMaaJob Swipe(int x1, int y1, int x2, int y2, int duration);
 

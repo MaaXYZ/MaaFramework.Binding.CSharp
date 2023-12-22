@@ -36,12 +36,6 @@ _💫 A common interoperable API wrapper 💫_
 | MaaJobStatus | MaaStatusEnum |
 | ResourceOption | MaaResOptionEnum |
 
-### IMaaCommon
-
-| Wrapper | Native API |
-| --- | --- |
-| IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
-
 ### MaaJob : IMaaJob
 
 | Wrapper | Native API |
@@ -97,7 +91,7 @@ _💫 A common interoperable API wrapper 💫_
 | IMaaPost.GetStatus() | MaaTaskStatus |
 | IMaaPost.Wait() | MaaWaitTask |
 | IMaaInstance.AllTasksFinished | MaaTaskAllFinished |
-| IMaaInstance.Stop() | MaaStop |
+| IMaaInstance.Abort() | MaaStop |
 | IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
 | IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
@@ -165,12 +159,12 @@ _💫 A common interoperable API wrapper 💫_
 | --- | --- |
 | MaaImageBuffer.MaaImageBuffer() | MaaCreateImageBuffer |
 | IDisposable.Dispose() | MaaDestroyImageBuffer |
-| IMaaImageBuffer.IsEmpty() | MaaIsImageEmpty |
+| IMaaImageBuffer.IsEmpty | MaaIsImageEmpty |
 | IMaaImageBuffer.Clear() | MaaClearImage |
 | IMaaImageBuffer.GetRawData() | MaaGetImageRawData |
-| IMaaImageBuffer.Width | MaaGetImageWidth |
-| IMaaImageBuffer.Height | MaaGetImageHeight |
-| IMaaImageBuffer.Type | MaaGetImageType |
+| IMaaImageBuffer.Info.Width | MaaGetImageWidth |
+| IMaaImageBuffer.Info.Height | MaaGetImageHeight |
+| IMaaImageBuffer.Info.Type | MaaGetImageType |
 | IMaaImageBuffer.SetRawData() | MaaSetImageRawData |
 | IMaaImageBuffer.GetEncodedData() | MaaGetImageEncoded |
 | IMaaImageBuffer.Size | MaaGetImageEncodedSize |
@@ -184,7 +178,7 @@ _💫 A common interoperable API wrapper 💫_
 | --- | --- |
 | MaaStringBuffer.MaaStringBuffer() | MaaCreateStringBuffer |
 | IDisposable.Dispose() | MaaDestroyStringBuffer |
-| IMaaStringBuffer.IsEmpty() | MaaIsStringEmpty |
+| IMaaStringBuffer.IsEmpty | MaaIsStringEmpty |
 | IMaaStringBuffer.Clear() | MaaClearString |
 | IMaaStringBuffer.Get() | MaaGetString |
 | IMaaStringBuffer.Size | MaaGetStringSize |

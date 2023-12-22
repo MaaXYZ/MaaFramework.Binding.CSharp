@@ -2,7 +2,6 @@
 using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Grpc.Interop;
 using System.Buffers;
-using System.Runtime.InteropServices;
 using static MaaFramework.Binding.Grpc.Interop.Image;
 
 namespace MaaFramework.Binding.Buffers;
@@ -47,8 +46,7 @@ public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<s
     }
 
     /// <inheritdoc/>
-    public bool IsEmpty()
-        => _client.is_empty(new HandleRequest { Handle = Handle, }).Bool;
+    public bool IsEmpty => _client.is_empty(new HandleRequest { Handle = Handle, }).Bool;
 
     /// <inheritdoc/>
     public bool Clear()
@@ -62,13 +60,19 @@ public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<s
         => throw new NotImplementedException();
 
     /// <inheritdoc/>
-    public int Width => _client.info(new HandleRequest { Handle = Handle, }).Size.Width;
-
-    /// <inheritdoc/>
-    public int Height => _client.info(new HandleRequest { Handle = Handle, }).Size.Height;
-
-    /// <inheritdoc/>
-    public int Type => _client.info(new HandleRequest { Handle = Handle, }).Type;
+    public ImageInfo Info
+    {
+        get
+        {
+            var info = _client.info(new HandleRequest { Handle = Handle, });
+            return new()
+            {
+                Width = info.Size.Width,
+                Height = info.Size.Height,
+                Type = info.Type,
+            };
+        }
+    }
 
     /// <inheritdoc/>
     public bool SetRawData(nint data, int width, int height, int type)

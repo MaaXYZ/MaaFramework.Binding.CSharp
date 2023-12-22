@@ -15,10 +15,10 @@ public interface IMaaStringBuffer<out T> : IMaaStringBuffer, IMaaDisposableHandl
 public interface IMaaStringBuffer : IDisposable
 {
     /// <summary>
-    ///     Indicates whether the string of the MaaStringBuffer is empty.
+    ///     Gets a value indicates whether the string of the MaaStringBuffer is empty.
     /// </summary>
     /// <returns>true if the string is empty; otherwise, false.</returns>
-    bool IsEmpty();
+    bool IsEmpty { get; }
 
     /// <summary>
     ///     Clears the string of the MaaStringBuffer.
