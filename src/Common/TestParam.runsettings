@@ -2,7 +2,9 @@
 <RunSettings>
   <!-- Parameters used by tests at run time -->
   <TestRunParameters>
-    <Parameter name="adbPath" value="adb" />
-    <Parameter name="address" value="192.168.1.110:33445" />
+    <!--
+    <Parameter name="AdbPath" value="adb" />
+    <Parameter name="Address" value="192.168.1.110:33445" />
+    -->
   </TestRunParameters>
 </RunSettings>
