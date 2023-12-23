@@ -16,28 +16,13 @@ namespace MaaFramework.Binding.Native.Interop;
 public static partial class MaaToolKit
 {
 
-    #region include/MaaToolKit/Device/MaaToolKitDevice.h, version: v1.1.1.
+    #region include/MaaToolKit/Config/MaaToolKitConfig.h, version: v1.4.0.
 
     [LibraryImport("MaaToolKit")]
-    public static partial MaaSize MaaToolKitFindDevice();
+    public static partial MaaBool MaaToolKitInit();
 
     [LibraryImport("MaaToolKit")]
-    public static partial MaaSize MaaToolKitFindDeviceWithAdb([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path);
-
-    [LibraryImport("MaaToolKit")]
-    public static partial MaaStringView MaaToolKitGetDeviceName(MaaSize index);
-
-    [LibraryImport("MaaToolKit")]
-    public static partial MaaStringView MaaToolKitGetDeviceAdbPath(MaaSize index);
-
-    [LibraryImport("MaaToolKit")]
-    public static partial MaaStringView MaaToolKitGetDeviceAdbSerial(MaaSize index);
-
-    [LibraryImport("MaaToolKit")]
-    public static partial MaaAdbControllerType MaaToolKitGetDeviceAdbControllerType(MaaSize index);
-
-    [LibraryImport("MaaToolKit")]
-    public static partial MaaStringView MaaToolKitGetDeviceAdbConfig(MaaSize index);
+    public static partial MaaBool MaaToolKitUninit();
 
     #endregion
 

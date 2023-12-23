@@ -56,7 +56,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// <inheritdoc/>
     protected override void ReleaseHandle()
     {
-        _client.destroy(new HandleRequest { Handle = Handle, });
+        // Cannot destroy Instance before disposing Controller and Resource.
 
         if (DisposeOptions.HasFlag(DisposeOptions.Controller))
         {
@@ -67,6 +67,8 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         {
             Resource.Dispose();
         }
+
+        _client.destroy(new HandleRequest { Handle = Handle, });
     }
 
     /// <inheritdoc/>

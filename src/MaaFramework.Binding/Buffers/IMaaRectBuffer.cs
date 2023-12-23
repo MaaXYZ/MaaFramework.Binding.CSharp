@@ -46,6 +46,7 @@ public interface IMaaRectBuffer : IDisposable
     /// <param name="width">The width.</param>
     /// <param name="height">The height.</param>
     /// <exception cref="InvalidOperationException" />
+    /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
     void SetValues(int x, int y, int width, int height);
 
     /// <summary>
@@ -55,6 +56,7 @@ public interface IMaaRectBuffer : IDisposable
     /// <param name="y">The vertical coordinate.</param>
     /// <param name="width">The width.</param>
     /// <param name="height">The height.</param>
+    /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
     void GetValues(out int x, out int y, out int width, out int height);
 }
 

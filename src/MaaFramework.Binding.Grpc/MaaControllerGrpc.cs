@@ -4,6 +4,7 @@ using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Grpc.Abstractions;
 using MaaFramework.Binding.Grpc.Interop;
 using static MaaFramework.Binding.Grpc.Interop.Controller;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace MaaFramework.Binding;
 
@@ -135,6 +136,17 @@ public class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
         {
             Handle = Handle,
             Param = new KeyParam { Key = keyCode, },
+        }).Id;
+        return new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    public IMaaJob InputText(string text)
+    {
+        var id = _client.post_input_text(new ControllerInputTextRequest
+        {
+            Handle = Handle,
+            Param = new InputTextParam { Text = text },
         }).Id;
         return new MaaJob(id, this);
     }

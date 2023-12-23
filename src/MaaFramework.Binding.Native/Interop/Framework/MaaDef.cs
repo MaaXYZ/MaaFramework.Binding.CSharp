@@ -12,6 +12,8 @@ global using MaaStringView = nint;
 
 global using MaaStatus = System.Int32;
 // enum MaaJobStatus
+global using MaaLoggingLevel = System.Int32;
+// enum LoggingLevel
 
 global using MaaId = System.Int64;
 global using MaaCtrlId = System.Int64;
@@ -34,15 +36,20 @@ global using MaaInstOption = System.Int32;
 // const MaaTaskParam_Empty
 global using MaaAdbControllerType = System.Int32;
 // enum AdbControllerTypes
-global using MaaDebuggingControllerType = System.Int32;
-// enum DebuggingControllerType
+global using MaaDbgControllerType = System.Int32;
+// enum DbgControllerType
+global using MaaThriftControllerType = System.Int32;
+// enum ThriftControllerType
+global using MaaWin32ControllerType = System.Int32;
+// enum Win32ControllerTypes
+global using MaaWin32Hwnd = nint;
 
 global using MaaTransparentArg = nint;
 global using MaaCallbackTransparentArg = nint;
 
-global using MaaResourceCallback = MaaFramework.Binding.Native.Interop.MaaApiCallback;
-global using MaaControllerCallback = MaaFramework.Binding.Native.Interop.MaaApiCallback;
-global using MaaInstanceCallback = MaaFramework.Binding.Native.Interop.MaaApiCallback;
+global using MaaResourceCallback = MaaFramework.Binding.Native.Interop.MaaAPICallback;
+global using MaaControllerCallback = MaaFramework.Binding.Native.Interop.MaaAPICallback;
+global using MaaInstanceCallback = MaaFramework.Binding.Native.Interop.MaaAPICallback;
 
 global using MaaCustomControllerHandle = nint;
 global using MaaCustomRecognizerHandle = nint;
@@ -63,12 +70,7 @@ namespace MaaFramework.Binding.Native.Interop;
 public static class MaaDef
 {
 
-    #region include/MaaFramework/MaaAPI.h, version: v1.1.1.
-
-    #endregion
-
-
-    #region include/MaaFramework/MaaDef.h, version: v1.1.1.
+    #region include/MaaFramework/MaaAPI.h, version: v1.4.0.
 
     #endregion
 
@@ -77,4 +79,8 @@ public static class MaaDef
     // internal const string EmptyMaaTaskParam = "{}";
 }
 
-public delegate void MaaApiCallback(MaaStringView msg, MaaStringView details_json, MaaCallbackTransparentArg callback_arg);
+#region include/MaaFramework/MaaDef.h, version: v1.4.0.
+
+public delegate void MaaAPICallback(MaaStringView msg, MaaStringView details_json, MaaTransparentArg callback_arg);
+
+#endregion

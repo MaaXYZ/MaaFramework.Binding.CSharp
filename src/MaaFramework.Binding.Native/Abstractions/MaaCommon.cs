@@ -49,7 +49,7 @@ public abstract class MaaCommon<TEnum> : MaaDisposableHandle<nint>, IMaaCommon, 
     /// <summary>
     ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
     /// </summary>
-    protected MaaApiCallback MaaApiCallback { get; }
+    protected MaaAPICallback MaaApiCallback { get; }
 
     /// <summary>
     ///     Initializes <see cref="MaaApiCallback"/>.

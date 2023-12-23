@@ -17,10 +17,10 @@ public class Test_IMaaController
     public static Dictionary<MaaTypes, object> NewData => new()
     {
         {
-            MaaTypes.Native, new MaaAdbController(Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreenCapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
+            MaaTypes.Native, new MaaAdbController(Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
         },
         {
-            MaaTypes.Grpc, new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreenCapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
+            MaaTypes.Grpc, new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
         }
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
@@ -69,20 +69,20 @@ public class Test_IMaaController
         using var native1 = new MaaAdbController(
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode,
+            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath);
         using var native2 = new MaaAdbController(
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode,
+            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath,
             LinkOption.None);
         using var native3 = new MaaAdbController(
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode,
+            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath,
             CheckStatusOption.None,
@@ -90,7 +90,7 @@ public class Test_IMaaController
         using var native4 = new MaaAdbController(
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode,
+            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath,
             nint.Zero,
@@ -101,14 +101,14 @@ public class Test_IMaaController
             Common.GrpcChannel,
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode,
+            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath);
         using var grpc2 = new MaaAdbControllerGrpc(
             Common.GrpcChannel,
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode,
+            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath,
             LinkOption.None);
@@ -116,7 +116,7 @@ public class Test_IMaaController
             Common.GrpcChannel,
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode,
+            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath,
             CheckStatusOption.None,
@@ -129,6 +129,7 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 720)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackageEntry, "DefaultAppPackageEntry")]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackage, "DefaultAppPackage")]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Recording, false)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, "Anything")]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, false)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, 0)]
@@ -209,12 +210,22 @@ public class Test_IMaaController
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), true, 4)]  // KEYCODE_BACK
-    [MaaData(MaaTypes.All, nameof(Data), true, -1)] // outrange
     public void Interface_PressKey(MaaTypes type, IMaaController maaController, bool assertSuccess, int keyCode)
     {
         Assert.IsNotNull(maaController);
 
         var job = maaController.PressKey(keyCode);
+        Interface_IMaaPost(assertSuccess, job);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), true, "")]
+    [MaaData(MaaTypes.All, nameof(Data), true, "Anything")]
+    public void Interface_InputText(MaaTypes type, IMaaController maaController, bool assertSuccess, string text)
+    {
+        Assert.IsNotNull(maaController);
+
+        var job = maaController.InputText(text);
         Interface_IMaaPost(assertSuccess, job);
     }
 

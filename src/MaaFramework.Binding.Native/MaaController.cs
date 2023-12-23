@@ -2,6 +2,7 @@
 using MaaFramework.Binding.Native.Abstractions;
 using MaaFramework.Binding.Native.Interop;
 using static MaaFramework.Binding.Native.Interop.MaaController;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace MaaFramework.Binding;
 
@@ -72,6 +73,16 @@ public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
     public IMaaJob PressKey(int keyCode)
     {
         var id = MaaControllerPostPressKey(Handle, keyCode);
+        return new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostInputText"/>.
+    /// </remarks>
+    public IMaaJob InputText(string text)
+    {
+        var id = MaaControllerPostInputText(Handle, text);
         return new MaaJob(id, this);
     }
 

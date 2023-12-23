@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Native.Interop;
 public static partial class MaaUtility
 {
 
-    #region include/MaaFramework/Utility/MaaUtility.h, version: v1.1.1.
+    #region include/MaaFramework/Utility/MaaUtility.h, version: v1.4.0.
 
     [LibraryImport("MaaFramework")]
     public static partial MaaStringView MaaVersion();

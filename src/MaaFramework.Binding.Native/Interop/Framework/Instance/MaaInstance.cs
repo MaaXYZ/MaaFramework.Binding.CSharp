@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Native.Interop;
 public static partial class MaaInstance
 {
 
-    #region include/MaaFramework/Instance/MaaInstance.h, version: v1.1.1.
+    #region include/MaaFramework/Instance/MaaInstance.h, version: v1.4.0.
 
     [LibraryImport("MaaFramework")]
     public static partial MaaInstanceHandle MaaCreate(MaaInstanceCallback callback, MaaCallbackTransparentArg callback_arg);

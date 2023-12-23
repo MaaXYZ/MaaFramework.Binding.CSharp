@@ -1,4 +1,8 @@
-﻿namespace MaaFramework.Binding.UnitTests;
+﻿using Grpc.Core;
+using MaaFramework.Binding.Grpc.Interop;
+using MaaFramework.Binding.Native.Interop;
+
+namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
 ///     Test <see cref="IMaaUtility"/> and <see cref="MaaUtility"/> and <see cref="MaaUtilityGrpc"/>.
@@ -36,8 +40,11 @@ public class Test_IMaaMaaUtility
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Logging, nameof(Common.DebugPath))]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DebugMode, false)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.LogDir, nameof(Common.DebugPath))]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.SaveDraw, false)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Recording, false)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, LoggingLevel.All)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.ShowHitDraw, false)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, "Anything")]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, false)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, 0)]
@@ -57,19 +64,76 @@ public class Test_IMaaMaaUtility
     public void Grpc_RegisterCallback_UnregisterCallback(MaaTypes type, MaaUtilityGrpc maaUtility)
     {
         Assert.IsNotNull(maaUtility);
+        var registered = true;
 
+#pragma warning disable CA2000 // Dispose the streamingCall
         Assert.IsTrue(
-            maaUtility.RegisterCallback(out var callbackId, out _));
+            maaUtility.RegisterCallback(out var callbackId, out var streamingCall));
+
+        // read response
+        var readResponse = Task.Run(async () =>
+        {
+            await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
+            {
+                Common.Callback(this, new MaaCallbackEventArgs(response.Msg, response.Detail, nint.Zero));
+            }
+
+            streamingCall.Dispose();
+            if (registered)
+                throw new TaskCanceledException();
+        });
+#pragma warning restore CA2000 // Dispose the streamingCall
+
+        // register callback id
+        streamingCall.RequestStream.WriteAsync(new CallbackRequest
+        {
+            Ok = true,
+            Init = new IdRequest { Id = callbackId, },
+        }).Wait();
+        streamingCall.RequestStream.CompleteAsync().Wait();
+
+        // Unregister callback id
+        registered = false;
         Assert.IsTrue(
             maaUtility.UnregisterCallback(callbackId));
+        readResponse.Wait();
     }
 
     [TestMethod]
     public void Grpc_Static_RegisterCallback_UnregisterCallback()
     {
+        var registered = true;
+
+#pragma warning disable CA2000 // Dispose the streamingCall
         Assert.IsTrue(
-            MaaUtilityGrpc.RegisterCallback(Common.GrpcChannel, out var callbackId, out _));
+            MaaUtilityGrpc.RegisterCallback(Common.GrpcChannel, out var callbackId, out var streamingCall));
+
+        // read response
+        var readResponse = Task.Run(async () =>
+        {
+            await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
+            {
+                Common.Callback(this, new MaaCallbackEventArgs(response.Msg, response.Detail, nint.Zero));
+            }
+
+            streamingCall.Dispose();
+            if (registered)
+                throw new TaskCanceledException();
+        });
+#pragma warning restore CA2000 // Dispose the streamingCall
+
+        // register callback id
+        streamingCall.RequestStream.WriteAsync(new CallbackRequest
+        {
+            Ok = true,
+            Init = new IdRequest { Id = callbackId, },
+        }).Wait();
+        streamingCall.RequestStream.CompleteAsync().Wait();
+
+        // Unregister callback id
+        registered = false;
         Assert.IsTrue(
             MaaUtilityGrpc.UnregisterCallback(Common.GrpcChannel, callbackId));
+        readResponse.Wait();
     }
 }

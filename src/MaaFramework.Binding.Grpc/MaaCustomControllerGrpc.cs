@@ -47,6 +47,8 @@ public class MaaCustomControllerGrpc : MaaControllerGrpc
         {
             switch (response.CommandCase)
             {
+                case CustomControllerResponse.CommandOneofCase.None:
+                    throw new InvalidOperationException();
                 case CustomControllerResponse.CommandOneofCase.Init:
                     SetHandle(response.Init, needReleased: true);
                     break;
@@ -56,6 +58,56 @@ public class MaaCustomControllerGrpc : MaaControllerGrpc
                         Ok = controller.Connect.Invoke(
                                 arg),
                     });
+                    break;
+                case CustomControllerResponse.CommandOneofCase.RequestUuid:
+                    using (var uuid = new MaaStringBufferGrpc())
+                    {
+                        await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
+                        {
+                            Ok = controller.RequestUuid.Invoke(
+                                    arg,
+                                    uuid),
+                            Uuid = uuid.ToString(),
+                        });
+                    }
+                    break;
+                case CustomControllerResponse.CommandOneofCase.RequestResolution:
+                    int width = 0, height = 0;
+                    await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
+                    {
+                        Ok = controller.RequestResolution.Invoke(
+                                arg,
+                                ref width,
+                                ref height),
+                        Resolution = new Size { Width = width, Height = height },
+                    });
+                    break;
+                case CustomControllerResponse.CommandOneofCase.StartApp:
+                    await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
+                    {
+                        Ok = controller.StartApp.Invoke(
+                                response.StartApp,
+                                arg),
+                    });
+                    break;
+                case CustomControllerResponse.CommandOneofCase.StopApp:
+                    await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
+                    {
+                        Ok = controller.StopApp.Invoke(
+                                response.StopApp,
+                                arg),
+                    });
+                    break;
+                case CustomControllerResponse.CommandOneofCase.Screencap:
+                    using (var image = new MaaImageBufferGrpc(response.Screencap, Channel))
+                    {
+                        await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
+                        {
+                            Ok = controller.Screencap.Invoke(
+                                arg,
+                                image),
+                        });
+                    }
                     break;
                 case CustomControllerResponse.CommandOneofCase.Click:
                     await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
@@ -75,14 +127,6 @@ public class MaaCustomControllerGrpc : MaaControllerGrpc
                                 response.Swipe.To.X,
                                 response.Swipe.To.Y,
                                 response.Swipe.Duration,
-                                arg),
-                    });
-                    break;
-                case CustomControllerResponse.CommandOneofCase.Key:
-                    await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
-                    {
-                        Ok = controller.PressKey.Invoke(
-                                response.Key.Key,
                                 arg),
                     });
                     break;
@@ -116,68 +160,24 @@ public class MaaCustomControllerGrpc : MaaControllerGrpc
                                 arg),
                     });
                     break;
-                case CustomControllerResponse.CommandOneofCase.Start:
+                case CustomControllerResponse.CommandOneofCase.PressKey:
                     await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
                     {
-                        Ok = controller.StartApp.Invoke(
-                                response.Start,
+                        Ok = controller.PressKey.Invoke(
+                                response.PressKey.Key,
                                 arg),
                     });
                     break;
-                case CustomControllerResponse.CommandOneofCase.Stop:
+                case CustomControllerResponse.CommandOneofCase.InputText:
                     await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
                     {
-                        Ok = controller.StopApp.Invoke(
-                                response.Stop,
-                                arg),
-                    });
-                    break;
-                case CustomControllerResponse.CommandOneofCase.Resolution:
-                    var width = 0;
-                    var height = 0;
-                    await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
-                    {
-                        Ok = controller.GetResolution.Invoke(
-                                arg,
-                                ref width,
-                                ref height),
-                        Resolution = new Size { Width = width, Height = height },
-                    });
-                    break;
-                case CustomControllerResponse.CommandOneofCase.Image:
-                    using (var image = new MaaImageBufferGrpc(response.Image, Channel))
-                    {
-                        await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
-                        {
-                            Ok = controller.GetImage.Invoke(
-                                arg,
-                                image),
-                        });
-                    }
-                    break;
-                case CustomControllerResponse.CommandOneofCase.Uuid:
-                    using (var uuid = new MaaStringBufferGrpc())
-                    {
-                        await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
-                        {
-                            Ok = controller.GetUuid.Invoke(
-                                    arg,
-                                    uuid),
-                            Uuid = uuid.ToString(),
-                        });
-                    }
-                    break;
-                case CustomControllerResponse.CommandOneofCase.SetOption:
-                    await streamingCall.RequestStream.WriteAsync(new CustomControllerRequest
-                    {
-                        Ok = controller.SetOption.Invoke(
-                                (ControllerOption)response.SetOption.Key,
-                                response.SetOption.Value,
+                        Ok = controller.InputText.Invoke(
+                                response.InputText.Text,
                                 arg),
                     });
                     break;
                 default:
-                    break;
+                    throw new NotImplementedException();
             }
         }
 

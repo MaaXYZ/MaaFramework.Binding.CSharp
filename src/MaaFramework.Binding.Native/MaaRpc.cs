@@ -1,4 +1,5 @@
-﻿using static MaaFramework.Binding.Native.Interop.MaaRpc;
+﻿using MaaFramework.Binding.Native.Interop;
+using static MaaFramework.Binding.Native.Interop.MaaRpc;
 
 namespace MaaFramework.Binding;
 
@@ -11,11 +12,16 @@ public static class MaaRpc
     /// <summary>
     ///     Starts Maa Grpc server.
     /// </summary>
+    /// <param name="address">The listening address. (ip:port)</param>
+    /// <exception cref="InvalidOperationException"></exception>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRpcStart"/>.
     /// </remarks>
     public static void Start(string address)
-        => MaaRpcStart(address);
+    {
+        if (!MaaRpcStart(address).ToBoolean())
+            throw new InvalidOperationException();
+    }
 
     /// <summary>
     ///     Stops Maa Grpc server.

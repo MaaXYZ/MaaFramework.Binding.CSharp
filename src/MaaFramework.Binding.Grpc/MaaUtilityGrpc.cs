@@ -34,7 +34,19 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
 
     /// <inheritdoc/>
     public bool SetOption(GlobalOption opt, int value)
-        => false;
+    {
+        var request = new SetGlobalOptionRequest();
+        switch (opt)
+        {
+            case GlobalOption.StdoutLevel:
+                request.StdoutLevel = value;
+                break;
+            default:
+                return false;
+        }
+
+        return SetOption(request);
+    }
 
     /// <inheritdoc/>
     public bool SetOption(GlobalOption opt, bool value)
@@ -42,8 +54,14 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
         var request = new SetGlobalOptionRequest();
         switch (opt)
         {
-            case GlobalOption.DebugMode:
-                request.DebugMode = value;
+            case GlobalOption.SaveDraw:
+                request.SaveDraw = value;
+                break;
+            case GlobalOption.Recording:
+                request.Recording = value;
+                break;
+            case GlobalOption.ShowHitDraw:
+                request.ShowHitDraw = value;
                 break;
             default:
                 return false;
@@ -60,8 +78,8 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
         var request = new SetGlobalOptionRequest();
         switch (opt)
         {
-            case GlobalOption.Logging:
-                request.Logging = value;
+            case GlobalOption.LogDir:
+                request.LogDir = value;
                 break;
             default:
                 return false;
@@ -92,13 +110,13 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
     /// <param name="callbackId">The acquired id.</param>
     /// <param name="streamingCall">The callback streaming.</param>
     /// <returns>true if the callback was registered successfully; otherwise, false.</returns>
-    public static bool RegisterCallback(GrpcChannel channel, out string callbackId, [NotNullWhen(true)] out AsyncServerStreamingCall<Callback>? streamingCall)
+    public static bool RegisterCallback(GrpcChannel channel, out string callbackId, [NotNullWhen(true)] out AsyncDuplexStreamingCall<CallbackRequest, Callback>? streamingCall)
     {
         var client = new UtilityClient(channel);
         callbackId = client.acquire_id(new EmptyRequest()).Id;
         try
         {
-            streamingCall = client.register_callback(new IdRequest { Id = callbackId });
+            streamingCall = client.register_callback();
             return true;
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists)
@@ -108,13 +126,13 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
         }
     }
 
-    /// <inheritdoc cref="RegisterCallback(GrpcChannel, out string, out AsyncServerStreamingCall{Callback}?)"/>
-    public bool RegisterCallback(out string callbackId, [NotNullWhen(true)] out AsyncServerStreamingCall<Callback>? streamingCall)
+    /// <inheritdoc cref="RegisterCallback(GrpcChannel, out string, out AsyncDuplexStreamingCall{CallbackRequest, Callback}?)"/>
+    public bool RegisterCallback(out string callbackId, [NotNullWhen(true)] out AsyncDuplexStreamingCall<CallbackRequest, Callback>? streamingCall)
     {
         callbackId = _client.acquire_id(new EmptyRequest()).Id;
         try
         {
-            streamingCall = _client.register_callback(new IdRequest { Id = callbackId });
+            streamingCall = _client.register_callback();
             return true;
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists)

@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Native.Interop;
+using System.Runtime.InteropServices;
 using static MaaFramework.Binding.Native.Interop.MaaToolKit;
 
 namespace MaaFramework.Binding;
@@ -8,6 +9,8 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaToolKit : IMaaToolkit
 {
+    #region MaaToolKitConfig
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolKitInit"/>.
@@ -21,6 +24,10 @@ public class MaaToolKit : IMaaToolkit
     /// </remarks>
     public bool Uninit()
         => MaaToolKitUninit().ToBoolean();
+
+    #endregion
+
+    #region MaaToolKitDevice
 
     /// <inheritdoc/>
     public DeviceInfo[] Find(string adbPath = "")
@@ -121,4 +128,75 @@ public class MaaToolKit : IMaaToolkit
     /// </remarks>
     protected static string GetDeviceAdbConfig(ulong index)
         => MaaToolKitGetDeviceAdbConfig(index).ToStringUTF8();
+
+    #endregion
+
+    #region MaaToolKitWin32Window
+
+    /// <returns>
+    ///     The number of windows.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitFindWindow"/>.
+    /// </remarks>
+    public static ulong FindWindow(string className, string windowName)
+        => MaaToolKitFindWindow(className, windowName);
+
+    /// <returns>
+    ///     The number of windows.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitSearchWindow"/>.
+    /// </remarks>
+    public static ulong SearchWindow(string className, string windowName)
+        => MaaToolKitSearchWindow(className, windowName);
+
+    /// <returns>
+    ///     The MaaWin32Hwnd.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitGetWindow"/>.
+    /// </remarks>
+    public static nint GetWindow(ulong index)
+        => MaaToolKitGetWindow(index);
+
+    /// <returns>
+    ///     The MaaWin32Hwnd.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitGetCursorWindow"/>.
+    /// </remarks>
+    public static nint GetCursorWindow()
+        => MaaToolKitGetCursorWindow();
+
+    #endregion
+
+    #region MaaToolKitExecAgent
+
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitRegisterCustomRecognizerExecutor"/>.
+    /// </remarks>
+    public static nint RegisterCustomRecognizerExecutor(MaaInstanceHandle handle, string recognizerName, string recognizerExecPath, string recognizerExecParamJson)
+        => MaaToolKitRegisterCustomRecognizerExecutor(handle, recognizerName, recognizerExecPath, recognizerExecParamJson);
+
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitUnregisterCustomRecognizerExecutor"/>.
+    /// </remarks>
+    public static nint UnregisterCustomRecognizerExecutor(MaaInstanceHandle handle, string recognizerName)
+        => MaaToolKitUnregisterCustomRecognizerExecutor(handle, recognizerName);
+
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitRegisterCustomActionExecutor"/>.
+    /// </remarks>
+    public static nint RegisterCustomActionExecutor(MaaInstanceHandle handle, string actionName, string actionExecPath, string actionExecParamJson)
+        => MaaToolKitRegisterCustomActionExecutor(handle, actionName, actionExecPath, actionExecParamJson);
+
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolKitUnregisterCustomActionExecutor"/>.
+    /// </remarks>
+    public static nint UnregisterCustomActionExecutor(MaaInstanceHandle handle, string actionName)
+        => MaaToolKitUnregisterCustomActionExecutor(handle, actionName);
+    #endregion
+
+    // Todoa: 没搞懂，等一个文档
 }

@@ -15,27 +15,14 @@ namespace MaaFramework.Binding.Native.Interop;
 public static class MaaActionApi
 {
 
-    #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.1.1.
+    #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.4.0.
+
+    public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg);
+
+    public delegate void Abort(MaaTransparentArg action_arg);
 
     #endregion
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="sync_context">The MaaSyncContextHandle.</param>
-    /// <param name="task_name">The MaaStringView.</param>
-    /// <param name="custom_action_param">The MaaStringView.</param>
-    /// <param name="cur_box">The MaaRectHandle.</param>
-    /// <param name="cur_rec_detail">The MaaStringView.</param>
-    /// <param name="action_arg">The MaaTransparentArg.</param>
-    /// <returns></returns>
-    public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg);
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="action_arg">The MaaTransparentArg.</param>
-    public delegate void Abort(MaaTransparentArg action_arg);
 }
 
 /// <summary>
@@ -45,7 +32,6 @@ public static class MaaActionApi
 public class MaaCustomActionApi : IMaaDef
 {
     public required MaaActionApi.Run Run { get; init; }
-
     public required MaaActionApi.Abort Abort { get; init; }
 }
 

@@ -19,7 +19,7 @@ namespace MaaFramework.Binding.Native.Interop;
 public static partial class MaaBuffer
 {
 
-    #region include/MaaFramework/Utility/MaaBuffer.h, version: v1.1.1.
+    #region include/MaaFramework/Utility/MaaBuffer.h, version: v1.4.0.
 
     [LibraryImport("MaaFramework")]
     public static partial MaaStringBufferHandle MaaCreateStringBuffer();
@@ -98,6 +98,9 @@ public static partial class MaaBuffer
 
     [LibraryImport("MaaFramework")]
     public static partial int32_t MaaGetRectH(MaaRectHandle handle);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSetRect(MaaRectHandle handle, int32_t x, int32_t y, int32_t w, int32_t h);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaSetRectX(MaaRectHandle handle, int32_t value);

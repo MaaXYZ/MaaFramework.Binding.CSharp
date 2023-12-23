@@ -18,29 +18,36 @@ namespace MaaFramework.Binding.Native.Interop;
 public static class MaaControllerApi
 {
 
-    #region include/MaaFramework/Instance/MaaCustomController.h, version: v1.1.1.
+    #region include/MaaFramework/Instance/MaaCustomController.h, version: v1.4.0.
+
+    public delegate MaaBool Connect(MaaTransparentArg handle_arg);
+
+    public delegate MaaBool RequestUuid(MaaTransparentArg handle_arg, /* out */ MaaStringBufferHandle buffer);
+
+    public delegate MaaBool RequestResolution(MaaTransparentArg handle_arg, /* out */ ref int32_t width, /* out */ ref int32_t height);
+
+    public delegate MaaBool StartApp(MaaStringView intent, MaaTransparentArg handle_arg);
+
+    public delegate MaaBool StopApp(MaaStringView intent, MaaTransparentArg handle_arg);
+
+    public delegate MaaBool Screencap(MaaTransparentArg handle_arg, /* out */ MaaImageBufferHandle buffer);
+
+    public delegate MaaBool Click(int32_t x, int32_t y, MaaTransparentArg handle_arg);
+
+    public delegate MaaBool Swipe(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t duration, MaaTransparentArg handle_arg);
+
+    public delegate MaaBool TouchDown(int32_t contact, int32_t x, int32_t y, int32_t pressure, MaaTransparentArg handle_arg);
+
+    public delegate MaaBool TouchMove(int32_t contact, int32_t x, int32_t y, int32_t pressure, MaaTransparentArg handle_arg);
+
+    public delegate MaaBool TouchUp(int32_t contact, MaaTransparentArg handle_arg);
+
+    public delegate MaaBool PressKey(int32_t keycode, MaaTransparentArg handle_arg);
+
+    public delegate MaaBool InputText(MaaStringView text, MaaTransparentArg handle_arg);
 
     #endregion
 
-    public delegate MaaBool SetOption(MaaCtrlOption key, MaaStringView value, MaaTransparentArg handle_arg);
-
-    public delegate MaaBool Connect(MaaTransparentArg handle_arg);
-    public delegate MaaBool Click(int32_t x, int32_t y, MaaTransparentArg handle_arg);
-    public delegate MaaBool Swipe(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t duration, MaaTransparentArg handle_arg);
-    public delegate MaaBool PressKey(int32_t keycode, MaaTransparentArg handle_arg);
-
-    public delegate MaaBool TouchDown(int32_t contact, int32_t x, int32_t y, int32_t pressure, MaaTransparentArg handle_arg);
-    public delegate MaaBool TouchMove(int32_t contact, int32_t x, int32_t y, int32_t pressure, MaaTransparentArg handle_arg);
-    public delegate MaaBool TouchUp(int32_t contact, MaaTransparentArg handle_arg);
-
-    public delegate MaaBool StartApp(MaaStringView package_name, MaaTransparentArg handle_arg);
-    public delegate MaaBool StopApp(MaaStringView package_name, MaaTransparentArg handle_arg);
-
-    public delegate MaaBool GetResolution(MaaTransparentArg handle_arg, /* out */ ref
-        int32_t width, /* out */ ref int32_t height);
-
-    public delegate MaaBool GetImage(MaaTransparentArg handle_arg, /* out */ MaaImageBufferHandle buffer);
-    public delegate MaaBool GetUuid(MaaTransparentArg handle_arg, /* out */ MaaStringBufferHandle buffer);
 }
 
 /// <summary>
@@ -49,24 +56,20 @@ public static class MaaControllerApi
 [NativeMarshalling(typeof(MaaCustomControllerApiMarshaller))]
 public class MaaCustomControllerApi : IMaaDef
 {
-    public required MaaControllerApi.SetOption SetOption { get; init; }
-
     public required MaaControllerApi.Connect Connect { get; init; }
+    public required MaaControllerApi.RequestUuid RequestUuid { get; init; }
+    public required MaaControllerApi.RequestResolution RequestResolution { get; init; }
+    public required MaaControllerApi.StartApp StartApp { get; init; }
+    public required MaaControllerApi.StopApp StopApp { get; init; }
+    public required MaaControllerApi.Screencap Screencap { get; init; }
     public required MaaControllerApi.Click Click { get; init; }
     public required MaaControllerApi.Swipe Swipe { get; init; }
-    public required MaaControllerApi.PressKey PressKey { get; init; }
-
     public required MaaControllerApi.TouchDown TouchDown { get; init; }
     public required MaaControllerApi.TouchMove TouchMove { get; init; }
     public required MaaControllerApi.TouchUp TouchUp { get; init; }
+    public required MaaControllerApi.PressKey PressKey { get; init; }
+    public required MaaControllerApi.InputText InputText { get; init; }
 
-    public required MaaControllerApi.StartApp StartApp { get; init; }
-    public required MaaControllerApi.StopApp StopApp { get; init; }
-
-    public required MaaControllerApi.GetResolution GetResolution { get; init; }
-
-    public required MaaControllerApi.GetImage GetImage { get; init; }
-    public required MaaControllerApi.GetUuid GetUuid { get; init; }
 }
 
 /// <summary>
@@ -78,65 +81,55 @@ internal static class MaaCustomControllerApiMarshaller
     [StructLayout(LayoutKind.Sequential)]
     internal struct Unmanaged
     {
-        public required nint SetOption;
         public required nint Connect;
+        public required nint RequestUuid;
+        public required nint RequestResolution;
+        public required nint StartApp;
+        public required nint StopApp;
+        public required nint Screencap;
         public required nint Click;
         public required nint Swipe;
         public required nint TouchDown;
         public required nint TouchMove;
         public required nint TouchUp;
         public required nint PressKey;
-        public required nint StartApp;
-        public required nint StopApp;
-        public required nint GetResolution;
-        public required nint GetImage;
-        public required nint GetUuid;
+        public required nint InputText;
     }
 
     public static Unmanaged ConvertToUnmanaged(MaaCustomControllerApi managed)
         => new()
         {
-            SetOption = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.SetOption>(managed.SetOption),
-
             Connect = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.Connect>(managed.Connect),
+            RequestUuid = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.RequestUuid>(managed.RequestUuid),
+            RequestResolution = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.RequestResolution>(managed.RequestResolution),
+            StartApp = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.StartApp>(managed.StartApp),
+            StopApp = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.StopApp>(managed.StopApp),
+            Screencap = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.Screencap>(managed.Screencap),
             Click = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.Click>(managed.Click),
             Swipe = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.Swipe>(managed.Swipe),
-            PressKey = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.PressKey>(managed.PressKey),
-
             TouchDown = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.TouchDown>(managed.TouchDown),
             TouchMove = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.TouchMove>(managed.TouchMove),
             TouchUp = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.TouchUp>(managed.TouchUp),
-
-            StartApp = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.StartApp>(managed.StartApp),
-            StopApp = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.StopApp>(managed.StopApp),
-
-            GetResolution = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.GetResolution>(managed.GetResolution),
-
-            GetImage = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.GetImage>(managed.GetImage),
-            GetUuid = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.GetUuid>(managed.GetUuid),
+            PressKey = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.PressKey>(managed.PressKey),
+            InputText = Marshal.GetFunctionPointerForDelegate<MaaControllerApi.InputText>(managed.InputText),
         };
 
     public static MaaCustomControllerApi ConvertToManaged(Unmanaged unmanaged)
         => new()
         {
-            SetOption = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.SetOption>(unmanaged.SetOption),
-
             Connect = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.Connect>(unmanaged.Connect),
+            RequestUuid = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.RequestUuid>(unmanaged.RequestUuid),
+            RequestResolution = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.RequestResolution>(unmanaged.RequestResolution),
+            StartApp = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.StartApp>(unmanaged.StartApp),
+            StopApp = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.StopApp>(unmanaged.StopApp),
+            Screencap = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.Screencap>(unmanaged.Screencap),
             Click = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.Click>(unmanaged.Click),
             Swipe = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.Swipe>(unmanaged.Swipe),
-            PressKey = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.PressKey>(unmanaged.PressKey),
-
             TouchDown = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.TouchDown>(unmanaged.TouchDown),
             TouchMove = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.TouchMove>(unmanaged.TouchMove),
             TouchUp = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.TouchUp>(unmanaged.TouchUp),
-
-            StartApp = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.StartApp>(unmanaged.StartApp),
-            StopApp = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.StopApp>(unmanaged.StopApp),
-
-            GetResolution = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.GetResolution>(unmanaged.GetResolution),
-
-            GetImage = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.GetImage>(unmanaged.GetImage),
-            GetUuid = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.GetUuid>(unmanaged.GetUuid)
+            PressKey = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.PressKey>(unmanaged.PressKey),
+            InputText = Marshal.GetDelegateForFunctionPointer<MaaControllerApi.InputText>(unmanaged.InputText),
         };
 
     public static void Free(Unmanaged unmanaged)

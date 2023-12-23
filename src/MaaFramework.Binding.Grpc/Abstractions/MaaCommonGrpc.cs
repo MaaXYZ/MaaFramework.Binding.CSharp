@@ -1,6 +1,7 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Grpc.Interop;
 
 namespace MaaFramework.Binding.Grpc.Abstractions;
 
@@ -69,6 +70,13 @@ public abstract class MaaCommonGrpc : MaaDisposableHandle<string>, IMaaCommon
             if (IsValidCallbackId)
                 throw new TaskCanceledException();
         });
+
+        streamingCall.RequestStream.WriteAsync(new CallbackRequest
+        {
+            Ok = true,
+            Init = new IdRequest { Id = id, },
+        }).Wait();
+        streamingCall.RequestStream.CompleteAsync().Wait();
 
         return id;
     }

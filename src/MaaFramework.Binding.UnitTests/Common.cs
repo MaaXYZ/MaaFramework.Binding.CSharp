@@ -55,8 +55,8 @@ public static class Common
         ArgumentNullException.ThrowIfNull(testContext);
         InitializeInfo(testContext);
 
-        new MaaUtility().SetOption(GlobalOption.Logging, DebugPath);
-        new MaaUtilityGrpc(GrpcChannel).SetOption(GlobalOption.Logging, DebugPath);
+        new MaaUtility().SetOption(GlobalOption.LogDir, DebugPath);
+        new MaaUtilityGrpc(GrpcChannel).SetOption(GlobalOption.LogDir, DebugPath);
     }
 
     /// <summary>
@@ -87,6 +87,7 @@ public static class Common
             int value => maa.SetOption(opt, value),
             bool value => maa.SetOption(opt, value),
             string value => maa.SetOption(opt, value),
+            Enum value => maa.SetOption(opt, value.GetHashCode()),
             _ => throw new InvalidOperationException(),
         };
     }
@@ -96,6 +97,5 @@ public static class Common
         Assert.IsNotNull(sender);
         Assert.IsNotNull(e);
         Assert.IsFalse(string.IsNullOrWhiteSpace(e.Message));
-        Assert.IsFalse(string.IsNullOrWhiteSpace(e.Details));
     }
 }

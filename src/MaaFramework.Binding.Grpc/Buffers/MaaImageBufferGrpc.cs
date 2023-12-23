@@ -56,7 +56,7 @@ public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<s
     }
 
     /// <inheritdoc/>
-    public nint GetRawData()
+    nint IMaaImageBuffer.GetRawData()
         => throw new NotImplementedException();
 
     /// <inheritdoc/>
@@ -75,7 +75,7 @@ public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<s
     }
 
     /// <inheritdoc/>
-    public bool SetRawData(nint data, int width, int height, int type)
+    bool IMaaImageBuffer.SetRawData(nint data, int width, int height, int type)
          => throw new NotImplementedException();
 
     /// <inheritdoc/>

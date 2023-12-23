@@ -14,12 +14,12 @@ namespace MaaFramework.Binding.Native.Interop;
 public static partial class MaaToolKit
 {
 
-    #region include/MaaToolKit/MaaToolKitAPI.h, version: v1.1.1.
+    #region include/MaaToolKit/MaaToolKitAPI.h, version: v1.4.0.
 
     #endregion
 
 
-    #region include/MaaToolKit/MaaToolKitDef.h, version: v1.1.1.
+    #region include/MaaToolKit/MaaToolKitDef.h, version: v1.4.0.
 
     #endregion
 

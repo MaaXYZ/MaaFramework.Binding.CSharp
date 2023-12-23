@@ -46,11 +46,12 @@ public class MaaAdbControllerGrpc : MaaControllerGrpc
         var client = new ControllerClient(channel);
         var handle = client.create_adb(new AdbControllerRequest
         {
+            Id = CallbackId,
             AdbPath = adbPath,
             AdbSerial = address,
             AdbType = (uint)type,
             AdbConfig = adbConfig,
-            Id = CallbackId,
+            AgentPath = agentPath,
         }).Handle;
         SetHandle(handle, needReleased: true);
 

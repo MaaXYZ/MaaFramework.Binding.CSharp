@@ -100,4 +100,14 @@ public class Test_IMaaResource
         Assert.IsFalse(string.IsNullOrWhiteSpace(
             maaResource.Hash));
     }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_TaskList(MaaTypes type, IMaaResource maaResource)
+    {
+        Assert.IsNotNull(maaResource);
+
+        Assert.IsFalse(string.IsNullOrWhiteSpace(
+            maaResource.TaskList));
+    }
 }

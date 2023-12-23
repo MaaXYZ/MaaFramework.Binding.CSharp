@@ -41,10 +41,10 @@ public class Test_IMaaToolkit
         Assert.IsNotNull(maaToolkit);
         // In Maa.Framework.Runtimes v1.1.1.
         // Notes: maaToolkit.Init() will change the log path.
-        MaaUtilityData[type].SetOption(GlobalOption.Logging, Common.DebugPath);
+        MaaUtilityData[type].SetOption(GlobalOption.LogDir, Common.DebugPath);
         Assert.IsTrue(
             maaToolkit.Init());
-        MaaUtilityData[type].SetOption(GlobalOption.Logging, Common.DebugPath);
+        //MaaUtilityData[type].SetOption(GlobalOption.Logging, Common.DebugPath);
         Assert.IsTrue(
             maaToolkit.Uninit());
     }

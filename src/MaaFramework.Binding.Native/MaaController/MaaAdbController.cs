@@ -49,7 +49,7 @@ public class MaaAdbController : MaaController
         ArgumentException.ThrowIfNullOrEmpty(adbConfig);
         ArgumentException.ThrowIfNullOrEmpty(agentPath);
 
-        var handle = MaaAdbControllerCreateV2(adbPath, address, (int)type, adbConfig, agentPath, MaaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaAdbControllerCreateV2(adbPath, address, (MaaAdbControllerType)type, adbConfig, agentPath, MaaApiCallback, maaCallbackTransparentArg);
         SetHandle(handle, needReleased: true);
 
         if (link == LinkOption.Start)

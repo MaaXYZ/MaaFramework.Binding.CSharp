@@ -135,4 +135,20 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
             }
         }
     }
+
+    /// <inheritdoc/>
+    public string? TaskList
+    {
+        get
+        {
+            try
+            {
+                return _client.task_list(new HandleRequest { Handle = Handle, }).Str;
+            }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
+            {
+                return null;
+            }
+        }
+    }
 }

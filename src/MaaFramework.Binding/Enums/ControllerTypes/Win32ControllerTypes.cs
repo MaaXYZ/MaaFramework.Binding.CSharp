@@ -7,24 +7,22 @@
 #pragma warning disable S4070 // Non-flags enums should not be marked with "FlagsAttribute"
 
 /// <summary>
-///     Debugging controller types.
+///     Win32 controller types.
 /// </summary>
 /// <remarks>
-///     <see cref="DebuggingControllerTypes"/> combines TouchType, KeyType and ScreencapType.
+///     <see cref="AdbControllerTypes"/> combines TouchType, KeyType and ScreencapType.
 /// </remarks>
 [Flags]
-public enum DebuggingControllerTypes
+public enum Win32ControllerTypes
 {
     Invalid = 0,
 
-    TouchIgnore = 1,
+    TouchSendMessage = 1,
     TouchMask = 0xFF,
 
-    KeyIgnore = 1 << 8,
+    KeySendMessage = 1 << 8,
     KeyMask = 0xFF00,
 
-    InputPresetIgnore = TouchIgnore | KeyIgnore,
-
-    ScreenCapReadIndex = 1 << 16,
-    ScreenCapMask = 0xFF0000,
+    ScreencapGDI = 1 << 16,
+    ScreencapMask = 0xFF0000,
 }

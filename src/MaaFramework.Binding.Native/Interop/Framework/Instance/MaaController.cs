@@ -16,11 +16,14 @@ namespace MaaFramework.Binding.Native.Interop;
 public static partial class MaaController
 {
 
-    #region include/MaaFramework/Instance/MaaController.h, version: v1.1.1.
+    #region include/MaaFramework/Instance/MaaController.h, version: v1.4.0.
 
     [Obsolete("This API MaaAdbControllerCreate is about to be deprecated. Please use MaaAdbControllerCreateV2 instead.")]
     [LibraryImport("MaaFramework")]
     public static partial MaaControllerHandle MaaAdbControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string address, MaaAdbControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaControllerHandle MaaWin32ControllerCreate(MaaWin32Hwnd hWnd, MaaWin32ControllerType type, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaControllerHandle MaaAdbControllerCreateV2([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string address, MaaAdbControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, [MarshalAs(UnmanagedType.LPUTF8Str)] string agent_path, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
@@ -29,10 +32,10 @@ public static partial class MaaController
     public static partial MaaControllerHandle MaaCustomControllerCreate(ref MaaCustomControllerApi handle, MaaTransparentArg handle_arg, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaControllerHandle MaaThriftControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string param, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
+    public static partial MaaControllerHandle MaaThriftControllerCreate(MaaThriftControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string host, int32_t port, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaControllerHandle MaaDebuggingControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string read_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string write_path, MaaDebuggingControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
+    public static partial MaaControllerHandle MaaDbgControllerCreate([MarshalAs(UnmanagedType.LPUTF8Str)] string read_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string write_path, MaaDbgControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 
     [LibraryImport("MaaFramework")]
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);
@@ -51,6 +54,9 @@ public static partial class MaaController
 
     [LibraryImport("MaaFramework")]
     public static partial MaaCtrlId MaaControllerPostPressKey(MaaControllerHandle ctrl, int32_t keycode);
+
+    [LibraryImport("MaaFramework")]
+    public static partial MaaCtrlId MaaControllerPostInputText(MaaControllerHandle ctrl, [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaCtrlId MaaControllerPostTouchDown(MaaControllerHandle ctrl, int32_t contact, int32_t x, int32_t y, int32_t pressure);

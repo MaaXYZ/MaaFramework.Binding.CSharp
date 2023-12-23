@@ -13,16 +13,16 @@ public interface IMaaSyncContext<T> : IMaaSyncContext
     T Handle { get; init; }
 
     /// <inheritdoc cref="IMaaSyncContext.RunRecognizer"/>
-    bool RunRecognizer(IMaaImageBuffer<T> image, string task, string taskParam, IMaaRectBuffer<T> outBox, IMaaStringBuffer<T> detailBuff);
+    bool RunRecognizer(IMaaImageBuffer<T> image, string taskName, string taskParam, IMaaRectBuffer<T> outBox, IMaaStringBuffer<T> outDetail);
 
     /// <inheritdoc cref="IMaaSyncContext.RunAction"/>
-    bool RunAction(string task, string taskParam, IMaaRectBuffer<T> curBox, string curRecDetail);
+    bool RunAction(string taskName, string taskParam, IMaaRectBuffer<T> curBox, string curRecDetail);
 
     /// <inheritdoc cref="IMaaSyncContext.Screencap"/>
-    bool Screencap(IMaaImageBuffer<T> buffer);
+    bool Screencap(IMaaImageBuffer<T> outImage);
 
     /// <inheritdoc cref="IMaaSyncContext.GetTaskResult"/>
-    bool GetTaskResult(string task, IMaaStringBuffer<T> buffer);
+    bool GetTaskResult(string taskName, IMaaStringBuffer<T> outTaskResult);
 }
 
 /// <summary>
@@ -33,31 +33,31 @@ public interface IMaaSyncContext
     /// <summary>
     ///     Runs a task.
     /// </summary>
-    /// <param name="task">The task name.</param>
+    /// <param name="taskName">The task name.</param>
     /// <param name="param">The task parameters.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    bool RunTask(string task, string param);
+    bool RunTask(string taskName, string param);
 
     /// <summary>
     ///     Run a recognizer.
     /// </summary>
     /// <param name="image">The images to be recognized.</param>
-    /// <param name="task">The task name.</param>
+    /// <param name="taskName">The task name.</param>
     /// <param name="taskParam">The task parameters.</param>
     /// <param name="outBox">The rect buffer to receive the rect in the recognition result.</param>
-    /// <param name="detailBuff">The string buffer to receive the rect detail in the recognition result.</param>
+    /// <param name="outDetail">The string buffer to receive the rect detail in the recognition result.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    bool RunRecognizer(IMaaImageBuffer image, string task, string taskParam, IMaaRectBuffer outBox, IMaaStringBuffer detailBuff);
+    bool RunRecognizer(IMaaImageBuffer image, string taskName, string taskParam, IMaaRectBuffer outBox, IMaaStringBuffer outDetail);
 
     /// <summary>
     ///     Run an action.
     /// </summary>
-    /// <param name="task">The task name.</param>
+    /// <param name="taskName">The task name.</param>
     /// <param name="taskParam">The task parameters.</param>
     /// <param name="curBox">The rect buffer containing curent rect in the recognition result.</param>
     /// <param name="curRecDetail">The rect detail in the recognition result.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    bool RunAction(string task, string taskParam, IMaaRectBuffer curBox, string curRecDetail);
+    bool RunAction(string taskName, string taskParam, IMaaRectBuffer curBox, string curRecDetail);
 
     /// <summary>
     ///     Clicks a point.
@@ -84,6 +84,13 @@ public interface IMaaSyncContext
     /// <param name="keyCode">The code of the key.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
     bool PressKey(int keyCode);
+
+    /// <summary>
+    ///     Input a text.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
+    bool InputText(string text);
 
     /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
@@ -115,15 +122,15 @@ public interface IMaaSyncContext
     /// <summary>
     ///     Takes a screenshot.
     /// </summary>
-    /// <param name="buffer">The image buffer to receive the screenshot.</param>
+    /// <param name="outImage">The image buffer to receive the screenshot.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    bool Screencap(IMaaImageBuffer buffer);
+    bool Screencap(IMaaImageBuffer outImage);
 
     /// <summary>
     ///     Gets a task result.
     /// </summary>
-    /// <param name="task">The task name.</param>
-    /// <param name="buffer">The string buffer to receive the task result.</param>
+    /// <param name="taskName">The task name.</param>
+    /// <param name="outTaskResult">The string buffer to receive the task result.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    bool GetTaskResult(string task, IMaaStringBuffer buffer);
+    bool GetTaskResult(string taskName, IMaaStringBuffer outTaskResult);
 }

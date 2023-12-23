@@ -16,10 +16,10 @@ namespace MaaFramework.Binding.Native.Interop;
 public static partial class MaaRpc
 {
 
-    #region include/MaaRpc/MaaRpc.h, version: v1.1.1.
+    #region include/MaaRpc/MaaRpc.h, version: v1.4.0.
 
     [LibraryImport("MaaRpc")]
-    public static partial void MaaRpcStart([MarshalAs(UnmanagedType.LPUTF8Str)] string address);
+    public static partial MaaBool MaaRpcStart([MarshalAs(UnmanagedType.LPUTF8Str)] string address);
 
     [LibraryImport("MaaRpc")]
     public static partial void MaaRpcStop();
@@ -30,7 +30,7 @@ public static partial class MaaRpc
     #endregion
 
 
-    #region include/MaaRpc/MaaFramework/MaaDef.h, version: v1.1.1.
+    #region include/MaaRpc/MaaFramework/MaaDef.h, version: v1.4.0.
 
     #endregion
 

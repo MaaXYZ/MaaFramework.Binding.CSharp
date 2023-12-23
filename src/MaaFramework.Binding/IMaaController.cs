@@ -50,6 +50,13 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     IMaaJob PressKey(int keyCode);
 
     /// <summary>
+    ///     Input a text.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns>A input text job.</returns>
+    IMaaJob InputText(string text);
+
+    /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
     /// </summary>
     /// <param name="contact">The contact id.</param>

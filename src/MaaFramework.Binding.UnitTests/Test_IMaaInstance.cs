@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -14,7 +15,7 @@ public class Test_IMaaInstance
             MaaTypes.Native, new MaaInstance()
             {
                 Resource = new MaaResource(),
-                Controller = new MaaAdbController(Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None),
+                Controller = new MaaAdbController(Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None),
                 DisposeOptions = DisposeOptions.All,
             }
         },
@@ -22,7 +23,7 @@ public class Test_IMaaInstance
             MaaTypes.Grpc, new MaaInstanceGrpc(Common.GrpcChannel)
             {
                 Resource = new MaaResourceGrpc(Common.GrpcChannel),
-                Controller = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None),
+                Controller = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None),
                 DisposeOptions = DisposeOptions.All,
             }
         }
@@ -67,8 +68,8 @@ public class Test_IMaaInstance
     {
         using var nativeResource = new MaaResource();
         using var grpcResource = new MaaResourceGrpc(Common.GrpcChannel);
-        using var nativeController = new MaaAdbController(Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode, Common.AdbConfig, Common.AgentPath);
-        using var grpcController = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreenCapEncode, Common.AdbConfig, Common.AgentPath);
+        using var nativeController = new MaaAdbController(Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
+        using var grpcController = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
 
         using var native1 = new MaaInstance()
         {
@@ -136,11 +137,18 @@ public class Test_IMaaInstance
         Assert.IsNotNull(maaInstance);
 
         Assert.IsFalse(maaInstance.Initialized);
+
         maaInstance
-            .Controller
+            .Resource
+            .AppendPath(Common.ResourcePath)
+            .Wait()
+            .ThrowIfNot(MaaJobStatus.Success);
+        maaInstance.Controller
             .LinkStart()
-            .Wait();
+            .Wait()
+            .ThrowIfNot(MaaJobStatus.Success);
         Assert.IsTrue(maaInstance.Initialized);
+
         maaInstance.Resource.AppendPath(Common.ResourcePath);
         maaInstance.Resource.AppendPath(Common.ResourcePath);
         maaInstance.Resource.AppendPath(Common.ResourcePath);
@@ -181,7 +189,7 @@ public class Test_IMaaInstance
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_AppendTask_Abort(MaaTypes type, IMaaInstance maaInstance)
+    public void Interface_Abort(MaaTypes type, IMaaInstance maaInstance)
     {
         Assert.IsNotNull(maaInstance);
 

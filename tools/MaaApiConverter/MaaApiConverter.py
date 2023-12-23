@@ -2,13 +2,7 @@ import os
 import re
 import requests
 import pyperclip
-'''
-include/MaaFramework/Utility/MaaUtility.h Press any key to continue.
-include/MaaFramework/Utility/MaaUtility.h Copied to clipboard.
-include/MaaRpc/MaaFramework/MaaDef.h Press any key to continue.
-include/MaaRpc/MaaFramework/MaaDef.h Copied to clipboard.
-include/MaaToolKit/MaaToolKitDef.h Press any key to continue.
-'''
+
 repo = 'MaaAssistantArknights/MaaFramework'
 api_path = [
     'include/MaaFramework/MaaAPI.h',
@@ -24,15 +18,30 @@ def convert_cpp_header_to_csharp(header_path: str):
     # 获取文件
     content = get_header(header_path)
 
-    # 匹配函数声明
-    pattern = pattern = re.compile(r'(\w+)\s+(?:MAA_.*?_API)\s+(\w+)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
+    # 匹配函数指针声明
+    pattern = re.compile(r'(\w+)\s+\(\*(\w+)\)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
     matches = pattern.finditer(content)
+    # 转换为 C# 代码
+    for match in matches:
+        return_type = match.group(1)
+        function_name = ''.join(word[0].upper() + word[1:] for word in match.group(2).split('_'))
+        parameters = ' '.join(match.group(3).replace('//\n', '').split())
+        # 转换名称和参数类型
+        function_name = 'Abort' if function_name == 'Stop' else function_name
+        parameters = parameters.replace('int32_t*', 'ref int32_t')
+        parameters = parameters.replace('const MaaImageBufferHandle', 'MaaImageBufferHandle')
+        csharp_code = f'    public delegate {return_type} {function_name}({parameters});\n'
+        csharp_codes.append(csharp_code)
 
+    # 匹配函数声明
+    pattern = re.compile(r'(\w+)\s+(?:MAA_.*?_API)\s+(\w+)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
+    matches = pattern.finditer(content)
+    
     # 转换为 C# 代码
     for match in matches:
         return_type = match.group(1)
         function_name = match.group(2)
-        parameters = ' '.join(match.group(3).split())
+        parameters = ' '.join(match.group(3).replace('//\n', '').split())
 
         # 特定 API
         special_api_dict = {
@@ -74,11 +83,10 @@ def convert_cpp_header_to_csharp(header_path: str):
 def get_version() -> str:
     url = f'https://api.github.com/repos/{repo}/releases/latest'
     json = requests.get(url).json()
-    try:
+    if 'message' in json:
         print(json['message']) 
         exit(1)
-        # return 'main'
-    except:
+    else:
         return json['tag_name']
 
 def get_header(header_path: str):
@@ -92,6 +100,7 @@ def get_includes(header_path: str) -> list[str]:
 
 
 version = get_version()
+print("Current MaaFramework Version:", version)
 for path in api_path:
     convert_cpp_header_to_csharp(path)
     includes = get_includes(path)

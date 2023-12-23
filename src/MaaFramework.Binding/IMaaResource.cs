@@ -35,5 +35,13 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     /// <value>
     ///     A string if the hash was got successfully; otherwise, null.
     /// </value>
-    public string? Hash { get; }
+    string? Hash { get; }
+
+    /// <summary>
+    ///     Gets the string of current task list.
+    /// </summary>
+    /// <value>
+    ///     A string if the task list was got successfully; otherwise, null.
+    /// </value>
+    string? TaskList { get; }
 }

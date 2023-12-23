@@ -43,11 +43,11 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
     }
 
     /// <inheritdoc/>
-    public bool RunTask(string task, string param)
+    public bool RunTask(string taskName, string param)
     {
         try
         {
-            _client.run_task(new SyncContextRunTaskRequest { Handle = Handle, Task = task, Param = param, });
+            _client.run_task(new SyncContextRunTaskRequest { Handle = Handle, Task = taskName, Param = param, });
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
         {
@@ -58,15 +58,15 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
     }
 
     /// <inheritdoc/>
-    public bool RunRecognizer(IMaaImageBuffer image, string task, string taskParam, IMaaRectBuffer outBox, IMaaStringBuffer detailBuff)
-        => RunRecognizer((IMaaImageBuffer<string>)image, task, taskParam, (IMaaRectBuffer<string>)outBox, (IMaaStringBuffer<string>)detailBuff);
+    public bool RunRecognizer(IMaaImageBuffer image, string taskName, string taskParam, IMaaRectBuffer outBox, IMaaStringBuffer outDetail)
+        => RunRecognizer((IMaaImageBuffer<string>)image, taskName, taskParam, (IMaaRectBuffer<string>)outBox, (IMaaStringBuffer<string>)outDetail);
 
     /// <inheritdoc/>
-    public bool RunRecognizer(IMaaImageBuffer<string> image, string task, string taskParam, IMaaRectBuffer<string> outBox, IMaaStringBuffer<string> detailBuff)
+    public bool RunRecognizer(IMaaImageBuffer<string> image, string taskName, string taskParam, IMaaRectBuffer<string> outBox, IMaaStringBuffer<string> outDetail)
     {
         ArgumentNullException.ThrowIfNull(image);
         ArgumentNullException.ThrowIfNull(outBox);
-        ArgumentNullException.ThrowIfNull(detailBuff);
+        ArgumentNullException.ThrowIfNull(outDetail);
 
         try
         {
@@ -74,14 +74,14 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
             {
                 Handle = Handle,
                 ImageHandle = image.Handle,
-                Task = task,
+                Task = taskName,
                 Param = taskParam,
             });
             outBox.SetValues(x: response.Box.Xy.X,
                              y: response.Box.Xy.Y,
                              width: response.Box.Wh.Width,
                              height: response.Box.Wh.Height);
-            detailBuff.SetValue(response.Detail);
+            outDetail.SetValue(response.Detail);
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
         {
@@ -92,11 +92,11 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
     }
 
     /// <inheritdoc/>
-    public bool RunAction(string task, string taskParam, IMaaRectBuffer curBox, string curRecDetail)
-        => RunAction(task, taskParam, (IMaaRectBuffer<string>)curBox, curRecDetail);
+    public bool RunAction(string taskName, string taskParam, IMaaRectBuffer curBox, string curRecDetail)
+        => RunAction(taskName, taskParam, (IMaaRectBuffer<string>)curBox, curRecDetail);
 
     /// <inheritdoc/>
-    public bool RunAction(string task, string taskParam, IMaaRectBuffer<string> curBox, string curRecDetail)
+    public bool RunAction(string taskName, string taskParam, IMaaRectBuffer<string> curBox, string curRecDetail)
     {
         ArgumentNullException.ThrowIfNull(curBox);
 
@@ -105,7 +105,7 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
             _client.run_action(new SyncContextRunActionRequest
             {
                 Handle = Handle,
-                Task = task,
+                Task = taskName,
                 Param = taskParam,
                 Detail = curRecDetail,
                 Box = new Rect
@@ -192,6 +192,10 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
     }
 
     /// <inheritdoc/>
+    bool IMaaSyncContext.InputText(string text)
+        => throw new NotImplementedException();
+
+    /// <inheritdoc/>
     public bool TouchDown(int contact, int x, int y, int pressure)
     {
         try
@@ -262,17 +266,17 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
     }
 
     /// <inheritdoc/>
-    public bool Screencap(IMaaImageBuffer buffer)
-        => Screencap((IMaaImageBuffer<string>)buffer);
+    public bool Screencap(IMaaImageBuffer outImage)
+        => Screencap((IMaaImageBuffer<string>)outImage);
 
     /// <inheritdoc/>
-    public bool Screencap(IMaaImageBuffer<string> buffer)
+    public bool Screencap(IMaaImageBuffer<string> outImage)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(outImage);
 
         try
         {
-            _client.screencap(new SyncContextScreencapRequest { Handle = Handle, ImageHandle = buffer.Handle, });
+            _client.screencap(new SyncContextScreencapRequest { Handle = Handle, ImageHandle = outImage.Handle, });
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
         {
@@ -283,17 +287,17 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
     }
 
     /// <inheritdoc/>
-    public bool GetTaskResult(string task, IMaaStringBuffer buffer)
-        => GetTaskResult(task, (IMaaStringBuffer<string>)buffer);
+    public bool GetTaskResult(string taskName, IMaaStringBuffer outTaskResult)
+        => GetTaskResult(taskName, (IMaaStringBuffer<string>)outTaskResult);
 
     /// <inheritdoc/>
-    public bool GetTaskResult(string task, IMaaStringBuffer<string> buffer)
+    public bool GetTaskResult(string taskName, IMaaStringBuffer<string> outTaskResult)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
+        ArgumentNullException.ThrowIfNull(outTaskResult);
 
         try
         {
-            _client.task_result(new HandleStringRequest { Handle = Handle, Str = buffer.ToString(), });
+            _client.task_result(new HandleStringRequest { Handle = Handle, Str = outTaskResult.ToString(), });
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
         {

@@ -138,4 +138,18 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
             return ret ? buffer.ToString() : null;
         }
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceGetTaskList"/>.
+    /// </remarks>
+    public string? TaskList
+    {
+        get
+        {
+            using var buffer = new MaaStringBuffer();
+            var ret = MaaResourceGetTaskList(Handle, buffer.Handle).ToBoolean();
+            return ret ? buffer.ToString() : null;
+        }
+    }
 }

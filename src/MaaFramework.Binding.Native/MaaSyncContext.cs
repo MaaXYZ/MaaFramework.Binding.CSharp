@@ -32,44 +32,38 @@ public class MaaSyncContext : IMaaSyncContext<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSyncContextRunTask"/>.
     /// </remarks>
-    public bool RunTask(string task, string param)
-        => MaaSyncContextRunTask(Handle, task, param).ToBoolean();
+    public bool RunTask(string taskName, string param)
+        => MaaSyncContextRunTask(Handle, taskName, param).ToBoolean();
+
+    /// <inheritdoc/>
+    bool IMaaSyncContext.RunRecognizer(IMaaImageBuffer image, string taskName, string taskParam, IMaaRectBuffer outBox, IMaaStringBuffer outDetail)
+        => RunRecognizer((IMaaImageBuffer<nint>)image, taskName, taskParam, (IMaaRectBuffer<nint>)outBox, (IMaaStringBuffer<nint>)outDetail);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSyncContextRunRecognizer"/>.
     /// </remarks>
-    public bool RunRecognizer(IMaaImageBuffer image, string task, string taskParam, IMaaRectBuffer outBox, IMaaStringBuffer detailBuff)
-        => RunRecognizer((IMaaImageBuffer<nint>)image, task, taskParam, (IMaaRectBuffer<nint>)outBox, (IMaaStringBuffer<nint>)detailBuff);
-
-    /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaSyncContextRunRecognizer"/>.
-    /// </remarks>
-    public bool RunRecognizer(IMaaImageBuffer<nint> image, string task, string taskParam, IMaaRectBuffer<nint> outBox, IMaaStringBuffer<nint> detailBuff)
+    public bool RunRecognizer(IMaaImageBuffer<nint> image, string taskName, string taskParam, IMaaRectBuffer<nint> outBox, IMaaStringBuffer<nint> outDetail)
     {
         ArgumentNullException.ThrowIfNull(image);
         ArgumentNullException.ThrowIfNull(outBox);
-        ArgumentNullException.ThrowIfNull(detailBuff);
+        ArgumentNullException.ThrowIfNull(outDetail);
 
-        return MaaSyncContextRunRecognizer(Handle, image.Handle, task, taskParam, outBox.Handle, detailBuff.Handle).ToBoolean();
+        return MaaSyncContextRunRecognizer(Handle, image.Handle, taskName, taskParam, outBox.Handle, outDetail.Handle).ToBoolean();
     }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaSyncContextRunAction"/>.
-    /// </remarks>
-    public bool RunAction(string task, string taskParam, IMaaRectBuffer curBox, string curRecDetail)
-        => RunAction(task, taskParam, (IMaaRectBuffer<nint>)curBox, curRecDetail);
+    bool IMaaSyncContext.RunAction(string taskName, string taskParam, IMaaRectBuffer curBox, string curRecDetail)
+        => RunAction(taskName, taskParam, (IMaaRectBuffer<nint>)curBox, curRecDetail);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSyncContextRunAction"/>.
     /// </remarks>
-    public bool RunAction(string task, string taskParam, IMaaRectBuffer<nint> curBox, string curRecDetail)
+    public bool RunAction(string taskName, string taskParam, IMaaRectBuffer<nint> curBox, string curRecDetail)
     {
         ArgumentNullException.ThrowIfNull(curBox);
-        return MaaSyncContextRunAction(Handle, task, taskParam, curBox.Handle, curRecDetail).ToBoolean();
+        return MaaSyncContextRunAction(Handle, taskName, taskParam, curBox.Handle, curRecDetail).ToBoolean();
     }
 
     /// <inheritdoc/>
@@ -95,6 +89,13 @@ public class MaaSyncContext : IMaaSyncContext<nint>
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaSyncContextInputText"/>.
+    /// </remarks>
+    public bool InputText(string text)
+        => MaaSyncContextInputText(Handle, text).ToBoolean();
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaSyncContextTouchDown"/>.
     /// </remarks>
     public bool TouchDown(int contact, int x, int y, int pressure)
@@ -115,36 +116,30 @@ public class MaaSyncContext : IMaaSyncContext<nint>
         => MaaSyncContextTouchUp(Handle, contact).ToBoolean();
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaSyncContextScreencap"/>.
-    /// </remarks>
-    public bool Screencap(IMaaImageBuffer buffer)
-        => Screencap((IMaaImageBuffer<nint>)buffer);
+    bool IMaaSyncContext.Screencap(IMaaImageBuffer outImage)
+        => Screencap((IMaaImageBuffer<nint>)outImage);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSyncContextScreencap"/>.
     /// </remarks>
-    public bool Screencap(IMaaImageBuffer<nint> buffer)
+    public bool Screencap(IMaaImageBuffer<nint> outImage)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
-        return MaaSyncContextScreencap(Handle, buffer.Handle).ToBoolean();
+        ArgumentNullException.ThrowIfNull(outImage);
+        return MaaSyncContextScreencap(Handle, outImage.Handle).ToBoolean();
     }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaSyncContextGetTaskResult"/>.
-    /// </remarks>
-    public bool GetTaskResult(string task, IMaaStringBuffer buffer)
-        => GetTaskResult(task, (IMaaStringBuffer<nint>)buffer);
+    bool IMaaSyncContext.GetTaskResult(string taskName, IMaaStringBuffer outTaskResult)
+        => GetTaskResult(taskName, (IMaaStringBuffer<nint>)outTaskResult);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSyncContextGetTaskResult"/>.
     /// </remarks>
-    public bool GetTaskResult(string task, IMaaStringBuffer<nint> buffer)
+    public bool GetTaskResult(string taskName, IMaaStringBuffer<nint> outTaskResult)
     {
-        ArgumentNullException.ThrowIfNull(buffer);
-        return MaaSyncContextGetTaskResult(Handle, task, buffer.Handle).ToBoolean();
+        ArgumentNullException.ThrowIfNull(outTaskResult);
+        return MaaSyncContextGetTaskResult(Handle, taskName, outTaskResult.Handle).ToBoolean();
     }
 }

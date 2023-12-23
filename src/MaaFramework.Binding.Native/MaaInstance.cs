@@ -56,7 +56,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// </remarks>
     protected override void ReleaseHandle()
     {
-        MaaDestroy(Handle);
+        // Cannot destroy Instance before disposing Controller and Resource.
 
         if (DisposeOptions.HasFlag(DisposeOptions.Controller))
         {
@@ -67,6 +67,8 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
         {
             Resource.Dispose();
         }
+
+        MaaDestroy(Handle);
     }
 
     /// <inheritdoc/>
@@ -110,7 +112,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
             ArgumentNullException.ThrowIfNull(value);
 
             MaaBindException.ThrowIf(
-                MaaBindResource(Handle, value.Handle).ToBoolean() is not true,
+                !MaaBindResource(Handle, value.Handle).ToBoolean(),
                 MaaBindException.ResourceMessage);
             _resource = value;
         }
@@ -134,7 +136,7 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
             ArgumentNullException.ThrowIfNull(value);
 
             MaaBindException.ThrowIf(
-                MaaBindController(Handle, value.Handle).ToBoolean() is not true,
+                !MaaBindController(Handle, value.Handle).ToBoolean(),
                 MaaBindException.ControllerMessage);
             _controller = value;
         }

@@ -16,16 +16,16 @@ namespace MaaFramework.Binding.Native.Interop;
 public static partial class MaaSyncContext
 {
 
-    #region include/MaaFramework/Task/MaaSyncContext.h, version: v1.1.1.
+    #region include/MaaFramework/Task/MaaSyncContext.h, version: v1.4.0.
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextRunTask(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string param);
+    public static partial MaaBool MaaSyncContextRunTask(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_name, [MarshalAs(UnmanagedType.LPUTF8Str)] string param);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextRunRecognizer(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, /* out */ MaaRectHandle out_box, /* out */ MaaStringBufferHandle detail_buff);
+    public static partial MaaBool MaaSyncContextRunRecognizer(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_name, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, /* out */ MaaRectHandle out_box, /* out */ MaaStringBufferHandle out_detail);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextRunAction(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, MaaRectHandle cur_box, [MarshalAs(UnmanagedType.LPUTF8Str)] string cur_rec_detail);
+    public static partial MaaBool MaaSyncContextRunAction(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_name, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_param, MaaRectHandle cur_box, [MarshalAs(UnmanagedType.LPUTF8Str)] string cur_rec_detail);
 
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaSyncContextClick(MaaSyncContextHandle sync_context, int32_t x, int32_t y);
@@ -37,6 +37,9 @@ public static partial class MaaSyncContext
     public static partial MaaBool MaaSyncContextPressKey(MaaSyncContextHandle sync_context, int32_t keycode);
 
     [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaSyncContextInputText(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
+
+    [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaSyncContextTouchDown(MaaSyncContextHandle sync_context, int32_t contact, int32_t x, int32_t y, int32_t pressure);
 
     [LibraryImport("MaaFramework")]
@@ -46,10 +49,10 @@ public static partial class MaaSyncContext
     public static partial MaaBool MaaSyncContextTouchUp(MaaSyncContextHandle sync_context, int32_t contact);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextScreencap(MaaSyncContextHandle sync_context, /* out */ MaaImageBufferHandle buffer);
+    public static partial MaaBool MaaSyncContextScreencap(MaaSyncContextHandle sync_context, /* out */ MaaImageBufferHandle out_image);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaSyncContextGetTaskResult(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task, /* out */ MaaStringBufferHandle buffer);
+    public static partial MaaBool MaaSyncContextGetTaskResult(MaaSyncContextHandle sync_context, [MarshalAs(UnmanagedType.LPUTF8Str)] string task_name, /* out */ MaaStringBufferHandle out_task_result);
 
     #endregion
 

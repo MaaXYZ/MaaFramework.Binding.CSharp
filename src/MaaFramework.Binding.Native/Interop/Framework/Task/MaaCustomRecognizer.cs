@@ -15,25 +15,12 @@ namespace MaaFramework.Binding.Native.Interop;
 public static class MaaRecognizerApi
 {
 
-    #region include/MaaFramework/Task/MaaCustomRecognizer.h, version: v1.1.1.
+    #region include/MaaFramework/Task/MaaCustomRecognizer.h, version: v1.4.0.
+
+    public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail);
 
     #endregion
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="sync_context">The MaaSyncContextHandle.</param>
-    /// <param name="image">The MaaImageBufferHandle.</param>
-    /// <param name="task_name">The MaaStringView.</param>
-    /// <param name="custom_recognition_param">The MaaStringView.</param>
-    /// <param name="recognizer_arg">The MaaTransparentArg.</param>
-    /// <param name="out_box">The MaaRectHandle.</param>
-    /// <param name="detail_buff">The MaaStringBufferHandle.</param>
-    /// <returns></returns>
-    public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name,
-                           MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg,
-                           /*out*/ MaaRectHandle out_box,
-                           /*out*/ MaaStringBufferHandle detail_buff);
 }
 
 /// <summary>
