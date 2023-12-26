@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- Package Properties -->
+    <PropertyGroup>
+        <PackageId>Maa.Framework</PackageId>
+        <Title>Maa Framework Metapackage</Title>
+        <description>Maa.Framework is a metapackage with references to Maa.Framework.Binding.Native, Maa.AgentBinary.</description>
+        <PackageTags>MAA;c-sharp;cross-platform;dotnet;wrapper</PackageTags>
+
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+
+        <!-- Don't include empty DLL or PDB in metapackage -->
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IncludeSymbols>false</IncludeSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+
+        <!-- Avoid NU5128 warning. TFM in dependencies group of the nuspec must match lib/ref content. -->
+        <None Include="lib\**\*" Pack="true" PackagePath="lib" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MaaFramework.Binding.Native\MaaFramework.Binding.Native.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- PrivateAssets set to None to ensure the build targets/props are propagated to parent project -->
+        <PackageReference Include="Maa.AgentBinary" />
+    </ItemGroup>
+
+</Project>
