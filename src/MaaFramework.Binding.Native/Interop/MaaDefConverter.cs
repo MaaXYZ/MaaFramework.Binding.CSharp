@@ -24,6 +24,12 @@ public static class MaaDefConverter
         => 0 != value;
 
     /// <summary>
+    ///     Converts a <see cref="bool"/> to a MaaBool (<see cref="MaaBool"/>).
+    /// </summary>
+    public static MaaBool ToMaaBool(this bool value)
+        => (MaaBool)(value ? 1 : 0);
+
+    /// <summary>
     ///     Converts a <see cref="int"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
     /// </summary>
     public static MaaOptionValue[] ToMaaOptionValues(this int value)

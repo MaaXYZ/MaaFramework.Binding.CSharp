@@ -31,7 +31,7 @@ def convert_cpp_header_to_csharp(header_path: str):
         parameters = ' '.join(match.group(3).replace('//\n', '').split())
         # 转换名称和参数类型
         function_name = 'Abort' if function_name == 'Stop' else function_name
-        parameters = parameters.replace('int32_t*', 'ref int32_t')
+        parameters = parameters.replace('int32_t*', 'out int32_t')
         parameters = parameters.replace('const MaaImageBufferHandle', 'MaaImageBufferHandle')
         parameters = ','.join(p for p in parameters.split(',') if 'TransparentArg' not in p)
         csharp_code = f'    public delegate {return_type} {function_name}({parameters});\n'

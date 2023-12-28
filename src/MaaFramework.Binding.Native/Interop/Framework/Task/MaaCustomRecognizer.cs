@@ -27,8 +27,16 @@ public static class MaaRecognizerApi
 ///     MaaCustomRecognizerApi
 /// </summary>
 [NativeMarshalling(typeof(MaaCustomRecognizerApiMarshaller))]
-public class MaaCustomRecognizerApi : IMaaDef
+public class MaaCustomRecognizerApi
 {
+    public static MaaCustomRecognizerApi Convert(Custom.MaaCustomRecognizerApi api) => new()
+    {
+        Analyze = (MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail)
+           => api.Analyze
+                 .Invoke(new Binding.MaaSyncContext(sync_context), new Buffers.MaaImageBuffer(image), task_name.ToStringUTF8(), custom_recognition_param.ToStringUTF8(), new Buffers.MaaRectBuffer(out_box), new Buffers.MaaStringBuffer(out_detail))
+                 .ToMaaBool(),
+    };
+
     public required MaaRecognizerApi.Analyze Analyze { get; init; }
 }
 

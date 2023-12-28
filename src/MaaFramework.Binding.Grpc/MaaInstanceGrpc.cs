@@ -1,6 +1,7 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Grpc.Abstractions;
 using MaaFramework.Binding.Grpc.Interop;
 using System.Diagnostics.CodeAnalysis;
@@ -161,23 +162,19 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// <inheritdoc/>
     public bool Initialized => _client.inited(new HandleRequest { Handle = Handle, }).Bool;
 
-    /// <summary>
-    ///     Registers a <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> named <paramref name="name"/> in the <see cref="MaaInstanceGrpc"/>.
-    /// </summary>
-    /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <inheritdoc/>
-    public bool Register<T>(string name, T custom, nint arg) where T : IMaaDef
+    public bool Register<T>(string name, T custom) where T : IMaaCustomTask
     {
         switch (custom)
         {
             case MaaCustomRecognizerApi recognizer:
                 var streamingCallRecognizer = _client.register_custom_recognizer();
-                Task.Run(() => CallCustomRecognizer(recognizer, streamingCallRecognizer, arg));
+                Task.Run(() => CallCustomRecognizer(recognizer, streamingCallRecognizer));
                 RegisterCustomRecognizer(name, streamingCallRecognizer).Wait();
                 return true;
             case MaaCustomActionApi action:
                 var streamingCallAction = _client.register_custom_action();
-                Task.Run(() => CallCustomAction(action, streamingCallAction, arg));
+                Task.Run(() => CallCustomAction(action, streamingCallAction));
                 RegisterCustomAction(name, streamingCallAction).Wait();
                 return true;
             default:
@@ -197,10 +194,9 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         await streamingCall.RequestStream.CompleteAsync();
     }
 
-    private static async Task CallCustomRecognizer(
+    private async Task CallCustomRecognizer(
         MaaCustomRecognizerApi recognizer,
-        AsyncDuplexStreamingCall<CustomRecognizerRequest, CustomRecognizerResponse> streamingCall,
-        nint arg)
+        AsyncDuplexStreamingCall<CustomRecognizerRequest, CustomRecognizerResponse> streamingCall)
     {
         await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
         {
@@ -210,13 +206,13 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
                     using (var box = new MaaRectBufferGrpc())
                     {
                         using var str = new MaaStringBufferGrpc();
+                        using var image = new MaaImageBufferGrpc(Channel, response.Analyze.ImageHandle);
 
                         var ret = recognizer.Analyze.Invoke(
-                            response.Analyze.Context,
-                            response.Analyze.ImageHandle,
+                            new MaaSyncContextGrpc(Channel, response.Analyze.Context),
+                            image,
                             response.Analyze.Task,
                             response.Analyze.Param,
-                            arg,
                             box,
                             str);
 
@@ -256,11 +252,10 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         await streamingCall.RequestStream.CompleteAsync();
     }
 
-    private static async Task CallCustomAction(
+    private async Task CallCustomAction(
         //string name,
         MaaCustomActionApi action,
-        AsyncDuplexStreamingCall<CustomActionRequest, CustomActionResponse> streamingCall,
-        nint arg)
+        AsyncDuplexStreamingCall<CustomActionRequest, CustomActionResponse> streamingCall)
     {
         await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
         {
@@ -269,29 +264,29 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
                 case CustomActionResponse.CommandOneofCase.Run:
                     using (var box = new MaaRectBufferGrpc())
                     {
-                        using var str = new MaaStringBufferGrpc();
+                        box.X = response.Run.Box.Xy.X;
+                        box.Y = response.Run.Box.Xy.Y;
+                        box.Width = response.Run.Box.Wh.Width;
+                        box.Height = response.Run.Box.Wh.Height;
 
                         var ret = action.Run.Invoke(
-                            response.Run.Context,
+                            new MaaSyncContextGrpc(Channel, response.Run.Context),
                             response.Run.Task,
                             response.Run.Param,
                             box,
-                            str,
-                            arg);
+                            response.Run.Detail);
 
                         await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
                         {
                             Ok = ret,
-                            //Init = new CustomActionInit { Handle = Handle, Name = name },
                         });
                     }
                     break;
                 case CustomActionResponse.CommandOneofCase.Stop:
-                    action.Abort.Invoke(arg);
+                    action.Abort.Invoke();
                     await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
                     {
-                        // Ok = ret,
-                        //Init = new CustomActionInit { Handle = Handle, Name = name },
+                        Ok = true,
                     });
                     break;
                 default:
@@ -302,12 +297,8 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         streamingCall.Dispose();
     }
 
-    /// <summary>
-    ///     Unregisters a <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> named <paramref name="name"/> in the <see cref="MaaInstanceGrpc"/>.
-    /// </summary>
-    /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <inheritdoc/>
-    public bool Unregister<T>(string name) where T : IMaaDef
+    public bool Unregister<T>(string name) where T : IMaaCustomTask
     {
         switch (typeof(T).Name)
         {
@@ -322,12 +313,8 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         }
     }
 
-    /// <summary>
-    ///     Clears <see cref="MaaCustomRecognizerApi"/>s or <see cref="MaaCustomActionApi"/>s in the <see cref="MaaInstanceGrpc"/>.
-    /// </summary>
-    /// <typeparam name="T"><see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <inheritdoc/>
-    public bool Clear<T>() where T : IMaaDef
+    public bool Clear<T>() where T : IMaaCustomTask
     {
         switch (typeof(T).Name)
         {

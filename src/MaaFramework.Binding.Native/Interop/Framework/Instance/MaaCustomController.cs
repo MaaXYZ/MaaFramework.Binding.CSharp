@@ -24,7 +24,7 @@ public static class MaaControllerApi
 
     public delegate MaaBool RequestUuid( /* out */ MaaStringBufferHandle buffer);
 
-    public delegate MaaBool RequestResolution( /* out */ ref int32_t width, /* out */ ref int32_t height);
+    public delegate MaaBool RequestResolution( /* out */ out int32_t width, /* out */ out int32_t height);
 
     public delegate MaaBool StartApp(MaaStringView intent);
 
@@ -54,8 +54,64 @@ public static class MaaControllerApi
 ///     MaaCustomControllerApi
 /// </summary>
 [NativeMarshalling(typeof(MaaCustomControllerApiMarshaller))]
-public class MaaCustomControllerApi : IMaaDef
+public class MaaCustomControllerApi
 {
+    public static MaaCustomControllerApi Convert(Custom.MaaCustomControllerApi api) => new()
+    {
+        Connect = ()
+            => api.Connect
+                  .Invoke()
+                  .ToMaaBool(),
+        RequestUuid = ( /* out */ MaaStringBufferHandle buffer)
+            => api.RequestUuid
+                  .Invoke(new Buffers.MaaStringBuffer(buffer))
+                  .ToMaaBool(),
+        RequestResolution = ( /* out */ out int32_t width, /* out */ out int32_t height)
+            => api.RequestResolution
+                  .Invoke(out width, out height)
+                  .ToMaaBool(),
+        StartApp = (MaaStringView intent)
+            => api.StartApp
+                  .Invoke(intent.ToStringUTF8())
+                  .ToMaaBool(),
+        StopApp = (MaaStringView intent)
+            => api.StopApp
+                  .Invoke(intent.ToStringUTF8())
+                  .ToMaaBool(),
+        Screencap = ( /* out */ MaaImageBufferHandle buffer)
+            => api.Screencap
+                  .Invoke(new Buffers.MaaImageBuffer(buffer))
+                  .ToMaaBool(),
+        Click = (int32_t x, int32_t y)
+            => api.Click
+                  .Invoke(x, y)
+                  .ToMaaBool(),
+        Swipe = (int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t duration)
+            => api.Swipe
+                  .Invoke(x1, y1, x2, y2, duration)
+                  .ToMaaBool(),
+        TouchDown = (int32_t contact, int32_t x, int32_t y, int32_t pressure)
+            => api.TouchDown
+                  .Invoke(contact, x, y, pressure)
+                  .ToMaaBool(),
+        TouchMove = (int32_t contact, int32_t x, int32_t y, int32_t pressure)
+            => api.TouchMove
+                  .Invoke(contact, x, y, pressure)
+                  .ToMaaBool(),
+        TouchUp = (int32_t contact)
+            => api.TouchUp
+                  .Invoke(contact)
+                  .ToMaaBool(),
+        PressKey = (int32_t keycode)
+            => api.PressKey
+                  .Invoke(keycode)
+                  .ToMaaBool(),
+        InputText = (MaaStringView text)
+            => api.InputText
+                  .Invoke(text.ToStringUTF8())
+                  .ToMaaBool(),
+    };
+
     public required MaaControllerApi.Connect Connect { get; init; }
     public required MaaControllerApi.RequestUuid RequestUuid { get; init; }
     public required MaaControllerApi.RequestResolution RequestResolution { get; init; }

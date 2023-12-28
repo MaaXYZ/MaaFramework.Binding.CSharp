@@ -14,7 +14,7 @@ public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<s
     private readonly ImageClient _client;
     private readonly List<MemoryHandle> _memoryHandles = new();
 
-    /// <inheritdoc cref="MaaImageBufferGrpc(string, GrpcChannel)"/>
+    /// <inheritdoc cref="MaaImageBufferGrpc(GrpcChannel, string)"/>
     public MaaImageBufferGrpc(GrpcChannel channel)
         : base(invalidHandleValue: string.Empty)
     {
@@ -27,7 +27,7 @@ public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<s
     /// </summary>
     /// <param name="handle">The MaaImageBufferHandle.</param>
     /// <param name="channel">The channel to use to make remote calls.</param>
-    public MaaImageBufferGrpc(string handle, GrpcChannel channel)
+    public MaaImageBufferGrpc(GrpcChannel channel, string handle)
         : base(invalidHandleValue: string.Empty)
     {
         _client = new ImageClient(channel);

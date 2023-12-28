@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Custom;
 
 namespace MaaFramework.Binding;
 
@@ -45,32 +46,36 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// </value>
     bool Initialized { get; }
 
+
     /// <summary>
-    ///     Registers a custom recognizer or action named <paramref name="name"/> in the <see cref="IMaaInstance"/>.
+    ///     Registers a <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> named <paramref name="name"/> in the <see cref="IMaaInstance"/>.
     /// </summary>
+    /// <typeparam name="T">The <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <param name="name">The name.</param>
     /// <param name="custom">The MaaCustomRecognizerApi or MaaCustomActionApi.</param>
     /// <returns>
     ///     true if the custom recognizer or action was registered successfully; otherwise, false.
     /// </returns>
-    bool Register<T>(string name, T custom) where T : IMaaDef;
+    bool Register<T>(string name, T custom) where T : IMaaCustomTask;
 
     /// <summary>
-    ///     Unregisters a custom recognizer or action named <paramref name="name"/> in the <see cref="IMaaInstance"/>.
+    ///     Unregisters a <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> named <paramref name="name"/> in the <see cref="IMaaInstance"/>.
     /// </summary>
+    /// <typeparam name="T">The <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <param name="name">The name of recognizer.</param>
     /// <returns>
     ///     true if the custom recognizer or action was unregistered successfully; otherwise, false.
     /// </returns>
-    bool Unregister<T>(string name) where T : IMaaDef;
+    bool Unregister<T>(string name) where T : IMaaCustomTask;
 
     /// <summary>
-    ///     Clears custom recognizers or actions in the <see cref="IMaaInstance"/>.
+    ///     Clears <see cref="MaaCustomRecognizerApi"/>s or <see cref="MaaCustomActionApi"/>s in the <see cref="IMaaInstance"/>.
     /// </summary>
+    /// <typeparam name="T">THe <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
     /// <returns>
     ///     true if custom recognizers or actions were cleared successfully; otherwise, false.
     /// </returns>
-    bool Clear<T>() where T : IMaaDef;
+    bool Clear<T>() where T : IMaaCustomTask;
 
     /// <summary>
     ///     Appends a async job of executing a maa task, could be called multiple times.
