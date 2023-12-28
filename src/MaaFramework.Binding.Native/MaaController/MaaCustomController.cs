@@ -10,24 +10,23 @@ public class MaaCustomController : MaaController
 {
 #pragma warning disable S4487 // Unread "private" fields should be removed
 #pragma warning disable IDE0052 // 删除未读的私有成员
-    private readonly MaaCustomControllerApi _customController;
+    // Due to use customMarshaller, _api cannot be modified externally.
+    private readonly MaaCustomControllerApi _api;
 #pragma warning restore IDE0052 // 删除未读的私有成员
 #pragma warning restore S4487 // Unread "private" fields should be removed
 
     /// <summary>
     ///     Creates a <see cref="MaaCustomController"/> instance.
     /// </summary>
-    /// <param name="customController">The MaaCustomControllerApi.</param>
-    /// <param name="handleArg">The MaaTransparentArg.</param>
-    /// <param name="maaCallbackTransparentArg">The MaaCallbackTransparentArg.</param>
+    /// <param name="api">The MaaCustomControllerApi.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCustomControllerCreate"/>.
     /// </remarks>
-    public MaaCustomController(MaaCustomControllerApi customController, MaaTransparentArg handleArg, MaaCallbackTransparentArg maaCallbackTransparentArg)
+    public MaaCustomController(MaaCustomControllerApi api)
         : base()
     {
-        var handle = MaaCustomControllerCreate(ref customController, handleArg, MaaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaCustomControllerCreate(ref api, nint.Zero, MaaApiCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
-        _customController = customController;
+        _api = api;
     }
 }

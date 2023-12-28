@@ -20,20 +20,13 @@ public class MaaCallbackEventArgs : EventArgs
     public string Details { get; }
 
     /// <summary>
-    ///     MaaCallbackTransparentArg.
-    /// </summary>
-    public nint Arg { get; }
-
-    /// <summary>
     ///      Creates a <see cref="MaaCallbackEventArgs"/> instance.
     /// </summary>
     /// <param name="message">The callback message.</param>
     /// <param name="details">The callback details json.</param>
-    /// <param name="arg">The MaaCallbackTransparentArg.</param>
-    public MaaCallbackEventArgs(string message, string details, nint arg)
+    public MaaCallbackEventArgs(string message, string details)
     {
         Message = message;
         Details = details;
-        Arg = arg;
     }
 }

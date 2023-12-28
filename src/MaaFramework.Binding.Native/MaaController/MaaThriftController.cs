@@ -7,12 +7,6 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaThriftController : MaaController
 {
-    /// <inheritdoc cref="MaaThriftController(ThriftControllerType, string, int, string, MaaCallbackTransparentArg)"/>
-    public MaaThriftController(ThriftControllerType type, string host, int port, string config)
-        : this(type, host, port, config, MaaCallbackTransparentArg.Zero)
-    {
-    }
-
     /// <summary>
     ///     Creates a <see cref="MaaThriftController"/> instance.
     /// </summary>
@@ -20,13 +14,12 @@ public class MaaThriftController : MaaController
     /// <param name="host">The host.</param>
     /// <param name="port">The port.</param>
     /// <param name="config">The config.</param>
-    /// <param name="maaCallbackTransparentArg">The MaaCallbackTransparentArg.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaThriftControllerCreate"/>.
     /// </remarks>
-    public MaaThriftController(ThriftControllerType type, string host, int port, string config, MaaCallbackTransparentArg maaCallbackTransparentArg)
+    public MaaThriftController(ThriftControllerType type, string host, int port, string config)
     {
-        var handle = MaaThriftControllerCreate((MaaThriftControllerType)type, host, port, config, MaaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaThriftControllerCreate((MaaThriftControllerType)type, host, port, config, MaaApiCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
     }
 }

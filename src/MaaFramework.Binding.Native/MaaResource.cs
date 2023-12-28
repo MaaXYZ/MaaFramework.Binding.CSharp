@@ -11,22 +11,15 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
 {
-    /// <inheritdoc cref="MaaResource(MaaCallbackTransparentArg)"/>
-    public MaaResource()
-        : this(MaaCallbackTransparentArg.Zero)
-    {
-    }
-
     /// <summary>
     ///     Creates a <see cref="MaaResource"/> instance.
     /// </summary>
-    /// <param name="maaCallbackTransparentArg">The maaCallbackTransparentArg.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceCreate"/>.
     /// </remarks>
-    public MaaResource(MaaCallbackTransparentArg maaCallbackTransparentArg)
+    public MaaResource()
     {
-        var handle = MaaResourceCreate(MaaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaResourceCreate(MaaApiCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
     }
 
@@ -36,19 +29,12 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     {
     }
 
-    /// <inheritdoc cref="MaaResource(MaaCallbackTransparentArg, CheckStatusOption, string[])"/>
-    public MaaResource(CheckStatusOption check, params string[] paths)
-    : this(MaaCallbackTransparentArg.Zero, check, paths)
-    {
-    }
-
-    /// <param name="maaCallbackTransparentArg">The maaCallbackTransparentArg.</param>
     /// <param name="check">Checks AppendPath(path).Wait() status if true; otherwise, not checks.</param>
     /// <param name="paths">The paths of maa resource.</param>
     /// <exception cref="MaaJobStatusException" />
-    /// <inheritdoc cref="MaaResource(MaaCallbackTransparentArg)"/>
-    public MaaResource(MaaCallbackTransparentArg maaCallbackTransparentArg, CheckStatusOption check, params string[] paths)
-        : this(maaCallbackTransparentArg)
+    /// <inheritdoc cref="MaaResource()"/>
+    public MaaResource(CheckStatusOption check, params string[] paths)
+        : this()
     {
         ArgumentNullException.ThrowIfNull(paths);
 

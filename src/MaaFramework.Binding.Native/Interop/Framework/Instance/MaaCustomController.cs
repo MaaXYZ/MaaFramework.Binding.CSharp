@@ -20,31 +20,31 @@ public static class MaaControllerApi
 
     #region include/MaaFramework/Instance/MaaCustomController.h, version: v1.4.0.
 
-    public delegate MaaBool Connect(MaaTransparentArg handle_arg);
+    public delegate MaaBool Connect();
 
-    public delegate MaaBool RequestUuid(MaaTransparentArg handle_arg, /* out */ MaaStringBufferHandle buffer);
+    public delegate MaaBool RequestUuid( /* out */ MaaStringBufferHandle buffer);
 
-    public delegate MaaBool RequestResolution(MaaTransparentArg handle_arg, /* out */ ref int32_t width, /* out */ ref int32_t height);
+    public delegate MaaBool RequestResolution( /* out */ ref int32_t width, /* out */ ref int32_t height);
 
-    public delegate MaaBool StartApp(MaaStringView intent, MaaTransparentArg handle_arg);
+    public delegate MaaBool StartApp(MaaStringView intent);
 
-    public delegate MaaBool StopApp(MaaStringView intent, MaaTransparentArg handle_arg);
+    public delegate MaaBool StopApp(MaaStringView intent);
 
-    public delegate MaaBool Screencap(MaaTransparentArg handle_arg, /* out */ MaaImageBufferHandle buffer);
+    public delegate MaaBool Screencap( /* out */ MaaImageBufferHandle buffer);
 
-    public delegate MaaBool Click(int32_t x, int32_t y, MaaTransparentArg handle_arg);
+    public delegate MaaBool Click(int32_t x, int32_t y);
 
-    public delegate MaaBool Swipe(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t duration, MaaTransparentArg handle_arg);
+    public delegate MaaBool Swipe(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t duration);
 
-    public delegate MaaBool TouchDown(int32_t contact, int32_t x, int32_t y, int32_t pressure, MaaTransparentArg handle_arg);
+    public delegate MaaBool TouchDown(int32_t contact, int32_t x, int32_t y, int32_t pressure);
 
-    public delegate MaaBool TouchMove(int32_t contact, int32_t x, int32_t y, int32_t pressure, MaaTransparentArg handle_arg);
+    public delegate MaaBool TouchMove(int32_t contact, int32_t x, int32_t y, int32_t pressure);
 
-    public delegate MaaBool TouchUp(int32_t contact, MaaTransparentArg handle_arg);
+    public delegate MaaBool TouchUp(int32_t contact);
 
-    public delegate MaaBool PressKey(int32_t keycode, MaaTransparentArg handle_arg);
+    public delegate MaaBool PressKey(int32_t keycode);
 
-    public delegate MaaBool InputText(MaaStringView text, MaaTransparentArg handle_arg);
+    public delegate MaaBool InputText(MaaStringView text);
 
     #endregion
 

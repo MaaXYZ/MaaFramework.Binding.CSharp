@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import requests
 import pyperclip
 
@@ -17,6 +18,8 @@ def convert_cpp_header_to_csharp(header_path: str):
 
     # 获取文件
     content = get_header(header_path)
+    # 输出过时信息
+    print('\n'.join(line for line in content.split('\n') if 'deprecate' in line.lower()))
 
     # 匹配函数指针声明
     pattern = re.compile(r'(\w+)\s+\(\*(\w+)\)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
@@ -30,6 +33,7 @@ def convert_cpp_header_to_csharp(header_path: str):
         function_name = 'Abort' if function_name == 'Stop' else function_name
         parameters = parameters.replace('int32_t*', 'ref int32_t')
         parameters = parameters.replace('const MaaImageBufferHandle', 'MaaImageBufferHandle')
+        parameters = ','.join(p for p in parameters.split(',') if 'TransparentArg' not in p)
         csharp_code = f'    public delegate {return_type} {function_name}({parameters});\n'
         csharp_codes.append(csharp_code)
 
@@ -81,6 +85,8 @@ def convert_cpp_header_to_csharp(header_path: str):
     input(f'Press any key to continue.')
 
 def get_version() -> str:
+    if len(sys.argv) > 1:
+        return sys.argv[1]
     url = f'https://api.github.com/repos/{repo}/releases/latest'
     json = requests.get(url).json()
     if 'message' in json:

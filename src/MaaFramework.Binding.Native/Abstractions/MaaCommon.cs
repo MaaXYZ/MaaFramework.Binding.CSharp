@@ -42,8 +42,7 @@ public abstract class MaaCommon<TEnum> : MaaDisposableHandle<nint>, IMaaCommon, 
     {
         Callback?.Invoke(this, new MaaCallbackEventArgs(
             msg.ToStringUTF8() ?? string.Empty,
-            detail.ToStringUTF8() ?? "{}",
-            arg));
+            detail.ToStringUTF8() ?? "{}"));
     }
 
     /// <summary>

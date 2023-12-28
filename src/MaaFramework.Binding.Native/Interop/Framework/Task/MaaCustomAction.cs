@@ -17,9 +17,9 @@ public static class MaaActionApi
 
     #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.4.0.
 
-    public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg);
+    public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail);
 
-    public delegate void Abort(MaaTransparentArg action_arg);
+    public delegate void Abort();
 
     #endregion
 

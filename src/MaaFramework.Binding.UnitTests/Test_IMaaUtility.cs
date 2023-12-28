@@ -75,7 +75,7 @@ public class Test_IMaaMaaUtility
         {
             await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
             {
-                Common.Callback(this, new MaaCallbackEventArgs(response.Msg, response.Detail, nint.Zero));
+                Common.Callback(this, new MaaCallbackEventArgs(response.Msg, response.Detail));
             }
 
             streamingCall.Dispose();
@@ -113,7 +113,7 @@ public class Test_IMaaMaaUtility
         {
             await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
             {
-                Common.Callback(this, new MaaCallbackEventArgs(response.Msg, response.Detail, nint.Zero));
+                Common.Callback(this, new MaaCallbackEventArgs(response.Msg, response.Detail));
             }
 
             streamingCall.Dispose();

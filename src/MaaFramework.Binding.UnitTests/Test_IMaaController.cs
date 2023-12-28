@@ -87,15 +87,6 @@ public class Test_IMaaController
             Common.AgentPath,
             CheckStatusOption.None,
             LinkOption.Start);
-        using var native4 = new MaaAdbController(
-            Common.AdbPath,
-            Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
-            Common.AdbConfig,
-            Common.AgentPath,
-            nint.Zero,
-            CheckStatusOption.ThrowIfNotSuccess,
-            LinkOption.Start);
 
         using var grpc1 = new MaaAdbControllerGrpc(
             Common.GrpcChannel,

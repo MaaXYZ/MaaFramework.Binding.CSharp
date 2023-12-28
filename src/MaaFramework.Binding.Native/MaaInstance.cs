@@ -13,32 +13,25 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     private IMaaResource<nint> _resource = default!;
     private IMaaController<nint> _controller = default!;
 
-    /// <inheritdoc cref="MaaInstance(MaaCallbackTransparentArg)"/>
-    public MaaInstance()
-        : this(MaaCallbackTransparentArg.Zero)
-    {
-    }
-
     /// <summary>
     ///     Creates a <see cref="MaaInstance"/> instance.
     /// </summary>
-    /// <param name="maaCallbackTransparentArg">The MaaCallbackTransparentArg.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCreate"/>.
     /// </remarks>
-    public MaaInstance(MaaCallbackTransparentArg maaCallbackTransparentArg)
+    public MaaInstance()
     {
-        var handle = MaaCreate(MaaApiCallback, maaCallbackTransparentArg);
+        var handle = MaaCreate(MaaApiCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
     }
 
     /// <param name="resource">The resource.</param>
     /// <param name="controller">The controller.</param>
     /// <param name="disposeOptions">The dispose options.</param>
-    /// <inheritdoc cref="MaaInstance(MaaCallbackTransparentArg)"/>
+    /// <inheritdoc cref="MaaInstance()"/>
     [SetsRequiredMembers]
     public MaaInstance(IMaaResource<nint> resource, IMaaController<nint> controller, DisposeOptions disposeOptions)
-        : this(MaaCallbackTransparentArg.Zero)
+        : this()
     {
         Resource = resource;
         Controller = controller;
@@ -159,17 +152,17 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRegisterCustomRecognizer"/> and <see cref="MaaRegisterCustomAction"/>.
     /// </remarks>
-    public bool Register<T>(string name, T custom, nint arg) where T : IMaaDef
+    public bool Register<T>(string name, T custom) where T : IMaaDef
     {
         var ret = false;
         switch (custom)
         {
             case MaaCustomRecognizerApi recognizer:
-                ret = MaaRegisterCustomRecognizer(Handle, name, ref recognizer, arg).ToBoolean();
+                ret = MaaRegisterCustomRecognizer(Handle, name, ref recognizer, nint.Zero).ToBoolean();
                 if (ret) _recognizers[name] = recognizer;
                 return ret;
             case MaaCustomActionApi action:
-                ret = MaaRegisterCustomAction(Handle, name, ref action, arg).ToBoolean();
+                ret = MaaRegisterCustomAction(Handle, name, ref action, nint.Zero).ToBoolean();
                 if (ret) _actions[name] = action;
                 return ret;
             default:

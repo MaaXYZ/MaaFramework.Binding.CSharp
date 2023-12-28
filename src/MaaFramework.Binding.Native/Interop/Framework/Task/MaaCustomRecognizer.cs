@@ -17,7 +17,7 @@ public static class MaaRecognizerApi
 
     #region include/MaaFramework/Task/MaaCustomRecognizer.h, version: v1.4.0.
 
-    public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail);
+    public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail);
 
     #endregion
 

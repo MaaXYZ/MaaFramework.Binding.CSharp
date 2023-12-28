@@ -77,13 +77,7 @@ public class Test_IMaaInstance
             Controller = nativeController,
             DisposeOptions = DisposeOptions.None,
         };
-        using var native2 = new MaaInstance(nint.Zero)
-        {
-            Resource = nativeResource,
-            Controller = nativeController,
-            DisposeOptions = DisposeOptions.None,
-        };
-        using var native3 = new MaaInstance(nativeResource, nativeController, DisposeOptions.None);
+        using var native2 = new MaaInstance(nativeResource, nativeController, DisposeOptions.None);
 
         using var grpc1 = new MaaInstanceGrpc(Common.GrpcChannel)
         {

@@ -18,12 +18,8 @@ public abstract class MaaCommonGrpc : MaaDisposableHandle<string>, IMaaCommon
     /// </summary>
     /// <param name="msg">The MaaStringView.</param>
     /// <param name="detail">The MaaStringView.</param>
-    /// <param name="arg">The MaaCallbackTransparentArg.</param>
-    /// <remarks>
-    ///     Usually invoked by MaaFramework.
-    /// </remarks>
-    protected virtual void OnCallback(string msg, string detail, nint arg)
-        => Callback?.Invoke(this, new MaaCallbackEventArgs(msg, detail, arg));
+    protected virtual void OnCallback(string msg, string detail)
+        => Callback?.Invoke(this, new MaaCallbackEventArgs(msg, detail));
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
@@ -63,7 +59,7 @@ public abstract class MaaCommonGrpc : MaaDisposableHandle<string>, IMaaCommon
         {
             await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
             {
-                OnCallback(response.Msg, response.Detail, nint.Zero);
+                OnCallback(response.Msg, response.Detail);
             }
 
             streamingCall.Dispose();

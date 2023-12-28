@@ -50,11 +50,10 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// </summary>
     /// <param name="name">The name.</param>
     /// <param name="custom">The MaaCustomRecognizerApi or MaaCustomActionApi.</param>
-    /// <param name="arg">The MaaTransparentArg.</param>
     /// <returns>
     ///     true if the custom recognizer or action was registered successfully; otherwise, false.
     /// </returns>
-    bool Register<T>(string name, T custom, nint arg) where T : IMaaDef;
+    bool Register<T>(string name, T custom) where T : IMaaDef;
 
     /// <summary>
     ///     Unregisters a custom recognizer or action named <paramref name="name"/> in the <see cref="IMaaInstance"/>.

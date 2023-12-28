@@ -38,10 +38,8 @@ public class Test_IMaaResource
     public void CreateInstances()
     {
         using var native1 = new MaaResource();
-        using var native2 = new MaaResource(nint.Zero);
-        using var native3 = new MaaResource(Common.ResourcePath, Common.ResourcePath);
-        using var native4 = new MaaResource(CheckStatusOption.None, Common.ResourcePath);
-        using var native5 = new MaaResource(nint.Zero, CheckStatusOption.None, Common.ResourcePath);
+        using var native2 = new MaaResource(Common.ResourcePath, Common.ResourcePath);
+        using var native3 = new MaaResource(CheckStatusOption.None, Common.ResourcePath);
 
         using var grpc1 = new MaaResourceGrpc(Common.GrpcChannel);
         using var grpc2 = new MaaResourceGrpc(Common.GrpcChannel, Common.ResourcePath, Common.ResourcePath);
