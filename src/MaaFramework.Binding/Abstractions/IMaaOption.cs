@@ -9,10 +9,10 @@ public interface IMaaOption<in TOption> where TOption : Enum
     /// <summary>
     ///     Sets value to a option.
     /// </summary>
-    /// <typeparam name="TValue">The type specified by the <paramref name="opt"/>.</typeparam>
+    /// <typeparam name="T">The type specified by the <paramref name="opt"/>(see remarks of enumerations).</typeparam>
     /// <param name="opt">The option.</param>
     /// <param name="value">The value.</param>
     /// <returns>true if the option was setted successfully; otherwise, false.</returns>
     /// <exception cref="InvalidOperationException"></exception>
-    bool SetOption<TValue>(TOption opt, TValue value);
+    bool SetOption<T>(TOption opt, T value);
 }

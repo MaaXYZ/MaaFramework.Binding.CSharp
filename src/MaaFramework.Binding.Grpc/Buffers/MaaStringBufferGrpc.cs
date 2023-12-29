@@ -1,6 +1,4 @@
-﻿using MaaFramework.Binding.Abstractions;
-
-namespace MaaFramework.Binding.Buffers;
+﻿namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
 ///     A class providing a reference implementation for Maa String Buffer section.

@@ -4,7 +4,6 @@ using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Grpc.Abstractions;
 using MaaFramework.Binding.Grpc.Interop;
 using static MaaFramework.Binding.Grpc.Interop.Controller;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace MaaFramework.Binding;
 
@@ -175,8 +174,8 @@ public class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
     }
 
     /// <inheritdoc/>
-    public bool SetParam(IMaaJob job, string param)
-        => false;
+    bool Abstractions.IMaaPost.SetParam(IMaaJob job, string param)
+        => throw new InvalidOperationException();
 
     /// <inheritdoc/>
     public MaaJobStatus GetStatus(IMaaJob job)

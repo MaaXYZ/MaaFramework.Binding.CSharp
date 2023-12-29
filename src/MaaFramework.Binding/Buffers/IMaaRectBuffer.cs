@@ -5,6 +5,7 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     An interface defining wrapped members for MaaRectBuffer with generic handle.
 /// </summary>
+/// <typeparam name="T">The type of handle.</typeparam>
 public interface IMaaRectBuffer<out T> : IMaaRectBuffer, IMaaDisposableHandle<T>
 {
 }
@@ -45,9 +46,8 @@ public interface IMaaRectBuffer : IDisposable
     /// <param name="y">The vertical coordinate.</param>
     /// <param name="width">The width.</param>
     /// <param name="height">The height.</param>
-    /// <exception cref="InvalidOperationException" />
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    void SetValues(int x, int y, int width, int height);
+    bool SetValues(int x, int y, int width, int height);
 
     /// <summary>
     ///     Gets values of a MaaRectBuffer.

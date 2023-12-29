@@ -5,6 +5,7 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     An interface defining wrapped members for MaaImageBuffer with generic handle.
 /// </summary>
+/// <typeparam name="T">The type of handle.</typeparam>
 public interface IMaaImageBuffer<out T> : IMaaImageBuffer, IMaaDisposableHandle<T>
 {
 }
@@ -29,12 +30,6 @@ public interface IMaaImageBuffer : IDisposable
     bool Clear();
 
     /// <summary>
-    ///     Gets the image raw data.
-    /// </summary>
-    /// <returns>The raw data of image.</returns>
-    nint GetRawData();
-
-    /// <summary>
     ///     Gets the image info.
     /// </summary>
     /// <value>
@@ -43,26 +38,10 @@ public interface IMaaImageBuffer : IDisposable
     ImageInfo Info { get; }
 
     /// <summary>
-    ///     Sets the image raw data.
-    /// </summary>
-    /// <param name="data">The raw data of image.</param>
-    /// <param name="width">The width of image.</param>
-    /// <param name="height">The height of image.</param>
-    /// <param name="type">The type of image.</param>
-    /// <returns>true if the image raw data was setted successfully; otherwise, false.</returns>
-    /// <remarks>
-    ///     The data is cv::Mat::data.
-    /// </remarks>
-    bool SetRawData(nint data, int width, int height, int type);
-
-    /// <summary>
     ///     Gets the image encoded data.
     /// </summary>
     /// <param name="size">The image encoded size.</param>
-    /// <returns>The encoded data of image.</returns>
-    /// <remarks>
-    ///     The data is a PNG image.
-    /// </remarks>
+    /// <returns>The encoded data of image(PNG).</returns>
     nint GetEncodedData(out ulong size);
 
     /// <summary>

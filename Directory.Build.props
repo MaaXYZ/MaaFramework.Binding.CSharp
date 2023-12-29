@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>preview</LangVersion>
     <TargetFramework>net7.0</TargetFramework>
-    <CodeAnalysisRuleSet>$(SolutionDir)Directory.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <!-- Unit Test Properties -->

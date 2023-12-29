@@ -13,15 +13,12 @@ public static class MaaRpc
     ///     Starts Maa Grpc server.
     /// </summary>
     /// <param name="address">The listening address. (ip:port)</param>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <returns>true if the maa rpc server started successfully; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRpcStart"/>.
     /// </remarks>
-    public static void Start(string address)
-    {
-        if (!MaaRpcStart(address).ToBoolean())
-            throw new InvalidOperationException();
-    }
+    public static bool Start(string address)
+        => MaaRpcStart(address).ToBoolean();
 
     /// <summary>
     ///     Stops Maa Grpc server.

@@ -15,15 +15,15 @@ global using MaaStatus = System.Int32;
 global using MaaLoggingLevel = System.Int32;
 // enum LoggingLevel
 
-global using MaaId = System.Int64;
+global using MaaId = System.Int64; // Also global using in MaaFramework.Binding
 global using MaaCtrlId = System.Int64;
 global using MaaResId = System.Int64;
 global using MaaTaskId = System.Int64;
 // const MaaInvalidId
 
 global using MaaOption = System.Int32;
-global using MaaOptionValue = System.Byte; // ref MaaOptionValue
-global using MaaOptionValueSize = System.UInt64; // MaaOptionValue.Length
+global using MaaOptionValue = System.Byte;
+global using MaaOptionValueSize = System.UInt64;
 
 global using MaaGlobalOption = System.Int32;
 // enum GlobalOption

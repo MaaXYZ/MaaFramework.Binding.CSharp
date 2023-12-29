@@ -1,6 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Native.Interop;
-using System.Reflection.Metadata;
 using static MaaFramework.Binding.Native.Interop.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -97,21 +96,20 @@ public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetRect"/>.
     /// </remarks>
-    public void SetValues(int x, int y, int width, int height)
-    {
-        if (!MaaSetRect(Handle, x, y, width, height).ToBoolean())
-            throw new InvalidOperationException();
-    }
+    public bool SetValues(int x, int y, int width, int height)
+        => MaaSetRect(Handle, x, y, width, height).ToBoolean();
+
+    /// <inheritdoc cref="SetValues(int, int, int, int)"/>
+    public static bool Set(MaaRectHandle handle, int x, int y, int width, int height)
+        => MaaSetRect(handle, x, y, width, height).ToBoolean();
 
     /// <inheritdoc/>
     public void GetValues(out int x, out int y, out int width, out int height)
-        => Get(Handle, out x, out y, out width, out height);
-
-    /// <inheritdoc cref="SetValues(int, int, int, int)"/>
-    public static void Set(MaaRectHandle handle, int x, int y, int width, int height)
     {
-        if (!MaaSetRect(handle, x, y, width, height).ToBoolean())
-            throw new InvalidOperationException();
+        x = MaaGetRectX(Handle);
+        y = MaaGetRectY(Handle);
+        width = MaaGetRectW(Handle);
+        height = MaaGetRectH(Handle);
     }
 
     /// <inheritdoc cref="GetValues(out int, out int, out int, out int)"/>

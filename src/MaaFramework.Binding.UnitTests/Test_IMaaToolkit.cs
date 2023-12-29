@@ -1,7 +1,4 @@
-﻿using MaaFramework.Binding.Grpc.Interop;
-using MaaFramework.Binding.Native.Interop;
-
-namespace MaaFramework.Binding.UnitTests;
+﻿namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
 ///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolKit"/> and <see cref="MaaToolKitGrpc"/>.
@@ -39,12 +36,10 @@ public class Test_IMaaToolkit
     public void Interface_Init_Uninit(MaaTypes type, IMaaToolkit maaToolkit)
     {
         Assert.IsNotNull(maaToolkit);
-        // In Maa.Framework.Runtimes v1.1.1.
-        // Notes: maaToolkit.Init() will change the log path.
-        MaaUtilityData[type].SetOption(GlobalOption.LogDir, Common.DebugPath);
+        // In Maa.Framework.Runtimes v1.4.0.
+        // Notes: maaToolkit.Init() will change the log path to ./debug/maa.log.
         Assert.IsTrue(
             maaToolkit.Init());
-        //MaaUtilityData[type].SetOption(GlobalOption.Logging, Common.DebugPath);
         Assert.IsTrue(
             maaToolkit.Uninit());
     }

@@ -1,5 +1,4 @@
 ﻿using Grpc.Net.Client;
-using System.Threading.Channels;
 
 namespace MaaFramework.Binding;
 

@@ -1,7 +1,6 @@
 ﻿using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Native.Abstractions;
 using MaaFramework.Binding.Native.Interop;
-using System;
 using static MaaFramework.Binding.Native.Interop.MaaResource;
 
 namespace MaaFramework.Binding;
@@ -66,11 +65,8 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Always return false.
-    /// </remarks>
-    public bool SetParam(IMaaJob job, string param)
-        => false;
+    bool Abstractions.IMaaPost.SetParam(IMaaJob job, string param)
+        => throw new InvalidOperationException();
 
     /// <inheritdoc/>
     /// <remarks>

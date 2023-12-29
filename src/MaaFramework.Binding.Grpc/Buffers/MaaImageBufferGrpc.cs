@@ -12,7 +12,7 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<string>
 {
     private readonly ImageClient _client;
-    private readonly List<MemoryHandle> _memoryHandles = new();
+    private readonly List<MemoryHandle> _memoryHandles = [];
 
     /// <inheritdoc cref="MaaImageBufferGrpc(GrpcChannel, string)"/>
     public MaaImageBufferGrpc(GrpcChannel channel)
@@ -56,10 +56,6 @@ public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<s
     }
 
     /// <inheritdoc/>
-    nint IMaaImageBuffer.GetRawData()
-        => throw new NotImplementedException();
-
-    /// <inheritdoc/>
     public ImageInfo Info
     {
         get
@@ -75,17 +71,13 @@ public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<s
     }
 
     /// <inheritdoc/>
-    bool IMaaImageBuffer.SetRawData(nint data, int width, int height, int type)
-         => throw new NotImplementedException();
-
-    /// <inheritdoc/>
     public unsafe nint GetEncodedData(out ulong size)
     {
         var memory = _client.encoded(new HandleRequest { Handle = Handle, }).Buf.Memory;
-        var handle = memory.Pin();
-        _memoryHandles.Add(handle);
+        var memoryHandle = memory.Pin();
+        _memoryHandles.Add(memoryHandle);
         size = (ulong)memory.Length;
-        return (nint)handle.Pointer;
+        return (nint)memoryHandle.Pointer;
     }
 
     /// <inheritdoc/>

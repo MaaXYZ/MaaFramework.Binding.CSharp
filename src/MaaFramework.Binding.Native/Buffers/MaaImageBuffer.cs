@@ -49,7 +49,10 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     public bool Clear()
         => MaaClearImage(Handle).ToBoolean();
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Gets the image raw data.
+    /// </summary>
+    /// <returns>The raw data of image(cv::Mat::data).</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetImageRawData"/>.
     /// </remarks>
@@ -82,7 +85,14 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     /// </remarks>
     public int Type => MaaGetImageType(Handle);
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Sets the image raw data.
+    /// </summary>
+    /// <param name="data">The raw data of image.</param>
+    /// <param name="width">The width of image.</param>
+    /// <param name="height">The height of image.</param>
+    /// <param name="type">The type of image.</param>
+    /// <returns>true if the image raw data was setted successfully; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetImageRawData"/>.
     /// </remarks>
@@ -99,10 +109,21 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
         return MaaGetImageEncoded(Handle);
     }
 
+    /// <inheritdoc cref="GetEncodedData"/>
+    public static MaaImageEncodedData Get(MaaImageBufferHandle handle, out ulong size)
+    {
+        size = MaaGetImageEncodedSize(handle);
+        return MaaGetImageEncoded(handle);
+    }
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetImageEncoded"/>.
     /// </remarks>
     public bool SetEncodedData(MaaImageBufferHandle data, ulong size)
         => MaaSetImageEncoded(Handle, data, size).ToBoolean();
+
+    /// <inheritdoc cref="SetEncodedData"/>
+    public static bool Set(MaaImageBufferHandle handle, MaaImageBufferHandle data, ulong size)
+        => MaaSetImageEncoded(handle, data, size).ToBoolean();
 }

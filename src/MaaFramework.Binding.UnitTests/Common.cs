@@ -1,5 +1,4 @@
-﻿using Grpc.Core;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using MaaFramework.Binding.Abstractions;
 
 namespace MaaFramework.Binding.UnitTests;
@@ -18,7 +17,7 @@ public static class Common
     internal static string AdbPath { get; set; } = string.Empty;
     internal static string Address { get; set; } = string.Empty;
 
-    internal static string DebugPath { get; set; } = Path.GetFullPath("./debug"); // testContext.TestDir
+    internal static string DebugPath { get; set; } = Path.GetFullPath("./debug");
     internal static string ResourcePath { get; set; } = Path.GetFullPath("./SampleResource");
     internal static string AgentPath { get; set; } = Path.GetFullPath($"./MaaAgentBinary");
     internal static string AdbConfig { get; set; } = File.ReadAllText(Path.GetFullPath($"{ResourcePath}/controller_config.json"));
@@ -28,8 +27,6 @@ public static class Common
 
     private static void InitializeInfo(TestContext testContext)
     {
-        DebugPath = testContext.TestDir
-            ?? DebugPath;
         var devices = new MaaToolKit().Find();
 
         // 请修改 TestParam.runsettings，并在测试资源管理器——设置——配置运行设置
@@ -57,6 +54,11 @@ public static class Common
 
         new MaaUtility().SetOption(GlobalOption.LogDir, DebugPath);
         new MaaUtilityGrpc(GrpcChannel).SetOption(GlobalOption.LogDir, DebugPath);
+        Task.Run(() =>
+        {
+            MaaRpc.Wait();
+            Assert.Fail();
+        });
     }
 
     /// <summary>

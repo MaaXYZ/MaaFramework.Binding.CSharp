@@ -1,5 +1,4 @@
 ﻿using MaaFramework.Binding.Abstractions;
-using System.Security.Principal;
 
 namespace MaaFramework.Binding;
 

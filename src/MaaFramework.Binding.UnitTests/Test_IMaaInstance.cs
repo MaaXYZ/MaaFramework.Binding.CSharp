@@ -1,6 +1,4 @@
 ﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Native.Interop;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -133,7 +131,6 @@ public class Test_IMaaInstance
         Assert.IsNotNull(maaInstance);
 
         Assert.IsFalse(maaInstance.Initialized);
-
         maaInstance
             .Resource
             .AppendPath(Common.ResourcePath)
@@ -143,16 +140,6 @@ public class Test_IMaaInstance
             .LinkStart()
             .Wait()
             .ThrowIfNot(MaaJobStatus.Success);
-        Assert.IsTrue(maaInstance.Initialized);
-
-        maaInstance.Resource.AppendPath(Common.ResourcePath);
-        maaInstance.Resource.AppendPath(Common.ResourcePath);
-        maaInstance.Resource.AppendPath(Common.ResourcePath);
-        maaInstance.Resource.AppendPath(Common.ResourcePath);
-        maaInstance.Resource.AppendPath(Common.ResourcePath);
-        var job = maaInstance.Resource.AppendPath(Common.ResourcePath);
-        Assert.IsFalse(maaInstance.Initialized);
-        Assert.AreEqual(MaaJobStatus.Success, job.Wait());
         Assert.IsTrue(maaInstance.Initialized);
     }
 

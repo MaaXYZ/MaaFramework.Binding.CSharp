@@ -1,6 +1,5 @@
 ﻿using Grpc.Core;
 using MaaFramework.Binding.Grpc.Interop;
-using MaaFramework.Binding.Native.Interop;
 
 namespace MaaFramework.Binding.UnitTests;
 

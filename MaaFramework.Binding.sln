@@ -10,7 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
-		Directory.ruleset = Directory.ruleset
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -23,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Binding.Native
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Binding.Grpc", "src\MaaFramework.Binding.Grpc\MaaFramework.Binding.Grpc.csproj", "{0ECAD2D5-A482-4FC4-98CC-F7549EA0E491}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaaFramework", "src\MaaFramework\MaaFramework.csproj", "{1F349B98-6557-4CD2-8482-63B081C1C79F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework", "src\MaaFramework\MaaFramework.csproj", "{1F349B98-6557-4CD2-8482-63B081C1C79F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

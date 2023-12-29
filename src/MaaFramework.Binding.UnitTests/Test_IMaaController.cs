@@ -1,9 +1,6 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using MaaFramework.Binding.Abstractions;
+﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
-using System;
 using System.Runtime.InteropServices;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -146,7 +143,7 @@ public class Test_IMaaController
     {
         Assert.IsNotNull(job);
 
-        Assert.IsFalse(
+        Assert.ThrowsException<InvalidOperationException>(() =>
             job.SetParam("{}"));
         Assert.AreEqual(
             MaaJobStatus.Success, job.Wait());
@@ -158,7 +155,7 @@ public class Test_IMaaController
     {
         Assert.IsNotNull(job);
 
-        Assert.IsFalse(
+        Assert.ThrowsException<InvalidOperationException>(() =>
             job.SetParam("{}"));
         Assert.AreEqual(
             MaaJobStatus.Failed, job.Wait());
@@ -271,18 +268,16 @@ public class Test_IMaaController
         Marshal.Copy(encodedDataHandle, pngImageData, 0, (int)size);
         CollectionAssert.AreNotEqual(new byte[size], pngImageData);
 
-        if (type is MaaTypes.Grpc)
+        if (type is MaaTypes.Native)
         {
-            Assert.ThrowsException<NotImplementedException>(() => buffer.GetRawData());
-            return;
+            var nativeBuffer = buffer as MaaImageBuffer;
+            var info = buffer.Info;
+            var length = info.Width * info.Height * GetChannel(info.Type);
+            var rawDataHandle = nativeBuffer!.GetRawData();
+            var cv2MatData = new byte[length];
+            Marshal.Copy(rawDataHandle, cv2MatData, 0, length);
+            CollectionAssert.AreNotEqual(new byte[length], cv2MatData);
         }
-
-        var info = buffer.Info;
-        var length = info.Width * info.Height * GetChannel(info.Type);
-        var rawDataHandle = buffer.GetRawData();
-        var cv2MatData = new byte[length];
-        Marshal.Copy(rawDataHandle, cv2MatData, 0, length);
-        CollectionAssert.AreNotEqual(new byte[length], cv2MatData);
 
         static int GetChannel(int type)
         {

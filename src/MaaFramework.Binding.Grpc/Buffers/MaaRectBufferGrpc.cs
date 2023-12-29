@@ -1,6 +1,4 @@
-﻿using MaaFramework.Binding.Abstractions;
-
-namespace MaaFramework.Binding.Buffers;
+﻿namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
 ///     A class providing a reference implementation for Maa Rect Buffer section.
@@ -40,12 +38,13 @@ public class MaaRectBufferGrpc : IMaaRectBuffer
     public int Height { get; set; }
 
     /// <inheritdoc/>
-    public void SetValues(int x, int y, int width, int height)
+    public bool SetValues(int x, int y, int width, int height)
     {
         X = x;
         Y = y;
         Width = width;
         Height = height;
+        return true;
     }
 
     /// <inheritdoc/>

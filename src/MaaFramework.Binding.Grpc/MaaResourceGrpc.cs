@@ -68,11 +68,8 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
     }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Always return false.
-    /// </remarks>
-    public bool SetParam(IMaaJob job, string param)
-        => false;
+    bool Abstractions.IMaaPost.SetParam(IMaaJob job, string param)
+        => throw new InvalidOperationException();
 
     /// <inheritdoc/>
     public MaaJobStatus GetStatus(IMaaJob job)

@@ -2,7 +2,6 @@
 using MaaFramework.Binding.Native.Abstractions;
 using MaaFramework.Binding.Native.Interop;
 using static MaaFramework.Binding.Native.Interop.MaaController;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace MaaFramework.Binding;
 
@@ -32,7 +31,6 @@ public class MaaController : MaaCommon, IMaaController<nint>
     public bool SetOption<T>(ControllerOption opt, T value)
     {
         ArgumentNullException.ThrowIfNull(value);
-
 
         var bytes = opt switch
         {
@@ -139,11 +137,8 @@ public class MaaController : MaaCommon, IMaaController<nint>
     }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Always return false.
-    /// </remarks>
-    public bool SetParam(IMaaJob job, string param)
-        => false;
+    bool Abstractions.IMaaPost.SetParam(IMaaJob job, string param)
+        => throw new InvalidOperationException();
 
     /// <inheritdoc/>
     /// <remarks>

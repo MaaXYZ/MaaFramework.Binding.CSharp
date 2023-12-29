@@ -3,6 +3,7 @@
 /// <summary>
 ///     An abstract class providing a common mechanism for releasing handles from <see cref="MaaFramework"/>.
 /// </summary>
+/// <typeparam name="T">The type of handle.</typeparam>
 public abstract class MaaDisposableHandle<T> : MaaDisposable, IMaaDisposableHandle<T> where T : IEquatable<T>
 {
     /// <inheritdoc/>

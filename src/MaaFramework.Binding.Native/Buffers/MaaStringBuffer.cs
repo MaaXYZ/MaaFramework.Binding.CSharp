@@ -56,6 +56,10 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     public string GetValue()
         => IsEmpty ? string.Empty : MaaGetString(Handle).ToStringUTF8(Size);
 
+    /// <inheritdoc cref="GetValue"/>
+    public static string Get(MaaStringBufferHandle handle)
+        => MaaIsStringEmpty(handle).ToBoolean() ? string.Empty : MaaGetString(handle).ToStringUTF8(MaaGetStringSize(handle));
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetStringSize"/>.
@@ -75,6 +79,18 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
         }
 
         return MaaSetString(Handle, str).ToBoolean();
+    }
+
+    /// <inheritdoc cref="SetValue"/>
+    public static bool Set(MaaStringBufferHandle handle, string str, bool useEx = true)
+    {
+        if (useEx)
+        {
+            var bytes = str.ToBytes();
+            return MaaSetStringEx(handle, ref bytes[0], (MaaSize)bytes.LongLength).ToBoolean();
+        }
+
+        return MaaSetString(handle, str).ToBoolean();
     }
 
     /// <inheritdoc cref="GetValue"/>

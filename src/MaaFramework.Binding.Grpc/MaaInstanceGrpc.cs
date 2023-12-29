@@ -211,7 +211,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
                     }
                     break;
                 default:
-                    break;
+                    throw new NotImplementedException();
             }
         }
 
@@ -268,7 +268,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
                     });
                     break;
                 default:
-                    break;
+                    throw new NotImplementedException();
             }
         }
 

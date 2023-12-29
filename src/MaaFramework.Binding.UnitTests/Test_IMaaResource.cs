@@ -1,5 +1,4 @@
 ﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Native.Interop;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -66,7 +65,7 @@ public class Test_IMaaResource
     {
         Assert.IsNotNull(job);
 
-        Assert.IsFalse(
+        Assert.ThrowsException<InvalidOperationException>(() =>
             job.SetParam("{}"));
         Assert.AreEqual(
             MaaJobStatus.Success, job.Wait());
