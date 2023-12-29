@@ -9,7 +9,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaController"/>.
 /// </summary>
-public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
+public class MaaController : MaaCommon, IMaaController<nint>
 {
     /// <summary>
     ///     Creates a <see cref="MaaController"/> instance.
@@ -29,11 +29,23 @@ public class MaaController : MaaCommon<ControllerOption>, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerSetOption"/>.
     /// </remarks>
-    sealed protected override bool SetOption(ControllerOption opt, MaaOptionValue[] value)
+    public bool SetOption<T>(ControllerOption opt, T value)
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        return MaaControllerSetOption(Handle, (MaaCtrlOption)opt, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+
+        var bytes = opt switch
+        {
+            ControllerOption.Invalid => throw new InvalidOperationException(),
+            ControllerOption.ScreenshotTargetLongSide => value switch { int v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            ControllerOption.ScreenshotTargetShortSide => value switch { int v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            ControllerOption.DefaultAppPackageEntry => value switch { string v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            ControllerOption.DefaultAppPackage => value switch { string v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            ControllerOption.Recording => value switch { bool v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            _ => throw new NotImplementedException(),
+        };
+
+        return MaaControllerSetOption(Handle, (MaaCtrlOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();
     }
 
     /// <inheritdoc/>

@@ -34,52 +34,22 @@ public class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
         => _client.destroy(new HandleRequest { Handle = Handle, });
 
     /// <inheritdoc/>
-    public bool SetOption(ControllerOption opt, int value)
+    public bool SetOption<T>(ControllerOption opt, T value)
     {
-        var request = new ControllerSetOptionRequest { Handle = Handle, };
-        switch (opt)
+        ArgumentNullException.ThrowIfNull(value);
+
+        ControllerSetOptionRequest request = opt switch
         {
-            case ControllerOption.ScreenshotTargetLongSide:
-                request.LongSide = value;
-                break;
-            case ControllerOption.ScreenshotTargetShortSide:
-                request.ShortSide = value;
-                break;
-            default:
-                return false;
-        }
+            ControllerOption.Invalid => throw new InvalidOperationException(),
+            ControllerOption.ScreenshotTargetLongSide => value switch { int v => new() { LongSide = v }, _ => throw new InvalidOperationException(), },
+            ControllerOption.ScreenshotTargetShortSide => value switch { int v => new() { ShortSide = v }, _ => throw new InvalidOperationException(), },
+            ControllerOption.DefaultAppPackageEntry => value switch { string v => new() { DefPackageEntry = v }, _ => throw new InvalidOperationException(), },
+            ControllerOption.DefaultAppPackage => value switch { string v => new() { DefPackage = v }, _ => throw new InvalidOperationException(), },
+            // ControllerOption.Recording => value switch { bool v => new() { Recording = v }, _ => throw new InvalidOperationException(), },
+            _ => throw new NotImplementedException(),
+        };
 
-        return SetOption(request);
-    }
-
-    /// <inheritdoc/>
-    public bool SetOption(ControllerOption opt, bool value)
-        => false;
-
-    /// <inheritdoc/>
-    public bool SetOption(ControllerOption opt, string value)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(value);
-
-        var request = new ControllerSetOptionRequest { Handle = Handle, };
-        switch (opt)
-        {
-            case ControllerOption.DefaultAppPackageEntry:
-                request.DefPackageEntry = value;
-                break;
-            case ControllerOption.DefaultAppPackage:
-                request.DefPackage = value;
-                break;
-            default:
-                return false;
-        }
-
-        return SetOption(request);
-    }
-
-    /// <inheritdoc cref="SetOption(ControllerOption, int)"/>
-    protected bool SetOption(ControllerSetOptionRequest request)
-    {
+        request.Handle = Handle;
         try
         {
             _client.set_option(request);

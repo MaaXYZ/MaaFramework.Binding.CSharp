@@ -8,7 +8,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaInstance"/>.
 /// </summary>
-public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
+public class MaaInstance : MaaCommon, IMaaInstance<nint>
 {
     private IMaaResource<nint> _resource = default!;
     private IMaaController<nint> _controller = default!;
@@ -68,11 +68,17 @@ public class MaaInstance : MaaCommon<InstanceOption>, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetOption"/>.
     /// </remarks>
-    sealed protected override bool SetOption(InstanceOption opt, MaaOptionValue[] value)
+    public bool SetOption<T>(InstanceOption opt, T value)
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        return MaaSetOption(Handle, (MaaInstOption)opt, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+        MaaOptionValue[] bytes = opt switch
+        {
+            InstanceOption.Invalid => throw new InvalidOperationException(),
+            _ => throw new NotImplementedException(),
+        };
+
+        return MaaSetOption(Handle, (MaaInstOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();
     }
 
     /// <inheritdoc/>

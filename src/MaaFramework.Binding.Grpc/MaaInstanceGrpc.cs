@@ -73,33 +73,11 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     }
 
     /// <inheritdoc/>
-    public bool SetOption(InstanceOption opt, int value)
-        => false;
-
-    /// <inheritdoc/>
-    public bool SetOption(InstanceOption opt, bool value)
-        => false;
-
-    /// <inheritdoc/>
-    public bool SetOption(InstanceOption opt, string value)
-        => false;
-
-    /*
-    /// <inheritdoc cref="SetOption(InstanceOption, int)"/>
-    protected bool SetOption(SetInstanceOptionRequest request)
+    public bool SetOption<T>(InstanceOption opt, T value) => opt switch
     {
-        try
-        {
-            _client.set_option(request);
-        }
-        catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
-        {
-            return false;
-        }
-
-        return true;
-    }
-    */
+        InstanceOption.Invalid => throw new InvalidOperationException(),
+        _ => throw new NotImplementedException(),
+    };
 
     /// <inheritdoc/>
     IMaaResource IMaaInstance.Resource => Resource;

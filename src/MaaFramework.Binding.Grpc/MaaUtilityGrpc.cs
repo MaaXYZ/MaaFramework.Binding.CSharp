@@ -33,64 +33,26 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
     public string Version => _client.version(new EmptyRequest()).Str;
 
     /// <inheritdoc/>
-    public bool SetOption(GlobalOption opt, int value)
+    public bool SetOption<T>(GlobalOption opt, T value)
     {
-        var request = new SetGlobalOptionRequest();
-        switch (opt)
+        ArgumentNullException.ThrowIfNull(value);
+
+        SetGlobalOptionRequest request = opt switch
         {
-            case GlobalOption.StdoutLevel:
-                request.StdoutLevel = value;
-                break;
-            default:
-                return false;
-        }
+            GlobalOption.Invalid => throw new InvalidOperationException(),
+            GlobalOption.LogDir => value switch { string v => new() { LogDir = v }, _ => throw new InvalidOperationException(), },
+            GlobalOption.SaveDraw => value switch { bool v => new() { SaveDraw = v }, _ => throw new InvalidOperationException(), },
+            GlobalOption.Recording => value switch { bool v => new() { SaveDraw = v }, _ => throw new InvalidOperationException(), },
+            GlobalOption.ShowHitDraw => value switch { bool v => new() { SaveDraw = v }, _ => throw new InvalidOperationException(), },
+            GlobalOption.StdoutLevel => value switch
+            {
+                LoggingLevel v => new() { StdoutLevel = (int)v },
+                int v => new() { StdoutLevel = v },
+                _ => throw new InvalidOperationException(),
+            },
+            _ => throw new NotImplementedException(),
+        };
 
-        return SetOption(request);
-    }
-
-    /// <inheritdoc/>
-    public bool SetOption(GlobalOption opt, bool value)
-    {
-        var request = new SetGlobalOptionRequest();
-        switch (opt)
-        {
-            case GlobalOption.SaveDraw:
-                request.SaveDraw = value;
-                break;
-            case GlobalOption.Recording:
-                request.Recording = value;
-                break;
-            case GlobalOption.ShowHitDraw:
-                request.ShowHitDraw = value;
-                break;
-            default:
-                return false;
-        }
-
-        return SetOption(request);
-    }
-
-    /// <inheritdoc/>
-    public bool SetOption(GlobalOption opt, string value)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(value);
-
-        var request = new SetGlobalOptionRequest();
-        switch (opt)
-        {
-            case GlobalOption.LogDir:
-                request.LogDir = value;
-                break;
-            default:
-                return false;
-        }
-
-        return SetOption(request);
-    }
-
-    /// <inheritdoc cref="SetOption(GlobalOption, int)"/>
-    protected bool SetOption(SetGlobalOptionRequest request)
-    {
         try
         {
             _client.set_global_option(request);

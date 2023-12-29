@@ -15,28 +15,29 @@ public class MaaUtility : IMaaUtility
     public string Version => MaaVersion().ToStringUTF8();
 
     /// <inheritdoc/>
-    public bool SetOption(GlobalOption opt, int value)
-        => SetOption(opt, value.ToMaaOptionValues());
-
-    /// <inheritdoc/>
-    public bool SetOption(GlobalOption opt, bool value)
-        => SetOption(opt, value.ToMaaOptionValues());
-
-    /// <inheritdoc/>
-    public bool SetOption(GlobalOption opt, string value)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(value);
-        return SetOption(opt, value.ToMaaOptionValues());
-    }
-
-    /// <inheritdoc cref="SetOption(GlobalOption, int)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetGlobalOption"/>.
     /// </remarks>
-    protected static bool SetOption(GlobalOption opt, MaaOptionValue[] value)
+    public bool SetOption<T>(GlobalOption opt, T value)
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        return MaaSetGlobalOption((MaaGlobalOption)opt, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+        var bytes = opt switch
+        {
+            GlobalOption.Invalid => throw new InvalidOperationException(),
+            GlobalOption.LogDir => value switch { string v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            GlobalOption.SaveDraw => value switch { bool v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            GlobalOption.Recording => value switch { bool v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            GlobalOption.ShowHitDraw => value switch { bool v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
+            GlobalOption.StdoutLevel => value switch
+            {
+                LoggingLevel v => ((int)v).ToMaaOptionValues(),
+                int v => v.ToMaaOptionValues(),
+                _ => throw new InvalidOperationException(),
+            },
+            _ => throw new NotImplementedException(),
+        };
+
+        return MaaSetGlobalOption((MaaGlobalOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();
     }
 }

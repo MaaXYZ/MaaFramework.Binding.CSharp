@@ -6,7 +6,7 @@
 public enum ControllerOption
 {
     /// <summary>
-    ///     Invalid option
+    ///     Invalid option.
     /// </summary>
     Invalid = 0,
 
@@ -27,7 +27,7 @@ public enum ControllerOption
     ScreenshotTargetShortSide = 2,
 
     /// <summary>
-    ///     For StartApp
+    ///     For StartApp.
     /// </summary>
     /// <remarks>
     ///     value: <see cref="string"/>, eg: "com.hypergryph.arknights/com.u8.sdk.U8UnityContext"; val_size: <see cref="string"/> length
@@ -35,7 +35,7 @@ public enum ControllerOption
     DefaultAppPackageEntry = 3,
 
     /// <summary>
-    ///     For StopApp
+    ///     For StopApp.
     /// </summary>
     /// <remarks>
     ///     value: <see cref="string"/>, eg: "com.hypergryph.arknights"; val_size: <see cref="string"/> length

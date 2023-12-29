@@ -82,11 +82,14 @@ public class Test_IMaaResource
     {
         Assert.IsNotNull(maaResource);
 
-        var ret = Common.SetOption(maaResource, opt, arg);
         if (opt is ResourceOption.Invalid)
-            Assert.IsFalse(ret);
-        else
-            Assert.IsTrue(ret);
+        {
+            Assert.ThrowsException<InvalidOperationException>(() => maaResource.SetOption(opt, arg));
+            return;
+        }
+
+        Assert.IsTrue(
+            maaResource.SetOption(opt, arg));
     }
 
     [TestMethod]

@@ -92,33 +92,11 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
     public bool Loaded => _client.loaded(new HandleRequest { Handle = Handle, }).Bool;
 
     /// <inheritdoc/>
-    public bool SetOption(ResourceOption opt, int value)
-        => false;
-
-    /// <inheritdoc/>
-    public bool SetOption(ResourceOption opt, bool value)
-        => false;
-
-    /// <inheritdoc/>
-    public bool SetOption(ResourceOption opt, string value)
-        => false;
-
-    /*
-    /// <inheritdoc cref="SetOption(ResourceOption, int)"/>
-    protected bool SetOption(SetResourceOptionRequest request)
+    public bool SetOption<T>(ResourceOption opt, T value) => opt switch
     {
-        try
-        {
-            _client.set_option(request);
-        }
-        catch (RpcException ex) when (ex.StatusCode == StatusCode.Unknown)
-        {
-            return false;
-        }
-
-        return true;
-    }
-    */
+        ResourceOption.Invalid => throw new InvalidOperationException(),
+        _ => throw new NotImplementedException(),
+    };
 
     /// <inheritdoc/>
     public string? Hash

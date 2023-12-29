@@ -40,23 +40,25 @@ public class Test_IMaaMaaUtility
     }
 
     [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, "Anything")]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.LogDir, nameof(Common.DebugPath))]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.SaveDraw, false)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Recording, false)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, LoggingLevel.All)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 7)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.ShowHitDraw, false)]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, "Anything")]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, false)]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, 0)]
     public void Interface_SetOption(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
     {
         Assert.IsNotNull(maaUtility);
 
-        var ret = Common.SetOption(maaUtility, opt, arg);
         if (opt is GlobalOption.Invalid)
-            Assert.IsFalse(ret);
-        else
-            Assert.IsTrue(ret);
+        {
+            Assert.ThrowsException<InvalidOperationException>(() => maaUtility.SetOption(opt, arg));
+            return;
+        }
+
+        Assert.IsTrue(
+            maaUtility.SetOption(opt, arg));
     }
 
     [TestMethod]

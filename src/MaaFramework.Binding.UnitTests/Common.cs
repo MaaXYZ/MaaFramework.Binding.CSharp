@@ -78,20 +78,6 @@ public static class Common
         }
     }
 
-    internal static bool SetOption<T>(IMaaOption<T> maa, T opt, object arg) where T : Enum
-    {
-        ArgumentNullException.ThrowIfNull(maa);
-
-        return arg switch
-        {
-            int value => maa.SetOption(opt, value),
-            bool value => maa.SetOption(opt, value),
-            string value => maa.SetOption(opt, value),
-            Enum value => maa.SetOption(opt, value.GetHashCode()),
-            _ => throw new InvalidOperationException(),
-        };
-    }
-
     internal static void Callback(object? sender, MaaCallbackEventArgs e)
     {
         Assert.IsNotNull(sender);

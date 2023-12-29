@@ -3,20 +3,16 @@
 /// <summary>
 ///     An interface defining methods that set options for <see cref="MaaFramework"/>.
 /// </summary>
-public interface IMaaOption<in T> where T : Enum
+/// <typeparam name="TOption">The <see cref="ControllerOption"/>, <see cref="GlobalOption"/>, <see cref="InstanceOption"/>, <see cref="ResourceOption"/>.</typeparam>
+public interface IMaaOption<in TOption> where TOption : Enum
 {
     /// <summary>
     ///     Sets value to a option.
     /// </summary>
+    /// <typeparam name="TValue">The type specified by the <paramref name="opt"/>.</typeparam>
     /// <param name="opt">The option.</param>
     /// <param name="value">The value.</param>
     /// <returns>true if the option was setted successfully; otherwise, false.</returns>
-    bool SetOption(T opt, int value);
-
-    /// <inheritdoc cref="SetOption(T, int)"/>
-    bool SetOption(T opt, bool value);
-
-    /// <inheritdoc cref="SetOption(T, int)"/>
-    /// <exception cref="ArgumentException" />
-    bool SetOption(T opt, string value);
+    /// <exception cref="InvalidOperationException"></exception>
+    bool SetOption<TValue>(TOption opt, TValue value);
 }

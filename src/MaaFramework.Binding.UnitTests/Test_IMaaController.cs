@@ -116,23 +116,30 @@ public class Test_IMaaController
 #pragma warning restore S2699 // Tests should include assertions
 
     [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, "Anything")]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 1280)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 720)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackageEntry, "DefaultAppPackageEntry")]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackage, "DefaultAppPackage")]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Recording, false)]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, "Anything")]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, false)]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, 0)]
     public void Interface_SetOption(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);
 
-        var ret = Common.SetOption(maaController, opt, arg);
         if (opt is ControllerOption.Invalid)
-            Assert.IsFalse(ret);
-        else
-            Assert.IsTrue(ret);
+        {
+            Assert.ThrowsException<InvalidOperationException>(() => maaController.SetOption(opt, arg));
+            return;
+        }
+
+        if (opt is ControllerOption.Recording && type is MaaTypes.Grpc)
+        {
+            Assert.ThrowsException<NotImplementedException>(() => maaController.SetOption(opt, arg));
+            return;
+        }
+
+        Assert.IsTrue(
+            maaController.SetOption(opt, arg));
     }
 
     public static void Interface_IMaaPost_Success(IMaaJob job)

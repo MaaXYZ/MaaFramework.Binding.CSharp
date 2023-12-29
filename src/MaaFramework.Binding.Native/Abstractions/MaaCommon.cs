@@ -6,26 +6,8 @@ namespace MaaFramework.Binding.Native.Abstractions;
 /// <summary>
 ///     An abstract class providing common members for <see cref="MaaController"/>, <see cref="MaaInstance"/> and <see cref="MaaResource"/>.
 /// </summary>
-public abstract class MaaCommon<TEnum> : MaaDisposableHandle<nint>, IMaaCommon, IMaaOption<TEnum> where TEnum : Enum
+public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
 {
-    /// <inheritdoc/>
-    public bool SetOption(TEnum opt, int value)
-        => SetOption(opt, value.ToMaaOptionValues());
-
-    /// <inheritdoc/>
-    public bool SetOption(TEnum opt, bool value)
-        => SetOption(opt, value.ToMaaOptionValues());
-
-    /// <inheritdoc/>
-    public bool SetOption(TEnum opt, string value)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(value);
-        return SetOption(opt, value.ToMaaOptionValues());
-    }
-
-    /// <inheritdoc cref="SetOption(TEnum, int)"/>
-    protected abstract bool SetOption(TEnum opt, MaaOptionValue[] value);
-
     /// <inheritdoc/>
     public event EventHandler<MaaCallbackEventArgs>? Callback;
 

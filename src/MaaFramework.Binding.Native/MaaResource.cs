@@ -9,7 +9,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaResource"/>.
 /// </summary>
-public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
+public class MaaResource : MaaCommon, IMaaResource<nint>
 {
     /// <summary>
     ///     Creates a <see cref="MaaResource"/> instance.
@@ -104,11 +104,17 @@ public class MaaResource : MaaCommon<ResourceOption>, IMaaResource<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceSetOption"/>.
     /// </remarks>
-    sealed protected override bool SetOption(ResourceOption opt, MaaOptionValue[] value)
+    public bool SetOption<T>(ResourceOption opt, T value)
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        return MaaResourceSetOption(Handle, (MaaResOption)opt, ref value[0], (MaaOptionValueSize)value.Length).ToBoolean();
+        MaaOptionValue[] bytes = opt switch
+        {
+            ResourceOption.Invalid => throw new InvalidOperationException(),
+            _ => throw new NotImplementedException(),
+        };
+
+        return MaaResourceSetOption(Handle, (MaaResOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();
     }
 
     /// <inheritdoc/>

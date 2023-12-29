@@ -6,12 +6,12 @@
 public enum GlobalOption
 {
     /// <summary>
-    ///     Invalid option
+    ///     Invalid option.
     /// </summary>
     Invalid = 0,
 
     /// <summary>
-    ///     The logging option, value is the path to the log directory
+    ///     The logging option, value is the path to the log directory.
     /// </summary>
     /// <remarks>
     ///     value: <see cref="string"/>, log dir, eg: "C:\\Users\\Administrator\\Desktop\\log"; val_size: <see cref="string"/> length
@@ -36,7 +36,7 @@ public enum GlobalOption
     Recording = 3,
 
     /// <summary>
-    ///     The LogLevel.
+    ///     The log level of Stdout.
     /// </summary>
     /// <remarks>
     ///     value: <see cref="LoggingLevel"/>, val_size: sizeof(<see cref="LoggingLevel"/>), default by <see cref="LoggingLevel.Error"/>

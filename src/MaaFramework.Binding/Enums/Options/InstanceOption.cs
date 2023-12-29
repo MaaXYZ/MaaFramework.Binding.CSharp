@@ -1,12 +1,12 @@
 ﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     Resource option.
+///     Instance option.
 /// </summary>
-public enum ResourceOption
+public enum InstanceOption
 {
     /// <summary>
-    ///     Invalid option
+    ///     Invalid option.
     /// </summary>
     Invalid = 0
 }

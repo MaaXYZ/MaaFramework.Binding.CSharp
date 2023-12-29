@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Native.Interop;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MaaFramework.Binding.UnitTests;
@@ -91,17 +92,18 @@ public class Test_IMaaInstance
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), InstanceOption.Invalid, "Anything")]
-    [MaaData(MaaTypes.All, nameof(Data), InstanceOption.Invalid, false)]
-    [MaaData(MaaTypes.All, nameof(Data), InstanceOption.Invalid, 0)]
     public void Interface_SetOption(MaaTypes type, IMaaInstance maaInstance, InstanceOption opt, object arg)
     {
         Assert.IsNotNull(maaInstance);
 
-        var ret = Common.SetOption(maaInstance, opt, arg);
         if (opt is InstanceOption.Invalid)
-            Assert.IsFalse(ret);
-        else
-            Assert.IsTrue(ret);
+        {
+            Assert.ThrowsException<InvalidOperationException>(() => maaInstance.SetOption(opt, arg));
+            return;
+        }
+
+        Assert.IsTrue(
+            maaInstance.SetOption(opt, arg));
     }
 
     [TestMethod]
