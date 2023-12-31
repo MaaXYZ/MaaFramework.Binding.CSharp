@@ -63,7 +63,7 @@
   <PropertyGroup>
     <Version Condition="'$(Version)' == ''">1.0.0-dev</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageLicenseExpression>LGPL-2.1-only</PackageLicenseExpression>
+    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageIcon>maa-logo_128x128.png</PackageIcon>
     <PackageReleaseNotes>Release notes are at https://github.com/moomiji/MaaFramework.Binding.CSharp/releases.</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/moomiji/MaaFramework.Binding.CSharp</RepositoryUrl>
