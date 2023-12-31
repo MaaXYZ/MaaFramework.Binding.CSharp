@@ -74,7 +74,7 @@ internal static partial class NativeLibrary
         else if (IsOSX)
             sb.Append("osx");
         else
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
 
         sb.Append('-');
         if (IsX64)
@@ -82,7 +82,7 @@ internal static partial class NativeLibrary
         else if (IsArm64)
             sb.Append("arm64");
         else
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
 
         string exten;
         if (IsWindows)
@@ -92,7 +92,7 @@ internal static partial class NativeLibrary
         else if (IsOSX)
             exten = "dylib";
         else
-            throw new NotImplementedException();
+            throw new PlatformNotSupportedException();
 
         return (sb.ToString(), exten);
     }
