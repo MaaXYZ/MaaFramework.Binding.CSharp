@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace MaaFramework.Binding;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
 ///     The exception that is the base class for custom exceptions in <see cref="MaaFramework.Binding"/>.
@@ -22,12 +20,6 @@ public class MaaException : Exception
     /// <inheritdoc cref="Exception(string, Exception)"/>
     public MaaException(string? message, Exception? innerException)
         : base(message, innerException)
-    {
-    }
-
-    /// <inheritdoc cref="Exception(SerializationInfo, StreamingContext)"/>
-    public MaaException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
     {
     }
 }
