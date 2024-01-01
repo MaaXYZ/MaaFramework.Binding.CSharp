@@ -1,10 +1,10 @@
-﻿using MaaFramework.Binding.Native.Interop;
-using static MaaFramework.Binding.Native.Interop.MaaUtility;
+﻿using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaUtility;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaUtility"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaUtility"/>.
 /// </summary>
 public class MaaUtility : IMaaUtility
 {

@@ -1,13 +1,13 @@
 ﻿using Grpc.Net.Client;
 using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Grpc.Interop;
+using MaaFramework.Binding.Interop.Grpc;
 using System.Buffers;
-using static MaaFramework.Binding.Grpc.Interop.Image;
+using static MaaFramework.Binding.Interop.Grpc.Image;
 
 namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
-///     A class providing a reference implementation for Maa Image Buffer section of <see cref="MaaFramework.Binding.Grpc.Interop.Image"/>.
+///     A class providing a reference implementation for Maa Image Buffer section of <see cref="MaaFramework.Binding.Interop.Grpc.Image"/>.
 /// </summary>
 public class MaaImageBufferGrpc : MaaDisposableHandle<string>, IMaaImageBuffer<string>
 {

@@ -1,5 +1,5 @@
-﻿using MaaFramework.Binding.Native.Interop;
-using static MaaFramework.Binding.Native.Interop.MaaController;
+﻿using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaController;
 
 namespace MaaFramework.Binding;
 

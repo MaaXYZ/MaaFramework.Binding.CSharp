@@ -1,6 +1,6 @@
 ﻿using Grpc.Net.Client;
 
-namespace MaaFramework.Binding.Grpc.Abstractions;
+namespace MaaFramework.Binding.Abstractions.Grpc;
 
 /// <summary>
 ///     An abstract class providing common members for GrpcChannel.

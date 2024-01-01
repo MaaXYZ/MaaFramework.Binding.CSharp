@@ -1,11 +1,11 @@
 ﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Native.Interop;
-using static MaaFramework.Binding.Native.Interop.MaaBuffer;
+using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
-///     A class providing a reference implementation for Maa Rect Buffer section of <see cref="MaaFramework.Binding.Native.Interop.MaaBuffer"/>.
+///     A class providing a reference implementation for Maa Rect Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
 /// </summary>
 public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
 {

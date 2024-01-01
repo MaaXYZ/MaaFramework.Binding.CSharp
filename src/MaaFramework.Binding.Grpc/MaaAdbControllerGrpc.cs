@@ -1,6 +1,6 @@
 ﻿using Grpc.Net.Client;
-using MaaFramework.Binding.Grpc.Interop;
-using static MaaFramework.Binding.Grpc.Interop.Controller;
+using MaaFramework.Binding.Interop.Grpc;
+using static MaaFramework.Binding.Interop.Grpc.Controller;
 
 namespace MaaFramework.Binding;
 

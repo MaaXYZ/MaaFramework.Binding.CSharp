@@ -1,12 +1,12 @@
-﻿using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Native.Abstractions;
-using MaaFramework.Binding.Native.Interop;
-using static MaaFramework.Binding.Native.Interop.MaaResource;
+﻿using MaaFramework.Binding.Abstractions.Native;
+using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaResource;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaResource"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaResource"/>.
 /// </summary>
 public class MaaResource : MaaCommon, IMaaResource<nint>
 {

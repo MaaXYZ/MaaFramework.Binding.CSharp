@@ -47,9 +47,9 @@ global using MaaWin32Hwnd = nint;
 global using MaaTransparentArg = nint;
 global using MaaCallbackTransparentArg = nint;
 
-global using MaaResourceCallback = MaaFramework.Binding.Native.Interop.MaaAPICallback;
-global using MaaControllerCallback = MaaFramework.Binding.Native.Interop.MaaAPICallback;
-global using MaaInstanceCallback = MaaFramework.Binding.Native.Interop.MaaAPICallback;
+global using MaaResourceCallback = MaaFramework.Binding.Interop.Native.MaaAPICallback;
+global using MaaControllerCallback = MaaFramework.Binding.Interop.Native.MaaAPICallback;
+global using MaaInstanceCallback = MaaFramework.Binding.Interop.Native.MaaAPICallback;
 
 global using MaaCustomControllerHandle = nint;
 global using MaaCustomRecognizerHandle = nint;
@@ -65,7 +65,7 @@ global using int32_t = System.Int32;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning disable CA1707 // 标识符不应包含下划线
 
-namespace MaaFramework.Binding.Native.Interop;
+namespace MaaFramework.Binding.Interop.Native;
 
 public static class MaaDef
 {

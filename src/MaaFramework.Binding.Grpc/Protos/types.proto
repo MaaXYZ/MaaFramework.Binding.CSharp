@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package maarpc;
 
-option csharp_namespace = "MaaFramework.Binding.Grpc.Interop";
+option csharp_namespace = "MaaFramework.Binding.Interop.Grpc";
 
 message Point {
   optional int32 x = 1;

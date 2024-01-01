@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MaaFramework.Binding.Native.Interop;
+namespace MaaFramework.Binding.Interop.Native;
 
 /// <summary>
 ///     A class that implements the extension methods for converting between MaaDef types and C# types.

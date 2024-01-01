@@ -1,10 +1,10 @@
-﻿using MaaFramework.Binding.Native.Interop;
-using static MaaFramework.Binding.Native.Interop.MaaRpc;
+﻿using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaRpc;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A static wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaRpc"/>.
+///     A static wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaRpc"/>.
 /// </summary>
 
 public static class MaaRpc

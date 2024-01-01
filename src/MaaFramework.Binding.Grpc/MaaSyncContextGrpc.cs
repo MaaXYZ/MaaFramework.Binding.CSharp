@@ -1,15 +1,15 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
+using MaaFramework.Binding.Abstractions.Grpc;
 using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Grpc.Abstractions;
-using MaaFramework.Binding.Grpc.Interop;
+using MaaFramework.Binding.Interop.Grpc;
 using System.Diagnostics.CodeAnalysis;
-using static MaaFramework.Binding.Grpc.Interop.SyncContext;
+using static MaaFramework.Binding.Interop.Grpc.SyncContext;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Grpc.Interop.SyncContext"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Grpc.SyncContext"/>.
 /// </summary>
 public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
 {

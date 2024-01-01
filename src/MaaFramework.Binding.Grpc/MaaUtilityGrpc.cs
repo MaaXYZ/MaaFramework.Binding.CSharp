@@ -1,14 +1,14 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
-using MaaFramework.Binding.Grpc.Abstractions;
-using MaaFramework.Binding.Grpc.Interop;
+using MaaFramework.Binding.Abstractions.Grpc;
+using MaaFramework.Binding.Interop.Grpc;
 using System.Diagnostics.CodeAnalysis;
-using static MaaFramework.Binding.Grpc.Interop.Utility;
+using static MaaFramework.Binding.Interop.Grpc.Utility;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Grpc.Interop.Utility"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Grpc.Utility"/>.
 /// </summary>
 public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
 {

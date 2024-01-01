@@ -1,9 +1,8 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
-using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Grpc.Interop;
+using MaaFramework.Binding.Interop.Grpc;
 
-namespace MaaFramework.Binding.Grpc.Abstractions;
+namespace MaaFramework.Binding.Abstractions.Grpc;
 
 /// <summary>
 ///     An abstract class providing common members for <see cref="MaaControllerGrpc"/>, <see cref="MaaInstanceGrpc"/> and <see cref="MaaResourceGrpc"/>.

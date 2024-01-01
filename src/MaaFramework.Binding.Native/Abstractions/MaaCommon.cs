@@ -1,7 +1,6 @@
-﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Native.Interop;
+﻿using MaaFramework.Binding.Interop.Native;
 
-namespace MaaFramework.Binding.Native.Abstractions;
+namespace MaaFramework.Binding.Abstractions.Native;
 
 /// <summary>
 ///     An abstract class providing common members for <see cref="MaaController"/>, <see cref="MaaInstance"/> and <see cref="MaaResource"/>.

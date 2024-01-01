@@ -1,12 +1,12 @@
 ﻿using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Native.Interop;
+using MaaFramework.Binding.Interop.Native;
 using System.Diagnostics.CodeAnalysis;
-using static MaaFramework.Binding.Native.Interop.MaaSyncContext;
+using static MaaFramework.Binding.Interop.Native.MaaSyncContext;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Native.Interop.MaaSyncContext"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaSyncContext"/>.
 /// </summary>
 public class MaaSyncContext : IMaaSyncContext<nint>
 {

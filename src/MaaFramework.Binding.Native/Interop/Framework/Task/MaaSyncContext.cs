@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MaaFramework.Binding.Native.Interop;
+namespace MaaFramework.Binding.Interop.Native;
 
 #pragma warning disable S1133 // Deprecated code should be removed
 #pragma warning disable S4200 // Native methods should be wrapped

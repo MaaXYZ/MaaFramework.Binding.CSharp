@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package maarpc;
 
-option csharp_namespace = "MaaFramework.Binding.Grpc.Interop";
+option csharp_namespace = "MaaFramework.Binding.Interop.Grpc";
 
 import "types.proto";
 

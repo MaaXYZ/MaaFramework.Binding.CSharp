@@ -1,14 +1,14 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
+using MaaFramework.Binding.Abstractions.Grpc;
 using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Grpc.Abstractions;
-using MaaFramework.Binding.Grpc.Interop;
-using static MaaFramework.Binding.Grpc.Interop.Controller;
+using MaaFramework.Binding.Interop.Grpc;
+using static MaaFramework.Binding.Interop.Grpc.Controller;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Grpc.Interop.Controller"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Grpc.Controller"/>.
 /// </summary>
 public class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
 {

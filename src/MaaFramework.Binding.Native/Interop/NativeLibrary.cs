@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace MaaFramework.Binding.Native.Interop;
+namespace MaaFramework.Binding.Interop.Native;
 
 internal static partial class NativeLibrary
 {
