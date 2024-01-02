@@ -30,7 +30,9 @@ public class Test_IMaaController
     {
         InitializeData(AdbControllerTypes.InputPresetMaatouch);
         MaaTouchData = Data;
-        InitializeData(AdbControllerTypes.InputPresetMinitouch);
+        InitializeData(Common.InGithubActions
+            ? AdbControllerTypes.InputPresetMaatouch
+            : AdbControllerTypes.InputPresetAdb);
         MiniTouchData = Data;
         InitializeData(AdbControllerTypes.InputPresetAdb);
         TestLinkData = NewData;
