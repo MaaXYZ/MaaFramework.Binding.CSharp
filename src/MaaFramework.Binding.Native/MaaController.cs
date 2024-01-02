@@ -8,7 +8,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaController"/>.
 /// </summary>
-public class MaaController : MaaCommon, IMaaController<nint>
+public abstract class MaaController : MaaCommon, IMaaController<nint>
 {
     /// <summary>
     ///     Creates a <see cref="MaaController"/> instance.

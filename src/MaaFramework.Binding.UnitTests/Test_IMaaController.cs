@@ -83,8 +83,8 @@ public class Test_IMaaController
             AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath,
-            CheckStatusOption.None,
-            LinkOption.Start);
+            LinkOption.Start,
+            CheckStatusOption.None);
 
         using var grpc1 = new MaaAdbControllerGrpc(
             Common.GrpcChannel,
@@ -108,8 +108,8 @@ public class Test_IMaaController
             AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
             Common.AdbConfig,
             Common.AgentPath,
-            CheckStatusOption.None,
-            LinkOption.Start);
+            LinkOption.Start,
+            CheckStatusOption.None);
     }
 #pragma warning restore S2699 // Tests should include assertions
 

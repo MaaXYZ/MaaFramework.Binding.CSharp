@@ -15,9 +15,9 @@ public class MaaAdbControllerGrpc : MaaControllerGrpc
     {
     }
 
-    /// <inheritdoc cref="MaaAdbControllerGrpc(GrpcChannel, string, string, AdbControllerTypes, string, string, CheckStatusOption, LinkOption)"/>
+    /// <inheritdoc cref="MaaAdbControllerGrpc(GrpcChannel, string, string, AdbControllerTypes, string, string, LinkOption, CheckStatusOption)"/>
     public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link)
-        : this(channel, adbPath, address, type, adbConfig, agentPath, CheckStatusOption.ThrowIfNotSuccess, link)
+        : this(channel, adbPath, address, type, adbConfig, agentPath, link, CheckStatusOption.ThrowIfNotSuccess)
     {
     }
 
@@ -30,11 +30,11 @@ public class MaaAdbControllerGrpc : MaaControllerGrpc
     /// <param name="type">The AdbControllerTypes including touch type, key type and screencap type.</param>
     /// <param name="adbConfig">The path of adb config file.</param>
     /// <param name="agentPath">The path of agent directory.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if true; otherwise, not check.</param>
     /// <param name="link">Executes <see cref="MaaControllerGrpc.LinkStart"/> if true; otherwise, not link.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if true; otherwise, not check.</param>
     /// <exception cref="ArgumentException" />
     /// <exception cref="MaaJobStatusException" />
-    public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, CheckStatusOption check, LinkOption link)
+    public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link, CheckStatusOption check)
         : base(channel)
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);

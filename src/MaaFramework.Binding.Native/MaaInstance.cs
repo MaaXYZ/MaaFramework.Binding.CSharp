@@ -25,12 +25,12 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
         SetHandle(handle, needReleased: true);
     }
 
-    /// <param name="resource">The resource.</param>
     /// <param name="controller">The controller.</param>
+    /// <param name="resource">The resource.</param>
     /// <param name="disposeOptions">The dispose options.</param>
     /// <inheritdoc cref="MaaInstance()"/>
     [SetsRequiredMembers]
-    public MaaInstance(IMaaResource<nint> resource, IMaaController<nint> controller, DisposeOptions disposeOptions)
+    public MaaInstance(IMaaController<nint> controller, IMaaResource<nint> resource, DisposeOptions disposeOptions)
         : this()
     {
         Resource = resource;

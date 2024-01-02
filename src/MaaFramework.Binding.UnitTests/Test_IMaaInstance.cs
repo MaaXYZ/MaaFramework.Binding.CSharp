@@ -76,7 +76,7 @@ public class Test_IMaaInstance
             Controller = nativeController,
             DisposeOptions = DisposeOptions.None,
         };
-        using var native2 = new MaaInstance(nativeResource, nativeController, DisposeOptions.None);
+        using var native2 = new MaaInstance(nativeController, nativeResource, DisposeOptions.None);
 
         using var grpc1 = new MaaInstanceGrpc(Common.GrpcChannel)
         {
@@ -84,7 +84,7 @@ public class Test_IMaaInstance
             Controller = grpcController,
             DisposeOptions = DisposeOptions.None,
         };
-        using var grpc2 = new MaaInstanceGrpc(Common.GrpcChannel, grpcResource, grpcController, DisposeOptions.None);
+        using var grpc2 = new MaaInstanceGrpc(Common.GrpcChannel, grpcController, grpcResource, DisposeOptions.None);
     }
 #pragma warning restore S2699 // Tests should include assertions
 

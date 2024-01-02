@@ -10,7 +10,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Grpc.Controller"/>.
 /// </summary>
-public class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
+public abstract class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
 {
     private ControllerClient _client = default!;
 
