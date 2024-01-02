@@ -1,14 +1,17 @@
-# v1.0.0-beta.2.1
+# v1.4.0
 
-## Breaking changes
-
-- move namespace Extensions.ComponentModel to Extensions @moomiji
+> ### ***Great refactoring***
 
 ## New features
 
-- add Maa ToolKit device section @moomiji
+- rename MaaToolKit.Extensions to MaaFramework.Binding.CSharp @moomiji
+- `Maa.Framework.Binding` : separate abstraction & implementation @moomiji
+- `Maa.Framework.Binding.Native` : add Native project & move implementation @moomiji
+- `Maa.Framework.Binding.Grpc` : add Grpc interop & implementations @moomiji
+- `Maa.Framework` : add Native metapackage @moomiji
+- support framework `net8.0` now @moomiji
 
 ## Other
 
-- Todo: MaaFramework GetHash return null @moomiji
-- follow the change of MaaFramework from v0.6.0-beta.1 to v1.0.0-beta.2 @moomiji
+- LICENSE: Update license to LGPL v3.0 @moomiji
+- update interop to framework 1.4.0 @moomiji
