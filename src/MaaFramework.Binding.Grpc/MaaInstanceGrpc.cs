@@ -36,12 +36,12 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     }
 
     /// <param name="channel">The channel to use to make remote calls.</param>
-    /// <param name="resource">The resource.</param>
     /// <param name="controller">The controller.</param>
+    /// <param name="resource">The resource.</param>
     /// <param name="disposeOptions">The dispose options.</param>
     /// <inheritdoc cref="MaaInstanceGrpc(GrpcChannel)"/>
     [SetsRequiredMembers]
-    public MaaInstanceGrpc(GrpcChannel channel, IMaaResource<string> resource, IMaaController<string> controller, DisposeOptions disposeOptions)
+    public MaaInstanceGrpc(GrpcChannel channel, IMaaController<string> controller, IMaaResource<string> resource, DisposeOptions disposeOptions)
         : this(channel)
     {
         Resource = resource;

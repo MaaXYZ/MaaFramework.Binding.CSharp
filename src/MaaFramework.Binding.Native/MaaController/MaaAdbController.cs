@@ -13,9 +13,9 @@ public class MaaAdbController : MaaController
     {
     }
 
-    /// <inheritdoc cref="MaaAdbController(string, string, AdbControllerTypes, string, string, CheckStatusOption, LinkOption)"/>
+    /// <inheritdoc cref="MaaAdbController(string, string, AdbControllerTypes, string, string, LinkOption, CheckStatusOption)"/>
     public MaaAdbController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link)
-        : this(adbPath, address, type, adbConfig, agentPath, CheckStatusOption.ThrowIfNotSuccess, link)
+        : this(adbPath, address, type, adbConfig, agentPath, link, CheckStatusOption.ThrowIfNotSuccess)
     {
     }
 
@@ -27,14 +27,14 @@ public class MaaAdbController : MaaController
     /// <param name="type">The AdbControllerTypes including touch type, key type and screencap type.</param>
     /// <param name="adbConfig">The path of adb config file.</param>
     /// <param name="agentPath">The path of agent directory.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if true; otherwise, not check.</param>
     /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if true; otherwise, not link.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if true; otherwise, not check.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAdbControllerCreateV2"/>.
     /// </remarks>
     /// <exception cref="ArgumentException" />
     /// <exception cref="MaaJobStatusException" />
-    public MaaAdbController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, CheckStatusOption check, LinkOption link)
+    public MaaAdbController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link, CheckStatusOption check)
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);
         ArgumentException.ThrowIfNullOrEmpty(address);

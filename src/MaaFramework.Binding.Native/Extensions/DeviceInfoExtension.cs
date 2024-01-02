@@ -13,8 +13,8 @@ public static class DeviceInfoExtension
         string? address = null,
         AdbControllerTypes? type = null,
         string? adbConfig = null,
-        CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess,
-        LinkOption link = LinkOption.Start)
+        LinkOption link = LinkOption.Start,
+        CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess)
     {
         ArgumentNullException.ThrowIfNull(info);
 
@@ -23,7 +23,7 @@ public static class DeviceInfoExtension
                    type ?? info.AdbTypes,
                    adbConfig ?? info.AdbConfig,
                    agentPath,
-                   check,
-                   link);
+                   link,
+                   check);
     }
 }
