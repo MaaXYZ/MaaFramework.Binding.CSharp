@@ -16,7 +16,7 @@ jobs:
     runs-on: macos-latest
     env:
       API_LEVEL: 29
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
 
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +24,9 @@ jobs:
           submodules: true
       - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.0'
+          dotnet-version: | 
+            7.0.x
+            8.0.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
       - run: dotnet restore --locked-mode
@@ -66,4 +68,6 @@ jobs:
         if: always()
         with:
           name: TestResults
-          path: ./**/TestResults
+          path: |
+            ./**/TestResults
+            ./src/MaaFramework.Binding.UnitTests/bin/**/debug

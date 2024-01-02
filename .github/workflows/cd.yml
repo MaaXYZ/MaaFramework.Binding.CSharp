@@ -2,6 +2,16 @@ name: cd
 
 on:
   workflow_dispatch:
+    inputs:
+      Publish:
+        description: 'Publish option'
+        required: true
+        default: 'None'
+        type: choice
+        options:
+          - None
+          - NuGet
+          - NuGetTest
   push:
     branches:
       - "**"
@@ -14,8 +24,9 @@ jobs:
   release:
     runs-on: windows-latest
     env:
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # need ${{ secrets.NUGET_TOKEN }}
-      NUGET_PACKAGE_SOURCE: https://api.nuget.org/v3/index.json # https://apiint.nugettest.org/v3/index.json
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
+      NUGET_PACKAGE_SOURCE: https://api.nuget.org/v3/index.json # need ${{ secrets.NUGET_TOKEN }} or ${{ secrets.NUGETALL_TOKEN }} (Expires in a day)
+      NUGETTEST_PACKAGE_SOURCE: https://apiint.nugettest.org/v3/index.json # need ${{ secrets.NUGETTEST_TOKEN }} (Expires in a day)
 
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +35,9 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.0'
+          dotnet-version: | 
+            7.0.x
+            8.0.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
       - run: dotnet restore --locked-mode
@@ -49,8 +62,13 @@ jobs:
           dotnet build --configuration Release --no-restore -p:Version=${{ steps.meta.outputs.version }} -p:RepositoryBranch=$(git rev-parse --abbrev-ref HEAD) -p:RepositoryCommit=$(git rev-parse HEAD)
           mv ./src/**/bin/Release/*nupkg ./
 
+      - name: Publish the package to nugettest.org
+        if: ${{ steps.meta.outputs.is_release == 'false' || github.event.inputs.Publish == 'NuGetTest' }}
+        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETTEST_TOKEN }} --source ${{ env.NUGETTEST_PACKAGE_SOURCE }}
+
       - name: Publish the package to nuget.org
-        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_TOKEN }} --source ${{ env.NUGET_PACKAGE_SOURCE }}
+        if: ${{ steps.meta.outputs.is_release == 'true' || github.event.inputs.Publish == 'NuGet' }}
+        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETALL_TOKEN }} --source ${{ env.NUGET_PACKAGE_SOURCE }}
 
       - uses: softprops/action-gh-release@v1
         if: ${{ steps.meta.outputs.is_release == 'true' }}
