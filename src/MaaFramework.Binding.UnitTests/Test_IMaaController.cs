@@ -114,7 +114,6 @@ public class Test_IMaaController
 #pragma warning restore S2699 // Tests should include assertions
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, "Anything")]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 1280)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 720)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackageEntry, "DefaultAppPackageEntry")]
@@ -123,12 +122,6 @@ public class Test_IMaaController
     public void Interface_SetOption(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);
-
-        if (opt is ControllerOption.Invalid)
-        {
-            Assert.ThrowsException<InvalidOperationException>(() => maaController.SetOption(opt, arg));
-            return;
-        }
 
         if (opt is ControllerOption.Recording && type is MaaTypes.Grpc)
         {
@@ -301,4 +294,28 @@ public class Test_IMaaController
         Assert.IsFalse(string.IsNullOrWhiteSpace(
             maaController.Uuid));
     }
+
+    #region Invalid data tests
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, "Anything")]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackageEntry, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackage, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Recording, 0.0)]
+    public void Interface_SetOption_InvalidData(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
+    {
+        Assert.IsNotNull(maaController);
+
+        if (opt is ControllerOption.Recording && type is MaaTypes.Grpc)
+        {
+            Assert.ThrowsException<NotImplementedException>(() => maaController.SetOption(opt, arg));
+            return;
+        }
+
+        Assert.ThrowsException<InvalidOperationException>(() => maaController.SetOption(opt, arg));
+    }
+
+    #endregion
 }
