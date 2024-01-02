@@ -14,6 +14,8 @@ public static class Common
         MaaRpc.Start(GrpcAddress);
     }
 
+    internal static bool InGithubActions;
+
     internal static string AdbPath { get; set; } = string.Empty;
     internal static string Address { get; set; } = string.Empty;
 
@@ -27,6 +29,7 @@ public static class Common
 
     private static void InitializeInfo(TestContext testContext)
     {
+        InGithubActions = bool.Parse(Environment.GetEnvironmentVariable("GITHUB_ACTIONS") ?? "false");
         var devices = new MaaToolkit().Find();
 
         // 请修改 TestParam.runsettings，并在测试资源管理器——设置——配置运行设置
@@ -53,7 +56,7 @@ public static class Common
         InitializeInfo(testContext);
 
         new MaaUtility().SetOption(GlobalOption.LogDir, DebugPath);
-        new MaaUtilityGrpc(GrpcChannel).SetOption(GlobalOption.LogDir, DebugPath);
+        new MaaUtility().SetOption(GlobalOption.StdoutLevel, LoggingLevel.Off);
         Task.Run(() =>
         {
             MaaRpc.Wait();

@@ -149,7 +149,16 @@ public class Test_IMaaInstance
     {
         Assert.IsNotNull(maaInstance);
 
+        // First job
         var job =
+            maaInstance.AppendTask(taskEntryName);
+        Assert.IsFalse(
+            job.SetParam("{}"));
+        Assert.AreEqual(
+            MaaJobStatus.Running, job.Status);
+
+        // Second job appended on running first job
+        job =
             maaInstance.AppendTask(taskEntryName);
         Assert.IsFalse(
             maaInstance.AllTasksFinished);
