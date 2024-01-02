@@ -89,22 +89,6 @@ public class Test_IMaaInstance
 #pragma warning restore S2699 // Tests should include assertions
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), InstanceOption.Invalid, "Anything")]
-    public void Interface_SetOption(MaaTypes type, IMaaInstance maaInstance, InstanceOption opt, object arg)
-    {
-        Assert.IsNotNull(maaInstance);
-
-        if (opt is InstanceOption.Invalid)
-        {
-            Assert.ThrowsException<InvalidOperationException>(() => maaInstance.SetOption(opt, arg));
-            return;
-        }
-
-        Assert.IsTrue(
-            maaInstance.SetOption(opt, arg));
-    }
-
-    [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
     public void Interface_Resource(MaaTypes type, IMaaInstance maaInstance)
     {
@@ -188,4 +172,17 @@ public class Test_IMaaInstance
         Assert.IsTrue(
             maaInstance.Abort());
     }
+
+    #region Invalid data tests
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), InstanceOption.Invalid, "Anything")]
+    public void Interface_SetOption_InvalidData(MaaTypes type, IMaaInstance maaInstance, InstanceOption opt, object arg)
+    {
+        Assert.IsNotNull(maaInstance);
+
+        Assert.ThrowsException<InvalidOperationException>(() => maaInstance.SetOption(opt, arg));
+    }
+
+    #endregion
 }

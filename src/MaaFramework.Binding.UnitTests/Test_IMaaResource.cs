@@ -74,24 +74,6 @@ public class Test_IMaaResource
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.Invalid, "Anything")]
-    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.Invalid, false)]
-    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.Invalid, 0)]
-    public void Interface_SetOption(MaaTypes type, IMaaResource maaResource, ResourceOption opt, object arg)
-    {
-        Assert.IsNotNull(maaResource);
-
-        if (opt is ResourceOption.Invalid)
-        {
-            Assert.ThrowsException<InvalidOperationException>(() => maaResource.SetOption(opt, arg));
-            return;
-        }
-
-        Assert.IsTrue(
-            maaResource.SetOption(opt, arg));
-    }
-
-    [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
     public void Interface_Hash(MaaTypes type, IMaaResource maaResource)
     {
@@ -110,4 +92,17 @@ public class Test_IMaaResource
         Assert.IsFalse(string.IsNullOrWhiteSpace(
             maaResource.TaskList));
     }
+
+    #region Invalid data tests
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.Invalid, "Anything")]
+    public void Interface_SetOption_InvalidData(MaaTypes type, IMaaResource maaResource, ResourceOption opt, object arg)
+    {
+        Assert.IsNotNull(maaResource);
+
+        Assert.ThrowsException<InvalidOperationException>(() => maaResource.SetOption(opt, arg));
+    }
+
+    #endregion
 }

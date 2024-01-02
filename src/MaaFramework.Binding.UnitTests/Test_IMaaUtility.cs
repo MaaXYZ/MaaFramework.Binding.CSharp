@@ -39,7 +39,6 @@ public class Test_IMaaMaaUtility
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, "Anything")]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.LogDir, nameof(Common.DebugPath))]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.SaveDraw, false)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Recording, false)]
@@ -49,12 +48,6 @@ public class Test_IMaaMaaUtility
     public void Interface_SetOption(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
     {
         Assert.IsNotNull(maaUtility);
-
-        if (opt is GlobalOption.Invalid)
-        {
-            Assert.ThrowsException<InvalidOperationException>(() => maaUtility.SetOption(opt, arg));
-            return;
-        }
 
         Assert.IsTrue(
             maaUtility.SetOption(opt, arg));
@@ -137,4 +130,22 @@ public class Test_IMaaMaaUtility
             MaaUtilityGrpc.UnregisterCallback(Common.GrpcChannel, callbackId));
         readResponse.Wait();
     }
+
+    #region Invalid data tests
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, "Anything")]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.LogDir, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.SaveDraw, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Recording, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.ShowHitDraw, 0.0)]
+    public void Interface_SetOption_InvalidData(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
+    {
+        Assert.IsNotNull(maaUtility);
+
+        Assert.ThrowsException<InvalidOperationException>(() => maaUtility.SetOption(opt, arg));
+    }
+
+    #endregion
 }
