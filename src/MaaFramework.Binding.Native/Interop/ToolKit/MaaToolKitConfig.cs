@@ -11,7 +11,7 @@ namespace MaaFramework.Binding.Interop.Native;
 /// <summary>
 ///     The base P/Invoke methods for MaaToolKit, use this class to call all the native methods.
 ///     If you do not known what you are doing, do not use this class. In most situations, you
-///     should use <see cref="Binding.MaaToolKit"/> instead.
+///     should use <see cref="Binding.MaaToolkit"/> instead.
 /// </summary>
 public static partial class MaaToolKit
 {

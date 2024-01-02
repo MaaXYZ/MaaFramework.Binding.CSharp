@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
-///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolKit"/> and <see cref="MaaToolKitGrpc"/>.
+///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolkit"/> and <see cref="MaaToolkitGrpc"/>.
 /// </summary>
 [TestClass]
 public class Test_IMaaToolkit
@@ -14,8 +14,8 @@ public class Test_IMaaToolkit
 
     public static Dictionary<MaaTypes, object> NewData => new()
     {
-        { MaaTypes.Native, new MaaToolKit() },
-        { MaaTypes.Grpc,   new MaaToolKitGrpc(Common.GrpcChannel) },
+        { MaaTypes.Native, new MaaToolkit() },
+        { MaaTypes.Grpc,   new MaaToolkitGrpc(Common.GrpcChannel) },
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
 

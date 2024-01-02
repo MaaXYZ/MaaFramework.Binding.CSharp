@@ -39,7 +39,7 @@ Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) 
 ```CSharp
 using MaaFramework.Binding;
 
-var maaTookit = new MaaToolKit();
+var maaTookit = new MaaToolkit();
 var devices = maaTookit.Find();
 if (devices.Length < 1 || !maaTookit.Init())
 {

@@ -10,7 +10,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Grpc.Config"/> and <see cref="MaaFramework.Binding.Interop.Grpc.Device"/>.
 /// </summary>
-public class MaaToolKitGrpc : MaaGrpcChannel, IMaaToolkit
+public class MaaToolkitGrpc : MaaGrpcChannel, IMaaToolkit
 {
     private ConfigClient _configClient = default!;
     private DeviceClient _deviceClient = default!;
@@ -23,10 +23,10 @@ public class MaaToolKitGrpc : MaaGrpcChannel, IMaaToolkit
     }
 
     /// <summary>
-    ///     Creates a <see cref="MaaToolKitGrpc"/> instance.
+    ///     Creates a <see cref="MaaToolkitGrpc"/> instance.
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
-    public MaaToolKitGrpc(GrpcChannel channel)
+    public MaaToolkitGrpc(GrpcChannel channel)
         : base(channel)
     {
     }

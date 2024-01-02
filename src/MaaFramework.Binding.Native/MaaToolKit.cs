@@ -6,7 +6,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaToolKit"/>.
 /// </summary>
-public class MaaToolKit : IMaaToolkit
+public class MaaToolkit : IMaaToolkit
 {
     #region MaaToolKitConfig
 
