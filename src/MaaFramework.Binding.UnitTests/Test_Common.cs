@@ -56,7 +56,7 @@ public static class Common
         InitializeInfo(testContext);
 
         new MaaUtility().SetOption(GlobalOption.LogDir, DebugPath);
-        new MaaUtilityGrpc(GrpcChannel).SetOption(GlobalOption.LogDir, DebugPath);
+        new MaaUtility().SetOption(GlobalOption.StdoutLevel, LoggingLevel.Off);
         Task.Run(() =>
         {
             MaaRpc.Wait();
