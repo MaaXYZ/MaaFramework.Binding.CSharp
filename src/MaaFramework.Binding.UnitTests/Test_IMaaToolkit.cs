@@ -65,11 +65,14 @@ public class Test_IMaaToolkit
 
         using IMaaController maaController = type switch
         {
-            MaaTypes.Native => devices[0].ToAdbController(Path.GetFullPath("./MaaAgentBinary"),
-                                                          link: LinkOption.None),
-            MaaTypes.Grpc => devices[0].ToAdbControllerGrpc(Common.GrpcChannel,
-                                                            Path.GetFullPath("./MaaAgentBinary"),
-                                                            link: LinkOption.None),
+            MaaTypes.Native => devices[0].ToAdbController(
+                Path.GetFullPath("./MaaAgentBinary"),
+                type: AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
+                link: LinkOption.None),
+            MaaTypes.Grpc => devices[0].ToAdbControllerGrpc(
+                Common.GrpcChannel,
+                Path.GetFullPath("./MaaAgentBinary"),
+                link: LinkOption.None),
             _ => throw new NotImplementedException(),
         };
         maaController

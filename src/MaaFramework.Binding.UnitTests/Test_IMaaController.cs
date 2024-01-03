@@ -48,7 +48,6 @@ public class Test_IMaaController
                 data.LinkStart()
                     .Wait()
                     .ThrowIfNot(MaaJobStatus.Success);
-                data.SetOption(ControllerOption.ScreenshotTargetShortSide, 720);
             }
         }
     }
