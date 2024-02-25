@@ -83,6 +83,6 @@ public class Test_IMaaToolkit
         maaController
             .LinkStart()
             .Wait()
-            .ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage);
+            .ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, devices[0].AdbPath, devices[0].AdbSerial);
     }
 }

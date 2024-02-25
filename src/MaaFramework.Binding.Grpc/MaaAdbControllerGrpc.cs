@@ -60,7 +60,7 @@ public class MaaAdbControllerGrpc : MaaControllerGrpc
             var status = LinkStart().Wait();
             if (check == CheckStatusOption.ThrowIfNotSuccess)
             {
-                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage);
+                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, adbPath, address);
             }
         }
     }

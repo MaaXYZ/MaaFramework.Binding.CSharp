@@ -51,7 +51,7 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
             var status = AppendPath(path).Wait();
             if (check == CheckStatusOption.ThrowIfNotSuccess)
             {
-                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage);
+                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage, path);
             }
         }
     }
@@ -73,7 +73,7 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
             var status = AppendPath(path).Wait();
             if (check == CheckStatusOption.ThrowIfNotSuccess)
             {
-                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage);
+                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage, path);
             }
         }
     }

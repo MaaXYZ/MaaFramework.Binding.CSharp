@@ -19,7 +19,8 @@ public class MaaJobStatusException : MaaException
     ///     Creates a <see cref="MaaJobStatusException"/> instance.
     /// </summary>
     /// <param name="message">The message that describes the error.</param>
-    public MaaJobStatusException(string message = "MaaJobStatus was unexpected.") : base(message)
+    /// <param name="args">The key arguments.</param>
+    public MaaJobStatusException(string message = "MaaJobStatus was unexpected.", params object?[] args) : base(string.Join('\n', message, args))
     {
     }
 
@@ -28,8 +29,9 @@ public class MaaJobStatusException : MaaException
     /// </summary>
     /// <param name="status">The MaaJobStatus.</param>
     /// <param name="message">The message that describes the error.</param>
-    public MaaJobStatusException(MaaJobStatus status, string message = "")
-        : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {status}." : $"{message} MaaJobStatus cannot be {status}.")
+    /// <param name="args">The key arguments.</param>
+    public MaaJobStatusException(MaaJobStatus status, string message = "", params object?[] args)
+        : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {status}." : $"{message} MaaJobStatus cannot be {status}.", args)
     {
     }
 
@@ -38,8 +40,9 @@ public class MaaJobStatusException : MaaException
     /// </summary>
     /// <param name="job">The IMaaJob.</param>
     /// <param name="message">The message that describes the error.</param>
-    public MaaJobStatusException(IMaaJob job, string message = "")
-        : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {job?.Status}." : $"{message} MaaJobStatus cannot be {job?.Status}.")
+    /// <param name="args">The key arguments.</param>
+    public MaaJobStatusException(IMaaJob job, string message = "", params object?[] args)
+        : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {job?.Status}." : $"{message} MaaJobStatus cannot be {job?.Status}.", args)
     {
     }
 }
@@ -55,10 +58,11 @@ public static class MaaJobStatusThrow
     /// <param name="current">The current status.</param>
     /// <param name="incorrect">The incorrect status.</param>
     /// <param name="message">The message.</param>
+    /// <param name="args">The key arguments.</param>
     /// <exception cref="MaaJobStatusException"></exception>
-    public static void ThrowIf(this MaaJobStatus current, MaaJobStatus incorrect, string message = "")
+    public static void ThrowIf(this MaaJobStatus current, MaaJobStatus incorrect, string message = "", params object?[] args)
     {
-        if (current == incorrect) throw new MaaJobStatusException(current, message);
+        if (current == incorrect) throw new MaaJobStatusException(current, message, args);
     }
 
     /// <summary>
@@ -67,9 +71,10 @@ public static class MaaJobStatusThrow
     /// <param name="current">The current status.</param>
     /// <param name="correct">The correct status.</param>
     /// <param name="message">The message.</param>
+    /// <param name="args">The key arguments.</param>
     /// <exception cref="MaaJobStatusException"></exception>
-    public static void ThrowIfNot(this MaaJobStatus current, MaaJobStatus correct, string message = "")
+    public static void ThrowIfNot(this MaaJobStatus current, MaaJobStatus correct, string message = "", params object?[] args)
     {
-        if (current != correct) throw new MaaJobStatusException(current, message);
+        if (current != correct) throw new MaaJobStatusException(current, message, args);
     }
 }

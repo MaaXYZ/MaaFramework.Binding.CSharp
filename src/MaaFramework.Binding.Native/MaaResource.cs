@@ -42,7 +42,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             var status = AppendPath(path).Wait();
             if (check == CheckStatusOption.ThrowIfNotSuccess)
             {
-                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage);
+                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage, path);
             }
         }
     }
@@ -64,7 +64,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             var status = AppendPath(path).Wait();
             if (check == CheckStatusOption.ThrowIfNotSuccess)
             {
-                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage);
+                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage, path);
             }
         }
     }
