@@ -73,10 +73,9 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     }
 
     /// <inheritdoc/>
-    public bool SetOption<T>(InstanceOption opt, T value) => opt switch
+    public bool SetOption<T>(InstanceOption opt, T value) => (value, opt) switch
     {
-        InstanceOption.Invalid => throw new InvalidOperationException(),
-        _ => throw new NotImplementedException(),
+        _ => throw new InvalidOperationException(),
     };
 
     /// <inheritdoc/>

@@ -72,10 +72,10 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        MaaOptionValue[] bytes = opt switch
+        MaaOptionValue[] bytes = (value, opt) switch
         {
-            InstanceOption.Invalid => throw new InvalidOperationException(),
-            _ => throw new NotImplementedException(),
+            // (int vvvv, InstanceOption.Invalid) => vvvv.ToMaaOptionValues(),
+            _ => throw new InvalidOperationException(),
         };
 
         return MaaSetOption(Handle, (MaaInstOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();

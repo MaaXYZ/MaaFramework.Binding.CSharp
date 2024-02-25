@@ -22,20 +22,17 @@ public class MaaUtility : IMaaUtility
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        var bytes = opt switch
+        var bytes = (value, opt) switch
         {
-            GlobalOption.Invalid => throw new InvalidOperationException(),
-            GlobalOption.LogDir => value switch { string v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            GlobalOption.SaveDraw => value switch { bool v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            GlobalOption.Recording => value switch { bool v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            GlobalOption.ShowHitDraw => value switch { bool v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            GlobalOption.StdoutLevel => value switch
-            {
-                LoggingLevel v => ((int)v).ToMaaOptionValues(),
-                int v => v.ToMaaOptionValues(),
-                _ => throw new InvalidOperationException(),
-            },
-            _ => throw new NotImplementedException(),
+            (int vvvv, GlobalOption.StdoutLevel) => vvvv.ToMaaOptionValues(),
+            (string v, GlobalOption.LogDir) => v.ToMaaOptionValues(),
+            (bool vvv, GlobalOption.SaveDraw
+                    or GlobalOption.Recording
+                    or GlobalOption.ShowHitDraw) => vvv.ToMaaOptionValues(),
+
+            (LoggingLevel v, GlobalOption.StdoutLevel) => ((int)v).ToMaaOptionValues(),
+
+            _ => throw new InvalidOperationException(),
         };
 
         return MaaSetGlobalOption((MaaGlobalOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();

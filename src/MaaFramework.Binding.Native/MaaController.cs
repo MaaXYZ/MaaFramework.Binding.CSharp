@@ -32,15 +32,15 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        var bytes = opt switch
+        var bytes = (value, opt) switch
         {
-            ControllerOption.Invalid => throw new InvalidOperationException(),
-            ControllerOption.ScreenshotTargetLongSide => value switch { int v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            ControllerOption.ScreenshotTargetShortSide => value switch { int v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            ControllerOption.DefaultAppPackageEntry => value switch { string v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            ControllerOption.DefaultAppPackage => value switch { string v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            ControllerOption.Recording => value switch { bool v => v.ToMaaOptionValues(), _ => throw new InvalidOperationException(), },
-            _ => throw new NotImplementedException(),
+            (int vvvv, ControllerOption.ScreenshotTargetLongSide
+                    or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValues(),
+            (string v, ControllerOption.DefaultAppPackageEntry
+                    or ControllerOption.DefaultAppPackage) => v.ToMaaOptionValues(),
+            (bool vvv, ControllerOption.Recording) => vvv.ToMaaOptionValues(),
+
+            _ => throw new InvalidOperationException(),
         };
 
         return MaaControllerSetOption(Handle, (MaaCtrlOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();

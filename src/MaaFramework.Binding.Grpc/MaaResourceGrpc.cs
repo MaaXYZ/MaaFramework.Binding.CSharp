@@ -111,10 +111,9 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
     public bool Loaded => _client.loaded(new HandleRequest { Handle = Handle, }).Bool;
 
     /// <inheritdoc/>
-    public bool SetOption<T>(ResourceOption opt, T value) => opt switch
+    public bool SetOption<T>(ResourceOption opt, T value) => (value, opt) switch
     {
-        ResourceOption.Invalid => throw new InvalidOperationException(),
-        _ => throw new NotImplementedException(),
+        _ => throw new InvalidOperationException(),
     };
 
     /// <inheritdoc/>

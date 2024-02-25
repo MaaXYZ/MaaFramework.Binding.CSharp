@@ -37,20 +37,17 @@ public class MaaUtilityGrpc : MaaGrpcChannel, IMaaUtility
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        SetGlobalOptionRequest request = opt switch
+        SetGlobalOptionRequest request = (value, opt) switch
         {
-            GlobalOption.Invalid => throw new InvalidOperationException(),
-            GlobalOption.LogDir => value switch { string v => new() { LogDir = v }, _ => throw new InvalidOperationException(), },
-            GlobalOption.SaveDraw => value switch { bool v => new() { SaveDraw = v }, _ => throw new InvalidOperationException(), },
-            GlobalOption.Recording => value switch { bool v => new() { SaveDraw = v }, _ => throw new InvalidOperationException(), },
-            GlobalOption.ShowHitDraw => value switch { bool v => new() { SaveDraw = v }, _ => throw new InvalidOperationException(), },
-            GlobalOption.StdoutLevel => value switch
-            {
-                LoggingLevel v => new() { StdoutLevel = (int)v },
-                int v => new() { StdoutLevel = v },
-                _ => throw new InvalidOperationException(),
-            },
-            _ => throw new NotImplementedException(),
+            (int vvvv, GlobalOption.StdoutLevel) => new() { StdoutLevel = vvvv },
+            (string v, GlobalOption.LogDir) => new() { LogDir = v },
+            (bool vvv, GlobalOption.SaveDraw) => new() { SaveDraw = vvv },
+            (bool vvv, GlobalOption.Recording) => new() { Recording = vvv, },
+            (bool vvv, GlobalOption.ShowHitDraw) => new() { ShowHitDraw = vvv, },
+
+            (LoggingLevel v, GlobalOption.StdoutLevel) => new() { StdoutLevel = (int)v },
+
+            _ => throw new InvalidOperationException(),
         };
 
         try

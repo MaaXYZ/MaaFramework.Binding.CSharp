@@ -37,15 +37,14 @@ public abstract class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        ControllerSetOptionRequest request = opt switch
+        ControllerSetOptionRequest request = (value, opt) switch
         {
-            ControllerOption.Invalid => throw new InvalidOperationException(),
-            ControllerOption.ScreenshotTargetLongSide => value switch { int v => new() { LongSide = v }, _ => throw new InvalidOperationException(), },
-            ControllerOption.ScreenshotTargetShortSide => value switch { int v => new() { ShortSide = v }, _ => throw new InvalidOperationException(), },
-            ControllerOption.DefaultAppPackageEntry => value switch { string v => new() { DefPackageEntry = v }, _ => throw new InvalidOperationException(), },
-            ControllerOption.DefaultAppPackage => value switch { string v => new() { DefPackage = v }, _ => throw new InvalidOperationException(), },
-            // ControllerOption.Recording => value switch { bool v => new() { Recording = v }, _ => throw new InvalidOperationException(), },
-            _ => throw new NotImplementedException(),
+            (int vvvv, ControllerOption.ScreenshotTargetLongSide) => new() { LongSide = vvvv },
+            (int vvvv, ControllerOption.ScreenshotTargetShortSide) => new() { ShortSide = vvvv },
+            (string v, ControllerOption.DefaultAppPackageEntry) => new() { DefPackageEntry = v },
+            (string v, ControllerOption.DefaultAppPackage) => new() { DefPackage = v },
+            (bool vvv, ControllerOption.Recording) => throw new NotImplementedException($"{opt}: {vvv} is not implemented in Grpc."), // new() { Recording = vvv },
+            _ => throw new InvalidOperationException(),
         };
 
         request.Handle = Handle;

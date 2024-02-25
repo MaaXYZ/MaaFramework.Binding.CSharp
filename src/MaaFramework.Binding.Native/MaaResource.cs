@@ -126,10 +126,10 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        MaaOptionValue[] bytes = opt switch
+        MaaOptionValue[] bytes = (value, opt) switch
         {
-            ResourceOption.Invalid => throw new InvalidOperationException(),
-            _ => throw new NotImplementedException(),
+            // (int vvvv, ResourceOption.Invalid) => vvvv.ToMaaOptionValues(),
+            _ => throw new InvalidOperationException(),
         };
 
         return MaaResourceSetOption(Handle, (MaaResOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();
