@@ -47,6 +47,28 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         }
     }
 
+    /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
+    public MaaResource(IEnumerable<string> paths)
+        : this(CheckStatusOption.ThrowIfNotSuccess, paths)
+    {
+    }
+
+    /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
+    public MaaResource(CheckStatusOption check, IEnumerable<string> paths)
+        : this()
+    {
+        ArgumentNullException.ThrowIfNull(paths);
+
+        foreach (var path in paths)
+        {
+            var status = AppendPath(path).Wait();
+            if (check == CheckStatusOption.ThrowIfNotSuccess)
+            {
+                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage);
+            }
+        }
+    }
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceDestroy"/>.

@@ -56,6 +56,28 @@ public class MaaResourceGrpc : MaaCommonGrpc, IMaaResource<string>
         }
     }
 
+    /// <inheritdoc cref="MaaResourceGrpc(GrpcChannel, CheckStatusOption, string[])"/>
+    public MaaResourceGrpc(GrpcChannel channel, IEnumerable<string> paths)
+        : this(channel, CheckStatusOption.ThrowIfNotSuccess, paths)
+    {
+    }
+
+    /// <inheritdoc cref="MaaResourceGrpc(GrpcChannel, CheckStatusOption, string[])"/>
+    public MaaResourceGrpc(GrpcChannel channel, CheckStatusOption check, IEnumerable<string> paths)
+        : this(channel)
+    {
+        ArgumentNullException.ThrowIfNull(paths);
+
+        foreach (var path in paths)
+        {
+            var status = AppendPath(path).Wait();
+            if (check == CheckStatusOption.ThrowIfNotSuccess)
+            {
+                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage);
+            }
+        }
+    }
+
     /// <inheritdoc/>
     protected override void ReleaseHandle()
         => _client.destroy(new HandleRequest { Handle = Handle, });
