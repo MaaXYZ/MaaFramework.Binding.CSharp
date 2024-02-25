@@ -73,4 +73,5 @@ jobs:
       - uses: softprops/action-gh-release@v1
         if: ${{ steps.meta.outputs.is_release == 'true' }}
         with:
+          body_path: CHANGELOG.md
           tag_name: ${{ steps.meta.outputs.tag }}

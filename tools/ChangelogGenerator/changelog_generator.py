@@ -97,7 +97,7 @@ def print_commits(commits: dict, indent: str = "", need_sort: bool = True) -> (s
                 sorted_commits["other"].update({commit_hash: commit_info})
 
         if sorted_commits["feat"]:
-            ret_message += "\n## New features\n\n"
+            ret_message += "\n### New features\n\n"
             mes, ctrs = print_commits(sorted_commits["feat"], "", False)
             ret_message += mes
             for ctr in ctrs:
@@ -105,21 +105,21 @@ def print_commits(commits: dict, indent: str = "", need_sort: bool = True) -> (s
                     ret_contributor.append(ctr)
 
         if sorted_commits["perf"]:
-            ret_message += "\n## Perfect\n\n"
+            ret_message += "\n### Perfect\n\n"
             mes, ctrs = print_commits(sorted_commits["perf"], "", False)
             ret_message += mes
             for ctr in ctrs:
                 if ret_contributor.count(ctr) == 0:
                     ret_contributor.append(ctr)
         if sorted_commits["fix"]:
-            ret_message += "\n## Fix\n\n"
+            ret_message += "\n### Fix\n\n"
             mes, ctrs = print_commits(sorted_commits["fix"], "", False)
             ret_message += mes
             for ctr in ctrs:
                 if ret_contributor.count(ctr) == 0:
                     ret_contributor.append(ctr)
         if sorted_commits["other"]:
-            ret_message += "\n## Other\n\n"
+            ret_message += "\n### Other\n\n"
             mes, ctrs = print_commits(sorted_commits["other"], "", False)
             ret_message += mes
             for ctr in ctrs:
@@ -246,7 +246,16 @@ def main(tag_name=None, latest=None):
 
     res = print_commits(build_commits_tree([x for x in raw_commits_info.keys()][0]))
 
-    changelog_content = "# " + tag_name + "\n" + res[0]
+    version = tag_name.rstrip("v")
+    changelog_content = f"""### NuGet Link
+
+[![](https://img.shields.io/badge/NuGet-Maa.Framework-%23004880)](https://www.nuget.org/packages/Maa.Framework/{version}) [![](https://img.shields.io/badge/NuGet-Binding-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding/{version}) [![](https://img.shields.io/badge/NuGet-Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Native/{version}) [![](https://img.shields.io/badge/NuGet-Grpc-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Grpc/{version})
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/{latest}...{tag_name}
+
+## What's Changed in {tag_name}
+"""
+    changelog_content = changelog_content + res[0]
     print(changelog_content)
     with open(changelog_path, "w", encoding="utf8") as f:
         f.write(changelog_content)
