@@ -28,30 +28,33 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     ///     Creates a <see cref="MaaInstanceGrpc"/> instance.
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
-    public MaaInstanceGrpc(GrpcChannel channel)
+    /// <param name="toolkitInit">Whether inits the <see cref="Toolkit"/>.</param>
+    public MaaInstanceGrpc(GrpcChannel channel, bool toolkitInit = false)
         : base(channel)
     {
         var handle = _client.create(new IdRequest { Id = CallbackId }).Handle;
         SetHandle(handle, needReleased: true);
+
+        Toolkit = new MaaToolkitGrpc(Channel, toolkitInit);
+        Utility = new MaaUtilityGrpc(Channel);
     }
 
     /// <param name="channel">The channel to use to make remote calls.</param>
     /// <param name="controller">The controller.</param>
     /// <param name="resource">The resource.</param>
     /// <param name="disposeOptions">The dispose options.</param>
-    /// <inheritdoc cref="MaaInstanceGrpc(GrpcChannel)"/>
+    /// <param name="toolkitInit">Whether inits the <see cref="Toolkit"/>.</param>
+    /// <inheritdoc cref="MaaInstanceGrpc(GrpcChannel, bool)"/>
     [SetsRequiredMembers]
-    public MaaInstanceGrpc(GrpcChannel channel, IMaaController<string> controller, IMaaResource<string> resource, DisposeOptions disposeOptions)
-        : this(channel)
+    public MaaInstanceGrpc(GrpcChannel channel, IMaaController<string> controller, IMaaResource<string> resource, DisposeOptions disposeOptions, bool toolkitInit = false)
+        : this(channel, toolkitInit)
     {
         Resource = resource;
         Controller = controller;
         DisposeOptions = disposeOptions;
     }
 
-    /// <summary>
-    ///     Whether to dispose the <see cref="Resource"/> and the <see cref="Controller"/> when <see cref="IDisposable.Dispose"/> was invoked.
-    /// </summary>
+    /// <inheritdoc/>
     public required DisposeOptions DisposeOptions { get; set; }
 
     /// <inheritdoc/>
@@ -67,6 +70,11 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         if (DisposeOptions.HasFlag(DisposeOptions.Resource))
         {
             Resource.Dispose();
+        }
+
+        if (DisposeOptions.HasFlag(DisposeOptions.Toolkit))
+        {
+            Toolkit.Uninit();
         }
 
         _client.destroy(new HandleRequest { Handle = Handle, });
@@ -135,6 +143,12 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
             }
         }
     }
+
+    /// <inheritdoc/>
+    public IMaaToolkit Toolkit { get; set; }
+
+    /// <inheritdoc/>
+    public IMaaUtility Utility { get; set; }
 
     /// <inheritdoc/>
     public bool Initialized => _client.inited(new HandleRequest { Handle = Handle, }).Bool;

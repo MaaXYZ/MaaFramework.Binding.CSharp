@@ -26,9 +26,14 @@ public class MaaToolkitGrpc : MaaGrpcChannel, IMaaToolkit
     ///     Creates a <see cref="MaaToolkitGrpc"/> instance.
     /// </summary>
     /// <param name="channel">The channel to use to make remote calls.</param>
-    public MaaToolkitGrpc(GrpcChannel channel)
+    /// <param name="init">Whether invokes the <see cref="IMaaToolkit.Init"/>.</param>
+    public MaaToolkitGrpc(GrpcChannel channel, bool init = false)
         : base(channel)
     {
+        if (init)
+        {
+            Init();
+        }
     }
 
     /// <inheritdoc/>

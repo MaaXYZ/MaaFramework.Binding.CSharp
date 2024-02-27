@@ -28,6 +28,11 @@ public interface IMaaInstance<T> : IMaaInstance, IMaaDisposableHandle<T>
 public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost, IMaaDisposable
 {
     /// <summary>
+    ///     Gets or sets whether disposes the <see cref="Resource"/> or the <see cref="Controller"/> or uninits <see cref="Toolkit"/> when <see cref="IDisposable.Dispose"/> was invoked.
+    /// </summary>
+    DisposeOptions DisposeOptions { get; set; }
+
+    /// <summary>
     ///     Gets the resource.
     /// </summary>
     /// <exception cref="MaaBindException"/>
@@ -38,6 +43,19 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// </summary>
     /// <exception cref="MaaBindException"/>
     IMaaController Controller { get; }
+
+    /// <summary>
+    ///     Gets or sets the toolkit.
+    /// </summary>
+    /// <remarks>
+    ///     Not automatically calls <see cref="IMaaToolkit.Init"/>.
+    /// </remarks>
+    IMaaToolkit Toolkit { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the utility.
+    /// </summary>
+    IMaaUtility Utility { get; set; }
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaInstance"/> is fully initialized.

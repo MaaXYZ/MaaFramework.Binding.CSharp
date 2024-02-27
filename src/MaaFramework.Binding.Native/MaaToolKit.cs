@@ -8,6 +8,18 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaToolkit : IMaaToolkit
 {
+    /// <summary>
+    ///     Creates a <see cref="MaaToolkit"/> instance.
+    /// </summary>
+    /// <param name="init">Whether invokes the <see cref="IMaaToolkit.Init"/>.</param>
+    public MaaToolkit(bool init = false)
+    {
+        if (init)
+        {
+            Init();
+        }
+    }
+
     #region MaaToolKitConfig
 
     /// <inheritdoc/>

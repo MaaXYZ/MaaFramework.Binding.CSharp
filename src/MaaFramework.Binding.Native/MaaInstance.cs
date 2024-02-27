@@ -16,31 +16,34 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <summary>
     ///     Creates a <see cref="MaaInstance"/> instance.
     /// </summary>
+    /// <param name="toolkitInit">Whether inits the <see cref="Toolkit"/>.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCreate"/>.
     /// </remarks>
-    public MaaInstance()
+    public MaaInstance(bool toolkitInit = false)
     {
         var handle = MaaCreate(MaaApiCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
+
+        Toolkit = new MaaToolkit(toolkitInit);
+        Utility = new MaaUtility();
     }
 
     /// <param name="controller">The controller.</param>
     /// <param name="resource">The resource.</param>
     /// <param name="disposeOptions">The dispose options.</param>
-    /// <inheritdoc cref="MaaInstance()"/>
+    /// <param name="toolkitInit">Whether inits the <see cref="Toolkit"/>.</param>
+    /// <inheritdoc cref="MaaInstance(bool)"/>
     [SetsRequiredMembers]
-    public MaaInstance(IMaaController<nint> controller, IMaaResource<nint> resource, DisposeOptions disposeOptions)
-        : this()
+    public MaaInstance(IMaaController<nint> controller, IMaaResource<nint> resource, DisposeOptions disposeOptions, bool toolkitInit = false)
+        : this(toolkitInit)
     {
         Resource = resource;
         Controller = controller;
         DisposeOptions = disposeOptions;
     }
 
-    /// <summary>
-    ///     Whether to dispose the <see cref="Resource"/> and the <see cref="Controller"/> when <see cref="IDisposable.Dispose"/> was invoked.
-    /// </summary>
+    /// <inheritdoc/>
     public required DisposeOptions DisposeOptions { get; set; }
 
     /// <inheritdoc/>
@@ -59,6 +62,11 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
         if (DisposeOptions.HasFlag(DisposeOptions.Resource))
         {
             Resource.Dispose();
+        }
+
+        if (DisposeOptions.HasFlag(DisposeOptions.Toolkit))
+        {
+            Toolkit.Uninit();
         }
 
         MaaDestroy(Handle);
@@ -142,13 +150,19 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     }
 
     /// <inheritdoc/>
+    public IMaaToolkit Toolkit { get; set; }
+
+    /// <inheritdoc/>
+    public IMaaUtility Utility { get; set; }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaInited"/>.
     /// </remarks>
     public bool Initialized => MaaInited(Handle).ToBoolean();
 
-    private static readonly Dictionary<string, MaaCustomRecognizerApi> _recognizers = new();
-    private static readonly Dictionary<string, MaaCustomActionApi> _actions = new();
+    private static readonly Dictionary<string, MaaCustomRecognizerApi> _recognizers = [];
+    private static readonly Dictionary<string, MaaCustomActionApi> _actions = [];
 
     /// <inheritdoc/>
     /// <remarks>
