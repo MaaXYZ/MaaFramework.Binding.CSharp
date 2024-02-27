@@ -8,7 +8,7 @@ repo = 'MaaAssistantArknights/MaaFramework'
 api_path = [
     'include/MaaFramework/MaaAPI.h',
     'include/MaaRpc/MaaRpc.h',
-    'include/MaaToolKit/MaaToolKitAPI.h'
+    'include/MaaToolkit/MaaToolkitAPI.h'
 ]
 
 def convert_cpp_header_to_csharp(header_path: str):

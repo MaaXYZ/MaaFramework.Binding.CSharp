@@ -1,5 +1,5 @@
-﻿global using MaaToolKitConfigHandle = nint;
-global using MaaToolKitTaskHandle = nint;
+﻿global using MaaToolkitConfigHandle = nint;
+global using MaaToolkitTaskHandle = nint;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -11,15 +11,15 @@ namespace MaaFramework.Binding.Interop.Native;
 
 #pragma warning disable S2094 // Classes should not be empty
 
-public static partial class MaaToolKit
+public static partial class MaaToolkit
 {
 
-    #region include/MaaToolKit/MaaToolKitAPI.h, version: v1.4.0.
+    #region include/MaaToolkit/MaaToolkitAPI.h, version: v1.4.0.
 
     #endregion
 
 
-    #region include/MaaToolKit/MaaToolKitDef.h, version: v1.4.0.
+    #region include/MaaToolkit/MaaToolkitDef.h, version: v1.4.0.
 
     #endregion
 

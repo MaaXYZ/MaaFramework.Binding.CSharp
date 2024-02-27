@@ -6,18 +6,18 @@
 public interface IMaaToolkit
 {
     /// <summary>
-    ///     Initializes Maa ToolKit.
+    ///     Initializes Maa Toolkit.
     /// </summary>
     /// <returns>
-    ///     true if the Maa ToolKit was initialized successfully; otherwise, false.
+    ///     true if the Maa Toolkit was initialized successfully; otherwise, false.
     /// </returns>
     bool Init();
 
     /// <summary>
-    ///     Uninitializes Maa ToolKit.
+    ///     Uninitializes Maa Toolkit.
     /// </summary>
     /// <returns>
-    ///     true if the Maa ToolKit was uninitialized successfully; otherwise, false.
+    ///     true if the Maa Toolkit was uninitialized successfully; otherwise, false.
     /// </returns>
     bool Uninit();
 

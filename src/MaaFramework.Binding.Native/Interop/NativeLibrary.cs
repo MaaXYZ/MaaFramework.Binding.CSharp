@@ -14,7 +14,7 @@ internal static partial class NativeLibrary
     {
         var libHandle = IntPtr.Zero;
         if (!libraryName.Equals("MaaFramework", StringComparison.Ordinal)
-         && !libraryName.Equals("MaaToolKit", StringComparison.Ordinal)
+         && !libraryName.Equals("MaaToolkit", StringComparison.Ordinal)
          && !libraryName.Equals("MaaRpc", StringComparison.Ordinal))
         {
             return libHandle;

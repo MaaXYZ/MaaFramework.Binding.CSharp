@@ -9,20 +9,20 @@ namespace MaaFramework.Binding.Interop.Native;
 #pragma warning disable CA1707 // 标识符不应包含下划线
 
 /// <summary>
-///     The base P/Invoke methods for MaaToolKit, use this class to call all the native methods.
+///     The base P/Invoke methods for MaaToolkit, use this class to call all the native methods.
 ///     If you do not known what you are doing, do not use this class. In most situations, you
 ///     should use <see cref="Binding.MaaToolkit"/> instead.
 /// </summary>
-public static partial class MaaToolKit
+public static partial class MaaToolkit
 {
 
-    #region include/MaaToolKit/Config/MaaToolKitConfig.h, version: v1.4.0.
+    #region include/MaaToolkit/Config/MaaToolkitConfig.h, version: v1.4.0.
 
-    [LibraryImport("MaaToolKit")]
-    public static partial MaaBool MaaToolKitInit();
+    [LibraryImport("MaaToolkit")]
+    public static partial MaaBool MaaToolkitInit();
 
-    [LibraryImport("MaaToolKit")]
-    public static partial MaaBool MaaToolKitUninit();
+    [LibraryImport("MaaToolkit")]
+    public static partial MaaBool MaaToolkitUninit();
 
     #endregion
 
