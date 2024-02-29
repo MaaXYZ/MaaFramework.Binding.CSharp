@@ -43,7 +43,10 @@ public class MaaToolkit : IMaaToolkit
     /// <inheritdoc/>
     public DeviceInfo[] Find(string adbPath = "")
     {
-        var size = FindDevice(adbPath);
+        if (!FindDevice(adbPath))
+            throw new InvalidOperationException();
+
+        var size = WaitForFindDeviceToComplete();
         var devices = new DeviceInfo[size];
         for (ulong i = 0; i < size; i++)
         {
@@ -65,15 +68,51 @@ public class MaaToolkit : IMaaToolkit
     /// </summary>
     /// <param name="adbPath">The adb path that devices connected to.</param>
     /// <returns>
-    ///     The number of devices.
+    ///     true if the find device operation posted successfully; otherwise, false.
     /// </returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitFindDevice"/> and <see cref="MaaToolkitFindDeviceWithAdb"/>.
     /// </remarks>
-    protected static ulong FindDevice(string adbPath = "")
+    protected static bool FindDevice(string adbPath = "")
         => string.IsNullOrEmpty(adbPath)
-         ? MaaToolkitFindDevice()
-         : MaaToolkitFindDeviceWithAdb(adbPath);
+         ? MaaToolkitPostFindDevice().ToBoolean()
+         : MaaToolkitPostFindDeviceWithAdb(adbPath).ToBoolean();
+
+    /// <summary>
+    ///     Get a value indicates whether the find device operation is completed.
+    /// </summary>
+    /// <returns>
+    ///     true if the operation is completed; otherwise, false.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolkitIsFindDeviceCompleted"/>.
+    /// </remarks>
+    protected static bool IsFindDeviceCompleted()
+        => MaaToolkitIsFindDeviceCompleted().ToBoolean();
+
+    /// <summary>
+    ///     Waits and gets the number of devices.
+    /// </summary>
+    /// <returns>
+    ///     The number of devices.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolkitWaitForFindDeviceToComplete"/>.
+    /// </remarks>
+    protected static ulong WaitForFindDeviceToComplete()
+        => MaaToolkitWaitForFindDeviceToComplete();
+
+    /// <summary>
+    ///     Gets the number of devices.
+    /// </summary>
+    /// <returns>
+    ///     The number of devices.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolkitGetDeviceCount"/>.
+    /// </remarks>
+    protected static ulong GetDeviceCount()
+        => MaaToolkitGetDeviceCount();
 
     /// <summary>
     ///     Gets the name of a device.
@@ -179,6 +218,24 @@ public class MaaToolkit : IMaaToolkit
     /// </remarks>
     public static nint GetCursorWindow()
         => MaaToolkitGetCursorWindow();
+
+    /// <returns>
+    ///     The MaaWin32Hwnd.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolkitGetDesktopWindow"/>.
+    /// </remarks>
+    public static nint GetDesktopWindow()
+        => MaaToolkitGetDesktopWindow();
+
+    /// <returns>
+    ///     The MaaWin32Hwnd.
+    /// </returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaToolkitGetForegroundWindow"/>.
+    /// </remarks>
+    public static nint GetForegroundWindow()
+        => MaaToolkitGetForegroundWindow();
 
     #endregion
 

@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaInstance
 {
 
-    #region include/MaaFramework/Instance/MaaInstance.h, version: v1.4.0.
+    #region include/MaaFramework/Instance/MaaInstance.h, version: v1.6.3.
 
     [LibraryImport("MaaFramework")]
     public static partial MaaInstanceHandle MaaCreate(MaaInstanceCallback callback, MaaCallbackTransparentArg callback_arg);
@@ -69,6 +69,10 @@ public static partial class MaaInstance
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaTaskAllFinished(MaaInstanceHandle inst);
 
+    [LibraryImport("MaaFramework")]
+    public static partial MaaBool MaaPostStop(MaaInstanceHandle inst);
+
+    [Obsolete("This API MaaStop is about to be deprecated. Please use MaaPostStop instead.")]
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaStop(MaaInstanceHandle inst);
 

@@ -15,7 +15,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static class MaaActionApi
 {
 
-    #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.4.0.
+    #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.6.3.
 
     public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail);
 

@@ -285,5 +285,5 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     ///     Wrapper of <see cref="MaaStop"/>.
     /// </remarks>
     public bool Abort()
-        => MaaStop(Handle).ToBoolean();
+        => MaaPostStop(Handle).ToBoolean();
 }

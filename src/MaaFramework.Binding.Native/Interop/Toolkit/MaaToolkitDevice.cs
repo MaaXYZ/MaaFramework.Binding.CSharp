@@ -16,13 +16,30 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaToolkit
 {
 
-    #region include/MaaToolkit/Device/MaaToolkitDevice.h, version: v1.4.0.
+    #region include/MaaToolkit/Device/MaaToolkitDevice.h, version: v1.6.3.
 
+    [Obsolete("This API MaaToolkitFindDevice is about to be deprecated. Please use MaaToolkitPostFindDevice instead.")]
     [LibraryImport("MaaToolkit")]
     public static partial MaaSize MaaToolkitFindDevice();
 
+    [Obsolete("This API MaaToolkitFindDeviceWithAdb is about to be deprecated. Please use MaaToolkitPostFindDeviceWithAdb instead.")]
     [LibraryImport("MaaToolkit")]
     public static partial MaaSize MaaToolkitFindDeviceWithAdb([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path);
+
+    [LibraryImport("MaaToolkit")]
+    public static partial MaaBool MaaToolkitPostFindDevice();
+
+    [LibraryImport("MaaToolkit")]
+    public static partial MaaBool MaaToolkitPostFindDeviceWithAdb([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path);
+
+    [LibraryImport("MaaToolkit")]
+    public static partial MaaBool MaaToolkitIsFindDeviceCompleted();
+
+    [LibraryImport("MaaToolkit")]
+    public static partial MaaSize MaaToolkitWaitForFindDeviceToComplete();
+
+    [LibraryImport("MaaToolkit")]
+    public static partial MaaSize MaaToolkitGetDeviceCount();
 
     [LibraryImport("MaaToolkit")]
     public static partial MaaStringView MaaToolkitGetDeviceName(MaaSize index);

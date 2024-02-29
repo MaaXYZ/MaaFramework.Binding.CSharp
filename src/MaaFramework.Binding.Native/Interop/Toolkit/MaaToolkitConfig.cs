@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaToolkit
 {
 
-    #region include/MaaToolkit/Config/MaaToolkitConfig.h, version: v1.4.0.
+    #region include/MaaToolkit/Config/MaaToolkitConfig.h, version: v1.6.3.
 
     [LibraryImport("MaaToolkit")]
     public static partial MaaBool MaaToolkitInit();

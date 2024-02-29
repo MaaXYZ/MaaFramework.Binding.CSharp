@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaResource
 {
 
-    #region include/MaaFramework/Instance/MaaResource.h, version: v1.4.0.
+    #region include/MaaFramework/Instance/MaaResource.h, version: v1.6.3.
 
     [LibraryImport("MaaFramework")]
     public static partial MaaResourceHandle MaaResourceCreate(MaaResourceCallback callback, MaaCallbackTransparentArg callback_arg);
@@ -40,10 +40,10 @@ public static partial class MaaResource
     public static partial MaaBool MaaResourceSetOption(MaaResourceHandle res, MaaResOption key, ref MaaOptionValue value, MaaOptionValueSize val_size);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaResourceGetHash(MaaResourceHandle res, /* out */ MaaStringBufferHandle buffer);
+    public static partial MaaBool MaaResourceGetHash(MaaResourceHandle res, MaaStringBufferHandle buffer);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaResourceGetTaskList(MaaResourceHandle res, /* out */ MaaStringBufferHandle buffer);
+    public static partial MaaBool MaaResourceGetTaskList(MaaResourceHandle res, MaaStringBufferHandle buffer);
 
     #endregion
 

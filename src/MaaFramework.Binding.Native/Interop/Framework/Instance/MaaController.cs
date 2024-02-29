@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaController
 {
 
-    #region include/MaaFramework/Instance/MaaController.h, version: v1.4.0.
+    #region include/MaaFramework/Instance/MaaController.h, version: v1.6.3.
 
     [Obsolete("This API MaaAdbControllerCreate is about to be deprecated. Please use MaaAdbControllerCreateV2 instead.")]
     [LibraryImport("MaaFramework")]
@@ -80,10 +80,10 @@ public static partial class MaaController
     public static partial MaaBool MaaControllerConnected(MaaControllerHandle ctrl);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaControllerGetImage(MaaControllerHandle ctrl, /* out */ MaaImageBufferHandle buffer);
+    public static partial MaaBool MaaControllerGetImage(MaaControllerHandle ctrl, MaaImageBufferHandle buffer);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaControllerGetUUID(MaaControllerHandle ctrl, /* out */ MaaStringBufferHandle buffer);
+    public static partial MaaBool MaaControllerGetUUID(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
 
     #endregion
 

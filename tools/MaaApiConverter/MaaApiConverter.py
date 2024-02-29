@@ -11,6 +11,16 @@ api_path = [
     'include/MaaToolkit/MaaToolkitAPI.h'
 ]
 
+print("Please read https://maaxyz.github.io/MaaFramework/deprecated.html")
+# 过时 API
+obsolete_api_dict = {
+    'MaaAdbControllerCreate': 'MaaAdbControllerCreateV2',
+    'MaaAdbControllerType_Screencap_FastestWay_Compatible': '',
+    'MaaStop': 'MaaPostStop',
+    'MaaToolkitFindDevice': 'MaaToolkitPostFindDevice',
+    'MaaToolkitFindDeviceWithAdb': 'MaaToolkitPostFindDeviceWithAdb',
+}
+
 def convert_cpp_header_to_csharp(header_path: str):
     dll_name = header_path.split('/')[1]
     csharp_codes = []
@@ -28,12 +38,12 @@ def convert_cpp_header_to_csharp(header_path: str):
     for match in matches:
         return_type = match.group(1)
         function_name = ''.join(word[0].upper() + word[1:] for word in match.group(2).split('_'))
-        parameters = ' '.join(match.group(3).replace('//\n', '').split())
+        parameters = ' '.join(match.group(3).replace('//\r\n', '').replace('//\n', '').split())
         # 转换名称和参数类型
         function_name = 'Abort' if function_name == 'Stop' else function_name
         parameters = parameters.replace('int32_t*', 'out int32_t')
         parameters = parameters.replace('const MaaImageBufferHandle', 'MaaImageBufferHandle')
-        parameters = ','.join(p for p in parameters.split(',') if 'TransparentArg' not in p)
+        parameters = ','.join(p for p in parameters.split(',') if 'TransparentArg' not in p or 'MaaAPICallback' in function_name)
         csharp_code = f'    public delegate {return_type} {function_name}({parameters});\n'
         csharp_codes.append(csharp_code)
 
@@ -45,7 +55,7 @@ def convert_cpp_header_to_csharp(header_path: str):
     for match in matches:
         return_type = match.group(1)
         function_name = match.group(2)
-        parameters = ' '.join(match.group(3).replace('//\n', '').split())
+        parameters = ' '.join(match.group(3).replace('//\r\n', '').replace('//\n', '').split())
 
         # 特定 API
         special_api_dict = {
@@ -68,10 +78,6 @@ def convert_cpp_header_to_csharp(header_path: str):
             # parameters = parameters.replace('MaaRectHandle', 'ref MaaRect')
             parameters = parameters.replace('MaaStringView', '[MarshalAs(UnmanagedType.LPUTF8Str)] string')
 
-        # 过时 API
-        obsolete_api_dict = {
-            'MaaAdbControllerCreate': 'MaaAdbControllerCreateV2',
-        }
         if function_name in obsolete_api_dict.keys():
             obsolete_explanation = f'    [Obsolete("This API {function_name} is about to be deprecated. Please use {obsolete_api_dict[function_name]} instead.")]'
             csharp_codes.append(obsolete_explanation)

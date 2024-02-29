@@ -18,7 +18,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static class MaaControllerApi
 {
 
-    #region include/MaaFramework/Instance/MaaCustomController.h, version: v1.4.0.
+    #region include/MaaFramework/Instance/MaaCustomController.h, version: v1.6.3.
 
     public delegate MaaBool Connect();
 

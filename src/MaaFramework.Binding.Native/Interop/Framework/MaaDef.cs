@@ -70,7 +70,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static class MaaDef
 {
 
-    #region include/MaaFramework/MaaAPI.h, version: v1.4.0.
+    #region include/MaaFramework/MaaAPI.h, version: v1.6.3.
 
     #endregion
 
@@ -79,7 +79,7 @@ public static class MaaDef
     // internal const string EmptyMaaTaskParam = "{}";
 }
 
-#region include/MaaFramework/MaaDef.h, version: v1.4.0.
+#region include/MaaFramework/MaaDef.h, version: v1.6.3.
 
 public delegate void MaaAPICallback(MaaStringView msg, MaaStringView details_json, MaaTransparentArg callback_arg);
 
