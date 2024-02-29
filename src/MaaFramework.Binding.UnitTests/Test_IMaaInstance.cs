@@ -66,9 +66,7 @@ public class Test_IMaaInstance
     public void CreateInstances()
     {
         using var nativeResource = new MaaResource();
-        using var grpcResource = new MaaResourceGrpc(Common.GrpcChannel);
         using var nativeController = new MaaAdbController(Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
-        using var grpcController = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
 
         using var native1 = new MaaInstance(true)
         {
@@ -77,6 +75,9 @@ public class Test_IMaaInstance
             DisposeOptions = DisposeOptions.None,
         };
         using var native2 = new MaaInstance(nativeController, nativeResource, DisposeOptions.None);
+
+        using var grpcResource = new MaaResourceGrpc(Common.GrpcChannel);
+        using var grpcController = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
 
         using var grpc1 = new MaaInstanceGrpc(Common.GrpcChannel, true)
         {

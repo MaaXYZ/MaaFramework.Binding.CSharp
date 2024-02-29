@@ -48,6 +48,9 @@ public sealed class MaaDataAttribute : DataRowAttribute, ITestDataSource
         }
     }
 
+    /// <remarks>
+    ///     NewData
+    /// </remarks>
     private IEnumerable<KeyValuePair<MaaTypes, object>> GetMaaObjects(MethodInfo methodInfo)
     {
         var declaredProperty = (methodInfo.DeclaringType?.GetTypeInfo().GetDeclaredProperty(_maaDataSourceName))

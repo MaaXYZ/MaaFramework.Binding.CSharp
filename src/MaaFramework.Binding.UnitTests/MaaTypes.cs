@@ -13,4 +13,5 @@ public enum MaaTypes
 
     Native = 1 << 0,
     Grpc = 1 << 1,
+    Placeholder = 1 << 30,
 }
