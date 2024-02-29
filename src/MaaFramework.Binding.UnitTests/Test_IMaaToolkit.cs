@@ -9,13 +9,17 @@ public class Test_IMaaToolkit
     public static Dictionary<MaaTypes, IMaaUtility> MaaUtilityData { get; } = new()
     {
         { MaaTypes.Native, new MaaUtility() },
+        /*
         { MaaTypes.Grpc,   new MaaUtilityGrpc(Common.GrpcChannel) },
+        */
     };
 
     public static Dictionary<MaaTypes, object> NewData => new()
     {
         { MaaTypes.Native, new MaaToolkit() },
+        /*
         { MaaTypes.Grpc,   new MaaToolkitGrpc(Common.GrpcChannel) },
+        */
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
 

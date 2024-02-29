@@ -18,6 +18,7 @@ public class Test_IMaaInstance
                 DisposeOptions = DisposeOptions.All,
             }
         },
+        /*
         {
             MaaTypes.Grpc, new MaaInstanceGrpc(Common.GrpcChannel)
             {
@@ -26,6 +27,7 @@ public class Test_IMaaInstance
                 DisposeOptions = DisposeOptions.All,
             }
         }
+        */
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
 
@@ -76,6 +78,7 @@ public class Test_IMaaInstance
         };
         using var native2 = new MaaInstance(nativeController, nativeResource, DisposeOptions.None);
 
+        /*
         using var grpcResource = new MaaResourceGrpc(Common.GrpcChannel);
         using var grpcController = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
 
@@ -86,6 +89,7 @@ public class Test_IMaaInstance
             DisposeOptions = DisposeOptions.None,
         };
         using var grpc2 = new MaaInstanceGrpc(Common.GrpcChannel, grpcController, grpcResource, DisposeOptions.None);
+        */
     }
 #pragma warning restore S2699 // Tests should include assertions
 

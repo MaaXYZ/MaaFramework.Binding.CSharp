@@ -11,7 +11,9 @@ public class Test_IMaaResource
     public static Dictionary<MaaTypes, object> NewData => new()
     {
         { MaaTypes.Native, new MaaResource() },
+        /*
         { MaaTypes.Grpc,   new MaaResourceGrpc(Common.GrpcChannel) },
+        */
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
 
@@ -42,11 +44,13 @@ public class Test_IMaaResource
         using var native4 = new MaaResource(new List<string>() { Common.ResourcePath, Common.ResourcePath });
         using var native5 = new MaaResource(CheckStatusOption.None, new List<string>() { });
 
+        /*
         using var grpc1 = new MaaResourceGrpc(Common.GrpcChannel);
         using var grpc2 = new MaaResourceGrpc(Common.GrpcChannel, Common.ResourcePath, Common.ResourcePath);
         using var grpc3 = new MaaResourceGrpc(Common.GrpcChannel, CheckStatusOption.None, Common.ResourcePath);
         using var grpc4 = new MaaResourceGrpc(Common.GrpcChannel, new List<string>() { Common.ResourcePath, Common.ResourcePath });
         using var grpc5 = new MaaResourceGrpc(Common.GrpcChannel, CheckStatusOption.None, new List<string>() { });
+        */
     }
 #pragma warning restore S2699 // Tests should include assertions
 

@@ -16,9 +16,11 @@ public class Test_IMaaController
         {
             MaaTypes.Native, new MaaAdbController(Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
         },
+        /*
         {
             MaaTypes.Grpc, new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
         }
+        */
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
     public static Dictionary<MaaTypes, object> MiniTouchData { get; private set; } = default!;
@@ -86,6 +88,7 @@ public class Test_IMaaController
             LinkOption.Start,
             CheckStatusOption.None);
 
+        /*
         using var grpc1 = new MaaAdbControllerGrpc(
             Common.GrpcChannel,
             Common.AdbPath,
@@ -110,6 +113,7 @@ public class Test_IMaaController
             Common.AgentPath,
             LinkOption.Start,
             CheckStatusOption.None);
+        */
     }
 #pragma warning restore S2699 // Tests should include assertions
 

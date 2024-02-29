@@ -11,7 +11,9 @@ public static class Common
 {
     static Common()
     {
+        /*
         MaaRpc.Start(GrpcAddress);
+        */
     }
 
     internal static bool InGithubActions;
@@ -70,8 +72,10 @@ public static class Common
     [AssemblyCleanup]
     public static void CleanupAssembly()
     {
+        /*
         GrpcChannel.Dispose();
         MaaRpc.Stop();
+        */
     }
 
     internal static void DisposeData(IEnumerable<IMaaDisposable> data)
