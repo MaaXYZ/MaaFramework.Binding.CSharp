@@ -45,13 +45,15 @@ public class Test_IMaaToolkit
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), "")]
-    [MaaData(MaaTypes.All, nameof(Data), nameof(Common.AdbPath))]
-    public void Interface_Find(MaaTypes type, IMaaToolkit maaToolkit, string arg)
+    [MaaData(MaaTypes.All, nameof(Data), "", true)]
+    [MaaData(MaaTypes.All, nameof(Data), "", false)]
+    [MaaData(MaaTypes.All, nameof(Data), nameof(Common.AdbPath), true)]
+    [MaaData(MaaTypes.All, nameof(Data), nameof(Common.AdbPath), false)]
+    public void Interface_Find_FindAsync(MaaTypes type, IMaaToolkit maaToolkit, string arg, bool useAsync)
     {
         Assert.IsNotNull(maaToolkit);
 
-        var devices = maaToolkit.Find(arg);
+        var devices = useAsync ? maaToolkit.FindAsync(arg).GetAwaiter().GetResult() : maaToolkit.Find(arg);
         if (Common.InGithubActions && devices.Length == 0)
             return;
         else

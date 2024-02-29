@@ -47,6 +47,21 @@ public class MaaToolkit : IMaaToolkit
             throw new InvalidOperationException();
 
         var size = WaitForFindDeviceToComplete();
+        return GetDeviceInfo(size);
+    }
+
+    /// <inheritdoc/>
+    public async Task<DeviceInfo[]> FindAsync(string adbPath = "")
+    {
+        if (!FindDevice(adbPath))
+            throw new InvalidOperationException();
+
+        var size = await Task.Run(WaitForFindDeviceToComplete);
+        return GetDeviceInfo(size);
+    }
+
+    private static DeviceInfo[] GetDeviceInfo(ulong size)
+    {
         var devices = new DeviceInfo[size];
         for (ulong i = 0; i < size; i++)
         {

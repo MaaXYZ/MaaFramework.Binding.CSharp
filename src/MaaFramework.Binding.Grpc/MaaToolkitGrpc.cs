@@ -78,4 +78,20 @@ public class MaaToolkitGrpc : MaaGrpcChannel, IMaaToolkit
             AdbTypes = (AdbControllerTypes)device.AdbType,
         })
         .ToArray();
+
+    /// <inheritdoc/>
+    public async Task<DeviceInfo[]> FindAsync(string adbPath = "")
+    {
+        var response = await _deviceClient.findAsync(new EmptyRequest());
+        return response.Info
+        .Select(device => new DeviceInfo
+        {
+            Name = device.Name,
+            AdbConfig = device.AdbConfig,
+            AdbPath = device.AdbPath,
+            AdbSerial = device.AdbSerial,
+            AdbTypes = (AdbControllerTypes)device.AdbType,
+        })
+        .ToArray();
+    }
 }

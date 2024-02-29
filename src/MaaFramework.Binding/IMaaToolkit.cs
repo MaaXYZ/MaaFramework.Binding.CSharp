@@ -29,5 +29,14 @@ public interface IMaaToolkit
     ///     The arrays of device information.
     /// </returns>
     DeviceInfo[] Find(string adbPath = "");
+
+    /// <summary>
+    ///     Finds informations of devices in an asynchronous operation.
+    /// </summary>
+    /// <param name="adbPath">The adb path that devices connected to.</param>
+    /// <returns>
+    ///     The task object representing the asynchronous operation.
+    /// </returns>
+    Task<DeviceInfo[]> FindAsync(string adbPath = "");
 }
 
