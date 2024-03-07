@@ -48,7 +48,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     ///     Gets or sets the toolkit.
     /// </summary>
     /// <remarks>
-    ///     Not automatically calls <see cref="IMaaToolkit.Init"/>.
+    ///     Not automatically calls <see cref="IMaaToolkitConfig.Init"/>.
     /// </remarks>
     IMaaToolkit Toolkit { get; set; }
 

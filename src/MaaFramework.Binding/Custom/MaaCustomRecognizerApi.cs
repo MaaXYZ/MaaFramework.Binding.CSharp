@@ -23,6 +23,9 @@ public static class MaaRecognizerApi
 /// </summary>
 public class MaaCustomRecognizerApi : IMaaCustomTask
 {
+    /// <inheritdoc/>
+    public string Name { get; set; } = string.Empty;
+
     public required MaaRecognizerApi.Analyze Analyze { get; init; }
 }
 

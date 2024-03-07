@@ -15,7 +15,7 @@ public abstract class MaaGrpcChannel
     /// <remarks>
     ///     MaaRpc does not have a reconnect mechanism for active calls.
     /// </remarks>
-    protected GrpcChannel Channel
+    internal protected GrpcChannel Channel
     {
         get => _channel;
         set

@@ -5,8 +5,7 @@ namespace MaaFramework.Binding.Custom;
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 /// <summary>
-///     A static class provides the delegates of <see cref="MaaCustomControllerApi
-///     " />.
+///     A static class provides the delegates of <see cref="MaaCustomControllerApi" />.
 /// </summary>
 public static class MaaControllerApi
 {
@@ -43,6 +42,9 @@ public static class MaaControllerApi
 
 public class MaaCustomControllerApi : IMaaCustom
 {
+    /// <inheritdoc/>
+    public string Name { get; set; } = string.Empty;
+
     public required MaaControllerApi.Connect Connect { get; init; }
     public required MaaControllerApi.RequestUuid RequestUuid { get; init; }
     public required MaaControllerApi.RequestResolution RequestResolution { get; init; }

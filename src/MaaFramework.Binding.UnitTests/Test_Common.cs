@@ -32,7 +32,7 @@ public static class Common
     private static void InitializeInfo(TestContext testContext)
     {
         InGithubActions = bool.Parse(Environment.GetEnvironmentVariable("GITHUB_ACTIONS") ?? "false");
-        var devices = new MaaToolkit().Find();
+        var devices = new MaaToolkit().Device.Find();
 
         // 请修改 TestParam.runsettings，并在测试资源管理器——设置——配置运行设置
         // 选择解决方案范围内的 runsettings 文件：src\Common\TestParam.runsettings

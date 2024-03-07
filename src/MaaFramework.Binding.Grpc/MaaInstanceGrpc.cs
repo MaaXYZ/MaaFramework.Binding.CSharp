@@ -74,7 +74,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
 
         if (DisposeOptions.HasFlag(DisposeOptions.Toolkit))
         {
-            Toolkit.Uninit();
+            Toolkit.Config.Uninit();
         }
 
         _client.destroy(new HandleRequest { Handle = Handle, });

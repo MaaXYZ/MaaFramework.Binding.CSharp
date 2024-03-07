@@ -18,7 +18,7 @@ public enum DisposeOptions
     All = Resource | Controller,
 
     /// <summary>
-    ///     Disposes <see cref="IMaaResource"/> and <see cref="IMaaController"/>, invokes <see cref="IMaaToolkit.Uninit()"/>.
+    ///     Disposes <see cref="IMaaResource"/> and <see cref="IMaaController"/>, invokes <see cref="IMaaToolkitConfig.Uninit"/>.
     /// </summary>
     AllIncludeToolkitUninit = Resource | Controller | Toolkit,
 

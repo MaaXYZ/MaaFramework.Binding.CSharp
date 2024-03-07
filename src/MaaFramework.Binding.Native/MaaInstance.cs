@@ -66,7 +66,7 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
 
         if (DisposeOptions.HasFlag(DisposeOptions.Toolkit))
         {
-            Toolkit.Uninit();
+            Toolkit.Config.Uninit();
         }
 
         MaaDestroy(Handle);

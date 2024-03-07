@@ -19,6 +19,9 @@ public static class MaaActionApi
 /// </summary>
 public class MaaCustomActionApi : IMaaCustomTask
 {
+    /// <inheritdoc/>
+    public string Name { get; set; } = string.Empty;
+
     public required MaaActionApi.Run Run { get; init; }
     public required MaaActionApi.Abort Abort { get; init; }
 }
