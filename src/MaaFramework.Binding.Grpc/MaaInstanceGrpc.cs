@@ -156,21 +156,85 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// <inheritdoc/>
     public bool Register<T>(string name, T custom) where T : IMaaCustomTask
     {
+        ((IMaaCustom)custom).Name = name;
+        return Register(custom);
+    }
+
+    /// <inheritdoc/>
+    public bool Register<T>(T custom) where T : IMaaCustomTask
+    {
         switch (custom)
         {
-            case MaaCustomRecognizerApi recognizer:
-                var streamingCallRecognizer = _client.register_custom_recognizer();
-                Task.Run(() => CallCustomRecognizer(recognizer, streamingCallRecognizer));
-                RegisterCustomRecognizer(name, streamingCallRecognizer).Wait();
-                return true;
-            case MaaCustomActionApi action:
+            case MaaCustomActionApi api:
                 var streamingCallAction = _client.register_custom_action();
-                Task.Run(() => CallCustomAction(action, streamingCallAction));
-                RegisterCustomAction(name, streamingCallAction).Wait();
+                Task.Run(() => CallCustomAction(api, streamingCallAction));
+                RegisterCustomAction(api.Name, streamingCallAction).Wait();
+                return true;
+            case MaaCustomRecognizerApi api:
+                var streamingCallRecognizer = _client.register_custom_recognizer();
+                Task.Run(() => CallCustomRecognizer(api, streamingCallRecognizer));
+                RegisterCustomRecognizer(api.Name, streamingCallRecognizer).Wait();
                 return true;
             default:
                 return false;
         }
+    }
+
+    private async Task RegisterCustomAction(
+        string name,
+        AsyncDuplexStreamingCall<CustomActionRequest, CustomActionResponse> streamingCall)
+    {
+        await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
+        {
+            Ok = true,
+            Init = new CustomActionInit { Handle = Handle, Name = name, }
+        });
+        await streamingCall.RequestStream.CompleteAsync();
+    }
+
+    private async Task CallCustomAction(
+        //string name,
+        MaaCustomActionApi action,
+        AsyncDuplexStreamingCall<CustomActionRequest, CustomActionResponse> streamingCall)
+    {
+        await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
+        {
+            switch (response.CommandCase)
+            {
+                case CustomActionResponse.CommandOneofCase.Run:
+                    using (var box = new MaaRectBufferGrpc())
+                    {
+                        box.X = response.Run.Box.Xy.X;
+                        box.Y = response.Run.Box.Xy.Y;
+                        box.Width = response.Run.Box.Wh.Width;
+                        box.Height = response.Run.Box.Wh.Height;
+
+                        var ret = action.Run.Invoke(
+                            new MaaSyncContextGrpc(Channel, response.Run.Context),
+                            response.Run.Task,
+                            response.Run.Param,
+                            box,
+                            response.Run.Detail);
+
+                        await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
+                        {
+                            Ok = ret,
+                        });
+                    }
+                    break;
+                case CustomActionResponse.CommandOneofCase.Stop:
+                    action.Abort.Invoke();
+                    await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
+                    {
+                        Ok = true,
+                    });
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        streamingCall.Dispose();
     }
 
     private async Task RegisterCustomRecognizer(
@@ -231,92 +295,47 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
         streamingCall.Dispose();
     }
 
-    private async Task RegisterCustomAction(
-        string name,
-        AsyncDuplexStreamingCall<CustomActionRequest, CustomActionResponse> streamingCall)
-    {
-        await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
-        {
-            Ok = true,
-            Init = new CustomActionInit { Handle = Handle, Name = name, }
-        });
-        await streamingCall.RequestStream.CompleteAsync();
-    }
-
-    private async Task CallCustomAction(
-        //string name,
-        MaaCustomActionApi action,
-        AsyncDuplexStreamingCall<CustomActionRequest, CustomActionResponse> streamingCall)
-    {
-        await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
-        {
-            switch (response.CommandCase)
-            {
-                case CustomActionResponse.CommandOneofCase.Run:
-                    using (var box = new MaaRectBufferGrpc())
-                    {
-                        box.X = response.Run.Box.Xy.X;
-                        box.Y = response.Run.Box.Xy.Y;
-                        box.Width = response.Run.Box.Wh.Width;
-                        box.Height = response.Run.Box.Wh.Height;
-
-                        var ret = action.Run.Invoke(
-                            new MaaSyncContextGrpc(Channel, response.Run.Context),
-                            response.Run.Task,
-                            response.Run.Param,
-                            box,
-                            response.Run.Detail);
-
-                        await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
-                        {
-                            Ok = ret,
-                        });
-                    }
-                    break;
-                case CustomActionResponse.CommandOneofCase.Stop:
-                    action.Abort.Invoke();
-                    await streamingCall.RequestStream.WriteAsync(new CustomActionRequest
-                    {
-                        Ok = true,
-                    });
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        streamingCall.Dispose();
-    }
-
     /// <inheritdoc/>
     public bool Unregister<T>(string name) where T : IMaaCustomTask
     {
-        switch (typeof(T).Name)
+        if (typeof(T) == typeof(MaaCustomActionApi))
         {
-            case nameof(MaaCustomRecognizerApi):
-                _client.unregister_custom_recognizer(new HandleStringRequest { Handle = Handle, Str = name });
-                return true;
-            case nameof(MaaCustomActionApi):
-                _client.unregister_custom_action(new HandleStringRequest { Handle = Handle, Str = name });
-                return true;
-            default:
-                return false;
+            _client.unregister_custom_action(new HandleStringRequest { Handle = Handle, Str = name });
+            return true;
         }
+        else if (typeof(T) == typeof(MaaCustomRecognizerApi))
+        {
+            _client.unregister_custom_recognizer(new HandleStringRequest { Handle = Handle, Str = name });
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <inheritdoc/>
+    public bool Unregister<T>(T custom) where T : IMaaCustomTask
+    {
+        return Unregister<T>(((IMaaCustom)custom).Name);
     }
 
     /// <inheritdoc/>
     public bool Clear<T>() where T : IMaaCustomTask
     {
-        switch (typeof(T).Name)
+        if (typeof(T) == typeof(MaaCustomActionApi))
         {
-            case nameof(MaaCustomRecognizerApi):
-                _client.clear_custom_recognizer(new HandleRequest { Handle = Handle, });
-                return true;
-            case nameof(MaaCustomActionApi):
-                _client.clear_custom_action(new HandleRequest { Handle = Handle, });
-                return true;
-            default:
-                return false;
+            _client.clear_custom_action(new HandleRequest { Handle = Handle, });
+            return true;
+        }
+        else if (typeof(T) == typeof(MaaCustomRecognizerApi))
+        {
+            _client.clear_custom_recognizer(new HandleRequest { Handle = Handle, });
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

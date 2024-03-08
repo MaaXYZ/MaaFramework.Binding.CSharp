@@ -65,34 +65,42 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// </value>
     bool Initialized { get; }
 
+    /// <summary>
+    ///     Registers a <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/> in the <see cref="IMaaInstance"/>.
+    /// </summary>
+    /// <typeparam name="T">The <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/>.</typeparam>
+    /// <param name="name">The new name.</param>
+    /// <param name="custom">The <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/>.</param>
+    /// <returns>
+    ///     true if the custom action or recognizer was registered successfully; otherwise, false.
+    /// </returns>
+    /// <exception cref="ArgumentException"/>
+    bool Register<T>(string name, T custom) where T : IMaaCustomTask; // TODOa 缺少测试用例
+
+    /// <inheritdoc cref="Register{T}(string, T)"/>
+    bool Register<T>(T custom) where T : IMaaCustomTask;
 
     /// <summary>
-    ///     Registers a <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> named <paramref name="name"/> in the <see cref="IMaaInstance"/>.
+    ///     Unregisters a <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/> in the <see cref="IMaaInstance"/>.
     /// </summary>
-    /// <typeparam name="T">The <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
-    /// <param name="name">The name.</param>
-    /// <param name="custom">The MaaCustomRecognizerApi or MaaCustomActionApi.</param>
+    /// <typeparam name="T">The <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/>.</typeparam>
+    /// <param name="name">The name of <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/>.</param>
     /// <returns>
-    ///     true if the custom recognizer or action was registered successfully; otherwise, false.
+    ///     true if the custom action or recognizer was unregistered successfully; otherwise, false.
     /// </returns>
-    bool Register<T>(string name, T custom) where T : IMaaCustomTask;
-
-    /// <summary>
-    ///     Unregisters a <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/> named <paramref name="name"/> in the <see cref="IMaaInstance"/>.
-    /// </summary>
-    /// <typeparam name="T">The <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
-    /// <param name="name">The name of recognizer.</param>
-    /// <returns>
-    ///     true if the custom recognizer or action was unregistered successfully; otherwise, false.
-    /// </returns>
+    /// <exception cref="ArgumentException"/>
     bool Unregister<T>(string name) where T : IMaaCustomTask;
 
+    /// <inheritdoc cref="Unregister{T}(string)"/>
+    /// <param name="custom">The <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/>.</param>
+    bool Unregister<T>(T custom) where T : IMaaCustomTask;
+
     /// <summary>
-    ///     Clears <see cref="MaaCustomRecognizerApi"/>s or <see cref="MaaCustomActionApi"/>s in the <see cref="IMaaInstance"/>.
+    ///     Clears all <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/> in the <see cref="IMaaInstance"/>.
     /// </summary>
-    /// <typeparam name="T">THe <see cref="MaaCustomRecognizerApi"/> or <see cref="MaaCustomActionApi"/>.</typeparam>
+    /// <typeparam name="T">THe <see cref="MaaCustomActionApi"/> or <see cref="MaaCustomRecognizerApi"/>.</typeparam>
     /// <returns>
-    ///     true if custom recognizers or actions were cleared successfully; otherwise, false.
+    ///     true if custom actions or recognizers were cleared successfully; otherwise, false.
     /// </returns>
     bool Clear<T>() where T : IMaaCustomTask;
 
