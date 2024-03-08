@@ -66,6 +66,8 @@ public class Test_IMaaController
     [TestMethod]
     public void CreateInstances()
     {
+        #region MaaAdbController
+
         using var native1 = new MaaAdbController(
             Common.AdbPath,
             Common.Address,
@@ -114,6 +116,25 @@ public class Test_IMaaController
             LinkOption.Start,
             CheckStatusOption.None);
         */
+
+        #endregion
+
+        #region MaaWin32Controller
+
+        using var win32Native1 = new MaaWin32Controller(
+            nint.Zero,
+            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI);
+        using var win32Native2 = new MaaWin32Controller(
+            nint.Zero,
+            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
+            LinkOption.None);
+        using var win32Native3 = new MaaWin32Controller(
+            nint.Zero,
+            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
+            LinkOption.Start,
+            CheckStatusOption.None);
+
+        #endregion
     }
 #pragma warning restore S2699 // Tests should include assertions
 

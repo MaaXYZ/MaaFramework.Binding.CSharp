@@ -76,7 +76,7 @@ public class Test_IMaaToolkit
             MaaTypes.Grpc => devices[0].ToAdbControllerGrpc(
                 Common.GrpcChannel,
                 Path.GetFullPath("./MaaAgentBinary"),
-                type: AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
+                types: AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
                 link: LinkOption.None),
             _ => throw new NotImplementedException(),
         };
@@ -94,7 +94,7 @@ public class Test_IMaaToolkit
             return;
         Assert.IsNotNull(maaToolkit);
 
-        Test_WindowInfos(
+        Test_WindowInfos(type,
             maaToolkit.Win32.Window.Find(string.Empty, string.Empty));
     }
 
@@ -106,16 +106,29 @@ public class Test_IMaaToolkit
             return;
         Assert.IsNotNull(maaToolkit);
 
-        Test_WindowInfos(
+        Test_WindowInfos(type,
             maaToolkit.Win32.Window.Search(string.Empty, string.Empty));
     }
-    private static void Test_WindowInfos(WindowInfo[] windows)
+
+    private static void Test_WindowInfos(MaaTypes type, WindowInfo[] windows)
     {
         CollectionAssert.AllItemsAreUnique(windows);
         foreach (var window in windows)
         {
             Assert.AreNotEqual(nint.Zero, window.Hwnd);
         }
+
+        using var maaController = type switch
+        {
+            MaaTypes.Native => windows[0].ToWin32Controller(
+                Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
+                link: LinkOption.None),
+            _ => throw new NotImplementedException(),
+        };
+        maaController
+            .LinkStart()
+            .Wait()
+            .ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, windows[0].Hwnd);
     }
 
     [TestMethod]
@@ -126,7 +139,7 @@ public class Test_IMaaToolkit
             return;
         Assert.IsNotNull(maaToolkit);
 
-        Test_WindowInfos(
+        Test_WindowInfos(type,
             [maaToolkit.Win32.Window.Cursor]);
     }
 
@@ -138,7 +151,7 @@ public class Test_IMaaToolkit
             return;
         Assert.IsNotNull(maaToolkit);
 
-        Test_WindowInfos(
+        Test_WindowInfos(type,
             [maaToolkit.Win32.Window.Desktop]);
     }
 
@@ -150,7 +163,7 @@ public class Test_IMaaToolkit
             return;
         Assert.IsNotNull(maaToolkit);
 
-        Test_WindowInfos(
+        Test_WindowInfos(type,
             [maaToolkit.Win32.Window.Foreground]);
     }
 }

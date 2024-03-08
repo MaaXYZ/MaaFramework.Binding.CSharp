@@ -27,8 +27,8 @@ public class MaaAdbController : MaaController
     /// <param name="type">The AdbControllerTypes including touch type, key type and screencap type.</param>
     /// <param name="adbConfig">The path of adb config file.</param>
     /// <param name="agentPath">The path of agent directory.</param>
-    /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if true; otherwise, not link.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if true; otherwise, not check.</param>
+    /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSuccess"/>; otherwise, not check.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAdbControllerCreateV2"/>.
     /// </remarks>

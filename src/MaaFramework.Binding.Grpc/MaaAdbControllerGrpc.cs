@@ -30,8 +30,8 @@ public class MaaAdbControllerGrpc : MaaControllerGrpc
     /// <param name="type">The AdbControllerTypes including touch type, key type and screencap type.</param>
     /// <param name="adbConfig">The path of adb config file.</param>
     /// <param name="agentPath">The path of agent directory.</param>
-    /// <param name="link">Executes <see cref="MaaControllerGrpc.LinkStart"/> if true; otherwise, not link.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if true; otherwise, not check.</param>
+    /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSuccess"/>; otherwise, not check.</param>
     /// <exception cref="ArgumentException" />
     /// <exception cref="MaaJobStatusException" />
     public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link, CheckStatusOption check)
