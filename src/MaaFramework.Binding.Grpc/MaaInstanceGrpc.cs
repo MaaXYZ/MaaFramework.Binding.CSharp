@@ -165,15 +165,15 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     {
         switch (custom)
         {
-            case MaaCustomActionApi api:
+            case MaaCustomActionTask task:
                 var streamingCallAction = _client.register_custom_action();
-                Task.Run(() => CallCustomAction(api, streamingCallAction));
-                RegisterCustomAction(api.Name, streamingCallAction).Wait();
+                Task.Run(() => CallCustomAction(task, streamingCallAction));
+                RegisterCustomAction(task.Name, streamingCallAction).Wait();
                 return true;
-            case MaaCustomRecognizerApi api:
+            case MaaCustomRecognizerTask task:
                 var streamingCallRecognizer = _client.register_custom_recognizer();
-                Task.Run(() => CallCustomRecognizer(api, streamingCallRecognizer));
-                RegisterCustomRecognizer(api.Name, streamingCallRecognizer).Wait();
+                Task.Run(() => CallCustomRecognizer(task, streamingCallRecognizer));
+                RegisterCustomRecognizer(task.Name, streamingCallRecognizer).Wait();
                 return true;
             default:
                 return false;
@@ -194,7 +194,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
 
     private async Task CallCustomAction(
         //string name,
-        MaaCustomActionApi action,
+        MaaCustomActionTask action,
         AsyncDuplexStreamingCall<CustomActionRequest, CustomActionResponse> streamingCall)
     {
         await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
@@ -250,7 +250,7 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     }
 
     private async Task CallCustomRecognizer(
-        MaaCustomRecognizerApi recognizer,
+        MaaCustomRecognizerTask recognizer,
         AsyncDuplexStreamingCall<CustomRecognizerRequest, CustomRecognizerResponse> streamingCall)
     {
         await foreach (var response in streamingCall.ResponseStream.ReadAllAsync())
@@ -298,12 +298,12 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// <inheritdoc/>
     public bool Unregister<T>(string name) where T : IMaaCustomTask
     {
-        if (typeof(T) == typeof(MaaCustomActionApi))
+        if (typeof(T) == typeof(MaaCustomActionTask))
         {
             _client.unregister_custom_action(new HandleStringRequest { Handle = Handle, Str = name });
             return true;
         }
-        else if (typeof(T) == typeof(MaaCustomRecognizerApi))
+        else if (typeof(T) == typeof(MaaCustomRecognizerTask))
         {
             _client.unregister_custom_recognizer(new HandleStringRequest { Handle = Handle, Str = name });
             return true;
@@ -323,12 +323,12 @@ public class MaaInstanceGrpc : MaaCommonGrpc, IMaaInstance<string>
     /// <inheritdoc/>
     public bool Clear<T>() where T : IMaaCustomTask
     {
-        if (typeof(T) == typeof(MaaCustomActionApi))
+        if (typeof(T) == typeof(MaaCustomActionTask))
         {
             _client.clear_custom_action(new HandleRequest { Handle = Handle, });
             return true;
         }
-        else if (typeof(T) == typeof(MaaCustomRecognizerApi))
+        else if (typeof(T) == typeof(MaaCustomRecognizerTask))
         {
             _client.clear_custom_recognizer(new HandleRequest { Handle = Handle, });
             return true;

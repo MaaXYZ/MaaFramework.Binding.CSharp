@@ -26,19 +26,19 @@ public static class MaaActionApi
 }
 
 /// <summary>
-///     MaaCustomActionApi
+///     MaaCustomActionTask
 /// </summary>
 [NativeMarshalling(typeof(MaaCustomActionApiMarshaller))]
 public class MaaCustomActionApi
 {
-    public static MaaCustomActionApi Convert(Custom.MaaCustomActionApi api) => new()
+    public static MaaCustomActionApi Convert(Custom.MaaCustomActionTask task) => new()
     {
         Run = (MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail)
-            => api.Run
+            => task.Run
                   .Invoke(new Binding.MaaSyncContext(sync_context), task_name.ToStringUTF8(), custom_action_param.ToStringUTF8(), new Buffers.MaaRectBuffer(cur_box), cur_rec_detail.ToStringUTF8())
                   .ToMaaBool(),
         Abort = ()
-            => api.Abort
+            => task.Abort
                   .Invoke(),
     };
 

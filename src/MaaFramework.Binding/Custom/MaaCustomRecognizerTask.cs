@@ -5,7 +5,7 @@ namespace MaaFramework.Binding.Custom;
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 /// <summary>
-///     A static class provides the delegates of <see cref="MaaCustomRecognizerApi" />.
+///     A static class provides the delegates of <see cref="MaaCustomRecognizerTask" />.
 /// </summary>
 public static class MaaRecognizerApi
 {
@@ -19,9 +19,9 @@ public static class MaaRecognizerApi
 }
 
 /// <summary>
-///     MaaCustomRecognizerApi
+///     MaaCustomRecognizerTask
 /// </summary>
-public class MaaCustomRecognizerApi : IMaaCustomTask
+public class MaaCustomRecognizerTask : IMaaCustomTask
 {
     /// <inheritdoc/>
     public string Name { get; set; } = string.Empty;

@@ -180,15 +180,15 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
         var ret = false;
         switch (custom)
         {
-            case Custom.MaaCustomActionApi api:
-                var action = MaaCustomActionApi.Convert(api);
-                ret = MaaRegisterCustomAction(Handle, api.Name, ref action, nint.Zero).ToBoolean();
-                if (ret) _actions[api.Name] = action;
+            case Custom.MaaCustomActionTask task:
+                var action = MaaCustomActionApi.Convert(task);
+                ret = MaaRegisterCustomAction(Handle, task.Name, ref action, nint.Zero).ToBoolean();
+                if (ret) _actions[task.Name] = action;
                 return ret;
-            case Custom.MaaCustomRecognizerApi api:
-                var recognizer = MaaCustomRecognizerApi.Convert(api);
-                ret = MaaRegisterCustomRecognizer(Handle, api.Name, ref recognizer, nint.Zero).ToBoolean();
-                if (ret) _recognizers[api.Name] = recognizer;
+            case Custom.MaaCustomRecognizerTask task:
+                var recognizer = MaaCustomRecognizerApi.Convert(task);
+                ret = MaaRegisterCustomRecognizer(Handle, task.Name, ref recognizer, nint.Zero).ToBoolean();
+                if (ret) _recognizers[task.Name] = recognizer;
                 return ret;
             default:
                 return ret;
