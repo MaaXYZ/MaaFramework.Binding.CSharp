@@ -43,7 +43,7 @@ public abstract class MaaControllerGrpc : MaaCommonGrpc, IMaaController<string>
             (int vvvv, ControllerOption.ScreenshotTargetShortSide) => new() { ShortSide = vvvv },
             (string v, ControllerOption.DefaultAppPackageEntry) => new() { DefPackageEntry = v },
             (string v, ControllerOption.DefaultAppPackage) => new() { DefPackage = v },
-            (bool vvv, ControllerOption.Recording) => throw new NotImplementedException($"{opt}: {vvv} is not implemented in Grpc."), // new() { Recording = vvv },
+            (bool vvv, ControllerOption.Recording) => throw new NotSupportedException($"{opt}: {vvv} is not implemented in Grpc."), // new() { Recording = vvv },
             _ => throw new InvalidOperationException(),
         };
 

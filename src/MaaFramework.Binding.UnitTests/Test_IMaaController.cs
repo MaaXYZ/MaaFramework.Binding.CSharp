@@ -150,7 +150,7 @@ public class Test_IMaaController
 
         if (opt is ControllerOption.Recording && type is MaaTypes.Grpc)
         {
-            Assert.ThrowsException<NotImplementedException>(() => maaController.SetOption(opt, arg));
+            Assert.ThrowsException<NotSupportedException>(() => maaController.SetOption(opt, arg));
             return;
         }
 
@@ -335,7 +335,7 @@ public class Test_IMaaController
 
         if (opt is ControllerOption.Recording && type is MaaTypes.Grpc)
         {
-            Assert.ThrowsException<NotImplementedException>(() => maaController.SetOption(opt, arg));
+            Assert.ThrowsException<NotSupportedException>(() => maaController.SetOption(opt, arg));
             return;
         }
 

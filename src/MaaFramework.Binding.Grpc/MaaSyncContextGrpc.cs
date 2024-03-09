@@ -193,7 +193,7 @@ public class MaaSyncContextGrpc : MaaGrpcChannel, IMaaSyncContext<string>
 
     /// <inheritdoc/>
     bool IMaaSyncContext.InputText(string text)
-        => throw new NotImplementedException();
+        => throw new NotSupportedException();
 
     /// <inheritdoc/>
     public bool TouchDown(int contact, int x, int y, int pressure)
