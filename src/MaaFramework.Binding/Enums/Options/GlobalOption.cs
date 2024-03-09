@@ -19,7 +19,7 @@ public enum GlobalOption
     LogDir = 1,
 
     /// <summary>
-    ///     The debug mode option, value is <see cref="bool"/> indicating whether turns on the debug mode.
+    ///     The save draw (debug mode) option, value is <see cref="bool"/> indicating whether to save draw.
     /// </summary>
     /// <remarks>
     ///     value: <see cref="bool"/>, eg: true; val_size: sizeof(<see cref="bool"/>)
@@ -39,7 +39,7 @@ public enum GlobalOption
     ///     The log level of Stdout.
     /// </summary>
     /// <remarks>
-    ///     value: <see cref="LoggingLevel"/>, val_size: sizeof(<see cref="LoggingLevel"/>), default by <see cref="LoggingLevel.Error"/>
+    ///     value: <see cref="LoggingLevel"/>, val_size: sizeof(<see cref="LoggingLevel"/>), default value is <see cref="LoggingLevel.Error"/>
     /// </remarks>
     StdoutLevel = 4,
 

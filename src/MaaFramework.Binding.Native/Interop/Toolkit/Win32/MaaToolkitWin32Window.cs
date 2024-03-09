@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaToolkit
 {
 
-    #region include/MaaToolkit/Win32/MaaToolkitWin32Window.h, version: v1.6.3.
+    #region include/MaaToolkit/Win32/MaaToolkitWin32Window.h, version: v1.6.4.
 
     [LibraryImport("MaaToolkit")]
     public static partial MaaSize MaaToolkitFindWindow([MarshalAs(UnmanagedType.LPUTF8Str)] string class_name, [MarshalAs(UnmanagedType.LPUTF8Str)] string window_name);

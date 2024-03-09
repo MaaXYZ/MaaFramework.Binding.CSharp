@@ -1,5 +1,6 @@
 ﻿global using MaaStringBufferHandle = nint;
 global using MaaImageBufferHandle = nint;
+
 global using MaaResourceHandle = nint;
 global using MaaControllerHandle = nint;
 global using MaaInstanceHandle = nint;
@@ -70,17 +71,23 @@ namespace MaaFramework.Binding.Interop.Native;
 public static class MaaDef
 {
 
-    #region include/MaaFramework/MaaAPI.h, version: v1.6.3.
+    #region include/MaaFramework/MaaAPI.h, version: v1.6.4.
 
     #endregion
 
     internal const MaaSize MaaNullSize = MaaSize.MaxValue;
     internal const MaaId MaaInvalidId = 0;
-    // internal const string EmptyMaaTaskParam = "{}";
+    internal const string EmptyMaaTaskParam = "{}";
 }
 
-#region include/MaaFramework/MaaDef.h, version: v1.6.3.
+#region include/MaaFramework/MaaDef.h, version: v1.6.4.
 
+/// <summary>
+///     The callback delegate.
+/// </summary>
+/// <param name="msg">The message. See MaaMsg.h</param>
+/// <param name="details_json">The details in JSON format. See doc in MaaMsg.h</param>
+/// <param name="callback_arg"></param>
 public delegate void MaaAPICallback(MaaStringView msg, MaaStringView details_json, MaaTransparentArg callback_arg);
 
 #endregion

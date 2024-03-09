@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaToolkit
 {
 
-    #region include/MaaToolkit/ExecAgent/MaaToolkitExecAgent.h, version: v1.6.3.
+    #region include/MaaToolkit/ExecAgent/MaaToolkitExecAgent.h, version: v1.6.4.
 
     [LibraryImport("MaaToolkit")]
     public static partial MaaBool MaaToolkitRegisterCustomRecognizerExecutor(MaaInstanceHandle handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string recognizer_name, [MarshalAs(UnmanagedType.LPUTF8Str)] string recognizer_exec_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string recognizer_exec_param_json);

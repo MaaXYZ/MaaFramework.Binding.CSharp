@@ -21,14 +21,14 @@
         "type": "Project",
         "dependencies": {
           "Maa.Framework.Binding": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[1.6.3, )"
+          "Maa.Framework.Runtimes": "[1.6.4, )"
         }
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
-        "requested": "[1.6.3, )",
-        "resolved": "1.6.3",
-        "contentHash": "SPjjTRqLbK2+K8yhoCo6GMWijSPR8K7mEkYPze/XosI5PTterElIvklnErad07Fbgkg6WPIeKOoe9TPaR73knw=="
+        "requested": "[1.6.4, )",
+        "resolved": "1.6.4",
+        "contentHash": "4iZhdfbKEQpAZtpAKfhBSsqxcqRDE9trAAfzDNIs7e5Q6p+EH7UTSRFfnexwUwjDIxirrH3dcptuB7A2QCMcQA=="
       }
     },
     "net8.0": {
@@ -51,14 +51,14 @@
         "type": "Project",
         "dependencies": {
           "Maa.Framework.Binding": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[1.6.3, )"
+          "Maa.Framework.Runtimes": "[1.6.4, )"
         }
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
-        "requested": "[1.6.3, )",
-        "resolved": "1.6.3",
-        "contentHash": "SPjjTRqLbK2+K8yhoCo6GMWijSPR8K7mEkYPze/XosI5PTterElIvklnErad07Fbgkg6WPIeKOoe9TPaR73knw=="
+        "requested": "[1.6.4, )",
+        "resolved": "1.6.4",
+        "contentHash": "4iZhdfbKEQpAZtpAKfhBSsqxcqRDE9trAAfzDNIs7e5Q6p+EH7UTSRFfnexwUwjDIxirrH3dcptuB7A2QCMcQA=="
       }
     }
   }

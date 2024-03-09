@@ -32,7 +32,7 @@ def convert_cpp_header_to_csharp(header_path: str):
     print('\n'.join(line for line in content.split('\n') if 'deprecate' in line.lower()))
 
     # 匹配函数指针声明
-    pattern = re.compile(r'(\w+)\s+\(\*(\w+)\)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
+    pattern = re.compile(r'(\w+)\s*\(\s*\*(\w+)\)\s*\(([\s\S]*?)\)', re.DOTALL)
     matches = pattern.finditer(content)
     # 转换为 C# 代码
     for match in matches:
@@ -48,14 +48,14 @@ def convert_cpp_header_to_csharp(header_path: str):
         csharp_codes.append(csharp_code)
 
     # 匹配函数声明
-    pattern = re.compile(r'(\w+)\s+(?:MAA_.*?_API)\s+(\w+)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
+    pattern = re.compile(r'(?:MAA_.*?_API)\s+(\w+)\s+(\w+)\s*\(([\s\S]*?)\)\s*;', re.DOTALL)
     matches = pattern.finditer(content)
     
     # 转换为 C# 代码
     for match in matches:
         return_type = match.group(1)
         function_name = match.group(2)
-        parameters = ' '.join(match.group(3).replace('//\r\n', '').replace('//\n', '').split())
+        parameters = ' '.join(match.group(3).replace('//\r\n', '').replace('//\n', '').replace('**<', '*').split())
 
         # 特定 API
         special_api_dict = {

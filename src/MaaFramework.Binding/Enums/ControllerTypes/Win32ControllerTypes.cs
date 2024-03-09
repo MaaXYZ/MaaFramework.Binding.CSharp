@@ -16,13 +16,16 @@
 public enum Win32ControllerTypes
 {
     Invalid = 0,
+    TouchMask = 0xFF,
+    KeyMask = 0xFF00,
+    ScreencapMask = 0xFF0000,
 
     TouchSendMessage = 1,
-    TouchMask = 0xFF,
 
     KeySendMessage = 1 << 8,
-    KeyMask = 0xFF00,
 
     ScreencapGDI = 1 << 16,
-    ScreencapMask = 0xFF0000,
+    ScreencapDXGIDesktopDup = 2 << 16,
+    // ScreencapDXGIBackBuffer = 3 << 16,
+    ScreencapDXGIFramePool = 4 << 16,
 }

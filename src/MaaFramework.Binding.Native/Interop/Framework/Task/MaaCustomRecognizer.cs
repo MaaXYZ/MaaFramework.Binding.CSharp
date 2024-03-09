@@ -15,7 +15,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static class MaaRecognizerApi
 {
 
-    #region include/MaaFramework/Task/MaaCustomRecognizer.h, version: v1.6.3.
+    #region include/MaaFramework/Task/MaaCustomRecognizer.h, version: v1.6.4.
 
     public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail);
 

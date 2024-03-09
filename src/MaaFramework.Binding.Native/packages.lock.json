@@ -4,9 +4,9 @@
     "net7.0": {
       "Maa.Framework.Runtimes": {
         "type": "Direct",
-        "requested": "[1.6.3, )",
-        "resolved": "1.6.3",
-        "contentHash": "SPjjTRqLbK2+K8yhoCo6GMWijSPR8K7mEkYPze/XosI5PTterElIvklnErad07Fbgkg6WPIeKOoe9TPaR73knw=="
+        "requested": "[1.6.4, )",
+        "resolved": "1.6.4",
+        "contentHash": "4iZhdfbKEQpAZtpAKfhBSsqxcqRDE9trAAfzDNIs7e5Q6p+EH7UTSRFfnexwUwjDIxirrH3dcptuB7A2QCMcQA=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
@@ -21,9 +21,9 @@
     "net8.0": {
       "Maa.Framework.Runtimes": {
         "type": "Direct",
-        "requested": "[1.6.3, )",
-        "resolved": "1.6.3",
-        "contentHash": "SPjjTRqLbK2+K8yhoCo6GMWijSPR8K7mEkYPze/XosI5PTterElIvklnErad07Fbgkg6WPIeKOoe9TPaR73knw=="
+        "requested": "[1.6.4, )",
+        "resolved": "1.6.4",
+        "contentHash": "4iZhdfbKEQpAZtpAKfhBSsqxcqRDE9trAAfzDNIs7e5Q6p+EH7UTSRFfnexwUwjDIxirrH3dcptuB7A2QCMcQA=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",

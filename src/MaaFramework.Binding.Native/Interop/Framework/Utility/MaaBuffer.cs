@@ -19,7 +19,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaBuffer
 {
 
-    #region include/MaaFramework/Utility/MaaBuffer.h, version: v1.6.3.
+    #region include/MaaFramework/Utility/MaaBuffer.h, version: v1.6.4.
 
     [LibraryImport("MaaFramework")]
     public static partial MaaStringBufferHandle MaaCreateStringBuffer();

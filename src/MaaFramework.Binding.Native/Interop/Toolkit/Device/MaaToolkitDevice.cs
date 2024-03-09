@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaToolkit
 {
 
-    #region include/MaaToolkit/Device/MaaToolkitDevice.h, version: v1.6.3.
+    #region include/MaaToolkit/Device/MaaToolkitDevice.h, version: v1.6.4.
 
     [Obsolete("This API MaaToolkitFindDevice is about to be deprecated. Please use MaaToolkitPostFindDevice instead.")]
     [LibraryImport("MaaToolkit")]

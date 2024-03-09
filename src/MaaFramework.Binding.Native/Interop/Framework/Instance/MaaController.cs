@@ -16,7 +16,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaController
 {
 
-    #region include/MaaFramework/Instance/MaaController.h, version: v1.6.3.
+    #region include/MaaFramework/Instance/MaaController.h, version: v1.6.4.
 
     [Obsolete("This API MaaAdbControllerCreate is about to be deprecated. Please use MaaAdbControllerCreateV2 instead.")]
     [LibraryImport("MaaFramework")]
