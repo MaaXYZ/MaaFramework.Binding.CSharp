@@ -17,12 +17,12 @@ public class MaaAdbControllerGrpc : MaaControllerGrpc
     /// <param name="address">The device address.</param>
     /// <param name="type">The AdbControllerTypes including touch type, key type and screencap type.</param>
     /// <param name="adbConfig">The path of adb config file.</param>
-    /// <param name="agentPath">The path of agent directory.</param>
+    /// <param name="agentPath">The path of agent directory. Default is "./MaaAgentBinary" if use package "Maa.Framework" or "Maa.AgentBinary".</param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSuccess"/>; otherwise, not check.</param>
     /// <exception cref="ArgumentException" />
     /// <exception cref="MaaJobStatusException" />
-    public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess)
+    public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath = "./MaaAgentBinary", LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess)
         : base(channel)
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);
