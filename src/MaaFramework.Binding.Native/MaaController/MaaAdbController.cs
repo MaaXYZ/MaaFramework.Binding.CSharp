@@ -7,18 +7,6 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaAdbController : MaaController
 {
-    /// <inheritdoc cref="MaaAdbController(string, string, AdbControllerTypes, string, string, LinkOption)"/>
-    public MaaAdbController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath)
-        : this(adbPath, address, type, adbConfig, agentPath, LinkOption.Start)
-    {
-    }
-
-    /// <inheritdoc cref="MaaAdbController(string, string, AdbControllerTypes, string, string, LinkOption, CheckStatusOption)"/>
-    public MaaAdbController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link)
-        : this(adbPath, address, type, adbConfig, agentPath, link, CheckStatusOption.ThrowIfNotSuccess)
-    {
-    }
-
     /// <summary>
     ///     Creates a <see cref="MaaAdbController"/> instance.
     /// </summary>
@@ -34,7 +22,7 @@ public class MaaAdbController : MaaController
     /// </remarks>
     /// <exception cref="ArgumentException" />
     /// <exception cref="MaaJobStatusException" />
-    public MaaAdbController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link, CheckStatusOption check)
+    public MaaAdbController(string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess)
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);
         ArgumentException.ThrowIfNullOrEmpty(address);

@@ -9,18 +9,6 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaAdbControllerGrpc : MaaControllerGrpc
 {
-    /// <inheritdoc cref="MaaAdbControllerGrpc(GrpcChannel, string, string, AdbControllerTypes, string, string, LinkOption)"/>
-    public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath)
-        : this(channel, adbPath, address, type, adbConfig, agentPath, LinkOption.Start)
-    {
-    }
-
-    /// <inheritdoc cref="MaaAdbControllerGrpc(GrpcChannel, string, string, AdbControllerTypes, string, string, LinkOption, CheckStatusOption)"/>
-    public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link)
-        : this(channel, adbPath, address, type, adbConfig, agentPath, link, CheckStatusOption.ThrowIfNotSuccess)
-    {
-    }
-
     /// <summary>
     ///     Creates a <see cref="MaaAdbControllerGrpc"/> instance.
     /// </summary>
@@ -34,7 +22,7 @@ public class MaaAdbControllerGrpc : MaaControllerGrpc
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSuccess"/>; otherwise, not check.</param>
     /// <exception cref="ArgumentException" />
     /// <exception cref="MaaJobStatusException" />
-    public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link, CheckStatusOption check)
+    public MaaAdbControllerGrpc(GrpcChannel channel, string adbPath, string address, AdbControllerTypes type, string adbConfig, string agentPath, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess)
         : base(channel)
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);
