@@ -18,4 +18,28 @@
         <ProjectReference Include="..\MaaFramework.Binding.Grpc\MaaFramework.Binding.Grpc.csproj" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <DefineConstants>$(DefineConstants);MAA_NATIVE;MAA_GRPC; <!-- MAA_GRPC; --> </DefineConstants>
+    </PropertyGroup>
+
+    <Choose>
+        <When Condition="$([System.OperatingSystem]::IsOSPlatform('WINDOWS'))">
+            <PropertyGroup>
+                <DefineConstants>$(DefineConstants);MAA_WIN32;</DefineConstants>
+            </PropertyGroup>
+        </When>
+        <Otherwise>
+        </Otherwise>
+    </Choose>
+
+    <Choose>
+        <When Condition="$([System.Environment]::GetEnvironmentVariable('GITHUB_ACTIONS')) == 'true'">
+            <PropertyGroup>
+                <DefineConstants>$(DefineConstants);GITHUB_ACTIONS;</DefineConstants>
+            </PropertyGroup>
+        </When>
+        <Otherwise>
+        </Otherwise>
+    </Choose>
+
 </Project>

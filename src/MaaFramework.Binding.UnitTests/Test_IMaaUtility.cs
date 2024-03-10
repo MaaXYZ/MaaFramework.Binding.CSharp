@@ -11,10 +11,12 @@ public class Test_IMaaMaaUtility
 {
     public static Dictionary<MaaTypes, object> NewData => new()
     {
+#if MAA_NATIVE
         { MaaTypes.Native, new MaaUtility() },
-        /*
+#endif
+#if MAA_GRPC
         { MaaTypes.Grpc,   new MaaUtilityGrpc(Common.GrpcChannel) },
-        */
+#endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
 
@@ -55,7 +57,6 @@ public class Test_IMaaMaaUtility
             maaUtility.SetOption(opt, arg));
     }
 
-    /*
     [TestMethod]
     [MaaData(MaaTypes.Grpc, nameof(Data))]
     public void Grpc_RegisterCallback_UnregisterCallback(MaaTypes type, MaaUtilityGrpc maaUtility)
@@ -96,6 +97,7 @@ public class Test_IMaaMaaUtility
         readResponse.Wait();
     }
 
+#if MAA_GRPC
     [TestMethod]
     public void Grpc_Static_RegisterCallback_UnregisterCallback()
     {
@@ -133,7 +135,7 @@ public class Test_IMaaMaaUtility
             MaaUtilityGrpc.UnregisterCallback(Common.GrpcChannel, callbackId));
         readResponse.Wait();
     }
-    */
+#endif
 
     #region Invalid data tests
 

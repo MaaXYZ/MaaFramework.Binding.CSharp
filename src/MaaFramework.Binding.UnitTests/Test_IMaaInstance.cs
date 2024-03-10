@@ -10,6 +10,7 @@ public class Test_IMaaInstance
 {
     public static Dictionary<MaaTypes, object> NewData => new()
     {
+#if MAA_NATIVE
         {
             MaaTypes.Native, new MaaInstance()
             {
@@ -18,7 +19,8 @@ public class Test_IMaaInstance
                 DisposeOptions = DisposeOptions.All,
             }
         },
-        /*
+#endif
+#if MAA_GRPC
         {
             MaaTypes.Grpc, new MaaInstanceGrpc(Common.GrpcChannel)
             {
@@ -26,8 +28,8 @@ public class Test_IMaaInstance
                 Controller = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None),
                 DisposeOptions = DisposeOptions.All,
             }
-        }
-        */
+        },
+#endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
 
@@ -67,6 +69,7 @@ public class Test_IMaaInstance
     [TestMethod]
     public void CreateInstances()
     {
+#if MAA_NATIVE
         using var nativeResource = new MaaResource();
         using var nativeController = new MaaAdbController(Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
 
@@ -77,8 +80,8 @@ public class Test_IMaaInstance
             DisposeOptions = DisposeOptions.None,
         };
         using var native2 = new MaaInstance(nativeController, nativeResource, DisposeOptions.None);
-
-        /*
+#endif
+#if MAA_GRPC
         using var grpcResource = new MaaResourceGrpc(Common.GrpcChannel);
         using var grpcController = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
 
@@ -89,7 +92,7 @@ public class Test_IMaaInstance
             DisposeOptions = DisposeOptions.None,
         };
         using var grpc2 = new MaaInstanceGrpc(Common.GrpcChannel, grpcController, grpcResource, DisposeOptions.None);
-        */
+#endif
     }
 #pragma warning restore S2699 // Tests should include assertions
 

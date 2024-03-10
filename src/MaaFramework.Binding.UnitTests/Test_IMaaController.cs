@@ -13,14 +13,16 @@ public class Test_IMaaController
     private static AdbControllerTypes s_inputPreset = AdbControllerTypes.InputPresetAdb;
     public static Dictionary<MaaTypes, object> NewData => new()
     {
+#if MAA_NATIVE
         {
             MaaTypes.Native, new MaaAdbController(Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
         },
-        /*
+#endif
+#if MAA_GRPC
         {
             MaaTypes.Grpc, new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
-        }
-        */
+        },
+#endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
     public static Dictionary<MaaTypes, object> MiniTouchData { get; private set; } = default!;
@@ -32,9 +34,9 @@ public class Test_IMaaController
     {
         InitializeData(AdbControllerTypes.InputPresetMaatouch);
         MaaTouchData = Data;
-        InitializeData(Common.InGithubActions
-            ? AdbControllerTypes.InputPresetMaatouch
-            : AdbControllerTypes.InputPresetAdb);
+#if !GITHUB_ACTIONS
+        InitializeData(AdbControllerTypes.InputPresetAdb);
+#endif
         MiniTouchData = Data;
         InitializeData(AdbControllerTypes.InputPresetAdb);
         TestLinkData = NewData;
@@ -66,6 +68,7 @@ public class Test_IMaaController
     [TestMethod]
     public void CreateInstances()
     {
+#if MAA_GRPC
         #region MaaAdbController
 
         using var native1 = new MaaAdbController(
@@ -89,8 +92,27 @@ public class Test_IMaaController
             Common.AgentPath,
             LinkOption.Start,
             CheckStatusOption.None);
+        #endregion
 
-        /*
+        #region MaaWin32Controller
+
+        using var win32Native1 = new MaaWin32Controller(
+            nint.Zero,
+            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI);
+        using var win32Native2 = new MaaWin32Controller(
+            nint.Zero,
+            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
+            LinkOption.None);
+        using var win32Native3 = new MaaWin32Controller(
+            nint.Zero,
+            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
+            LinkOption.Start,
+            CheckStatusOption.None);
+
+        #endregion
+#endif
+
+#if MAA_GRPC
         using var grpc1 = new MaaAdbControllerGrpc(
             Common.GrpcChannel,
             Common.AdbPath,
@@ -115,26 +137,7 @@ public class Test_IMaaController
             Common.AgentPath,
             LinkOption.Start,
             CheckStatusOption.None);
-        */
-
-        #endregion
-
-        #region MaaWin32Controller
-
-        using var win32Native1 = new MaaWin32Controller(
-            nint.Zero,
-            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI);
-        using var win32Native2 = new MaaWin32Controller(
-            nint.Zero,
-            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
-            LinkOption.None);
-        using var win32Native3 = new MaaWin32Controller(
-            nint.Zero,
-            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
-            LinkOption.Start,
-            CheckStatusOption.None);
-
-        #endregion
+#endif
     }
 #pragma warning restore S2699 // Tests should include assertions
 

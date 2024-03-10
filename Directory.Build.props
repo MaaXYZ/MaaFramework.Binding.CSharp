@@ -9,11 +9,8 @@
   </PropertyGroup>
 
   <!-- Unit Test Properties -->
-  <PropertyGroup>
-    <IsTestProject>$(MSBuildProjectName.Contains('Test'))</IsTestProject>
-  </PropertyGroup>
   <Choose>
-    <When Condition="$(IsTestProject)">
+    <When Condition="$(MSBuildProjectName.Contains('Test'))">
       <PropertyGroup>
         <IsPackable>false</IsPackable>
         <IsPublishable>false</IsPublishable>

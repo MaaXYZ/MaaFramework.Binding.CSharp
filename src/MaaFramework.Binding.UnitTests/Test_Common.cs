@@ -11,12 +11,10 @@ public static class Common
 {
     static Common()
     {
-        /*
+#if MAA_GRPC
         MaaRpc.Start(GrpcAddress);
-        */
+#endif
     }
-
-    internal static bool InGithubActions;
 
     internal static string AdbPath { get; set; } = string.Empty;
     internal static string Address { get; set; } = string.Empty;
@@ -31,7 +29,6 @@ public static class Common
 
     private static void InitializeInfo(TestContext testContext)
     {
-        InGithubActions = bool.Parse(Environment.GetEnvironmentVariable("GITHUB_ACTIONS") ?? "false");
         var devices = new MaaToolkit().Device.Find();
 
         // 请修改 TestParam.runsettings，并在测试资源管理器——设置——配置运行设置
@@ -72,10 +69,10 @@ public static class Common
     [AssemblyCleanup]
     public static void CleanupAssembly()
     {
-        /*
+#if MAA_GRPC
         GrpcChannel.Dispose();
         MaaRpc.Stop();
-        */
+#endif
     }
 
     internal static void DisposeData(IEnumerable<IMaaDisposable> data)

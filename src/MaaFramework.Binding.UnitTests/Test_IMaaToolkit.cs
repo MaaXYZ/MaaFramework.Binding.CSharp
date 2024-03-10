@@ -10,10 +10,12 @@ public class Test_IMaaToolkit
 {
     public static Dictionary<MaaTypes, object> NewData => new()
     {
+#if MAA_NATIVE
         { MaaTypes.Native, new MaaToolkit() },
-        /*
+#endif
+#if MAA_GRPC
         { MaaTypes.Grpc,   new MaaToolkitGrpc(Common.GrpcChannel) },
-        */
+#endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
 
@@ -52,10 +54,11 @@ public class Test_IMaaToolkit
         Assert.IsNotNull(maaToolkit);
 
         var devices = useAsync ? maaToolkit.Device.FindAsync(arg).GetAwaiter().GetResult() : maaToolkit.Device.Find(arg);
-        if (Common.InGithubActions && devices.Length == 0)
+#if GITHUB_ACTIONS
+        if (devices.Length == 0)
             return;
-        else
-            Assert.AreNotEqual(0, devices.Length);
+#endif
+        Assert.AreNotEqual(0, devices.Length);
 
         CollectionAssert.AllItemsAreUnique(devices);
         foreach (var device in devices)
@@ -86,12 +89,11 @@ public class Test_IMaaToolkit
             .ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, devices[0].AdbPath, devices[0].AdbSerial);
     }
 
+#if MAA_WIN32 && !GITHUB_ACTIONS
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(NewData))]
     public void Interface_Win32Window_Find(MaaTypes type, IMaaToolkit maaToolkit)
     {
-        if (Common.InGithubActions)
-            return;
         Assert.IsNotNull(maaToolkit);
 
         Test_WindowInfos(type,
@@ -102,8 +104,6 @@ public class Test_IMaaToolkit
     [MaaData(MaaTypes.All, nameof(NewData))]
     public void Interface_Win32Window_Search(MaaTypes type, IMaaToolkit maaToolkit)
     {
-        if (Common.InGithubActions)
-            return;
         Assert.IsNotNull(maaToolkit);
 
         Test_WindowInfos(type,
@@ -135,8 +135,6 @@ public class Test_IMaaToolkit
     [MaaData(MaaTypes.All, nameof(NewData))]
     public void Interface_Win32Window_Cursor(MaaTypes type, IMaaToolkit maaToolkit)
     {
-        if (Common.InGithubActions)
-            return;
         Assert.IsNotNull(maaToolkit);
 
         Test_WindowInfos(type,
@@ -147,8 +145,6 @@ public class Test_IMaaToolkit
     [MaaData(MaaTypes.All, nameof(NewData))]
     public void Interface_Win32Window_Desktop(MaaTypes type, IMaaToolkit maaToolkit)
     {
-        if (Common.InGithubActions)
-            return;
         Assert.IsNotNull(maaToolkit);
 
         Test_WindowInfos(type,
@@ -159,11 +155,10 @@ public class Test_IMaaToolkit
     [MaaData(MaaTypes.All, nameof(NewData))]
     public void Interface_Win32Window_Foreground(MaaTypes type, IMaaToolkit maaToolkit)
     {
-        if (Common.InGithubActions)
-            return;
         Assert.IsNotNull(maaToolkit);
 
         Test_WindowInfos(type,
             [maaToolkit.Win32.Window.Foreground]);
     }
+#endif
 }
