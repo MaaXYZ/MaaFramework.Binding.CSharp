@@ -14,7 +14,7 @@ _💫 A common interoperable API wrapper 💫_
 
 ## Wiki
 
-- [Overview of Wrapper and Api](https://github.com/moomiji/MaaFramework.Binding.CSharp/wiki#overview-of-wrapper-and-api)
+- [Overview of Wrapper and Api](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/wiki#overview-of-wrapper-and-api)
 
 ## Get Started
 

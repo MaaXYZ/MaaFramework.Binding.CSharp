@@ -62,8 +62,8 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageIcon>maa-logo_128x128.png</PackageIcon>
-    <PackageReleaseNotes>Release notes are at https://github.com/moomiji/MaaFramework.Binding.CSharp/releases.</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/moomiji/MaaFramework.Binding.CSharp</RepositoryUrl>
+    <PackageReleaseNotes>Release notes are at https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/releases.</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/MaaXYZ/MaaFramework.Binding.CSharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryBranch>$(RepositoryBranch)</RepositoryBranch>
     <RepositoryCommit>$(RepositoryCommit)</RepositoryCommit>

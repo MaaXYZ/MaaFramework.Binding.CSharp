@@ -187,7 +187,7 @@ def convert_contributors_name(name: str, commit_hash: str, name_type: str):
     global contributors
     if name not in contributors:
         try:
-            req = urllib.request.Request(f"https://api.github.com/repos/moomiji/MaaFramework.Binding.CSharp/commits/{commit_hash}")
+            req = urllib.request.Request(f"https://api.github.com/repos/MaaXYZ/MaaFramework.Binding.CSharp/commits/{commit_hash}")
             token = os.environ.get("GH_TOKEN", os.environ.get("GITHUB_TOKEN", None))
             if token:
                 req.add_header("Authorization", f"Bearer {token}")
