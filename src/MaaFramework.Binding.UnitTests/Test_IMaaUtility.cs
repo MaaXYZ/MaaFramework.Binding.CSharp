@@ -1,5 +1,7 @@
-﻿using Grpc.Core;
+﻿#if MAA_GRPC
+using Grpc.Core;
 using MaaFramework.Binding.Interop.Grpc;
+#endif
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -57,6 +59,7 @@ public class Test_IMaaMaaUtility
             maaUtility.SetOption(opt, arg));
     }
 
+#if MAA_GRPC
     [TestMethod]
     [MaaData(MaaTypes.Grpc, nameof(Data))]
     public void Grpc_RegisterCallback_UnregisterCallback(MaaTypes type, MaaUtilityGrpc maaUtility)
@@ -97,7 +100,6 @@ public class Test_IMaaMaaUtility
         readResponse.Wait();
     }
 
-#if MAA_GRPC
     [TestMethod]
     public void Grpc_Static_RegisterCallback_UnregisterCallback()
     {

@@ -155,6 +155,9 @@ public class Test_IMaaInstance
         Assert.IsFalse(
             maaInstance.AllTasksFinished);
         Interface_IMaaPost_Success(job);
+
+        // Maybe return false if the execution is too fast.
+        Task.Delay(1000).Wait();
         Assert.IsTrue(
             maaInstance.AllTasksFinished);
     }

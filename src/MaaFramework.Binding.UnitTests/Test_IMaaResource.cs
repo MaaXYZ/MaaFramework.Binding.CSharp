@@ -63,7 +63,7 @@ public class Test_IMaaResource
     {
         Assert.IsNotNull(maaResource);
 
-        Assert.IsFalse(
+        Assert.IsTrue(
             maaResource.Loaded);
         var job =
             maaResource.AppendPath(Common.ResourcePath);

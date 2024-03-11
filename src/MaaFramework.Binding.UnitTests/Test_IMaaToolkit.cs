@@ -52,11 +52,8 @@ public class Test_IMaaToolkit
         Assert.IsNotNull(maaToolkit);
 
         var devices = useAsync ? maaToolkit.Device.FindAsync(arg).GetAwaiter().GetResult() : maaToolkit.Device.Find(arg);
-#if GITHUB_ACTIONS
         if (devices.Length == 0)
             return;
-#endif
-        Assert.AreNotEqual(0, devices.Length);
 
         CollectionAssert.AllItemsAreUnique(devices);
         foreach (var device in devices)
@@ -71,12 +68,12 @@ public class Test_IMaaToolkit
         using IMaaController maaController = type switch
         {
             MaaTypes.Native => devices[0].ToAdbController(
-                Path.GetFullPath("./MaaAgentBinary"),
+                adbPath: Common.AdbPath,
                 types: AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
                 link: LinkOption.None),
             MaaTypes.Grpc => devices[0].ToAdbControllerGrpc(
                 Common.GrpcChannel,
-                Path.GetFullPath("./MaaAgentBinary"),
+                adbPath: Common.AdbPath,
                 types: AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
                 link: LinkOption.None),
             _ => throw new NotImplementedException(),

@@ -35,7 +35,7 @@ public class Test_IMaaController
         InitializeData(AdbControllerTypes.InputPresetMaatouch);
         MaaTouchData = Data;
 #if !GITHUB_ACTIONS
-        InitializeData(AdbControllerTypes.InputPresetAdb);
+        InitializeData(AdbControllerTypes.InputPresetMinitouch);
 #endif
         MiniTouchData = Data;
         InitializeData(AdbControllerTypes.InputPresetAdb);
@@ -52,6 +52,8 @@ public class Test_IMaaController
                 data.LinkStart()
                     .Wait()
                     .ThrowIfNot(MaaJobStatus.Success);
+                Assert.IsTrue(
+                    data.SetOption(ControllerOption.ScreenshotTargetShortSide, 720));
             }
         }
     }

@@ -29,7 +29,11 @@ public static class Common
 
     private static void InitializeInfo(TestContext testContext)
     {
+#if GITHUB_ACTIONS
+        DeviceInfo[] devices = [];
+#else
         var devices = new MaaToolkit().Device.Find();
+#endif
 
         // 请修改 TestParam.runsettings，并在测试资源管理器——设置——配置运行设置
         // 选择解决方案范围内的 runsettings 文件：src\Common\TestParam.runsettings
@@ -52,15 +56,19 @@ public static class Common
     public static void InitializeAssembly(TestContext testContext)
     {
         ArgumentNullException.ThrowIfNull(testContext);
-        InitializeInfo(testContext);
 
         new MaaUtility().SetOption(GlobalOption.LogDir, DebugPath);
         new MaaUtility().SetOption(GlobalOption.StdoutLevel, LoggingLevel.Off);
+
+        InitializeInfo(testContext);
+
+#if Maa_GRPC
         Task.Run(() =>
         {
             MaaRpc.Wait();
             Assert.Fail();
         });
+#endif
     }
 
     /// <summary>

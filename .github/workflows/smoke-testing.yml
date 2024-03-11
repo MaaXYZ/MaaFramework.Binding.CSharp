@@ -13,7 +13,7 @@ on:
 
 jobs:
   test:
-    runs-on: macos-latest
+    runs-on: macos-13
     env:
       API_LEVEL: 29
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
@@ -29,7 +29,7 @@ jobs:
             8.0.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
-      - run: dotnet restore --locked-mode
+      - run: dotnet restore --locked-mode && dotnet build --no-restore
 
       - name: AVD cache
         uses: actions/cache@v3
@@ -41,7 +41,7 @@ jobs:
           key: avd-${{ env.API_LEVEL }}
 
       - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
+        if: ${{ !steps.avd-cache.outputs.cache-hit }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ env.API_LEVEL }}
@@ -61,7 +61,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: dotnet test --no-restore --logger trx --verbosity normal
+          script: dotnet test --no-build --logger trx --verbosity normal
 
       - name: Upload TestResults
         uses: actions/upload-artifact@v3
