@@ -1,5 +1,4 @@
-﻿using MaaFramework.Binding.Infos;
-using MaaFramework.Binding.Interop.Native;
+﻿using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding;

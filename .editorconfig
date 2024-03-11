@@ -173,3 +173,9 @@ dotnet_diagnostic.S125.severity = silent
 dotnet_diagnostic.S1134.severity = suggestion
 
 dotnet_diagnostic.CA5392.severity = silent
+# error IDE0290: 使用主构造函数
+dotnet_diagnostic.IDE0290.severity = suggestion
+# error IDE0010: 填充开关
+dotnet_diagnostic.IDE0010.severity = suggestion
+# error IDE0072: 填充开关
+dotnet_diagnostic.IDE0072.severity = suggestion

@@ -1,4 +1,6 @@
-﻿global using MaaStringBufferHandle = nint;
+﻿#pragma warning disable IDE0005 // Using 指令是不需要的。
+
+global using MaaStringBufferHandle = nint;
 global using MaaImageBufferHandle = nint;
 
 global using MaaResourceHandle = nint;

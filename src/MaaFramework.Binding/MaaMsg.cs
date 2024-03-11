@@ -1,6 +1,4 @@
-﻿using static MaaFramework.Binding.MaaMsg.Payload.Controller;
-
-namespace MaaFramework.Binding;
+﻿namespace MaaFramework.Binding;
 
 #pragma warning disable CA1034 // 嵌套类型应不可见
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释

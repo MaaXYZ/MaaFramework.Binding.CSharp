@@ -1,5 +1,4 @@
 ﻿using MaaFramework.Binding.Custom;
-using MaaFramework.Binding.Infos;
 
 namespace MaaFramework.Binding;
 

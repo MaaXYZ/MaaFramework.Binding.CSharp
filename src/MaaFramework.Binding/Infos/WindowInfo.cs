@@ -1,4 +1,4 @@
-﻿namespace MaaFramework.Binding.Infos;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
 ///     A class providing properties of window information.

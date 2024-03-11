@@ -1,6 +1,4 @@
-﻿using MaaFramework.Binding.Infos;
-
-namespace MaaFramework.Binding;
+﻿namespace MaaFramework.Binding;
 
 /// <summary>
 ///     A static class providing extension methods for the creation of MaaWin32Controller.

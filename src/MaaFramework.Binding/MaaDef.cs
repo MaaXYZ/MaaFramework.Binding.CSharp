@@ -6,27 +6,21 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A class providing data for the <see cref="MaaFramework.Binding.Abstractions.IMaaCommon.Callback"/> event.
 /// </summary>
-public class MaaCallbackEventArgs : EventArgs
+/// <remarks>
+///      Creates a <see cref="MaaCallbackEventArgs"/> instance.
+/// </remarks>
+/// <param name="message">The callback message.</param>
+/// <param name="details">The callback details json.</param>
+public class MaaCallbackEventArgs(string message, string details) : EventArgs
 {
     /// <summary>
     ///     Maa callback message.
     /// </summary>
-    public string Message { get; }
+    public string Message { get; } = message;
 
 
     /// <summary>
     ///     Maa callback details json.
     /// </summary>
-    public string Details { get; }
-
-    /// <summary>
-    ///      Creates a <see cref="MaaCallbackEventArgs"/> instance.
-    /// </summary>
-    /// <param name="message">The callback message.</param>
-    /// <param name="details">The callback details json.</param>
-    public MaaCallbackEventArgs(string message, string details)
-    {
-        Message = message;
-        Details = details;
-    }
+    public string Details { get; } = details;
 }

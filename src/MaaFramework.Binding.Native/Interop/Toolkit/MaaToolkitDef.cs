@@ -1,5 +1,4 @@
-﻿global using MaaToolkitConfigHandle = nint;
-global using MaaToolkitTaskHandle = nint;
+﻿#pragma warning disable IDE0005 // Using 指令是不需要的。
 
 namespace MaaFramework.Binding.Interop.Native;
 

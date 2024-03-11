@@ -1,6 +1,4 @@
-﻿using MaaFramework.Binding.Infos;
-
-namespace MaaFramework.Binding.UnitTests;
+﻿namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
 ///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolkit"/> and <see cref="MaaToolkitGrpc"/>.
