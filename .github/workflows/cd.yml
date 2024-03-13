@@ -29,11 +29,11 @@ jobs:
       NUGETTEST_PACKAGE_SOURCE: https://apiint.nugettest.org/v3/index.json # need ${{ secrets.NUGETTEST_TOKEN }} (Expires in a day)
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: | 
             7.0.x
@@ -68,9 +68,9 @@ jobs:
 
       - name: Publish the package to nuget.org
         if: ${{ steps.meta.outputs.is_release == 'true' || github.event.inputs.Publish == 'NuGet' }}
-        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETALL_TOKEN }} --source ${{ env.NUGET_PACKAGE_SOURCE }}
+        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_TOKEN }} --source ${{ env.NUGET_PACKAGE_SOURCE }}
 
-      - uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v2
         if: ${{ steps.meta.outputs.is_release == 'true' }}
         with:
           body_path: CHANGELOG.md
