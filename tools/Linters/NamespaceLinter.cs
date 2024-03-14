@@ -19,6 +19,7 @@ var directoriesNamespaces = new Dictionary<string, string>
 
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.UnitTests/"), string.Empty },
 
+    { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding/MaaMsg.cs"), "MaaFramework.Binding.Message" },
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding"), "MaaFramework.Binding" },
 };
 var protosNamespaces = new Dictionary<string, string>

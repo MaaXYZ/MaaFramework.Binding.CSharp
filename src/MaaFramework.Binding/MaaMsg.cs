@@ -1,4 +1,4 @@
-﻿namespace MaaFramework.Binding;
+﻿namespace MaaFramework.Binding.Message;
 
 #pragma warning disable CA1034 // 嵌套类型应不可见
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
@@ -59,88 +59,82 @@ public static class MaaMsg
             public const string Completed = "Task.Focus.Completed";
         }
     }
+}
 
 #pragma warning disable IDE1006 // 命名样式
 #pragma warning disable CA1707 // 标识符不应包含下划线
 #pragma warning disable CA1708 // 标识符应以大小写之外的差别进行区分
 #pragma warning disable S101 // Types should be named in PascalCase
-    public static class Payload
+public static class Payload
+{
+    public class Invalid
     {
-        public class Invalid
+    }
+
+    public class Failed
+    {
+        public required string why { get; init; }
+    }
+
+    public static class Resource
+    {
+        public class Loading
         {
+            public required long id { get; init; }
+            public required string path { get; init; }
+        }
+    }
+
+    public static class Controller
+    {
+        public class Resolution
+        {
+            public required int width { get; init; }
+            public required int height { get; init; }
         }
 
-        public class Failed
+        public class UUIDGot
         {
-            public required string why { get; init; }
+            public required string uuid { get; init; }
         }
 
-        public static class Resource
+        public class ResolutionGot
         {
-            public class Loading
-            {
-                public required long id { get; init; }
-                public required string path { get; init; }
-            }
+            public required Resolution resolution { get; init; }
         }
 
-        public static class Controller
+        public class Connected
         {
-            public class Resolution
-            {
-                public required int width { get; init; }
-                public required int height { get; init; }
-            }
-
-            public class UUIDGot
-            {
-                public required string uuid { get; init; }
-            }
-
-            public class ResolutionGot
-            {
-                public required Resolution resolution { get; init; }
-            }
-
-            public class Connected
-            {
-                public required string uuid { get; init; }
-                public required Resolution height { get; init; }
-            }
-
-            public class Action
-            {
-                public required long id { get; init; }
-            }
+            public required string uuid { get; init; }
+            public required Resolution height { get; init; }
         }
 
-        public class Task
+        public class Action
+        {
+            public required long id { get; init; }
+        }
+    }
+
+    public class Task
+    {
+        public required long id { get; init; }
+        public required string entry { get; init; }
+        public required string name { get; init; }
+        public required string uuid { get; init; }
+        public required string hash { get; init; }
+
+        public class Focus
         {
             public required long id { get; init; }
             public required string entry { get; init; }
             public required string name { get; init; }
             public required string uuid { get; init; }
             public required string hash { get; init; }
+            public required string recognition { get; init; }
+            public required uint run_times { get; init; }
+            public required string last_time { get; init; }
+            public required string status { get; init; }
 
-            public class Focus
-            {
-                public required long id { get; init; }
-                public required string entry { get; init; }
-                public required string name { get; init; }
-                public required string uuid { get; init; }
-                public required string hash { get; init; }
-                public required string recognition { get; init; }
-                public required uint run_times { get; init; }
-                public required string last_time { get; init; }
-                public required string status { get; init; }
-
-            }
         }
-
     }
-#pragma warning restore S101 // Types should be named in PascalCase
-#pragma warning restore CA1708 // 标识符应以大小写之外的差别进行区分
-#pragma warning restore CA1707 // 标识符不应包含下划线
-#pragma warning restore IDE1006 // 命名样式
 }
-
