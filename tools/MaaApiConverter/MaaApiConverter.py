@@ -4,7 +4,7 @@ import sys
 import requests
 import pyperclip
 
-repo = 'MaaAssistantArknights/MaaFramework'
+repo = 'MaaXYZ/MaaFramework'
 api_path = [
     'include/MaaFramework/MaaAPI.h',
     'include/MaaRpc/MaaRpc.h',

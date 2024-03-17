@@ -4,11 +4,11 @@
 
 # MaaFramework.Binding.CSharp
 
-_✨ The csharp binding of [MaaFramework](https://github.com/MaaAssistantArknights/MaaFramework/tree/v1.4.0) ✨_
+_✨ The csharp binding of [MaaFramework](https://github.com/MaaXYZ/MaaFramework/tree/v1.6.4) ✨_
 
 _💫 A common interoperable API wrapper 💫_
 
-![license](https://img.shields.io/github/license/MaaAssistantArknights/MaaFramework) ![language](https://img.shields.io/badge/.NET-≥%207-512BD4?logo=csharp) ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blueviolet) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
+![license](https://img.shields.io/github/license/MaaXYZ/MaaFramework) ![language](https://img.shields.io/badge/.NET-≥%207-512BD4?logo=csharp) ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blueviolet) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
 
 </div>
 
@@ -40,7 +40,7 @@ Your computer should meet the minimum system requirements before you run and use
 
 ### Prepare Resources
 
-See MaaFramework document ([en-us](https://github.com/MaaAssistantArknights/MaaFramework/blob/v1.4.0/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) / [zh_cn](https://github.com/MaaAssistantArknights/MaaFramework/blob/v1.4.0/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6)).
+See MaaFramework document ([en-us](https://github.com/MaaXYZ/MaaFramework/blob/v1.4.0/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) / [zh_cn](https://github.com/MaaXYZ/MaaFramework/blob/v1.4.0/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6)).
 
 Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) in MaaFramework.Binding.CSharp.
 
@@ -78,7 +78,7 @@ Console.WriteLine("EmptyTask Completed");
 
 ## Best Practices
 
-- [MBA](https://github.com/MaaAssistantArknights/MBA) BA Assistant  
+- [MBA](https://github.com/MaaXYZ/MBA) BA Assistant  
   A BA Assistant based on MAA's new architecture. Image technology + simulation control, no more clicking! Powered by MaaFramework.
 
 - You can also find more examples in the [unit tests](./src/MaaFramework.Binding.UnitTests).

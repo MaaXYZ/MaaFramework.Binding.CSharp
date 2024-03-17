@@ -1,4 +1,4 @@
-# Overview of Wrapper and Api in [v1.4.0](https://github.com/MaaAssistantArknights/MaaFramework/tree/v1.4.0)
+# Overview of Wrapper and Api in [v1.4.0](https://github.com/MaaXYZ/MaaFramework/tree/v1.4.0)
 
 ## Enums
 
