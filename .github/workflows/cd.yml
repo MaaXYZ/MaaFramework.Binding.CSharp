@@ -23,9 +23,12 @@ on:
 jobs:
   release:
     runs-on: windows-latest
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
     env:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
-      NUGET_PACKAGE_SOURCE: https://api.nuget.org/v3/index.json # need ${{ secrets.NUGET_TOKEN }} or ${{ secrets.NUGETALL_TOKEN }} (Expires in a day)
+      NUGET_PACKAGE_SOURCE: https://api.nuget.org/v3/index.json # need ${{ secrets.NUGET_TOKEN }}
       NUGETTEST_PACKAGE_SOURCE: https://apiint.nugettest.org/v3/index.json # need ${{ secrets.NUGETTEST_TOKEN }} (Expires in a day)
 
     steps:
@@ -75,3 +78,15 @@ jobs:
         with:
           body_path: CHANGELOG.md
           tag_name: ${{ steps.meta.outputs.tag }}
+
+      - run: dotnet tool update -g docfx
+      - run: ./docs/build.ps1
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs/_site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

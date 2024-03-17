@@ -12,11 +12,23 @@ _💫 A common interoperable API wrapper 💫_
 
 </div>
 
-## Wiki
+## Articles
 
-- [Overview of Wrapper and Api](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/wiki#overview-of-wrapper-and-api)
+- [Overview of Wrapper and Api](./docs/articles/overview-of-wrapper-and-api.md)
 
 ## Get Started
+
+### System Requirements
+
+Your computer should meet the minimum system requirements before you run and use `MaaFramework.Binding.CSharp`, which might run on other platforms or versions not listed here.
+
+| OS Version | Minimum Requirements / Reason |
+| :---: | :---: |
+| Windows 10+ | Restricted from [.NET 7.0](https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md#windows) |
+| macOS 12+ | Restricted from [MaaFramework](https://github.com/MaaXYZ/MaaFramework/issues/174) |
+| Linux <br> Ubuntu 23.10+ | libc6 2.38+ <br> and more |
+
+- Architectures: x64, Arm64
 
 ### Install Dependents
 
@@ -34,37 +46,34 @@ Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) 
 
 ### Run Code
 
-> Pre-work: `adb connect HOST[:PORT]`
+> Pre-work:
+  `dotnet add package Maa.Framework;`
+  `adb connect HOST[:PORT];`
 
 ```CSharp
 using MaaFramework.Binding;
 
-var maaTookit = new MaaToolkit();
-var devices = maaTookit.Find();
-if (devices.Length < 1 || !maaTookit.Init())
-{
+var tookit = new MaaToolkit();
+tookit.Config.Init();
+var devices = tookit.Device.Find();
+if (devices.Length < 1)
     throw new InvalidOperationException();
-}
 
 using var maa = new MaaInstance
 {
-                                    // From package Maa.Framework
-    Controller = devices[0].ToAdbController("./MaaAgentBinary"),
+    Controller = devices[0].ToAdbController(),
     Resource = new MaaResource("./SampleResource"),
     DisposeOptions = DisposeOptions.All,
 };
 
 if (!maa.Initialized)
-{
     throw new InvalidOperationException();
-}
 
 maa.AppendTask("EmptyTask")
    .Wait()
    .ThrowIfNot(MaaJobStatus.Success);
 
 Console.WriteLine("EmptyTask Completed");
-maaTookit.Uninit();
 ```
 
 ## Best Practices
