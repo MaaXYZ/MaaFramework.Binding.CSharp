@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -22,46 +21,31 @@ public static class MaaRecognizerApi
 
     #endregion
 
+    private static readonly Dictionary<string, MaaCustomRecognizerApi> _apis = [];
+    private static readonly Dictionary<string, Analyze> _analyzes = [];
+
+    public static MaaCustomRecognizerApi Convert(this Custom.MaaCustomRecognizerTask task)
+    {
+        MaaBool analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail)
+            => task.Analyze
+                    .Invoke(new Binding.MaaSyncContext(sync_context), new Buffers.MaaImageBuffer(image), task_name.ToStringUTF8(), custom_recognition_param.ToStringUTF8(), new Buffers.MaaRectBuffer(out_box), new Buffers.MaaStringBuffer(out_detail))
+                    .ToMaaBool();
+        ArgumentException.ThrowIfNullOrEmpty(task?.Name);
+        MaaCustomRecognizerApi api = new()
+        {
+            Analyze = Marshal.GetFunctionPointerForDelegate<Analyze>(analyze),
+        };
+        _analyzes.Add(task.Name, analyze);
+        _apis.Add(task.Name, api);
+        return api;
+    }
 }
 
 /// <summary>
 ///     MaaCustomRecognizerTask
 /// </summary>
-[NativeMarshalling(typeof(MaaCustomRecognizerApiMarshaller))]
+[StructLayout(LayoutKind.Sequential)]
 public class MaaCustomRecognizerApi
 {
-    public static MaaCustomRecognizerApi Convert(Custom.MaaCustomRecognizerTask task) => new()
-    {
-        Analyze = (MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail)
-           => task.Analyze
-                 .Invoke(new Binding.MaaSyncContext(sync_context), new Buffers.MaaImageBuffer(image), task_name.ToStringUTF8(), custom_recognition_param.ToStringUTF8(), new Buffers.MaaRectBuffer(out_box), new Buffers.MaaStringBuffer(out_detail))
-                 .ToMaaBool(),
-    };
-
-    public required MaaRecognizerApi.Analyze Analyze { get; init; }
-    internal MaaCustomRecognizerApiMarshaller.Unmanaged Unmanaged { get; set; }
-}
-
-/// <summary>
-///     A static class providing a reference implementation of marshaller for <see cref="MaaCustomRecognizerApi" />.
-/// </summary>
-[CustomMarshaller(typeof(MaaCustomRecognizerApi), MarshalMode.Default, typeof(MaaCustomRecognizerApiMarshaller))]
-internal static class MaaCustomRecognizerApiMarshaller
-{
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct Unmanaged
-    {
-        public nint Analyze;
-    }
-
-    public static Unmanaged ConvertToUnmanaged(MaaCustomRecognizerApi managed)
-        => managed.Unmanaged = new()
-        {
-            Analyze = Marshal.GetFunctionPointerForDelegate<MaaRecognizerApi.Analyze>(managed.Analyze)
-        };
-
-    public static void Free(Unmanaged unmanaged)
-    {
-        // Method intentionally left empty.
-    }
+    public nint Analyze;
 }

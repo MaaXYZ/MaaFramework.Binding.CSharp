@@ -167,7 +167,7 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <inheritdoc/>
     public bool Register<T>(string name, T custom) where T : Custom.IMaaCustomTask
     {
-        ((Custom.IMaaCustom)custom).Name = name;
+        custom.Name = name;
         return Register(custom);
     }
 
@@ -175,25 +175,12 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRegisterCustomAction"/> and <see cref="MaaRegisterCustomRecognizer"/>.
     /// </remarks>
-    public bool Register<T>(T custom) where T : Custom.IMaaCustomTask
+    public bool Register<T>(T custom) where T : Custom.IMaaCustomTask => custom switch
     {
-        var ret = false;
-        switch (custom)
-        {
-            case Custom.MaaCustomActionTask task:
-                var action = MaaCustomActionApi.Convert(task);
-                ret = MaaRegisterCustomAction(Handle, task.Name, ref action, nint.Zero).ToBoolean();
-                if (ret) _actions[task.Name] = action;
-                return ret;
-            case Custom.MaaCustomRecognizerTask task:
-                var recognizer = MaaCustomRecognizerApi.Convert(task);
-                ret = MaaRegisterCustomRecognizer(Handle, task.Name, ref recognizer, nint.Zero).ToBoolean();
-                if (ret) _recognizers[task.Name] = recognizer;
-                return ret;
-            default:
-                return ret;
-        }
-    }
+        Custom.MaaCustomActionTask task => MaaRegisterCustomAction(Handle, task.Name, task.Convert(), nint.Zero).ToBoolean(),
+        Custom.MaaCustomRecognizerTask task => MaaRegisterCustomRecognizer(Handle, task.Name, task.Convert(), nint.Zero).ToBoolean(),
+        _ => false,
+    };
 
     /// <inheritdoc/>
     /// <remarks>

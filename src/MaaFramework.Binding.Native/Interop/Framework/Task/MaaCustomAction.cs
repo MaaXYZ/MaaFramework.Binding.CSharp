@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -25,54 +24,38 @@ public static class MaaActionApi
 
     #endregion
 
+    private static readonly Dictionary<string, MaaCustomActionApi> _apis = [];
+    private static readonly Dictionary<string, Run> _runs = [];
+    private static readonly Dictionary<string, Abort> _aborts = [];
+
+    public static MaaCustomActionApi Convert(this Custom.MaaCustomActionTask task)
+    {
+        MaaBool run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg)
+                => task.Run
+                      .Invoke(new Binding.MaaSyncContext(sync_context), task_name.ToStringUTF8(), custom_action_param.ToStringUTF8(), new Buffers.MaaRectBuffer(cur_box), cur_rec_detail.ToStringUTF8())
+                      .ToMaaBool();
+        void abort(MaaTransparentArg action_arg)
+                => task.Abort
+                      .Invoke();
+        ArgumentException.ThrowIfNullOrEmpty(task?.Name);
+        MaaCustomActionApi api = new()
+        {
+            Run = Marshal.GetFunctionPointerForDelegate<Run>(run),
+            Stop = Marshal.GetFunctionPointerForDelegate<Abort>(abort),
+        };
+        _runs.Add(task.Name, run);
+        _aborts.Add(task.Name, abort);
+        _apis.Add(task.Name, api);
+        return api;
+    }
 }
 
 /// <summary>
 ///     MaaCustomActionTask
 /// </summary>
-[NativeMarshalling(typeof(MaaCustomActionApiMarshaller))]
+[StructLayout(LayoutKind.Sequential)]
 public class MaaCustomActionApi
 {
-    public static MaaCustomActionApi Convert(Custom.MaaCustomActionTask task) => new()
-    {
-        Run = (MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg)
-            => task.Run
-                  .Invoke(new Binding.MaaSyncContext(sync_context), task_name.ToStringUTF8(), custom_action_param.ToStringUTF8(), new Buffers.MaaRectBuffer(cur_box), cur_rec_detail.ToStringUTF8())
-                  .ToMaaBool(),
-        Abort = (MaaTransparentArg action_arg)
-            => task.Abort
-                  .Invoke(),
-    };
-
-    public required MaaActionApi.Run Run { get; init; }
-    public required MaaActionApi.Abort Abort { get; init; }
-    internal MaaCustomActionApiMarshaller.Unmanaged Unmanaged { get; set; }
+    public nint Run;
+    public nint Stop;
 }
-
-/// <summary>
-///     A static class providing a reference implementation of marshaller for <see cref="MaaCustomActionApi" />.
-/// </summary>
-[CustomMarshaller(typeof(MaaCustomActionApi), MarshalMode.Default, typeof(MaaCustomActionApiMarshaller))]
-internal static class MaaCustomActionApiMarshaller
-{
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct Unmanaged
-    {
-        public nint Run;
-        public nint Stop;
-    }
-
-    public static Unmanaged ConvertToUnmanaged(MaaCustomActionApi managed)
-        => managed.Unmanaged = new()
-        {
-            Run = Marshal.GetFunctionPointerForDelegate<MaaActionApi.Run>(managed.Run),
-
-            Stop = Marshal.GetFunctionPointerForDelegate<MaaActionApi.Abort>(managed.Abort)
-        };
-
-    public static void Free(Unmanaged unmanaged)
-    {
-        // Method intentionally left empty.
-    }
-}
-

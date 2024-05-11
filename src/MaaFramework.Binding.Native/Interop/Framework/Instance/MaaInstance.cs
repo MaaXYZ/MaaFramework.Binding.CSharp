@@ -37,7 +37,9 @@ public static partial class MaaInstance
     public static partial MaaBool MaaInited(MaaInstanceHandle inst);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaRegisterCustomRecognizer(MaaInstanceHandle inst, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, ref MaaCustomRecognizerApi recognizer, MaaTransparentArg recognizer_arg);
+#pragma warning disable SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
+    public static partial MaaBool MaaRegisterCustomRecognizer(MaaInstanceHandle inst, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, MaaCustomRecognizerApi recognizer, MaaTransparentArg recognizer_arg);
+#pragma warning restore SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
 
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaUnregisterCustomRecognizer(MaaInstanceHandle inst, [MarshalAs(UnmanagedType.LPUTF8Str)] string name);
@@ -46,7 +48,9 @@ public static partial class MaaInstance
     public static partial MaaBool MaaClearCustomRecognizer(MaaInstanceHandle inst);
 
     [LibraryImport("MaaFramework")]
-    public static partial MaaBool MaaRegisterCustomAction(MaaInstanceHandle inst, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, ref MaaCustomActionApi action, MaaTransparentArg action_arg);
+#pragma warning disable SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
+    public static partial MaaBool MaaRegisterCustomAction(MaaInstanceHandle inst, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, MaaCustomActionApi action, MaaTransparentArg action_arg);
+#pragma warning restore SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
 
     [LibraryImport("MaaFramework")]
     public static partial MaaBool MaaUnregisterCustomAction(MaaInstanceHandle inst, [MarshalAs(UnmanagedType.LPUTF8Str)] string name);
