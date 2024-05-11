@@ -17,7 +17,8 @@ public static class MaaRecognizerApi
 
     #region include/MaaFramework/Task/MaaCustomRecognizer.h, version: v1.6.4.
 
-    public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate MaaBool Analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail);
 
     #endregion
 
@@ -31,13 +32,14 @@ public class MaaCustomRecognizerApi
 {
     public static MaaCustomRecognizerApi Convert(Custom.MaaCustomRecognizerTask task) => new()
     {
-        Analyze = (MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail)
+        Analyze = (MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail)
            => task.Analyze
                  .Invoke(new Binding.MaaSyncContext(sync_context), new Buffers.MaaImageBuffer(image), task_name.ToStringUTF8(), custom_recognition_param.ToStringUTF8(), new Buffers.MaaRectBuffer(out_box), new Buffers.MaaStringBuffer(out_detail))
                  .ToMaaBool(),
     };
 
     public required MaaRecognizerApi.Analyze Analyze { get; init; }
+    internal MaaCustomRecognizerApiMarshaller.Unmanaged Unmanaged { get; set; }
 }
 
 /// <summary>
@@ -53,10 +55,10 @@ internal static class MaaCustomRecognizerApiMarshaller
     }
 
     public static Unmanaged ConvertToUnmanaged(MaaCustomRecognizerApi managed)
-        => new() { Analyze = Marshal.GetFunctionPointerForDelegate<MaaRecognizerApi.Analyze>(managed.Analyze) };
-
-    public static MaaCustomRecognizerApi ConvertToManaged(Unmanaged unmanaged)
-        => new() { Analyze = Marshal.GetDelegateForFunctionPointer<MaaRecognizerApi.Analyze>(unmanaged.Analyze) };
+        => managed.Unmanaged = new()
+        {
+            Analyze = Marshal.GetFunctionPointerForDelegate<MaaRecognizerApi.Analyze>(managed.Analyze)
+        };
 
     public static void Free(Unmanaged unmanaged)
     {

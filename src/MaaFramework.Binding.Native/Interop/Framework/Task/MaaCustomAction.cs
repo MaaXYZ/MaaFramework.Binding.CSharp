@@ -17,9 +17,11 @@ public static class MaaActionApi
 
     #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.6.4.
 
-    public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg);
 
-    public delegate void Abort();
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void Abort(MaaTransparentArg action_arg);
 
     #endregion
 
@@ -33,17 +35,18 @@ public class MaaCustomActionApi
 {
     public static MaaCustomActionApi Convert(Custom.MaaCustomActionTask task) => new()
     {
-        Run = (MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail)
+        Run = (MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg)
             => task.Run
                   .Invoke(new Binding.MaaSyncContext(sync_context), task_name.ToStringUTF8(), custom_action_param.ToStringUTF8(), new Buffers.MaaRectBuffer(cur_box), cur_rec_detail.ToStringUTF8())
                   .ToMaaBool(),
-        Abort = ()
+        Abort = (MaaTransparentArg action_arg)
             => task.Abort
                   .Invoke(),
     };
 
     public required MaaActionApi.Run Run { get; init; }
     public required MaaActionApi.Abort Abort { get; init; }
+    internal MaaCustomActionApiMarshaller.Unmanaged Unmanaged { get; set; }
 }
 
 /// <summary>
@@ -60,19 +63,11 @@ internal static class MaaCustomActionApiMarshaller
     }
 
     public static Unmanaged ConvertToUnmanaged(MaaCustomActionApi managed)
-        => new()
+        => managed.Unmanaged = new()
         {
             Run = Marshal.GetFunctionPointerForDelegate<MaaActionApi.Run>(managed.Run),
 
             Stop = Marshal.GetFunctionPointerForDelegate<MaaActionApi.Abort>(managed.Abort)
-        };
-
-    public static MaaCustomActionApi ConvertToManaged(Unmanaged unmanaged)
-        => new()
-        {
-            Run = Marshal.GetDelegateForFunctionPointer<MaaActionApi.Run>(unmanaged.Run),
-
-            Abort = Marshal.GetDelegateForFunctionPointer<MaaActionApi.Abort>(unmanaged.Stop)
         };
 
     public static void Free(Unmanaged unmanaged)

@@ -68,6 +68,8 @@ global using int32_t = System.Int32;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 #pragma warning disable CA1707 // 标识符不应包含下划线
 
+using System.Runtime.InteropServices;
+
 namespace MaaFramework.Binding.Interop.Native;
 
 public static class MaaDef
@@ -90,6 +92,7 @@ public static class MaaDef
 /// <param name="msg">The message. See MaaMsg.h</param>
 /// <param name="details_json">The details in JSON format. See doc in MaaMsg.h</param>
 /// <param name="callback_arg"></param>
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public delegate void MaaAPICallback(MaaStringView msg, MaaStringView details_json, MaaTransparentArg callback_arg);
 
 #endregion
