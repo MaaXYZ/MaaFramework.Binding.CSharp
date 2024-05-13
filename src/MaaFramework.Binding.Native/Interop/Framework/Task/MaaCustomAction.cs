@@ -1,4 +1,11 @@
-﻿using System.Runtime.InteropServices;
+﻿global using MaaActionApiTuple = (
+    MaaFramework.Binding.Interop.Native.MaaCustomActionApi Api,
+    MaaFramework.Binding.Custom.MaaCustomActionTask Task,
+    MaaFramework.Binding.Interop.Native.MaaActionApi.Run Run,
+    MaaFramework.Binding.Interop.Native.MaaActionApi.Abort Abort
+);
+
+using System.Runtime.InteropServices;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -9,11 +16,17 @@ namespace MaaFramework.Binding.Interop.Native;
 #pragma warning disable CA1707 // 标识符不应包含下划线
 
 /// <summary>
-///     A static class provides the delegates of <see cref="MaaCustomActionApi" />.
+///     MaaCustomActionTask
 /// </summary>
-public static class MaaActionApi
+[StructLayout(LayoutKind.Sequential)]
+public class MaaCustomActionApi
 {
+    public nint Run;
+    public nint Stop;
+}
 
+public static class MaaCustomActionTaskExtension
+{
     #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.6.4.
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -24,38 +37,46 @@ public static class MaaActionApi
 
     #endregion
 
-    private static readonly Dictionary<string, MaaCustomActionApi> _apis = [];
-    private static readonly Dictionary<string, Run> _runs = [];
-    private static readonly Dictionary<string, Abort> _aborts = [];
-
-    public static MaaCustomActionApi Convert(this Custom.MaaCustomActionTask task)
+    public static MaaCustomActionApi Convert(this Custom.MaaCustomActionTask task, out MaaActionApiTuple tuple)
     {
         MaaBool run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg)
-                => task.Run
-                      .Invoke(new Binding.MaaSyncContext(sync_context), task_name.ToStringUTF8(), custom_action_param.ToStringUTF8(), new Buffers.MaaRectBuffer(cur_box), cur_rec_detail.ToStringUTF8())
-                      .ToMaaBool();
+            => task.Run
+                .Invoke(new Binding.MaaSyncContext(sync_context), task_name.ToStringUTF8(), custom_action_param.ToStringUTF8(), new Buffers.MaaRectBuffer(cur_box), cur_rec_detail.ToStringUTF8())
+                .ToMaaBool();
         void abort(MaaTransparentArg action_arg)
-                => task.Abort
-                      .Invoke();
-        ArgumentException.ThrowIfNullOrEmpty(task?.Name);
-        MaaCustomActionApi api = new()
+            => task.Abort
+                .Invoke();
+
+        tuple = (new()
         {
             Run = Marshal.GetFunctionPointerForDelegate<Run>(run),
             Stop = Marshal.GetFunctionPointerForDelegate<Abort>(abort),
-        };
-        _runs.Add(task.Name, run);
-        _aborts.Add(task.Name, abort);
-        _apis.Add(task.Name, api);
-        return api;
+        }, task, run, abort);
+        return tuple.Api;
     }
 }
 
 /// <summary>
-///     MaaCustomActionTask
+///     A class provides the delegates of <see cref="MaaCustomActionApi" />.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public class MaaCustomActionApi
+public class MaaActionApi
 {
-    public nint Run;
-    public nint Stop;
+    private readonly Dictionary<string, MaaActionApiTuple> _apis = [];
+
+    public bool Set(MaaActionApiTuple tuple)
+    {
+        _apis[tuple.Task.Name] = tuple;
+        return true;
+    }
+
+    public bool Remove(string name)
+    {
+        return _apis.Remove(name);
+    }
+
+    public bool Clear()
+    {
+        _apis.Clear();
+        return true;
+    }
 }

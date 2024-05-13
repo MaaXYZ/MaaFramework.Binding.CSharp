@@ -1,4 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿global using MaaRecognizerApiTuple = (
+    MaaFramework.Binding.Interop.Native.MaaCustomRecognizerApi Api,
+    MaaFramework.Binding.Custom.MaaCustomRecognizerTask Task,
+    MaaFramework.Binding.Interop.Native.MaaRecognizerApi.Analyze Analyze
+);
+
+using System.Runtime.InteropServices;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -9,11 +15,16 @@ namespace MaaFramework.Binding.Interop.Native;
 #pragma warning disable CA1707 // 标识符不应包含下划线
 
 /// <summary>
-///     A static class provides the delegates of <see cref="MaaCustomRecognizerApi" />.
+///     MaaCustomRecognizerTask
 /// </summary>
-public static class MaaRecognizerApi
+[StructLayout(LayoutKind.Sequential)]
+public class MaaCustomRecognizerApi
 {
+    public nint Analyze;
+}
 
+public static class MaaCustomRecognizerTaskExtension
+{
     #region include/MaaFramework/Task/MaaCustomRecognizer.h, version: v1.6.4.
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -21,31 +32,42 @@ public static class MaaRecognizerApi
 
     #endregion
 
-    private static readonly Dictionary<string, MaaCustomRecognizerApi> _apis = [];
-    private static readonly Dictionary<string, Analyze> _analyzes = [];
-
-    public static MaaCustomRecognizerApi Convert(this Custom.MaaCustomRecognizerTask task)
+    public static MaaCustomRecognizerApi Convert(this Custom.MaaCustomRecognizerTask task, out MaaRecognizerApiTuple tuple)
     {
         MaaBool analyze(MaaSyncContextHandle sync_context, MaaImageBufferHandle image, MaaStringView task_name, MaaStringView custom_recognition_param, MaaTransparentArg recognizer_arg, /*out*/ MaaRectHandle out_box, /*out*/ MaaStringBufferHandle out_detail)
             => task.Analyze
-                    .Invoke(new Binding.MaaSyncContext(sync_context), new Buffers.MaaImageBuffer(image), task_name.ToStringUTF8(), custom_recognition_param.ToStringUTF8(), new Buffers.MaaRectBuffer(out_box), new Buffers.MaaStringBuffer(out_detail))
-                    .ToMaaBool();
-        ArgumentException.ThrowIfNullOrEmpty(task?.Name);
-        MaaCustomRecognizerApi api = new()
+                .Invoke(new Binding.MaaSyncContext(sync_context), new Buffers.MaaImageBuffer(image), task_name.ToStringUTF8(), custom_recognition_param.ToStringUTF8(), new Buffers.MaaRectBuffer(out_box), new Buffers.MaaStringBuffer(out_detail))
+                .ToMaaBool();
+
+        tuple = (new()
         {
             Analyze = Marshal.GetFunctionPointerForDelegate<Analyze>(analyze),
-        };
-        _analyzes.Add(task.Name, analyze);
-        _apis.Add(task.Name, api);
-        return api;
+        }, task, analyze);
+        return tuple.Api;
     }
 }
 
 /// <summary>
-///     MaaCustomRecognizerTask
+///     A static class provides the delegates of <see cref="MaaCustomRecognizerApi" />.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public class MaaCustomRecognizerApi
+public class MaaRecognizerApi
 {
-    public nint Analyze;
+    private readonly Dictionary<string, MaaRecognizerApiTuple> _apis = [];
+
+    public bool Set(MaaRecognizerApiTuple tuple)
+    {
+        _apis[tuple.Task.Name] = tuple;
+        return true;
+    }
+
+    public bool Remove(string name)
+    {
+        return _apis.Remove(name);
+    }
+
+    public bool Clear()
+    {
+        _apis.Clear();
+        return true;
+    }
 }
