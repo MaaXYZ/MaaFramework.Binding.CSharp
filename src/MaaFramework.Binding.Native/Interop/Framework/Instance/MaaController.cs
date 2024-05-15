@@ -28,8 +28,10 @@ public static partial class MaaController
     [LibraryImport("MaaFramework")]
     public static partial MaaControllerHandle MaaAdbControllerCreateV2([MarshalAs(UnmanagedType.LPUTF8Str)] string adb_path, [MarshalAs(UnmanagedType.LPUTF8Str)] string address, MaaAdbControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, [MarshalAs(UnmanagedType.LPUTF8Str)] string agent_path, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
 
+#pragma warning disable SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
     [LibraryImport("MaaFramework")]
-    public static partial MaaControllerHandle MaaCustomControllerCreate(ref MaaCustomControllerApi handle, MaaTransparentArg handle_arg, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
+    public static partial MaaControllerHandle MaaCustomControllerCreate(MaaCustomControllerApi handle, MaaTransparentArg handle_arg, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);
+#pragma warning restore SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
 
     [LibraryImport("MaaFramework")]
     public static partial MaaControllerHandle MaaThriftControllerCreate(MaaThriftControllerType type, [MarshalAs(UnmanagedType.LPUTF8Str)] string host, int32_t port, [MarshalAs(UnmanagedType.LPUTF8Str)] string config, MaaControllerCallback callback, MaaCallbackTransparentArg callback_arg);

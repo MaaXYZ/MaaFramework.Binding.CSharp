@@ -1,10 +1,10 @@
 ﻿global using MaaActionApiTuple = (
-    MaaFramework.Binding.Interop.Native.MaaCustomActionApi Api,
-    MaaFramework.Binding.Custom.MaaCustomActionTask Task,
-    MaaFramework.Binding.Interop.Native.MaaActionApi.Run Run,
-    MaaFramework.Binding.Interop.Native.MaaActionApi.Abort Abort
+    MaaFramework.Binding.Interop.Native.MaaCustomActionApi Unmanaged,
+    MaaFramework.Binding.Custom.IMaaCustomAction Managed,
+    MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension.Run Run,
+    MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension.Abort Abort
 );
-
+using MaaFramework.Binding.Custom;
 using System.Runtime.InteropServices;
 
 namespace MaaFramework.Binding.Interop.Native;
@@ -16,7 +16,9 @@ namespace MaaFramework.Binding.Interop.Native;
 #pragma warning disable CA1707 // 标识符不应包含下划线
 
 /// <summary>
-///     MaaCustomActionTask
+///     A class marshalled as a MaaCustomActionApi into MaaFramework.
+///     If you do not known what you are doing, do not use this class. In most situations, you
+///     should use <see cref="IMaaCustomAction"/> instead.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public class MaaCustomActionApi
@@ -25,8 +27,12 @@ public class MaaCustomActionApi
     public nint Stop;
 }
 
-public static class MaaCustomActionTaskExtension
+/// <summary>
+///     A static class providing extension methods for the converter of <see cref="IMaaCustomAction"/>.
+/// </summary>
+public static class IMaaCustomActionExtension
 {
+
     #region include/MaaFramework/Task/MaaCustomAction.h, version: v1.6.4.
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -37,27 +43,32 @@ public static class MaaCustomActionTaskExtension
 
     #endregion
 
-    public static MaaCustomActionApi Convert(this Custom.MaaCustomActionTask task, out MaaActionApiTuple tuple)
+    public static MaaCustomActionApi Convert(this IMaaCustomAction task, out MaaActionApiTuple tuple)
     {
-        MaaBool run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg)
-            => task.Run
-                .Invoke(new Binding.MaaSyncContext(sync_context), task_name.ToStringUTF8(), custom_action_param.ToStringUTF8(), new Buffers.MaaRectBuffer(cur_box), cur_rec_detail.ToStringUTF8())
-                .ToMaaBool();
-        void abort(MaaTransparentArg action_arg)
-            => task.Abort
-                .Invoke();
+        MaaBool Run(MaaSyncContextHandle sync_context, MaaStringView task_name, MaaStringView custom_action_param, MaaRectHandle cur_box, MaaStringView cur_rec_detail, MaaTransparentArg action_arg)
+            => task
+               .Run(new Binding.MaaSyncContext(sync_context), task_name.ToStringUTF8(), custom_action_param.ToStringUTF8(), new Buffers.MaaRectBuffer(cur_box), cur_rec_detail.ToStringUTF8())
+               .ToMaaBool();
+
+        void Abort(MaaTransparentArg action_arg)
+            => task
+            .Abort();
 
         tuple = (new()
         {
-            Run = Marshal.GetFunctionPointerForDelegate<Run>(run),
-            Stop = Marshal.GetFunctionPointerForDelegate<Abort>(abort),
-        }, task, run, abort);
-        return tuple.Api;
+            Run = Marshal.GetFunctionPointerForDelegate<Run>(Run),
+            Stop = Marshal.GetFunctionPointerForDelegate<Abort>(Abort),
+        },
+            task,
+            Run,
+            Abort
+        );
+        return tuple.Unmanaged;
     }
 }
 
 /// <summary>
-///     A class provides the delegates of <see cref="MaaCustomActionApi" />.
+///     A class providing implementation for managing marshaled parameters in <see cref="IMaaCustomAction"/>.
 /// </summary>
 public class MaaActionApi
 {
@@ -65,7 +76,7 @@ public class MaaActionApi
 
     public bool Set(MaaActionApiTuple tuple)
     {
-        _apis[tuple.Task.Name] = tuple;
+        _apis[tuple.Managed.Name] = tuple;
         return true;
     }
 

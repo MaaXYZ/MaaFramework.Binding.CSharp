@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions.Native;
+using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaInstance;
@@ -165,7 +166,7 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     private readonly MaaRecognizerApi _recognizer = new();
 
     /// <inheritdoc/>
-    public bool Register<T>(string name, T custom) where T : Custom.IMaaCustomTask
+    public bool Register<T>(string name, T custom) where T : IMaaCustomTask
     {
         custom.Name = name;
         return Register(custom);
@@ -175,10 +176,12 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRegisterCustomAction"/> and <see cref="MaaRegisterCustomRecognizer"/>.
     /// </remarks>
-    public bool Register<T>(T custom) where T : Custom.IMaaCustomTask => custom switch
+    public bool Register<T>(T custom) where T : IMaaCustomTask => custom switch
     {
-        Custom.MaaCustomActionTask task => MaaRegisterCustomAction(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _action.Set(t),
-        Custom.MaaCustomRecognizerTask task => MaaRegisterCustomRecognizer(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _recognizer.Set(t),
+        IMaaCustomAction task
+            => MaaRegisterCustomAction(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _action.Set(t),
+        IMaaCustomRecognizer task
+            => MaaRegisterCustomRecognizer(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _recognizer.Set(t),
         _ => throw new NotImplementedException(),
     };
 
@@ -186,25 +189,31 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaUnregisterCustomAction"/> and <see cref="MaaUnregisterCustomRecognizer"/>.
     /// </remarks>
-    public bool Unregister<T>(string name) where T : Custom.IMaaCustomTask
+    public bool Unregister<T>(string name) where T : IMaaCustomTask
     {
-        if (typeof(T) == typeof(Custom.MaaCustomActionTask)) return MaaUnregisterCustomAction(Handle, name).ToBoolean() && _action.Remove(name);
-        else if (typeof(T) == typeof(Custom.MaaCustomRecognizerTask)) return MaaUnregisterCustomRecognizer(Handle, name).ToBoolean() && _recognizer.Remove(name);
-        else throw new NotImplementedException();
+        var t = typeof(T);
+        if (typeof(IMaaCustomAction).IsAssignableFrom(t))
+            return MaaUnregisterCustomAction(Handle, name).ToBoolean() && _action.Remove(name);
+        if (typeof(IMaaCustomRecognizer).IsAssignableFrom(t))
+            return MaaUnregisterCustomRecognizer(Handle, name).ToBoolean() && _recognizer.Remove(name);
+        throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public bool Unregister<T>(T custom) where T : Custom.IMaaCustomTask
+    public bool Unregister<T>(T custom) where T : IMaaCustomTask
         => Unregister<T>(custom.Name);
 
     /// <remarks>
     ///     Wrapper of <see cref="MaaClearCustomAction"/> and <see cref="MaaClearCustomRecognizer"/>.
     /// </remarks>
-    public bool Clear<T>() where T : Custom.IMaaCustomTask
+    public bool Clear<T>() where T : IMaaCustomTask
     {
-        if (typeof(T) == typeof(Custom.MaaCustomActionTask)) return MaaClearCustomAction(Handle).ToBoolean() && _action.Clear();
-        else if (typeof(T) == typeof(Custom.MaaCustomRecognizerTask)) return MaaClearCustomRecognizer(Handle).ToBoolean() && _recognizer.Clear();
-        else throw new NotImplementedException();
+        var t = typeof(T);
+        if (typeof(IMaaCustomAction).IsAssignableFrom(t))
+            return MaaClearCustomAction(Handle).ToBoolean() && _action.Clear();
+        if (typeof(IMaaCustomRecognizer).IsAssignableFrom(t))
+            return MaaClearCustomRecognizer(Handle).ToBoolean() && _recognizer.Clear();
+        throw new NotImplementedException();
     }
 
     /// <inheritdoc/>

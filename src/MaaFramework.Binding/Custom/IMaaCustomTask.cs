@@ -2,7 +2,9 @@
 
 #pragma warning disable CA1040 // 避免使用空接口
 
-/// <inheritdoc/>
+/// <summary>
+///     An interface representing implementation is maa custom task.
+/// </summary>
 public interface IMaaCustomTask : IMaaCustom
 {
 }

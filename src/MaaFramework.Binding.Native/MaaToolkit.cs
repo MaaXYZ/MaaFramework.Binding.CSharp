@@ -1,4 +1,5 @@
-﻿using MaaFramework.Binding.Interop.Native;
+﻿using MaaFramework.Binding.Custom;
+using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding;
@@ -212,9 +213,9 @@ public class MaaToolkit : IMaaToolkit
     protected class ExecAgentClass : IMaaToolkitExecAgent
     {
         /// <inheritdoc/>
-        public bool Register<T>(IMaaInstance maaInstance, string name, T custom) where T : Custom.IMaaCustomExecutor
+        public bool Register<T>(IMaaInstance maaInstance, string name, T custom) where T : IMaaCustomExecutor
         {
-            ((Custom.IMaaCustom)custom).Name = name;
+            custom.Name = name;
             return Register(maaInstance, custom);
         }
 
@@ -222,10 +223,10 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitRegisterCustomActionExecutor"/> and <see cref="MaaToolkitRegisterCustomRecognizerExecutor"/>.
         /// </remarks>
-        public bool Register<T>(IMaaInstance maaInstance, T custom) where T : Custom.IMaaCustomExecutor => (maaInstance, custom) switch
+        public bool Register<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor => (maaInstance, custom) switch
         {
-            (IMaaInstance<nint> maa, Custom.MaaCustomActionExecutor executor) => MaaToolkitRegisterCustomActionExecutor(maa.Handle, executor.Name, executor.Path, executor.Parameter).ToBoolean(),
-            (IMaaInstance<nint> maa, Custom.MaaCustomRecognizerExecutor executor) => MaaToolkitRegisterCustomRecognizerExecutor(maa.Handle, executor.Name, executor.Path, executor.Parameter).ToBoolean(),
+            (IMaaInstance<nint> maa, MaaCustomActionExecutor executor) => MaaToolkitRegisterCustomActionExecutor(maa.Handle, executor.Name, executor.Path, executor.Parameter).ToBoolean(),
+            (IMaaInstance<nint> maa, MaaCustomRecognizerExecutor executor) => MaaToolkitRegisterCustomRecognizerExecutor(maa.Handle, executor.Name, executor.Path, executor.Parameter).ToBoolean(),
             _ => false,
         };
 
@@ -233,17 +234,17 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitUnregisterCustomActionExecutor"/> and <see cref="MaaToolkitUnregisterCustomRecognizerExecutor"/>.
         /// </remarks>
-        public bool Unregister<T>(IMaaInstance maaInstance, string name) where T : Custom.IMaaCustomExecutor => maaInstance switch
+        public bool Unregister<T>(IMaaInstance maaInstance, string name) where T : IMaaCustomExecutor => maaInstance switch
         {
-            IMaaInstance<nint> maa when typeof(T) == typeof(Custom.MaaCustomActionExecutor) => MaaToolkitUnregisterCustomActionExecutor(maa.Handle, name).ToBoolean(),
-            IMaaInstance<nint> maa when typeof(T) == typeof(Custom.MaaCustomRecognizerExecutor) => MaaToolkitUnregisterCustomRecognizerExecutor(maa.Handle, name).ToBoolean(),
+            IMaaInstance<nint> maa when typeof(T) == typeof(MaaCustomActionExecutor) => MaaToolkitUnregisterCustomActionExecutor(maa.Handle, name).ToBoolean(),
+            IMaaInstance<nint> maa when typeof(T) == typeof(MaaCustomRecognizerExecutor) => MaaToolkitUnregisterCustomRecognizerExecutor(maa.Handle, name).ToBoolean(),
             _ => false,
         };
 
         /// <inheritdoc/>
-        public bool Unregister<T>(IMaaInstance maaInstance, T custom) where T : Custom.IMaaCustomExecutor
+        public bool Unregister<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor
         {
-            return Unregister<T>(maaInstance, ((Custom.IMaaCustom)custom).Name);
+            return Unregister<T>(maaInstance, custom.Name);
         }
     }
 
