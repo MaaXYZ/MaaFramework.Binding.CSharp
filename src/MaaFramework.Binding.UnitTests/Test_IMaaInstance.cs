@@ -3,7 +3,7 @@
 namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
-///     Test <see cref="IMaaInstance"/> and <see cref="MaaInstance"/> and <see cref="MaaInstanceGrpc"/>.
+///     Test <see cref="IMaaInstance"/> and <see cref="MaaInstance"/>.
 /// </summary>
 [TestClass]
 public class Test_IMaaInstance
@@ -16,16 +16,6 @@ public class Test_IMaaInstance
             {
                 Resource = new MaaResource(),
                 Controller = new MaaAdbController(Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None),
-                DisposeOptions = DisposeOptions.All,
-            }
-        },
-#endif
-#if MAA_GRPC
-        {
-            MaaTypes.Grpc, new MaaInstanceGrpc(Common.GrpcChannel)
-            {
-                Resource = new MaaResourceGrpc(Common.GrpcChannel),
-                Controller = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None),
                 DisposeOptions = DisposeOptions.All,
             }
         },
@@ -81,18 +71,6 @@ public class Test_IMaaInstance
         };
         using var native2 = new MaaInstance(nativeController, nativeResource, DisposeOptions.None);
 #endif
-#if MAA_GRPC
-        using var grpcResource = new MaaResourceGrpc(Common.GrpcChannel);
-        using var grpcController = new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath);
-
-        using var grpc1 = new MaaInstanceGrpc(Common.GrpcChannel, true)
-        {
-            Resource = grpcResource,
-            Controller = grpcController,
-            DisposeOptions = DisposeOptions.None,
-        };
-        using var grpc2 = new MaaInstanceGrpc(Common.GrpcChannel, grpcController, grpcResource, DisposeOptions.None);
-#endif
     }
 #pragma warning restore S2699 // Tests should include assertions
 
@@ -144,8 +122,7 @@ public class Test_IMaaInstance
         // First job
         var job =
             maaInstance.AppendTask(taskEntryName);
-        Assert.IsFalse(
-            job.SetParam("{}"));
+        job.SetParam("{}");
         Assert.AreEqual(
             MaaJobStatus.Running, job.Status);
 

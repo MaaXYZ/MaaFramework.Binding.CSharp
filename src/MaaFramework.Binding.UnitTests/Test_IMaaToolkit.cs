@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
-///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolkit"/> and <see cref="MaaToolkitGrpc"/>.
+///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolkit"/>.
 /// </summary>
 [TestClass]
 public class Test_IMaaToolkit
@@ -10,9 +10,6 @@ public class Test_IMaaToolkit
     {
 #if MAA_NATIVE
         { MaaTypes.Native, new MaaToolkit() },
-#endif
-#if MAA_GRPC
-        { MaaTypes.Grpc,   new MaaToolkitGrpc(Common.GrpcChannel) },
 #endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
@@ -65,17 +62,14 @@ public class Test_IMaaToolkit
             device.AdbTypes.Check();
         }
 
-        using IMaaController maaController = type switch
+        using var maaController = type switch
         {
+#if MAA_NATIVE
             MaaTypes.Native => devices[0].ToAdbController(
                 adbPath: Common.AdbPath,
                 types: AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
                 link: LinkOption.None),
-            MaaTypes.Grpc => devices[0].ToAdbControllerGrpc(
-                Common.GrpcChannel,
-                adbPath: Common.AdbPath,
-                types: AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
-                link: LinkOption.None),
+#endif
             _ => throw new NotImplementedException(),
         };
         maaController

@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);MAA_NATIVE; <!-- MAA_GRPC; --> </DefineConstants>
+    <DefineConstants>$(DefineConstants);MAA_NATIVE;</DefineConstants>
   </PropertyGroup>
 
   <Choose>

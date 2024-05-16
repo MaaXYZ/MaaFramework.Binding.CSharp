@@ -1,5 +1,4 @@
-﻿using Grpc.Net.Client;
-using MaaFramework.Binding.Abstractions;
+﻿using MaaFramework.Binding.Abstractions;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -11,9 +10,6 @@ public static class Common
 {
     static Common()
     {
-#if MAA_GRPC
-        MaaRpc.Start(GrpcAddress);
-#endif
     }
 
     internal static string AdbPath { get; set; } = string.Empty;
@@ -23,9 +19,6 @@ public static class Common
     internal static string ResourcePath { get; set; } = Path.GetFullPath("./SampleResource");
     internal static string AgentPath { get; set; } = Path.GetFullPath($"./MaaAgentBinary");
     internal static string AdbConfig { get; set; } = File.ReadAllText(Path.GetFullPath($"{ResourcePath}/controller_config.json"));
-
-    internal static GrpcChannel GrpcChannel { get; set; } = GrpcChannel.ForAddress($"http://{GrpcAddress}/");
-    private const string GrpcAddress = "127.0.0.1:8080";
 
     private static void InitializeInfo(TestContext testContext)
     {
@@ -61,14 +54,6 @@ public static class Common
         new MaaUtility().SetOption(GlobalOption.StdoutLevel, LoggingLevel.Off);
 
         InitializeInfo(testContext);
-
-#if Maa_GRPC
-        Task.Run(() =>
-        {
-            MaaRpc.Wait();
-            Assert.Fail();
-        });
-#endif
     }
 
     /// <summary>
@@ -77,10 +62,7 @@ public static class Common
     [AssemblyCleanup]
     public static void CleanupAssembly()
     {
-#if MAA_GRPC
-        GrpcChannel.Dispose();
-        MaaRpc.Stop();
-#endif
+        // Assembly cleanup.
     }
 
     internal static void DisposeData(IEnumerable<IMaaDisposable> data)

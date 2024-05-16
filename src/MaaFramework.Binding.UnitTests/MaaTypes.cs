@@ -9,9 +9,8 @@
 public enum MaaTypes
 {
     None = 0,
-    All = Native | Grpc,
+    All = Native | Placeholder,
 
     Native = 1 << 0,
-    Grpc = 1 << 1,
     Placeholder = 1 << 30,
 }

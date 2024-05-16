@@ -30,28 +30,10 @@
         "resolved": "9.21.0.86780",
         "contentHash": "m+0RKlTMGDLKH8zDwGqWtvVVbY7leuDWNjcGDqEtvI12lR0fQtmPV8eooMyaA76QxUxRnbIMmilwqba1lXMvJQ=="
       },
-      "Grpc.Core.Api": {
-        "type": "Transitive",
-        "resolved": "2.59.0",
-        "contentHash": "n0QpwXqri/Uu7pXWbE6PWVANEhKggC6QRX7qsSR4vyzZRDN2jBPoUNvrJP7RBw7g8Dgg8e2bWYuGKq4ph6VXeA=="
-      },
-      "Grpc.Net.Common": {
-        "type": "Transitive",
-        "resolved": "2.59.0",
-        "contentHash": "9j1wKAeCzjnx/j8CC8chXRoLCuzJ9VhhlhwMkbW37mS1Ox4vv0i2pcefpDY5INIeE1BmPNIuPtqFLOUktkiKrQ==",
-        "dependencies": {
-          "Grpc.Core.Api": "2.59.0"
-        }
-      },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
         "resolved": "17.5.0",
         "contentHash": "6FQo0O6LKDqbCiIgVQhJAf810HSjFlOj7FunWaeOGDKxy8DAbpHzPk4SfBTXz9ytaaceuIIeR6hZgplt09m+ig=="
-      },
-      "Microsoft.Extensions.Logging.Abstractions": {
-        "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "/HggWBbTwy8TgebGSX5DBZ24ndhzi93sHUBDvP1IxbZD7FDokYzdAr6+vbWGjw2XAfR2EJ1sfKUotpjHnFWPxA=="
       },
       "Microsoft.TestPlatform.ObjectModel": {
         "type": "Transitive",
@@ -96,35 +78,11 @@
       "Maa.Framework.Binding": {
         "type": "Project"
       },
-      "Maa.Framework.Binding.Grpc": {
-        "type": "Project",
-        "dependencies": {
-          "Google.Protobuf": "[3.25.1, )",
-          "Grpc.Net.Client": "[2.59.0, )",
-          "Maa.Framework.Binding": "[1.0.0-dev, )"
-        }
-      },
       "Maa.Framework.Binding.Native": {
         "type": "Project",
         "dependencies": {
           "Maa.Framework.Binding": "[1.0.0-dev, )",
           "Maa.Framework.Runtimes": "[1.6.4, )"
-        }
-      },
-      "Google.Protobuf": {
-        "type": "CentralTransitive",
-        "requested": "[3.25.1, )",
-        "resolved": "3.25.1",
-        "contentHash": "Sw9bq4hOD+AaS3RrnmP5IT25cyZ/T1qpM0e8+G+23Nojhv7+ScJFPEAQo1m4EFQWhXoI4FRZDrK+wjHCPw9yxg=="
-      },
-      "Grpc.Net.Client": {
-        "type": "CentralTransitive",
-        "requested": "[2.59.0, )",
-        "resolved": "2.59.0",
-        "contentHash": "I2CP5aLTek9mz7OwmM8T94pzvuV2Jib91KqzHh+vohazx/rL0ks1GCsUrwf+7866UsSsOznaWRKqFxWPEYstpg==",
-        "dependencies": {
-          "Grpc.Net.Common": "2.59.0",
-          "Microsoft.Extensions.Logging.Abstractions": "6.0.0"
         }
       },
       "Maa.AgentBinary": {
@@ -169,28 +127,10 @@
         "resolved": "9.21.0.86780",
         "contentHash": "m+0RKlTMGDLKH8zDwGqWtvVVbY7leuDWNjcGDqEtvI12lR0fQtmPV8eooMyaA76QxUxRnbIMmilwqba1lXMvJQ=="
       },
-      "Grpc.Core.Api": {
-        "type": "Transitive",
-        "resolved": "2.59.0",
-        "contentHash": "n0QpwXqri/Uu7pXWbE6PWVANEhKggC6QRX7qsSR4vyzZRDN2jBPoUNvrJP7RBw7g8Dgg8e2bWYuGKq4ph6VXeA=="
-      },
-      "Grpc.Net.Common": {
-        "type": "Transitive",
-        "resolved": "2.59.0",
-        "contentHash": "9j1wKAeCzjnx/j8CC8chXRoLCuzJ9VhhlhwMkbW37mS1Ox4vv0i2pcefpDY5INIeE1BmPNIuPtqFLOUktkiKrQ==",
-        "dependencies": {
-          "Grpc.Core.Api": "2.59.0"
-        }
-      },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
         "resolved": "17.5.0",
         "contentHash": "6FQo0O6LKDqbCiIgVQhJAf810HSjFlOj7FunWaeOGDKxy8DAbpHzPk4SfBTXz9ytaaceuIIeR6hZgplt09m+ig=="
-      },
-      "Microsoft.Extensions.Logging.Abstractions": {
-        "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "/HggWBbTwy8TgebGSX5DBZ24ndhzi93sHUBDvP1IxbZD7FDokYzdAr6+vbWGjw2XAfR2EJ1sfKUotpjHnFWPxA=="
       },
       "Microsoft.TestPlatform.ObjectModel": {
         "type": "Transitive",
@@ -235,35 +175,11 @@
       "Maa.Framework.Binding": {
         "type": "Project"
       },
-      "Maa.Framework.Binding.Grpc": {
-        "type": "Project",
-        "dependencies": {
-          "Google.Protobuf": "[3.25.1, )",
-          "Grpc.Net.Client": "[2.59.0, )",
-          "Maa.Framework.Binding": "[1.0.0-dev, )"
-        }
-      },
       "Maa.Framework.Binding.Native": {
         "type": "Project",
         "dependencies": {
           "Maa.Framework.Binding": "[1.0.0-dev, )",
           "Maa.Framework.Runtimes": "[1.6.4, )"
-        }
-      },
-      "Google.Protobuf": {
-        "type": "CentralTransitive",
-        "requested": "[3.25.1, )",
-        "resolved": "3.25.1",
-        "contentHash": "Sw9bq4hOD+AaS3RrnmP5IT25cyZ/T1qpM0e8+G+23Nojhv7+ScJFPEAQo1m4EFQWhXoI4FRZDrK+wjHCPw9yxg=="
-      },
-      "Grpc.Net.Client": {
-        "type": "CentralTransitive",
-        "requested": "[2.59.0, )",
-        "resolved": "2.59.0",
-        "contentHash": "I2CP5aLTek9mz7OwmM8T94pzvuV2Jib91KqzHh+vohazx/rL0ks1GCsUrwf+7866UsSsOznaWRKqFxWPEYstpg==",
-        "dependencies": {
-          "Grpc.Net.Common": "2.59.0",
-          "Microsoft.Extensions.Logging.Abstractions": "6.0.0"
         }
       },
       "Maa.AgentBinary": {

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
-///     Test <see cref="IMaaController"/> and <see cref="MaaController"/> and <see cref="MaaControllerGrpc"/>.
+///     Test <see cref="IMaaController"/> and <see cref="MaaController"/>.
 /// </summary>
 [TestClass]
 public class Test_IMaaController
@@ -16,11 +16,6 @@ public class Test_IMaaController
 #if MAA_NATIVE
         {
             MaaTypes.Native, new MaaAdbController(Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
-        },
-#endif
-#if MAA_GRPC
-        {
-            MaaTypes.Grpc, new MaaAdbControllerGrpc(Common.GrpcChannel, Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
         },
 #endif
     };
@@ -70,7 +65,7 @@ public class Test_IMaaController
     [TestMethod]
     public void CreateInstances()
     {
-#if MAA_GRPC
+#if MAA_NATIVE
         #region MaaAdbController
 
         using var native1 = new MaaAdbController(
@@ -97,48 +92,24 @@ public class Test_IMaaController
         #endregion
 
         #region MaaWin32Controller
+#if !GITHUB_ACTIONS
+        var toolkit = new MaaToolkit();
+        var windowInfo = toolkit.Win32.Window.Search(string.Empty, "Visual Studio").FirstOrDefault() ?? new() { Hwnd = nint.Zero, };
 
         using var win32Native1 = new MaaWin32Controller(
-            nint.Zero,
+            windowInfo.Hwnd,
             Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI);
         using var win32Native2 = new MaaWin32Controller(
-            nint.Zero,
+            windowInfo.Hwnd,
             Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
             LinkOption.None);
         using var win32Native3 = new MaaWin32Controller(
-            nint.Zero,
+            windowInfo.Hwnd,
             Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
             LinkOption.Start,
             CheckStatusOption.None);
-
-        #endregion
 #endif
-
-#if MAA_GRPC
-        using var grpc1 = new MaaAdbControllerGrpc(
-            Common.GrpcChannel,
-            Common.AdbPath,
-            Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
-            Common.AdbConfig,
-            Common.AgentPath);
-        using var grpc2 = new MaaAdbControllerGrpc(
-            Common.GrpcChannel,
-            Common.AdbPath,
-            Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
-            Common.AdbConfig,
-            Common.AgentPath,
-            LinkOption.None);
-        using var grpc3 = new MaaAdbControllerGrpc(
-            Common.GrpcChannel,
-            Common.AdbPath,
-            Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
-            Common.AdbConfig,
-            Common.AgentPath,
-            LinkOption.Start,
-            CheckStatusOption.None);
+        #endregion
 #endif
     }
 #pragma warning restore S2699 // Tests should include assertions
@@ -152,12 +123,6 @@ public class Test_IMaaController
     public void Interface_SetOption(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);
-
-        if (opt is ControllerOption.Recording && type is MaaTypes.Grpc)
-        {
-            Assert.ThrowsException<NotSupportedException>(() => maaController.SetOption(opt, arg));
-            return;
-        }
 
         Assert.IsTrue(
             maaController.SetOption(opt, arg));
@@ -276,10 +241,11 @@ public class Test_IMaaController
 
         var job = maaController.Screencap();
         Interface_IMaaPost_Success(job);
-        using IMaaImageBuffer buffer = type switch
+        using var buffer = type switch
         {
+#if MAA_NATIVE
             MaaTypes.Native => new MaaImageBuffer(),
-            MaaTypes.Grpc => new MaaImageBufferGrpc(Common.GrpcChannel),
+#endif
             _ => throw new NotImplementedException(),
         };
         Assert.IsTrue(
@@ -292,16 +258,14 @@ public class Test_IMaaController
         Marshal.Copy(encodedDataHandle, pngImageData, 0, (int)size);
         CollectionAssert.AreNotEqual(new byte[size], pngImageData);
 
-        if (type is MaaTypes.Native)
-        {
-            var nativeBuffer = buffer as MaaImageBuffer;
-            var info = buffer.Info;
-            var length = info.Width * info.Height * GetChannel(info.Type);
-            var rawDataHandle = nativeBuffer!.GetRawData();
-            var cv2MatData = new byte[length];
-            Marshal.Copy(rawDataHandle, cv2MatData, 0, length);
-            CollectionAssert.AreNotEqual(new byte[length], cv2MatData);
-        }
+        // if (type is MaaTypes.Native) { }
+        var nativeBuffer = buffer;
+        var info = buffer.Info;
+        var length = info.Width * info.Height * GetChannel(info.Type);
+        var rawDataHandle = nativeBuffer!.GetRawData();
+        var cv2MatData = new byte[length];
+        Marshal.Copy(rawDataHandle, cv2MatData, 0, length);
+        CollectionAssert.AreNotEqual(new byte[length], cv2MatData);
 
         static int GetChannel(int type)
         {
@@ -337,12 +301,6 @@ public class Test_IMaaController
     public void Interface_SetOption_InvalidData(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);
-
-        if (opt is ControllerOption.Recording && type is MaaTypes.Grpc)
-        {
-            Assert.ThrowsException<NotSupportedException>(() => maaController.SetOption(opt, arg));
-            return;
-        }
 
         Assert.ThrowsException<InvalidOperationException>(() => maaController.SetOption(opt, arg));
     }
