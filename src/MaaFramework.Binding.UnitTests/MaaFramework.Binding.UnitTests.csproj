@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MaaFramework\MaaFramework.csproj" />
-    <ProjectReference Include="..\MaaFramework.Binding.Grpc\MaaFramework.Binding.Grpc.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

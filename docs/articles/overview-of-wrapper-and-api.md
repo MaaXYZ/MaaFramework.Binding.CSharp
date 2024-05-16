@@ -172,14 +172,6 @@
 | IMaaDisposableHandle.Handle | *The MaaRectHandle.* |
 | IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
 
-## MaaRpc
-
-| Wrapper | Native API |
-| --- | --- |
-| MaaRpc.Start() | MaaRpcStart |
-| MaaRpc.Stop() | MaaRpcStop |
-| MaaRpc.Wait() | MaaRpcWait |
-
 ## MaaToolkit : IMaaToolkit
 
 | Wrapper | Native API |
@@ -204,9 +196,7 @@
 
 ## MaaUtility : IMaaUtility
 
-| Wrapper | Native API | Grpc API |
-| --- | --- | --- |
-| IMaaUtility.Version | MaaVersion | - |
-| IMaaOption.SetOption() | MaaSetGlobalOption | - |
-| MaaUtilityGrpc.RegisterCallback() | - | acquire_id <br> register_callback |
-| MaaUtilityGrpc.UnregisterCallback() | - | unregister_callback |
+| Wrapper | Native API |
+| --- | --- |
+| IMaaUtility.Version | MaaVersion |
+| IMaaOption.SetOption() | MaaSetGlobalOption |

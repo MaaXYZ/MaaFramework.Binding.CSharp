@@ -7,7 +7,6 @@ import pyperclip
 repo = 'MaaXYZ/MaaFramework'
 api_path = [
     'include/MaaFramework/MaaAPI.h',
-    'include/MaaRpc/MaaRpc.h',
     'include/MaaToolkit/MaaToolkitAPI.h'
 ]
 
