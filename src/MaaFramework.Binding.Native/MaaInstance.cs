@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
+using MaaFramework.Binding.Native.Interop;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaInstance;
 
@@ -162,8 +163,8 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// </remarks>
     public bool Initialized => MaaInited(Handle).ToBoolean();
 
-    private readonly MaaActionApi _action = new();
-    private readonly MaaRecognizerApi _recognizer = new();
+    private readonly MaaMarshaledApis<MaaActionApiTuple> _action = new();
+    private readonly MaaMarshaledApis<MaaRecognizerApiTuple> _recognizer = new();
 
     /// <inheritdoc/>
     public bool Register<T>(string name, T custom) where T : IMaaCustomTask
@@ -179,9 +180,9 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     public bool Register<T>(T custom) where T : IMaaCustomTask => custom switch
     {
         IMaaCustomAction task
-            => MaaRegisterCustomAction(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _action.Set(t),
+            => MaaRegisterCustomAction(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _action.Set(t.Managed.Name, t),
         IMaaCustomRecognizer task
-            => MaaRegisterCustomRecognizer(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _recognizer.Set(t),
+            => MaaRegisterCustomRecognizer(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _recognizer.Set(t.Managed.Name, t),
         _ => throw new NotImplementedException(),
     };
 

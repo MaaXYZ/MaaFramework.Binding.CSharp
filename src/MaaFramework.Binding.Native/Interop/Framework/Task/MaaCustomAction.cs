@@ -24,7 +24,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public class MaaCustomActionApi
 {
     public nint Run;
-    public nint Stop;
+    public nint Abort;
 }
 
 /// <summary>
@@ -57,37 +57,12 @@ public static class IMaaCustomActionExtension
         tuple = (new()
         {
             Run = Marshal.GetFunctionPointerForDelegate<Run>(Run),
-            Stop = Marshal.GetFunctionPointerForDelegate<Abort>(Abort),
+            Abort = Marshal.GetFunctionPointerForDelegate<Abort>(Abort),
         },
             task,
             Run,
             Abort
         );
         return tuple.Unmanaged;
-    }
-}
-
-/// <summary>
-///     A class providing implementation for managing marshaled parameters in <see cref="IMaaCustomAction"/>.
-/// </summary>
-public class MaaActionApi
-{
-    private readonly Dictionary<string, MaaActionApiTuple> _apis = [];
-
-    public bool Set(MaaActionApiTuple tuple)
-    {
-        _apis[tuple.Managed.Name] = tuple;
-        return true;
-    }
-
-    public bool Remove(string name)
-    {
-        return _apis.Remove(name);
-    }
-
-    public bool Clear()
-    {
-        _apis.Clear();
-        return true;
     }
 }

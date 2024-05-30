@@ -55,28 +55,3 @@ public static class IMaaCustomRecognizerExtension
         return tuple.Unmanaged;
     }
 }
-
-/// <summary>
-///     A class providing implementation for managing marshaled parameters in <see cref="IMaaCustomRecognizer"/>.
-/// </summary>
-public class MaaRecognizerApi
-{
-    private readonly Dictionary<string, MaaRecognizerApiTuple> _apis = [];
-
-    public bool Set(MaaRecognizerApiTuple tuple)
-    {
-        _apis[tuple.Managed.Name] = tuple;
-        return true;
-    }
-
-    public bool Remove(string name)
-    {
-        return _apis.Remove(name);
-    }
-
-    public bool Clear()
-    {
-        _apis.Clear();
-        return true;
-    }
-}
