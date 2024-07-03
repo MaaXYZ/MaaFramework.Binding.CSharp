@@ -82,7 +82,7 @@
         "type": "Project",
         "dependencies": {
           "Maa.Framework.Binding": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[1.6.4, )"
+          "Maa.Framework.Runtimes": "[1.8.7, )"
         }
       },
       "Maa.AgentBinary": {
@@ -93,9 +93,9 @@
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
-        "requested": "[1.6.4, )",
-        "resolved": "1.6.4",
-        "contentHash": "4iZhdfbKEQpAZtpAKfhBSsqxcqRDE9trAAfzDNIs7e5Q6p+EH7UTSRFfnexwUwjDIxirrH3dcptuB7A2QCMcQA=="
+        "requested": "[1.8.7, )",
+        "resolved": "1.8.7",
+        "contentHash": "+YLZGJv1O5PvYH+ljYKvJPx4vZqgiYCQUejoMTx5nWAZN2H9aTFv6no2s3X6EhtkbeNb296lIJSCYASyOmsbzg=="
       }
     },
     "net8.0": {
@@ -179,7 +179,7 @@
         "type": "Project",
         "dependencies": {
           "Maa.Framework.Binding": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[1.6.4, )"
+          "Maa.Framework.Runtimes": "[1.8.7, )"
         }
       },
       "Maa.AgentBinary": {
@@ -190,9 +190,9 @@
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
-        "requested": "[1.6.4, )",
-        "resolved": "1.6.4",
-        "contentHash": "4iZhdfbKEQpAZtpAKfhBSsqxcqRDE9trAAfzDNIs7e5Q6p+EH7UTSRFfnexwUwjDIxirrH3dcptuB7A2QCMcQA=="
+        "requested": "[1.8.7, )",
+        "resolved": "1.8.7",
+        "contentHash": "+YLZGJv1O5PvYH+ljYKvJPx4vZqgiYCQUejoMTx5nWAZN2H9aTFv6no2s3X6EhtkbeNb296lIJSCYASyOmsbzg=="
       }
     }
   }
