@@ -12,5 +12,5 @@ public class MaaCustomActionExecutor : IMaaCustomExecutor
     public required string Path { get; init; }
 
     /// <inheritdoc/>
-    public required string Parameter { get; init; }
+    public required IEnumerable<string> Parameter { get; init; }
 }

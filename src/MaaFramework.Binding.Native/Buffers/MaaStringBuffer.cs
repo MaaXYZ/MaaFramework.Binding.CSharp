@@ -75,7 +75,7 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
         if (useEx)
         {
             var bytes = str.ToBytes();
-            return MaaSetStringEx(Handle, ref bytes[0], (MaaSize)bytes.LongLength).ToBoolean();
+            return MaaSetStringEx(Handle, bytes, (MaaSize)bytes.LongLength).ToBoolean();
         }
 
         return MaaSetString(Handle, str).ToBoolean();
@@ -87,7 +87,7 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
         if (useEx)
         {
             var bytes = str.ToBytes();
-            return MaaSetStringEx(handle, ref bytes[0], (MaaSize)bytes.LongLength).ToBoolean();
+            return MaaSetStringEx(handle, bytes, (MaaSize)bytes.LongLength).ToBoolean();
         }
 
         return MaaSetString(handle, str).ToBoolean();

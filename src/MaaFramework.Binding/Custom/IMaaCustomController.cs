@@ -25,6 +25,7 @@ public interface IMaaCustomController : IMaaCustomTask
 
     /// <summary/>
     bool StopApp(string intent);
+
     /// <summary>
     /// Write result to buffer.
     /// </summary>

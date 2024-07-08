@@ -8,7 +8,7 @@ namespace MaaFramework.Binding.Custom;
 public interface IMaaCustomAction : IMaaCustomTask
 {
     /// <summary/>
-    bool Run(IMaaSyncContext syncContext, string taskName, string customActionParam, IMaaRectBuffer curBox, string curRecDetail);
+    bool Run(in IMaaSyncContext syncContext, string taskName, string customActionParam, IMaaRectBuffer curBox, string curRecDetail);
 
     /// <summary/>
     void Abort();

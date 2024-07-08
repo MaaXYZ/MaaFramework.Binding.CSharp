@@ -1,4 +1,4 @@
-﻿namespace MaaFramework.Binding.Native.Interop;
+﻿namespace MaaFramework.Binding.Interop.Native;
 
 /// <summary>
 ///     A class providing implementation for managing marshaled parameters in <see cref="Binding"/>.

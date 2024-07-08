@@ -2,6 +2,8 @@
 
 namespace MaaFramework.Binding;
 
+#pragma warning disable S1133 // Deprecated code should be removed
+
 /// <summary>
 ///     An interface defining wrapped members for MaaToolkit.
 /// </summary>
@@ -34,11 +36,22 @@ public interface IMaaToolkit
 public interface IMaaToolkitConfig
 {
     /// <summary>
+    ///     Initializes Maa Toolkit option config.
+    /// </summary>
+    /// <param name="userPath">The user path. Default is <see cref="Environment.CurrentDirectory"/>.</param>
+    /// <param name="defaultJson">The default config. Default is a empty json.</param>
+    /// <returns>
+    ///     true if the Maa Toolkit option config was initialized successfully; otherwise, false.
+    /// </returns>
+    bool InitOption(string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}");
+
+    /// <summary>
     ///     Initializes Maa Toolkit.
     /// </summary>
     /// <returns>
     ///     true if the Maa Toolkit was initialized successfully; otherwise, false.
     /// </returns>
+    [Obsolete("Use InitOption() instead.")]
     bool Init();
 
     /// <summary>
@@ -47,6 +60,7 @@ public interface IMaaToolkitConfig
     /// <returns>
     ///     true if the Maa Toolkit was uninitialized successfully; otherwise, false.
     /// </returns>
+    [Obsolete("Use InitOption() instead.")]
     bool Uninit();
 }
 

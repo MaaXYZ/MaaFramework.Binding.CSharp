@@ -11,7 +11,7 @@ public interface IMaaCustomExecutor : IMaaCustom
     public string Path { get; init; }
 
     /// <summary>
-    ///     Gets or inits the parameter json.
+    ///     Gets or inits the parameter.
     /// </summary>
-    public string Parameter { get; init; }
+    public IEnumerable<string> Parameter { get; init; }
 }

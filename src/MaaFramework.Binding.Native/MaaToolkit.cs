@@ -4,6 +4,8 @@ using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding;
 
+#pragma warning disable S1133 // Deprecated code should be removed
+
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaToolkit"/>.
 /// </summary>
@@ -12,12 +14,16 @@ public class MaaToolkit : IMaaToolkit
     /// <summary>
     ///     Creates a <see cref="MaaToolkit"/> instance.
     /// </summary>
-    /// <param name="init">Whether invokes the <see cref="IMaaToolkitConfig.Init"/>.</param>
-    public MaaToolkit(bool init = false)
+    /// <param name="init">Whether invokes the <see cref="IMaaToolkitConfig.InitOption"/>.</param>
+    /// <param name="userPath">The user path. Default is <see cref="Environment.CurrentDirectory"/>.</param>
+    /// <param name="defaultJson">The default config. Default is a empty json.</param>
+    public MaaToolkit(bool init = false, string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}")
     {
         if (init)
         {
-            Config.Init();
+            if (userPath == nameof(Environment.CurrentDirectory))
+                userPath = Environment.CurrentDirectory;
+            Config.InitOption(userPath, defaultJson);
         }
     }
 
@@ -38,8 +44,16 @@ public class MaaToolkit : IMaaToolkit
     {
         /// <inheritdoc/>
         /// <remarks>
+        ///     Wrapper of <see cref="MaaToolkitInitOptionConfig"/>.
+        /// </remarks>
+        public bool InitOption(string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}")
+            => MaaToolkitInitOptionConfig(userPath, defaultJson).ToBoolean();
+
+        /// <inheritdoc/>
+        /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitInit"/>.
         /// </remarks>
+        [Obsolete("Use InitOption() instead.")]
         public bool Init()
             => MaaToolkitInit().ToBoolean();
 
@@ -47,6 +61,7 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitUninit"/>.
         /// </remarks>
+        [Obsolete("Use InitOption() instead.")]
         public bool Uninit()
             => MaaToolkitUninit().ToBoolean();
     }
@@ -223,12 +238,13 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitRegisterCustomActionExecutor"/> and <see cref="MaaToolkitRegisterCustomRecognizerExecutor"/>.
         /// </remarks>
-        public bool Register<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor => (maaInstance, custom) switch
-        {
-            (IMaaInstance<nint> maa, MaaCustomActionExecutor executor) => MaaToolkitRegisterCustomActionExecutor(maa.Handle, executor.Name, executor.Path, executor.Parameter).ToBoolean(),
-            (IMaaInstance<nint> maa, MaaCustomRecognizerExecutor executor) => MaaToolkitRegisterCustomRecognizerExecutor(maa.Handle, executor.Name, executor.Path, executor.Parameter).ToBoolean(),
-            _ => false,
-        };
+        public bool Register<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor
+            => (maaInstance, custom) switch
+            {
+                (IMaaInstance<nint> maa, MaaCustomActionExecutor executor) => MaaToolkitRegisterCustomActionExecutor(maa.Handle, executor.Name, executor.Path, custom.Parameter.ToArray(), (MaaSize)custom.Parameter.LongCount()).ToBoolean(),
+                (IMaaInstance<nint> maa, MaaCustomRecognizerExecutor executor) => MaaToolkitRegisterCustomRecognizerExecutor(maa.Handle, executor.Name, executor.Path, custom.Parameter.ToArray(), (MaaSize)custom.Parameter.LongCount()).ToBoolean(),
+                _ => false,
+            };
 
         /// <inheritdoc/>
         /// <remarks>

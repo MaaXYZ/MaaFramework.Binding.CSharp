@@ -32,18 +32,18 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        var bytes = (value, opt) switch
+        var optValue = (value, opt) switch
         {
             (int vvvv, ControllerOption.ScreenshotTargetLongSide
-                    or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValues(),
+                    or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValue(),
             (string v, ControllerOption.DefaultAppPackageEntry
-                    or ControllerOption.DefaultAppPackage) => v.ToMaaOptionValues(),
-            (bool vvv, ControllerOption.Recording) => vvv.ToMaaOptionValues(),
+                    or ControllerOption.DefaultAppPackage) => v.ToMaaOptionValue(),
+            (bool vvv, ControllerOption.Recording) => vvv.ToMaaOptionValue(),
 
             _ => throw new InvalidOperationException(),
         };
 
-        return MaaControllerSetOption(Handle, (MaaCtrlOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();
+        return MaaControllerSetOption(Handle, (MaaCtrlOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
     }
 
     /// <inheritdoc/>

@@ -12,6 +12,6 @@ public interface IMaaCustomRecognizer : IMaaCustomTask
     /// successful. If the recognition fails, return false. You can also write details to the
     /// out_detail buffer.
     /// </summary>
-    bool Analyze(IMaaSyncContext syncContext, IMaaImageBuffer image, string taskName, string customRecognitionParam, in IMaaRectBuffer outBox, in IMaaStringBuffer outDetail);
+    bool Analyze(in IMaaSyncContext syncContext, IMaaImageBuffer image, string taskName, string customRecognitionParam, in IMaaRectBuffer outBox, in IMaaStringBuffer outDetail);
 }
 

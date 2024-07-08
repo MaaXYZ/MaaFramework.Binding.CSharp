@@ -19,17 +19,15 @@ public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
     /// <remarks>
     ///     Usually invoked by MaaFramework.
     /// </remarks>
-    protected virtual void OnCallback(MaaStringView msg, MaaStringView detail, MaaCallbackTransparentArg arg)
+    protected virtual void OnCallback(string msg, string detail, MaaCallbackTransparentArg arg)
     {
-        Callback?.Invoke(this, new MaaCallbackEventArgs(
-            msg.ToStringUTF8() ?? string.Empty,
-            detail.ToStringUTF8() ?? "{}"));
+        Callback?.Invoke(this, new MaaCallbackEventArgs(msg, detail));
     }
 
     /// <summary>
     ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
     /// </summary>
-    protected MaaAPICallback MaaApiCallback { get; }
+    protected MaaApiCallback MaaApiCallback { get; }
 
     /// <summary>
     ///     Initializes <see cref="MaaApiCallback"/>.

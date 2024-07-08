@@ -21,9 +21,6 @@ public interface IMaaSyncContext<T> : IMaaSyncContext
 
     /// <inheritdoc cref="IMaaSyncContext.Screencap"/>
     bool Screencap(IMaaImageBuffer<T> outImage);
-
-    /// <inheritdoc cref="IMaaSyncContext.GetTaskResult"/>
-    bool GetTaskResult(string taskName, IMaaStringBuffer<T> outTaskResult);
 }
 
 /// <summary>
@@ -126,12 +123,4 @@ public interface IMaaSyncContext
     /// <param name="outImage">The image buffer to receive the screenshot.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
     bool Screencap(IMaaImageBuffer outImage);
-
-    /// <summary>
-    ///     Gets a task result.
-    /// </summary>
-    /// <param name="taskName">The task name.</param>
-    /// <param name="outTaskResult">The string buffer to receive the task result.</param>
-    /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    bool GetTaskResult(string taskName, IMaaStringBuffer outTaskResult);
 }

@@ -30,21 +30,21 @@ public static class MaaDefConverter
         => (MaaBool)(value ? 1 : 0);
 
     /// <summary>
-    ///     Converts a <see cref="int"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
+    ///     Converts a <see cref="int"/> to a MaaOptionValue (<see cref="byte"/>[]).
     /// </summary>
-    public static MaaOptionValue[] ToMaaOptionValues(this int value)
+    public static byte[] ToMaaOptionValue(this int value)
         => BitConverter.GetBytes(value);
 
     /// <summary>
-    ///     Converts a <see cref="bool"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
+    ///     Converts a <see cref="bool"/> to a MaaOptionValue (<see cref="byte"/>[]).
     /// </summary>
-    public static MaaOptionValue[] ToMaaOptionValues(this bool value)
+    public static byte[] ToMaaOptionValue(this bool value)
         => BitConverter.GetBytes(value);
 
     /// <summary>
-    ///     Converts a <see cref="string"/> to a MaaOptionValue[] (<see cref="MaaOptionValue"/>[]).
+    ///     Converts a <see cref="string"/> to a MaaOptionValue (<see cref="byte"/>[]).
     /// </summary>
-    public static MaaOptionValue[] ToMaaOptionValues(this string value)
+    public static byte[] ToMaaOptionValue(this string value)
         => Encoding.UTF8.GetBytes(value);
 
     /// <summary>

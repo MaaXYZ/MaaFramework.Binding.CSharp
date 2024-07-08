@@ -22,19 +22,19 @@ public class MaaUtility : IMaaUtility
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        var bytes = (value, opt) switch
+        var optValue = (value, opt) switch
         {
-            (int vvvv, GlobalOption.StdoutLevel) => vvvv.ToMaaOptionValues(),
-            (string v, GlobalOption.LogDir) => v.ToMaaOptionValues(),
+            (int vvvv, GlobalOption.StdoutLevel) => vvvv.ToMaaOptionValue(),
+            (string v, GlobalOption.LogDir) => v.ToMaaOptionValue(),
             (bool vvv, GlobalOption.SaveDraw
                     or GlobalOption.Recording
-                    or GlobalOption.ShowHitDraw) => vvv.ToMaaOptionValues(),
+                    or GlobalOption.ShowHitDraw) => vvv.ToMaaOptionValue(),
 
-            (LoggingLevel v, GlobalOption.StdoutLevel) => ((int)v).ToMaaOptionValues(),
+            (LoggingLevel v, GlobalOption.StdoutLevel) => ((int)v).ToMaaOptionValue(),
 
             _ => throw new InvalidOperationException(),
         };
 
-        return MaaSetGlobalOption((MaaGlobalOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();
+        return MaaSetGlobalOption((MaaGlobalOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
     }
 }

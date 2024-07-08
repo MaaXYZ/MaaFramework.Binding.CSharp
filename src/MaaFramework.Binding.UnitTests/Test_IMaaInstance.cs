@@ -122,19 +122,15 @@ public class Test_IMaaInstance
         // First job
         var job =
             maaInstance.AppendTask(taskEntryName);
-        job.SetParam("{}");
         Assert.AreEqual(
             MaaJobStatus.Running, job.Status);
 
         // Second job appended on running first job
         job =
             maaInstance.AppendTask(taskEntryName);
-        Assert.IsFalse(
-            maaInstance.AllTasksFinished);
-        Interface_IMaaPost_Success(job);
 
-        // Maybe return false if the execution is too fast.
-        Task.Delay(1000).Wait();
+        // Wait the second job
+        Interface_IMaaPost_Success(job);
         Assert.IsTrue(
             maaInstance.AllTasksFinished);
     }

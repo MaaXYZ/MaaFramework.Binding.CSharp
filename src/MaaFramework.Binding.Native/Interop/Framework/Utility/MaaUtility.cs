@@ -42,5 +42,5 @@ public static partial class MaaUtility
     public static partial MaaBool MaaQueryNodeDetail(MaaNodeId nodeId, MaaStringBufferHandle name, out MaaRecoId recoId, out MaaBool runCompleted);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaQueryTaskDetail(MaaTaskId taskId, MaaStringBufferHandle entry, out MaaNodeId nodeIdList, ref MaaSize nodeIdListSize);
+    public static partial MaaBool MaaQueryTaskDetail(MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize);
 }

@@ -1,7 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
-using MaaFramework.Binding.Native.Interop;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaInstance;
 
@@ -66,11 +65,6 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
             Resource.Dispose();
         }
 
-        if (DisposeOptions.HasFlag(DisposeOptions.Toolkit))
-        {
-            Toolkit.Config.Uninit();
-        }
-
         MaaDestroy(Handle);
     }
 
@@ -82,13 +76,13 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        MaaOptionValue[] bytes = (value, opt) switch
+        byte[] optValue = (value, opt) switch
         {
             // (int vvvv, InstanceOption.Invalid) => vvvv.ToMaaOptionValues(),
             _ => throw new InvalidOperationException(),
         };
 
-        return MaaSetOption(Handle, (MaaInstOption)opt, ref bytes[0], (MaaOptionValueSize)bytes.Length).ToBoolean();
+        return MaaSetOption(Handle, (MaaInstOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
     }
 
     /// <inheritdoc/>
@@ -264,6 +258,9 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskAllFinished"/>.
     /// </remarks>
+#pragma warning disable S1133 // Deprecated code should be removed
+    [Obsolete("Use !MaaRunning() instead.")]
+#pragma warning restore S1133 // Deprecated code should be removed
     public bool AllTasksFinished => MaaTaskAllFinished(Handle).ToBoolean();
 
     /// <inheritdoc/>
