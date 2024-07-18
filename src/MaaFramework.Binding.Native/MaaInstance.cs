@@ -195,29 +195,58 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     }
 
     /// <inheritdoc/>
-    public bool Unregister<T>(T custom) where T : IMaaCustomTask
-        => Unregister<T>(custom.Name);
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaUnregisterCustomAction"/> and <see cref="MaaUnregisterCustomRecognizer"/>.
+    /// </remarks>
+    public bool Unregister<T>(T custom) where T : IMaaCustomTask => custom switch
+    {
+        IMaaCustomAction
+            => MaaUnregisterCustomAction(Handle, custom.Name).ToBoolean() && _action.Remove(custom.Name),
+        IMaaCustomRecognizer
+            => MaaUnregisterCustomRecognizer(Handle, custom.Name).ToBoolean() && _recognizer.Remove(custom.Name),
+        _ => throw new NotImplementedException(),
+    };
 
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaClearCustomAction"/> and <see cref="MaaClearCustomRecognizer"/>.
     /// </remarks>
-    public bool Clear<T>() where T : IMaaCustomTask
+    public bool Clear<T>() where T : IMaaCustomTask => typeof(T).Name switch
     {
-        var t = typeof(T);
-        if (typeof(IMaaCustomAction).IsAssignableFrom(t))
-            return MaaClearCustomAction(Handle).ToBoolean() && _action.Clear();
-        if (typeof(IMaaCustomRecognizer).IsAssignableFrom(t))
-            return MaaClearCustomRecognizer(Handle).ToBoolean() && _recognizer.Clear();
-        throw new NotImplementedException();
-    }
+        nameof(IMaaCustomAction)
+            => MaaClearCustomAction(Handle).ToBoolean() && _action.Clear(),
+        nameof(IMaaCustomRecognizer)
+            => MaaClearCustomRecognizer(Handle).ToBoolean() && _recognizer.Clear(),
+        _ => throw new NotImplementedException()
+    };
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaPostTask"/>.
     /// </remarks>
-    public IMaaJob AppendTask(string taskEntryName, string taskParam = "{}")
+    public IMaaJob AppendTask(string entry, string param = "{}")
     {
-        var id = MaaPostTask(Handle, taskEntryName, taskParam);
+        var id = MaaPostTask(Handle, entry, param);
+        return new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaPostRecognition"/>.
+    /// </remarks>
+    public IMaaJob AppendRecognition(string entry, string param = "{}")
+    {
+        var id = MaaPostRecognition(Handle, entry, param);
+        return new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaPostAction"/>.
+    /// </remarks>
+    public IMaaJob AppendAction(string entry, string param = "{}")
+    {
+        var id = MaaPostAction(Handle, entry, param);
         return new MaaJob(id, this);
     }
 
@@ -258,14 +287,18 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskAllFinished"/>.
     /// </remarks>
-#pragma warning disable S1133 // Deprecated code should be removed
-    [Obsolete("Use !MaaRunning() instead.")]
-#pragma warning restore S1133 // Deprecated code should be removed
+    [Obsolete("Use !Running instead.")]
     public bool AllTasksFinished => MaaTaskAllFinished(Handle).ToBoolean();
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaStop"/>.
+    ///     Wrapper of <see cref="MaaRunning"/>.
+    /// </remarks>
+    public bool Running => MaaRunning(Handle).ToBoolean();
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaPostStop"/>.
     /// </remarks>
     public bool Abort()
         => MaaPostStop(Handle).ToBoolean();

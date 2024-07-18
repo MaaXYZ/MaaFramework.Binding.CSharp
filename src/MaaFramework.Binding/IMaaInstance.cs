@@ -48,7 +48,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     ///     Gets or sets the toolkit.
     /// </summary>
     /// <remarks>
-    ///     Not automatically calls <see cref="IMaaToolkitConfig.Init"/>.
+    ///     Not automatically calls <see cref="IMaaToolkitConfig.InitOption"/>.
     /// </remarks>
     IMaaToolkit Toolkit { get; set; }
 
@@ -74,7 +74,6 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <returns>
     ///     true if the custom action or recognizer was registered successfully; otherwise, false.
     /// </returns>
-    /// <exception cref="ArgumentException"/>
     bool Register<T>(string name, T custom) where T : IMaaCustomTask; // TODOa 缺少测试用例
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
@@ -88,7 +87,6 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <returns>
     ///     true if the custom action or recognizer was unregistered successfully; otherwise, false.
     /// </returns>
-    /// <exception cref="ArgumentException"/>
     bool Unregister<T>(string name) where T : IMaaCustomTask;
 
     /// <inheritdoc cref="Unregister{T}(string)"/>
@@ -105,12 +103,28 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     bool Clear<T>() where T : IMaaCustomTask;
 
     /// <summary>
-    ///     Appends a async job of executing a maa task, could be called multiple times.
+    ///     Appends a async job of executing a task, could be called multiple times.
     /// </summary>
-    /// <param name="taskEntryName">The name of task entry.</param>
-    /// <param name="taskParam">The param of task, which could be parsed to a JSON.</param>
+    /// <param name="entry">The entry of the task.</param>
+    /// <param name="param">The parameter of the task.</param>
     /// <returns>A task job.</returns>
-    IMaaJob AppendTask(string taskEntryName, string taskParam = "{}");
+    IMaaJob AppendTask(string entry, string param = "{}");
+
+    /// <summary>
+    ///     Appends a async job of executing a recognition, could be called multiple times.
+    /// </summary>
+    /// <param name="entry">The entry of the recognition.</param>
+    /// <param name="param">The parameter of the recognition.</param>
+    /// <returns>A recognition job.</returns>
+    IMaaJob AppendRecognition(string entry, string param = "{}");
+
+    /// <summary>
+    ///     Appends a async job of executing a action, could be called multiple times.
+    /// </summary>
+    /// <param name="entry">The entry of the action.</param>
+    /// <param name="param">The parameter of the action.</param>
+    /// <returns>An action job.</returns>
+    IMaaJob AppendAction(string entry, string param = "{}");
 
     /// <summary>
     ///     Gets whether the all maa tasks finished.
@@ -118,7 +132,16 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <value>
     ///     true if all tasks finished; otherwise, false.
     /// </value>
+    [Obsolete("Use !Running instead.")]
     bool AllTasksFinished { get; }
+
+    /// <summary>
+    ///     Gets whether the maa instance is running.
+    /// </summary>
+    /// <value>
+    ///     true if maa is running; otherwise, false.
+    /// </value>
+    bool Running { get; }
 
     /// <summary>
     ///     Stops the binded <see cref="IMaaResource"/>, the binded <see cref="IMaaController"/>, all appended tasks. 

@@ -94,7 +94,7 @@ public class Test_IMaaController
         #region MaaWin32Controller
 #if !GITHUB_ACTIONS
         var toolkit = new MaaToolkit();
-        var windowInfo = toolkit.Win32.Window.Search(string.Empty, "Visual Studio").FirstOrDefault() ?? new() { Hwnd = nint.Zero, };
+        var windowInfo = toolkit.Win32.Window.Search(string.Empty, "Visual Studio").FirstOrDefault() ?? new() { Hwnd = nint.Zero, Name = string.Empty, ClassName = string.Empty };
 
         using var win32Native1 = new MaaWin32Controller(
             windowInfo.Hwnd,
@@ -211,6 +211,21 @@ public class Test_IMaaController
 
         var job = maaController.InputText(text);
         Interface_IMaaPost(assertSuccess, job);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), false, "com.android.settings")]
+    [MaaData(MaaTypes.All, nameof(Data), true, "com.android.settings/.Settings")]
+    public void Interface_StartApp_StopApp(MaaTypes type, IMaaController maaController, bool assertSuccess, string intent)
+    {
+        Assert.IsNotNull(maaController);
+        Assert.IsNotNull(intent);
+
+        var job = maaController.StartApp(intent);
+        Interface_IMaaPost(assertSuccess, job);
+
+        job = maaController.StopApp(intent.Split('/')[0]);
+        Interface_IMaaPost(true, job); // "adb shell am force-stop" always returns True
     }
 
     [TestMethod]

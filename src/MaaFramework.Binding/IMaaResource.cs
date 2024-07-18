@@ -23,6 +23,14 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     IMaaJob AppendPath(string resourcePath);
 
     /// <summary>
+    ///     Clear the loaded resource paths.
+    /// </summary>
+    /// <value>
+    ///     true if the <see cref="IMaaResource"/> is cleared successfully; otherwise, false.
+    /// </value>
+    bool Clear();
+
+    /// <summary>
     ///     Gets whether the <see cref="IMaaResource"/> is fully loaded.
     /// </summary>
     /// <value>

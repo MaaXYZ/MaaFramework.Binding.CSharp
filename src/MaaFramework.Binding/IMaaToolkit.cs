@@ -2,32 +2,30 @@
 
 namespace MaaFramework.Binding;
 
-#pragma warning disable S1133 // Deprecated code should be removed
-
 /// <summary>
 ///     An interface defining wrapped members for MaaToolkit.
 /// </summary>
 public interface IMaaToolkit
 {
     /// <summary>
-    ///     Gets or sets the MaaToolkit Config.
+    ///     Gets the MaaToolkit Config.
     /// </summary>
-    IMaaToolkitConfig Config { get; set; }
+    IMaaToolkitConfig Config { get; }
 
     /// <summary>
-    ///     Gets or sets the MaaToolkit Device.
+    ///     Gets the MaaToolkit Device.
     /// </summary>
-    IMaaToolkitDevice Device { get; set; }
+    IMaaToolkitDevice Device { get; }
 
     /// <summary>
-    ///     Gets or sets the MaaToolkit ExecAgent.
+    ///     Gets the MaaToolkit ExecAgent.
     /// </summary>
-    IMaaToolkitExecAgent ExecAgent { get; set; }
+    IMaaToolkitExecAgent ExecAgent { get; }
 
     /// <summary>
-    ///     Gets or sets the MaaToolkit Win32.
+    ///     Gets the MaaToolkit Win32.
     /// </summary>
-    IMaaToolkitWin32 Win32 { get; set; }
+    IMaaToolkitWin32 Win32 { get; }
 }
 
 /// <summary>
@@ -76,6 +74,7 @@ public interface IMaaToolkitDevice
     /// <returns>
     ///     The arrays of device information.
     /// </returns>
+    /// <exception cref="InvalidOperationException"/>
     DeviceInfo[] Find(string adbPath = "");
 
     /// <summary>
@@ -85,6 +84,7 @@ public interface IMaaToolkitDevice
     /// <returns>
     ///     The task object representing the asynchronous operation.
     /// </returns>
+    /// <exception cref="InvalidOperationException"/>
     Task<DeviceInfo[]> FindAsync(string adbPath = "");
 }
 
@@ -125,6 +125,16 @@ public interface IMaaToolkitExecAgent
     /// <param name="maaInstance">The maa instance.</param>
     /// <param name="custom">The <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/>.</param>
     bool Unregister<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor;
+
+    /// <summary>
+    ///     Clears all <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/> in the <see cref="IMaaInstance"/>.
+    /// </summary>
+    /// <typeparam name="T">THe <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/>.</typeparam>
+    /// <returns>
+    ///     true if custom actions or recognizers were cleared successfully; otherwise, false.
+    /// </returns>
+    /// <exception cref="ArgumentException"/>
+    bool Clear<T>(IMaaInstance maaInstance) where T : IMaaCustomExecutor;
 }
 
 /// <summary>
@@ -133,9 +143,9 @@ public interface IMaaToolkitExecAgent
 public interface IMaaToolkitWin32
 {
     /// <summary>
-    ///     Gets or sets the MaaToolkit Win32Window.
+    ///     Gets the MaaToolkit Win32Window.
     /// </summary>
-    IMaaToolkitWin32Window Window { get; set; }
+    IMaaToolkitWin32Window Window { get; }
 }
 
 /// <summary>
@@ -163,23 +173,31 @@ public interface IMaaToolkitWin32Window
     WindowInfo[] Find(string className, string windowName);
 
     /// <summary>
-    ///     Searches a win32 window by class name and window name.
+    ///     Regex searches a win32 window by class name and window name.
     /// </summary>
     /// <param name="className">
-    ///     The class name of the window.
+    ///     The class name regex of the window.
     ///     If passed an empty string, class name will not be filtered.
     /// </param>
     /// <param name="windowName">
-    ///     The window name of the window.
+    ///     The window name regex of the window.
     ///     If passed an empty string, window name will not be filtered.
     /// </param>
     /// <remarks>
-    ///     Searches by substring match. See also <see cref="Find"/>().
+    ///     Searches by regex search. See also <see cref="Find"/>().
     /// </remarks>
     /// <returns>
     ///     The arrays of window information.
     /// </returns>
     WindowInfo[] Search(string className, string windowName);
+
+    /// <summary>
+    ///     Lists all windows.
+    /// </summary>
+    /// <returns>
+    ///     The arrays of window information.
+    /// </returns>
+    WindowInfo[] ListWindows();
 
     /// <summary>
     ///     Gets the window under the cursor.

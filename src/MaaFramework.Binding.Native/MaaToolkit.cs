@@ -1,10 +1,9 @@
-﻿using MaaFramework.Binding.Custom;
+﻿using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding;
-
-#pragma warning disable S1133 // Deprecated code should be removed
 
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaToolkit"/>.
@@ -28,16 +27,16 @@ public class MaaToolkit : IMaaToolkit
     }
 
     /// <inheritdoc/>
-    public IMaaToolkitConfig Config { get; set; } = new ConfigClass();
+    public IMaaToolkitConfig Config { get; } = new ConfigClass();
 
     /// <inheritdoc/>
-    public IMaaToolkitDevice Device { get; set; } = new DeviceClass();
+    public IMaaToolkitDevice Device { get; } = new DeviceClass();
 
     /// <inheritdoc/>
-    public IMaaToolkitExecAgent ExecAgent { get; set; } = new ExecAgentClass();
+    public IMaaToolkitExecAgent ExecAgent { get; } = new ExecAgentClass();
 
     /// <inheritdoc/>
-    public IMaaToolkitWin32 Win32 { get; set; } = new Win32Class();
+    public IMaaToolkitWin32 Win32 { get; } = new Win32Class();
 
     /// <inheritdoc cref="MaaToolkit"/>
     protected class ConfigClass : IMaaToolkitConfig
@@ -115,7 +114,7 @@ public class MaaToolkit : IMaaToolkit
         ///     true if the find device operation posted successfully; otherwise, false.
         /// </returns>
         /// <remarks>
-        ///     Wrapper of <see cref="MaaToolkitFindDevice"/> and <see cref="MaaToolkitFindDeviceWithAdb"/>.
+        ///     Wrapper of <see cref="MaaToolkitPostFindDevice"/> and <see cref="MaaToolkitPostFindDeviceWithAdb"/>.
         /// </remarks>
         protected static bool FindDevice(string adbPath = "")
             => string.IsNullOrEmpty(adbPath)
@@ -172,7 +171,7 @@ public class MaaToolkit : IMaaToolkit
             => MaaToolkitGetDeviceName(index).ToStringUTF8();
 
         /// <summary>
-        ///     Gets the path of a adb that a device connected to.
+        ///     Gets the path of an adb that a device connected to.
         /// </summary>
         /// <param name="index">The index of the device.</param>
         /// <returns>
@@ -238,13 +237,16 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitRegisterCustomActionExecutor"/> and <see cref="MaaToolkitRegisterCustomRecognizerExecutor"/>.
         /// </remarks>
-        public bool Register<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor
-            => (maaInstance, custom) switch
-            {
-                (IMaaInstance<nint> maa, MaaCustomActionExecutor executor) => MaaToolkitRegisterCustomActionExecutor(maa.Handle, executor.Name, executor.Path, custom.Parameter.ToArray(), (MaaSize)custom.Parameter.LongCount()).ToBoolean(),
-                (IMaaInstance<nint> maa, MaaCustomRecognizerExecutor executor) => MaaToolkitRegisterCustomRecognizerExecutor(maa.Handle, executor.Name, executor.Path, custom.Parameter.ToArray(), (MaaSize)custom.Parameter.LongCount()).ToBoolean(),
-                _ => false,
-            };
+        public bool Register<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor => (maaInstance, custom) switch
+        {
+            (IMaaInstance<nint> maa, MaaCustomActionExecutor executor)
+                => MaaToolkitRegisterCustomActionExecutor(maa.Handle, executor.Name, executor.Path, custom.Parameter.ToArray(), (MaaSize)custom.Parameter.LongCount()).ToBoolean(),
+            (IMaaInstance<nint> maa, MaaCustomRecognizerExecutor executor)
+                => MaaToolkitRegisterCustomRecognizerExecutor(maa.Handle, executor.Name, executor.Path, custom.Parameter.ToArray(), (MaaSize)custom.Parameter.LongCount()).ToBoolean(),
+            (IMaaInstance<nint>, _)
+                => throw new NotImplementedException(),
+            _ => throw new ArgumentException("The parameter is not of IMaaInstance<nint>", nameof(maaInstance)),
+        };
 
         /// <inheritdoc/>
         /// <remarks>
@@ -252,23 +254,51 @@ public class MaaToolkit : IMaaToolkit
         /// </remarks>
         public bool Unregister<T>(IMaaInstance maaInstance, string name) where T : IMaaCustomExecutor => maaInstance switch
         {
-            IMaaInstance<nint> maa when typeof(T) == typeof(MaaCustomActionExecutor) => MaaToolkitUnregisterCustomActionExecutor(maa.Handle, name).ToBoolean(),
-            IMaaInstance<nint> maa when typeof(T) == typeof(MaaCustomRecognizerExecutor) => MaaToolkitUnregisterCustomRecognizerExecutor(maa.Handle, name).ToBoolean(),
-            _ => false,
+            IMaaInstance<nint> maa when typeof(MaaCustomActionExecutor).IsAssignableFrom(typeof(T))
+                => MaaToolkitUnregisterCustomActionExecutor(maa.Handle, name).ToBoolean(),
+            IMaaInstance<nint> maa when typeof(MaaCustomRecognizerExecutor).IsAssignableFrom(typeof(T))
+                => MaaToolkitUnregisterCustomRecognizerExecutor(maa.Handle, name).ToBoolean(),
+            IMaaInstance<nint>
+                => throw new NotImplementedException(),
+            _ => throw new ArgumentException("The parameter is not of IMaaInstance<nint>", nameof(maaInstance)),
         };
 
         /// <inheritdoc/>
-        public bool Unregister<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor
+        /// <remarks>
+        ///     Wrapper of <see cref="MaaToolkitUnregisterCustomActionExecutor"/> and <see cref="MaaToolkitUnregisterCustomRecognizerExecutor"/>.
+        /// </remarks>
+        public bool Unregister<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor => (maaInstance, custom) switch
         {
-            return Unregister<T>(maaInstance, custom.Name);
-        }
+            (IMaaInstance<nint> maa, MaaCustomActionExecutor)
+                => MaaToolkitUnregisterCustomActionExecutor(maa.Handle, custom.Name).ToBoolean(),
+            (IMaaInstance<nint> maa, MaaCustomRecognizerExecutor)
+                => MaaToolkitUnregisterCustomRecognizerExecutor(maa.Handle, custom.Name).ToBoolean(),
+            (IMaaInstance<nint>, _)
+                 => throw new NotImplementedException(),
+            _ => throw new ArgumentException("The parameter is not of IMaaInstance<nint>", nameof(maaInstance)),
+        };
+
+        /// <inheritdoc/>
+        /// <remarks>
+        ///     Wrapper of <see cref="MaaToolkitClearCustomActionExecutor"/> and <see cref="MaaToolkitClearCustomRecognizerExecutor"/>.
+        /// </remarks>
+        public bool Clear<T>(IMaaInstance maaInstance) where T : IMaaCustomExecutor => (maaInstance, typeof(T).Name) switch
+        {
+            (IMaaInstance<nint> maa, nameof(MaaCustomActionExecutor))
+                => MaaToolkitClearCustomActionExecutor(maa.Handle).ToBoolean(),
+            (IMaaInstance<nint> maa, nameof(MaaCustomRecognizerExecutor))
+                => MaaToolkitClearCustomRecognizerExecutor(maa.Handle).ToBoolean(),
+            (IMaaInstance<nint>, _)
+                => throw new NotImplementedException(),
+            _ => throw new ArgumentException("The parameter is not of IMaaInstance<nint>", nameof(maaInstance))
+        };
     }
 
     /// <inheritdoc cref="MaaToolkit"/>
     protected class Win32Class : IMaaToolkitWin32
     {
         /// <inheritdoc/>
-        public IMaaToolkitWin32Window Window { get; set; } = new Win32WindowClass();
+        public IMaaToolkitWin32Window Window { get; } = new Win32WindowClass();
 
         /// <inheritdoc cref="MaaToolkit"/>
         protected class Win32WindowClass : IMaaToolkitWin32Window
@@ -278,49 +308,62 @@ public class MaaToolkit : IMaaToolkit
             /// </remarks>
             /// <inheritdoc/>
             public WindowInfo[] Find(string className, string windowName)
-                => GetWindowInfo(MaaToolkitFindWindow(className, windowName));
+                => GetWindowInfos(MaaToolkitFindWindow(className, windowName));
 
             /// <remarks>
             ///     Wrapper of <see cref="MaaToolkitSearchWindow"/>.
             /// </remarks>
             /// <inheritdoc/>
             public WindowInfo[] Search(string className, string windowName)
-                => GetWindowInfo(MaaToolkitSearchWindow(className, windowName));
+                => GetWindowInfos(MaaToolkitSearchWindow(className, windowName));
+
+            /// <remarks>
+            ///     Wrapper of <see cref="MaaToolkitListWindows"/>.
+            /// </remarks>
+            /// <inheritdoc/>
+            public WindowInfo[] ListWindows()
+                => GetWindowInfos(MaaToolkitListWindows());
 
             /// <remarks>
             ///     Wrapper of <see cref="MaaToolkitGetWindow"/>.
             /// </remarks>
-            private static WindowInfo[] GetWindowInfo(ulong size)
+            private static WindowInfo[] GetWindowInfos(ulong size)
             {
                 var devices = new WindowInfo[size];
                 for (ulong i = 0; i < size; i++)
                 {
-                    devices[i] = new WindowInfo
-                    {
-                        Hwnd = MaaToolkitGetWindow(i),
-                    };
+                    devices[i] = GetWindowInfo(MaaToolkitGetWindow(i));
                 }
-
                 return devices;
             }
+
+            /// <remarks>
+            ///     Wrapper of <see cref="MaaToolkitGetWindowWindowName"/> and <see cref="MaaToolkitGetWindowClassName"/>.
+            /// </remarks>
+            private static WindowInfo GetWindowInfo(nint hwnd) => new()
+            {
+                Hwnd = hwnd,
+                Name = MaaStringBuffer.Get(buffer => MaaToolkitGetWindowWindowName(hwnd, buffer)),
+                ClassName = MaaStringBuffer.Get(buffer => MaaToolkitGetWindowClassName(hwnd, buffer)),
+            };
 
             /// <remarks>
             ///     Wrapper of <see cref="MaaToolkitGetCursorWindow"/>.
             /// </remarks>
             /// <inheritdoc/>
-            public WindowInfo Cursor => new() { Hwnd = MaaToolkitGetCursorWindow(), };
+            public WindowInfo Cursor => GetWindowInfo(MaaToolkitGetCursorWindow());
 
             /// <remarks>
             ///     Wrapper of <see cref="MaaToolkitGetDesktopWindow"/>.
             /// </remarks>
             /// <inheritdoc/>
-            public WindowInfo Desktop => new() { Hwnd = MaaToolkitGetDesktopWindow(), };
+            public WindowInfo Desktop => GetWindowInfo(MaaToolkitGetDesktopWindow());
 
             /// <remarks>
             ///     Wrapper of <see cref="MaaToolkitGetForegroundWindow"/>.
             /// </remarks>
             /// <inheritdoc/>
-            public WindowInfo Foreground => new() { Hwnd = MaaToolkitGetForegroundWindow(), };
+            public WindowInfo Foreground => GetWindowInfo(MaaToolkitGetForegroundWindow());
         }
     }
 }

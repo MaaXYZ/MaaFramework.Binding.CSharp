@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Custom;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -95,6 +96,26 @@ public class Test_IMaaInstance
     }
 
     [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_Toolkit(MaaTypes type, IMaaInstance maaInstance)
+    {
+        Assert.IsNotNull(maaInstance);
+
+        Assert.IsNotNull(
+            maaInstance.Toolkit);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_Utility(MaaTypes type, IMaaInstance maaInstance)
+    {
+        Assert.IsNotNull(maaInstance);
+
+        Assert.IsNotNull(
+            maaInstance.Utility);
+    }
+
+    [TestMethod]
     [MaaData(MaaTypes.All, nameof(UninitializedData))]
     public void Interface_Initialized(MaaTypes type, IMaaInstance maaInstance)
     {
@@ -114,31 +135,135 @@ public class Test_IMaaInstance
     }
 
     [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_Register_Unregister_Clear(MaaTypes type, IMaaInstance maaInstance)
+    {
+        Assert.IsNotNull(maaInstance);
+
+        // Registers custom class
+        Assert.IsTrue(
+            maaInstance.Register(Custom.Action));
+        Assert.IsTrue(
+            maaInstance.Register(Custom.Recognizer));
+
+        // Updates if name is registered
+        // #289 bug, should be return true
+        Assert.IsFalse(
+            maaInstance.Register(Custom.Action.Name, Custom.Action));
+        Assert.IsFalse(
+            maaInstance.Register(Custom.Recognizer.Name, Custom.Recognizer));
+
+        // Runs a custom task
+        Assert.AreEqual(MaaJobStatus.Success,
+            maaInstance.AppendTask(Custom.TaskName, Custom.Param).Wait());
+
+        // Unregisters custom class
+        Assert.IsTrue(
+            maaInstance.Unregister(Custom.Action));
+        Assert.IsTrue(
+            maaInstance.Unregister(Custom.Recognizer));
+
+        // Unregisters custom class by name
+        Assert.IsFalse(
+            maaInstance.Unregister<IMaaCustomAction>(Custom.Action.Name)
+         // Actually unregisters IMaaCustomAction instead of TestAction
+         || maaInstance.Unregister<Custom.TestAction>(Custom.Action.Name));
+        Assert.IsFalse(
+            maaInstance.Unregister<IMaaCustomRecognizer>(Custom.Recognizer.Name)
+         // Actually unregisters IMaaCustomRecognizer instead of TestRecognizer
+         || maaInstance.Unregister<Custom.TestRecognizer>(Custom.Recognizer.Name));
+
+        // Clears custom class by interface
+        Assert.IsTrue(
+            maaInstance.Clear<IMaaCustomAction>());
+        Assert.IsTrue(
+            maaInstance.Clear<IMaaCustomRecognizer>());
+
+        // Cannot clear a specific implementation
+        Assert.ThrowsException<NotImplementedException>(() =>
+            maaInstance.Clear<Custom.TestAction>());
+        Assert.ThrowsException<NotImplementedException>(() =>
+            maaInstance.Clear<Custom.TestRecognizer>());
+
+        Assert.ThrowsException<NotImplementedException>(() =>
+            maaInstance.Register(Custom.Task));
+        Assert.ThrowsException<NotImplementedException>(() =>
+            maaInstance.Unregister(Custom.Task));
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void IMaaToolkit_Interface_ExecAgent(MaaTypes type, IMaaInstance maaInstance)
+    {
+        Assert.IsNotNull(maaInstance);
+        var maaToolkit = new MaaToolkit();
+
+        // Registers custom class
+        Assert.IsTrue(
+            maaToolkit.ExecAgent.Register(maaInstance, Custom.ActionExecutor));
+        Assert.IsTrue(
+            maaToolkit.ExecAgent.Register(maaInstance, Custom.RecognizerExecutor));
+
+        // Updates if name is registered
+        // #289 bug, should be return true
+        Assert.IsFalse(
+            maaToolkit.ExecAgent.Register(maaInstance, Custom.ActionExecutor.Name, Custom.ActionExecutor));
+        Assert.IsFalse(
+            maaToolkit.ExecAgent.Register(maaInstance, Custom.RecognizerExecutor.Name, Custom.RecognizerExecutor));
+
+        // Runs a custom task
+        Assert.AreEqual(MaaJobStatus.Failed, // The test executor is invalid
+            maaInstance.AppendTask(Custom.TaskName, Custom.Param).Wait());
+
+        // Unregisters custom class
+        Assert.IsTrue(
+            maaToolkit.ExecAgent.Unregister(maaInstance, Custom.ActionExecutor));
+        Assert.IsTrue(
+            maaToolkit.ExecAgent.Unregister(maaInstance, Custom.RecognizerExecutor));
+
+        // Unregisters custom class by name
+        Assert.IsFalse(
+            maaToolkit.ExecAgent.Unregister<MaaCustomActionExecutor>(maaInstance, Custom.ActionExecutor.Name));
+        Assert.IsFalse(
+            maaToolkit.ExecAgent.Unregister<MaaCustomRecognizerExecutor>(maaInstance, Custom.RecognizerExecutor.Name));
+
+        // Clears custom class
+        Assert.IsTrue(
+            maaToolkit.ExecAgent.Clear<MaaCustomActionExecutor>(maaInstance));
+        Assert.IsTrue(
+            maaToolkit.ExecAgent.Clear<MaaCustomRecognizerExecutor>(maaInstance));
+    }
+
+    [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), "EmptyTask")]
-    public void Interface_AppendTask_AllTasksFinished(MaaTypes type, IMaaInstance maaInstance, string taskEntryName)
+    [Obsolete("AllTasksFinished")]
+    public void Interface_AppendTask_AppendRecognition_AppendAction(MaaTypes type, IMaaInstance maaInstance, string taskEntryName)
     {
         Assert.IsNotNull(maaInstance);
 
         // First job
+        _ = maaInstance.AppendRecognition(taskEntryName);
+        // Second job appended on running first job
+        _ = maaInstance.AppendAction(taskEntryName);
+        // Third job
         var job =
             maaInstance.AppendTask(taskEntryName);
-        Assert.AreEqual(
-            MaaJobStatus.Running, job.Status);
-
-        // Second job appended on running first job
-        job =
-            maaInstance.AppendTask(taskEntryName);
-
         // Wait the second job
         Interface_IMaaPost_Success(job);
-        Assert.IsTrue(
-            maaInstance.AllTasksFinished);
+        Interface_Running_AllTasksFinished(maaInstance);
     }
 
-    public static void Interface_IMaaPost_Success(IMaaJob job)
+    [Obsolete("AllTasksFinished")]
+    private static void Interface_Running_AllTasksFinished(IMaaInstance maaInstance)
     {
-        Assert.IsNotNull(job);
+        Assert.IsTrue(
+            maaInstance.AllTasksFinished);
+        Assert.IsFalse(
+            maaInstance.Running);
+    }
 
+    private static void Interface_IMaaPost_Success(IMaaJob job)
+    {
         Assert.IsTrue(
             job.SetParam("{}"));
         Assert.AreEqual(

@@ -20,7 +20,10 @@ public interface IMaaSyncContext<T> : IMaaSyncContext
     bool RunAction(string taskName, string taskParam, IMaaRectBuffer<T> curBox, string curRecDetail);
 
     /// <inheritdoc cref="IMaaSyncContext.Screencap"/>
-    bool Screencap(IMaaImageBuffer<T> outImage);
+    bool Screencap(in IMaaImageBuffer<T> outImage);
+
+    /// <inheritdoc cref="IMaaSyncContext.GetCachedImage"/>
+    bool GetCachedImage(in IMaaImageBuffer<T> outImage);
 }
 
 /// <summary>
@@ -122,5 +125,12 @@ public interface IMaaSyncContext
     /// </summary>
     /// <param name="outImage">The image buffer to receive the screenshot.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
-    bool Screencap(IMaaImageBuffer outImage);
+    bool Screencap(in IMaaImageBuffer outImage);
+
+    /// <summary>
+    ///     Get the cached image.
+    /// </summary>
+    /// <param name="outImage">The image buffer to receive the image.</param>
+    /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
+    bool GetCachedImage(in IMaaImageBuffer outImage);
 }

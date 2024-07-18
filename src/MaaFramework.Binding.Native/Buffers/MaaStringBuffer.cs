@@ -60,6 +60,16 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     public static string Get(MaaStringBufferHandle handle)
         => MaaIsStringEmpty(handle).ToBoolean() ? string.Empty : MaaGetString(handle).ToStringUTF8(MaaGetStringSize(handle));
 
+    /// <inheritdoc cref="GetValue"/>
+    public static string Get(Action<MaaStringBufferHandle> action)
+    {
+        var handle = MaaCreateStringBuffer();
+        action?.Invoke(handle);
+        var ret = Get(handle);
+        MaaDestroyStringBuffer(handle);
+        return ret;
+    }
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaGetStringSize"/>.

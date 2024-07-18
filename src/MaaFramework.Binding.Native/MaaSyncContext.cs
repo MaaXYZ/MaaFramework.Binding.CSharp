@@ -23,7 +23,7 @@ public class MaaSyncContext : IMaaSyncContext<nint>
     /// </summary>
     /// <param name="syncContext">The MaaSyncContextHandle.</param>
     [SetsRequiredMembers]
-    public MaaSyncContext(MaaSyncContextHandle syncContext)
+    public MaaSyncContext(MaaSyncContextHandle syncContext) : this()
     {
         Handle = syncContext;
     }
@@ -116,16 +116,30 @@ public class MaaSyncContext : IMaaSyncContext<nint>
         => MaaSyncContextTouchUp(Handle, contact).ToBoolean();
 
     /// <inheritdoc/>
-    bool IMaaSyncContext.Screencap(IMaaImageBuffer outImage)
+    bool IMaaSyncContext.Screencap(in IMaaImageBuffer outImage)
         => Screencap((IMaaImageBuffer<nint>)outImage);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSyncContextScreencap"/>.
     /// </remarks>
-    public bool Screencap(IMaaImageBuffer<nint> outImage)
+    public bool Screencap(in IMaaImageBuffer<nint> outImage)
     {
         ArgumentNullException.ThrowIfNull(outImage);
         return MaaSyncContextScreencap(Handle, outImage.Handle).ToBoolean();
+    }
+
+    /// <inheritdoc/>
+    bool IMaaSyncContext.GetCachedImage(in IMaaImageBuffer outImage)
+        => GetCachedImage((IMaaImageBuffer<nint>)outImage);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaSyncContextCachedImage"/>.
+    /// </remarks>
+    public bool GetCachedImage(in IMaaImageBuffer<nint> outImage)
+    {
+        ArgumentNullException.ThrowIfNull(outImage);
+        return MaaSyncContextCachedImage(Handle, outImage.Handle).ToBoolean();
     }
 }

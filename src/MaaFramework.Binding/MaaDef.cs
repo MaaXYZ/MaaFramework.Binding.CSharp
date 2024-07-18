@@ -1,5 +1,6 @@
 ﻿// Some necessary maa definitions for abstractions in MaaFramework.Binding.
 global using MaaId = System.Int64;
+global using MaaSize = System.UInt64;
 
 namespace MaaFramework.Binding;
 

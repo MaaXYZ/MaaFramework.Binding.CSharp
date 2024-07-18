@@ -87,6 +87,13 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceClear"/>.
+    /// </remarks>
+    public bool Clear()
+        => MaaResourceClear(Handle).ToBoolean();
+
+    /// <inheritdoc/>
     bool Abstractions.IMaaPost.SetParam(IMaaJob job, string param)
         => throw new InvalidOperationException();
 

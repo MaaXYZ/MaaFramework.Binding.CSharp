@@ -98,6 +98,26 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostStartApp"/>.
+    /// </remarks>
+    public IMaaJob StartApp(string intent)
+    {
+        var id = MaaControllerPostStartApp(Handle, intent);
+        return new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostStopApp"/>.
+    /// </remarks>
+    public IMaaJob StopApp(string intent)
+    {
+        var id = MaaControllerPostStopApp(Handle, intent);
+        return new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchDown"/>.
     /// </remarks>
     public IMaaJob TouchDown(int contact, int x, int y, int pressure)

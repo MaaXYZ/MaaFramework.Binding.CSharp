@@ -51,11 +51,25 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     IMaaJob PressKey(int keyCode);
 
     /// <summary>
-    ///     Input a text.
+    ///     Inputs a text.
     /// </summary>
     /// <param name="text">The text.</param>
     /// <returns>A input text job.</returns>
     IMaaJob InputText(string text);
+
+    /// <summary>
+    ///     Starts an app.
+    /// </summary>
+    /// <param name="intent">The intent. eg: "com.hypergryph.arknights/com.u8.sdk.U8UnityContext".</param>
+    /// <returns>A start app job.</returns>
+    IMaaJob StartApp(string intent);
+
+    /// <summary>
+    ///     Stops an app.
+    /// </summary>
+    /// <param name="intent">The intent. eg: "com.hypergryph.arknights/com.u8.sdk.U8UnityContext".</param>
+    /// <returns>A stop app job.</returns>
+    IMaaJob StopApp(string intent);
 
     /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
