@@ -20,7 +20,7 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     /// </summary>
     /// <param name="resourcePath">The resource path.</param>
     /// <returns>A load resource job.</returns>
-    IMaaJob AppendPath(string resourcePath);
+    MaaJob AppendPath(string resourcePath);
 
     /// <summary>
     ///     Clear the loaded resource paths.

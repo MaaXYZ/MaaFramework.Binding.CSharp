@@ -80,7 +80,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourcePostPath"/>.
     /// </remarks>
-    public IMaaJob AppendPath(string resourcePath)
+    public MaaJob AppendPath(string resourcePath)
     {
         var id = MaaResourcePostPath(Handle, resourcePath);
         return new MaaJob(id, this);
@@ -94,14 +94,10 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         => MaaResourceClear(Handle).ToBoolean();
 
     /// <inheritdoc/>
-    bool Abstractions.IMaaPost.SetParam(IMaaJob job, string param)
-        => throw new InvalidOperationException();
-
-    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceStatus"/>.
     /// </remarks>
-    public MaaJobStatus GetStatus(IMaaJob job)
+    public MaaJobStatus GetStatus(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
@@ -112,7 +108,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceWait"/>.
     /// </remarks>
-    public MaaJobStatus Wait(IMaaJob job)
+    public MaaJobStatus Wait(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 

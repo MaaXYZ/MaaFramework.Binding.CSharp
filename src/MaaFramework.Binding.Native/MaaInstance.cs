@@ -224,37 +224,37 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaPostTask"/>.
     /// </remarks>
-    public IMaaJob AppendTask(string entry, string param = "{}")
+    public MaaTaskJob AppendTask(string entry, string param = "{}")
     {
         var id = MaaPostTask(Handle, entry, param);
-        return new MaaJob(id, this);
+        return new MaaTaskJob(id, this);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaPostRecognition"/>.
     /// </remarks>
-    public IMaaJob AppendRecognition(string entry, string param = "{}")
+    public MaaTaskJob AppendRecognition(string entry, string param = "{}")
     {
         var id = MaaPostRecognition(Handle, entry, param);
-        return new MaaJob(id, this);
+        return new MaaTaskJob(id, this);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaPostAction"/>.
     /// </remarks>
-    public IMaaJob AppendAction(string entry, string param = "{}")
+    public MaaTaskJob AppendAction(string entry, string param = "{}")
     {
         var id = MaaPostAction(Handle, entry, param);
-        return new MaaJob(id, this);
+        return new MaaTaskJob(id, this);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetTaskParam"/>.
     /// </remarks>
-    public bool SetParam(IMaaJob job, string param)
+    public bool SetTaskParam(MaaTaskJob job, string param)
     {
         ArgumentNullException.ThrowIfNull(job);
 
@@ -265,7 +265,7 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskStatus"/>.
     /// </remarks>
-    public MaaJobStatus GetStatus(IMaaJob job)
+    public MaaJobStatus GetStatus(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
@@ -276,7 +276,7 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaWaitTask"/>.
     /// </remarks>
-    public MaaJobStatus Wait(IMaaJob job)
+    public MaaJobStatus Wait(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 

@@ -262,7 +262,7 @@ public class Test_IMaaInstance
             maaInstance.Running);
     }
 
-    private static void Interface_IMaaPost_Success(IMaaJob job)
+    private static void Interface_IMaaPost_Success(MaaTaskJob job)
     {
         Assert.IsTrue(
             job.SetParam("{}"));

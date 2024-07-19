@@ -108,7 +108,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <param name="entry">The entry of the task.</param>
     /// <param name="param">The parameter of the task.</param>
     /// <returns>A task job.</returns>
-    IMaaJob AppendTask(string entry, string param = "{}");
+    MaaTaskJob AppendTask(string entry, string param = "{}");
 
     /// <summary>
     ///     Appends a async job of executing a recognition, could be called multiple times.
@@ -116,15 +116,23 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// <param name="entry">The entry of the recognition.</param>
     /// <param name="param">The parameter of the recognition.</param>
     /// <returns>A recognition job.</returns>
-    IMaaJob AppendRecognition(string entry, string param = "{}");
+    MaaTaskJob AppendRecognition(string entry, string param = "{}");
 
     /// <summary>
-    ///     Appends a async job of executing a action, could be called multiple times.
+    ///     Appends a async job of executing a action, could be called multiple times. // TODOa: typo
     /// </summary>
     /// <param name="entry">The entry of the action.</param>
     /// <param name="param">The parameter of the action.</param>
     /// <returns>An action job.</returns>
-    IMaaJob AppendAction(string entry, string param = "{}");
+    MaaTaskJob AppendAction(string entry, string param = "{}");
+
+    /// <summary>
+    ///     Sets <paramref name="param"/> of a <see cref="MaaTaskJob"/>.
+    /// </summary>
+    /// <param name="job">The MaaJob.</param>
+    /// <param name="param">The param, which could be parsed to a JSON.</param>
+    /// <returns>true if the <paramref name="param"/> were setted successfully in the <paramref name="job"/>; otherwise, false.</returns>
+    bool SetTaskParam(MaaTaskJob job, string param);
 
     /// <summary>
     ///     Gets whether the all maa tasks finished.

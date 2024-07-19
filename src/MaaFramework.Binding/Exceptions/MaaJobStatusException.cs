@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     The exception is thrown when the <see cref="MaaJobStatus"/> of a <see cref="IMaaJob"/> is unexpected.
+///     The exception is thrown when the <see cref="MaaJobStatus"/> of a <see cref="MaaFramework.Binding.MaaJob"/> is unexpected.
 /// </summary>
 public class MaaJobStatusException : MaaException
 {
@@ -38,10 +38,10 @@ public class MaaJobStatusException : MaaException
     /// <summary>
     ///     Creates a <see cref="MaaJobStatusException"/> instance.
     /// </summary>
-    /// <param name="job">The IMaaJob.</param>
+    /// <param name="job">The MaaJob.</param>
     /// <param name="message">The message that describes the error.</param>
     /// <param name="args">The key arguments.</param>
-    public MaaJobStatusException(IMaaJob job, string message = "", params object?[] args)
+    public MaaJobStatusException(MaaJob job, string message = "", params object?[] args)
         : this(string.IsNullOrEmpty(message) ? $"MaaJobStatus cannot be {job?.Status}." : $"{message} MaaJobStatus cannot be {job?.Status}.", args)
     {
     }

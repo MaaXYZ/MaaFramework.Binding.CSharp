@@ -62,12 +62,10 @@ public class Test_IMaaResource
             maaResource.Loaded);
     }
 
-    public static void Interface_IMaaPost_Success(IMaaJob job)
+    public static void Interface_IMaaPost_Success(MaaJob job)
     {
         Assert.IsNotNull(job);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
-            job.SetParam("{}"));
         Assert.AreEqual(
             MaaJobStatus.Success, job.Wait());
         Assert.AreEqual(

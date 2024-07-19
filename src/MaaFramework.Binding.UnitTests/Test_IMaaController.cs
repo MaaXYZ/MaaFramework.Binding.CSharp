@@ -128,31 +128,27 @@ public class Test_IMaaController
             maaController.SetOption(opt, arg));
     }
 
-    public static void Interface_IMaaPost_Success(IMaaJob job)
+    public static void Interface_IMaaPost_Success(MaaJob job)
     {
         Assert.IsNotNull(job);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
-            job.SetParam("{}"));
         Assert.AreEqual(
             MaaJobStatus.Success, job.Wait());
         Assert.AreEqual(
             MaaJobStatus.Success, job.Status);
     }
 
-    public static void Interface_IMaaPost_Failed(IMaaJob job)
+    public static void Interface_IMaaPost_Failed(MaaJob job)
     {
         Assert.IsNotNull(job);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
-            job.SetParam("{}"));
         Assert.AreEqual(
             MaaJobStatus.Failed, job.Wait());
         Assert.AreEqual(
             MaaJobStatus.Failed, job.Status);
     }
 
-    public static void Interface_IMaaPost(bool assertSuccess, IMaaJob job)
+    public static void Interface_IMaaPost(bool assertSuccess, MaaJob job)
     {
         if (assertSuccess)
             Interface_IMaaPost_Success(job);

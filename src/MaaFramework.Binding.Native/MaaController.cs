@@ -50,7 +50,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostConnection"/>.
     /// </remarks>
-    public IMaaJob LinkStart()
+    public MaaJob LinkStart()
     {
         var id = MaaControllerPostConnection(Handle);
         return new MaaJob(id, this);
@@ -60,7 +60,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostClick"/>.
     /// </remarks>
-    public IMaaJob Click(int x, int y)
+    public MaaJob Click(int x, int y)
     {
         var id = MaaControllerPostClick(Handle, x, y);
         return new MaaJob(id, this);
@@ -70,7 +70,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostSwipe"/>.
     /// </remarks>
-    public IMaaJob Swipe(int x1, int y1, int x2, int y2, int duration)
+    public MaaJob Swipe(int x1, int y1, int x2, int y2, int duration)
     {
         var id = MaaControllerPostSwipe(Handle, x1, y1, x2, y2, duration);
         return new MaaJob(id, this);
@@ -80,7 +80,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostPressKey"/>.
     /// </remarks>
-    public IMaaJob PressKey(int keyCode)
+    public MaaJob PressKey(int keyCode)
     {
         var id = MaaControllerPostPressKey(Handle, keyCode);
         return new MaaJob(id, this);
@@ -90,7 +90,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostInputText"/>.
     /// </remarks>
-    public IMaaJob InputText(string text)
+    public MaaJob InputText(string text)
     {
         var id = MaaControllerPostInputText(Handle, text);
         return new MaaJob(id, this);
@@ -100,7 +100,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostStartApp"/>.
     /// </remarks>
-    public IMaaJob StartApp(string intent)
+    public MaaJob StartApp(string intent)
     {
         var id = MaaControllerPostStartApp(Handle, intent);
         return new MaaJob(id, this);
@@ -110,7 +110,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostStopApp"/>.
     /// </remarks>
-    public IMaaJob StopApp(string intent)
+    public MaaJob StopApp(string intent)
     {
         var id = MaaControllerPostStopApp(Handle, intent);
         return new MaaJob(id, this);
@@ -120,7 +120,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchDown"/>.
     /// </remarks>
-    public IMaaJob TouchDown(int contact, int x, int y, int pressure)
+    public MaaJob TouchDown(int contact, int x, int y, int pressure)
     {
         var id = MaaControllerPostTouchDown(Handle, contact, x, y, pressure);
         return new MaaJob(id, this);
@@ -130,7 +130,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchMove"/>.
     /// </remarks>
-    public IMaaJob TouchMove(int contact, int x, int y, int pressure)
+    public MaaJob TouchMove(int contact, int x, int y, int pressure)
     {
         var id = MaaControllerPostTouchMove(Handle, contact, x, y, pressure);
         return new MaaJob(id, this);
@@ -140,7 +140,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchUp"/>.
     /// </remarks>
-    public IMaaJob TouchUp(int contact)
+    public MaaJob TouchUp(int contact)
     {
         var id = MaaControllerPostTouchUp(Handle, contact);
         return new MaaJob(id, this);
@@ -150,21 +150,17 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostScreencap"/>.
     /// </remarks>
-    public IMaaJob Screencap()
+    public MaaJob Screencap()
     {
         var id = MaaControllerPostScreencap(Handle);
         return new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
-    bool Abstractions.IMaaPost.SetParam(IMaaJob job, string param)
-        => throw new InvalidOperationException();
-
-    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerStatus"/>.
     /// </remarks>
-    public MaaJobStatus GetStatus(IMaaJob job)
+    public MaaJobStatus GetStatus(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
@@ -175,7 +171,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerWait"/>.
     /// </remarks>
-    public MaaJobStatus Wait(IMaaJob job)
+    public MaaJobStatus Wait(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
