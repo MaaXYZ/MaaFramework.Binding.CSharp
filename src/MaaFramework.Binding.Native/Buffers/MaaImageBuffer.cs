@@ -93,7 +93,7 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     /// <param name="width">The width of image.</param>
     /// <param name="height">The height of image.</param>
     /// <param name="type">The type of image.</param>
-    /// <returns>true if the image raw data was setted successfully; otherwise, false.</returns>
+    /// <returns>true if the image raw data was set successfully; otherwise, false.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaSetImageRawData"/>.
     /// </remarks>

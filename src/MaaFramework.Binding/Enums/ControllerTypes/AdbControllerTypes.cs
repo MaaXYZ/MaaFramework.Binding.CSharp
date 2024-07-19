@@ -36,8 +36,8 @@ public enum AdbControllerTypes
     KeyEmulatorExtras = 3 << 8,
     KeyAutoDetect = KeyMask - (1 << 8),
     InputPresetAdb = TouchAdb | KeyAdb,
-    InputPresetMinitouch = TouchMiniTouch | KeyAdb,
-    InputPresetMaatouch = TouchMaaTouch | KeyMaaTouch,
+    InputPresetMiniTouch = TouchMiniTouch | KeyAdb,
+    InputPresetMaaTouch = TouchMaaTouch | KeyMaaTouch,
     InputPresetAutoDetect = TouchAutoDetect | KeyAutoDetect,
     InputPresetEmulatorExtras = TouchEmulatorExtras | KeyEmulatorExtras,
     [Obsolete]

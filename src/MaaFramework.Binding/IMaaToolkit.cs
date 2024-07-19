@@ -37,7 +37,7 @@ public interface IMaaToolkitConfig
     ///     Initializes Maa Toolkit option config.
     /// </summary>
     /// <param name="userPath">The user path. Default is <see cref="Environment.CurrentDirectory"/>.</param>
-    /// <param name="defaultJson">The default config. Default is a empty json.</param>
+    /// <param name="defaultJson">The default config. Default is an empty json.</param>
     /// <returns>
     ///     true if the Maa Toolkit option config was initialized successfully; otherwise, false.
     /// </returns>

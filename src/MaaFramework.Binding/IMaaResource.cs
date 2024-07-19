@@ -16,7 +16,7 @@ public interface IMaaResource<T> : IMaaResource, IMaaDisposableHandle<T>
 public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost, IMaaDisposable
 {
     /// <summary>
-    ///     Appends a async job of loading resource from <paramref name="resourcePath"/> , could be called multiple times.
+    ///     Appends an async job of loading resource from <paramref name="resourcePath"/> , could be called multiple times.
     /// </summary>
     /// <param name="resourcePath">The resource path.</param>
     /// <returns>A load resource job.</returns>

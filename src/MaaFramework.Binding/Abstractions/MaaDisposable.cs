@@ -14,7 +14,7 @@ public abstract class MaaDisposable : IMaaDisposable
         GC.SuppressFinalize(this);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="Dispose()"/>
     protected abstract void Dispose(bool disposing);
 
     /// <inheritdoc/>

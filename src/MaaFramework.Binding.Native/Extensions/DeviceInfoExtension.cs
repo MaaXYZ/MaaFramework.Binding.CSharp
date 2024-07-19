@@ -13,7 +13,7 @@ public static class DeviceInfoExtension
     /// <param name="address">The new address.</param>
     /// <param name="types">The new AdbControllerTypes.</param>
     /// <param name="adbConfig">The new adb config.</param>
-    /// <param name="agentPath">The new path of agent directory. Default is "./MaaAgentBinary" if use package "Maa.Framework" or "Maa.AgentBinary".</param>
+    /// <param name="agentPath">The new path of agent directory. Default is "./MaaAgentBinary" if package "Maa.Framework" or "Maa.AgentBinary" is used.</param>
     /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSuccess"/>; otherwise, not check.</param>
     /// <returns>A MaaAdbController.</returns>
@@ -28,7 +28,7 @@ public static class DeviceInfoExtension
     {
         ArgumentNullException.ThrowIfNull(info);
 
-        return new(adbPath ?? info.AdbPath,
+        return new MaaAdbController(adbPath ?? info.AdbPath,
                    address ?? info.AdbSerial,
                    types ?? info.AdbTypes,
                    adbConfig ?? info.AdbConfig,

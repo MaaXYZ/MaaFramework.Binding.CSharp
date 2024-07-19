@@ -12,7 +12,7 @@ public class MaaUtility : IMaaUtility
     /// <remarks>
     ///     Wrapper of <see cref="MaaVersion"/>.
     /// </remarks>
-    public string Version => MaaVersion().ToStringUTF8();
+    public string Version => MaaVersion().ToStringUtf8();
 
     /// <inheritdoc/>
     /// <remarks>

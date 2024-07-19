@@ -37,13 +37,13 @@ public interface IMaaStringBuffer : IDisposable
     ///     Gets the size of the string.
     /// </summary>
     /// <returns>The size.</returns>
-    ulong Size { get; }
+    MaaSize Size { get; }
 
     /// <summary>
     ///     Sets a string into the MaaStringBuffer.
     /// </summary>
     /// <param name="str">The string.</param>
     /// <param name="useEx">Uses MaaSetStringEx if true; otherwise, Uses MaaSetString.</param>
-    /// <returns>true if the string was setted successfully; otherwise, false.</returns>
+    /// <returns>true if the string was set successfully; otherwise, false.</returns>
     bool SetValue(string str, bool useEx = true);
 }

@@ -11,7 +11,7 @@ public sealed class DeviceInfo
     public required string Name { get; init; }
 
     /// <summary>
-    ///     Gets the path of a adb that a device connected to.
+    ///     Gets the path of an adb that a device connected to.
     /// </summary>
     public required string AdbPath { get; init; }
 

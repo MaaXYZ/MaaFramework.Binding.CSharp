@@ -23,19 +23,16 @@ public abstract class MaaDisposableHandle<T> : MaaDisposable, IMaaDisposableHand
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
-        if (!_handle.Equals(_invalidHandle))
-        {
-            if (_needReleased)
-                ReleaseHandle();
-            _handle = _invalidHandle;
-        }
+        if (_handle.Equals(_invalidHandle)) return;
+        if (_needReleased) ReleaseHandle();
+        _handle = _invalidHandle;
     }
 
     /// <inheritdoc/>
     public override bool IsInvalid => _handle.Equals(_invalidHandle);
 
     /// <summary>
-    ///     Creats a <see cref="MaaDisposableHandle{T}"/> instance.
+    ///     Creates a <see cref="MaaDisposableHandle{T}"/> instance.
     /// </summary>
     /// <param name="invalidHandleValue">The invalid handle value.</param>
     protected MaaDisposableHandle(T invalidHandleValue)

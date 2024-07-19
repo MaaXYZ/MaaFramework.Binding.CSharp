@@ -36,14 +36,14 @@ public sealed class MaaDataAttribute : DataRowAttribute, ITestDataSource
 
             foreach (var data in datas)
             {
-                var arry = new object?[data.Length + 2];
-                arry[0] = maaObject.Key;
-                arry[1] = maaObject.Value;
+                var array = new object?[data.Length + 2];
+                array[0] = maaObject.Key;
+                array[1] = maaObject.Value;
                 for (var i = 0; i < data.Length; i++)
                 {
-                    arry[i + 2] = CheckArgument(methodInfo, data[i]);
+                    array[i + 2] = CheckArgument(methodInfo, data[i]);
                 }
-                yield return arry;
+                yield return array;
             }
         }
     }

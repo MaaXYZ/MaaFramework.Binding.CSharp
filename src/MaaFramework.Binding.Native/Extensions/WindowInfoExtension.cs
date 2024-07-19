@@ -22,7 +22,7 @@ public static class WindowInfoExtension
     {
         ArgumentNullException.ThrowIfNull(info);
 
-        return new(hWnd ?? info.Hwnd,
+        return new MaaWin32Controller(hWnd ?? info.Handle,
                    types,
                    link,
                    check);

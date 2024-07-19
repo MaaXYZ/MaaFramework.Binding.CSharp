@@ -29,17 +29,12 @@ internal static partial class NativeLibrary
     private static bool TryGetRuntimesPath(string libraryName, out string dllPath)
     {
         dllPath = GetRuntimesPaths(libraryName).FirstOrDefault(File.Exists, string.Empty);
-        if (string.IsNullOrEmpty(dllPath))
-        {
-            return false;
-        }
-
-        return true;
+        return !string.IsNullOrEmpty(dllPath);
     }
 
     private static IEnumerable<string> GetRuntimesPaths(string libraryName)
     {
-        var (arch, exten) = GetArchitectureNameAndExtensionName();
+        var (arch, ext) = GetArchitectureNameAndExtensionName();
         var args1 = new string[]
         {
             Path.GetDirectoryName(s_assembly.Location) ?? "./",
@@ -52,8 +47,8 @@ internal static partial class NativeLibrary
         };
         var args3 = new string[]
         {
-            $"{libraryName}.{exten}",
-            $"lib{libraryName}.{exten}"
+            $"{libraryName}.{ext}",
+            $"lib{libraryName}.{ext}"
         };
 
         return from arg1 in args1
@@ -83,17 +78,17 @@ internal static partial class NativeLibrary
         else
             throw new PlatformNotSupportedException();
 
-        string exten;
+        string ext;
         if (IsWindows)
-            exten = "dll";
+            ext = "dll";
         else if (IsLinux)
-            exten = "so";
+            ext = "so";
         else if (IsOSX)
-            exten = "dylib";
+            ext = "dylib";
         else
             throw new PlatformNotSupportedException();
 
-        return (sb.ToString(), exten);
+        return (sb.ToString(), ext);
     }
 
     private static bool IsWindows

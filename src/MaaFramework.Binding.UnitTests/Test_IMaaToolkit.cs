@@ -107,7 +107,7 @@ public class Test_IMaaToolkit
         CollectionAssert.AllItemsAreUnique(windows);
         foreach (var window in windows)
         {
-            Assert.AreNotEqual(nint.Zero, window.Hwnd);
+            Assert.AreNotEqual(nint.Zero, window.Handle);
         }
 
         using var maaController = type switch
@@ -120,7 +120,7 @@ public class Test_IMaaToolkit
         maaController
             .LinkStart()
             .Wait()
-            .ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, windows[0].Hwnd);
+            .ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, windows[0].Handle);
     }
 #endif
 }

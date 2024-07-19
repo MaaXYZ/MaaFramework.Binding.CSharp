@@ -68,7 +68,7 @@ public class MaaStringList : MaaDisposableHandle<nint>, IMaaList<nint, MaaString
         {
             if ((uint)index >= (uint)Count)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            return new(MaaGetStringListAt(Handle, (ulong)index));
+            return new MaaStringBuffer(MaaGetStringListAt(Handle, (ulong)index));
         }
     }
 
@@ -122,12 +122,12 @@ public class MaaStringList : MaaDisposableHandle<nint>, IMaaList<nint, MaaString
 
     IEnumerator<MaaStringBuffer> IEnumerable<MaaStringBuffer>.GetEnumerator()
         => new MaaListEnumerator<MaaStringBuffer>(
-        i => new(MaaGetStringListAt(Handle, i)),
+        i => new MaaStringBuffer(MaaGetStringListAt(Handle, i)),
         () => MaaGetStringListSize(Handle));
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         => new MaaListEnumerator<MaaStringBuffer>(
-        i => new(MaaGetStringListAt(Handle, i)),
+        i => new MaaStringBuffer(MaaGetStringListAt(Handle, i)),
         () => MaaGetStringListSize(Handle));
 
     int IList<MaaStringBuffer>.IndexOf(MaaStringBuffer item)

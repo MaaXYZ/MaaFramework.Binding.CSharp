@@ -54,11 +54,11 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     ///     Wrapper of <see cref="MaaGetString"/>.
     /// </remarks>
     public string GetValue()
-        => IsEmpty ? string.Empty : MaaGetString(Handle).ToStringUTF8(Size);
+        => IsEmpty ? string.Empty : MaaGetString(Handle).ToStringUtf8(Size);
 
     /// <inheritdoc cref="GetValue"/>
     public static string Get(MaaStringBufferHandle handle)
-        => MaaIsStringEmpty(handle).ToBoolean() ? string.Empty : MaaGetString(handle).ToStringUTF8(MaaGetStringSize(handle));
+        => MaaIsStringEmpty(handle).ToBoolean() ? string.Empty : MaaGetString(handle).ToStringUtf8(MaaGetStringSize(handle));
 
     /// <inheritdoc cref="GetValue"/>
     public static string Get(Action<MaaStringBufferHandle> action)
@@ -82,25 +82,23 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     /// </remarks>
     public bool SetValue(string str, bool useEx = true)
     {
-        if (useEx)
-        {
-            var bytes = str.ToBytes();
-            return MaaSetStringEx(Handle, bytes, (MaaSize)bytes.LongLength).ToBoolean();
-        }
+        if (!useEx)
+            return MaaSetString(Handle, str).ToBoolean();
 
-        return MaaSetString(Handle, str).ToBoolean();
+        var bytes = str.ToBytes();
+        return MaaSetStringEx(Handle, bytes, (MaaSize)bytes.LongLength).ToBoolean();
+
     }
 
     /// <inheritdoc cref="SetValue"/>
     public static bool Set(MaaStringBufferHandle handle, string str, bool useEx = true)
     {
-        if (useEx)
-        {
-            var bytes = str.ToBytes();
-            return MaaSetStringEx(handle, bytes, (MaaSize)bytes.LongLength).ToBoolean();
-        }
+        if (!useEx)
+            return MaaSetString(handle, str).ToBoolean();
 
-        return MaaSetString(handle, str).ToBoolean();
+        var bytes = str.ToBytes();
+        return MaaSetStringEx(handle, bytes, (MaaSize)bytes.LongLength).ToBoolean();
+
     }
 
     /// <inheritdoc cref="GetValue"/>

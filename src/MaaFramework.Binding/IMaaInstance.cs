@@ -10,13 +10,13 @@ namespace MaaFramework.Binding;
 public interface IMaaInstance<T> : IMaaInstance, IMaaDisposableHandle<T>
 {
     /// <summary>
-    ///     Gets the resource or inits to bind a <see cref="IMaaResource"/>.
+    ///     Gets the resource or initializes to bind a <see cref="IMaaResource"/>.
     /// </summary>
     /// <exception cref="MaaBindException"/>
     new IMaaResource<T> Resource { get; init; }
 
     /// <summary>
-    ///     Gets the controller or inits to bind a <see cref="IMaaController"/>.
+    ///     Gets the controller or initializes to bind a <see cref="IMaaController"/>.
     /// </summary>
     /// <exception cref="MaaBindException"/>
     new IMaaController<T> Controller { get; init; }
@@ -28,7 +28,7 @@ public interface IMaaInstance<T> : IMaaInstance, IMaaDisposableHandle<T>
 public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost, IMaaDisposable
 {
     /// <summary>
-    ///     Gets or sets whether disposes the <see cref="Resource"/> or the <see cref="Controller"/> or uninits <see cref="Toolkit"/> when <see cref="IDisposable.Dispose"/> was invoked.
+    ///     Gets or sets whether disposes the <see cref="Resource"/> or the <see cref="Controller"/> when <see cref="IDisposable.Dispose"/> was invoked.
     /// </summary>
     DisposeOptions DisposeOptions { get; set; }
 
@@ -103,7 +103,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     bool Clear<T>() where T : IMaaCustomTask;
 
     /// <summary>
-    ///     Appends a async job of executing a task, could be called multiple times.
+    ///     Appends an async job of executing a task, could be called multiple times.
     /// </summary>
     /// <param name="entry">The entry of the task.</param>
     /// <param name="param">The parameter of the task.</param>
@@ -111,7 +111,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     MaaTaskJob AppendTask(string entry, string param = "{}");
 
     /// <summary>
-    ///     Appends a async job of executing a recognition, could be called multiple times.
+    ///     Appends an async job of executing a recognition, could be called multiple times.
     /// </summary>
     /// <param name="entry">The entry of the recognition.</param>
     /// <param name="param">The parameter of the recognition.</param>
@@ -119,7 +119,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     MaaTaskJob AppendRecognition(string entry, string param = "{}");
 
     /// <summary>
-    ///     Appends a async job of executing a action, could be called multiple times. // TODOa: typo
+    ///     Appends an async job of executing an action, could be called multiple times. // TODOa: typo
     /// </summary>
     /// <param name="entry">The entry of the action.</param>
     /// <param name="param">The parameter of the action.</param>
@@ -131,7 +131,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     /// </summary>
     /// <param name="job">The MaaJob.</param>
     /// <param name="param">The param, which could be parsed to a JSON.</param>
-    /// <returns>true if the <paramref name="param"/> were setted successfully in the <paramref name="job"/>; otherwise, false.</returns>
+    /// <returns>true if the <paramref name="param"/> were set successfully in the <paramref name="job"/>; otherwise, false.</returns>
     bool SetTaskParam(MaaTaskJob job, string param);
 
     /// <summary>
@@ -152,7 +152,7 @@ public interface IMaaInstance : IMaaCommon, IMaaOption<InstanceOption>, IMaaPost
     bool Running { get; }
 
     /// <summary>
-    ///     Stops the binded <see cref="IMaaResource"/>, the binded <see cref="IMaaController"/>, all appended tasks. 
+    ///     Stops the bound <see cref="IMaaResource"/>, the bound <see cref="IMaaController"/>, all appended tasks. 
     /// </summary>
     bool Abort();
 }

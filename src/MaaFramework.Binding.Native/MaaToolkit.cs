@@ -15,7 +15,7 @@ public class MaaToolkit : IMaaToolkit
     /// </summary>
     /// <param name="init">Whether invokes the <see cref="IMaaToolkitConfig.InitOption"/>.</param>
     /// <param name="userPath">The user path. Default is <see cref="Environment.CurrentDirectory"/>.</param>
-    /// <param name="defaultJson">The default config. Default is a empty json.</param>
+    /// <param name="defaultJson">The default config. Default is an empty json.</param>
     public MaaToolkit(bool init = false, string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}")
     {
         if (init)
@@ -168,7 +168,7 @@ public class MaaToolkit : IMaaToolkit
         ///     Wrapper of <see cref="MaaToolkitGetDeviceName"/>.
         /// </remarks>
         protected static string GetDeviceName(ulong index)
-            => MaaToolkitGetDeviceName(index).ToStringUTF8();
+            => MaaToolkitGetDeviceName(index).ToStringUtf8();
 
         /// <summary>
         ///     Gets the path of an adb that a device connected to.
@@ -181,7 +181,7 @@ public class MaaToolkit : IMaaToolkit
         ///     Wrapper of <see cref="MaaToolkitGetDeviceAdbPath"/>.
         /// </remarks>
         protected static string GetDeviceAdbPath(ulong index)
-            => MaaToolkitGetDeviceAdbPath(index).ToStringUTF8();
+            => MaaToolkitGetDeviceAdbPath(index).ToStringUtf8();
 
         /// <summary>
         ///     Gets the adb serial of a device.
@@ -194,7 +194,7 @@ public class MaaToolkit : IMaaToolkit
         ///     Wrapper of <see cref="MaaToolkitGetDeviceAdbSerial"/>.
         /// </remarks>
         protected static string GetDeviceAdbSerial(ulong index)
-            => MaaToolkitGetDeviceAdbSerial(index).ToStringUTF8();
+            => MaaToolkitGetDeviceAdbSerial(index).ToStringUtf8();
 
         /// <summary>
         ///     Gets the <see cref="AdbControllerTypes"/> of a device.
@@ -220,7 +220,7 @@ public class MaaToolkit : IMaaToolkit
         ///     Wrapper of <see cref="MaaToolkitGetDeviceAdbConfig"/>.
         /// </remarks>
         protected static string GetDeviceAdbConfig(ulong index)
-            => MaaToolkitGetDeviceAdbConfig(index).ToStringUTF8();
+            => MaaToolkitGetDeviceAdbConfig(index).ToStringUtf8();
     }
 
     /// <inheritdoc cref="MaaToolkit"/>
@@ -340,11 +340,11 @@ public class MaaToolkit : IMaaToolkit
             /// <remarks>
             ///     Wrapper of <see cref="MaaToolkitGetWindowWindowName"/> and <see cref="MaaToolkitGetWindowClassName"/>.
             /// </remarks>
-            private static WindowInfo GetWindowInfo(nint hwnd) => new()
+            private static WindowInfo GetWindowInfo(nint handle) => new()
             {
-                Hwnd = hwnd,
-                Name = MaaStringBuffer.Get(buffer => MaaToolkitGetWindowWindowName(hwnd, buffer)),
-                ClassName = MaaStringBuffer.Get(buffer => MaaToolkitGetWindowClassName(hwnd, buffer)),
+                Handle = handle,
+                Name = MaaStringBuffer.Get(buffer => MaaToolkitGetWindowWindowName(handle, buffer)),
+                ClassName = MaaStringBuffer.Get(buffer => MaaToolkitGetWindowClassName(handle, buffer)),
             };
 
             /// <remarks>

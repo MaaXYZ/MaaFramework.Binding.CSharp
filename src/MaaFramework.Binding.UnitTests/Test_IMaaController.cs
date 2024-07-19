@@ -27,10 +27,10 @@ public class Test_IMaaController
     [ClassInitialize]
     public static void InitializeClass(TestContext context)
     {
-        InitializeData(AdbControllerTypes.InputPresetMaatouch);
+        InitializeData(AdbControllerTypes.InputPresetMaaTouch);
         MaaTouchData = Data;
 #if !GITHUB_ACTIONS
-        InitializeData(AdbControllerTypes.InputPresetMinitouch);
+        InitializeData(AdbControllerTypes.InputPresetMiniTouch);
 #endif
         MiniTouchData = Data;
         InitializeData(AdbControllerTypes.InputPresetAdb);
@@ -94,17 +94,17 @@ public class Test_IMaaController
         #region MaaWin32Controller
 #if !GITHUB_ACTIONS
         var toolkit = new MaaToolkit();
-        var windowInfo = toolkit.Win32.Window.Search(string.Empty, "Visual Studio").FirstOrDefault() ?? new() { Hwnd = nint.Zero, Name = string.Empty, ClassName = string.Empty };
+        var windowInfo = toolkit.Win32.Window.Search(string.Empty, "Visual Studio").FirstOrDefault() ?? new() { Handle = nint.Zero, Name = string.Empty, ClassName = string.Empty };
 
         using var win32Native1 = new MaaWin32Controller(
-            windowInfo.Hwnd,
+            windowInfo.Handle,
             Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI);
         using var win32Native2 = new MaaWin32Controller(
-            windowInfo.Hwnd,
+            windowInfo.Handle,
             Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
             LinkOption.None);
         using var win32Native3 = new MaaWin32Controller(
-            windowInfo.Hwnd,
+            windowInfo.Handle,
             Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
             LinkOption.Start,
             CheckStatusOption.None);
@@ -227,7 +227,7 @@ public class Test_IMaaController
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), false, 0, 10, 10, 100, 100, "Adb")]
     [MaaData(MaaTypes.All, nameof(MiniTouchData), true, 0, 10, 10, 100, 100, "MiniTouch")]
-    [MaaData(MaaTypes.All, nameof(MaaTouchData), true, 0, 10, 10, 100, 100, "Maatouch")]
+    [MaaData(MaaTypes.All, nameof(MaaTouchData), true, 0, 10, 10, 100, 100, "MaaTouch")]
     public void Interface_TouchDown_TouchMove_TouchUp(MaaTypes type, IMaaController maaController, bool assertSuccess, int contact, int x1, int y1, int x2, int y2, string adbControllerTypes)
     {
         Assert.IsNotNull(maaController);

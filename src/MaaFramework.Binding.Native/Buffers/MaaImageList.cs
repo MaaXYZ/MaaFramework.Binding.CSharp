@@ -68,7 +68,7 @@ public class MaaImageList : MaaDisposableHandle<nint>, IMaaList<nint, MaaImageBu
         {
             if ((uint)index >= (uint)Count)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            return new(MaaGetImageListAt(Handle, (ulong)index));
+            return new MaaImageBuffer(MaaGetImageListAt(Handle, (ulong)index));
         }
     }
 
@@ -122,12 +122,12 @@ public class MaaImageList : MaaDisposableHandle<nint>, IMaaList<nint, MaaImageBu
 
     IEnumerator<MaaImageBuffer> IEnumerable<MaaImageBuffer>.GetEnumerator()
         => new MaaListEnumerator<MaaImageBuffer>(
-        i => new(MaaGetImageListAt(Handle, i)),
+        i => new MaaImageBuffer(MaaGetImageListAt(Handle, i)),
         () => MaaGetImageListSize(Handle));
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         => new MaaListEnumerator<MaaImageBuffer>(
-        i => new(MaaGetImageListAt(Handle, i)),
+        i => new MaaImageBuffer(MaaGetImageListAt(Handle, i)),
         () => MaaGetImageListSize(Handle));
 
     int IList<MaaImageBuffer>.IndexOf(MaaImageBuffer item)

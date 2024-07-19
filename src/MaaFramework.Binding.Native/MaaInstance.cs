@@ -11,13 +11,13 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaInstance : MaaCommon, IMaaInstance<nint>
 {
-    private IMaaResource<nint> _resource = default!;
-    private IMaaController<nint> _controller = default!;
+    private readonly IMaaResource<nint> _resource = default!;
+    private readonly IMaaController<nint> _controller = default!;
 
     /// <summary>
     ///     Creates a <see cref="MaaInstance"/> instance.
     /// </summary>
-    /// <param name="toolkitInit">Whether inits the <see cref="Toolkit"/>.</param>
+    /// <param name="toolkitInit">Whether initializes the <see cref="Toolkit"/>.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaCreate"/>.
     /// </remarks>
@@ -33,7 +33,7 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     /// <param name="controller">The controller.</param>
     /// <param name="resource">The resource.</param>
     /// <param name="disposeOptions">The dispose options.</param>
-    /// <param name="toolkitInit">Whether inits the <see cref="Toolkit"/>.</param>
+    /// <param name="toolkitInit">Whether initializes the <see cref="Toolkit"/>.</param>
     /// <inheritdoc cref="MaaInstance(bool)"/>
     [SetsRequiredMembers]
     public MaaInstance(IMaaController<nint> controller, IMaaResource<nint> resource, DisposeOptions disposeOptions, bool toolkitInit = false)

@@ -33,7 +33,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob Click(int x, int y);
 
     /// <summary>
-    ///     Swipes from a starting point to a ending point with duration.
+    ///     Swipes from a starting point to an ending point with duration.
     /// </summary>
     /// <param name="x1">The horizontal coordinate of the starting point.</param>
     /// <param name="y1">The vertical coordinate of the starting point.</param>
@@ -111,7 +111,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     bool LinkStop();
 
     /// <summary>
-    ///     Gets a image.
+    ///     Gets an image.
     /// </summary>
     /// <param name="maaImage">The MaaImageBuffer.</param>
     /// <returns>true if the image was got successfully; otherwise, false.</returns>

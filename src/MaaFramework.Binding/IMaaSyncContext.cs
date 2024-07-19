@@ -9,7 +9,7 @@ namespace MaaFramework.Binding;
 public interface IMaaSyncContext<T> : IMaaSyncContext
 {
     /// <summary>
-    ///     Gets or inits a MaaSyncContextHandle.
+    ///     Gets or initializes a MaaSyncContextHandle.
     /// </summary>
     T Handle { get; init; }
 
@@ -55,7 +55,7 @@ public interface IMaaSyncContext
     /// </summary>
     /// <param name="taskName">The task name.</param>
     /// <param name="taskParam">The task parameters.</param>
-    /// <param name="curBox">The rect buffer containing curent rect in the recognition result.</param>
+    /// <param name="curBox">The rect buffer containing current rect in the recognition result.</param>
     /// <param name="curRecDetail">The rect detail in the recognition result.</param>
     /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
     bool RunAction(string taskName, string taskParam, IMaaRectBuffer curBox, string curRecDetail);
@@ -69,7 +69,7 @@ public interface IMaaSyncContext
     bool Click(int x, int y);
 
     /// <summary>
-    ///     Swipes from a starting point to a ending point with duration.
+    ///     Swipes from a starting point to an ending point with duration.
     /// </summary>
     /// <param name="x1">The horizontal coordinate of the starting point.</param>
     /// <param name="y1">The vertical coordinate of the starting point.</param>

@@ -42,13 +42,13 @@ public interface IMaaImageBuffer : IDisposable
     /// </summary>
     /// <param name="size">The image encoded size.</param>
     /// <returns>The encoded data of image(PNG).</returns>
-    nint GetEncodedData(out ulong size);
+    nint GetEncodedData(out MaaSize size);
 
     /// <summary>
     ///     Sets the image encoded data.
     /// </summary>
     /// <param name="data">The encoded data of image.</param>
     /// <param name="size">The encoded size of image.</param>
-    /// <returns>true if the image encoded data was setted successfully; otherwise, false.</returns>
-    bool SetEncodedData(nint data, ulong size);
+    /// <returns>true if the image encoded data was set successfully; otherwise, false.</returns>
+    bool SetEncodedData(nint data, MaaSize size);
 }

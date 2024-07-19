@@ -9,7 +9,7 @@ public static class FlagsEnumExtension
     ///     Whether a flags enum contains all necessary enumeration value. 
     /// </summary>
     /// <param name="flagsEnum">The flags enum.</param>
-    /// <exception cref="MaaException">Throw a MaaException if not all inclusive.</exception>
+    /// <exception cref="MaaException">Throw a MaaException if not all-inclusive.</exception>
     public static void Check(this AdbControllerTypes flagsEnum)
     {
         if ((flagsEnum & AdbControllerTypes.TouchMask) == AdbControllerTypes.Invalid)

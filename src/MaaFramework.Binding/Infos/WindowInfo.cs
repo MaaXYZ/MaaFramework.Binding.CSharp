@@ -6,9 +6,9 @@
 public sealed class WindowInfo
 {
     /// <summary>
-    ///     Gets the handle to a win32 window.
+    ///     Gets the handle to a window.
     /// </summary>
-    public required nint Hwnd { get; init; }
+    public required nint Handle { get; init; }
 
     /// <summary>
     ///     Gets the window name.
