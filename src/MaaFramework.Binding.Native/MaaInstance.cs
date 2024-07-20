@@ -11,8 +11,10 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaInstance : MaaCommon, IMaaInstance<nint>
 {
+#pragma warning disable CA2213
     private readonly IMaaResource<nint> _resource = default!;
     private readonly IMaaController<nint> _controller = default!;
+#pragma warning restore CA2213
 
     /// <summary>
     ///     Creates a <see cref="MaaInstance"/> instance.

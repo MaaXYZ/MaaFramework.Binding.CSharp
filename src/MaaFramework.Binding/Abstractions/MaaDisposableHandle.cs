@@ -4,24 +4,22 @@
 ///     An abstract class providing a common mechanism for releasing handles from <see cref="MaaFramework"/>.
 /// </summary>
 /// <typeparam name="T">The type of handle.</typeparam>
-public abstract class MaaDisposableHandle<T> : MaaDisposable, IMaaDisposableHandle<T> where T : IEquatable<T>
+public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T : IEquatable<T>
 {
     /// <inheritdoc/>
     public T Handle => _handle;
 
-#pragma warning disable CA1816 // Dispose 方法应调用 SuppressFinalize
-#pragma warning disable S3971 // "GC.SuppressFinalize" should not be called
-    /// <inheritdoc/>
-    public void SetHandleAsInvalid()
+    /// <summary>
+    ///     Releases all resources from <see cref="MaaFramework"/>.
+    /// </summary>
+    public void Dispose()
     {
-        _handle = _invalidHandle;
+        Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
-#pragma warning restore S3971 // "GC.SuppressFinalize" should not be called
-#pragma warning restore CA1816 // Dispose 方法应调用 SuppressFinalize
 
-    /// <inheritdoc/>
-    protected override void Dispose(bool disposing)
+    /// <inheritdoc cref="Dispose()"/>
+    protected virtual void Dispose(bool disposing)
     {
         if (_handle.Equals(_invalidHandle)) return;
         if (_needReleased) ReleaseHandle();
@@ -29,7 +27,18 @@ public abstract class MaaDisposableHandle<T> : MaaDisposable, IMaaDisposableHand
     }
 
     /// <inheritdoc/>
-    public override bool IsInvalid => _handle.Equals(_invalidHandle);
+    public void SetHandleAsInvalid()
+    {
+#pragma warning disable CA1816
+#pragma warning disable S3971
+        _handle = _invalidHandle;
+        GC.SuppressFinalize(this);
+#pragma warning restore S3971
+#pragma warning restore CA1816
+    }
+
+    /// <inheritdoc/>
+    public virtual bool IsInvalid => _handle.Equals(_invalidHandle);
 
     /// <summary>
     ///     Creates a <see cref="MaaDisposableHandle{T}"/> instance.
@@ -49,7 +58,7 @@ public abstract class MaaDisposableHandle<T> : MaaDisposable, IMaaDisposableHand
     ///     Sets the handle to the specified pre-existing handle.
     /// </summary>
     /// <param name="handle">The pre-existing handle to use.</param>
-    /// <param name="needReleased">The value indicates whether the <paramref name="handle"/> needs to be released on <see cref="Dispose"/></param>
+    /// <param name="needReleased">The value indicates whether the <paramref name="handle"/> needs to be released on <see cref="Dispose()"/></param>
     protected void SetHandle(T handle, bool needReleased)
     {
         _handle = handle;
