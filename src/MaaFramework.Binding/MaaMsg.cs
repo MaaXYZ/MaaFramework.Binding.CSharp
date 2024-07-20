@@ -85,16 +85,9 @@ public static class MaaMsg
 
         public const string UUIDGetFailed = "Controller.UUIDGetFailed";
 
-        /// <summary>
-        ///     The message for the resolution got.
-        /// </summary>
         /// <remarks>
-        ///     payload: { resolution: { width: number, height: number } }
+        ///     payload: { }
         /// </remarks>
-        public const string ResolutionGot = "Controller.ResolutionGot";
-
-        public const string ResolutionGetFailed = "Controller.ResolutionGetFailed";
-
         public const string ScreencapInited = "Controller.ScreencapInited";
 
         public const string ScreencapInitFailed = "Controller.ScreencapInitFailed";
@@ -111,7 +104,7 @@ public static class MaaMsg
         ///     Message for the controller connected.
         /// </summary>
         /// <remarks>
-        ///     payload: { uuid: string, resolution: { width: number, height: number } }
+        ///     payload: { uuid: string }
         /// </remarks>
         public const string ConnectSuccess = "Controller.ConnectSuccess";
 

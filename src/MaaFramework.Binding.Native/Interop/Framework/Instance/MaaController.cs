@@ -149,7 +149,7 @@ public static partial class MaaController
     ///     Get the UUID of the controller.
     /// </summary>
     /// <param name="buffer">The buffer that the UUID will be stored in.</param>
-    /// <returns>Whether the resolution is retrieved successfully.</returns>
+    /// <returns>Whether the UUID is retrieved successfully.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaControllerGetUUID(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
 }

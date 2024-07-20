@@ -15,7 +15,6 @@ global using MaaControllerApiTuple = (
     MaaFramework.Binding.Custom.IMaaCustomController Managed,
     MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.Connect Connect,
     MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.RequestUuid RequestUuid,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.RequestResolution RequestResolution,
     MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.StartApp StartApp,
     MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.StopApp StopApp,
     MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.Screencap Screencap,
@@ -46,7 +45,6 @@ public class MaaCustomControllerApi
 {
     public nint Connect;
     public nint RequestUuid;
-    public nint RequestResolution;
     public nint StartApp;
     public nint StopApp;
     public nint Screencap;
@@ -72,12 +70,6 @@ public static class IMaaCustomControllerExtension
     /// </summary>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate MaaBool RequestUuid(MaaTransparentArg handleArg, MaaStringBufferHandle buffer);
-
-    /// <summary>
-    ///     Write result to width and height.
-    /// </summary>
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool RequestResolution(MaaTransparentArg handleArg, out int width, out int height);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate MaaBool StartApp(string intent, MaaTransparentArg handleArg);
@@ -117,8 +109,6 @@ public static class IMaaCustomControllerExtension
 
         MaaBool RequestUuid(MaaTransparentArg handleArg, MaaStringBufferHandle buffer) => task.RequestUuid(new Buffers.MaaStringBuffer(buffer)).ToMaaBool();
 
-        MaaBool RequestResolution(MaaTransparentArg handleArg, out int width, out int height) => task.RequestResolution(out width, out height).ToMaaBool();
-
         MaaBool StartApp(string intent, MaaTransparentArg handleArg) => task.StartApp(intent).ToMaaBool();
 
         MaaBool StopApp(string intent, MaaTransparentArg handleArg) => task.StopApp(intent).ToMaaBool();
@@ -143,7 +133,6 @@ public static class IMaaCustomControllerExtension
         {
             Connect = Marshal.GetFunctionPointerForDelegate<Connect>(Connect),
             RequestUuid = Marshal.GetFunctionPointerForDelegate<RequestUuid>(RequestUuid),
-            RequestResolution = Marshal.GetFunctionPointerForDelegate<RequestResolution>(RequestResolution),
             StartApp = Marshal.GetFunctionPointerForDelegate<StartApp>(StartApp),
             StopApp = Marshal.GetFunctionPointerForDelegate<StopApp>(StopApp),
             Screencap = Marshal.GetFunctionPointerForDelegate<Screencap>(Screencap),
@@ -158,7 +147,6 @@ public static class IMaaCustomControllerExtension
             task,
             Connect,
             RequestUuid,
-            RequestResolution,
             StartApp,
             StopApp,
             Screencap,
