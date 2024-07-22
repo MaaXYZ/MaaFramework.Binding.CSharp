@@ -15,7 +15,7 @@
       "dest": "api",
       "outputFormat": "apiPage",
       "memberLayout": "separatePages",
-      "includeExplicitInterfaceImplementations": true,
+      "includeExplicitInterfaceImplementations": false,
       "disableGitFeatures": true,
       "disableDefaultFilter": false
     }
