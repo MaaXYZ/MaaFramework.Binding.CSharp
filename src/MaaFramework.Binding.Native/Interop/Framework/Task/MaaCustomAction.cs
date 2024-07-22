@@ -43,7 +43,7 @@ public class MaaCustomActionApi
 public static class IMaaCustomActionExtension
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool Run(MaaSyncContextHandle syncContext, string taskName, string customActionParam, MaaRectHandle curBox, string curRecDetail, MaaTransparentArg actionArg);
+    public delegate MaaBool Run(MaaSyncContextHandle syncContext, [MarshalAs(UnmanagedType.LPUTF8Str)] string taskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionParam, MaaRectHandle curBox, [MarshalAs(UnmanagedType.LPUTF8Str)] string curRecDetail, MaaTransparentArg actionArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void Abort(MaaTransparentArg actionArg);

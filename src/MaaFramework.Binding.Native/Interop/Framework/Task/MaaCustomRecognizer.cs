@@ -44,7 +44,7 @@ public static class IMaaCustomRecognizerExtension
     ///     Write the recognition result to the out_box and return true if the recognition is successful. If the recognition fails, return false. You can also write details to the out_detail buffer.
     /// </remarks>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool Analyze(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, string taskName, string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
+    public delegate MaaBool Analyze(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string taskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
     public static MaaCustomRecognizerApi Convert(this IMaaCustomRecognizer task, out MaaRecognizerApiTuple tuple)
     {
         MaaBool Analyze(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, string taskName, string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail) => task.Analyze(new Binding.MaaSyncContext(syncContext), new MaaImageBuffer(image), taskName, customRecognitionParam, new Buffers.MaaRectBuffer(outBox), new Buffers.MaaStringBuffer(outDetail)).ToMaaBool();

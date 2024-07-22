@@ -72,10 +72,10 @@ public static class IMaaCustomControllerExtension
     public delegate MaaBool RequestUuid(MaaTransparentArg handleArg, MaaStringBufferHandle buffer);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool StartApp(string intent, MaaTransparentArg handleArg);
+    public delegate MaaBool StartApp([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool StopApp(string intent, MaaTransparentArg handleArg);
+    public delegate MaaBool StopApp([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, MaaTransparentArg handleArg);
 
     /// <summary>
     ///     Write result to buffer.
@@ -102,7 +102,7 @@ public static class IMaaCustomControllerExtension
     public delegate MaaBool PressKey(int keycode, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool InputText(string text, MaaTransparentArg handleArg);
+    public delegate MaaBool InputText([MarshalAs(UnmanagedType.LPUTF8Str)] string text, MaaTransparentArg handleArg);
     public static MaaCustomControllerApi Convert(this IMaaCustomController task, out MaaControllerApiTuple tuple)
     {
         MaaBool Connect(MaaTransparentArg handleArg) => task.Connect().ToMaaBool();

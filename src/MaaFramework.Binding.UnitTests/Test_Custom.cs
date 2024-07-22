@@ -11,7 +11,7 @@ internal static class Custom
     public static TestTask Task { get; } = new();
     public static MaaCustomActionExecutor ActionExecutor { get; } = new() { Name = Action.Name, Parameter = [], Path = "" };
     public static MaaCustomRecognizerExecutor RecognizerExecutor { get; } = new() { Name = Recognizer.Name, Parameter = [], Path = "" };
-    public static string TaskName => "TestCustom";
+    public static string TaskName => "中文字符测试";
     public static string Param => $$"""
     {
         "{{TaskName}}": {

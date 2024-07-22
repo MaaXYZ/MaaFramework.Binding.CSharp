@@ -61,7 +61,7 @@ namespace MaaFramework.Binding.Interop.Native;
 /// <param name="msg">The message. See MaaMsg.h</param>
 /// <param name="detailsJson">The details in JSON format. See doc in MaaMsg.h</param>
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public delegate void MaaApiCallback(string msg, string detailsJson, MaaTransparentArg callbackArg);
+public delegate void MaaApiCallback([MarshalAs(UnmanagedType.LPUTF8Str)] string msg, [MarshalAs(UnmanagedType.LPUTF8Str)] string detailsJson, MaaTransparentArg callbackArg);
 
 public static partial class MaaDef
 {
