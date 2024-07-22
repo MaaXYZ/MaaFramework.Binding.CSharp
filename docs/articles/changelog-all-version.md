@@ -1,12 +1,14 @@
-# v1.8.8
+## v1.8.8.1
 
-### NuGet Link
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.8...v1.8.8.1
 
-[![](https://img.shields.io/badge/NuGet-Maa.Framework-%23004880)](https://www.nuget.org/packages/Maa.Framework/v1.8.8) [![](https://img.shields.io/badge/NuGet-Binding-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding/v1.8.8) [![](https://img.shields.io/badge/NuGet-Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Native/v1.8.8)
+### Fix
+
+- [MarshalAs(UnmanagedType.LPUTF8Str)] missing in delegates @moomiji
+
+## v1.8.8
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.6.4...v1.8.8
-
-## What's Changed in v1.8.8
 
 ### Breaking changes
 
@@ -31,15 +33,9 @@
 - rename MaaAssistantArknights to MaaXYZ @moomiji
 - add API Reference @moomiji
 
-# v1.6.4
-
-### NuGet Link
-
-[![](https://img.shields.io/badge/NuGet-Maa.Framework-%23004880)](https://www.nuget.org/packages/Maa.Framework/v1.6.4) [![](https://img.shields.io/badge/NuGet-Binding-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding/v1.6.4) [![](https://img.shields.io/badge/NuGet-Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Native/v1.6.4) [![](https://img.shields.io/badge/NuGet-Grpc-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Grpc/v1.6.4)
+## v1.6.4
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.4.0...v1.6.4
-
-## What's Changed in v1.6.4
 
 ### Breaking changes
 
@@ -67,11 +63,13 @@
 - use NotSupportedException in Grpc @moomiji
 - typo(fw): rename ToolKit -> Toolkit @moomiji
 
-# v1.4.0
+## v1.4.0
 
-> ### ***Great refactoring***
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.0.0-beta.2.1...v1.4.0
 
-## New features
+> #### ***Great refactoring***
+
+### New features
 
 - rename MaaToolKit.Extensions to MaaFramework.Binding.CSharp @moomiji
 - `Maa.Framework.Binding` : separate abstraction & implementation @moomiji
@@ -80,22 +78,24 @@
 - `Maa.Framework` : add Native metapackage @moomiji
 - support framework `net8.0` now @moomiji
 
-## Other
+### Other
 
 - LICENSE: Update license to LGPL v3.0 @moomiji
 - update interop to framework 1.4.0 @moomiji
 
-# v1.0.0-beta.2.1
+## v1.0.0-beta.2.1
 
-## Breaking changes
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/0662a7e...v1.0.0-beta.2.1
+
+### Breaking changes
 
 - move namespace Extensions.ComponentModel to Extensions @moomiji
 
-## New features
+### New features
 
 - add Maa ToolKit device section @moomiji
 
-## Other
+### Other
 
 - Todo: MaaFramework GetHash return null @moomiji
 - follow the change of MaaFramework from v0.6.0-beta.1 to v1.0.0-beta.2 @moomiji
