@@ -53,9 +53,7 @@ Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) 
 ```CSharp
 using MaaFramework.Binding;
 
-var tookit = new MaaToolkit();
-tookit.Config.Init();
-var devices = tookit.Device.Find();
+var devices = new MaaToolkit(true).Device.Find();
 if (devices.Length < 1)
     throw new InvalidOperationException();
 
@@ -76,12 +74,77 @@ maa.AppendTask("EmptyTask")
 Console.WriteLine("EmptyTask Completed");
 ```
 
+#### Custom
+
+```CSharp
+using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Custom;
+
+var taskName = "MyCustomTask";
+var param = $$"""
+{
+  "{{taskName}}": {
+      "recognition": "Custom",
+      "custom_recognition": "MyRec",
+      "custom_recognition_param": {
+          "my_rec_key": "my_rec_value"
+      },
+      "action": "Custom",
+      "custom_action": "MyAct",
+      "custom_action_param": {
+          "my_act_key": "my_act_value"
+      }
+  }
+}
+""";
+
+maa.Register(new MyRec());
+maa.Register(new MyAct());
+maa.AppendTask(taskName, param)
+    .Wait()
+    .ThrowIfNot(MaaJobStatus.Success);
+
+internal sealed class MyRec : IMaaCustomRecognizer
+{
+    public string Name { get; set; } = nameof(MyRec);
+
+    public bool Analyze(in IMaaSyncContext syncContext, IMaaImageBuffer image, string taskName, string customRecognitionParam, in IMaaRectBuffer outBox, in IMaaStringBuffer outDetail)
+    {
+        outBox.SetValues(0, 0, 100, 100);
+        outDetail.SetValue("Hello World!");
+        return true;
+    }
+}
+
+internal sealed class MyAct : IMaaCustomAction
+{
+    public string Name { get; set; } = nameof(MyAct);
+
+    public void Abort() { }
+
+    public bool Run(in IMaaSyncContext syncContext, string taskName, string customActionParam, IMaaRectBuffer curBox, string curRecDetail)
+    {
+        return true;
+    }
+}
+```
+
 ## Best Practices
 
 - [MBA](https://github.com/MaaXYZ/MBA) BA Assistant  
   A BA Assistant based on MAA's new architecture. Image technology + simulation control, no more clicking! Powered by MaaFramework.
 
-- You can also find more examples in the [unit tests](./src/MaaFramework.Binding.UnitTests).
+- You can also find more examples in the [Unit Tests](./src/MaaFramework.Binding.UnitTests).
+
+## Documentation
+
+We have written detailed documentation comments in source code files.
+
+You can also visit [API Reference](https://maaxyz.github.io/MaaFramework.Binding.CSharp/api/MaaFramework.Binding.html) and [Unit Tests](./src/MaaFramework.Binding.UnitTests) for more information.
+
+## Contributing
+
+We welcome contributions to the MaaFramework.Binding.CSharp. If you find a bug or have a feature request, please open an issue on the GitHub repository. If you want to contribute code, feel free to fork the repository and submit a pull request.
 
 ## License
 
