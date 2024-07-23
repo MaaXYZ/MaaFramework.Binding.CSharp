@@ -20,8 +20,6 @@ public class MaaToolkit : IMaaToolkit
     {
         if (init)
         {
-            if (userPath == nameof(Environment.CurrentDirectory))
-                userPath = Environment.CurrentDirectory;
             Config.InitOption(userPath, defaultJson);
         }
     }
@@ -46,7 +44,11 @@ public class MaaToolkit : IMaaToolkit
         ///     Wrapper of <see cref="MaaToolkitInitOptionConfig"/>.
         /// </remarks>
         public bool InitOption(string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}")
-            => MaaToolkitInitOptionConfig(userPath, defaultJson).ToBoolean();
+        {
+            if (userPath == nameof(Environment.CurrentDirectory))
+                userPath = Environment.CurrentDirectory;
+            return MaaToolkitInitOptionConfig(userPath, defaultJson).ToBoolean();
+        }
 
         /// <inheritdoc/>
         /// <remarks>
