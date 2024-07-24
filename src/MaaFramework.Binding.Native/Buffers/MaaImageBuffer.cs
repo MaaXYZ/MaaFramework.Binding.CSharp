@@ -127,4 +127,31 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     /// <inheritdoc cref="SetEncodedData"/>
     public static bool Set(MaaImageBufferHandle handle, MaaImageBufferHandle data, ulong size)
         => MaaSetImageEncoded(handle, data, size).ToBoolean();
+
+    /// <inheritdoc/>
+    public unsafe Stream EncodedDataStream
+    {
+        get
+        {
+            return new UnmanagedMemoryStream((byte*)GetEncodedData(out var size).ToPointer(), (long)size);
+        }
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            var size = (ulong)value.Length;
+            var data = new byte[size];
+            value.Position = 0;
+            _ = value.Read(data, 0, data.Length);
+            value.Close();
+
+            bool ret;
+            // Pin - Pin data in preparation for calling the P/Invoke.
+            fixed (void* __data_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(data))
+            {
+                ret = SetEncodedData((nint)__data_native, size);
+            }
+            if (!ret)
+                throw new InvalidOperationException();
+        }
+    }
 }

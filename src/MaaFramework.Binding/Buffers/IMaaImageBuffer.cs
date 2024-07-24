@@ -6,8 +6,22 @@ namespace MaaFramework.Binding.Buffers;
 ///     An interface defining wrapped members for MaaImageBuffer with generic handle.
 /// </summary>
 /// <typeparam name="T">The type of handle.</typeparam>
-public interface IMaaImageBuffer<out T> : IMaaImageBuffer, IMaaDisposableHandle<T>
+public interface IMaaImageBuffer<T> : IMaaImageBuffer, IMaaDisposableHandle<T>
 {
+    /// <summary>
+    ///     Gets the image encoded data.
+    /// </summary>
+    /// <param name="size">The image encoded size.</param>
+    /// <returns>The encoded data of image(PNG).</returns>
+    T GetEncodedData(out MaaSize size);
+
+    /// <summary>
+    ///     Sets the image encoded data.
+    /// </summary>
+    /// <param name="data">The encoded data of image.</param>
+    /// <param name="size">The encoded size of image.</param>
+    /// <returns>true if the image encoded data was set successfully; otherwise, false.</returns>
+    bool SetEncodedData(T data, MaaSize size);
 }
 
 /// <summary>
@@ -38,17 +52,12 @@ public interface IMaaImageBuffer : IDisposable
     ImageInfo Info { get; }
 
     /// <summary>
-    ///     Gets the image encoded data.
+    ///     Gets or sets the image encoded data stream.
     /// </summary>
-    /// <param name="size">The image encoded size.</param>
-    /// <returns>The encoded data of image(PNG).</returns>
-    nint GetEncodedData(out MaaSize size);
-
-    /// <summary>
-    ///     Sets the image encoded data.
-    /// </summary>
-    /// <param name="data">The encoded data of image.</param>
-    /// <param name="size">The encoded size of image.</param>
-    /// <returns>true if the image encoded data was set successfully; otherwise, false.</returns>
-    bool SetEncodedData(nint data, MaaSize size);
+    /// <returns>The stream of image(PNG).</returns>
+    /// <remarks>
+    ///     1. Avoids disposing <see cref="IMaaImageBuffer"/> before the stream is read.
+    ///     2. Sets a png image into the <see cref="IMaaImageBuffer"/> if a stream is set, then the stream will be closed.
+    /// </remarks>
+    Stream EncodedDataStream { get; set; }
 }

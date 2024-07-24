@@ -1,6 +1,8 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using System.Runtime.InteropServices;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -244,15 +246,11 @@ public class Test_IMaaController
         Interface_IMaaPost(assertSuccess, job);
     }
 
-    [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Screencap_GetImage(MaaTypes type, IMaaController maaController)
+    private static MaaImageBuffer GetImage(MaaTypes type, IMaaController maaController)
     {
-        Assert.IsNotNull(maaController);
-
         var job = maaController.Screencap();
         Interface_IMaaPost_Success(job);
-        using var buffer = type switch
+        var buffer = type switch
         {
 #if MAA_NATIVE
             MaaTypes.Native => new MaaImageBuffer(),
@@ -263,6 +261,16 @@ public class Test_IMaaController
             maaController.GetImage(buffer));
         Assert.IsFalse(
             buffer.IsEmpty);
+
+        return buffer;
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_Screencap_GetImage(MaaTypes type, IMaaController maaController)
+    {
+        Assert.IsNotNull(maaController);
+        using var buffer = GetImage(type, maaController);
 
         var encodedDataHandle = buffer.GetEncodedData(out var size);
         var pngImageData = new byte[size];
@@ -288,6 +296,33 @@ public class Test_IMaaController
                 _ => throw new NotImplementedException(),
             };
         }
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_Screencap_GetImage_EncodedDataStream(MaaTypes type, IMaaController maaController)
+    {
+        Assert.IsNotNull(maaController);
+        using var buffer = GetImage(type, maaController);
+
+        using var image = Image.Load(buffer.EncodedDataStream);
+        Assert.AreEqual(
+            image.Height, buffer.Height);
+        Assert.AreEqual(
+            image.Width, buffer.Width);
+        Assert.ThrowsException<NotSupportedException>(() =>
+            image.Save(buffer.EncodedDataStream, image.Metadata.DecodedImageFormat!));
+
+        using var stream = new MemoryStream();
+        image.Mutate(c => c.Resize(30, 30));
+        image.Save(stream, image.Metadata.DecodedImageFormat!);
+        buffer.EncodedDataStream = stream;
+
+        using var resizeImage = Image.Load(buffer.EncodedDataStream);
+        Assert.AreEqual(
+            30, image.Height);
+        Assert.AreEqual(
+            30, image.Width);
     }
 
     [TestMethod]
