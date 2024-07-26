@@ -1,3 +1,19 @@
+## v1.8.9
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.8.1...v1.8.9
+
+### New features
+
+- add IMaaImageBuffer.EncodedDataStream @moomiji
+
+### Fix
+
+- incorrect default userPath of MaaToolkit.Config.InitOption @moomiji
+
+### Other
+
+- update interop to framework 1.8.9 @moomiji
+
 ## v1.8.8.1
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.8...v1.8.8.1
