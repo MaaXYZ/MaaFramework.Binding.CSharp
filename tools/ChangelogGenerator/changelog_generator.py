@@ -251,9 +251,9 @@ def main(tag_name=None, latest=None):
 
 [![](https://img.shields.io/badge/NuGet-Maa.Framework-%23004880)](https://www.nuget.org/packages/Maa.Framework/{version}) [![](https://img.shields.io/badge/NuGet-Binding-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding/{version}) [![](https://img.shields.io/badge/NuGet-Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Native/{version})
 
-**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/{latest}...{tag_name}
-
 ## What's Changed in {tag_name}
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/{latest}...{tag_name}
 """
     changelog_content = changelog_content + res[0]
     print(changelog_content)
