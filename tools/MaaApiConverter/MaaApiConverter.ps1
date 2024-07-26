@@ -2,6 +2,11 @@ rm -r temp
 mkdir temp
 cd temp
 mkdir .config
+$ErrorActionPreference = "Stop"
+trap {
+    cd ..
+    echo
+}
 
 # Template
 curl https://raw.githubusercontent.com/MaaXYZ/MaaApiConverter/v1/gen/Templates/CSharpTemplate.cs -o CSharpTemplate.cs
