@@ -193,11 +193,13 @@ public class Test_IMaaInstance
             maaInstance.Register(Custom.Task));
         Assert.ThrowsException<NotImplementedException>(() =>
             maaInstance.Unregister(Custom.Task));
+
+        // use the same tasks and name
+        // maybe cause "A callback was made on a garbage collected delegate"
+        IMaaToolkit_Interface_ExecAgent(type, maaInstance);
     }
 
-    [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data))]
-    public void IMaaToolkit_Interface_ExecAgent(MaaTypes type, IMaaInstance maaInstance)
+    public static void IMaaToolkit_Interface_ExecAgent(MaaTypes type, IMaaInstance maaInstance)
     {
         Assert.IsNotNull(maaInstance);
         var maaToolkit = new MaaToolkit();
