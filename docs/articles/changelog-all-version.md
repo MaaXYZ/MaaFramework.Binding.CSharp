@@ -1,3 +1,12 @@
+## v1.8.9.1
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.9...v1.8.9.1
+
+### Fix
+
+- null custom handle caused by unpinned object @moomiji
+- a callback was made on a garbage collected delegate @moomiji
+
 ## v1.8.9
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.8.1...v1.8.9
