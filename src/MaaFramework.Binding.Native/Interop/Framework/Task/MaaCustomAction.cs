@@ -11,7 +11,7 @@
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 global using MaaActionApiTuple = (
-    MaaFramework.Binding.Interop.Native.MaaCustomActionApi Unmanaged,
+    System.Runtime.InteropServices.GCHandle Handle,
     MaaFramework.Binding.Custom.IMaaCustomAction Managed,
     MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension.RunDelegate RunMethod,
     MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension.AbortDelegate AbortMethod
@@ -47,7 +47,7 @@ public static class IMaaCustomActionExtension
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void AbortDelegate(MaaTransparentArg actionArg);
-    public static MaaCustomActionApi Convert(this IMaaCustomAction task, out MaaActionApiTuple tuple)
+    public static MaaCustomActionHandle Convert(this IMaaCustomAction task, out MaaActionApiTuple tuple)
     {
         MaaBool RunLocalMethod(MaaSyncContextHandle syncContext, string taskName, string customActionParam, MaaRectHandle curBox, string curRecDetail, MaaTransparentArg actionArg) => task.Run(new Binding.MaaSyncContext(syncContext), taskName, customActionParam, new Buffers.MaaRectBuffer(curBox), curRecDetail).ToMaaBool();
 
@@ -56,15 +56,18 @@ public static class IMaaCustomActionExtension
         RunDelegate RunMethod = RunLocalMethod;
         AbortDelegate AbortMethod = AbortLocalMethod;
 
-        tuple = (new MaaCustomActionApi()
+        var handle = GCHandle.Alloc(new MaaCustomActionApi()
         {
             RunFunctionPointer = Marshal.GetFunctionPointerForDelegate<RunDelegate>(RunMethod),
             AbortFunctionPointer = Marshal.GetFunctionPointerForDelegate<AbortDelegate>(AbortMethod),
-        },
+        }, GCHandleType.Pinned);
+
+        tuple = (
+            handle,
             task,
             RunMethod,
             AbortMethod
         );
-        return tuple.Unmanaged;
+        return handle.AddrOfPinnedObject();
     }
 }

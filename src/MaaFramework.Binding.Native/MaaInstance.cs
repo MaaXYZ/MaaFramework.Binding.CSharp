@@ -176,9 +176,9 @@ public class MaaInstance : MaaCommon, IMaaInstance<nint>
     public bool Register<T>(T custom) where T : IMaaCustomTask => custom switch
     {
         IMaaCustomAction task
-            => MaaRegisterCustomAction(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _action.Set(t.Managed.Name, t),
+            => MaaRegisterCustomAction(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _action.Set(t.Managed.Name, t, t.Handle),
         IMaaCustomRecognizer task
-            => MaaRegisterCustomRecognizer(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _recognizer.Set(t.Managed.Name, t),
+            => MaaRegisterCustomRecognizer(Handle, task.Name, task.Convert(out var t), nint.Zero).ToBoolean() && _recognizer.Set(t.Managed.Name, t, t.Handle),
         _ => throw new NotImplementedException(),
     };
 

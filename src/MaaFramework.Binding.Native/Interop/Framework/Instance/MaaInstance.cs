@@ -76,9 +76,7 @@ public static partial class MaaInstance
     ///     See MaaCustomRecognizer.h for details about how to create a custom recognizer.
     /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    #pragma warning disable SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
-    public static partial MaaBool MaaRegisterCustomRecognizer(MaaInstanceHandle inst, string name, MaaCustomRecognizerApi recognizer, MaaTransparentArg recognizerArg);
-    #pragma warning restore SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
+    public static partial MaaBool MaaRegisterCustomRecognizer(MaaInstanceHandle inst, string name, MaaCustomRecognizerHandle recognizer, MaaTransparentArg recognizerArg);
 
     /// <summary>
     ///     Unregister a custom recognizer from the instance.
@@ -101,9 +99,7 @@ public static partial class MaaInstance
     ///     See MaaCustomAction.h for details about how to create a custom action.
     /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    #pragma warning disable SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
-    public static partial MaaBool MaaRegisterCustomAction(MaaInstanceHandle inst, string name, MaaCustomActionApi action, MaaTransparentArg actionArg);
-    #pragma warning restore SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
+    public static partial MaaBool MaaRegisterCustomAction(MaaInstanceHandle inst, string name, MaaCustomActionHandle action, MaaTransparentArg actionArg);
 
     /// <summary>
     ///     Unregister a custom action from the instance.

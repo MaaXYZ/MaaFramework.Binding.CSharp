@@ -54,9 +54,7 @@ public static partial class MaaController
     /// <param name="callbackArg">The callback arg that will be passed to the callback function.</param>
     /// <returns>The handle of the created controller instance.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    #pragma warning disable SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
-    public static partial MaaControllerHandle MaaCustomControllerCreate(MaaCustomControllerApi handle, MaaTransparentArg handleArg, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);
-    #pragma warning restore SYSLIB1051 // 源生成的 P/Invoke 不支持指定的类型
+    public static partial MaaControllerHandle MaaCustomControllerCreate(MaaCustomControllerHandle handle, MaaTransparentArg handleArg, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaThriftControllerCreate(MaaThriftControllerType type, string host, int port, string config, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);

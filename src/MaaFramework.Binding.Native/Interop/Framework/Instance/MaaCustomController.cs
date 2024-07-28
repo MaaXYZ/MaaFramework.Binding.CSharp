@@ -11,7 +11,7 @@
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 global using MaaControllerApiTuple = (
-    MaaFramework.Binding.Interop.Native.MaaCustomControllerApi Unmanaged,
+    System.Runtime.InteropServices.GCHandle Handle,
     MaaFramework.Binding.Custom.IMaaCustomController Managed,
     MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.ConnectDelegate ConnectMethod,
     MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.RequestUuidDelegate RequestUuidMethod,
@@ -103,7 +103,7 @@ public static class IMaaCustomControllerExtension
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate MaaBool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, MaaTransparentArg handleArg);
-    public static MaaCustomControllerApi Convert(this IMaaCustomController task, out MaaControllerApiTuple tuple)
+    public static MaaCustomControllerHandle Convert(this IMaaCustomController task, out MaaControllerApiTuple tuple)
     {
         MaaBool ConnectLocalMethod(MaaTransparentArg handleArg) => task.Connect().ToMaaBool();
 
@@ -142,7 +142,7 @@ public static class IMaaCustomControllerExtension
         PressKeyDelegate PressKeyMethod = PressKeyLocalMethod;
         InputTextDelegate InputTextMethod = InputTextLocalMethod;
 
-        tuple = (new MaaCustomControllerApi()
+        var handle = GCHandle.Alloc(new MaaCustomControllerApi()
         {
             ConnectFunctionPointer = Marshal.GetFunctionPointerForDelegate<ConnectDelegate>(ConnectMethod),
             RequestUuidFunctionPointer = Marshal.GetFunctionPointerForDelegate<RequestUuidDelegate>(RequestUuidMethod),
@@ -156,7 +156,10 @@ public static class IMaaCustomControllerExtension
             TouchUpFunctionPointer = Marshal.GetFunctionPointerForDelegate<TouchUpDelegate>(TouchUpMethod),
             PressKeyFunctionPointer = Marshal.GetFunctionPointerForDelegate<PressKeyDelegate>(PressKeyMethod),
             InputTextFunctionPointer = Marshal.GetFunctionPointerForDelegate<InputTextDelegate>(InputTextMethod),
-        },
+        }, GCHandleType.Pinned);
+
+        tuple = (
+            handle,
             task,
             ConnectMethod,
             RequestUuidMethod,
@@ -171,6 +174,6 @@ public static class IMaaCustomControllerExtension
             PressKeyMethod,
             InputTextMethod
         );
-        return tuple.Unmanaged;
+        return handle.AddrOfPinnedObject();
     }
 }

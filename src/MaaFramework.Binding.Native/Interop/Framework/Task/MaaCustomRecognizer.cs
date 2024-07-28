@@ -11,7 +11,7 @@
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 global using MaaRecognizerApiTuple = (
-    MaaFramework.Binding.Interop.Native.MaaCustomRecognizerApi Unmanaged,
+    System.Runtime.InteropServices.GCHandle Handle,
     MaaFramework.Binding.Custom.IMaaCustomRecognizer Managed,
     MaaFramework.Binding.Interop.Native.IMaaCustomRecognizerExtension.AnalyzeDelegate AnalyzeMethod
 );
@@ -45,19 +45,22 @@ public static class IMaaCustomRecognizerExtension
     /// </remarks>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate MaaBool AnalyzeDelegate(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string taskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
-    public static MaaCustomRecognizerApi Convert(this IMaaCustomRecognizer task, out MaaRecognizerApiTuple tuple)
+    public static MaaCustomRecognizerHandle Convert(this IMaaCustomRecognizer task, out MaaRecognizerApiTuple tuple)
     {
         MaaBool AnalyzeLocalMethod(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, string taskName, string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail) => task.Analyze(new Binding.MaaSyncContext(syncContext), new MaaImageBuffer(image), taskName, customRecognitionParam, new Buffers.MaaRectBuffer(outBox), new Buffers.MaaStringBuffer(outDetail)).ToMaaBool();
 
         AnalyzeDelegate AnalyzeMethod = AnalyzeLocalMethod;
 
-        tuple = (new MaaCustomRecognizerApi()
+        var handle = GCHandle.Alloc(new MaaCustomRecognizerApi()
         {
             AnalyzeFunctionPointer = Marshal.GetFunctionPointerForDelegate<AnalyzeDelegate>(AnalyzeMethod),
-        },
+        }, GCHandleType.Pinned);
+
+        tuple = (
+            handle,
             task,
             AnalyzeMethod
         );
-        return tuple.Unmanaged;
+        return handle.AddrOfPinnedObject();
     }
 }
