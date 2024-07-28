@@ -13,8 +13,8 @@
 global using MaaActionApiTuple = (
     MaaFramework.Binding.Interop.Native.MaaCustomActionApi Unmanaged,
     MaaFramework.Binding.Custom.IMaaCustomAction Managed,
-    MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension.Run Run,
-    MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension.Abort Abort
+    MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension.RunDelegate RunMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension.AbortDelegate AbortMethod
 );
 
 using MaaFramework.Binding.Buffers;
@@ -33,8 +33,8 @@ namespace MaaFramework.Binding.Interop.Native;
 [StructLayout(LayoutKind.Sequential)]
 public class MaaCustomActionApi
 {
-    public nint Run;
-    public nint Abort;
+    public nint RunFunctionPointer;
+    public nint AbortFunctionPointer;
 }
 
 /// <summary>
@@ -43,24 +43,27 @@ public class MaaCustomActionApi
 public static class IMaaCustomActionExtension
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool Run(MaaSyncContextHandle syncContext, [MarshalAs(UnmanagedType.LPUTF8Str)] string taskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionParam, MaaRectHandle curBox, [MarshalAs(UnmanagedType.LPUTF8Str)] string curRecDetail, MaaTransparentArg actionArg);
+    public delegate MaaBool RunDelegate(MaaSyncContextHandle syncContext, [MarshalAs(UnmanagedType.LPUTF8Str)] string taskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionParam, MaaRectHandle curBox, [MarshalAs(UnmanagedType.LPUTF8Str)] string curRecDetail, MaaTransparentArg actionArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void Abort(MaaTransparentArg actionArg);
+    public delegate void AbortDelegate(MaaTransparentArg actionArg);
     public static MaaCustomActionApi Convert(this IMaaCustomAction task, out MaaActionApiTuple tuple)
     {
-        MaaBool Run(MaaSyncContextHandle syncContext, string taskName, string customActionParam, MaaRectHandle curBox, string curRecDetail, MaaTransparentArg actionArg) => task.Run(new Binding.MaaSyncContext(syncContext), taskName, customActionParam, new Buffers.MaaRectBuffer(curBox), curRecDetail).ToMaaBool();
+        MaaBool RunLocalMethod(MaaSyncContextHandle syncContext, string taskName, string customActionParam, MaaRectHandle curBox, string curRecDetail, MaaTransparentArg actionArg) => task.Run(new Binding.MaaSyncContext(syncContext), taskName, customActionParam, new Buffers.MaaRectBuffer(curBox), curRecDetail).ToMaaBool();
 
-        void Abort(MaaTransparentArg actionArg) => task.Abort();
+        void AbortLocalMethod(MaaTransparentArg actionArg) => task.Abort();
 
-        tuple = (new()
+        RunDelegate RunMethod = RunLocalMethod;
+        AbortDelegate AbortMethod = AbortLocalMethod;
+
+        tuple = (new MaaCustomActionApi()
         {
-            Run = Marshal.GetFunctionPointerForDelegate<Run>(Run),
-            Abort = Marshal.GetFunctionPointerForDelegate<Abort>(Abort),
+            RunFunctionPointer = Marshal.GetFunctionPointerForDelegate<RunDelegate>(RunMethod),
+            AbortFunctionPointer = Marshal.GetFunctionPointerForDelegate<AbortDelegate>(AbortMethod),
         },
             task,
-            Run,
-            Abort
+            RunMethod,
+            AbortMethod
         );
         return tuple.Unmanaged;
     }

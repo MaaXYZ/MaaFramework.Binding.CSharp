@@ -13,7 +13,7 @@
 global using MaaRecognizerApiTuple = (
     MaaFramework.Binding.Interop.Native.MaaCustomRecognizerApi Unmanaged,
     MaaFramework.Binding.Custom.IMaaCustomRecognizer Managed,
-    MaaFramework.Binding.Interop.Native.IMaaCustomRecognizerExtension.Analyze Analyze
+    MaaFramework.Binding.Interop.Native.IMaaCustomRecognizerExtension.AnalyzeDelegate AnalyzeMethod
 );
 
 using MaaFramework.Binding.Buffers;
@@ -32,7 +32,7 @@ namespace MaaFramework.Binding.Interop.Native;
 [StructLayout(LayoutKind.Sequential)]
 public class MaaCustomRecognizerApi
 {
-    public nint Analyze;
+    public nint AnalyzeFunctionPointer;
 }
 
 /// <summary>
@@ -44,17 +44,19 @@ public static class IMaaCustomRecognizerExtension
     ///     Write the recognition result to the out_box and return true if the recognition is successful. If the recognition fails, return false. You can also write details to the out_detail buffer.
     /// </remarks>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool Analyze(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string taskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
+    public delegate MaaBool AnalyzeDelegate(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, [MarshalAs(UnmanagedType.LPUTF8Str)] string taskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
     public static MaaCustomRecognizerApi Convert(this IMaaCustomRecognizer task, out MaaRecognizerApiTuple tuple)
     {
-        MaaBool Analyze(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, string taskName, string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail) => task.Analyze(new Binding.MaaSyncContext(syncContext), new MaaImageBuffer(image), taskName, customRecognitionParam, new Buffers.MaaRectBuffer(outBox), new Buffers.MaaStringBuffer(outDetail)).ToMaaBool();
+        MaaBool AnalyzeLocalMethod(MaaSyncContextHandle syncContext, MaaImageBufferHandle image, string taskName, string customRecognitionParam, MaaTransparentArg recognizerArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail) => task.Analyze(new Binding.MaaSyncContext(syncContext), new MaaImageBuffer(image), taskName, customRecognitionParam, new Buffers.MaaRectBuffer(outBox), new Buffers.MaaStringBuffer(outDetail)).ToMaaBool();
 
-        tuple = (new()
+        AnalyzeDelegate AnalyzeMethod = AnalyzeLocalMethod;
+
+        tuple = (new MaaCustomRecognizerApi()
         {
-            Analyze = Marshal.GetFunctionPointerForDelegate<Analyze>(Analyze),
+            AnalyzeFunctionPointer = Marshal.GetFunctionPointerForDelegate<AnalyzeDelegate>(AnalyzeMethod),
         },
             task,
-            Analyze
+            AnalyzeMethod
         );
         return tuple.Unmanaged;
     }

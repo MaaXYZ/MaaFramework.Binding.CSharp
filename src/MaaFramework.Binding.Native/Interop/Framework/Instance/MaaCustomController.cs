@@ -13,18 +13,18 @@
 global using MaaControllerApiTuple = (
     MaaFramework.Binding.Interop.Native.MaaCustomControllerApi Unmanaged,
     MaaFramework.Binding.Custom.IMaaCustomController Managed,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.Connect Connect,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.RequestUuid RequestUuid,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.StartApp StartApp,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.StopApp StopApp,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.Screencap Screencap,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.Click Click,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.Swipe Swipe,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchDown TouchDown,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchMove TouchMove,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchUp TouchUp,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.PressKey PressKey,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.InputText InputText
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.ConnectDelegate ConnectMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.RequestUuidDelegate RequestUuidMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.StartAppDelegate StartAppMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.StopAppDelegate StopAppMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.ScreencapDelegate ScreencapMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.ClickDelegate ClickMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.SwipeDelegate SwipeMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchDownDelegate TouchDownMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchMoveDelegate TouchMoveMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchUpDelegate TouchUpMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.PressKeyDelegate PressKeyMethod,
+    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.InputTextDelegate InputTextMethod
 );
 
 using MaaFramework.Binding.Buffers;
@@ -43,18 +43,18 @@ namespace MaaFramework.Binding.Interop.Native;
 [StructLayout(LayoutKind.Sequential)]
 public class MaaCustomControllerApi
 {
-    public nint Connect;
-    public nint RequestUuid;
-    public nint StartApp;
-    public nint StopApp;
-    public nint Screencap;
-    public nint Click;
-    public nint Swipe;
-    public nint TouchDown;
-    public nint TouchMove;
-    public nint TouchUp;
-    public nint PressKey;
-    public nint InputText;
+    public nint ConnectFunctionPointer;
+    public nint RequestUuidFunctionPointer;
+    public nint StartAppFunctionPointer;
+    public nint StopAppFunctionPointer;
+    public nint ScreencapFunctionPointer;
+    public nint ClickFunctionPointer;
+    public nint SwipeFunctionPointer;
+    public nint TouchDownFunctionPointer;
+    public nint TouchMoveFunctionPointer;
+    public nint TouchUpFunctionPointer;
+    public nint PressKeyFunctionPointer;
+    public nint InputTextFunctionPointer;
 }
 
 /// <summary>
@@ -63,100 +63,113 @@ public class MaaCustomControllerApi
 public static class IMaaCustomControllerExtension
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool Connect(MaaTransparentArg handleArg);
+    public delegate MaaBool ConnectDelegate(MaaTransparentArg handleArg);
 
     /// <summary>
     ///     Write result to buffer.
     /// </summary>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool RequestUuid(MaaTransparentArg handleArg, MaaStringBufferHandle buffer);
+    public delegate MaaBool RequestUuidDelegate(MaaTransparentArg handleArg, MaaStringBufferHandle buffer);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool StartApp([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, MaaTransparentArg handleArg);
+    public delegate MaaBool StartAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool StopApp([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, MaaTransparentArg handleArg);
+    public delegate MaaBool StopAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, MaaTransparentArg handleArg);
 
     /// <summary>
     ///     Write result to buffer.
     /// </summary>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool Screencap(MaaTransparentArg handleArg, MaaImageBufferHandle buffer);
+    public delegate MaaBool ScreencapDelegate(MaaTransparentArg handleArg, MaaImageBufferHandle buffer);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool Click(int x, int y, MaaTransparentArg handleArg);
+    public delegate MaaBool ClickDelegate(int x, int y, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool Swipe(int x1, int y1, int x2, int y2, int duration, MaaTransparentArg handleArg);
+    public delegate MaaBool SwipeDelegate(int x1, int y1, int x2, int y2, int duration, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool TouchDown(int contact, int x, int y, int pressure, MaaTransparentArg handleArg);
+    public delegate MaaBool TouchDownDelegate(int contact, int x, int y, int pressure, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool TouchMove(int contact, int x, int y, int pressure, MaaTransparentArg handleArg);
+    public delegate MaaBool TouchMoveDelegate(int contact, int x, int y, int pressure, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool TouchUp(int contact, MaaTransparentArg handleArg);
+    public delegate MaaBool TouchUpDelegate(int contact, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool PressKey(int keycode, MaaTransparentArg handleArg);
+    public delegate MaaBool PressKeyDelegate(int keycode, MaaTransparentArg handleArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool InputText([MarshalAs(UnmanagedType.LPUTF8Str)] string text, MaaTransparentArg handleArg);
+    public delegate MaaBool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, MaaTransparentArg handleArg);
     public static MaaCustomControllerApi Convert(this IMaaCustomController task, out MaaControllerApiTuple tuple)
     {
-        MaaBool Connect(MaaTransparentArg handleArg) => task.Connect().ToMaaBool();
+        MaaBool ConnectLocalMethod(MaaTransparentArg handleArg) => task.Connect().ToMaaBool();
 
-        MaaBool RequestUuid(MaaTransparentArg handleArg, MaaStringBufferHandle buffer) => task.RequestUuid(new Buffers.MaaStringBuffer(buffer)).ToMaaBool();
+        MaaBool RequestUuidLocalMethod(MaaTransparentArg handleArg, MaaStringBufferHandle buffer) => task.RequestUuid(new Buffers.MaaStringBuffer(buffer)).ToMaaBool();
 
-        MaaBool StartApp(string intent, MaaTransparentArg handleArg) => task.StartApp(intent).ToMaaBool();
+        MaaBool StartAppLocalMethod(string intent, MaaTransparentArg handleArg) => task.StartApp(intent).ToMaaBool();
 
-        MaaBool StopApp(string intent, MaaTransparentArg handleArg) => task.StopApp(intent).ToMaaBool();
+        MaaBool StopAppLocalMethod(string intent, MaaTransparentArg handleArg) => task.StopApp(intent).ToMaaBool();
 
-        MaaBool Screencap(MaaTransparentArg handleArg, MaaImageBufferHandle buffer) => task.Screencap(new MaaImageBuffer(buffer)).ToMaaBool();
+        MaaBool ScreencapLocalMethod(MaaTransparentArg handleArg, MaaImageBufferHandle buffer) => task.Screencap(new MaaImageBuffer(buffer)).ToMaaBool();
 
-        MaaBool Click(int x, int y, MaaTransparentArg handleArg) => task.Click(x, y).ToMaaBool();
+        MaaBool ClickLocalMethod(int x, int y, MaaTransparentArg handleArg) => task.Click(x, y).ToMaaBool();
 
-        MaaBool Swipe(int x1, int y1, int x2, int y2, int duration, MaaTransparentArg handleArg) => task.Swipe(x1, y1, x2, y2, duration).ToMaaBool();
+        MaaBool SwipeLocalMethod(int x1, int y1, int x2, int y2, int duration, MaaTransparentArg handleArg) => task.Swipe(x1, y1, x2, y2, duration).ToMaaBool();
 
-        MaaBool TouchDown(int contact, int x, int y, int pressure, MaaTransparentArg handleArg) => task.TouchDown(contact, x, y, pressure).ToMaaBool();
+        MaaBool TouchDownLocalMethod(int contact, int x, int y, int pressure, MaaTransparentArg handleArg) => task.TouchDown(contact, x, y, pressure).ToMaaBool();
 
-        MaaBool TouchMove(int contact, int x, int y, int pressure, MaaTransparentArg handleArg) => task.TouchMove(contact, x, y, pressure).ToMaaBool();
+        MaaBool TouchMoveLocalMethod(int contact, int x, int y, int pressure, MaaTransparentArg handleArg) => task.TouchMove(contact, x, y, pressure).ToMaaBool();
 
-        MaaBool TouchUp(int contact, MaaTransparentArg handleArg) => task.TouchUp(contact).ToMaaBool();
+        MaaBool TouchUpLocalMethod(int contact, MaaTransparentArg handleArg) => task.TouchUp(contact).ToMaaBool();
 
-        MaaBool PressKey(int keycode, MaaTransparentArg handleArg) => task.PressKey(keycode).ToMaaBool();
+        MaaBool PressKeyLocalMethod(int keycode, MaaTransparentArg handleArg) => task.PressKey(keycode).ToMaaBool();
 
-        MaaBool InputText(string text, MaaTransparentArg handleArg) => task.InputText(text).ToMaaBool();
+        MaaBool InputTextLocalMethod(string text, MaaTransparentArg handleArg) => task.InputText(text).ToMaaBool();
 
-        tuple = (new()
+        ConnectDelegate ConnectMethod = ConnectLocalMethod;
+        RequestUuidDelegate RequestUuidMethod = RequestUuidLocalMethod;
+        StartAppDelegate StartAppMethod = StartAppLocalMethod;
+        StopAppDelegate StopAppMethod = StopAppLocalMethod;
+        ScreencapDelegate ScreencapMethod = ScreencapLocalMethod;
+        ClickDelegate ClickMethod = ClickLocalMethod;
+        SwipeDelegate SwipeMethod = SwipeLocalMethod;
+        TouchDownDelegate TouchDownMethod = TouchDownLocalMethod;
+        TouchMoveDelegate TouchMoveMethod = TouchMoveLocalMethod;
+        TouchUpDelegate TouchUpMethod = TouchUpLocalMethod;
+        PressKeyDelegate PressKeyMethod = PressKeyLocalMethod;
+        InputTextDelegate InputTextMethod = InputTextLocalMethod;
+
+        tuple = (new MaaCustomControllerApi()
         {
-            Connect = Marshal.GetFunctionPointerForDelegate<Connect>(Connect),
-            RequestUuid = Marshal.GetFunctionPointerForDelegate<RequestUuid>(RequestUuid),
-            StartApp = Marshal.GetFunctionPointerForDelegate<StartApp>(StartApp),
-            StopApp = Marshal.GetFunctionPointerForDelegate<StopApp>(StopApp),
-            Screencap = Marshal.GetFunctionPointerForDelegate<Screencap>(Screencap),
-            Click = Marshal.GetFunctionPointerForDelegate<Click>(Click),
-            Swipe = Marshal.GetFunctionPointerForDelegate<Swipe>(Swipe),
-            TouchDown = Marshal.GetFunctionPointerForDelegate<TouchDown>(TouchDown),
-            TouchMove = Marshal.GetFunctionPointerForDelegate<TouchMove>(TouchMove),
-            TouchUp = Marshal.GetFunctionPointerForDelegate<TouchUp>(TouchUp),
-            PressKey = Marshal.GetFunctionPointerForDelegate<PressKey>(PressKey),
-            InputText = Marshal.GetFunctionPointerForDelegate<InputText>(InputText),
+            ConnectFunctionPointer = Marshal.GetFunctionPointerForDelegate<ConnectDelegate>(ConnectMethod),
+            RequestUuidFunctionPointer = Marshal.GetFunctionPointerForDelegate<RequestUuidDelegate>(RequestUuidMethod),
+            StartAppFunctionPointer = Marshal.GetFunctionPointerForDelegate<StartAppDelegate>(StartAppMethod),
+            StopAppFunctionPointer = Marshal.GetFunctionPointerForDelegate<StopAppDelegate>(StopAppMethod),
+            ScreencapFunctionPointer = Marshal.GetFunctionPointerForDelegate<ScreencapDelegate>(ScreencapMethod),
+            ClickFunctionPointer = Marshal.GetFunctionPointerForDelegate<ClickDelegate>(ClickMethod),
+            SwipeFunctionPointer = Marshal.GetFunctionPointerForDelegate<SwipeDelegate>(SwipeMethod),
+            TouchDownFunctionPointer = Marshal.GetFunctionPointerForDelegate<TouchDownDelegate>(TouchDownMethod),
+            TouchMoveFunctionPointer = Marshal.GetFunctionPointerForDelegate<TouchMoveDelegate>(TouchMoveMethod),
+            TouchUpFunctionPointer = Marshal.GetFunctionPointerForDelegate<TouchUpDelegate>(TouchUpMethod),
+            PressKeyFunctionPointer = Marshal.GetFunctionPointerForDelegate<PressKeyDelegate>(PressKeyMethod),
+            InputTextFunctionPointer = Marshal.GetFunctionPointerForDelegate<InputTextDelegate>(InputTextMethod),
         },
             task,
-            Connect,
-            RequestUuid,
-            StartApp,
-            StopApp,
-            Screencap,
-            Click,
-            Swipe,
-            TouchDown,
-            TouchMove,
-            TouchUp,
-            PressKey,
-            InputText
+            ConnectMethod,
+            RequestUuidMethod,
+            StartAppMethod,
+            StopAppMethod,
+            ScreencapMethod,
+            ClickMethod,
+            SwipeMethod,
+            TouchDownMethod,
+            TouchMoveMethod,
+            TouchUpMethod,
+            PressKeyMethod,
+            InputTextMethod
         );
         return tuple.Unmanaged;
     }
