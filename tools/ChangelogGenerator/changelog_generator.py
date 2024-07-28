@@ -8,6 +8,7 @@ import urllib.error
 cur_dir = os.path.dirname(__file__)
 contributors_path = os.path.abspath(os.path.join(cur_dir, 'contributors.json'))
 changelog_path = os.path.abspath(os.path.join(cur_dir, '../../CHANGELOG.md'))
+changelogs_path = os.path.abspath(os.path.join(cur_dir, '../../docs/articles/changelog-all-version.md'))
 
 with_hash = False
 with_commitizen = False
@@ -255,10 +256,22 @@ def main(tag_name=None, latest=None):
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/{latest}...{tag_name}
 """
+    changelogs_content = f"""## {tag_name}
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/{latest}...{tag_name}
+"""
     changelog_content = changelog_content + res[0]
+    changelogs_content = changelogs_content + res[0] + "\n"
     print(changelog_content)
+
     with open(changelog_path, "w", encoding="utf8") as f:
         f.write(changelog_content)
+
+    with open(changelogs_path, "r+", encoding="utf8") as f:
+        changelogs = f.read()
+        f.seek(0)
+        f.write(changelogs_content)
+        f.write(changelogs)
 
     with open(contributors_path, "w") as f:
         json.dump(contributors, f)
