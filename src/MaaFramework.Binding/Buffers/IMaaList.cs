@@ -6,8 +6,8 @@ namespace MaaFramework.Binding.Buffers;
 ///     An interface defining wrapped members for MaaStringListBuffer with generic handle.
 /// </summary>
 /// <typeparam name="THandle">The type of handle.</typeparam>
-/// <typeparam name="TBuffer">The type of buffer.</typeparam>
-public interface IMaaList<out THandle, TBuffer> : IMaaList<TBuffer>, IMaaDisposableHandle<THandle>
+/// <typeparam name="T">The type of buffer.</typeparam>
+public interface IMaaList<out THandle, T> : IMaaList<T>, IMaaDisposableHandle<THandle> where T : new()
 {
 }
 
@@ -15,7 +15,7 @@ public interface IMaaList<out THandle, TBuffer> : IMaaList<TBuffer>, IMaaDisposa
 ///     An interface defining wrapped members for MaaStringListBuffer.
 /// </summary>
 /// <typeparam name="T">The type of buffer.</typeparam>
-public interface IMaaList<T> : IDisposable, IList<T>
+public interface IMaaList<T> : IDisposable, IList<T> where T : new()
 {
     /// <summary>
     ///     Gets a value indicates whether the string of the MaaStringListBuffer is empty.

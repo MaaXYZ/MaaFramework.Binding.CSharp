@@ -1,4 +1,5 @@
-﻿using MaaFramework.Binding.Interop.Native;
+﻿using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaUtility;
 
 namespace MaaFramework.Binding;
@@ -36,5 +37,57 @@ public class MaaUtility : IMaaUtility
         };
 
         return MaaSetGlobalOption((MaaGlobalOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaQueryTaskDetail"/>.
+    /// </remarks>
+    public bool QueryTaskDetail(MaaTaskId taskId, out string entry, out MaaNodeId[] nodeIdList)
+    {
+        entry = string.Empty;
+        nodeIdList = [];
+        MaaSize nodeIdListSize = 0;
+        using var buffer = new MaaStringBuffer();
+        if (!MaaQueryTaskDetail(taskId, buffer.Handle, null, ref nodeIdListSize).ToBoolean())
+            return false;
+
+        entry = buffer.ToString();
+        nodeIdList = new MaaNodeId[nodeIdListSize];
+        return MaaQueryTaskDetail(taskId, buffer.Handle, nodeIdList, ref nodeIdListSize).ToBoolean();
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaQueryNodeDetail"/>.
+    /// </remarks>
+    public bool QueryNodeDetail(MaaNodeId nodeId, out string name, out MaaRecoId recognitionId, out bool runCompleted)
+    {
+        using var buffer = new MaaStringBuffer();
+        var ret = MaaQueryNodeDetail(nodeId, buffer.Handle, out recognitionId, out var runCompletedByte).ToBoolean();
+        name = buffer.ToString();
+        runCompleted = runCompletedByte.ToBoolean();
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaQueryRecognitionDetail"/>.
+    /// </remarks>
+    public bool QueryRecognitionDetail<T>(MaaRecoId recognitionId, out string name, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, T? raw, IMaaList<T>? draws)
+        where T : IMaaImageBuffer, new()
+    {
+        var hitBoxHandle = (hitBox as IMaaRectBuffer<nint>)?.Handle ?? MaaRectHandle.Zero;
+        var rawHandle = (raw as IMaaImageBuffer<nint>)?.Handle ?? MaaImageBufferHandle.Zero;
+        var drawsHandle = (draws as IMaaList<nint, T>)?.Handle ?? MaaImageListBufferHandle.Zero;
+
+        using var nameBuffer = new MaaStringBuffer();
+        using var detailJsonBuffer = new MaaStringBuffer();
+
+        var ret = MaaQueryRecognitionDetail(recognitionId, nameBuffer.Handle, out var hitByte, hitBoxHandle, detailJsonBuffer.Handle, rawHandle, drawsHandle).ToBoolean();
+        name = nameBuffer.ToString();
+        hit = hitByte.ToBoolean();
+        detailJson = detailJsonBuffer.ToString();
+        return ret;
     }
 }

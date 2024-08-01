@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
 namespace MaaFramework.Binding.UnitTests;
@@ -254,7 +255,7 @@ public class Test_IMaaInstance
         // Third job
         var job =
             maaInstance.AppendTask(taskEntryName);
-        // Wait the second job
+        // Wait the third job
         Interface_IMaaPost_Success(job);
         Interface_Running_AllTasksFinished(maaInstance);
     }
@@ -276,6 +277,53 @@ public class Test_IMaaInstance
             MaaJobStatus.Success, job.Wait());
         Assert.AreEqual(
             MaaJobStatus.Success, job.Status);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), "AppendRecognition", """{"AppendRecognition":{"recognition":"OCR"}}""")]
+    public void IMaaMaaUtility_Query(MaaTypes type, IMaaInstance maaInstance, string taskEntryName, string diff)
+    {
+        Assert.IsNotNull(maaInstance);
+        var job =
+            maaInstance.AppendRecognition(taskEntryName, diff);
+        Interface_IMaaPost_Success(job);
+
+        Assert.IsTrue(
+            maaInstance.Utility.QueryTaskDetail(job.Id, out var enter, out var nodeIdList));
+        Assert.AreEqual(
+            taskEntryName, enter);
+        Assert.IsTrue(
+            nodeIdList.Length > 0);
+
+        Assert.IsTrue(
+            maaInstance.Utility.QueryNodeDetail(nodeIdList[0], out var nodeName, out var recognitionId, out var runCompleted));
+        Assert.IsFalse(
+            runCompleted);
+
+        using var hitBox = new MaaRectBuffer();
+        // using var raw = new MaaImageBuffer();
+        // using var draws = new MaaImageList();
+        Assert.IsTrue(
+            maaInstance.Utility.QueryRecognitionDetail<MaaImageBuffer>(recognitionId, out var recognitionName, out var hit, hitBox, out var detailJson, null, null));
+        Assert.AreNotEqual(string.Empty,
+            detailJson);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), "AppendRecognition", """{"AppendRecognition":{"recognition":"OCR"}}""")]
+    public void MaaTaskJob_Query(MaaTypes type, IMaaInstance maaInstance, string taskEntryName, string diff)
+    {
+        Assert.IsNotNull(maaInstance);
+        var job =
+            maaInstance.AppendRecognition(taskEntryName, diff);
+        Interface_IMaaPost_Success(job);
+
+        Assert.IsNotNull(
+            job.QueryTaskDetail());
+        Assert.IsNull(
+            job.QueryNodeDetail(index: 1));
+        Assert.IsNotNull(
+            job.QueryRecognitionDetail());
     }
 
     [TestMethod]
