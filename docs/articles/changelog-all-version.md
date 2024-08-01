@@ -1,3 +1,11 @@
+## v1.8.9.2
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.9.1...v1.8.9.2
+
+### New features
+
+- add query extension for MaaTaskJob & wrap query api @moomiji
+
 ## v1.8.9.1
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.9...v1.8.9.1
