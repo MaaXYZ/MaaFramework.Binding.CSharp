@@ -8,6 +8,7 @@ $fileContent | Set-Content -Path index.md
 
 if ($env:GITHUB_ACTIONS) {
     docfx
+    7z a docs.zip _site\
 }
 else {
     docfx --serve --open-browser

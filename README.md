@@ -44,11 +44,34 @@ See MaaFramework document ([en-us](https://github.com/MaaXYZ/MaaFramework/blob/v
 
 Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) in MaaFramework.Binding.CSharp.
 
+### Add Packages
+
+#### Release
+
+[![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
+
+``` ps1
+dotnet add package Maa.Framework --prerelease
+```
+
+#### Nightly Build
+
+Download `nupkgs.zip` from [CI Action](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/actions/workflows/ci.yml) and extract files to `.\nupkgs\`.
+
+- shell
+``` ps1
+dotnet add package Maa.Framework --prerelease -s .\nupkgs\
+```
+
+- or .csproj
+``` xml
+  <PropertyGroup>
+    <RestoreSources>$(RestoreSources);$(FullPath of .\nupkgs\)</RestoreSources>
+  </PropertyGroup>
+```
 ### Run Code
 
-> Pre-work:
-  `dotnet add package Maa.Framework;`
-  `adb connect HOST[:PORT];`
+> Pre-work: `adb connect HOST[:PORT]`
 
 ```CSharp
 using MaaFramework.Binding;
@@ -141,6 +164,8 @@ internal sealed class MyAct : IMaaCustomAction
 We have written detailed documentation comments in source code files.
 
 You can also visit [API Reference](https://maaxyz.github.io/MaaFramework.Binding.CSharp/api/MaaFramework.Binding.html) and [Unit Tests](./src/MaaFramework.Binding.UnitTests) for more information.
+
+If you still intend to use a API Reference specific to your preferred version of MaaFramework.Binding.CSharp, you may refer to the releases page of the project and download the attached docs.zip file.
 
 ## Contributing
 

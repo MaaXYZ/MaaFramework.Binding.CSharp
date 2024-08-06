@@ -29,9 +29,10 @@ public class Test_IMaaController
     [ClassInitialize]
     public static void InitializeClass(TestContext context)
     {
+        // The minimum Android API level for MaaTouch is 23.
         InitializeData(AdbControllerTypes.InputPresetMaaTouch);
         MaaTouchData = Data;
-#if !GITHUB_ACTIONS
+#if !GITHUB_ACTIONS // MiniTouch crashes.
         InitializeData(AdbControllerTypes.InputPresetMiniTouch);
 #endif
         MiniTouchData = Data;
@@ -212,7 +213,11 @@ public class Test_IMaaController
     }
 
     [TestMethod]
+#if GITHUB_ACTIONS // true if Android API level is less than 26
+    [MaaData(MaaTypes.All, nameof(Data), true, "com.android.settings")]
+#else
     [MaaData(MaaTypes.All, nameof(Data), false, "com.android.settings")]
+#endif
     [MaaData(MaaTypes.All, nameof(Data), true, "com.android.settings/.Settings")]
     public void Interface_StartApp_StopApp(MaaTypes type, IMaaController maaController, bool assertSuccess, string intent)
     {

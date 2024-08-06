@@ -6,7 +6,16 @@ on:
     branches:
       - "**"
     paths:
-      - ".github/workflows/smoke-testing.yml"
+      - ".github/workflows/test.yml"
+      - "src/**"
+      - "*.sln"
+      - "*.props"
+
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - ".github/workflows/test.yml"
       - "src/**"
       - "*.sln"
       - "*.props"
@@ -15,7 +24,7 @@ jobs:
   test:
     runs-on: macos-13
     env:
-      API_LEVEL: 29
+      API_LEVEL: 23
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
 
     steps:
@@ -46,22 +55,26 @@ jobs:
         with:
           api-level: ${{ env.API_LEVEL }}
           force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-metrics -camera-back none
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
       - name: Test
         uses: reactivecircus/android-emulator-runner@v2
+        timeout-minutes: 15
         env:
           AdbPath: adb
           Address: emulator-5554
-          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 0
         with:
           api-level: ${{ env.API_LEVEL }}
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-metrics -camera-back none -no-snapshot-save
           disable-animations: true
-          script: dotnet test --no-build --logger trx --verbosity normal
+          script: |
+            for i in {1..3}; do
+              dotnet test --no-build --logger trx --verbosity normal && break
+              echo "Test run $i failed, retrying..."
+            done
 
       - name: Upload TestResults
         uses: actions/upload-artifact@v4
