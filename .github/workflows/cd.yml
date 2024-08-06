@@ -66,6 +66,16 @@ jobs:
           dotnet build --configuration Release --no-restore -p:Version=${{ steps.meta.outputs.version }} -p:RepositoryBranch=$(git rev-parse --abbrev-ref HEAD) -p:RepositoryCommit=$(git rev-parse HEAD)
           mv ./src/**/bin/Release/*nupkg ./
 
+      - run: dotnet tool update -g docfx
+      - run: ./docs/build.ps1
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
       - name: Publish the package to nugettest.org
         if: ${{ steps.meta.outputs.is_release == 'false' || github.event.inputs.Publish == 'NuGetTest' }}
         run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETTEST_TOKEN }} --source ${{ env.NUGETTEST_PACKAGE_SOURCE }}
@@ -79,15 +89,4 @@ jobs:
         with:
           body_path: CHANGELOG.md
           tag_name: ${{ steps.meta.outputs.tag }}
-
-      - run: dotnet tool update -g docfx
-      - run: ./docs/build.ps1
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'docs/_site'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          files: docs/docs.zip

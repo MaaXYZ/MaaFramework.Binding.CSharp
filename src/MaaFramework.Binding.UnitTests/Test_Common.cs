@@ -22,7 +22,7 @@ public static class Common
 
     private static void InitializeInfo(TestContext testContext)
     {
-#if GITHUB_ACTIONS
+#if GITHUB_ACTIONS // use environment "AdbPath"
         DeviceInfo[] devices = [];
 #else
         var devices = new MaaToolkit().Device.Find();
