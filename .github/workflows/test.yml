@@ -6,7 +6,16 @@ on:
     branches:
       - "**"
     paths:
-      - ".github/workflows/smoke-testing.yml"
+      - ".github/workflows/test.yml"
+      - "src/**"
+      - "*.sln"
+      - "*.props"
+
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - ".github/workflows/test.yml"
       - "src/**"
       - "*.sln"
       - "*.props"
@@ -55,7 +64,7 @@ jobs:
         env:
           AdbPath: adb
           Address: emulator-5554
-          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 0
+          ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 60
         with:
           api-level: ${{ env.API_LEVEL }}
           force-avd-creation: false

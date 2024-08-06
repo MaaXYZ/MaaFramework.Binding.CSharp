@@ -22,29 +22,33 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [ windows-latest ] # [windows-latest, ubuntu-latest, macos-latest]
-        arch: [ x86_64 ] # [aarch64, x86_64]
-        dotnet: [ '7.0', '8.0' ]
-      fail-fast: false
     env:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
 
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: | 
+            7.0.x
+            8.0.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
       - run: dotnet restore --locked-mode
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore --framework net${{ matrix.dotnet }}
+        run: dotnet build --configuration Release --no-restore
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: nupkgs
+          path: | 
+            src/**/*.nupkg
+            src/**/*.snupkg
+          retention-days: 30
 
   lint:
     runs-on: windows-latest
