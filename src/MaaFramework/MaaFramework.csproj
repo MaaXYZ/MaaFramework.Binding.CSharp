@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="\" />
+        <None Include="$(NUGET_PACKAGES)\maa.framework.runtimes\*\docs\**\*.*" Pack="true" PackagePath="docs" />
 
         <!-- Avoid NU5128 warning. TFM in dependencies group of the nuspec must match lib/ref content. -->
         <None Include="lib\**\*" Pack="true" PackagePath="lib" />
@@ -28,7 +29,7 @@
 
     <ItemGroup>
         <!-- PrivateAssets set to None to ensure the build targets/props are propagated to parent project -->
-        <PackageReference Include="Maa.AgentBinary" />
+        <PackageReference Include="Maa.AgentBinary" PrivateAssets="None" />
     </ItemGroup>
 
 </Project>
