@@ -45,7 +45,7 @@
 
   <!-- Metadata Variable -->
   <PropertyGroup>
-    <CurrentYear>$([System.DateTime]::Now.Year)</CurrentYear>
+    <CurrentYear>$([System.DateTime]::UtcNow.Year)</CurrentYear>
   </PropertyGroup>
 
   <!-- Assembly Metadata -->
@@ -59,7 +59,6 @@
 
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
-    <Version Condition="'$(Version)' == ''">1.0.0-dev</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
     <PackageIcon>maa-logo_128x128.png</PackageIcon>

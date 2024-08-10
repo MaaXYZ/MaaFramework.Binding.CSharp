@@ -6,10 +6,9 @@ on:
       Publish:
         description: 'Publish option'
         required: true
-        default: 'None'
+        default: 'NuGetTest'
         type: choice
         options:
-          - None
           - NuGet
           - NuGetTest
   push:
@@ -17,76 +16,90 @@ on:
       - "**"
     paths:
       - ".github/workflows/cd.yml"
+      - "docs/build.ps1"
     tags:
       - "v*"
 
 jobs:
-  release:
+  build:
     runs-on: windows-latest
-    permissions:
-      contents: write
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
     env:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
-      NUGET_PACKAGE_SOURCE: https://api.nuget.org/v3/index.json # need ${{ secrets.NUGET_TOKEN }}
-      NUGETTEST_PACKAGE_SOURCE: https://apiint.nugettest.org/v3/index.json # need ${{ secrets.NUGETTEST_TOKEN }} (Expires in a day)
-
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
+
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: | 
+          dotnet-version: |
             7.0.x
             8.0.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
-      - run: dotnet restore --locked-mode
+      - run: |
+          dotnet restore --locked-mode
+          dotnet tool update -g dotnet-script
+          dotnet tool update -g docfx
 
-      - id: meta
-        shell: bash
+      - id: build
         run: |
-          is_release=${{ startsWith(github.ref, 'refs/tags/v') }}
-          tag=$(git describe --tags --match "v*" ${{ github.ref }} || true)
-          if ! $($is_release) ; then
-            prefix=${tag%-*-*}
-            suffix=${tag#$prefix-}
-            tag="$prefix-ci.$suffix"
-          fi
+          dotnet script ./tools/Builder/Build.csx
+          ./docs/build.ps1
 
-          echo tag=$tag | tee -a $GITHUB_OUTPUT
-          echo version=${tag#v} | tee -a $GITHUB_OUTPUT
-          echo is_release=$is_release | tee -a $GITHUB_OUTPUT
-
-      - name: Build
-        run: |
-          dotnet build --configuration Release --no-restore -p:Version=${{ steps.meta.outputs.version }} -p:RepositoryBranch=$(git rev-parse --abbrev-ref HEAD) -p:RepositoryCommit=$(git rev-parse HEAD)
-          mv ./src/**/bin/Release/*nupkg ./
-
-      - run: dotnet tool update -g docfx
-      - run: ./docs/build.ps1
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nupkgs
+          path: nupkgs
+          retention-days: 7
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/_site
+    outputs:
+      tag: ${{ steps.build.outputs.tag }}
+      version: ${{ steps.build.outputs.version }}
+      is_release: ${{ steps.build.outputs.is_release }}
+
+  test:
+    needs: [ build ]
+    runs-on: windows-latest
+    if: needs.build.outputs.is_release != 'True' && github.event.inputs.Publish != 'NuGet'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: nupkgs
+      - name: Publish the package to nugettest.org # need secrets.NUGETTEST_TOKEN
+        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETTEST_TOKEN }} --source https://apiint.nugettest.org/v3/index.json
+
+  release:
+    needs: [ build ]
+    runs-on: windows-latest
+    if: needs.build.outputs.is_release == 'True' || github.event.inputs.Publish == 'NuGet'
+    permissions:
+      contents: write
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Publish the package to nuget.org # need secrets.NUGET_TOKEN
+        run: |
+          cd nupkgs
+          dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json
+
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Publish the package to nugettest.org
-        if: ${{ steps.meta.outputs.is_release == 'false' || github.event.inputs.Publish == 'NuGetTest' }}
-        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETTEST_TOKEN }} --source ${{ env.NUGETTEST_PACKAGE_SOURCE }}
+      - name: Re-zip docs
+        run: |
+          cd github-pages
+          7z x artifact.tar -o${{ needs.build.outputs.version }}
+          7z a docs.zip ${{ needs.build.outputs.version }}
 
-      - name: Publish the package to nuget.org
-        if: ${{ steps.meta.outputs.is_release == 'true' || github.event.inputs.Publish == 'NuGet' }}
-        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_TOKEN }} --source ${{ env.NUGET_PACKAGE_SOURCE }}
-
-      - uses: softprops/action-gh-release@v2
-        if: ${{ steps.meta.outputs.is_release == 'true' }}
+      - if: needs.build.outputs.is_release == 'True'
+        uses: softprops/action-gh-release@v2
         with:
           body_path: CHANGELOG.md
-          tag_name: ${{ steps.meta.outputs.tag }}
-          files: docs/docs.zip
+          tag_name: ${{ needs.build.outputs.tag }}
+          files: github-pages/docs.zip

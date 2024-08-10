@@ -1,3 +1,4 @@
+echo "=============== build docs ==============="
 cd $PSScriptRoot
 cp -Force ../README.md index.md
 
@@ -8,7 +9,6 @@ $fileContent | Set-Content -Path index.md
 
 if ($env:GITHUB_ACTIONS) {
     docfx
-    7z a docs.zip _site\
 }
 else {
     docfx --serve --open-browser

@@ -7,6 +7,8 @@ on:
       - "**"
     paths:
       - ".github/workflows/ci.yml"
+      - "tools/Builder/Build.csx"
+      - "tools/Linters/NamespaceLinter.csx"
       - "src/**"
       - "*.sln"
       - "*.props"
@@ -22,33 +24,33 @@ on:
 
 jobs:
   build:
+    runs-on: windows-latest
     env:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
-
-    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
+          fetch-depth: 0
+
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: | 
+          dotnet-version: |
             7.0.x
             8.0.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
       - run: dotnet restore --locked-mode
+      - run: dotnet tool install -g dotnet-script
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      - id: build
+        run: dotnet script ./tools/Builder/Build.csx
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: nupkgs
-          path: | 
-            src/**/*.nupkg
-            src/**/*.snupkg
-          retention-days: 30
+          path: ./nupkgs
+          retention-days: 7
 
   lint:
     runs-on: windows-latest
@@ -57,4 +59,5 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0
-      - run: dotnet tool install -g dotnet-script ; cd tools/Linters ; dotnet script ./NamespaceLinter.cs
+      - run: dotnet tool install -g dotnet-script
+      - run: cd tools/Linters ; dotnet script ./NamespaceLinter.csx
