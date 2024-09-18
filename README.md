@@ -4,49 +4,49 @@
 
 # MaaFramework.Binding.CSharp
 
-_✨ The csharp binding of [MaaFramework](https://github.com/MaaXYZ/MaaFramework/tree/v1.6.4) ✨_
+_✨ [MaaFramework](https://github.com/MaaXYZ/MaaFramework/tree/v1.6.4) 的 C# 绑定 ✨_
 
-_💫 A common interoperable API wrapper 💫_
+_💫 一个通用的可互操作 API 封装 💫_
 
 ![license](https://img.shields.io/github/license/MaaXYZ/MaaFramework) ![language](https://img.shields.io/badge/.NET-≥%207-512BD4?logo=csharp) ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blueviolet) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
 
 </div>
 
-## Articles
+## 文章
 
-- [Overview of Wrapper and Api](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/overview-of-wrapper-and-api.html)
+- [封装和 API 概述](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/overview-of-wrapper-and-api.html)
 
-## Get Started
+## 快速开始
 
-### System Requirements
+### 系统要求
 
-Your computer should meet the minimum system requirements before you run and use `MaaFramework.Binding.CSharp`, which might run on other platforms or versions not listed here.
+在运行和使用 `MaaFramework.Binding.CSharp`  之前，您的计算机应满足最低系统要求，可能在其他未列出的平台或版本上运行。
 
-| OS Version | Minimum Requirements / Reason |
-| :---: | :---: |
-| Windows 10+ | Restricted from [.NET 7.0](https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md#windows) |
-| macOS 12+ | Restricted from [MaaFramework](https://github.com/MaaXYZ/MaaFramework/issues/174) |
-| Linux <br> Ubuntu 23.10+ | libc6 2.38+ <br> and more |
+| 操作系统版本 |                                             最低要求 / 原因                                              |
+| :---: |:--------------------------------------------------------------------------------------------------:|
+| Windows 10+ | 限制于 [.NET 7.0](https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md#windows) |
+| macOS 12+ |               限制于 [MaaFramework](https://github.com/MaaXYZ/MaaFramework/issues/174)                |
+| Linux <br> Ubuntu 23.10+ |                                           libc6 2.38+ 等                                            |
 
-- Architectures: x64, Arm64
+- 架构: x64, Arm64
 
-### Install Dependents
+### 安装依赖
 
-`MaaFramework.Binding.CSharp` needs the following dependencies installed to run properly.
+`MaaFramework.Binding.CSharp` 需要安装以下依赖项以正常运行。
 
-| Platform | Package Id | Dependent Download |
+| 平台 | 包 Id | 依赖下载 |
 | :---: | :---: | :---: |
 | Windows | `Maa.Framework` <br> `Maa.Framework.Binding.Native` | [Visual C++  Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) |
 
-### Prepare Resources
+### 准备资源
 
-See MaaFramework document ([en-us](https://github.com/MaaXYZ/MaaFramework/blob/v1.4.0/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) / [zh_cn](https://github.com/MaaXYZ/MaaFramework/blob/v1.4.0/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6)).
+请参阅 MaaFramework 文档 ([en-us](https://github.com/MaaXYZ/MaaFramework/blob/v1.4.0/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) / [zh_cn](https://github.com/MaaXYZ/MaaFramework/blob/v1.4.0/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6)).
 
-Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) in MaaFramework.Binding.CSharp.
+如同在 MaaFramework.Binding.CSharp 的 [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) .
 
-### Add Packages
+### 添加包
 
-#### Release
+#### 正式版
 
 [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
 
@@ -54,9 +54,9 @@ Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) 
 dotnet add package Maa.Framework --prerelease
 ```
 
-#### Nightly Build
+#### 每夜构建
 
-Download `nupkgs.zip` from [CI Action](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/actions/workflows/ci.yml) and extract files to `.\nupkgs\`.
+从 [CI Action](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/actions/workflows/ci.yml) 下载 `nupkgs.zip` 并解压文件到 `.\nupkgs\`.
 
 - shell
 ``` ps1
@@ -69,7 +69,7 @@ dotnet add package Maa.Framework --prerelease -s .\nupkgs\
     <RestoreSources>$(RestoreSources);$(FullPath of .\nupkgs\)</RestoreSources>
   </PropertyGroup>
 ```
-### Run Code
+### 运行代码
 
 > Pre-work: `adb connect HOST[:PORT]`
 
@@ -97,7 +97,7 @@ maa.AppendTask("EmptyTask")
 Console.WriteLine("EmptyTask Completed");
 ```
 
-#### Custom
+#### 自定义
 
 ```CSharp
 using MaaFramework.Binding.Buffers;
@@ -152,29 +152,31 @@ internal sealed class MyAct : IMaaCustomAction
 }
 ```
 
-## Best Practices
+## 最佳实践
 
-- [MBA](https://github.com/MaaXYZ/MBA) BA Assistant  
-  A BA Assistant based on MAA's new architecture. Image technology + simulation control, no more clicking! Powered by MaaFramework.
+- [MBA](https://github.com/MaaXYZ/MBA) BA 小助手
+  基于 MAA 全新架构的 BA 小助手. 图像技术 + 模拟控制，解放双手，不再点点点！由 MaaFramework 强力驱动！
+- [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) MFA 任务管理器
+  基于 MAA 全新架构的 通用 GUI. 由 MaaFramework 强力驱动！
 
-- You can also find more examples in the [Unit Tests](./src/MaaFramework.Binding.UnitTests).
+- 您还可以在 [单元测试](./src/MaaFramework.Binding.UnitTests) 中找到更多示例.
 
-## Documentation
+## 文档
 
-We have written detailed documentation comments in source code files.
+我们在源代码文件中编写了详细的文档注释。
 
-You can also visit [API Reference](https://maaxyz.github.io/MaaFramework.Binding.CSharp/api/MaaFramework.Binding.html) and [Unit Tests](./src/MaaFramework.Binding.UnitTests) for more information.
+您还可以访问 [API 参考](https://maaxyz.github.io/MaaFramework.Binding.CSharp/api/MaaFramework.Binding.html) 和 [单元测试](./src/MaaFramework.Binding.UnitTests) 获取更多信息。
 
-If you still intend to use a API Reference specific to your preferred version of MaaFramework.Binding.CSharp, you may refer to the releases page of the project and download the attached docs.zip file.
+如果您仍然打算使用特定版本的 MaaFramework.Binding.CSharp 的 API 参考，可以参考项目的发行页面并下载附加的 docs.zip 文件。
 
-## Contributing
+## 贡献
 
-We welcome contributions to the MaaFramework.Binding.CSharp. If you find a bug or have a feature request, please open an issue on the GitHub repository. If you want to contribute code, feel free to fork the repository and submit a pull request.
+我们欢迎对 MaaFramework.Binding.CSharp 的贡献。如果您发现了 bug 或有功能请求，请在 GitHub 仓库中打开一个 issue。如果您想贡献代码，可以随时 fork 仓库并提交 pull request。
 
-## License
+## 许可证
 
-`MaaFramework` is open-sourced under the [`LGPL-3.0`](./LICENSE.md) license.
+`MaaFramework` 采用 [`LGPL-3.0`](./LICENSE.md) 许可证开源。
 
-## Discussion
+## 讨论
 
-- QQ Group: 595990173
+- QQ 群: 595990173
