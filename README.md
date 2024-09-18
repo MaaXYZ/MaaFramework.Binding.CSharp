@@ -9,7 +9,11 @@ _✨ The csharp binding of [MaaFramework](https://github.com/MaaXYZ/MaaFramework
 _💫 A common interoperable API wrapper 💫_
 
 ![license](https://img.shields.io/github/license/MaaXYZ/MaaFramework) ![language](https://img.shields.io/badge/.NET-≥%207-512BD4?logo=csharp) ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blueviolet) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
+<div align="center">
 
+[English](./README.md) | [简体中文](./README_zh.md)
+
+</div>
 </div>
 
 ## Articles
@@ -154,8 +158,10 @@ internal sealed class MyAct : IMaaCustomAction
 
 ## Best Practices
 
-- [MBA](https://github.com/MaaXYZ/MBA) BA Assistant  
+- [MBA](https://github.com/MaaXYZ/MBA) BA Assistant
   A BA Assistant based on MAA's new architecture. Image technology + simulation control, no more clicking! Powered by MaaFramework.
+- [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) MFA Task Manager
+  A Universal GUI based on MAA's new architecture. Powered by MaaFramework.
 
 - You can also find more examples in the [Unit Tests](./src/MaaFramework.Binding.UnitTests).
 
