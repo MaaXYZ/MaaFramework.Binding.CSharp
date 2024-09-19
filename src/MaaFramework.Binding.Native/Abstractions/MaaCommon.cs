@@ -3,7 +3,7 @@
 namespace MaaFramework.Binding.Abstractions.Native;
 
 /// <summary>
-///     An abstract class providing common members for <see cref="MaaController"/>, <see cref="MaaInstance"/> and <see cref="MaaResource"/>.
+///     An abstract class providing common members for <see cref="MaaController"/>, <see cref="MaaTasker"/> and <see cref="MaaResource"/>.
 /// </summary>
 public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
 {
@@ -13,28 +13,28 @@ public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
     /// <summary>
     ///     Raises the Callback event.
     /// </summary>
-    /// <param name="msg">The MaaStringView.</param>
-    /// <param name="detail">The MaaStringView.</param>
-    /// <param name="arg">The MaaCallbackTransparentArg.</param>
+    /// <param name="message">The MaaStringView.</param>
+    /// <param name="detailsJson">The MaaStringView.</param>
+    /// <param name="callbackArg">The MaaCallbackTransparentArg.</param>
     /// <remarks>
     ///     Usually invoked by MaaFramework.
     /// </remarks>
-    protected virtual void OnCallback(string msg, string detail, MaaCallbackTransparentArg arg)
+    protected virtual void OnCallback(string message, string detailsJson, nint callbackArg)
     {
-        Callback?.Invoke(this, new MaaCallbackEventArgs(msg, detail));
+        Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
     }
 
     /// <summary>
     ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
     /// </summary>
-    protected MaaApiCallback MaaApiCallback { get; }
+    protected MaaNotificationCallback MaaNotificationCallback { get; }
 
     /// <summary>
-    ///     Initializes <see cref="MaaApiCallback"/>.
+    ///     Initializes <see cref="MaaNotificationCallback"/>.
     /// </summary>
     protected MaaCommon()
         : base(invalidHandleValue: nint.Zero)
     {
-        MaaApiCallback = OnCallback;
+        MaaNotificationCallback = OnCallback;
     }
 }

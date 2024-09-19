@@ -7,7 +7,7 @@ namespace MaaFramework.Binding.Custom;
 /// <summary>
 ///     An interface representing implementation is maa custom controller.
 /// </summary>
-public interface IMaaCustomController : IMaaCustomTask
+public interface IMaaCustomController : IMaaCustomResource
 {
     bool Connect();
 

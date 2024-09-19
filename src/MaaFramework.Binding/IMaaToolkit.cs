@@ -1,4 +1,4 @@
-﻿using MaaFramework.Binding.Custom;
+﻿using MaaFramework.Binding.Buffers;
 
 namespace MaaFramework.Binding;
 
@@ -13,19 +13,14 @@ public interface IMaaToolkit
     IMaaToolkitConfig Config { get; }
 
     /// <summary>
-    ///     Gets the MaaToolkit Device.
+    ///     Gets the MaaToolkit AdbDevice.
     /// </summary>
-    IMaaToolkitDevice Device { get; }
+    IMaaToolkitAdbDevice AdbDevice { get; }
 
     /// <summary>
-    ///     Gets the MaaToolkit ExecAgent.
+    ///     Gets the MaaToolkit Desktop.
     /// </summary>
-    IMaaToolkitExecAgent ExecAgent { get; }
-
-    /// <summary>
-    ///     Gets the MaaToolkit Win32.
-    /// </summary>
-    IMaaToolkitWin32 Win32 { get; }
+    IMaaToolkitDesktop Desktop { get; }
 }
 
 /// <summary>
@@ -34,192 +29,62 @@ public interface IMaaToolkit
 public interface IMaaToolkitConfig
 {
     /// <summary>
-    ///     Initializes Maa Toolkit option config.
+    ///     Initializes MaaToolkit option config.
     /// </summary>
     /// <param name="userPath">The user path. Default is <see cref="Environment.CurrentDirectory"/>.</param>
     /// <param name="defaultJson">The default config. Default is an empty json.</param>
-    /// <returns>
-    ///     true if the Maa Toolkit option config was initialized successfully; otherwise, false.
-    /// </returns>
+    /// <returns><see langword="true"/> if the option config was initialized successfully; otherwise, <see langword="false"/>. </returns>
     bool InitOption(string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}");
-
-    /// <summary>
-    ///     Initializes Maa Toolkit.
-    /// </summary>
-    /// <returns>
-    ///     true if the Maa Toolkit was initialized successfully; otherwise, false.
-    /// </returns>
-    [Obsolete("Use InitOption() instead.")]
-    bool Init();
-
-    /// <summary>
-    ///     Uninitializes Maa Toolkit.
-    /// </summary>
-    /// <returns>
-    ///     true if the Maa Toolkit was uninitialized successfully; otherwise, false.
-    /// </returns>
-    [Obsolete("Use InitOption() instead.")]
-    bool Uninit();
 }
 
 /// <summary>
-///     An interface defining wrapped members for MaaToolkit Device.
+///     An interface defining wrapped members for MaaToolkit Adb Device.
 /// </summary>
-public interface IMaaToolkitDevice
+public interface IMaaToolkitAdbDevice
 {
     /// <summary>
     ///     Finds devices.
     /// </summary>
-    /// <param name="adbPath">The adb path that devices connected to.</param>
+    /// <param name="adbPath">The specified adb path that devices connected to.</param>
     /// <returns>
-    ///     The arrays of device information.
+    ///     The List of device information.
     /// </returns>
     /// <exception cref="InvalidOperationException"/>
-    DeviceInfo[] Find(string adbPath = "");
+    IMaaListBuffer<AdbDeviceInfo> Find(string adbPath = "");
 
     /// <summary>
     ///     Finds devices in an asynchronous operation.
     /// </summary>
-    /// <param name="adbPath">The adb path that devices connected to.</param>
+    /// <param name="adbPath">The specified adb path that devices connected to.</param>
     /// <returns>
     ///     The task object representing the asynchronous operation.
     /// </returns>
     /// <exception cref="InvalidOperationException"/>
-    Task<DeviceInfo[]> FindAsync(string adbPath = "");
+    Task<IMaaListBuffer<AdbDeviceInfo>> FindAsync(string adbPath = "");
 }
 
 /// <summary>
-///     An interface defining wrapped members for MaaToolkit ExecAgent.
+///     An interface defining wrapped members for MaaToolkit Desktop.
 /// </summary>
-public interface IMaaToolkitExecAgent
+public interface IMaaToolkitDesktop
 {
     /// <summary>
-    ///     Registers a <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/> in the <see cref="IMaaInstance"/>.
+    ///     Gets the MaaToolkit Desktop Window.
     /// </summary>
-    /// <typeparam name="T">The <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/>.</typeparam>
-    /// <param name="maaInstance">The maa instance.</param>
-    /// <param name="name">The new name.</param>
-    /// <param name="custom">The <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/>.</param>
-    /// <returns>
-    ///     true if the custom action or recognizer was registered successfully; otherwise, false.
-    /// </returns>
-    /// <exception cref="ArgumentException"/>
-    bool Register<T>(IMaaInstance maaInstance, string name, T custom) where T : IMaaCustomExecutor;  // TODOa 缺少测试用例
-
-    /// <inheritdoc cref="Register{T}(IMaaInstance, string, T)"/>
-    bool Register<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor;
-
-    /// <summary>
-    ///     Unregisters a <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/> in the <see cref="IMaaInstance"/>.
-    /// </summary>
-    /// <typeparam name="T">The <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/>.</typeparam>
-    /// <param name="maaInstance">The maa instance.</param>
-    /// <param name="name">The name of <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/>.</param>
-    /// <returns>
-    ///     true if the custom action or recognizer was unregistered successfully; otherwise, false.
-    /// </returns>
-    /// <exception cref="ArgumentException"/>
-    bool Unregister<T>(IMaaInstance maaInstance, string name) where T : IMaaCustomExecutor;
-
-    /// <inheritdoc cref="Unregister{T}(IMaaInstance, string)"/>
-    /// <param name="maaInstance">The maa instance.</param>
-    /// <param name="custom">The <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/>.</param>
-    bool Unregister<T>(IMaaInstance maaInstance, T custom) where T : IMaaCustomExecutor;
-
-    /// <summary>
-    ///     Clears all <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/> in the <see cref="IMaaInstance"/>.
-    /// </summary>
-    /// <typeparam name="T">THe <see cref="MaaCustomActionExecutor"/> or <see cref="MaaCustomRecognizerExecutor"/>.</typeparam>
-    /// <returns>
-    ///     true if custom actions or recognizers were cleared successfully; otherwise, false.
-    /// </returns>
-    /// <exception cref="ArgumentException"/>
-    bool Clear<T>(IMaaInstance maaInstance) where T : IMaaCustomExecutor;
+    IMaaToolkitDesktopWindow Window { get; }
 }
 
 /// <summary>
-///     An interface defining wrapped members for MaaToolkit Win32.
+///     An interface defining wrapped members for MaaToolkit Desktop Window.
 /// </summary>
-public interface IMaaToolkitWin32
+public interface IMaaToolkitDesktopWindow
 {
     /// <summary>
-    ///     Gets the MaaToolkit Win32Window.
-    /// </summary>
-    IMaaToolkitWin32Window Window { get; }
-}
-
-/// <summary>
-///     An interface defining wrapped members for MaaToolkit Win32 Window.
-/// </summary>
-public interface IMaaToolkitWin32Window
-{
-    /// <summary>
-    ///     Finds a win32 window by class name and window name.
-    /// </summary>
-    /// <param name="className">
-    ///     The class name of the window.
-    ///     If passed an empty string, class name will not be filtered.
-    /// </param>
-    /// <param name="windowName">
-    ///     The window name of the window.
-    ///     If passed an empty string, window name will not be filtered.
-    /// </param>
-    /// <remarks>
-    ///     Finds by exact match. See also <see cref="Search"/>().
-    /// </remarks>
-    /// <returns>
-    ///     The arrays of window information.
-    /// </returns>
-    WindowInfo[] Find(string className, string windowName);
-
-    /// <summary>
-    ///     Regex searches a win32 window by class name and window name.
-    /// </summary>
-    /// <param name="className">
-    ///     The class name regex of the window.
-    ///     If passed an empty string, class name will not be filtered.
-    /// </param>
-    /// <param name="windowName">
-    ///     The window name regex of the window.
-    ///     If passed an empty string, window name will not be filtered.
-    /// </param>
-    /// <remarks>
-    ///     Searches by regex search. See also <see cref="Find"/>().
-    /// </remarks>
-    /// <returns>
-    ///     The arrays of window information.
-    /// </returns>
-    WindowInfo[] Search(string className, string windowName);
-
-    /// <summary>
-    ///     Lists all windows.
+    ///     Finds all desktop windows.
     /// </summary>
     /// <returns>
-    ///     The arrays of window information.
+    ///     The list of window information.
     /// </returns>
-    WindowInfo[] ListWindows();
-
-    /// <summary>
-    ///     Gets the window under the cursor.
-    /// </summary>
-    /// <remarks>
-    ///     Uses the WindowFromPoint() system API.
-    /// </remarks>
-    WindowInfo Cursor { get; }
-
-    /// <summary>
-    ///     Get the desktop window.
-    /// </summary>
-    /// <remarks>
-    ///     Uses the GetDesktopWindow() system API.
-    /// </remarks>
-    WindowInfo Desktop { get; }
-
-    /// <summary>
-    ///     Get the foreground window.
-    /// </summary>
-    /// <remarks>
-    ///     Uses the GetForegroundWindow() system API.
-    /// </remarks>
-    WindowInfo Foreground { get; }
+    /// <exception cref="InvalidOperationException"/>
+    IMaaListBuffer<DesktopWindowInfo> Find();
 }

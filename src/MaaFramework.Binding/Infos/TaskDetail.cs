@@ -1,46 +1,32 @@
 ﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing properties of task detail.
+///     A sealed record providing properties of task detail.
 /// </summary>
-public sealed class TaskDetail
+/// <param name="Id">Gets the task id.</param>
+/// <param name="Entry">Gets the name of task entry.</param>
+/// <param name="NodeIdList">Gets the node id list.</param>
+public sealed record TaskDetail(
+    MaaTaskId Id,
+    string Entry,
+    IList<MaaNodeId> NodeIdList
+)
 {
-    /// <summary>
-    ///     Gets or initializes the task id.
-    /// </summary>
-    /// <remarks>
-    ///     From <see cref="MaaJob.Id"/>.
-    /// </remarks>
-    public required MaaTaskId Id { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the name of task entry.
-    /// </summary>
-    public required string Entry { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the node id list.
-    /// </summary>
-    public required IList<MaaNodeId> NodeIdList { get; init; }
-
     /// <summary>
     ///     Queries the task detail.
     /// </summary>
     /// <param name="taskId">The task id.</param>
-    /// <param name="maa">The maa utility.</param>
+    /// <param name="tasker">The maa tasker.</param>
     /// <returns>A <see cref="TaskDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
-    public static TaskDetail? Query(MaaTaskId taskId, IMaaUtility maa)
+    public static TaskDetail? Query(MaaTaskId taskId, IMaaTasker tasker)
     {
-        ArgumentNullException.ThrowIfNull(maa);
-        if (!maa.QueryTaskDetail(taskId, out var entry, out var nodeIdList))
-            return null;
-
-        return new TaskDetail
-        {
-            Id = taskId,
-            Entry = entry,
-            NodeIdList = nodeIdList,
-        };
+        ArgumentNullException.ThrowIfNull(tasker);
+        return tasker.GetTaskDetail(taskId, out var entry, out var nodeIdList)
+            ? new TaskDetail(
+                Id: taskId,
+                Entry: entry,
+                NodeIdList: nodeIdList)
+            : null;
     }
 }
 
@@ -52,5 +38,5 @@ public static class TaskDetailExtension
     /// <param name="job">The maa task job.</param>
     /// <inheritdoc cref="TaskDetail.Query"/>
     public static TaskDetail? QueryTaskDetail(this MaaTaskJob? job)
-        => job is null ? null : TaskDetail.Query(job.Id, job.Maa.Utility);
+        => job is null ? null : TaskDetail.Query(job.Id, job.Tasker);
 }

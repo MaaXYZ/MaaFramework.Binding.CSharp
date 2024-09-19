@@ -36,8 +36,6 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
         {
             (int vvvv, ControllerOption.ScreenshotTargetLongSide
                     or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValue(),
-            (string v, ControllerOption.DefaultAppPackageEntry
-                    or ControllerOption.DefaultAppPackage) => v.ToMaaOptionValue(),
             (bool vvv, ControllerOption.Recording) => vvv.ToMaaOptionValue(),
 
             _ => throw new InvalidOperationException(),
@@ -187,33 +185,34 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerGetImage"/>.
+    ///     Wrapper of <see cref="MaaControllerCachedImage"/>.
     /// </remarks>
-    public bool GetImage(IMaaImageBuffer maaImage)
-        => GetImage((IMaaImageBuffer<nint>)maaImage);
+    public bool GetCachedImage(IMaaImageBuffer maaImage)
+        => GetCachedImage((IMaaImageBuffer<nint>)maaImage);
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerGetImage"/>.
+    ///     Wrapper of <see cref="MaaControllerCachedImage"/>.
     /// </remarks>
-    public bool GetImage(IMaaImageBuffer<nint> maaImage)
+    public bool GetCachedImage(IMaaImageBuffer<nint> maaImage)
     {
         ArgumentNullException.ThrowIfNull(maaImage);
 
-        return MaaControllerGetImage(Handle, maaImage.Handle).ToBoolean();
+        return MaaControllerCachedImage(Handle, maaImage.Handle).ToBoolean();
     }
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerGetUUID"/>.
+    ///     Wrapper of <see cref="MaaControllerGetUuid"/>.
     /// </remarks>
     public string? Uuid
     {
         get
         {
             using var buffer = new MaaStringBuffer();
-            var ret = MaaControllerGetUUID(Handle, buffer.Handle).ToBoolean();
-            return ret ? buffer.ToString() : null;
+            return MaaControllerGetUuid(Handle, buffer.Handle).ToBoolean()
+                ? buffer.ToString()
+                : null;
         }
     }
 }

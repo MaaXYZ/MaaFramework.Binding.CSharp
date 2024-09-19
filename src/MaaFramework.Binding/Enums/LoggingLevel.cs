@@ -12,7 +12,7 @@
 
 namespace MaaFramework.Binding;
 
-public enum LoggingLevel
+public enum LoggingLevel : System.Int32
 {
     Off = 0,
     Fatal = 1,

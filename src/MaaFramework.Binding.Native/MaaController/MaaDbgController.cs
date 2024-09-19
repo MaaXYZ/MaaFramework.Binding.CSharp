@@ -19,7 +19,7 @@ public class MaaDbgController : MaaController
     /// </remarks>
     public MaaDbgController(string readPath, string writePath, DbgControllerType type, string config)
     {
-        var handle = MaaDbgControllerCreate(readPath, writePath, (MaaDbgControllerType)type, config, MaaApiCallback, nint.Zero);
+        var handle = MaaDbgControllerCreate(readPath, writePath, (MaaDbgControllerType)type, config, MaaNotificationCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
     }
 }

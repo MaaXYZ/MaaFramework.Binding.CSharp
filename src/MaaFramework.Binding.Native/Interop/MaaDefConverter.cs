@@ -9,10 +9,10 @@ namespace MaaFramework.Binding.Interop.Native;
 public static class MaaDefConverter
 {
     /// <summary>
-    ///     Converts a MaaStringView (<see cref="MaaStringView"/>) to a <see cref="string"/>.
+    ///     Converts a MaaStringView (<see cref="nint"/>) to a <see cref="string"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException"></exception>
-    public static string ToStringUtf8(this MaaStringView value, MaaSize size = MaaSize.MinValue)
+    public static string ToStringUtf8(this nint value, MaaSize size = MaaSize.MinValue)
         => size == MaaSize.MinValue
         ? Marshal.PtrToStringUTF8(value) ?? throw new ArgumentNullException(nameof(value))
         : Marshal.PtrToStringUTF8(value, (int)size);

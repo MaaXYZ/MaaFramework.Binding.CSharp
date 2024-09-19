@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding.Abstractions;
 
 /// <summary>
-///     An interface defining common members for <see cref="IMaaController"/>, <see cref="IMaaInstance"/> and <see cref="IMaaResource"/>.
+///     An interface defining common members for <see cref="IMaaController"/>, <see cref="IMaaTasker"/> and <see cref="IMaaResource"/>.
 /// </summary>
 public interface IMaaCommon
 {

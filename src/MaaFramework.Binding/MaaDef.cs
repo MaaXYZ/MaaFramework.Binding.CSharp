@@ -22,7 +22,6 @@ public class MaaCallbackEventArgs(string message, string details) : EventArgs
     /// </summary>
     public string Message { get; } = message;
 
-
     /// <summary>
     ///     Maa callback details json.
     /// </summary>

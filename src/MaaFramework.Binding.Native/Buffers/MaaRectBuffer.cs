@@ -10,15 +10,17 @@ namespace MaaFramework.Binding.Buffers;
 [System.Diagnostics.DebuggerDisplay("x:{X}, y:{Y}, w:{Width}, h:{Height}")]
 public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
 {
-    /// <inheritdoc cref="MaaRectBuffer(nint)"/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaCreateRectBuffer"/>.
-    /// </remarks>
-    public MaaRectBuffer()
-        : base(invalidHandleValue: nint.Zero)
+    /// <inheritdoc/>
+    public bool CopyTo(IMaaRectBuffer buffer) => buffer switch
     {
-        SetHandle(MaaCreateRectBuffer(), needReleased: true);
-    }
+        // MaaRectBuffer native => native method is same to wrapped method
+        null => false,
+        _ => buffer.SetValues(
+            x: MaaRectGetX(Handle),
+            y: MaaRectGetY(Handle),
+            width: MaaRectGetW(Handle),
+            height: MaaRectGetH(Handle)),
+    };
 
     /// <summary>
     ///     Creates a <see cref="MaaRectBuffer"/> instance.
@@ -30,95 +32,85 @@ public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
         SetHandle(handle, needReleased: false);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="MaaRectBuffer(nint)"/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaDestroyRectBuffer"/>.
+    ///     Wrapper of <see cref="MaaRectCreate"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaDestroyRectBuffer(Handle);
+    public MaaRectBuffer()
+        : base(invalidHandleValue: nint.Zero)
+    {
+        SetHandle(MaaRectCreate(), needReleased: true);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaGetRectX"/> and <see cref="MaaSetRectX"/>.
+    ///     Wrapper of <see cref="MaaRectDestroy"/>.
+    /// </remarks>
+    protected override void ReleaseHandle()
+        => MaaRectDestroy(Handle);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaRectGetX"/>.
     /// </remarks>
     public int X
     {
-        get => MaaGetRectX(Handle);
-        set
-        {
-            if (!MaaSetRectX(Handle, value).ToBoolean())
-                throw new InvalidOperationException();
-        }
+        get => MaaRectGetX(Handle);
     }
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaGetRectY"/> and <see cref="MaaSetRectY"/>.
+    ///     Wrapper of <see cref="MaaRectGetY"/>.
     /// </remarks>
     public int Y
     {
-        get => MaaGetRectY(Handle);
-        set
-        {
-            if (!MaaSetRectY(Handle, value).ToBoolean())
-                throw new InvalidOperationException();
-        }
+        get => MaaRectGetY(Handle);
     }
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaGetRectW"/> and <see cref="MaaSetRectW"/>.
+    ///     Wrapper of <see cref="MaaRectGetW"/>.
     /// </remarks>
     public int Width
     {
-        get => MaaGetRectW(Handle);
-        set
-        {
-            if (!MaaSetRectW(Handle, value).ToBoolean())
-                throw new InvalidOperationException();
-        }
+        get => MaaRectGetW(Handle);
     }
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaGetRectH"/> and <see cref="MaaSetRectH"/>.
+    ///     Wrapper of <see cref="MaaRectGetH"/>.
     /// </remarks>
     public int Height
     {
-        get => MaaGetRectH(Handle);
-        set
-        {
-            if (!MaaSetRectH(Handle, value).ToBoolean())
-                throw new InvalidOperationException();
-        }
+        get => MaaRectGetH(Handle);
     }
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaSetRect"/>.
+    ///     Wrapper of <see cref="MaaRectSet"/>.
     /// </remarks>
     public bool SetValues(int x, int y, int width, int height)
-        => MaaSetRect(Handle, x, y, width, height).ToBoolean();
+        => MaaRectSet(Handle, x, y, width, height).ToBoolean();
 
     /// <inheritdoc cref="SetValues(int, int, int, int)"/>
     public static bool Set(MaaRectHandle handle, int x, int y, int width, int height)
-        => MaaSetRect(handle, x, y, width, height).ToBoolean();
+        => MaaRectSet(handle, x, y, width, height).ToBoolean();
 
     /// <inheritdoc/>
     public void GetValues(out int x, out int y, out int width, out int height)
     {
-        x = MaaGetRectX(Handle);
-        y = MaaGetRectY(Handle);
-        width = MaaGetRectW(Handle);
-        height = MaaGetRectH(Handle);
+        x = MaaRectGetX(Handle);
+        y = MaaRectGetY(Handle);
+        width = MaaRectGetW(Handle);
+        height = MaaRectGetH(Handle);
     }
 
     /// <inheritdoc cref="GetValues(out int, out int, out int, out int)"/>
     public static void Get(MaaRectHandle handle, out int x, out int y, out int width, out int height)
     {
-        x = MaaGetRectX(handle);
-        y = MaaGetRectY(handle);
-        width = MaaGetRectW(handle);
-        height = MaaGetRectH(handle);
+        x = MaaRectGetX(handle);
+        y = MaaRectGetY(handle);
+        width = MaaRectGetW(handle);
+        height = MaaRectGetH(handle);
     }
 }

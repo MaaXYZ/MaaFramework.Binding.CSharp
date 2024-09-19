@@ -1,22 +1,15 @@
 ﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing properties of image information.
+///     A sealed record providing properties of image information.
 /// </summary>
-public sealed class ImageInfo
-{
-    /// <summary>
-    ///     Gets the image width.
-    /// </summary>
-    public required int Width { get; init; }
-
-    /// <summary>
-    ///     Gets the image height.
-    /// </summary>
-    public required int Height { get; init; }
-
-    /// <summary>
-    ///     Gets the image type.
-    /// </summary>
-    public required int Type { get; init; }
-}
+/// <param name="Width">Gets the image width.</param>
+/// <param name="Height">Gets the image height.</param>
+/// <param name="Channels">Gets the image channels.</param>
+/// <param name="Type">Gets the image type.</param>
+public sealed record ImageInfo(
+    int Width,
+    int Height,
+    int Channels,
+    int Type
+);

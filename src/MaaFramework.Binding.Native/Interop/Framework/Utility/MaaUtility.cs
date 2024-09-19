@@ -16,31 +16,9 @@ namespace MaaFramework.Binding.Interop.Native;
 
 public static partial class MaaUtility
 {
-    /// <summary>
-    ///     Get the version of the framework.
-    /// </summary>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaStringView MaaVersion();
+    public static partial nint MaaVersion();
 
-    /// <summary>
-    ///     Set options globally.
-    /// </summary>
-    /// <param name="key">The option key.</param>
-    /// <param name="value">The option value.</param>
-    /// <param name="valSize">The size of the option value.</param>
-    /// <returns>Whether the option is set successfully.</returns>
-    /// <remarks>
-    ///     This function requires a given set of option keys and value types, otherwise this will fail. See MaaGlobalOptionEnum for details.
-    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaSetGlobalOption(MaaGlobalOption key, byte[] value, MaaOptionValueSize valSize);
-
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaQueryRecognitionDetail(MaaRecoId recoId, MaaStringBufferHandle name, out MaaBool hit, MaaRectHandle hitBox, MaaStringBufferHandle detailJson, MaaImageBufferHandle raw, MaaImageListBufferHandle draws);
-
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaQueryNodeDetail(MaaNodeId nodeId, MaaStringBufferHandle name, out MaaRecoId recoId, out MaaBool runCompleted);
-
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaQueryTaskDetail(MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize);
 }

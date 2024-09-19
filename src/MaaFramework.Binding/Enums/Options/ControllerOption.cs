@@ -15,45 +15,30 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     Option keys for controller instance options. See MaaControllerSetOption().
 /// </summary>
-public enum ControllerOption
+public enum ControllerOption : System.Int32
 {
     Invalid = 0,
     /// <summary>
     ///     Only one of long and short side can be set, and the other is automatically scaled according to the aspect ratio.
     /// </summary>
     /// <remarks>
-    ///     value: int, eg: 1920; val_size: sizeof(int)
+    ///     <para>value: int, eg: 1920; val_size: sizeof(int)</para>
     /// </remarks>
     ScreenshotTargetLongSide = 1,
     /// <summary>
     ///     Only one of long and short side can be set, and the other is automatically scaled according to the aspect ratio.
     /// </summary>
     /// <remarks>
-    ///     value: int, eg: 1080; val_size: sizeof(int)
+    ///     <para>value: int, eg: 1080; val_size: sizeof(int)</para>
     /// </remarks>
     ScreenshotTargetShortSide = 2,
-    /// <summary>
-    ///     For StartApp
-    /// </summary>
-    /// <remarks>
-    ///     value: string, eg: "com.hypergryph.arknights/com.u8.sdk.U8UnityContext"; val_size: string
-    ///     length
-    /// </remarks>
-    DefaultAppPackageEntry = 3,
-    /// <summary>
-    ///     For StopApp
-    /// </summary>
-    /// <remarks>
-    ///     value: string, eg: "com.hypergryph.arknights"; val_size: string length
-    /// </remarks>
-    DefaultAppPackage = 4,
     /// <summary>
     ///     Dump all screenshots and actions
     /// </summary>
     /// <remarks>
-    ///     Recording will evaluate to true if any of this or
-    ///     MaaGlobalOptionEnum::MaaGlobalOption_Recording is true.
-    ///     value: bool, eg: true; val_size: sizeof(bool)
+    ///     <para>Recording will evaluate to true if any of this or</para>
+    ///     <para>MaaGlobalOptionEnum::MaaGlobalOption_Recording is true.</para>
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     Recording = 5,
 }

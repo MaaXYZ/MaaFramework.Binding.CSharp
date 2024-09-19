@@ -7,16 +7,16 @@ internal static class Custom
 {
     public static TestController Controller { get; } = new();
     public static TestAction Action { get; } = new();
-    public static TestRecognizer Recognizer { get; } = new();
-    public static TestTask Task { get; } = new();
+    public static TestRecognition Recognition { get; } = new();
+    public static TestResource Resource { get; } = new();
     public static MaaCustomActionExecutor ActionExecutor { get; } = new() { Name = Action.Name, Parameter = [], Path = "" };
-    public static MaaCustomRecognizerExecutor RecognizerExecutor { get; } = new() { Name = Recognizer.Name, Parameter = [], Path = "" };
+    public static MaaCustomRecognitionExecutor RecognitionExecutor { get; } = new() { Name = Recognition.Name, Parameter = [], Path = "" };
     public static string TaskName => "中文字符测试";
     public static string Param => $$"""
     {
         "{{TaskName}}": {
             "recognition": "Custom",
-            "custom_recognition": "{{Recognizer.Name}}",
+            "custom_recognition": "{{Recognition.Name}}",
             "custom_recognition_param": {{RecognitionParam}},
             "action": "Custom",
             "custom_action": "{{Action.Name}}",
@@ -29,61 +29,26 @@ internal static class Custom
     private static string Detail { get; set; } = string.Empty;
     private static string Box { get; set; } = string.Empty;
 
-    internal static void Test_IMaaSyncContext_Interface(in IMaaSyncContext syncContext)
+    internal sealed class TestRecognition : IMaaCustomRecognition
     {
-        Assert.IsTrue(
-            syncContext.RunTask("EmptyTask", "{}"));
-        // syncContext.RunRecognizer
-        // syncContext.RunAction
-        Assert.IsTrue(
-            syncContext.Click(0, 0));
-        Assert.IsTrue(
-            syncContext.Swipe(0, 0, 10, 10, 100));
-        Assert.IsTrue(
-            syncContext.PressKey(0x00000003));
-        Assert.IsTrue(
-            syncContext.InputText("0x00000003"));
-        Assert.IsFalse( // AdbTapInput not supports
-            syncContext.TouchDown(1, 100, 100, 0));
-        Assert.IsFalse( // AdbTapInput not supports
-            syncContext.TouchMove(1, 200, 200, 0));
-        Assert.IsFalse( // AdbTapInput not supports
-            syncContext.TouchUp(1));
-
-        using var image1 = new MaaImageBuffer();
-        Assert.IsTrue(
-            syncContext.Screencap(image1));
-        using var image2 = new MaaImageBuffer();
-        Assert.IsTrue(
-            syncContext.GetCachedImage(image2));
-
-        Assert.AreEqual(
-            image1.GetEncodedData(out var size1), image1.GetEncodedData(out var size2));
-        Assert.AreEqual(
-            size1, size2);
-    }
-
-    internal sealed class TestRecognizer : IMaaCustomRecognizer
-    {
-        public string Name { get; set; } = nameof(TestRecognizer);
-
-        public bool Analyze(in IMaaSyncContext syncContext, IMaaImageBuffer image, string taskName, string customRecognitionParam, in IMaaRectBuffer outBox, in IMaaStringBuffer outDetail)
+        public string Name { get; set; } = nameof(TestRecognition);
+        public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
         {
-            Assert.AreEqual(TaskName, taskName);
-            Assert.AreEqual(RecognitionParam, customRecognitionParam);
-            Test_IMaaSyncContext_Interface(syncContext);
+            Assert.AreEqual(TaskName, args.TaskName);
+            Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
-            var ret = syncContext.RunRecognizer(image, DiffEntry, DiffParam, outBox, outDetail);
+            var recognitionDetail = context.RunRecognition(DiffEntry, DiffParam, args.Image) as RecognitionDetail<MaaImageBuffer>;
+            Assert.IsNotNull(recognitionDetail?.HitBox);
 
-            outBox.SetValues(outBox.X, outBox.Y, outBox.Width, outBox.Height);
-            outDetail.SetValue(outDetail.GetValue());
+            recognitionDetail.HitBox.CopyTo(results.Box);
+            results.Detail.SetValue(recognitionDetail.Detail);
             // return ret;
 
-            // Assert
-            Detail = outDetail.GetValue();
-            Box = $"{outBox.X}{outBox.Y}{outBox.Width}{outBox.Height}";
+            // Using in assert
+            Detail = recognitionDetail.Detail;
+            Box = $"{results.Box.X}{results.Box.Y}{results.Box.Width}{results.Box.Height}";
 
-            return ret;
+            return true;
         }
     }
 
@@ -103,20 +68,17 @@ internal static class Custom
     {
         public string Name { get; set; } = nameof(TestAction);
 
-        public void Abort()
+        public bool Run<T>(in IMaaContext context, in RunArgs<T> args) where T : IMaaImageBuffer
         {
-            throw new NotImplementedException();
-        }
+            Assert.AreEqual(TaskName, args.TaskName);
+            Assert.AreEqual(ActionParam, args.ActionParam);
 
-        public bool Run(in IMaaSyncContext syncContext, string taskName, string customActionParam, IMaaRectBuffer curBox, string curRecDetail)
-        {
-            Assert.AreEqual(TaskName, taskName);
-            Assert.AreEqual(ActionParam, customActionParam);
+            Assert.AreNotEqual(Detail, args.RecognitionDetail.Detail);
+            Assert.AreEqual(Box, $"{args.RecognitionBox.X}{args.RecognitionBox.Y}{args.RecognitionBox.Width}{args.RecognitionBox.Height}");
 
-            Assert.AreNotEqual(Detail, curRecDetail);
-            Assert.AreEqual(Box, $"{curBox.X}{curBox.Y}{curBox.Width}{curBox.Height}");
-
-            return syncContext.RunAction(DiffEntry, DiffParam, curBox, curRecDetail);
+            var nodeDetail = context.RunAction(DiffEntry, DiffParam, args.RecognitionBox, args.RecognitionDetail.Detail);
+            Assert.IsNotNull(nodeDetail);
+            return true;
         }
     }
 
@@ -190,9 +152,9 @@ internal static class Custom
         }
     }
 
-    internal sealed class TestTask : IMaaCustomTask
+    internal sealed class TestResource : IMaaCustomResource
     {
-        public string Name { get; set; } = nameof(TestTask);
+        public string Name { get; set; } = nameof(TestResource);
     }
 }
 

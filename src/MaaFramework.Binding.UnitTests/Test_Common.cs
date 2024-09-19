@@ -23,9 +23,9 @@ public static class Common
     private static void InitializeInfo(TestContext testContext)
     {
 #if GITHUB_ACTIONS // use environment "AdbPath"
-        DeviceInfo[] devices = [];
+        AdbDeviceInfo[] devices = [];
 #else
-        var devices = new MaaToolkit().Device.Find();
+        var devices = new MaaToolkit().AdbDevice.Find();
 #endif
 
         // 请修改 TestParam.runsettings，并在测试资源管理器——设置——配置运行设置

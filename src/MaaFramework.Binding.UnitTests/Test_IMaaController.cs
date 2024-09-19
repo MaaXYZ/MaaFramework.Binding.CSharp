@@ -10,14 +10,15 @@ namespace MaaFramework.Binding.UnitTests;
 ///     Test <see cref="IMaaController"/> and <see cref="MaaController"/>.
 /// </summary>
 [TestClass]
+// ReSharper disable InconsistentNaming
 public class Test_IMaaController
 {
-    private static AdbControllerTypes s_inputPreset = AdbControllerTypes.InputPresetAdb;
+    private static AdbInputMethods s_inputPreset = AdbInputMethods.AdbShell;
     public static Dictionary<MaaTypes, object> NewData => new()
     {
 #if MAA_NATIVE
         {
-            MaaTypes.Native, new MaaAdbController(Common.AdbPath, Common.Address, s_inputPreset | AdbControllerTypes.ScreencapEncode, Common.AdbConfig, Common.AgentPath, LinkOption.None)
+            MaaTypes.Native, new MaaAdbController(Common.AdbPath, Common.Address, AdbScreencapMethods.Encode, s_inputPreset, Common.AdbConfig, Common.AgentPath, LinkOption.None)
         },
 #endif
     };
@@ -30,16 +31,16 @@ public class Test_IMaaController
     public static void InitializeClass(TestContext context)
     {
         // The minimum Android API level for MaaTouch is 23.
-        InitializeData(AdbControllerTypes.InputPresetMaaTouch);
+        InitializeData(AdbInputMethods.Maatouch);
         MaaTouchData = Data;
 #if !GITHUB_ACTIONS // MiniTouch crashes.
-        InitializeData(AdbControllerTypes.InputPresetMiniTouch);
+        InitializeData(AdbInputMethods.MinitouchAndAdbKey);
 #endif
         MiniTouchData = Data;
-        InitializeData(AdbControllerTypes.InputPresetAdb);
+        InitializeData(AdbInputMethods.AdbShell);
         TestLinkData = NewData;
 
-        static void InitializeData(AdbControllerTypes inputPreset)
+        static void InitializeData(AdbInputMethods inputPreset)
         {
             s_inputPreset = inputPreset;
             Data = NewData;
@@ -74,20 +75,23 @@ public class Test_IMaaController
         using var native1 = new MaaAdbController(
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
+            AdbScreencapMethods.Encode,
+            AdbInputMethods.AdbShell,
             Common.AdbConfig,
             Common.AgentPath);
         using var native2 = new MaaAdbController(
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
+            AdbScreencapMethods.Encode,
+            AdbInputMethods.AdbShell,
             Common.AdbConfig,
             Common.AgentPath,
             LinkOption.None);
         using var native3 = new MaaAdbController(
             Common.AdbPath,
             Common.Address,
-            AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
+            AdbScreencapMethods.Encode,
+            AdbInputMethods.AdbShell,
             Common.AdbConfig,
             Common.AgentPath,
             LinkOption.Start,
@@ -97,18 +101,21 @@ public class Test_IMaaController
         #region MaaWin32Controller
 #if !GITHUB_ACTIONS
         var toolkit = new MaaToolkit();
-        var windowInfo = toolkit.Win32.Window.Search(string.Empty, "Visual Studio").FirstOrDefault() ?? new() { Handle = nint.Zero, Name = string.Empty, ClassName = string.Empty };
+        var windowInfo = toolkit.Desktop.Window.Find().First(x => x.Name.Contains("Visual Studio", StringComparison.OrdinalIgnoreCase));
 
         using var win32Native1 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI);
+            Win32ScreencapMethod.GDI,
+            Win32InputMethod.SendMessage);
         using var win32Native2 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
+            Win32ScreencapMethod.GDI,
+            Win32InputMethod.SendMessage,
             LinkOption.None);
         using var win32Native3 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
+            Win32ScreencapMethod.GDI,
+            Win32InputMethod.SendMessage,
             LinkOption.Start,
             CheckStatusOption.None);
 #endif
@@ -120,8 +127,6 @@ public class Test_IMaaController
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 1280)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 720)]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackageEntry, "DefaultAppPackageEntry")]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackage, "DefaultAppPackage")]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Recording, false)]
     public void Interface_SetOption(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
@@ -263,7 +268,7 @@ public class Test_IMaaController
             _ => throw new NotImplementedException(),
         };
         Assert.IsTrue(
-            maaController.GetImage(buffer));
+            maaController.GetCachedImage(buffer));
         Assert.IsFalse(
             buffer.IsEmpty);
 
@@ -283,10 +288,9 @@ public class Test_IMaaController
         CollectionAssert.AreNotEqual(new byte[size], pngImageData);
 
         // if (type is MaaTypes.Native) { }
-        var nativeBuffer = buffer;
         var info = buffer.Info;
         var length = info.Width * info.Height * GetChannel(info.Type);
-        var rawDataHandle = nativeBuffer!.GetRawData();
+        var rawDataHandle = buffer.GetRawData();
         var cv2MatData = new byte[length];
         Marshal.Copy(rawDataHandle, cv2MatData, 0, length);
         CollectionAssert.AreNotEqual(new byte[length], cv2MatData);
@@ -315,8 +319,10 @@ public class Test_IMaaController
             image.Height, buffer.Height);
         Assert.AreEqual(
             image.Width, buffer.Width);
+        // ReSharper disable AccessToDisposedClosure
         Assert.ThrowsException<NotSupportedException>(() =>
             image.Save(buffer.EncodedDataStream, image.Metadata.DecodedImageFormat!));
+        // ReSharper restore AccessToDisposedClosure
 
         using var stream = new MemoryStream();
         image.Mutate(c => c.Resize(30, 30));
@@ -346,8 +352,6 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Invalid, "Anything")]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 0.0)]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackageEntry, 0.0)]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.DefaultAppPackage, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.Recording, 0.0)]
     public void Interface_SetOption_InvalidData(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {

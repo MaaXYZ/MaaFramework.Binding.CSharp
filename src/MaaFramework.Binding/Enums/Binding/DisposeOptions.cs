@@ -1,7 +1,7 @@
 ﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     <see cref="IMaaInstance"/> dispose options.
+///     <see cref="IMaaTasker"/> dispose options.
 /// </summary>
 ///
 [Flags]

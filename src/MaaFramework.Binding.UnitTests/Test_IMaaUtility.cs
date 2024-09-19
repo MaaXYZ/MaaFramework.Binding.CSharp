@@ -4,6 +4,7 @@
 ///     Test <see cref="IMaaUtility"/> and <see cref="MaaUtility"/>.
 /// </summary>
 [TestClass]
+// ReSharper disable InconsistentNaming
 public class Test_IMaaMaaUtility
 {
     public static Dictionary<MaaTypes, object> NewData => new()

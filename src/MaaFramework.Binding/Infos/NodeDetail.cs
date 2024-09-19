@@ -1,52 +1,38 @@
 ﻿namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing properties of node detail.
+///     A sealed record providing properties of node detail.
 /// </summary>
-public sealed class NodeDetail
+/// <param name="Id">Gets the node id.</param>
+/// <param name="Name">Gets the node name.</param>
+/// <param name="RecognitionId">Gets the recognition id.</param>
+/// <param name="Times">Gets how many times the node was executed during a pipeline.</param>
+/// <param name="ActionCompleted">Gets a value indicating whether the action run completed.</param>
+public sealed record NodeDetail(
+    MaaNodeId Id,
+    string Name,
+    MaaRecoId RecognitionId,
+    MaaSize Times,
+    bool ActionCompleted
+)
 {
-    /// <summary>
-    ///     Gets or initializes the node id.
-    /// </summary>
-    /// <remarks>
-    ///     From <see cref="TaskDetail.NodeIdList"/>.
-    /// </remarks>
-    public required MaaNodeId Id { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the node name.
-    /// </summary>
-    public required string Name { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the recognition id.
-    /// </summary>
-    public required MaaRecoId RecognitionId { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes a value indicating whether the action run completed.
-    /// </summary>
-    public required bool RunCompleted { get; init; }
-
     /// <summary>
     ///     Queries the node detail.
     /// </summary>
     /// <param name="nodeId">The node id.</param>
-    /// <param name="maa">The maa utility.</param>
+    /// <param name="tasker">The maa tasker.</param>
     /// <returns>A <see cref="NodeDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
-    public static NodeDetail? Query(MaaNodeId nodeId, IMaaUtility maa)
+    public static NodeDetail? Query(MaaNodeId nodeId, IMaaTasker tasker)
     {
-        ArgumentNullException.ThrowIfNull(maa);
-        if (!maa.QueryNodeDetail(nodeId, out var name, out var recognitionId, out var runCompleted))
-            return null;
-
-        return new NodeDetail
-        {
-            Id = nodeId,
-            Name = name,
-            RecognitionId = recognitionId,
-            RunCompleted = runCompleted,
-        };
+        ArgumentNullException.ThrowIfNull(tasker);
+        return tasker.GetNodeDetail(nodeId, out var name, out var recognitionId, out var times, out var actionCompleted)
+            ? new NodeDetail(
+                Id: nodeId,
+                Name: name,
+                RecognitionId: recognitionId,
+                Times: times,
+                ActionCompleted: actionCompleted)
+            : null;
     }
 }
 
@@ -56,15 +42,15 @@ public sealed class NodeDetail
 public static class NodeDetailExtension
 {
     /// <param name="taskDetail">The task detail.</param>
-    /// <param name="maa">The maa utility.</param>
+    /// <param name="tasker">The maa tasker.</param>
     /// <param name="index">The index of <see cref="TaskDetail.NodeIdList"/>.</param>
     /// <inheritdoc cref="NodeDetail.Query"/>
-    public static NodeDetail? QueryNodeDetail(this TaskDetail? taskDetail, IMaaUtility maa, int index = 0)
-        => taskDetail?.NodeIdList.Count > index ? NodeDetail.Query(taskDetail.NodeIdList[index], maa) : null;
+    public static NodeDetail? QueryNodeDetail(this TaskDetail? taskDetail, IMaaTasker tasker, int index = 0)
+        => taskDetail?.NodeIdList.Count > index ? NodeDetail.Query(taskDetail.NodeIdList[index], tasker) : null;
 
     /// <param name="job">The maa task job.</param>
     /// <param name="index">The index of <see cref="TaskDetail.NodeIdList"/>.</param>
     /// <inheritdoc cref="NodeDetail.Query"/>
     public static NodeDetail? QueryNodeDetail(this MaaTaskJob? job, int index = 0)
-        => job?.QueryTaskDetail().QueryNodeDetail(job.Maa.Utility, index);
+        => job?.QueryTaskDetail().QueryNodeDetail(job.Tasker, index);
 }

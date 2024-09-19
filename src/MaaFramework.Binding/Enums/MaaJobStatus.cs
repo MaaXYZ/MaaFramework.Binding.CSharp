@@ -12,7 +12,7 @@
 
 namespace MaaFramework.Binding;
 
-public enum MaaJobStatus
+public enum MaaJobStatus : System.Int32
 {
     Invalid = 0,
     Pending = 1000,

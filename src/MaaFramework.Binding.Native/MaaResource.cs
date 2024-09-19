@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaResource;
 
@@ -18,7 +19,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// </remarks>
     public MaaResource()
     {
-        var handle = MaaResourceCreate(MaaApiCallback, nint.Zero);
+        var handle = MaaResourceCreate(MaaNotificationCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
     }
 
@@ -76,22 +77,103 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     protected override void ReleaseHandle()
         => MaaResourceDestroy(Handle);
 
+    private readonly MaaMarshaledApis<MaaCustomActionCallback> _actions = new();
+    private readonly MaaMarshaledApis<MaaCustomRecognizerCallback> _recognitions = new();
+
+    /// <inheritdoc/>
+    public bool Register<T>(string name, T custom) where T : IMaaCustomResource
+    {
+        custom.Name = name;
+        return Register(custom);
+    }
+
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourcePostPath"/>.
+    ///     Wrapper of <see cref="MaaResourceRegisterCustomAction"/> and <see cref="MaaResourceRegisterCustomRecognizer"/>.
     /// </remarks>
-    public MaaJob AppendPath(string resourcePath)
+    public bool Register<T>(T custom) where T : IMaaCustomResource => custom switch
     {
-        var id = MaaResourcePostPath(Handle, resourcePath);
-        return new MaaJob(id, this);
+        IMaaCustomAction res
+            => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero).ToBoolean()
+            && _actions.Set(res.Name, callback),
+        IMaaCustomRecognition res
+            => MaaResourceRegisterCustomRecognizer(Handle, res.Name, res.Convert(out var callback), nint.Zero).ToBoolean()
+            && _recognitions.Set(res.Name, callback),
+        _
+            => throw new NotImplementedException(),
+    };
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognizer"/>.
+    /// </remarks>
+    public bool Unregister<T>(string name) where T : IMaaCustomResource
+    {
+        var t = typeof(T);
+        if (typeof(IMaaCustomAction).IsAssignableFrom(t))
+            return MaaResourceUnregisterCustomAction(Handle, name).ToBoolean()
+                && _actions.Remove(name);
+        if (typeof(IMaaCustomRecognition).IsAssignableFrom(t))
+            return MaaResourceUnregisterCustomRecognizer(Handle, name).ToBoolean()
+                && _recognitions.Remove(name);
+
+        throw new NotImplementedException();
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognizer"/>.
+    /// </remarks>
+    public bool Unregister<T>(T custom) where T : IMaaCustomResource => custom switch
+    {
+        IMaaCustomAction
+            => MaaResourceUnregisterCustomAction(Handle, custom.Name).ToBoolean()
+            && _actions.Remove(custom.Name),
+        IMaaCustomRecognition
+            => MaaResourceUnregisterCustomRecognizer(Handle, custom.Name).ToBoolean()
+            && _recognitions.Remove(custom.Name),
+        _
+            => throw new NotImplementedException(),
+    };
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceClearCustomAction"/> and <see cref="MaaResourceClearCustomRecognizer"/>.
+    /// </remarks>
+    public bool Clear<T>() where T : IMaaCustomResource => typeof(T).Name switch
+    {
+        nameof(IMaaCustomAction)
+            => MaaResourceClearCustomAction(Handle).ToBoolean()
+            && _actions.Clear(),
+        nameof(IMaaCustomRecognition)
+            => MaaResourceClearCustomRecognizer(Handle).ToBoolean()
+            && _recognitions.Clear(),
+        _
+            => throw new NotImplementedException()
+    };
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceClear"/>.
     /// </remarks>
-    public bool Clear()
-        => MaaResourceClear(Handle).ToBoolean();
+    public bool Clear(bool includeCustomResource = false)
+    {
+        var ret = MaaResourceClear(Handle).ToBoolean();
+        if (!includeCustomResource) return ret;
+        ret &= Clear<IMaaCustomAction>();
+        ret &= Clear<IMaaCustomRecognition>();
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourcePostPath"/>.
+    /// </remarks>
+    public MaaJob AppendPath(string path)
+    {
+        var id = MaaResourcePostPath(Handle, path);
+        return new MaaJob(id, this);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -128,14 +210,17 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     public bool SetOption<T>(ResourceOption opt, T value)
     {
         ArgumentNullException.ThrowIfNull(value);
+        throw new InvalidOperationException();
 
+        /*
         byte[] optValue = (value, opt) switch
         {
-            // (int vvvv, ResourceOption.Invalid) => vvvv.ToMaaOptionValues(),
+            (int vvvv, ResourceOption.Invalid) => vvvv.ToMaaOptionValues(),
             _ => throw new InvalidOperationException(),
         };
 
         return MaaResourceSetOption(Handle, (MaaResOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
+        */
     }
 
     /// <inheritdoc/>

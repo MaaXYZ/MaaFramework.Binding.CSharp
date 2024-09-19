@@ -12,6 +12,7 @@
 
 ﻿namespace MaaFramework.Binding.Messages;
 
+//MaaApiDocument Version: (main) v2.0.0-beta.1
 /// <summary>
 ///  A callback consists of a message and a payload.
 ///  The message is a string that indicates the type of the message.
@@ -25,7 +26,7 @@ public static class MaaMsg
         ///     The message for the resource loading.
         /// </summary>
         /// <remarks>
-        ///     payload: { id: number, path: string }
+        ///     <para>payload: { id: number, path: string }</para>
         /// </remarks>
         public const string StartLoading = "Resource.StartLoading";
 
@@ -33,7 +34,7 @@ public static class MaaMsg
         ///     The message for the resource loading.
         /// </summary>
         /// <remarks>
-        ///     payload: { id: number, path: string }
+        ///     <para>payload: { id: number, path: string }</para>
         /// </remarks>
         public const string LoadingCompleted = "Resource.LoadingCompleted";
 
@@ -41,7 +42,7 @@ public static class MaaMsg
         ///     The message for the resource loading.
         /// </summary>
         /// <remarks>
-        ///     payload: { id: number, path: string }
+        ///     <para>payload: { id: number, path: string }</para>
         /// </remarks>
         public const string LoadingFailed = "Resource.LoadingFailed";
 
@@ -54,7 +55,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     payload: { id: number }
+            ///     <para>payload: { id: number }</para>
             /// </remarks>
             public const string Started = "Controller.Action.Started";
 
@@ -62,7 +63,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     payload: { id: number }
+            ///     <para>payload: { id: number }</para>
             /// </remarks>
             public const string Completed = "Controller.Action.Completed";
 
@@ -70,7 +71,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     payload: { id: number }
+            ///     <para>payload: { id: number }</para>
             /// </remarks>
             public const string Failed = "Controller.Action.Failed";
 
@@ -79,32 +80,28 @@ public static class MaaMsg
         ///     The message for the UUID got.
         /// </summary>
         /// <remarks>
-        ///     payload: { uuid: string }
+        ///     <para>payload: { uuid: string }</para>
         /// </remarks>
         public const string UUIDGot = "Controller.UUIDGot";
 
         public const string UUIDGetFailed = "Controller.UUIDGetFailed";
 
         /// <remarks>
-        ///     payload: { }
+        ///     <para>payload: { }</para>
         /// </remarks>
         public const string ScreencapInited = "Controller.ScreencapInited";
 
         public const string ScreencapInitFailed = "Controller.ScreencapInitFailed";
 
-        public const string TouchInputInited = "Controller.TouchinputInited";
+        public const string InputInited = "Controller.TouchinputInited";
 
-        public const string TouchInputInitFailed = "Controller.TouchinputInitFailed";
-
-        public const string KeyInputInited = "Controller.KeyinputInited";
-
-        public const string KeyInputInitFailed = "Controller.KeyinputInitFailed";
+        public const string InputInitFailed = "Controller.TouchinputInitFailed";
 
         /// <summary>
         ///     Message for the controller connected.
         /// </summary>
         /// <remarks>
-        ///     payload: { uuid: string }
+        ///     <para>payload: { uuid: string }</para>
         /// </remarks>
         public const string ConnectSuccess = "Controller.ConnectSuccess";
 
@@ -112,44 +109,101 @@ public static class MaaMsg
         ///     Message for the controller connect failed.
         /// </summary>
         /// <remarks>
-        ///     payload: { why: string }
+        ///     <para>payload: { why: string }</para>
         /// </remarks>
         public const string ConnectFailed = "Controller.ConnectFailed";
 
     }
+    public static class Tasker
+    {
+        public static class Task
+        {
+            /// <summary>
+            ///     Message for the tasks.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { id: number, entry: string, name: string, uuid: string, hash: string }</para>
+            /// </remarks>
+            public const string Started = "Tasker.Task.Started";
+
+            /// <summary>
+            ///     Message for the tasks.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { id: number, entry: string, name: string, uuid: string, hash: string }</para>
+            /// </remarks>
+            public const string Completed = "Tasker.Task.Completed";
+
+            /// <summary>
+            ///     Message for the tasks.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { id: number, entry: string, name: string, uuid: string, hash: string }</para>
+            /// </remarks>
+            public const string Failed = "Tasker.Task.Failed";
+
+        }
+    }
     public static class Task
     {
-        /// <summary>
-        ///     Message for the tasks.
-        /// </summary>
-        /// <remarks>
-        ///     payload: { id: number, entry: string, name: string, uuid: string, hash: string }
-        /// </remarks>
-        public const string Started = "Task.Started";
+        public static class Debug
+        {
+            /// <summary>
+            ///     Message for the recognitions.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string, current: string, recognition: { reco_id: number, name: string, box: [number, number, number, number], // If not recognized, it is null detail: any, } }</para>
+            /// </remarks>
+            public const string RecognitionResult = "Task.Debug.RecognitionResult";
 
-        /// <summary>
-        ///     Message for the tasks.
-        /// </summary>
-        /// <remarks>
-        ///     payload: { id: number, entry: string, name: string, uuid: string, hash: string }
-        /// </remarks>
-        public const string Completed = "Task.Completed";
+            /// <summary>
+            ///     Message for the recognitions.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string, current: string, recognition: { reco_id: number, name: string, box: [number, number, number, number], // If not recognized, it is null detail: any, } }</para>
+            /// </remarks>
+            public const string Hit = "Task.Debug.Hit";
 
-        /// <summary>
-        ///     Message for the tasks.
-        /// </summary>
-        /// <remarks>
-        ///     payload: { id: number, entry: string, name: string, uuid: string, hash: string }
-        /// </remarks>
-        public const string Failed = "Task.Failed";
+            /// <summary>
+            ///     Message for the task focus.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string, current: string, node: { node_id: number, name: string, reco_id: number, times: number, completed: boolean, } }</para>
+            /// </remarks>
+            public const string ReadyToRun = "Task.Debug.ReadyToRun";
 
+            /// <summary>
+            ///     Message for the task focus.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string, current: string, node: { node_id: number, name: string, reco_id: number, times: number, completed: boolean, } }</para>
+            /// </remarks>
+            public const string Completed = "Task.Debug.Completed";
+
+            /// <summary>
+            ///     Message for the task list.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string, current: string, list: [string], }</para>
+            /// </remarks>
+            public const string ListToRecognize = "Task.Debug.ListToRecognize";
+
+            /// <summary>
+            ///     Message for the task list.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string, current: string, list: [string], }</para>
+            /// </remarks>
+            public const string MissAll = "Task.Debug.MissAll";
+
+        }
         public static class Focus
         {
             /// <summary>
             ///     Message for the task focus.
             /// </summary>
             /// <remarks>
-            ///     payload: { task_id: number, entry: string, uuid: string, hash: string, pre_hit_task: string, name: string, recognition: { id: number, box: [number, number, number, number], detail: string, hit: boolean, }, node_id: number, status: number, }
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string, current: string, node: { node_id: number, name: string, reco_id: number, times: number, completed: boolean, } }</para>
             /// </remarks>
             public const string ReadyToRun = "Task.Focus.ReadyToRun";
 
@@ -157,52 +211,9 @@ public static class MaaMsg
             ///     Message for the task focus.
             /// </summary>
             /// <remarks>
-            ///     payload: { task_id: number, entry: string, uuid: string, hash: string, pre_hit_task: string, name: string, recognition: { id: number, box: [number, number, number, number], detail: string, hit: boolean, }, node_id: number, status: number, }
-            /// </remarks>
-            public const string Runout = "Task.Focus.Runout";
-
-            /// <summary>
-            ///     Message for the task focus.
-            /// </summary>
-            /// <remarks>
-            ///     payload: { task_id: number, entry: string, uuid: string, hash: string, pre_hit_task: string, name: string, recognition: { id: number, box: [number, number, number, number], detail: string, hit: boolean, }, node_id: number, status: number, }
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string, current: string, node: { node_id: number, name: string, reco_id: number, times: number, completed: boolean, } }</para>
             /// </remarks>
             public const string Completed = "Task.Focus.Completed";
-
-        }
-        public static class Debug
-        {
-            /// <summary>
-            ///     Message for debug.
-            /// </summary>
-            /// <remarks>
-            ///     payload: { task_id: number, entry: string, uuid: string, hash: string, pre_hit_task: string, name: string, recognition: { id: number, box: [number, number, number, number], detail: string, hit: boolean, }, node_id: number, status: number, }
-            /// </remarks>
-            public const string ReadyToRun = "Task.Debug.ReadyToRun";
-
-            /// <summary>
-            ///     Message for debug.
-            /// </summary>
-            /// <remarks>
-            ///     payload: { task_id: number, entry: string, uuid: string, hash: string, pre_hit_task: string, name: string, recognition: { id: number, box: [number, number, number, number], detail: string, hit: boolean, }, node_id: number, status: number, }
-            /// </remarks>
-            public const string Runout = "Task.Debug.Runout";
-
-            /// <summary>
-            ///     Message for debug.
-            /// </summary>
-            /// <remarks>
-            ///     payload: { task_id: number, entry: string, uuid: string, hash: string, pre_hit_task: string, name: string, recognition: { id: number, box: [number, number, number, number], detail: string, hit: boolean, }, node_id: number, status: number, }
-            /// </remarks>
-            public const string Completed = "Task.Debug.Completed";
-
-            public const string ListToRecognize = "Task.Debug.ListToRecognize";
-
-            public const string RecognitionResult = "Task.Debug.RecognitionResult";
-
-            public const string Hit = "Task.Debug.Hit";
-
-            public const string MissAll = "Task.Debug.MissAll";
 
         }
     }

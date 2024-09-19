@@ -3,10 +3,25 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A class providing properties of recognition detail.
+///     A sealed record providing properties of recognition detail.
 /// </summary>
 /// <typeparam name="T">The implemented type of <see cref="IMaaImageBuffer"/>.</typeparam>
-public sealed class RecognitionDetail<T> : IDisposable where T : IMaaImageBuffer, new()
+/// <param name="Id">Gets the recognition id.</param>
+/// <param name="Name">Gets the recognition name.</param>
+/// <param name="Algorithm">Gets the algorithm name of the recognition.</param>
+/// <param name="HitBox">Gets the hit box if hit; otherwise <see langword="null"/>.</param>
+/// <param name="Detail">Gets the recognition detail.</param>
+/// <param name="Raw">Gets the raw image on the recognition completing if in debug mode; otherwise <see langword="null"/>.</param>
+/// <param name="Draws">Gets the draw images on the recognition completed if in debug mode; otherwise <see langword="null"/>.</param>
+public sealed record RecognitionDetail<T>(
+    MaaRecoId Id,
+    string Name,
+    string Algorithm,
+    IMaaRectBuffer? HitBox,
+    string Detail,
+    T? Raw,
+    IMaaListBuffer<T>? Draws
+) : IDisposable where T : IMaaImageBuffer
 {
     private bool _disposed;
 
@@ -18,82 +33,61 @@ public sealed class RecognitionDetail<T> : IDisposable where T : IMaaImageBuffer
         _disposed = true;
 
         HitBox?.Dispose();
-        Raw.Dispose();
-        Draws.Dispose();
+        Raw?.Dispose();
+        Draws?.Dispose();
     }
-
-    /// <summary>
-    ///     Gets or initializes the recognition id.
-    /// </summary>
-    /// <remarks>
-    ///     From <see cref="NodeDetail.RecognitionId"/>.
-    /// </remarks>
-    public required MaaRecoId Id { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the recognition name.
-    /// </summary>
-    public required string Name { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the hit box.
-    /// </summary>
-    /// <remarks>
-    ///     Not hits if HitBox is <see langword="null"/>.
-    /// </remarks>
-    public required IMaaRectBuffer? HitBox { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the recognition detail.
-    /// </summary>
-    public required string Detail { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the raw image on the recognition completing.
-    /// </summary>
-    /// <remarks>
-    ///     Sets <see cref="GlobalOption.DebugMessage"/> to true in <see cref="IMaaUtility"/> to get this.
-    /// </remarks>
-    public required T Raw { get; init; }
-
-    /// <summary>
-    ///     Gets or initializes the draw images on the recognition completed.
-    /// </summary>
-    /// <remarks>
-    ///     Sets <see cref="GlobalOption.DebugMessage"/> to true in <see cref="IMaaUtility"/> to get this.
-    /// </remarks>
-    public required IMaaList<T> Draws { get; init; }
 
     /// <summary>
     ///     Queries the recognition detail.
     /// </summary>
     /// <typeparam name="TRect">The implemented type of <see cref="IMaaRectBuffer"/>.</typeparam>
     /// <typeparam name="TImage">The implemented type of <see cref="IMaaImageBuffer"/>.</typeparam>
-    /// <typeparam name="TImageList">The implemented type of <see cref="IMaaList&lt;TImage&gt;"/>.</typeparam>
-    /// <param name="recognitionId">The recognition id.</param>
-    /// <param name="maa">The maa utility.</param>
-    /// <returns>A <see cref="RecognitionDetail&lt;T&gt;"/> if query was successful; otherwise, <see langword="null"/>.</returns>
-    public static RecognitionDetail<TImage>? Query<TRect, TImage, TImageList>(MaaRecoId recognitionId, IMaaUtility maa)
+    /// <typeparam name="TImageList">The implemented type of <see cref="IMaaListBuffer{T}"/>.</typeparam>
+    /// <param name="recognitionId">The recognition id from <see cref="NodeDetail.RecognitionId"/>..</param>
+    /// <param name="tasker">The maa tasker.</param>
+    /// <returns>A <see cref="RecognitionDetail{T}"/> if query was successful; otherwise, <see langword="null"/>.</returns>
+    public static RecognitionDetail<TImage>? Query<TRect, TImage, TImageList>(MaaRecoId recognitionId, IMaaTasker tasker)
         where TRect : IMaaRectBuffer, new()
         where TImage : IMaaImageBuffer, new()
-        where TImageList : IMaaList<TImage>, new()
+        where TImageList : IMaaListBuffer<TImage>, new()
     {
-        ArgumentNullException.ThrowIfNull(maa);
+        ArgumentNullException.ThrowIfNull(tasker);
 
         var hitBox = new TRect();
         var raw = new TImage();
         var draws = new TImageList();
-        if (!maa.QueryRecognitionDetail(recognitionId, out var name, out var hit, hitBox, out var detail, raw, draws))
-            return null;
-
-        return new RecognitionDetail<TImage>
+        if (!tasker.GetRecognitionDetail(recognitionId, out var name, out var algorithm, out var hit, hitBox, out var detail, raw, draws))
         {
-            Id = recognitionId,
-            Name = name,
-            HitBox = hit ? hitBox : null,
-            Detail = detail,
-            Raw = raw,
-            Draws = draws,
-        };
+            hitBox.Dispose();
+            raw.Dispose();
+            draws.Dispose();
+            return null;
+        }
+
+        if (!hit)
+        {
+            hitBox.Dispose();
+            hitBox = default;
+        }
+        if (raw.IsEmpty)
+        {
+            raw.Dispose();
+            raw = default;
+        }
+        if (draws.IsEmpty)
+        {
+            draws.Dispose();
+            draws = default;
+        }
+
+        return new RecognitionDetail<TImage>(
+            Id: recognitionId,
+            Name: name,
+            Algorithm: algorithm,
+            HitBox: hitBox,
+            Detail: detail,
+            Raw: raw,
+            Draws: draws
+        );
     }
 }

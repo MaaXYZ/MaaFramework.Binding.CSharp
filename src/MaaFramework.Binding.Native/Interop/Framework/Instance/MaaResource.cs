@@ -16,76 +16,51 @@ namespace MaaFramework.Binding.Interop.Native;
 
 public static partial class MaaResource
 {
-    /// <summary>
-    ///     Create a resource.
-    /// </summary>
-    /// <param name="callback">The callback function. See MaaAPICallback</param>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaResourceHandle MaaResourceCreate(MaaResourceCallback callback, MaaCallbackTransparentArg callbackArg);
+    public static partial MaaResourceHandle MaaResourceCreate(MaaNotificationCallback callback, nint callbackArg);
 
-    /// <summary>
-    ///     Free the resource.
-    /// </summary>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaResourceDestroy(MaaResourceHandle res);
 
-    /// <summary>
-    ///     Add a path to the resource loading paths.
-    /// </summary>
-    /// <returns>The id of the resource</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaBool MaaResourceRegisterCustomRecognizer(MaaResourceHandle res, string name, MaaCustomRecognizerCallback recognizer, nint transArg);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaBool MaaResourceUnregisterCustomRecognizer(MaaResourceHandle res, string name);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaBool MaaResourceClearCustomRecognizer(MaaResourceHandle res);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaBool MaaResourceRegisterCustomAction(MaaResourceHandle res, string name, MaaCustomActionCallback action, nint transArg);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaBool MaaResourceUnregisterCustomAction(MaaResourceHandle res, string name);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaBool MaaResourceClearCustomAction(MaaResourceHandle res);
+
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaResId MaaResourcePostPath(MaaResourceHandle res, string path);
 
-    /// <summary>
-    ///     Clear the resource loading paths.
-    /// </summary>
-    /// <returns>Whether the resource is cleared successfully.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaResourceClear(MaaResourceHandle res);
 
-    /// <summary>
-    ///     Get the loading status of a resource identified by id.
-    /// </summary>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaResourceStatus(MaaResourceHandle res, MaaResId id);
 
-    /// <summary>
-    ///     Wait for a resource to be loaded.
-    /// </summary>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaResourceWait(MaaResourceHandle res, MaaResId id);
 
-    /// <summary>
-    ///     Check if resources are loaded.
-    /// </summary>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaResourceLoaded(MaaResourceHandle res);
 
-    /// <summary>
-    ///     Set options for a given resource.
-    /// </summary>
-    /// <param name="res">The handle of the resource to set options for.</param>
-    /// <param name="key">The option key.</param>
-    /// <param name="value">The option value.</param>
-    /// <param name="valSize">The size of the option value.</param>
-    /// <returns>Whether the option is set successfully.</returns>
-    /// <remarks>
-    ///     This function requires a given set of option keys and value types, otherwise this will fail. See MaaResOptionEnum for details.
-    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaResourceSetOption(MaaResourceHandle res, MaaResOption key, byte[] value, MaaOptionValueSize valSize);
 
-    /// <summary>
-    ///     Get the hash of the resource.
-    /// </summary>
-    /// <param name="buffer">The buffer where the hash will be written to.</param>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaResourceGetHash(MaaResourceHandle res, MaaStringBufferHandle buffer);
 
-    /// <summary>
-    ///     Get the task list of the resource.
-    /// </summary>
-    /// <param name="buffer">The buffer where the task list will be written to.</param>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceGetTaskList(MaaResourceHandle res, MaaStringBufferHandle buffer);
+    public static partial MaaBool MaaResourceGetTaskList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
 }

@@ -13,24 +13,24 @@ public interface IMaaStringBuffer<out T> : IMaaStringBuffer, IMaaDisposableHandl
 /// <summary>
 ///     An interface defining wrapped members for MaaStringBuffer.
 /// </summary>
-public interface IMaaStringBuffer : IDisposable
+public interface IMaaStringBuffer : IMaaBuffer<IMaaStringBuffer>
 {
     /// <summary>
-    ///     Gets a value indicates whether the string of the MaaStringBuffer is empty.
+    ///     Gets a value indicates whether the string of the <see cref="IMaaStringBuffer"/> is empty.
     /// </summary>
-    /// <returns>true if the string is empty; otherwise, false.</returns>
+    /// <returns><see langword="true"/> if the string is empty; otherwise, <see langword="false"/>.</returns>
     bool IsEmpty { get; }
 
     /// <summary>
-    ///     Clears the string of the MaaStringBuffer.
+    ///     Clears the string of the <see cref="IMaaStringBuffer"/>.
     /// </summary>
-    /// <returns>true if the string was cleared successfully; otherwise, false.</returns>
+    /// <returns><see langword="true"/> if the string was cleared successfully; otherwise, <see langword="false"/>.</returns>
     bool Clear();
 
     /// <summary>
-    ///     Gets the string from the MaaStringBuffer.
+    ///     Gets the string from the <see cref="IMaaStringBuffer"/>.
     /// </summary>
-    /// <returns>The string.</returns>
+    /// <returns>The <see cref="string"/>.</returns>
     string GetValue();
 
     /// <summary>
@@ -43,7 +43,7 @@ public interface IMaaStringBuffer : IDisposable
     ///     Sets a string into the MaaStringBuffer.
     /// </summary>
     /// <param name="str">The string.</param>
-    /// <param name="useEx">Uses MaaSetStringEx if true; otherwise, Uses MaaSetString.</param>
-    /// <returns>true if the string was set successfully; otherwise, false.</returns>
+    /// <param name="useEx">Uses MaaSetStringEx if <see langword="true"/>; otherwise, Uses MaaSetString.</param>
+    /// <returns><see langword="true"/> if the string was set successfully; otherwise, <see langword="false"/>.</returns>
     bool SetValue(string str, bool useEx = true);
 }

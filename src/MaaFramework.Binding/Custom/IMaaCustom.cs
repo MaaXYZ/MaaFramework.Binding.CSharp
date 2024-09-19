@@ -6,7 +6,7 @@
 public interface IMaaCustom
 {
     /// <summary>
-    ///     Gets or sets the name of MaaCustom.
+    ///     Gets or sets the name of MaaCustom that will be used to reference it.
     /// </summary>
     string Name { get; set; }
 }

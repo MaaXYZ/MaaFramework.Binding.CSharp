@@ -12,7 +12,7 @@
 
 namespace MaaFramework.Binding;
 
-public enum ResourceOption
+public enum ResourceOption : System.Int32
 {
     Invalid = 0,
 }

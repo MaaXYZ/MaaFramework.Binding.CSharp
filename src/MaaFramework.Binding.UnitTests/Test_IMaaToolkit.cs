@@ -4,6 +4,7 @@
 ///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolkit"/>.
 /// </summary>
 [TestClass]
+// ReSharper disable InconsistentNaming
 public class Test_IMaaToolkit
 {
     public static Dictionary<MaaTypes, object> NewData => new()
@@ -28,15 +29,10 @@ public class Test_IMaaToolkit
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(NewData))]
-    [Obsolete("Init_Uninit")]
     public void Interface_Config(MaaTypes type, IMaaToolkit maaToolkit)
     {
         Assert.IsNotNull(maaToolkit);
 
-        Assert.IsTrue(
-            maaToolkit.Config.Init());
-        Assert.IsTrue(
-            maaToolkit.Config.Uninit());
         Assert.IsTrue(
             maaToolkit.Config.InitOption());
     }
@@ -50,18 +46,16 @@ public class Test_IMaaToolkit
     {
         Assert.IsNotNull(maaToolkit);
 
-        var devices = useAsync ? maaToolkit.Device.FindAsync(arg).GetAwaiter().GetResult() : maaToolkit.Device.Find(arg);
-        if (devices.Length == 0)
+        var devices = useAsync ? maaToolkit.AdbDevice.FindAsync(arg).GetAwaiter().GetResult() : maaToolkit.AdbDevice.Find(arg);
+        if (devices.MaaSizeCount == 0)
             return;
 
-        CollectionAssert.AllItemsAreUnique(devices);
         foreach (var device in devices)
         {
             Assert.IsFalse(string.IsNullOrWhiteSpace(device.Name));
             Assert.IsFalse(string.IsNullOrWhiteSpace(device.AdbPath));
             Assert.IsFalse(string.IsNullOrWhiteSpace(device.AdbSerial));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(device.AdbConfig));
-            device.AdbTypes.Check();
+            Assert.IsFalse(string.IsNullOrWhiteSpace(device.Config));
         }
 
         using var maaController = type switch
@@ -69,7 +63,8 @@ public class Test_IMaaToolkit
 #if MAA_NATIVE
             MaaTypes.Native => devices[0].ToAdbController(
                 adbPath: Common.AdbPath,
-                types: AdbControllerTypes.InputPresetAdb | AdbControllerTypes.ScreencapEncode,
+                screencapMethods: AdbScreencapMethods.Encode,
+                inputMethods: AdbInputMethods.AdbShell,
                 link: LinkOption.None),
 #endif
             _ => throw new NotImplementedException(),
@@ -87,24 +82,12 @@ public class Test_IMaaToolkit
     {
         Assert.IsNotNull(maaToolkit);
 
-        Test_WindowInfos(type,
-            maaToolkit.Win32.Window.Find(string.Empty, string.Empty));
-        Test_WindowInfos(type,
-            maaToolkit.Win32.Window.Search(string.Empty, string.Empty));
-        Test_WindowInfos(type,
-            maaToolkit.Win32.Window.ListWindows());
-
-        Test_WindowInfos(type, [
-            maaToolkit.Win32.Window.Cursor]);
-        Test_WindowInfos(type, [
-            maaToolkit.Win32.Window.Desktop]);
-        Test_WindowInfos(type, [
-            maaToolkit.Win32.Window.Foreground]);
+        Test_Win32_WindowInfos(type,
+            maaToolkit.Desktop.Window.Find());
     }
 
-    private static void Test_WindowInfos(MaaTypes type, WindowInfo[] windows)
+    private static void Test_Win32_WindowInfos(MaaTypes type, IList<DesktopWindowInfo> windows)
     {
-        CollectionAssert.AllItemsAreUnique(windows);
         foreach (var window in windows)
         {
             Assert.AreNotEqual(nint.Zero, window.Handle);
@@ -113,7 +96,8 @@ public class Test_IMaaToolkit
         using var maaController = type switch
         {
             MaaTypes.Native => windows[0].ToWin32Controller(
-                Win32ControllerTypes.TouchSendMessage | Win32ControllerTypes.KeySendMessage | Win32ControllerTypes.ScreencapGDI,
+                screencapMethod: Win32ScreencapMethod.GDI,
+                inputMethod: Win32InputMethod.SendMessage,
                 link: LinkOption.None),
             _ => throw new NotImplementedException(),
         };

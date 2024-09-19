@@ -20,35 +20,31 @@ public interface IMaaImageBuffer<T> : IMaaImageBuffer, IMaaDisposableHandle<T>
     /// </summary>
     /// <param name="data">The encoded data of image.</param>
     /// <param name="size">The encoded size of image.</param>
-    /// <returns>true if the image encoded data was set successfully; otherwise, false.</returns>
+    /// <returns><see langword="true"/> if the image encoded data was set successfully; otherwise, <see langword="false"/>.</returns>
     bool SetEncodedData(T data, MaaSize size);
 }
 
 /// <summary>
 ///     An interface defining wrapped members for MaaImageBuffer.
 /// </summary>
-public interface IMaaImageBuffer : IDisposable
+public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>
 {
     /// <summary>
-    ///     Gets a value indicates whether the image of the MaaImageBuffer is empty.
+    ///     Gets a value indicates whether the image of the <see cref="IMaaImageBuffer"/> is empty.
     /// </summary>
-    /// <value>
-    ///     true if the image is empty; otherwise, false.
-    /// </value>
+    /// <returns><see langword="true"/> if the image is empty; otherwise, <see langword="false"/>.</returns>
     bool IsEmpty { get; }
 
     /// <summary>
-    ///     Clears the image of the MaaImageBuffer.
+    ///     Clears the image of the <see cref="IMaaImageBuffer"/>.
     /// </summary>
-    /// <returns>true if the image was cleared successfully; otherwise, false.</returns>
+    /// <returns><see langword="true"/> if the image was cleared successfully; otherwise, <see langword="false"/>.</returns>
     bool Clear();
 
     /// <summary>
     ///     Gets the image info.
     /// </summary>
-    /// <value>
-    ///     The info includes width, height, type.
-    /// </value>
+    /// <returns>The info includes width, height, channels, type.</returns>
     ImageInfo Info { get; }
 
     /// <summary>
@@ -56,8 +52,8 @@ public interface IMaaImageBuffer : IDisposable
     /// </summary>
     /// <returns>The stream of image(PNG).</returns>
     /// <remarks>
-    ///     1. Avoids disposing <see cref="IMaaImageBuffer"/> before the stream is read.
-    ///     2. Sets a png image into the <see cref="IMaaImageBuffer"/> if a stream is set, then the stream will be closed.
+    ///     <para>1. Avoids disposing <see cref="IMaaImageBuffer"/> before the stream is read.</para>
+    ///     <para>2. Sets a png image into the <see cref="IMaaImageBuffer"/> if a stream is set, then the stream will be closed.</para>
     /// </remarks>
     Stream EncodedDataStream { get; set; }
 }

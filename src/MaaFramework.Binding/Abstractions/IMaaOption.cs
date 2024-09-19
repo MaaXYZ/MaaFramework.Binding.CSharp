@@ -3,7 +3,7 @@
 /// <summary>
 ///     An interface defining methods that set options for <see cref="MaaFramework"/>.
 /// </summary>
-/// <typeparam name="TOption">The <see cref="ControllerOption"/>, <see cref="GlobalOption"/>, <see cref="InstanceOption"/>, <see cref="ResourceOption"/>.</typeparam>
+/// <typeparam name="TOption">The <see cref="ControllerOption"/>, <see cref="GlobalOption"/>, <see cref="TaskerOption"/>, <see cref="ResourceOption"/>.</typeparam>
 public interface IMaaOption<in TOption> where TOption : Enum
 {
     /// <summary>

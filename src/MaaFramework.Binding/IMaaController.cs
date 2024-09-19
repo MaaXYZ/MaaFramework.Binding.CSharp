@@ -9,8 +9,8 @@ namespace MaaFramework.Binding;
 /// <typeparam name="T">The type of handle.</typeparam>
 public interface IMaaController<T> : IMaaController, IMaaDisposableHandle<T>
 {
-    /// <inheritdoc cref="IMaaController.GetImage"/>
-    bool GetImage(IMaaImageBuffer<T> maaImage);
+    /// <inheritdoc cref="IMaaController.GetCachedImage"/>
+    bool GetCachedImage(IMaaImageBuffer<nint> maaImage);
 }
 
 /// <summary>
@@ -21,7 +21,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <summary>
     ///     Connects the address specified by the constructor.
     /// </summary>
-    /// <returns>A connection job.</returns>
+    /// <returns>A connection <see cref="MaaJob"/>.</returns>
     MaaJob LinkStart();
 
     /// <summary>
@@ -29,7 +29,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// </summary>
     /// <param name="x">The horizontal coordinate of the point.</param>
     /// <param name="y">The vertical coordinate of the point.</param>
-    /// <returns>A click job.</returns>
+    /// <returns>A click <see cref="MaaJob"/>.</returns>
     MaaJob Click(int x, int y);
 
     /// <summary>
@@ -38,37 +38,41 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <param name="x1">The horizontal coordinate of the starting point.</param>
     /// <param name="y1">The vertical coordinate of the starting point.</param>
     /// <param name="x2">The horizontal coordinate of the ending point.</param>
-    /// <param name="y2">The horizontal coordinate of the ending point.</param>
-    /// <param name="duration">The swipe duration(ms).</param>
-    /// <returns>A swipe job.</returns>
+    /// <param name="y2">The vertical coordinate of the ending point.</param>
+    /// <param name="duration">The millisecond of the swipe duration(ms).</param>
+    /// <returns>A swipe <see cref="MaaJob"/>.</returns>
     MaaJob Swipe(int x1, int y1, int x2, int y2, int duration);
 
     /// <summary>
     ///     Presses a key.
     /// </summary>
     /// <param name="keyCode">The code of the key.</param>
-    /// <returns>A press key job.</returns>
+    /// <returns>A press key <see cref="MaaJob"/>.</returns>
     MaaJob PressKey(int keyCode);
 
     /// <summary>
     ///     Inputs a text.
     /// </summary>
     /// <param name="text">The text.</param>
-    /// <returns>A input text job.</returns>
+    /// <returns>An input text <see cref="MaaJob"/>.</returns>
     MaaJob InputText(string text);
 
     /// <summary>
     ///     Starts an app.
     /// </summary>
-    /// <param name="intent">The intent. eg: "com.hypergryph.arknights/com.u8.sdk.U8UnityContext".</param>
-    /// <returns>A start app job.</returns>
+    /// <param name="intent">The intent.
+    /// <para>e.g., "com.hypergryph.arknights/com.u8.sdk.U8UnityContext".</para>
+    /// </param>
+    /// <returns>A start app <see cref="MaaJob"/>.</returns>
     MaaJob StartApp(string intent);
 
     /// <summary>
     ///     Stops an app.
     /// </summary>
-    /// <param name="intent">The intent. eg: "com.hypergryph.arknights/com.u8.sdk.U8UnityContext".</param>
-    /// <returns>A stop app job.</returns>
+    /// <param name="intent">The intent.
+    /// <para>e.g., "com.hypergryph.arknights".</para>
+    /// </param>
+    /// <returns>A stop app <see cref="MaaJob"/>.</returns>
     MaaJob StopApp(string intent);
 
     /// <summary>
@@ -78,7 +82,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <param name="x">The horizontal coordinate of the starting point.</param>
     /// <param name="y">The vertical coordinate of the starting point.</param>
     /// <param name="pressure">The pressure.</param>
-    /// <returns>A touch down job.</returns>
+    /// <returns>A touch down <see cref="MaaJob"/>.</returns>
     MaaJob TouchDown(int contact, int x, int y, int pressure);
 
     /// <summary>
@@ -88,40 +92,37 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <param name="x">The horizontal coordinate of the ending point.</param>
     /// <param name="y">The vertical coordinate of the ending point.</param>
     /// <param name="pressure">The pressure.</param>
-    /// <returns>A touch move job.</returns>
+    /// <returns>A touch move <see cref="MaaJob"/>.</returns>
     MaaJob TouchMove(int contact, int x, int y, int pressure);
 
     /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
     /// </summary>
     /// <param name="contact">The contact id.</param>
-    /// <returns>A touch up job.</returns>
+    /// <returns>A touch up <see cref="MaaJob"/>.</returns>
     MaaJob TouchUp(int contact);
 
     /// <summary>
     ///     Takes a screenshot.
     /// </summary>
-    /// <returns>A screen capture job.</returns>
+    /// <returns>A screen capture <see cref="MaaJob"/>.</returns>
     MaaJob Screencap();
 
     /// <summary>
     ///     Ends the connection of the address specified by the constructor.
     /// </summary>
-    /// <returns>true if the connection was ended successfully; otherwise, false.</returns>
+    /// <returns><see langword="true"/> if the connection was ended successfully; otherwise, <see langword="false"/>.</returns>
     bool LinkStop();
 
     /// <summary>
-    ///     Gets an image.
+    ///     Gets the cached image.
     /// </summary>
-    /// <param name="maaImage">The MaaImageBuffer.</param>
-    /// <returns>true if the image was got successfully; otherwise, false.</returns>
-    bool GetImage(IMaaImageBuffer maaImage);
+    /// <returns>An <see cref="IMaaImageBuffer"/> if the hash was successfully got; otherwise, <see langword="null"/>.</returns>
+    bool GetCachedImage(IMaaImageBuffer maaImage);
 
     /// <summary>
     ///     Gets the uuid string of the <see cref="IMaaController"/>.
     /// </summary>
-    /// <value>
-    ///     A string if the hash was successfully got; otherwise, null.
-    /// </value>
+    /// <returns>A <see cref="string"/> if the hash was successfully got; otherwise, <see langword="null"/>.</returns>
     string? Uuid { get; }
 }

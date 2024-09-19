@@ -11,52 +11,52 @@ public interface IMaaRectBuffer<out T> : IMaaRectBuffer, IMaaDisposableHandle<T>
 }
 
 /// <summary>
-///     An interface defining wrapped members for MaaRectBuffer.
+///     An interface defining wrapped members for <see cref="IMaaRectBuffer"/>.
 /// </summary>
-public interface IMaaRectBuffer : IDisposable
+public interface IMaaRectBuffer : IMaaBuffer<IMaaRectBuffer>
 {
     /// <summary>
-    ///     Gets or Sets the horizontal coordinate.
+    ///     Gets the horizontal coordinate.
     /// </summary>
     /// <exception cref="InvalidOperationException" />
-    int X { get; set; }
+    int X { get; }
 
     /// <summary>
-    ///     Gets or Sets the vertical coordinate.
+    ///     Gets the vertical coordinate.
     /// </summary>
     /// <exception cref="InvalidOperationException" />
-    int Y { get; set; }
+    int Y { get; }
 
     /// <summary>
-    ///     Gets or Sets the Width value.
+    ///     Gets the width value.
     /// </summary>
     /// <exception cref="InvalidOperationException" />
-    int Width { get; set; }
+    int Width { get; }
 
     /// <summary>
-    ///     Gets or Sets the Height value.
+    ///     Gets the height value.
     /// </summary>
     /// <exception cref="InvalidOperationException" />
-    int Height { get; set; }
+    int Height { get; }
 
     /// <summary>
-    ///     Sets values of a MaaRectBuffer.
+    ///     Sets values of a <see cref="IMaaRectBuffer"/>.
     /// </summary>
     /// <param name="x">The horizontal coordinate.</param>
     /// <param name="y">The vertical coordinate.</param>
     /// <param name="width">The width.</param>
     /// <param name="height">The height.</param>
-    /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     bool SetValues(int x, int y, int width, int height);
 
     /// <summary>
-    ///     Gets values of a MaaRectBuffer.
+    ///     Gets values of a <see cref="IMaaRectBuffer"/>.
     /// </summary>
     /// <param name="x">The horizontal coordinate.</param>
     /// <param name="y">The vertical coordinate.</param>
     /// <param name="width">The width.</param>
     /// <param name="height">The height.</param>
-    /// <returns>true if the operation was executed successfully; otherwise, false.</returns>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     void GetValues(out int x, out int y, out int width, out int height);
 }
 

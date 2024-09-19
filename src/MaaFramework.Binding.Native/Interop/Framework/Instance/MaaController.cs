@@ -10,75 +10,29 @@
 #pragma warning disable CS1573 // 参数在 XML 注释中没有匹配的 param 标记
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
+global using MaaCustomControllerCallbacksHandle = nint;
+
 using System.Runtime.InteropServices;
 
 namespace MaaFramework.Binding.Interop.Native;
 
 public static partial class MaaController
 {
-    [Obsolete("Use MaaAdbControllerCreateV2() instead.")]
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaAdbControllerCreate(string adbPath, string address, MaaAdbControllerType type, string config, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);
-
-    /// <summary>
-    ///     Create a ADB controller instance.
-    /// </summary>
-    /// <param name="adbPath">The path of ADB executable.</param>
-    /// <param name="address">The ADB serial of the target device.</param>
-    /// <param name="type">The type of the ADB controller. See MaaAdbControllerTypeEnum.</param>
-    /// <param name="config">The config of the ADB controller.</param>
-    /// <param name="agentPath">The path of the agent executable.</param>
-    /// <param name="callback">The callback function. See MaaAPICallback.</param>
-    /// <param name="callbackArg">The callback arg that will be passed to the callback function.</param>
-    /// <returns>The handle of the created controller instance.</returns>
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaAdbControllerCreateV2(string adbPath, string address, MaaAdbControllerType type, string config, string agentPath, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);
-
-    /// <summary>
-    ///     Create a win32 controller instance.
-    /// </summary>
-    /// <param name="hWnd">The win32 window handle to control. This can be retrieved by helpers provided in MaaToolkitWin32Window.h.</param>
-    /// <param name="type">The type of the win32 controller. See MaaWin32ControllerTypeEnum.</param>
-    /// <param name="callback">The callback function. See MaaAPICallback.</param>
-    /// <param name="callbackArg">The callback arg that will be passed to the callback function.</param>
-    /// <returns>The handle of the created controller instance.</returns>
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaWin32ControllerCreate(MaaWin32Hwnd hWnd, MaaWin32ControllerType type, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);
-
-    /// <summary>
-    ///     Create a custom controller instance.
-    /// </summary>
-    /// <param name="handle">The handle to your instance of custom controller. See MaaCustomControllerAPI.</param>
-    /// <param name="handleArg">The arg that will be passed to the custom controller API.</param>
-    /// <param name="callback">The callback function. See MaaAPICallback.</param>
-    /// <param name="callbackArg">The callback arg that will be passed to the callback function.</param>
-    /// <returns>The handle of the created controller instance.</returns>
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaCustomControllerCreate(MaaCustomControllerHandle handle, MaaTransparentArg handleArg, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);
+    public static partial MaaControllerHandle MaaAdbControllerCreate(string adbPath, string address, MaaAdbScreencapMethod screencapMethods, MaaAdbInputMethod inputMethods, string config, string agentPath, MaaNotificationCallback callback, nint callbackArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaThriftControllerCreate(MaaThriftControllerType type, string host, int port, string config, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);
+    public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod inputMethod, MaaNotificationCallback callback, nint callbackArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath, string writePath, MaaDbgControllerType type, string config, MaaControllerCallback callback, MaaCallbackTransparentArg callbackArg);
+    public static partial MaaControllerHandle MaaCustomControllerCreate(MaaCustomControllerCallbacksHandle handle, nint handleArg, MaaNotificationCallback callback, nint callbackArg);
 
-    /// <summary>
-    ///     Free the controller instance.
-    /// </summary>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath, string writePath, MaaDbgControllerType type, string config, MaaNotificationCallback callback, nint callbackArg);
+
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);
 
-    /// <summary>
-    ///     Set options for a given controller instance.
-    /// </summary>
-    /// <param name="ctrl">The handle of the controller instance to set options for.</param>
-    /// <param name="key">The option key.</param>
-    /// <param name="value">The option value.</param>
-    /// <param name="valSize">The size of the option value.</param>
-    /// <returns>Whether the option is set successfully.</returns>
-    /// <remarks>
-    ///     This function requires a given set of option keys and value types, otherwise this will fail. See MaaCtrlOptionEnum for details.
-    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaControllerSetOption(MaaControllerHandle ctrl, MaaCtrlOption key, byte[] value, MaaOptionValueSize valSize);
 
@@ -115,39 +69,18 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostScreencap(MaaControllerHandle ctrl);
 
-    /// <summary>
-    ///     Get the status of a request identified by the given id.
-    /// </summary>
-    /// <returns>The status of the request.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaControllerStatus(MaaControllerHandle ctrl, MaaCtrlId id);
 
-    /// <summary>
-    ///     Wait for the request identified by the given id to complete.
-    /// </summary>
-    /// <returns>The status of the request.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaControllerWait(MaaControllerHandle ctrl, MaaCtrlId id);
 
-    /// <summary>
-    ///     Check if the controller is connected.
-    /// </summary>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaControllerConnected(MaaControllerHandle ctrl);
 
-    /// <summary>
-    ///     Get the image buffer of the last screencap request.
-    /// </summary>
-    /// <param name="buffer">The buffer that the image data will be stored in.</param>
-    /// <returns>Whether the image buffer is retrieved successfully.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaControllerGetImage(MaaControllerHandle ctrl, MaaImageBufferHandle buffer);
+    public static partial MaaBool MaaControllerCachedImage(MaaControllerHandle ctrl, MaaImageBufferHandle buffer);
 
-    /// <summary>
-    ///     Get the UUID of the controller.
-    /// </summary>
-    /// <param name="buffer">The buffer that the UUID will be stored in.</param>
-    /// <returns>Whether the UUID is retrieved successfully.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaControllerGetUUID(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
+    public static partial MaaBool MaaControllerGetUuid(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
 }

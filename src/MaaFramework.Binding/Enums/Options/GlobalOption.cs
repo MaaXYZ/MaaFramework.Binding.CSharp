@@ -12,51 +12,51 @@
 
 namespace MaaFramework.Binding;
 
-public enum GlobalOption
+public enum GlobalOption : System.Int32
 {
     Invalid = 0,
     /// <summary>
     ///     Log dir
     /// </summary>
     /// <remarks>
-    ///     value: string, eg: "C:\\Users\\Administrator\\Desktop\\log"; val_size: string length
+    ///     <para>value: string, eg: "C:\\Users\\Administrator\\Desktop\\log"; val_size: string length</para>
     /// </remarks>
     LogDir = 1,
     /// <summary>
     ///     Whether to save draw
     /// </summary>
     /// <remarks>
-    ///     value: bool, eg: true; val_size: sizeof(bool)
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     SaveDraw = 2,
     /// <summary>
     ///     Dump all screenshots and actions
     /// </summary>
     /// <remarks>
-    ///     Recording will evaluate to true if any of this or MaaCtrlOptionEnum::MaaCtrlOption_Recording
-    ///     is true. value: bool, eg: true; val_size: sizeof(bool)
+    ///     <para>Recording will evaluate to true if any of this or MaaCtrlOptionEnum::MaaCtrlOption_Recording</para>
+    ///     <para>is true. value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     Recording = 3,
     /// <summary>
     ///     The level of log output to stdout
     /// </summary>
     /// <remarks>
-    ///     value: MaaLoggingLevel, val_size: sizeof(MaaLoggingLevel)
-    ///     default value is MaaLoggingLevel_Error
+    ///     <para>value: MaaLoggingLevel, val_size: sizeof(MaaLoggingLevel)</para>
+    ///     <para>default value is MaaLoggingLevel_Error</para>
     /// </remarks>
     StdoutLevel = 4,
     /// <summary>
     ///     Whether to show hit draw
     /// </summary>
     /// <remarks>
-    ///     value: bool, eg: true; val_size: sizeof(bool)
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     ShowHitDraw = 5,
     /// <summary>
     ///     Whether to callback debug message
     /// </summary>
     /// <remarks>
-    ///     value: bool, eg: true; val_size: sizeof(bool)
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     DebugMessage = 6,
 }

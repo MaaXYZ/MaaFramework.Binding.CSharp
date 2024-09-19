@@ -26,7 +26,7 @@ public class MaaCustomController : MaaController
     public MaaCustomController(IMaaCustomController api)
         : base()
     {
-        var handle = MaaCustomControllerCreate(api.Convert(out _apiTuple), nint.Zero, MaaApiCallback, nint.Zero);
+        var handle = MaaCustomControllerCreate(api.Convert(out _apiTuple), nint.Zero, MaaNotificationCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
     }
 }

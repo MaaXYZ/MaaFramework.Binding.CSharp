@@ -17,13 +17,5 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaToolkit
 {
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitInitOptionConfig(string userPath, string defaultJson);
-
-    [Obsolete("Use MaaToolkitInitOptionConfig instead.")]
-    [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitInit();
-
-    [Obsolete("Don't use it.")]
-    [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitUninit();
+    public static partial MaaBool MaaToolkitConfigInitOption(string userPath, string defaultJson);
 }
