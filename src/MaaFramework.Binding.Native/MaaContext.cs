@@ -109,13 +109,6 @@ public class MaaContext : IMaaContext<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextClone"/>.
     /// </remarks>
-    IMaaContext IMaaContext.Clone()
-        => Clone();
-
-    /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaContextClone"/>.
-    /// </remarks>
-    public IMaaContext<nint> Clone()
+    public object Clone()
         => new MaaContext(MaaContextClone(Handle));
 }

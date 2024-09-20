@@ -21,15 +21,12 @@ public interface IMaaContext<T> : IMaaContext
 
     /// <inheritdoc cref="IMaaContext.Tasker"/>
     new IMaaTasker<T> Tasker { get; }
-
-    /// <inheritdoc cref="IMaaContext.Clone"/>
-    new IMaaContext<T> Clone();
 }
 
 /// <summary>
 ///     An interface defining wrapped members for MaaContext.
 /// </summary>
-public interface IMaaContext
+public interface IMaaContext : ICloneable
 {
     /// <summary>
     ///     Runs a pipeline.
@@ -87,10 +84,4 @@ public interface IMaaContext
     /// </summary>
     /// <returns>The <see cref="IMaaTasker"/>.</returns>
     IMaaTasker Tasker { get; }
-
-    /// <summary>
-    ///     Clone the <see cref="IMaaContext"/> to a new <see cref="IMaaContext"/>.
-    /// </summary>
-    /// <returns>The new <see cref="IMaaContext"/>.</returns>
-    IMaaContext Clone();
 }
