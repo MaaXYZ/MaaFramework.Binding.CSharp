@@ -9,11 +9,9 @@ _✨ The csharp binding of [MaaFramework](https://github.com/MaaXYZ/MaaFramework
 _💫 A common interoperable API wrapper 💫_
 
 ![license](https://img.shields.io/github/license/MaaXYZ/MaaFramework) ![language](https://img.shields.io/badge/.NET-≥%207-512BD4?logo=csharp) ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blueviolet) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
-<div align="center">
 
 [English](./README.md) | [简体中文](./README_zh.md)
 
-</div>
 </div>
 
 ## Articles
@@ -32,7 +30,7 @@ Your computer should meet the minimum system requirements before you run and use
 | macOS 12+ | Restricted from [MaaFramework](https://github.com/MaaXYZ/MaaFramework/issues/174) |
 | Linux <br> Ubuntu 23.10+ | libc6 2.38+ <br> and more |
 
-- Architectures: x64, Arm64
+- Architectures: x64, arm64
 
 ### Install Dependents
 
@@ -46,7 +44,7 @@ Your computer should meet the minimum system requirements before you run and use
 
 See MaaFramework document ([en-us](https://github.com/MaaXYZ/MaaFramework/blob/v1.4.0/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) / [zh_cn](https://github.com/MaaXYZ/MaaFramework/blob/v1.4.0/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6)).
 
-Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) in MaaFramework.Binding.CSharp.
+Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) in `MaaFramework.Binding.CSharp`.
 
 ### Add Packages
 
@@ -171,7 +169,7 @@ We have written detailed documentation comments in source code files.
 
 You can also visit [API Reference](https://maaxyz.github.io/MaaFramework.Binding.CSharp/api/MaaFramework.Binding.html) and [Unit Tests](./src/MaaFramework.Binding.UnitTests) for more information.
 
-If you still intend to use a API Reference specific to your preferred version of MaaFramework.Binding.CSharp, you may refer to the releases page of the project and download the attached docs.zip file.
+If you still intend to use a API Reference specific to your preferred version of MaaFramework.Binding.CSharp, you may refer to the releases page of the project and download the attached `docs.zip` file.
 
 ## Contributing
 
