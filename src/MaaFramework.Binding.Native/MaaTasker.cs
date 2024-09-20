@@ -252,11 +252,11 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetNodeDetail"/>.
     /// </remarks>
-    public bool GetNodeDetail(MaaNodeId nodeId, out string name, out MaaRecoId recognitionId, out MaaSize times, out bool actionCompleted)
+    public bool GetNodeDetail(MaaNodeId nodeId, out string name, out MaaRecoId recognitionId, out bool actionCompleted)
     {
         using var nameBuffer = new MaaStringBuffer();
 
-        var ret = MaaTaskerGetNodeDetail(Handle, nodeId, nameBuffer.Handle, out recognitionId, out times, out var completed).ToBoolean();
+        var ret = MaaTaskerGetNodeDetail(Handle, nodeId, nameBuffer.Handle, out recognitionId, out var completed).ToBoolean();
 
         name = nameBuffer.ToString();
         actionCompleted = completed.ToBoolean();

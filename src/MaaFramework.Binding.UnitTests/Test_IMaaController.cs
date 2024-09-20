@@ -50,7 +50,7 @@ public class Test_IMaaController
                 data.Callback += Common.Callback;
                 data.LinkStart()
                     .Wait()
-                    .ThrowIfNot(MaaJobStatus.Success);
+                    .ThrowIfNot(MaaJobStatus.Succeeded);
                 Assert.IsTrue(
                     data.SetOption(ControllerOption.ScreenshotTargetShortSide, 720));
             }
@@ -141,9 +141,9 @@ public class Test_IMaaController
         Assert.IsNotNull(job);
 
         Assert.AreEqual(
-            MaaJobStatus.Success, job.Wait());
+            MaaJobStatus.Succeeded, job.Wait());
         Assert.AreEqual(
-            MaaJobStatus.Success, job.Status);
+            MaaJobStatus.Succeeded, job.Status);
     }
 
     public static void Interface_IMaaPost_Failed(MaaJob job)

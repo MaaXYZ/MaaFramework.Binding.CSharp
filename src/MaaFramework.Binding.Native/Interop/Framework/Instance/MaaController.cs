@@ -19,16 +19,16 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaController
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaAdbControllerCreate(string adbPath, string address, MaaAdbScreencapMethod screencapMethods, MaaAdbInputMethod inputMethods, string config, string agentPath, MaaNotificationCallback callback, nint callbackArg);
+    public static partial MaaControllerHandle MaaAdbControllerCreate(string adbPath, string address, MaaAdbScreencapMethod screencapMethods, MaaAdbInputMethod inputMethods, string config, string agentPath, MaaNotificationCallback notify, nint notifyTransArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod inputMethod, MaaNotificationCallback callback, nint callbackArg);
+    public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod inputMethod, MaaNotificationCallback notify, nint notifyTransArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaCustomControllerCreate(MaaCustomControllerCallbacksHandle handle, nint handleArg, MaaNotificationCallback callback, nint callbackArg);
+    public static partial MaaControllerHandle MaaCustomControllerCreate(MaaCustomControllerCallbacksHandle controller, nint controllerArg, MaaNotificationCallback notify, nint notifyTransArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath, string writePath, MaaDbgControllerType type, string config, MaaNotificationCallback callback, nint callbackArg);
+    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath, string writePath, MaaDbgControllerType type, string config, MaaNotificationCallback notify, nint notifyTransArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);

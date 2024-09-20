@@ -72,7 +72,7 @@ public class Test_IMaaToolkit
         maaController
             .LinkStart()
             .Wait()
-            .ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, devices[0].AdbPath, devices[0].AdbSerial);
+            .ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, devices[0].AdbPath, devices[0].AdbSerial);
     }
 
 #if MAA_WIN32 && !GITHUB_ACTIONS
@@ -104,7 +104,7 @@ public class Test_IMaaToolkit
         maaController
             .LinkStart()
             .Wait()
-            .ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, windows[0].Handle);
+            .ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, windows[0].Handle);
     }
 #endif
 }

@@ -17,11 +17,11 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaToolkit
 {
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void MaaToolkitProjectInterfaceRegisterCustomRecognition(ulong instId, string name, MaaCustomRecognizerCallback recognizer, nint transArg);
+    public static partial void MaaToolkitProjectInterfaceRegisterCustomRecognition(ulong instId, string name, MaaCustomRecognitionCallback recognition, nint transArg);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaToolkitProjectInterfaceRegisterCustomAction(ulong instId, string name, MaaCustomActionCallback action, nint transArg);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitProjectInterfaceRunCli(ulong instId, string resourcePath, string userPath, MaaBool directly, MaaNotificationCallback callback, nint callbackArg);
+    public static partial MaaBool MaaToolkitProjectInterfaceRunCli(ulong instId, string resourcePath, string userPath, MaaBool directly, MaaNotificationCallback notify, nint notifyTransArg);
 }

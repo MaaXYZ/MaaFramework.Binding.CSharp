@@ -16,7 +16,7 @@ public static class DeviceInfoExtension
     /// <param name="config">The new adb config.</param>
     /// <param name="agentPath">The new path of agent directory. Default is "./MaaAgentBinary" if package "Maa.Framework" or "Maa.AgentBinary" is used.</param>
     /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSuccess"/>; otherwise, not check.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <returns>A MaaAdbController.</returns>
     public static MaaAdbController ToAdbController(this AdbDeviceInfo info,
         string? adbPath = null,
@@ -26,7 +26,7 @@ public static class DeviceInfoExtension
         string? config = null,
         string agentPath = "./MaaAgentBinary",
         LinkOption link = LinkOption.Start,
-        CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess)
+        CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
         ArgumentNullException.ThrowIfNull(info);
 

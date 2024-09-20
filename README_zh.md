@@ -129,7 +129,7 @@ maa.AppendTask(taskName, param)
     .Wait()
     .ThrowIfNot(MaaJobStatus.Success);
 
-internal sealed class MyRec : IMaaCustomRecognizer
+internal sealed class MyRec : IMaaCustomRecognition
 {
     public string Name { get; set; } = nameof(MyRec);
 

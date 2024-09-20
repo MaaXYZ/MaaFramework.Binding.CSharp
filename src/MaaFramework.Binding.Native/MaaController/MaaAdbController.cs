@@ -17,13 +17,13 @@ public class MaaAdbController : MaaController
     /// <param name="config">The path of adb config file.</param>
     /// <param name="agentPath">The path of agent directory. Default is "./MaaAgentBinary" if package "Maa.Framework" or "Maa.AgentBinary" is used.</param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSuccess"/>; otherwise, not check.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
     /// </remarks>
     /// <exception cref="ArgumentException" />
     /// <exception cref="MaaJobStatusException" />
-    public MaaAdbController(string adbPath, string adbSerial, AdbScreencapMethods screencapMethods, AdbInputMethods inputMethods, string config, string agentPath = "./MaaAgentBinary", LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess)
+    public MaaAdbController(string adbPath, string adbSerial, AdbScreencapMethods screencapMethods, AdbInputMethods inputMethods, string config, string agentPath = "./MaaAgentBinary", LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);
         ArgumentException.ThrowIfNullOrEmpty(adbSerial);
@@ -41,7 +41,7 @@ public class MaaAdbController : MaaController
             return;
 
         var status = LinkStart().Wait();
-        if (check == CheckStatusOption.ThrowIfNotSuccess)
-            status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaControllerMessage, adbPath, adbSerial);
+        if (check == CheckStatusOption.ThrowIfNotSucceeded)
+            status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, adbPath, adbSerial);
     }
 }

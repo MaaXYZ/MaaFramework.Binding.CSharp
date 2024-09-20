@@ -17,7 +17,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaTasker
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaTaskerHandle MaaTaskerCreate(MaaNotificationCallback callback, nint callbackArg);
+    public static partial MaaTaskerHandle MaaTaskerCreate(MaaNotificationCallback notify, nint notifyTransArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaTaskerDestroy(MaaTaskerHandle tasker);
@@ -62,7 +62,7 @@ public static partial class MaaTasker
     public static partial MaaBool MaaTaskerGetRecognitionDetail(MaaTaskerHandle tasker, MaaRecoId recoId, MaaStringBufferHandle name, MaaStringBufferHandle algorithm, out MaaBool hit, MaaRectHandle box, MaaStringBufferHandle detailJson, MaaImageBufferHandle raw, MaaImageListBufferHandle draws);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerGetNodeDetail(MaaTaskerHandle tasker, MaaNodeId nodeId, MaaStringBufferHandle name, out MaaRecoId recoId, out MaaSize times, out MaaBool completed);
+    public static partial MaaBool MaaTaskerGetNodeDetail(MaaTaskerHandle tasker, MaaNodeId nodeId, MaaStringBufferHandle name, out MaaRecoId recoId, out MaaBool completed);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaTaskerGetTaskDetail(MaaTaskerHandle tasker, MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize);

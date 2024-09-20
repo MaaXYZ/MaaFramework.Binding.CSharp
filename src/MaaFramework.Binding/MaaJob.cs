@@ -2,6 +2,8 @@
 
 namespace MaaFramework.Binding;
 
+#pragma warning disable S1121
+
 /// <summary>
 ///     A wrapper class providing a reference implementation for return value of Maa Post method.
 /// </summary>
@@ -22,7 +24,7 @@ public class MaaJob(MaaId id, IMaaPost maa)
     /// <remarks>
     ///     Calls <see cref="IMaaPost.GetStatus"/>.
     /// </remarks>
-    public MaaJobStatus Status => _completedStatus = _completedStatus is MaaJobStatus.Success or MaaJobStatus.Failed ? _completedStatus : maa.GetStatus(this);
+    public MaaJobStatus Status => _completedStatus is MaaJobStatus.Succeeded or MaaJobStatus.Failed ? _completedStatus : _completedStatus = maa.GetStatus(this);
 
     /// <summary>
     ///     Waits for a <see cref="MaaJob"/> to complete.

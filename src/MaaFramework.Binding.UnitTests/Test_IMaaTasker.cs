@@ -40,11 +40,11 @@ public class Test_IMaaTasker
             data.Resource
                 .AppendPath(Common.ResourcePath)
                 .Wait()
-                .ThrowIfNot(MaaJobStatus.Success);
+                .ThrowIfNot(MaaJobStatus.Succeeded);
             data.Controller
                 .LinkStart()
                 .Wait()
-                .ThrowIfNot(MaaJobStatus.Success);
+                .ThrowIfNot(MaaJobStatus.Succeeded);
             data.Controller
                 .SetOption(ControllerOption.ScreenshotTargetShortSide, 720);
             Assert.IsTrue(data.Initialized);
@@ -128,11 +128,11 @@ public class Test_IMaaTasker
             .Resource
             .AppendPath(Common.ResourcePath)
             .Wait()
-            .ThrowIfNot(MaaJobStatus.Success);
+            .ThrowIfNot(MaaJobStatus.Succeeded);
         maaTasker.Controller
             .LinkStart()
             .Wait()
-            .ThrowIfNot(MaaJobStatus.Success);
+            .ThrowIfNot(MaaJobStatus.Succeeded);
         Assert.IsTrue(maaTasker.Initialized);
     }
 
@@ -160,7 +160,7 @@ public class Test_IMaaTasker
         */
 
         // Runs a custom task
-        Assert.AreEqual(MaaJobStatus.Success,
+        Assert.AreEqual(MaaJobStatus.Succeeded,
             maaTasker.AppendPipeline(Custom.TaskName, Custom.Param).Wait());
 
         // Unregisters custom class
@@ -226,9 +226,9 @@ public class Test_IMaaTasker
     private static void Interface_IMaaPost_Success(MaaTaskJob job)
     {
         Assert.AreEqual(
-            MaaJobStatus.Success, job.Wait());
+            MaaJobStatus.Succeeded, job.Wait());
         Assert.AreEqual(
-            MaaJobStatus.Success, job.Status);
+            MaaJobStatus.Succeeded, job.Status);
     }
 
     [TestMethod]
@@ -248,7 +248,7 @@ public class Test_IMaaTasker
             nodeIdList.Length > 0);
 
         Assert.IsTrue(
-            maaTasker.GetNodeDetail(nodeIdList[0], out _, out var recognitionId, out _, out var actionCompleted));
+            maaTasker.GetNodeDetail(nodeIdList[0], out _, out var recognitionId, out var actionCompleted));
         Assert.IsTrue(
             actionCompleted);
 

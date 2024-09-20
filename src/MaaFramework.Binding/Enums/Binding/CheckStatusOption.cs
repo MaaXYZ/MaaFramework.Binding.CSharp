@@ -11,7 +11,7 @@ public enum CheckStatusOption
     None,
 
     /// <summary>
-    ///     Throw a <see cref="MaaJobStatusException"/> if the Status is not <see cref="MaaJobStatus.Success"/> .
+    ///     Throw a <see cref="MaaJobStatusException"/> if the Status is not <see cref="MaaJobStatus.Succeeded"/> .
     /// </summary>
-    ThrowIfNotSuccess,
+    ThrowIfNotSucceeded,
 }

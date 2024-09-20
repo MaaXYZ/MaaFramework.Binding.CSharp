@@ -68,9 +68,9 @@ public class Test_IMaaResource
         Assert.IsNotNull(job);
 
         Assert.AreEqual(
-            MaaJobStatus.Success, job.Wait());
+            MaaJobStatus.Succeeded, job.Wait());
         Assert.AreEqual(
-            MaaJobStatus.Success, job.Status);
+            MaaJobStatus.Succeeded, job.Status);
     }
 
     [TestMethod]

@@ -25,7 +25,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
     public MaaResource(params string[] paths)
-        : this(CheckStatusOption.ThrowIfNotSuccess, paths)
+        : this(CheckStatusOption.ThrowIfNotSucceeded, paths)
     {
     }
 
@@ -41,16 +41,16 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         foreach (var path in paths)
         {
             var status = AppendPath(path).Wait();
-            if (check == CheckStatusOption.ThrowIfNotSuccess)
+            if (check == CheckStatusOption.ThrowIfNotSucceeded)
             {
-                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage, path);
+                status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, path);
             }
         }
     }
 
     /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
     public MaaResource(IEnumerable<string> paths)
-        : this(CheckStatusOption.ThrowIfNotSuccess, paths)
+        : this(CheckStatusOption.ThrowIfNotSucceeded, paths)
     {
     }
 
@@ -63,9 +63,9 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         foreach (var path in paths)
         {
             var status = AppendPath(path).Wait();
-            if (check == CheckStatusOption.ThrowIfNotSuccess)
+            if (check == CheckStatusOption.ThrowIfNotSucceeded)
             {
-                status.ThrowIfNot(MaaJobStatus.Success, MaaJobStatusException.MaaResourceMessage, path);
+                status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, path);
             }
         }
     }
@@ -78,7 +78,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         => MaaResourceDestroy(Handle);
 
     private readonly MaaMarshaledApis<MaaCustomActionCallback> _actions = new();
-    private readonly MaaMarshaledApis<MaaCustomRecognizerCallback> _recognitions = new();
+    private readonly MaaMarshaledApis<MaaCustomRecognitionCallback> _recognitions = new();
 
     /// <inheritdoc/>
     public bool Register<T>(string name, T custom) where T : IMaaCustomResource
@@ -89,7 +89,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourceRegisterCustomAction"/> and <see cref="MaaResourceRegisterCustomRecognizer"/>.
+    ///     Wrapper of <see cref="MaaResourceRegisterCustomAction"/> and <see cref="MaaResourceRegisterCustomRecognition"/>.
     /// </remarks>
     public bool Register<T>(T custom) where T : IMaaCustomResource => custom switch
     {
@@ -97,7 +97,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero).ToBoolean()
             && _actions.Set(res.Name, callback),
         IMaaCustomRecognition res
-            => MaaResourceRegisterCustomRecognizer(Handle, res.Name, res.Convert(out var callback), nint.Zero).ToBoolean()
+            => MaaResourceRegisterCustomRecognition(Handle, res.Name, res.Convert(out var callback), nint.Zero).ToBoolean()
             && _recognitions.Set(res.Name, callback),
         _
             => throw new NotImplementedException(),
@@ -105,7 +105,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognizer"/>.
+    ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognition"/>.
     /// </remarks>
     public bool Unregister<T>(string name) where T : IMaaCustomResource
     {
@@ -114,7 +114,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             return MaaResourceUnregisterCustomAction(Handle, name).ToBoolean()
                 && _actions.Remove(name);
         if (typeof(IMaaCustomRecognition).IsAssignableFrom(t))
-            return MaaResourceUnregisterCustomRecognizer(Handle, name).ToBoolean()
+            return MaaResourceUnregisterCustomRecognition(Handle, name).ToBoolean()
                 && _recognitions.Remove(name);
 
         throw new NotImplementedException();
@@ -122,7 +122,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognizer"/>.
+    ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognition"/>.
     /// </remarks>
     public bool Unregister<T>(T custom) where T : IMaaCustomResource => custom switch
     {
@@ -130,7 +130,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             => MaaResourceUnregisterCustomAction(Handle, custom.Name).ToBoolean()
             && _actions.Remove(custom.Name),
         IMaaCustomRecognition
-            => MaaResourceUnregisterCustomRecognizer(Handle, custom.Name).ToBoolean()
+            => MaaResourceUnregisterCustomRecognition(Handle, custom.Name).ToBoolean()
             && _recognitions.Remove(custom.Name),
         _
             => throw new NotImplementedException(),
@@ -138,7 +138,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourceClearCustomAction"/> and <see cref="MaaResourceClearCustomRecognizer"/>.
+    ///     Wrapper of <see cref="MaaResourceClearCustomAction"/> and <see cref="MaaResourceClearCustomRecognition"/>.
     /// </remarks>
     public bool Clear<T>() where T : IMaaCustomResource => typeof(T).Name switch
     {
@@ -146,7 +146,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             => MaaResourceClearCustomAction(Handle).ToBoolean()
             && _actions.Clear(),
         nameof(IMaaCustomRecognition)
-            => MaaResourceClearCustomRecognizer(Handle).ToBoolean()
+            => MaaResourceClearCustomRecognition(Handle).ToBoolean()
             && _recognitions.Clear(),
         _
             => throw new NotImplementedException()

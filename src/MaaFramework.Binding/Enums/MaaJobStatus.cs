@@ -17,7 +17,7 @@ public enum MaaJobStatus : System.Int32
     Invalid = 0,
     Pending = 1000,
     Running = 2000,
-    Success = 3000,
+    Succeeded = 3000,
     Failed = 4000,
 }
 

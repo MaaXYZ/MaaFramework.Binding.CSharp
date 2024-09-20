@@ -101,10 +101,9 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <param name="nodeId">The node id.</param>
     /// <param name="name">The node name.</param>
     /// <param name="recognitionId">The recognition id.</param>
-    /// <param name="times">How many times the node was executed during a pipeline.</param>
     /// <param name="actionCompleted">A value indicating whether the action run completed.</param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
-    bool GetNodeDetail(MaaNodeId nodeId, out string name, out MaaRecoId recognitionId, out MaaSize times, out bool actionCompleted);
+    bool GetNodeDetail(MaaNodeId nodeId, out string name, out MaaRecoId recognitionId, out bool actionCompleted);
 
     /// <summary>
     ///     Gets the task detail.

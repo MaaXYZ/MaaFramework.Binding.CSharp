@@ -52,10 +52,10 @@ using System.Runtime.InteropServices;
 namespace MaaFramework.Binding.Interop.Native;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public delegate void MaaNotificationCallback([MarshalAs(UnmanagedType.LPUTF8Str)] string message, [MarshalAs(UnmanagedType.LPUTF8Str)] string detailsJson, nint callbackArg);
+public delegate void MaaNotificationCallback([MarshalAs(UnmanagedType.LPUTF8Str)] string message, [MarshalAs(UnmanagedType.LPUTF8Str)] string detailsJson, nint notifyTransArg);
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public delegate MaaBool MaaCustomRecognizerCallback(MaaContextHandle context, MaaTaskId taskId, [MarshalAs(UnmanagedType.LPUTF8Str)] string currentTaskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionParam, MaaImageBufferHandle image, MaaRectHandle roi, nint transArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
+public delegate MaaBool MaaCustomRecognitionCallback(MaaContextHandle context, MaaTaskId taskId, [MarshalAs(UnmanagedType.LPUTF8Str)] string currentTaskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionParam, MaaImageBufferHandle image, MaaRectHandle roi, nint transArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public delegate MaaBool MaaCustomActionCallback(MaaContextHandle context, MaaTaskId taskId, [MarshalAs(UnmanagedType.LPUTF8Str)] string currentTaskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionParam, MaaRecoId recoId, MaaRectHandle box, nint transArg);

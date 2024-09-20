@@ -13,14 +13,14 @@ public static class WindowInfoExtension
     /// <param name="inputMethod">The input method.</param>
     /// <param name="hWnd">The new handle to a win32 window.</param>
     /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSuccess"/>; otherwise, not check.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <returns>A MaaWin32Controller.</returns>
     public static MaaWin32Controller ToWin32Controller(this DesktopWindowInfo info,
         Win32ScreencapMethod screencapMethod,
         Win32InputMethod inputMethod,
         nint? hWnd = null,
         LinkOption link = LinkOption.Start,
-        CheckStatusOption check = CheckStatusOption.ThrowIfNotSuccess)
+        CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
         ArgumentNullException.ThrowIfNull(info);
 

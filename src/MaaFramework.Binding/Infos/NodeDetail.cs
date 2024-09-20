@@ -6,13 +6,11 @@
 /// <param name="Id">Gets the node id.</param>
 /// <param name="Name">Gets the node name.</param>
 /// <param name="RecognitionId">Gets the recognition id.</param>
-/// <param name="Times">Gets how many times the node was executed during a pipeline.</param>
 /// <param name="ActionCompleted">Gets a value indicating whether the action run completed.</param>
 public sealed record NodeDetail(
     MaaNodeId Id,
     string Name,
     MaaRecoId RecognitionId,
-    MaaSize Times,
     bool ActionCompleted
 )
 {
@@ -25,12 +23,11 @@ public sealed record NodeDetail(
     public static NodeDetail? Query(MaaNodeId nodeId, IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);
-        return tasker.GetNodeDetail(nodeId, out var name, out var recognitionId, out var times, out var actionCompleted)
+        return tasker.GetNodeDetail(nodeId, out var name, out var recognitionId, out var actionCompleted)
             ? new NodeDetail(
                 Id: nodeId,
                 Name: name,
                 RecognitionId: recognitionId,
-                Times: times,
                 ActionCompleted: actionCompleted)
             : null;
     }

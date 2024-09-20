@@ -51,13 +51,13 @@ public static class IMaaCustomResourceExtension
     }
 
     /// <summary>
-    ///     Converts a <see cref="IMaaCustomRecognition"/> to a <see cref="MaaCustomRecognizerCallback"/>.
+    ///     Converts a <see cref="IMaaCustomRecognition"/> to a <see cref="MaaCustomRecognitionCallback"/>.
     /// </summary>
     /// <param name="resource">The custom recognition.</param>
     /// <param name="callback"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static MaaCustomRecognizerCallback Convert(this IMaaCustomRecognition resource, out MaaCustomRecognizerCallback callback)
+    public static MaaCustomRecognitionCallback Convert(this IMaaCustomRecognition resource, out MaaCustomRecognitionCallback callback)
     {
         callback =
             (

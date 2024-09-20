@@ -53,11 +53,11 @@ public enum GlobalOption : System.Int32
     /// </remarks>
     ShowHitDraw = 5,
     /// <summary>
-    ///     Whether to callback debug message
+    ///     Whether to debug
     /// </summary>
     /// <remarks>
     ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
-    DebugMessage = 6,
+    DebugMode = 6,
 }
 

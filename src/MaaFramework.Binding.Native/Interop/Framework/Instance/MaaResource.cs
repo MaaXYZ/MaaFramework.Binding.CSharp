@@ -17,19 +17,19 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaResource
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaResourceHandle MaaResourceCreate(MaaNotificationCallback callback, nint callbackArg);
+    public static partial MaaResourceHandle MaaResourceCreate(MaaNotificationCallback notify, nint notifyTransArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaResourceDestroy(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceRegisterCustomRecognizer(MaaResourceHandle res, string name, MaaCustomRecognizerCallback recognizer, nint transArg);
+    public static partial MaaBool MaaResourceRegisterCustomRecognition(MaaResourceHandle res, string name, MaaCustomRecognitionCallback recognition, nint transArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceUnregisterCustomRecognizer(MaaResourceHandle res, string name);
+    public static partial MaaBool MaaResourceUnregisterCustomRecognition(MaaResourceHandle res, string name);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceClearCustomRecognizer(MaaResourceHandle res);
+    public static partial MaaBool MaaResourceClearCustomRecognition(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaBool MaaResourceRegisterCustomAction(MaaResourceHandle res, string name, MaaCustomActionCallback action, nint transArg);
