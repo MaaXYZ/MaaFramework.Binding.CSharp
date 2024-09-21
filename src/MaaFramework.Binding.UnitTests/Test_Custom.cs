@@ -9,8 +9,6 @@ internal static class Custom
     public static TestAction Action { get; } = new();
     public static TestRecognition Recognition { get; } = new();
     public static TestResource Resource { get; } = new();
-    public static MaaCustomActionExecutor ActionExecutor { get; } = new() { Name = Action.Name, Parameter = [], Path = "" };
-    public static MaaCustomRecognitionExecutor RecognitionExecutor { get; } = new() { Name = Recognition.Name, Parameter = [], Path = "" };
     public static string TaskName => "中文字符测试";
     public static string Param => $$"""
     {
