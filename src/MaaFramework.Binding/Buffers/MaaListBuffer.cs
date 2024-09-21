@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using MaaFramework.Binding.Abstractions;
 
@@ -8,9 +9,12 @@ namespace MaaFramework.Binding.Buffers;
 ///     An abstract class providing a reference implementation for MaaListBuffer.
 /// </summary>
 /// <param name="invalidHandleValue">The invalid handle value.</param>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     : MaaDisposableHandle<THandle>(invalidHandleValue), IMaaListBuffer<THandle, T> where THandle : IEquatable<THandle>
 {
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Count = {MaaSizeCount}, Disposed = {IsInvalid} }}}}";
+
     /// <inheritdoc/>
     public abstract bool IsEmpty { get; }
     /// <inheritdoc/>

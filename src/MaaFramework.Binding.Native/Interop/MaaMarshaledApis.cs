@@ -8,6 +8,8 @@ internal sealed class MaaMarshaledApis<T>
 {
     private readonly Dictionary<string, T> _apis = [];
 
+    public IEnumerable<string> Names => _apis.Keys;
+
     public bool Set(string key, T tuple)
     {
         _apis[key] = tuple;

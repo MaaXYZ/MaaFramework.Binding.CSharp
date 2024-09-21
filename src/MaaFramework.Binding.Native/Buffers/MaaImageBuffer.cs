@@ -7,9 +7,11 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa Image Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
 /// </summary>
-[System.Diagnostics.DebuggerDisplay("{Width}x{Height}x{Type}")]
 public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
 {
+    /// <inheritdoc/>
+    public override string ToString() => $"{GetType().Name}: {Width}x{Height} {{ {nameof(Channels)} = {Channels}, {nameof(Type)} = {Type} }}";
+
     /// <inheritdoc/>
     public bool CopyTo(IMaaImageBuffer buffer) => buffer switch
     {

@@ -11,6 +11,11 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaResource : MaaCommon, IMaaResource<nint>
 {
+    private readonly HashSet<string> _postedPaths = [];
+
+    /// <inheritdoc/>
+    public override string ToString() => $"{GetType().Name} {{ Paths = {string.Join(" & ", _postedPaths)}, CustomActions = {string.Join(" & ", _actions.Names)}, CustomRecognitions = {string.Join(" & ", _recognitions.Names)} }}";
+
     /// <summary>
     ///     Creates a <see cref="MaaResource"/> instance.
     /// </summary>
@@ -158,6 +163,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// </remarks>
     public bool Clear(bool includeCustomResource = false)
     {
+        _postedPaths.Clear();
         var ret = MaaResourceClear(Handle).ToBoolean();
         if (!includeCustomResource) return ret;
         ret &= Clear<IMaaCustomAction>();
@@ -171,6 +177,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// </remarks>
     public MaaJob AppendPath(string path)
     {
+        _postedPaths.Add(path);
         var id = MaaResourcePostPath(Handle, path);
         return new MaaJob(id, this);
     }

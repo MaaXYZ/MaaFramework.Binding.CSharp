@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaTasker;
 
@@ -9,8 +10,11 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaTasker"/>.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaTasker : MaaCommon, IMaaTasker<nint>
 {
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
+
 #pragma warning disable CA2213
     private IMaaResource<nint> _resource = default!;
     private IMaaController<nint> _controller = default!;

@@ -11,6 +11,9 @@ namespace MaaFramework.Binding;
 /// <param name="maa">The <see cref="IMaaPost"/>.</param>
 public class MaaJob(MaaId id, IMaaPost maa)
 {
+    /// <inheritdoc/>
+    public override string ToString() => $"{GetType().Name} {{ {nameof(Status)} = {Status} }}";
+
     private MaaJobStatus _completedStatus = MaaJobStatus.Invalid;
 
     /// <summary>

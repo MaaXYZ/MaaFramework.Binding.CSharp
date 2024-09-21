@@ -1,4 +1,5 @@
-﻿using MaaFramework.Binding.Abstractions.Native;
+﻿using System.Diagnostics;
+using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaController;
@@ -8,8 +9,11 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaController"/>.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class MaaController : MaaCommon, IMaaController<nint>
 {
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
+
     /// <summary>
     ///     Creates a <see cref="MaaController"/> instance.
     /// </summary>
