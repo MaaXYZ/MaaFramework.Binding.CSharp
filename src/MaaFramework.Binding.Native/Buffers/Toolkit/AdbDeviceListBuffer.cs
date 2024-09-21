@@ -4,24 +4,24 @@ using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
-///     A class providing a reference implementation for Maa Image List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
+///     A class providing a reference implementation for Maa Toolkit Adb Device List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaToolkit"/>.
 /// </summary>
-public class MaaToolkitAdbDeviceList : MaaListBuffer<nint, AdbDeviceInfo>
+public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
 {
     /// <summary>
-    ///     Creates a <see cref="MaaToolkitAdbDeviceList"/> instance.
+    ///     Creates a <see cref="AdbDeviceListBuffer"/> instance.
     /// </summary>
     /// <param name="handle">The MaaToolkitAdbDeviceListHandle.</param>
-    public MaaToolkitAdbDeviceList(MaaToolkitAdbDeviceListHandle handle) : base(nint.Zero)
+    public AdbDeviceListBuffer(MaaToolkitAdbDeviceListHandle handle) : base(nint.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
 
-    /// <inheritdoc cref="MaaToolkitAdbDeviceList(MaaToolkitAdbDeviceListHandle)"/>
+    /// <inheritdoc cref="AdbDeviceListBuffer(MaaToolkitAdbDeviceListHandle)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitAdbDeviceListCreate"/>.
     /// </remarks>
-    public MaaToolkitAdbDeviceList() : base(nint.Zero)
+    public AdbDeviceListBuffer() : base(nint.Zero)
     {
         SetHandle(MaaToolkitAdbDeviceListCreate(), needReleased: true);
     }
@@ -80,7 +80,7 @@ public class MaaToolkitAdbDeviceList : MaaListBuffer<nint, AdbDeviceInfo>
     /// <summary>
     ///     A sealed record providing a reference implementation for <see cref="AdbDeviceInfo"/>.
     /// </summary>
-    /// <param name="InfoHandle">The <see cref="MaaToolkitAdbDevice"/> handle in the <see cref="MaaToolkitAdbDeviceList"/>.</param>
+    /// <param name="InfoHandle">The <see cref="MaaToolkitAdbDevice"/> handle in the <see cref="AdbDeviceListBuffer"/>.</param>
     protected internal sealed record MaaToolkitAdbDevice(MaaToolkitAdbDeviceHandle InfoHandle) : AdbDeviceInfo(
         Name: MaaToolkitAdbDeviceGetName(InfoHandle).ToStringUtf8(),
         AdbPath: MaaToolkitAdbDeviceGetAdbPath(InfoHandle).ToStringUtf8(),

@@ -53,7 +53,7 @@ public class MaaToolkit : IMaaToolkit
         /// <inheritdoc/>
         public IMaaListBuffer<AdbDeviceInfo> Find(string adbPath = "")
         {
-            var list = new MaaToolkitAdbDeviceList();
+            var list = new AdbDeviceListBuffer();
             var ret = string.IsNullOrWhiteSpace(adbPath)
                 ? MaaToolkitAdbDeviceFind(list.Handle)
                 : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle);
@@ -65,7 +65,7 @@ public class MaaToolkit : IMaaToolkit
         /// <inheritdoc/>
         public async Task<IMaaListBuffer<AdbDeviceInfo>> FindAsync(string adbPath = "")
         {
-            var list = new MaaToolkitAdbDeviceList();
+            var list = new AdbDeviceListBuffer();
             var ret = await Task.Run(() =>
                 string.IsNullOrWhiteSpace(adbPath)
                     ? MaaToolkitAdbDeviceFind(list.Handle)
@@ -93,7 +93,7 @@ public class MaaToolkit : IMaaToolkit
         /// <inheritdoc/>
         public IMaaListBuffer<DesktopWindowInfo> Find()
         {
-            var list = new MaaToolkitDesktopWindowList();
+            var list = new DesktopWindowListBuffer();
             var ret = MaaToolkitDesktopWindowFindAll(list.Handle);
             if (!ret.ToBoolean())
                 throw new InvalidOperationException();

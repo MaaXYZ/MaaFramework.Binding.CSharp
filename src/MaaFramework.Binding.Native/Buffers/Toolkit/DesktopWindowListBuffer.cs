@@ -4,24 +4,24 @@ using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
-///     A class providing a reference implementation for Maa Image List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
+///     A class providing a reference implementation for Maa Toolkit Desktop Window List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaToolkit"/>.
 /// </summary>
-public class MaaToolkitDesktopWindowList : MaaListBuffer<nint, DesktopWindowInfo>
+public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
 {
     /// <summary>
-    ///     Creates a <see cref="MaaToolkitDesktopWindowList"/> instance.
+    ///     Creates a <see cref="DesktopWindowListBuffer"/> instance.
     /// </summary>
     /// <param name="handle">The MaaToolkitDesktopWindowListHandle.</param>
-    public MaaToolkitDesktopWindowList(MaaToolkitDesktopWindowListHandle handle) : base(nint.Zero)
+    public DesktopWindowListBuffer(MaaToolkitDesktopWindowListHandle handle) : base(nint.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
 
-    /// <inheritdoc cref="MaaToolkitDesktopWindowList(MaaToolkitDesktopWindowListHandle)"/>
+    /// <inheritdoc cref="DesktopWindowListBuffer(MaaToolkitDesktopWindowListHandle)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitDesktopWindowListCreate"/>.
     /// </remarks>
-    public MaaToolkitDesktopWindowList() : base(nint.Zero)
+    public DesktopWindowListBuffer() : base(nint.Zero)
     {
         SetHandle(MaaToolkitDesktopWindowListCreate(), needReleased: true);
     }
@@ -80,7 +80,7 @@ public class MaaToolkitDesktopWindowList : MaaListBuffer<nint, DesktopWindowInfo
     /// <summary>
     ///     A sealed record providing a reference implementation for <see cref="DesktopWindowInfo"/>.
     /// </summary>
-    /// <param name="InfoHandle">The <see cref="MaaToolkitDesktopWindow"/> handle in the <see cref="MaaToolkitAdbDeviceList"/>.</param>
+    /// <param name="InfoHandle">The <see cref="MaaToolkitDesktopWindow"/> handle in the <see cref="AdbDeviceListBuffer"/>.</param>
     protected internal sealed record MaaToolkitDesktopWindow(nint InfoHandle) : DesktopWindowInfo(
         Handle: MaaToolkitDesktopWindowGetHandle(InfoHandle),
         ClassName: MaaToolkitDesktopWindowGetClassName(InfoHandle).ToStringUtf8(),
