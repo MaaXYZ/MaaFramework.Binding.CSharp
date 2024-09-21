@@ -29,6 +29,7 @@ Your computer should meet the minimum system requirements before you run and use
 | Windows 10+ | Restricted from [.NET 7.0](https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md#windows) |
 | macOS 12+ | Restricted from [MaaFramework](https://github.com/MaaXYZ/MaaFramework/issues/174) |
 | Linux <br> Ubuntu 23.10+ | libc6 2.38+ <br> and more |
+| Android | Unknown |
 
 - Architectures: x64, arm64
 

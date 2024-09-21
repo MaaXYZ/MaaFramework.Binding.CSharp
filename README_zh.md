@@ -29,6 +29,7 @@ _💫 一个通用的互操作 API 封装 💫_
 | Windows 10+ | 受限于 [.NET 7.0](https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md#windows) |
 | macOS 12+ | 受限于 [MaaFramework](https://github.com/MaaXYZ/MaaFramework/issues/174) |
 | Linux <br> Ubuntu 23.10+ | libc6 2.38+ 等 |
+| Android | Unknown |
 
 - 架构限制: x64, arm64
 

@@ -34,7 +34,7 @@ internal static partial class NativeLibrary
 
     private static IEnumerable<string> GetRuntimesPaths(string libraryName)
     {
-        var (arch, ext) = GetArchitectureNameAndExtensionName();
+        GetArchitectureNameAndExtensionName(out var arch, out var ext);
         var args1 = new string[]
         {
             Path.GetDirectoryName(s_assembly.Location) ?? "./",
@@ -58,47 +58,28 @@ internal static partial class NativeLibrary
                    string.Concat(arg1, arg2, arg3));
     }
 
-    private static (string arch, string exten) GetArchitectureNameAndExtensionName()
+    private static void GetArchitectureNameAndExtensionName(out string arch, out string ext)
     {
-        var sb = new System.Text.StringBuilder();
-        if (IsWindows)
-            sb.Append("win");
-        else if (IsLinux)
-            sb.Append("linux");
-        else if (IsOSX)
-            sb.Append("osx");
-        else
-            throw new PlatformNotSupportedException();
+        if (IsWindows) arch = "win";
+        else if (IsLinux) arch = "linux";
+        else if (IsOSX) arch = "osx";
+        else if (IsAndroid) arch = "android";
+        else throw new PlatformNotSupportedException();
 
-        sb.Append('-');
-        if (IsX64)
-            sb.Append("x64");
-        else if (IsArm64)
-            sb.Append("arm64");
-        else
-            throw new PlatformNotSupportedException();
+        if (IsX64) arch += "-x64";
+        else if (IsArm64) arch += "-arm64";
+        else throw new PlatformNotSupportedException();
 
-        string ext;
-        if (IsWindows)
-            ext = "dll";
-        else if (IsLinux)
-            ext = "so";
-        else if (IsOSX)
-            ext = "dylib";
-        else
-            throw new PlatformNotSupportedException();
-
-        return (sb.ToString(), ext);
+        if (IsWindows) ext = "dll";
+        else if (IsLinux || IsAndroid) ext = "so";
+        else if (IsOSX) ext = "dylib";
+        else throw new PlatformNotSupportedException();
     }
 
-    private static bool IsWindows
-        => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-    private static bool IsLinux
-        => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-    private static bool IsOSX
-        => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-    private static bool IsX64
-        => RuntimeInformation.OSArchitecture == Architecture.X64;
-    private static bool IsArm64
-        => RuntimeInformation.OSArchitecture == Architecture.Arm64;
+    private static bool IsWindows => OperatingSystem.IsWindows();
+    private static bool IsLinux => OperatingSystem.IsLinux();
+    private static bool IsOSX => OperatingSystem.IsMacOS();
+    private static bool IsAndroid => OperatingSystem.IsAndroid();
+    private static bool IsX64 => RuntimeInformation.OSArchitecture == Architecture.X64;
+    private static bool IsArm64 => RuntimeInformation.OSArchitecture == Architecture.Arm64;
 }
