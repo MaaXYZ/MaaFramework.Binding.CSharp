@@ -111,6 +111,21 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     }
 
     /// <summary>
+    ///     Gets a string list from a MaaStringListBufferHandle.
+    /// </summary>
+    /// <param name="list">The string list.</param>
+    /// <param name="func">A function that takes a MaaStringListBufferHandle and returns a boolean indicating success or failure.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    public static bool Get(out IList<string> list, Func<MaaStringListBufferHandle, bool> func)
+    {
+        var h = MaaStringListBufferCreate();
+        var ret = func?.Invoke(h) ?? false;
+        list = Get(h);
+        MaaStringListBufferDestroy(h);
+        return ret;
+    }
+
+    /// <summary>
     ///     Sets a string <paramref name="list"/> to a MaaStringListBufferHandle.
     /// </summary>
     /// <param name="handle">The MaaStringListBufferHandle.</param>
@@ -130,7 +145,7 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     /// then calls a <paramref name="func"/> to use the MaaStringListBufferHandle.
     /// </summary>
     /// <param name="list">The string list.</param>
-    /// <param name="func">The MaaStringListBufferHandle.</param>
+    /// <param name="func">A function that takes a MaaStringListBufferHandle and returns a boolean indicating success or failure.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool Set(IEnumerable<string> list, Func<MaaStringListBufferHandle, bool> func)
     {

@@ -16,10 +16,12 @@ public class Test_IMaaResource
 #endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
+    public static Dictionary<MaaTypes, object> UnloadedData { get; private set; } = default!;
 
     [ClassInitialize]
     public static void InitializeClass(TestContext context)
     {
+        UnloadedData = NewData;
         Data = NewData;
         foreach (var data in Data.Values.Cast<IMaaResource>())
         {
@@ -32,6 +34,7 @@ public class Test_IMaaResource
     public static void CleanUpClass()
     {
         Common.DisposeData(Data.Values.Cast<IMaaDisposable>());
+        Common.DisposeData(UnloadedData.Values.Cast<IMaaDisposable>());
     }
 
 #pragma warning disable S2699 // Tests should include assertions
@@ -74,23 +77,26 @@ public class Test_IMaaResource
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Hash(MaaTypes type, IMaaResource maaResource)
+    [MaaData(MaaTypes.All, nameof(UnloadedData))]
+    public void Interface_Hash_TaskList(MaaTypes type, IMaaResource maaResource)
     {
         Assert.IsNotNull(maaResource);
 
-        Assert.IsFalse(string.IsNullOrWhiteSpace(
-            maaResource.Hash));
-    }
+        Assert.IsFalse(
+            string.IsNullOrWhiteSpace(maaResource.Hash));
+        Assert.AreEqual(
+            "0", maaResource.Hash);
+        Assert.AreEqual(
+            0, maaResource.TaskList.Count);
 
-    [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_TaskList(MaaTypes type, IMaaResource maaResource)
-    {
-        Assert.IsNotNull(maaResource);
-
-        Assert.IsFalse(string.IsNullOrWhiteSpace(
-            maaResource.TaskList));
+        Interface_IMaaPost_Success(
+            maaResource.AppendPath(Common.ResourcePath));
+        Assert.AreNotEqual(
+            "0", maaResource.Hash);
+        Assert.AreNotEqual(
+            0, maaResource.TaskList.Count);
+        Assert.IsTrue(
+            maaResource.TaskList.Any(s => s == "EmptyTask"));
     }
 
     #region Invalid data tests

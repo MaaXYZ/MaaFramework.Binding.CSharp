@@ -248,13 +248,14 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceGetTaskList"/>.
     /// </remarks>
-    public string? TaskList
+    public IList<string> TaskList
     {
         get
         {
-            using var buffer = new MaaStringBuffer();
-            var ret = MaaResourceGetTaskList(Handle, buffer.Handle).ToBoolean();
-            return ret ? buffer.ToString() : null;
+            if (!MaaStringListBuffer.Get(out var list, h
+                    => MaaResourceGetTaskList(Handle, h).ToBoolean()))
+                throw new InvalidOperationException();
+            return list;
         }
     }
 }
