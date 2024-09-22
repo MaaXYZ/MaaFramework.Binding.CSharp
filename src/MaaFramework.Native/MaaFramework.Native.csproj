@@ -2,9 +2,9 @@
 
     <!-- Package Properties -->
     <PropertyGroup>
-        <PackageId>Maa.Framework</PackageId>
-        <Title>Maa Framework Metapackage</Title>
-        <description>Maa.Framework is a metapackage with references to Maa.Framework.Binding.Native, Maa.AgentBinary and Maa.Framework.Runtimes.</description>
+        <PackageId>Maa.Framework.Native</PackageId>
+        <Title>Maa Framework Native Metapackage</Title>
+        <description>Maa.Framework.Native is a metapackage with references to Maa.Framework.Binding.Native, Maa.AgentBinary.</description>
         <PackageTags>MAA;c-sharp;cross-platform;dotnet;wrapper</PackageTags>
 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -24,11 +24,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\MaaFramework.Native\MaaFramework.Native.csproj" />
+        <ProjectReference Include="..\MaaFramework.Binding.Native\MaaFramework.Binding.Native.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Maa.Framework.Runtimes" />
+        <!-- PrivateAssets set to None to ensure the build targets/props are propagated to parent project -->
+        <PackageReference Include="Maa.AgentBinary" PrivateAssets="None" />
     </ItemGroup>
 
 </Project>

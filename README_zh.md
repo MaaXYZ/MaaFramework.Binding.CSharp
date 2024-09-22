@@ -38,7 +38,7 @@ _💫 一个通用的互操作 API 封装 💫_
 
 | 平台 | 包 Id | 依赖下载 |
 | :---: | :---: | :---: |
-| Windows | `Maa.Framework` <br> `Maa.Framework.Binding.Native` | [Visual C++  Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) |
+| Windows | `Maa.Framework` <br> `Maa.Framework.Runtimes` <br> `Maa.Framework.Runtime.win-arm64` <br> `Maa.Framework.Runtime.win-x64` | [Visual C++  Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) |
 
 ### 准备资源
 
@@ -71,6 +71,16 @@ dotnet add package Maa.Framework --prerelease -s .\nupkgs\
     <RestoreSources>$(RestoreSources);$(FullPath of .\nupkgs\)</RestoreSources>
   </PropertyGroup>
 ```
+
+#### 指定 RIDs
+
+`MaaFramework` 目前支持的 Runtime Id 可在[此处](https://github.com/MaaXYZ/MaaFramework/tree/main/tools/nupkgs)查询。
+
+要想使用指定的 RIDs，例如使用已受支持的 `win` 平台包，请手动引用如下包：
+- `Maa.Framework.Native`
+- `Maa.Framework.Runtime.win-arm64`
+- `Maa.Framework.Runtime.win-x64`
+
 ### 运行代码
 
 > 准备工作：`adb connect HOST[:PORT]`

@@ -107,8 +107,8 @@
       "Maa.Framework": {
         "type": "Project",
         "dependencies": {
-          "Maa.AgentBinary": "[1.0.0, )",
-          "Maa.Framework.Binding.Native": "[1.0.0-dev, )"
+          "Maa.Framework.Native": "[1.0.0-dev, )",
+          "Maa.Framework.Runtimes": "[2.0.0, )"
         }
       },
       "Maa.Framework.Binding": {
@@ -117,8 +117,14 @@
       "Maa.Framework.Binding.Native": {
         "type": "Project",
         "dependencies": {
-          "Maa.Framework.Binding": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[2.0.0, )"
+          "Maa.Framework.Binding": "[1.0.0-dev, )"
+        }
+      },
+      "Maa.Framework.Native": {
+        "type": "Project",
+        "dependencies": {
+          "Maa.AgentBinary": "[1.0.0, )",
+          "Maa.Framework.Binding.Native": "[1.0.0-dev, )"
         }
       },
       "Maa.AgentBinary": {
@@ -248,8 +254,8 @@
       "Maa.Framework": {
         "type": "Project",
         "dependencies": {
-          "Maa.AgentBinary": "[1.0.0, )",
-          "Maa.Framework.Binding.Native": "[1.0.0-dev, )"
+          "Maa.Framework.Native": "[1.0.0-dev, )",
+          "Maa.Framework.Runtimes": "[2.0.0, )"
         }
       },
       "Maa.Framework.Binding": {
@@ -258,8 +264,14 @@
       "Maa.Framework.Binding.Native": {
         "type": "Project",
         "dependencies": {
-          "Maa.Framework.Binding": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[2.0.0, )"
+          "Maa.Framework.Binding": "[1.0.0-dev, )"
+        }
+      },
+      "Maa.Framework.Native": {
+        "type": "Project",
+        "dependencies": {
+          "Maa.AgentBinary": "[1.0.0, )",
+          "Maa.Framework.Binding.Native": "[1.0.0-dev, )"
         }
       },
       "Maa.AgentBinary": {

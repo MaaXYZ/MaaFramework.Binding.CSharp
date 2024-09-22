@@ -38,7 +38,7 @@ Your computer should meet the minimum system requirements before you run and use
 
 | Platform | Package Id | Dependent Download |
 | :---: | :---: | :---: |
-| Windows | `Maa.Framework` <br> `Maa.Framework.Binding.Native` | [Visual C++  Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) |
+| Windows | `Maa.Framework` <br> `Maa.Framework.Runtimes` <br> `Maa.Framework.Runtime.win-arm64` <br> `Maa.Framework.Runtime.win-x64` | [Visual C++  Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) |
 
 ### Prepare Resources
 
@@ -71,6 +71,16 @@ dotnet add package Maa.Framework --prerelease -s .\nupkgs\
     <RestoreSources>$(RestoreSources);$(FullPath of .\nupkgs\)</RestoreSources>
   </PropertyGroup>
 ```
+
+#### Specifying RIDs
+
+The supported Runtime IDs for `MaaFramework` can be found [here](https://github.com/MaaXYZ/MaaFramework/tree/main/tools/nupkgs).
+
+To use specific RIDs, such as the supported `win` platform packages, manually reference the following packages:
+- `Maa.Framework.Native`
+- `Maa.Framework.Runtime.win-arm64`
+- `Maa.Framework.Runtime.win-x64`
+
 ### Run Code
 
 > Pre-work: `adb connect HOST[:PORT]`

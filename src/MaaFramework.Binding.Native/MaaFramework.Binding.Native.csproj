@@ -17,10 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Maa.Framework.Runtimes" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Update="SonarAnalyzer.CSharp">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

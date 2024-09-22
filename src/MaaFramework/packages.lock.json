@@ -2,11 +2,19 @@
   "version": 2,
   "dependencies": {
     "net7.0": {
-      "Maa.AgentBinary": {
+      "Maa.Framework.Runtimes": {
         "type": "Direct",
-        "requested": "[1.0.0, )",
-        "resolved": "1.0.0",
-        "contentHash": "09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA=="
+        "requested": "[2.0.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "vfJMpHQUrd/z+F8YHqpgwg70564RGUtGN1ryPipADUkpr2uhbvtdm6MvMil+WMb6VaM+rB2K7gdbKvMdKyQV4g==",
+        "dependencies": {
+          "Maa.Framework.Runtime.linux-arm64": "2.0.0",
+          "Maa.Framework.Runtime.linux-x64": "2.0.0",
+          "Maa.Framework.Runtime.osx-arm64": "2.0.0",
+          "Maa.Framework.Runtime.osx-x64": "2.0.0",
+          "Maa.Framework.Runtime.win-arm64": "2.0.0",
+          "Maa.Framework.Runtime.win-x64": "2.0.0"
+        }
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
@@ -50,31 +58,37 @@
       "Maa.Framework.Binding.Native": {
         "type": "Project",
         "dependencies": {
-          "Maa.Framework.Binding": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[2.0.0, )"
+          "Maa.Framework.Binding": "[1.0.0-dev, )"
         }
       },
-      "Maa.Framework.Runtimes": {
-        "type": "CentralTransitive",
-        "requested": "[2.0.0, )",
-        "resolved": "2.0.0",
-        "contentHash": "vfJMpHQUrd/z+F8YHqpgwg70564RGUtGN1ryPipADUkpr2uhbvtdm6MvMil+WMb6VaM+rB2K7gdbKvMdKyQV4g==",
+      "Maa.Framework.Native": {
+        "type": "Project",
         "dependencies": {
-          "Maa.Framework.Runtime.linux-arm64": "2.0.0",
-          "Maa.Framework.Runtime.linux-x64": "2.0.0",
-          "Maa.Framework.Runtime.osx-arm64": "2.0.0",
-          "Maa.Framework.Runtime.osx-x64": "2.0.0",
-          "Maa.Framework.Runtime.win-arm64": "2.0.0",
-          "Maa.Framework.Runtime.win-x64": "2.0.0"
+          "Maa.AgentBinary": "[1.0.0, )",
+          "Maa.Framework.Binding.Native": "[1.0.0-dev, )"
         }
+      },
+      "Maa.AgentBinary": {
+        "type": "CentralTransitive",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA=="
       }
     },
     "net8.0": {
-      "Maa.AgentBinary": {
+      "Maa.Framework.Runtimes": {
         "type": "Direct",
-        "requested": "[1.0.0, )",
-        "resolved": "1.0.0",
-        "contentHash": "09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA=="
+        "requested": "[2.0.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "vfJMpHQUrd/z+F8YHqpgwg70564RGUtGN1ryPipADUkpr2uhbvtdm6MvMil+WMb6VaM+rB2K7gdbKvMdKyQV4g==",
+        "dependencies": {
+          "Maa.Framework.Runtime.linux-arm64": "2.0.0",
+          "Maa.Framework.Runtime.linux-x64": "2.0.0",
+          "Maa.Framework.Runtime.osx-arm64": "2.0.0",
+          "Maa.Framework.Runtime.osx-x64": "2.0.0",
+          "Maa.Framework.Runtime.win-arm64": "2.0.0",
+          "Maa.Framework.Runtime.win-x64": "2.0.0"
+        }
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
@@ -118,23 +132,21 @@
       "Maa.Framework.Binding.Native": {
         "type": "Project",
         "dependencies": {
-          "Maa.Framework.Binding": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[2.0.0, )"
+          "Maa.Framework.Binding": "[1.0.0-dev, )"
         }
       },
-      "Maa.Framework.Runtimes": {
-        "type": "CentralTransitive",
-        "requested": "[2.0.0, )",
-        "resolved": "2.0.0",
-        "contentHash": "vfJMpHQUrd/z+F8YHqpgwg70564RGUtGN1ryPipADUkpr2uhbvtdm6MvMil+WMb6VaM+rB2K7gdbKvMdKyQV4g==",
+      "Maa.Framework.Native": {
+        "type": "Project",
         "dependencies": {
-          "Maa.Framework.Runtime.linux-arm64": "2.0.0",
-          "Maa.Framework.Runtime.linux-x64": "2.0.0",
-          "Maa.Framework.Runtime.osx-arm64": "2.0.0",
-          "Maa.Framework.Runtime.osx-x64": "2.0.0",
-          "Maa.Framework.Runtime.win-arm64": "2.0.0",
-          "Maa.Framework.Runtime.win-x64": "2.0.0"
+          "Maa.AgentBinary": "[1.0.0, )",
+          "Maa.Framework.Binding.Native": "[1.0.0-dev, )"
         }
+      },
+      "Maa.AgentBinary": {
+        "type": "CentralTransitive",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA=="
       }
     }
   }
