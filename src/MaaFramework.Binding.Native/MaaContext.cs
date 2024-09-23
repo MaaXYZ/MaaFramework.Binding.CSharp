@@ -43,7 +43,7 @@ public class MaaContext : IMaaContext<nint>
     /// <value/>
     /// <inheritdoc cref="IMaaContext.RunRecognition"/>
     /// <remarks>
-    ///     Wrapper of <see cref="RunRecognition"/>.
+    ///     Wrapper of <see cref="MaaContextRunRecognition"/>.
     /// </remarks>
     public RecognitionDetail<MaaImageBuffer>? RunRecognition(string entry, string recognitionOverride, MaaImageBuffer image)
     {

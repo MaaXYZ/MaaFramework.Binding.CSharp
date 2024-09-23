@@ -44,6 +44,7 @@ public class Test_IMaaMaaUtility
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, LoggingLevel.Off)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.ShowHitDraw, false)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DebugMode, false)]
     public void Interface_SetOption(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
     {
         Assert.IsNotNull(maaUtility);
@@ -61,6 +62,7 @@ public class Test_IMaaMaaUtility
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Recording, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.ShowHitDraw, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DebugMode, 0.0)]
     public void Interface_SetOption_InvalidData(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
     {
         Assert.IsNotNull(maaUtility);

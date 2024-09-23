@@ -289,22 +289,11 @@ public class Test_IMaaController
 
         // if (type is MaaTypes.Native) { }
         var info = buffer.Info;
-        var length = info.Width * info.Height * GetChannel(info.Type);
+        var length = info.Width * info.Height * info.Channels;
         var rawDataHandle = buffer.GetRawData();
         var cv2MatData = new byte[length];
         Marshal.Copy(rawDataHandle, cv2MatData, 0, length);
         CollectionAssert.AreNotEqual(new byte[length], cv2MatData);
-
-        static int GetChannel(int type)
-        {
-            const int CV2_8UC3 = 16;
-
-            return type switch
-            {
-                CV2_8UC3 => 3,
-                _ => throw new NotImplementedException(),
-            };
-        }
     }
 
     [TestMethod]

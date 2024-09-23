@@ -28,7 +28,8 @@ public class MaaUtility : IMaaUtility
             (string v, GlobalOption.LogDir) => v.ToMaaOptionValue(),
             (bool vvv, GlobalOption.SaveDraw
                     or GlobalOption.Recording
-                    or GlobalOption.ShowHitDraw) => vvv.ToMaaOptionValue(),
+                    or GlobalOption.ShowHitDraw
+                    or GlobalOption.DebugMode) => vvv.ToMaaOptionValue(),
 
             (LoggingLevel v, GlobalOption.StdoutLevel) => ((int)v).ToMaaOptionValue(),
 

@@ -78,28 +78,23 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
     /// </summary>
+    /// <remarks>
+    ///     <para>For adb controller, contact means finger id (0 for first finger, 1 for second finger, etc.).</para>
+    ///     <para>For win32 controller, contact means mouse button id (0 for left, 1 for right, 2 for middle).</para>
+    /// </remarks>
     /// <param name="contact">The contact id.</param>
-    /// <param name="x">The horizontal coordinate of the starting point.</param>
-    /// <param name="y">The vertical coordinate of the starting point.</param>
+    /// <param name="x">The horizontal coordinate of the point.</param>
+    /// <param name="y">The vertical coordinate of the point.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>A touch down <see cref="MaaJob"/>.</returns>
     MaaJob TouchDown(int contact, int x, int y, int pressure);
 
-    /// <summary>
-    ///     Usage: TouchDown -> TouchMove -> TouchUp.
-    /// </summary>
-    /// <param name="contact">The contact id.</param>
-    /// <param name="x">The horizontal coordinate of the ending point.</param>
-    /// <param name="y">The vertical coordinate of the ending point.</param>
-    /// <param name="pressure">The pressure.</param>
     /// <returns>A touch move <see cref="MaaJob"/>.</returns>
+    /// <inheritdoc cref="TouchDown"/>
     MaaJob TouchMove(int contact, int x, int y, int pressure);
 
-    /// <summary>
-    ///     Usage: TouchDown -> TouchMove -> TouchUp.
-    /// </summary>
-    /// <param name="contact">The contact id.</param>
     /// <returns>A touch up <see cref="MaaJob"/>.</returns>
+    /// <inheritdoc cref="TouchDown"/>
     MaaJob TouchUp(int contact);
 
     /// <summary>

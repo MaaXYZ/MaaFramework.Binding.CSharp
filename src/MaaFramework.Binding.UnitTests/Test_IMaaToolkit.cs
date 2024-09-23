@@ -28,7 +28,7 @@ public class Test_IMaaToolkit
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(NewData))]
+    [MaaData(MaaTypes.All, nameof(Data))]
     public void Interface_Config(MaaTypes type, IMaaToolkit maaToolkit)
     {
         Assert.IsNotNull(maaToolkit);
@@ -77,7 +77,7 @@ public class Test_IMaaToolkit
 
 #if MAA_WIN32 && !GITHUB_ACTIONS
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(NewData))]
+    [MaaData(MaaTypes.All, nameof(Data))]
     public void Interface_Win32_Window(MaaTypes type, IMaaToolkit maaToolkit)
     {
         Assert.IsNotNull(maaToolkit);

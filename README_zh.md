@@ -31,7 +31,7 @@ _💫 一个通用的互操作 API 封装 💫_
 | Linux <br> Ubuntu 23.10+ | libc6 2.38+ 等 |
 | Android | Unknown |
 
-- 架构限制: x64, arm64
+- 架构限制: X64, Arm64
 
 ### 安装依赖
 

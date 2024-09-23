@@ -31,7 +31,7 @@ Your computer should meet the minimum system requirements before you run and use
 | Linux <br> Ubuntu 23.10+ | libc6 2.38+ <br> and more |
 | Android | Unknown |
 
-- Architectures: x64, arm64
+- Architectures: X64, Arm64
 
 ### Install Dependents
 

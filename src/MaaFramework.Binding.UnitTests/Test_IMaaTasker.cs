@@ -149,15 +149,10 @@ public class Test_IMaaTasker
             maaTasker.Resource.Register(Custom.Recognition));
 
         // Updates if name is registered
-        /* Todoa
-            #289 bug, should be return true
-            A callback was made on a garbage collected delegate of type 'MaaFramework.Binding.Native!MaaFramework.Binding.Interop.Native.IMaaCustomActionExtension+Run::Invoke'.)
-
         Assert.IsTrue(
-            maaTasker.Register(Custom.Action.Name, Custom.Action));
+            maaTasker.Resource.Register(Custom.Action.Name, Custom.Action));
         Assert.IsTrue(
-            maaTasker.Register(Custom.Recognition.Name, Custom.Recognition));
-        */
+            maaTasker.Resource.Register(Custom.Recognition.Name, Custom.Recognition));
 
         // Runs a custom task
         Assert.AreEqual(MaaJobStatus.Succeeded,
@@ -200,7 +195,6 @@ public class Test_IMaaTasker
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), "EmptyTask")]
-    [Obsolete("AllTasksFinished")]
     public void Interface_AppendPipeline(MaaTypes type, IMaaTasker maaTasker, string taskEntryName)
     {
         Assert.IsNotNull(maaTasker);
@@ -262,10 +256,14 @@ public class Test_IMaaTasker
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), "AppendRecognition", """{"AppendRecognition":{"recognition":"OCR"}}""")]
-    public void MaaTaskJob_Query(MaaTypes type, IMaaTasker maaTasker, string taskEntryName, string diff)
+    [MaaData(MaaTypes.All, nameof(Data), "AppendRecognition", """{"AppendRecognition":{"recognition":"OCR"}}""", true)]
+    [MaaData(MaaTypes.All, nameof(Data), "AppendRecognition", """{"AppendRecognition":{"recognition":"OCR"}}""", false)]
+    public void MaaTaskJob_Query(MaaTypes type, IMaaTasker maaTasker, string taskEntryName, string diff, bool debugMode)
     {
         Assert.IsNotNull(maaTasker);
+        Assert.IsTrue(
+            maaTasker.Utility.SetOption(GlobalOption.DebugMode, debugMode));
+
         var job =
             maaTasker.AppendPipeline(taskEntryName, diff);
         Interface_IMaaPost_Success(job);
@@ -274,8 +272,23 @@ public class Test_IMaaTasker
             job.QueryTaskDetail());
         Assert.IsNull(
             job.QueryNodeDetail(index: 1));
-        Assert.IsNotNull(
-            job.QueryRecognitionDetail());
+
+        // Tip: dispose the recognition detail to dispose HitBox, Raw and Draws after the query is completed.
+        using var recognitionDetail = job.QueryRecognitionDetail();
+        Assert.IsNotNull(recognitionDetail);
+        if (debugMode)
+        {
+            Assert.IsNotNull(recognitionDetail.Raw);
+            Assert.IsNotNull(recognitionDetail.Draws);
+        }
+        else
+        {
+            Assert.IsNull(recognitionDetail.Raw);
+            Assert.IsNull(recognitionDetail.Draws);
+        }
+
+        Assert.IsTrue(
+            maaTasker.Utility.SetOption(GlobalOption.DebugMode, false));
     }
 
     [TestMethod]
@@ -283,7 +296,6 @@ public class Test_IMaaTasker
     public void Interface_Abort(MaaTypes type, IMaaTasker maaTasker)
     {
         Assert.IsNotNull(maaTasker);
-
         Assert.IsTrue(
             maaTasker.Abort());
     }
