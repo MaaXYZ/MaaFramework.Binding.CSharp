@@ -1,4 +1,4 @@
-﻿#r "nuget: NuGet.Versioning, 6.10.1"
+﻿#r "nuget: NuGet.Versioning, 6.11.0"
 
 using System.Diagnostics;
 using NuGet.Versioning;
@@ -10,15 +10,18 @@ var branch = StartProcess("git rev-parse --abbrev-ref HEAD", true);
 var commit = StartProcess("git rev-parse HEAD", true);
 var gitRef = Environment.GetEnvironmentVariable("GITHUB_REF") ?? string.Empty;
 var isRelease = gitRef.StartsWith("refs/tags/v");
-var tag = StartProcess($"git describe --tags --match v* {gitRef}", true); // tag=v1.8.9.2-3-ge878f0b
-var tags = new Queue<string>(tag.Split('-'));
-var version = NuGetVersion.Parse(tags.Dequeue().TrimStart('v'));
-
-if (version.ReleaseLabels.Count() > 1)
+var tag = StartProcess($"git describe --tags --match v* {gitRef}", true);
+var tags = new Queue<string>(tag.TrimStart('v').Split('-'));
+var version = tags.Count switch
 {
-    throw new InvalidOperationException("The release labels count > 1.");
-}
-if (!isRelease)
+    1 or 3 => NuGetVersion.Parse(
+        tags.Dequeue()),                            // v2.0.1      v2.0.1-3-ge878f0b
+    2 or 4 => NuGetVersion.Parse(
+        tags.Dequeue() + '-' + tags.Dequeue()),     // v2.0.1-rc.1 v2.0.1-rc.1-3-ge878f0b
+    _ => throw new InvalidOperationException("The release labels count > 4.")
+};
+
+if (tags.Count != 0)                                // 非最新版本号
 {
     var nightlyVersion = new NuGetVersion(version.Major, version.Minor, version.Patch,
         version.IsPrerelease
@@ -26,7 +29,7 @@ if (!isRelease)
             : version.Revision + 1,
         version.IsPrerelease
             ? version.ReleaseLabels.Concat(tags)    // alpha1 -> alpha1.1
-            : tags.Prepend("alpha"),                 //        -> alpha.1
+            : tags.Prepend("alpha"),                //        -> alpha.1
         string.Empty
     );
     version = nightlyVersion;
