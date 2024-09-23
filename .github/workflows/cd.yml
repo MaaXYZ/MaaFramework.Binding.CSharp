@@ -94,8 +94,8 @@ jobs:
       - name: Re-zip docs
         run: |
           cd github-pages
-          7z x artifact.tar -o${{ needs.build.outputs.version }}
-          7z a docs.zip ${{ needs.build.outputs.version }}
+          7z x artifact.tar -o'${{ needs.build.outputs.version }}'
+          7z a docs.zip '${{ needs.build.outputs.version }}'
 
       - if: needs.build.outputs.is_release == 'True'
         uses: softprops/action-gh-release@v2
