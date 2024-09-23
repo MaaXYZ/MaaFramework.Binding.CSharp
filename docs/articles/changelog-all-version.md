@@ -1,3 +1,27 @@
+## v2.0.1-rc.1
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.9.2...v2.0.1-rc.1
+
+### New features
+
+- support android native library @moomiji
+- support platform rid differential nupkgs @moomiji
+
+### Perfect
+
+- pretty debugger display @moomiji
+
+### Fix
+
+- NuGet package metadata errors @moomiji
+
+### Other
+
+- update interop to framework 2.0.1 @moomiji
+- remove custom executors @moomiji
+- Create README_zh.md & add MFAWPF (#7) @SweetSmellFox
+- add solution builder @moomiji
+
 ## v1.8.9.2
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.9.1...v1.8.9.2
