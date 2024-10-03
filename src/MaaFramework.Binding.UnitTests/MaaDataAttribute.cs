@@ -26,15 +26,12 @@ public sealed class MaaDataAttribute : DataRowAttribute, ITestDataSource
     /// <inheritdoc/>
     IEnumerable<object?[]> ITestDataSource.GetData(MethodInfo methodInfo)
     {
-        var datas = GetData(methodInfo) as object[][]
-            ?? throw new ArgumentNullException($"{GetData} did not return a object[][] type value.");
-
         foreach (var maaObject in GetMaaObjects(methodInfo))
         {
             if (!_maaInteropTypes.HasFlag(maaObject.Key))
                 continue;
 
-            foreach (var data in datas)
+            foreach (var data in GetData(methodInfo))
             {
                 var array = new object?[data.Length + 2];
                 array[0] = maaObject.Key;
