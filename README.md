@@ -49,9 +49,16 @@ Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) 
 
 ### Add Packages
 
-#### Release
+| Package Id | Descriptions |
+| :---- | :---- |
+| Maa.Framework | A metapackage with references to Native, Runtimes. |
+| Maa.Framework.Native | A metapackage with references to Binding.Native, AgentBinary. |
+| Maa.Framework.Binding | The abstractions of binding. |
+| Maa.Framework.Binding.Native | The native api wrapper implementation of binding.|
+| Maa.Framework.Runtimes <br> Maa.Framework.Runtime.win-x64 <br> Maa.Framework.Runtime.win-arm64 <br> Maa.Framework.Runtime.linux-x64 <br> Maa.Framework.Runtime.linux-arm64 <br> Maa.Framework.Runtime.osx-x64  <br> Maa.Framework.Runtime.osx-arm64 <br> Maa.Framework.Runtime.android-x64 <br> Maa.Framework.Runtime.android-arm64 | Native binaries of [MaaFramework](https://github.com/MaaXYZ/MaaFramework). <br> **No** reference to android packages in Runtimes. |
+| Maa.AgentBinary | Pre-built [agent](https://github.com/MaaXYZ/MaaAgentBinary) binaries, including minitouch, maatouch and minicap. |
 
-[![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
+#### Release
 
 ``` ps1
 dotnet add package Maa.Framework --prerelease

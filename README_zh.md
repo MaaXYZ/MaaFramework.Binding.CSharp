@@ -49,9 +49,16 @@ _💫 一个通用的互操作 API 封装 💫_
 
 ### 添加包
 
-#### 正式版本
+| 包 Id | 描述 |
+| :---- | :---- |
+| Maa.Framework | 引用 Native 和 Runtimes 的元包 |
+| Maa.Framework.Native | 引用 Binding.Native 和 AgentBinary 的元包 |
+| Maa.Framework.Binding | Binding 的抽象层 |
+| Maa.Framework.Binding.Native | Binding 的本机 API 包装实现层 |
+| Maa.Framework.Runtimes <br> Maa.Framework.Runtime.win-x64 <br> Maa.Framework.Runtime.win-arm64 <br> Maa.Framework.Runtime.linux-x64 <br> Maa.Framework.Runtime.linux-arm64 <br> Maa.Framework.Runtime.osx-x64  <br> Maa.Framework.Runtime.osx-arm64 <br> Maa.Framework.Runtime.android-x64 <br> Maa.Framework.Runtime.android-arm64 | [MaaFramework](https://github.com/MaaXYZ/MaaFramework)的本机二进制文件。 <br> Runtimes **未**引用 android 包。 |
+| Maa.AgentBinary | 预构建的[代理](https://github.com/MaaXYZ/MaaAgentBinary)二进制文件，包括 minitouch、maatouch 和 minicap。 |
 
-[![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
+#### 发布版本
 
 ``` ps1
 dotnet add package Maa.Framework --prerelease
