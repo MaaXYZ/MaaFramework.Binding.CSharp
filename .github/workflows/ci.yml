@@ -46,11 +46,15 @@ jobs:
       - id: build
         run: dotnet script ./tools/Builder/Build.csx
 
-      - uses: actions/upload-artifact@v4
+      - uses: moomiji/host-nuget-on-github@v1
         with:
-          name: nupkgs
-          path: ./nupkgs
-          retention-days: 7
+          base-uri: https://maaxyz.github.io/pkg/nuget/
+          package-paths: nupkgs
+          feed-path: nuget
+          force: true
+          repository: MaaXYZ/pkg
+          branch: main
+          token: ${{ secrets.PKG_TOKEN }}
 
   lint:
     runs-on: windows-latest

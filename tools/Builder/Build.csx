@@ -5,34 +5,35 @@ using NuGet.Versioning;
 
 var GITHUB_OUTPUT = Environment.GetEnvironmentVariable("GITHUB_OUTPUT")
     ?? throw new InvalidOperationException("$GITHUB_OUTPUT is null.");
+var GITHUB_RUN_ID = Environment.GetEnvironmentVariable("GITHUB_RUN_ID")
+    ?? throw new InvalidOperationException("$GITHUB_RUN_ID is null.");
+var GITHUB_WORKFLOW = Environment.GetEnvironmentVariable("GITHUB_WORKFLOW")
+    ?? throw new InvalidOperationException("GITHUB_WORKFLOW is null.");
+var GITHUB_REF = Environment.GetEnvironmentVariable("GITHUB_REF")
+    ?? string.Empty;
+var d = DateTimeOffset.Parse(StartProcess($"gh run view {GITHUB_RUN_ID} --json createdAt --jq .createdAt")).ToOffset(TimeSpan.FromHours(8));
 
-var branch = StartProcess("git rev-parse --abbrev-ref HEAD", true);
-var commit = StartProcess("git rev-parse HEAD", true);
-var gitRef = Environment.GetEnvironmentVariable("GITHUB_REF") ?? string.Empty;
-var isRelease = gitRef.StartsWith("refs/tags/v");
-var tag = StartProcess($"git describe --tags --match v* {gitRef}", true);
-var tags = new Queue<string>(tag.TrimStart('v').Split('-'));
+var dateTime = ((d.Year - 2000) * 1000 + d.Month * 50 + d.Day).ToString("D5");
+var todayBuildTimes = StartProcess($"gh run list --workflow {GITHUB_WORKFLOW} --created {d.ToString("yyyy-MM-ddT00:00:00+08:00")}..{d.ToString("yyyy-MM-ddT23:59:59+08:00")} --limit 99 --json createdAt --jq length");
+var branch = StartProcess("git rev-parse --abbrev-ref HEAD");
+var commit = StartProcess("git rev-parse HEAD");
+var isRelease = GITHUB_REF.StartsWith("refs/tags/v");
+var tag = StartProcess($"git describe --tags --match v* {GITHUB_REF}");
+var tags = new List<string>(tag.TrimStart('v').Split('-'));
 var version = tags.Count switch
 {
-    1 or 3 => NuGetVersion.Parse(
-        tags.Dequeue()),                            // v2.0.1      v2.0.1-3-ge878f0b
-    2 or 4 => NuGetVersion.Parse(
-        tags.Dequeue() + '-' + tags.Dequeue()),     // v2.0.1-rc.1 v2.0.1-rc.1-3-ge878f0b
-    _ => throw new InvalidOperationException("The release labels count > 4.")
+    1 or 3 => NuGetVersion.Parse(       // => v2.0.1
+        string.Join('-', tags[..1])),   //    v2.0.1      v2.0.1-3-ge878f0b
+    2 or 4 => NuGetVersion.Parse(       // => v2.0.1-rc.1
+        string.Join('-', tags[..2])),   //    v2.0.1-rc.1 v2.0.1-rc.1-3-ge878f0b
+    _ => throw new InvalidOperationException("The release labels count > 4."),
 };
 
-if (tags.Count != 0)                                // 非最新版本号
+if (tags.Count is 3 or 4)               // 非最新版本号
 {
-    var nightlyVersion = new NuGetVersion(version.Major, version.Minor, version.Patch,
-        version.IsPrerelease
-            ? version.Revision                      // 预发布版本号已经提升了一位
-            : version.Revision + 1,
-        version.IsPrerelease
-            ? version.ReleaseLabels.Concat(tags)    // alpha1 -> alpha1.1
-            : tags.Prepend("alpha"),                //        -> alpha.1
-        string.Empty
-    );
-    version = nightlyVersion;
+    version = new NuGetVersion(version.Major, version.Minor, version.Patch,
+        ["preview", dateTime, todayBuildTimes],
+        tag);
 }
 
 var verStr = version.ToFullString();
@@ -42,7 +43,8 @@ TeeToGithubOutput(
     $"is_release={isRelease}"
     );
 StartProcess(
-    $"dotnet build --configuration Release --no-restore -p:Version={verStr};RepositoryBranch={branch};RepositoryCommit={commit}"
+    redirectStandardOutputToReturn: false,
+    cmd: $"dotnet build --configuration Release --no-restore \"-p:Version={verStr};RepositoryBranch={branch};RepositoryCommit={commit};{(isRelease ? string.Empty : "DebugType=embedded;")}\""
     );
 MoveNupkgFiles("nupkgs");
 
@@ -56,8 +58,9 @@ void TeeToGithubOutput(params string[] outputs)
     }
     File.AppendAllLines(GITHUB_OUTPUT, outputs);
 }
-string StartProcess(string cmd, bool redirectStandardOutputToReturn = false)
+string StartProcess(string cmd, bool redirectStandardOutputToReturn = true)
 {
+    Console.WriteLine(cmd);
     var cmds = cmd.Split(' ', 2, StringSplitOptions.TrimEntries);
     using var p = Process.Start(new ProcessStartInfo
     {
@@ -66,6 +69,8 @@ string StartProcess(string cmd, bool redirectStandardOutputToReturn = false)
         RedirectStandardOutput = redirectStandardOutputToReturn,
     });
     p.WaitForExit();
+    if (p.ExitCode != 0)
+        throw new InvalidOperationException($"ExitCode is {p.ExitCode} from {cmd}.");
     return redirectStandardOutputToReturn
         ? p.StandardOutput.ReadToEnd().Trim()
         : string.Empty;
