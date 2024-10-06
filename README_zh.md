@@ -66,19 +66,24 @@ dotnet add package Maa.Framework --prerelease
 
 #### 夜间构建
 
-从 [CI Action](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/actions/workflows/ci.yml) 下载 `nupkgs.zip` 并解压文件到 `.\nupkgs\` 。
+##### 添加包
 
 - shell
 ``` ps1
-dotnet add package Maa.Framework --prerelease -s .\nupkgs\
+dotnet add package Maa.Framework --prerelease -s https://nuget.pkg.github.com/maaxyz/index.json
 ```
 
-- or .csproj
+##### 添加包源
+
+- .csproj
 ``` xml
   <PropertyGroup>
-    <RestoreSources>$(RestoreSources);$(FullPath of .\nupkgs\)</RestoreSources>
+    <RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;https://maaxyz.github.io/pkg/nuget/index.json</RestoreSources>
   </PropertyGroup>
 ```
+
+- NuGet.config
+例子请参考[该配置](../NuGet.config)，完整信息请参考[该文章](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html)。
 
 #### 指定 RIDs
 

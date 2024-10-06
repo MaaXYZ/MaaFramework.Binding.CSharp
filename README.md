@@ -66,25 +66,30 @@ dotnet add package Maa.Framework --prerelease
 
 #### Nightly Build
 
-Download `nupkgs.zip` from [CI Action](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/actions/workflows/ci.yml) and extract files to `.\nupkgs\`.
+##### Add package
 
 - shell
 ``` ps1
-dotnet add package Maa.Framework --prerelease -s .\nupkgs\
+dotnet add package Maa.Framework --prerelease -s https://nuget.pkg.github.com/maaxyz/index.json
 ```
 
-- or .csproj
+##### Add package source
+
+- .csproj
 ``` xml
   <PropertyGroup>
-    <RestoreSources>$(RestoreSources);$(FullPath of .\nupkgs\)</RestoreSources>
+    <RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;https://maaxyz.github.io/pkg/nuget/index.json</RestoreSources>
   </PropertyGroup>
 ```
+
+- NuGet.config
+Please refer to [this config](../NuGet.config) for example, and [this article](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html) for complete information.
 
 #### Specifying RIDs
 
 The supported Runtime IDs for `MaaFramework` can be found [here](https://github.com/MaaXYZ/MaaFramework/tree/main/tools/nupkgs).
 
-To use specific RIDs, such as the supported `win` platform packages, manually reference the following packages:
+To use specific RIDs, such as the supported `win` platform packages, please manually reference the following packages:
 - `Maa.Framework.Native`
 - `Maa.Framework.Runtime.win-arm64`
 - `Maa.Framework.Runtime.win-x64`
