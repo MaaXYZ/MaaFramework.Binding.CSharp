@@ -15,10 +15,11 @@ var d = DateTimeOffset.Parse(StartProcess($"gh run view {GITHUB_RUN_ID} --json c
 
 var dateTime = ((d.Year - 2000) * 1000 + d.Month * 50 + d.Day).ToString("D5");
 var todayBuildTimes = StartProcess($"gh run list --workflow {GITHUB_WORKFLOW} --created {d.ToString("yyyy-MM-ddT00:00:00+08:00")}..{d.ToString("yyyy-MM-ddT23:59:59+08:00")} --limit 99 --json createdAt --jq length");
+var defaultBranch = StartProcess("gh repo view --json defaultBranchRef --jq .defaultBranchRef.name");
 var branch = StartProcess("git rev-parse --abbrev-ref HEAD");
 var commit = StartProcess("git rev-parse HEAD");
 var isRelease = GITHUB_REF.StartsWith("refs/tags/v");
-var tag = StartProcess($"git describe --tags --match v* {GITHUB_REF}");
+var tag = StartProcess($"git describe --tags --match v*");
 var tags = new List<string>(tag.TrimStart('v').Split('-'));
 var version = tags.Count switch
 {
@@ -40,11 +41,12 @@ var verStr = version.ToFullString();
 TeeToGithubOutput(
     $"tag={tag}",
     $"version={verStr}",
-    $"is_release={isRelease}"
+    $"is_release={isRelease}",
+    $"default_branch={defaultBranch}"
     );
 StartProcess(
     redirectStandardOutputToReturn: false,
-    cmd: $"dotnet build --configuration Release --no-restore \"-p:Version={verStr};RepositoryBranch={branch};RepositoryCommit={commit};{(isRelease ? string.Empty : "DebugType=embedded;")}\""
+    cmd: $"dotnet build --configuration Release --no-restore -p:Version={verStr};RepositoryBranch={branch};RepositoryCommit={commit};{(isRelease ? string.Empty : "DebugType=embedded;IncludeSymbols=false")}"
     );
 MoveNupkgFiles("nupkgs");
 
@@ -60,7 +62,7 @@ void TeeToGithubOutput(params string[] outputs)
 }
 string StartProcess(string cmd, bool redirectStandardOutputToReturn = true)
 {
-    Console.WriteLine(cmd);
+    Console.WriteLine(">> {0}", cmd);
     var cmds = cmd.Split(' ', 2, StringSplitOptions.TrimEntries);
     using var p = Process.Start(new ProcessStartInfo
     {
@@ -71,9 +73,9 @@ string StartProcess(string cmd, bool redirectStandardOutputToReturn = true)
     p.WaitForExit();
     if (p.ExitCode != 0)
         throw new InvalidOperationException($"ExitCode is {p.ExitCode} from {cmd}.");
-    return redirectStandardOutputToReturn
-        ? p.StandardOutput.ReadToEnd().Trim()
-        : string.Empty;
+    var output = redirectStandardOutputToReturn ? p.StandardOutput.ReadToEnd().Trim() : string.Empty;
+    Console.WriteLine(output);
+    return output;
 }
 void MoveNupkgFiles(string destDir)
 {

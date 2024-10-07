@@ -18,6 +18,8 @@ on:
       - "**"
     paths:
       - ".github/workflows/ci.yml"
+      - "tools/Builder/Build.csx"
+      - "tools/Linters/NamespaceLinter.csx"
       - "src/**"
       - "*.sln"
       - "*.props"
@@ -44,12 +46,21 @@ jobs:
       - run: dotnet tool install -g dotnet-script
 
       - id: build
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: dotnet script ./tools/Builder/Build.csx
 
-      - uses: moomiji/host-nuget-on-github@v1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nupkgs
+          path: ./nupkgs
+          retention-days: 1
+
+      - if: github.ref == 'refs/heads/${{ steps.build.outputs.default_branch }}' && github.repository_owner_id == '161146573'
+        uses: moomiji/host-nuget-on-github@v1
         with:
           base-uri: https://maaxyz.github.io/pkg/nuget/
-          package-paths: nupkgs
+          package-paths: ./nupkgs
           feed-path: nuget
           force: true
           repository: MaaXYZ/pkg
