@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
@@ -31,6 +32,9 @@ public class MaaToolkit : IMaaToolkit
 
     /// <inheritdoc/>
     public IMaaToolkitDesktop Desktop { get; } = new DesktopClass();
+
+    /// <inheritdoc/>
+    public IMaaToolkitProjectInterface PI => new ProjectInterfaceClass(0);
 
     /// <inheritdoc cref="MaaToolkit"/>
     protected internal class ConfigClass : IMaaToolkitConfig
@@ -98,6 +102,96 @@ public class MaaToolkit : IMaaToolkit
             if (!ret.ToBoolean())
                 throw new InvalidOperationException();
             return list;
+        }
+    }
+
+    /// <inheritdoc cref="MaaToolkit"/>
+    /// <remarks>Exists risk of memory leak.</remarks>
+    protected internal class ProjectInterfaceClass : IMaaToolkitProjectInterface
+    {
+        /// <inheritdoc/>
+        public event EventHandler<MaaCallbackEventArgs>? Callback;
+
+        /// <summary>
+        ///     Raises the Callback event.
+        /// </summary>
+        /// <param name="message">The MaaStringView.</param>
+        /// <param name="detailsJson">The MaaStringView.</param>
+        /// <param name="callbackArg">The MaaCallbackTransparentArg.</param>
+        /// <remarks>
+        ///     Usually invoked by MaaFramework.
+        /// </remarks>
+        protected virtual void OnCallback(string message, string detailsJson, nint callbackArg)
+        {
+            Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
+        }
+
+        /// <summary>
+        ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
+        /// </summary>
+        protected MaaNotificationCallback MaaNotificationCallback { get; }
+
+        /// <summary>
+        ///     Creates a <see cref="ProjectInterfaceClass"/> instance.
+        /// </summary>
+        /// <param name="instanceId">The instance id.</param>
+        public ProjectInterfaceClass(ulong instanceId)
+        {
+            s_instances[instanceId] = this;
+            _instanceId = instanceId;
+            MaaNotificationCallback = OnCallback;
+        }
+
+        private readonly ulong _instanceId;
+        private static readonly Dictionary<ulong, ProjectInterfaceClass> s_instances = [];
+        private readonly MaaMarshaledApis<MaaCustomActionCallback> _actions = new();
+        private readonly MaaMarshaledApis<MaaCustomRecognitionCallback> _recognitions = new();
+
+        private bool RegisterCustomAction(IMaaCustomAction res)
+        {
+            MaaToolkitProjectInterfaceRegisterCustomAction(_instanceId, res.Name, res.Convert(out var callback), nint.Zero);
+            return _actions.Set(res.Name, callback);
+        }
+        private bool RegisterCustomRecognition(IMaaCustomRecognition res)
+        {
+            MaaToolkitProjectInterfaceRegisterCustomRecognition(_instanceId, res.Name, res.Convert(out var callback), nint.Zero);
+            return _recognitions.Set(res.Name, callback);
+        }
+
+        /// <inheritdoc/>
+        public bool Register<T>(string name, T custom) where T : IMaaCustomResource
+        {
+            custom.Name = name;
+            return Register(custom);
+        }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        ///     Wrapper of <see cref="MaaToolkitProjectInterfaceRegisterCustomAction"/> and <see cref="MaaToolkitProjectInterfaceRegisterCustomRecognition"/>.
+        /// </remarks>
+        public bool Register<T>(T custom) where T : IMaaCustomResource => custom switch
+        {
+            IMaaCustomAction res => RegisterCustomAction(res),
+            IMaaCustomRecognition res => RegisterCustomRecognition(res),
+            _ => throw new NotImplementedException(),
+        };
+
+        /// <inheritdoc/>
+        /// <remarks>
+        ///     Wrapper of <see cref="MaaToolkitProjectInterfaceRunCli"/>.
+        /// </remarks>
+        public bool RunCli(string resourcePath, string userPath, bool directly = false)
+            => MaaToolkitProjectInterfaceRunCli(_instanceId, resourcePath, userPath, directly.ToMaaBool(), MaaNotificationCallback, nint.Zero).ToBoolean();
+
+        /// <inheritdoc/>
+        public IMaaToolkitProjectInterface this[ulong id]
+        {
+            get
+            {
+                if (s_instances.TryGetValue(id, out var pi))
+                    return pi;
+                return s_instances[id] = new ProjectInterfaceClass(id);
+            }
         }
     }
 }
