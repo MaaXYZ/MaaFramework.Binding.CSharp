@@ -4,7 +4,7 @@
 
 # MaaFramework.Binding.CSharp
 
-_✨ [MaaFramework](https://github.com/MaaXYZ/MaaFramework/blob/v2.0.1) 的 C# 绑定 ✨_
+_✨ [MaaFramework](https://github.com/MaaXYZ/MaaFramework/blob/v2.0.3) 的 C# 绑定 ✨_
 
 _💫 一个通用的互操作 API 封装 💫_
 
@@ -43,7 +43,7 @@ _💫 一个通用的互操作 API 封装 💫_
 
 ### 准备资源
 
-请参阅 MaaFramework 文档 ( [English](https://github.com/MaaXYZ/MaaFramework/blob/v2.0.1/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) | [简体中文](https://github.com/MaaXYZ/MaaFramework/blob/v2.0.1/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6) ) 。
+请参阅 MaaFramework 文档 ( [English](https://github.com/MaaXYZ/MaaFramework/blob/v2.0.3/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) | [简体中文](https://github.com/MaaXYZ/MaaFramework/blob/v2.0.3/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6) ) 。
 
 如同在 `MaaFramework.Binding.CSharp` 使用的的 [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) 。
 
