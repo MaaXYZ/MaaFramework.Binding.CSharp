@@ -1,20 +1,20 @@
 ﻿#r "nuget: NuGet.Versioning, 6.11.0"
 
 using System.Diagnostics;
+using System.Xml.Linq;
 using NuGet.Versioning;
 
 var GITHUB_OUTPUT = Environment.GetEnvironmentVariable("GITHUB_OUTPUT")
     ?? throw new InvalidOperationException("$GITHUB_OUTPUT is null.");
+var GITHUB_STEP_SUMMARY = Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY")
+    ?? throw new InvalidOperationException("$GITHUB_STEP_SUMMARY is null.");
 var GITHUB_RUN_ID = Environment.GetEnvironmentVariable("GITHUB_RUN_ID")
     ?? throw new InvalidOperationException("$GITHUB_RUN_ID is null.");
 var GITHUB_WORKFLOW = Environment.GetEnvironmentVariable("GITHUB_WORKFLOW")
     ?? throw new InvalidOperationException("GITHUB_WORKFLOW is null.");
 var GITHUB_REF = Environment.GetEnvironmentVariable("GITHUB_REF")
     ?? string.Empty;
-var d = DateTimeOffset.Parse(StartProcess($"gh run view {GITHUB_RUN_ID} --json createdAt --jq .createdAt")).ToOffset(TimeSpan.FromHours(8));
 
-var dateTime = ((d.Year - 2000) * 1000 + d.Month * 50 + d.Day).ToString("D5");
-var todayBuildTimes = StartProcess($"gh run list --workflow {GITHUB_WORKFLOW} --created {d.ToString("yyyy-MM-ddT00:00:00+08:00")}..{d.ToString("yyyy-MM-ddT23:59:59+08:00")} --limit 99 --json createdAt --jq length");
 var defaultBranch = StartProcess("gh repo view --json defaultBranchRef --jq .defaultBranchRef.name");
 var branch = StartProcess("git rev-parse --abbrev-ref HEAD");
 var commit = StartProcess("git rev-parse HEAD");
@@ -32,7 +32,16 @@ var version = tags.Count switch
 
 if (tags.Count is 3 or 4)               // 非最新版本号
 {
-    version = new NuGetVersion(version.Major, version.Minor, version.Patch,
+    var d = DateTimeOffset.Parse(StartProcess($"gh run view {GITHUB_RUN_ID} --json createdAt --jq .createdAt")).ToOffset(TimeSpan.FromHours(8));
+    var dateTime = ((d.Year - 2000) * 1000 + d.Month * 50 + d.Day).ToString("D5");
+    var todayBuildTimes = StartProcess($"gh run list --workflow {GITHUB_WORKFLOW} --created {d.ToString("yyyy-MM-ddT00:00:00+08:00")}..{d.ToString("yyyy-MM-ddT23:59:59+08:00")} --limit 99 --json createdAt --jq length");
+    var runtimes = NuGetVersion.Parse(
+        XDocument.Load("Directory.Packages.props")
+            .Descendants("PackageVersion")
+            .FirstOrDefault(e => e.Attribute("Include")?.Value == "Maa.Framework.Runtimes")
+            !.Attribute("Version")
+            !.Value);
+    version = new NuGetVersion(runtimes.Major, runtimes.Minor, runtimes.Patch,
         ["preview", dateTime, todayBuildTimes],
         tag);
 }
@@ -49,15 +58,26 @@ StartProcess(
     cmd: $"dotnet build --configuration Release --no-restore -p:Version={verStr};RepositoryBranch={branch};RepositoryCommit={commit};{(isRelease ? string.Empty : "DebugType=embedded;IncludeSymbols=false")}"
     );
 MoveNupkgFiles("nupkgs");
+File.AppendAllText(GITHUB_STEP_SUMMARY, $"""
+- PackageReference
+
+```xml
+<PackageReference Include="Maa.Framework.Runtimes" Version="{verStr}" />
+```
+
+For more information, please read [add packages](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/#add-packages).
+""");
 
 
 #region Methods
 void TeeToGithubOutput(params string[] outputs)
 {
+    Console.ForegroundColor = ConsoleColor.Green;
     foreach (var output in outputs)
     {
-        Console.WriteLine(output);
+        Console.WriteLine("|> {0}", output);
     }
+    Console.ResetColor();
     File.AppendAllLines(GITHUB_OUTPUT, outputs);
 }
 string StartProcess(string cmd, bool redirectStandardOutputToReturn = true)
@@ -74,7 +94,7 @@ string StartProcess(string cmd, bool redirectStandardOutputToReturn = true)
     if (p.ExitCode != 0)
         throw new InvalidOperationException($"ExitCode is {p.ExitCode} from {cmd}.");
     var output = redirectStandardOutputToReturn ? p.StandardOutput.ReadToEnd().Trim() : string.Empty;
-    Console.WriteLine(output);
+    Console.WriteLine("   {0}", output);
     return output;
 }
 void MoveNupkgFiles(string destDir)

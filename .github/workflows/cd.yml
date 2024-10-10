@@ -44,6 +44,8 @@ jobs:
           dotnet tool update -g docfx
 
       - id: build
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           dotnet script ./tools/Builder/Build.csx
           ./docs/build.ps1
