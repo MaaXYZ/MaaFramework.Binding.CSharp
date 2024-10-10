@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Interop.Native;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaTasker;
@@ -26,7 +27,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     A property used to simplify design of <see cref="MaaContext.Tasker"/>.
     /// </remarks>
-    protected internal static Dictionary<MaaTaskerHandle, MaaTasker> Instances { get; } = [];
+    protected internal static ConcurrentDictionary<MaaTaskerHandle, MaaTasker> Instances { get; } = [];
 
     /// <summary>
     ///     Creates a <see cref="MaaTasker"/> instance.
@@ -38,8 +39,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     public MaaTasker(bool toolkitInit = false)
     {
         var handle = MaaTaskerCreate(MaaNotificationCallback, nint.Zero);
+        if (!Instances.TryAdd(handle, this))
+            throw new InvalidOperationException(); // Always returns true, but non-atomic operation may fail to add.
         SetHandle(handle, needReleased: true);
-        Instances.Add(handle, this);
 
         Toolkit = new MaaToolkit(toolkitInit);
         Utility = new MaaUtility();

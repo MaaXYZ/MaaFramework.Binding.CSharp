@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
+using System.Collections.Concurrent;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding;
@@ -34,7 +35,7 @@ public class MaaToolkit : IMaaToolkit
     public IMaaToolkitDesktop Desktop { get; } = new DesktopClass();
 
     /// <inheritdoc/>
-    public IMaaToolkitProjectInterface PI => new ProjectInterfaceClass(0);
+    public IMaaToolkitProjectInterface PI { get; } = ProjectInterfaceClass.Get(0);
 
     /// <inheritdoc cref="MaaToolkit"/>
     protected internal class ConfigClass : IMaaToolkitConfig
@@ -135,15 +136,14 @@ public class MaaToolkit : IMaaToolkit
         ///     Creates a <see cref="ProjectInterfaceClass"/> instance.
         /// </summary>
         /// <param name="instanceId">The instance id.</param>
-        public ProjectInterfaceClass(ulong instanceId)
+        protected ProjectInterfaceClass(ulong instanceId)
         {
-            s_instances[instanceId] = this;
             _instanceId = instanceId;
             MaaNotificationCallback = OnCallback;
         }
 
         private readonly ulong _instanceId;
-        private static readonly Dictionary<ulong, ProjectInterfaceClass> s_instances = [];
+        private static readonly ConcurrentDictionary<ulong, ProjectInterfaceClass> s_instances = [];
         private readonly MaaMarshaledApis<MaaCustomActionCallback> _actions = new();
         private readonly MaaMarshaledApis<MaaCustomRecognitionCallback> _recognitions = new();
 
@@ -184,14 +184,10 @@ public class MaaToolkit : IMaaToolkit
             => MaaToolkitProjectInterfaceRunCli(_instanceId, resourcePath, userPath, directly.ToMaaBool(), MaaNotificationCallback, nint.Zero).ToBoolean();
 
         /// <inheritdoc/>
-        public IMaaToolkitProjectInterface this[ulong id]
-        {
-            get
-            {
-                if (s_instances.TryGetValue(id, out var pi))
-                    return pi;
-                return s_instances[id] = new ProjectInterfaceClass(id);
-            }
-        }
+        public IMaaToolkitProjectInterface this[ulong id] => Get(id);
+
+        /// <inheritdoc cref="this"/>
+        public static IMaaToolkitProjectInterface Get(ulong id)
+            => s_instances.GetOrAdd(id, x => new ProjectInterfaceClass(x));
     }
 }
