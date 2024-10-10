@@ -247,7 +247,7 @@ def main(tag_name=None, latest=None):
 
     res = print_commits(build_commits_tree([x for x in raw_commits_info.keys()][0]))
 
-    version = tag_name.rstrip("v")
+    version = tag_name.lstrip("v")
     changelog_content = f"""### NuGet Link
 
 [![](https://img.shields.io/badge/NuGet-Maa.Framework-%23004880)](https://www.nuget.org/packages/Maa.Framework/{version}) [![](https://img.shields.io/badge/NuGet-Maa.Framework.Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Native/{version}) [![](https://img.shields.io/badge/NuGet-Binding-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding/{version}) [![](https://img.shields.io/badge/NuGet-Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Native/{version})
