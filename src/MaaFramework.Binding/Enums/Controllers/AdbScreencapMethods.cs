@@ -27,6 +27,6 @@ public enum AdbScreencapMethods : System.UInt64
     MinicapStream = (1 << 5),
     EmulatorExtras = (1 << 6),
     All = (~None),
-    Default = (All & (~MinicapDirect) & (~MinicapStream)),
+    Default = (All & (~RawByNetcat) & (~MinicapDirect) & (~MinicapStream)),
 }
 
