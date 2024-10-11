@@ -1,11 +1,11 @@
-﻿using MaaFramework.Binding.Buffers;
+﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
 namespace MaaFramework.Binding.UnitTests;
 
 internal static class Custom
 {
-    public static TestController Controller { get; } = new();
     public static TestAction Action { get; } = new();
     public static TestRecognition Recognition { get; } = new();
     public static TestResource Resource { get; } = new();
@@ -80,74 +80,72 @@ internal static class Custom
         }
     }
 
-    internal sealed class TestController : IMaaCustomController
+    internal sealed class TestController(MaaController c) : IMaaCustomController, IMaaDisposable
     {
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #region Test_IMaaDisposable
+
+        public bool IsInvalid => c.IsInvalid;
+
+        public void Dispose() => c.Dispose();
+
+        #endregion
+
+        public string Name { get; set; } = "TestController";
 
         public bool Click(int x, int y)
-        {
-            throw new NotImplementedException();
-        }
+            => c.Click(x, y).Wait() == MaaJobStatus.Succeeded;
 
         public bool Connect()
-        {
-            throw new NotImplementedException();
-        }
+            => c.LinkStart().Wait() == MaaJobStatus.Succeeded;
 
         public bool InputText(string text)
-        {
-            throw new NotImplementedException();
-        }
+            => c.InputText(text).Wait() == MaaJobStatus.Succeeded;
 
         public bool PressKey(int keycode)
-        {
-            throw new NotImplementedException();
-        }
+            => c.PressKey(keycode).Wait() == MaaJobStatus.Succeeded;
 
         public bool RequestResolution(out int width, out int height)
         {
-            throw new NotImplementedException();
+            using var image = new MaaImageBuffer();
+            if (Screencap(image))
+            {
+                width = image.Width;
+                height = image.Height;
+                return true;
+            }
+
+            width = height = -1;
+            return false;
         }
 
         public bool RequestUuid(in IMaaStringBuffer buffer)
         {
-            throw new NotImplementedException();
+            var uuid = c.Uuid;
+            if (uuid is null) return false;
+            buffer.SetValue(uuid);
+            return true;
         }
 
         public bool Screencap(in IMaaImageBuffer buffer)
-        {
-            throw new NotImplementedException();
-        }
+            => c.Screencap().Wait() == MaaJobStatus.Succeeded && c.GetCachedImage(buffer);
 
         public bool StartApp(string intent)
-        {
-            throw new NotImplementedException();
-        }
+            => c.StartApp(intent).Wait() == MaaJobStatus.Succeeded;
 
         public bool StopApp(string intent)
-        {
-            throw new NotImplementedException();
-        }
+            => c.StopApp(intent).Wait() == MaaJobStatus.Succeeded;
 
         public bool Swipe(int x1, int y1, int x2, int y2, int duration)
-        {
-            throw new NotImplementedException();
-        }
+            => c.Swipe(x1, y1, x2, y2, duration).Wait() == MaaJobStatus.Succeeded;
 
         public bool TouchDown(int contact, int x, int y, int pressure)
-        {
-            throw new NotImplementedException();
-        }
+            => c.TouchDown(contact, x, y, pressure).Wait() == MaaJobStatus.Succeeded;
 
         public bool TouchMove(int contact, int x, int y, int pressure)
-        {
-            throw new NotImplementedException();
-        }
+            => c.TouchMove(contact, x, y, pressure).Wait() == MaaJobStatus.Succeeded;
 
         public bool TouchUp(int contact)
-        {
-            throw new NotImplementedException();
-        }
+            => c.TouchUp(contact).Wait() == MaaJobStatus.Succeeded;
     }
 
     internal sealed class TestResource : IMaaCustomResource

@@ -20,6 +20,11 @@ public class Test_IMaaController
         {
             MaaTypes.Native, new MaaAdbController(Common.AdbPath, Common.Address, AdbScreencapMethods.Encode, s_inputPreset, Common.AdbConfig, Common.AgentPath, LinkOption.None)
         },
+#pragma warning disable CA2000
+        {
+            MaaTypes.Custom, new MaaCustomController(new Custom.TestController(new MaaAdbController(Common.AdbPath, Common.Address, AdbScreencapMethods.Encode, s_inputPreset, Common.AdbConfig, Common.AgentPath, LinkOption.None)))
+        },
+#pragma warning restore CA2000
 #endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
@@ -264,6 +269,7 @@ public class Test_IMaaController
         {
 #if MAA_NATIVE
             MaaTypes.Native => new MaaImageBuffer(),
+            MaaTypes.Custom => new MaaImageBuffer(),
 #endif
             _ => throw new NotImplementedException(),
         };

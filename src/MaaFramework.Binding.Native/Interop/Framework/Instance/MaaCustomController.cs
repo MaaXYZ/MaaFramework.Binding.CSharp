@@ -10,170 +10,145 @@
 #pragma warning disable CS1573 // 参数在 XML 注释中没有匹配的 param 标记
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
-global using MaaControllerApiTuple = (
-    System.Runtime.InteropServices.GCHandle Handle,
-    MaaFramework.Binding.Custom.IMaaCustomController Managed,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.ConnectDelegate ConnectMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.RequestUuidDelegate RequestUuidMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.StartAppDelegate StartAppMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.StopAppDelegate StopAppMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.ScreencapDelegate ScreencapMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.ClickDelegate ClickMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.SwipeDelegate SwipeMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchDownDelegate TouchDownMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchMoveDelegate TouchMoveMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.TouchUpDelegate TouchUpMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.PressKeyDelegate PressKeyMethod,
-    MaaFramework.Binding.Interop.Native.IMaaCustomControllerExtension.InputTextDelegate InputTextMethod
-);
-
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Native;
 
 /// <summary>
-///     The custom controller API.
-/// </summary>
-/// <remarks>
-///     <para>To create a custom controller, you need to implement this API.</para>
-///     <para>You do not have to implement all the functions in this API. Instead, just implement the functions you need. Do note that if an unimplemented function is called, the framework will likely crash.</para>
-/// </remarks>
-[StructLayout(LayoutKind.Sequential)]
-public class MaaCustomControllerCallbacks
-{
-    public nint ConnectFunctionPointer;
-    public nint RequestUuidFunctionPointer;
-    public nint StartAppFunctionPointer;
-    public nint StopAppFunctionPointer;
-    public nint ScreencapFunctionPointer;
-    public nint ClickFunctionPointer;
-    public nint SwipeFunctionPointer;
-    public nint TouchDownFunctionPointer;
-    public nint TouchMoveFunctionPointer;
-    public nint TouchUpFunctionPointer;
-    public nint PressKeyFunctionPointer;
-    public nint InputTextFunctionPointer;
-}
-
-/// <summary>
 ///     A static class providing extension methods for the converter of <see cref="IMaaCustomController"/>.
 /// </summary>
-public static class IMaaCustomControllerExtension
+[CustomMarshaller(typeof(IMaaCustomController), MarshalMode.ManagedToUnmanagedIn, typeof(ManagedToUnmanagedIn))]
+public static class MaaCustomControllerMarshaller
 {
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool ConnectDelegate(nint transArg);
+    private static ConcurrentDictionary<IMaaCustomController, ManagedToUnmanagedIn> Instances { get; } = [];
 
-    /// <summary>
-    ///     Write result to buffer.
-    /// </summary>
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool RequestUuidDelegate(nint transArg, MaaStringBufferHandle buffer);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool StartAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool StopAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
-
-    /// <summary>
-    ///     Write result to buffer.
-    /// </summary>
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool ScreencapDelegate(nint transArg, MaaImageBufferHandle buffer);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool ClickDelegate(int x, int y, nint transArg);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool SwipeDelegate(int x1, int y1, int x2, int y2, int duration, nint transArg);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool TouchDownDelegate(int contact, int x, int y, int pressure, nint transArg);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool TouchMoveDelegate(int contact, int x, int y, int pressure, nint transArg);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool TouchUpDelegate(int contact, nint transArg);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool PressKeyDelegate(int keycode, nint transArg);
-
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate MaaBool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, nint transArg);
-    public static MaaCustomControllerCallbacksHandle Convert(this IMaaCustomController task, out MaaControllerApiTuple tuple)
+    /// <inheritdoc cref="GCHandle.Free"/>
+    public static void Free(IMaaCustomController managed)
     {
-        MaaBool ConnectLocalMethod(nint transArg) => task.Connect().ToMaaBool();
-
-        MaaBool RequestUuidLocalMethod(nint transArg, MaaStringBufferHandle buffer) => task.RequestUuid(new Buffers.MaaStringBuffer(buffer)).ToMaaBool();
-
-        MaaBool StartAppLocalMethod(string intent, nint transArg) => task.StartApp(intent).ToMaaBool();
-
-        MaaBool StopAppLocalMethod(string intent, nint transArg) => task.StopApp(intent).ToMaaBool();
-
-        MaaBool ScreencapLocalMethod(nint transArg, MaaImageBufferHandle buffer) => task.Screencap(new MaaImageBuffer(buffer)).ToMaaBool();
-
-        MaaBool ClickLocalMethod(int x, int y, nint transArg) => task.Click(x, y).ToMaaBool();
-
-        MaaBool SwipeLocalMethod(int x1, int y1, int x2, int y2, int duration, nint transArg) => task.Swipe(x1, y1, x2, y2, duration).ToMaaBool();
-
-        MaaBool TouchDownLocalMethod(int contact, int x, int y, int pressure, nint transArg) => task.TouchDown(contact, x, y, pressure).ToMaaBool();
-
-        MaaBool TouchMoveLocalMethod(int contact, int x, int y, int pressure, nint transArg) => task.TouchMove(contact, x, y, pressure).ToMaaBool();
-
-        MaaBool TouchUpLocalMethod(int contact, nint transArg) => task.TouchUp(contact).ToMaaBool();
-
-        MaaBool PressKeyLocalMethod(int keycode, nint transArg) => task.PressKey(keycode).ToMaaBool();
-
-        MaaBool InputTextLocalMethod(string text, nint transArg) => task.InputText(text).ToMaaBool();
-
-        ConnectDelegate ConnectMethod = ConnectLocalMethod;
-        RequestUuidDelegate RequestUuidMethod = RequestUuidLocalMethod;
-        StartAppDelegate StartAppMethod = StartAppLocalMethod;
-        StopAppDelegate StopAppMethod = StopAppLocalMethod;
-        ScreencapDelegate ScreencapMethod = ScreencapLocalMethod;
-        ClickDelegate ClickMethod = ClickLocalMethod;
-        SwipeDelegate SwipeMethod = SwipeLocalMethod;
-        TouchDownDelegate TouchDownMethod = TouchDownLocalMethod;
-        TouchMoveDelegate TouchMoveMethod = TouchMoveLocalMethod;
-        TouchUpDelegate TouchUpMethod = TouchUpLocalMethod;
-        PressKeyDelegate PressKeyMethod = PressKeyLocalMethod;
-        InputTextDelegate InputTextMethod = InputTextLocalMethod;
-
-        var handle = GCHandle.Alloc(new MaaCustomControllerCallbacks()
+        if (Instances.TryGetValue(managed, out var value))
         {
-            ConnectFunctionPointer = Marshal.GetFunctionPointerForDelegate<ConnectDelegate>(ConnectMethod),
-            RequestUuidFunctionPointer = Marshal.GetFunctionPointerForDelegate<RequestUuidDelegate>(RequestUuidMethod),
-            StartAppFunctionPointer = Marshal.GetFunctionPointerForDelegate<StartAppDelegate>(StartAppMethod),
-            StopAppFunctionPointer = Marshal.GetFunctionPointerForDelegate<StopAppDelegate>(StopAppMethod),
-            ScreencapFunctionPointer = Marshal.GetFunctionPointerForDelegate<ScreencapDelegate>(ScreencapMethod),
-            ClickFunctionPointer = Marshal.GetFunctionPointerForDelegate<ClickDelegate>(ClickMethod),
-            SwipeFunctionPointer = Marshal.GetFunctionPointerForDelegate<SwipeDelegate>(SwipeMethod),
-            TouchDownFunctionPointer = Marshal.GetFunctionPointerForDelegate<TouchDownDelegate>(TouchDownMethod),
-            TouchMoveFunctionPointer = Marshal.GetFunctionPointerForDelegate<TouchMoveDelegate>(TouchMoveMethod),
-            TouchUpFunctionPointer = Marshal.GetFunctionPointerForDelegate<TouchUpDelegate>(TouchUpMethod),
-            PressKeyFunctionPointer = Marshal.GetFunctionPointerForDelegate<PressKeyDelegate>(PressKeyMethod),
-            InputTextFunctionPointer = Marshal.GetFunctionPointerForDelegate<InputTextDelegate>(InputTextMethod),
-        }, GCHandleType.Pinned);
-
-        tuple = (
-            handle,
-            task,
-            ConnectMethod,
-            RequestUuidMethod,
-            StartAppMethod,
-            StopAppMethod,
-            ScreencapMethod,
-            ClickMethod,
-            SwipeMethod,
-            TouchDownMethod,
-            TouchMoveMethod,
-            TouchUpMethod,
-            PressKeyMethod,
-            InputTextMethod
-        );
-        return handle.AddrOfPinnedObject();
+            ManagedToUnmanagedIn.Free(value);
+        }
     }
+
+    public struct ManagedToUnmanagedIn
+    {
+        private IMaaCustomController _managed;
+        private Delegates _delegates;
+        private GCHandle _handle;
+
+        public void FromManaged(IMaaCustomController managed)
+        {
+            _managed = managed;
+            _delegates = new Delegates(managed);
+        }
+
+        public MaaCustomControllerCallbacksHandle ToUnmanaged()
+        {
+            _handle = GCHandle.Alloc(new Unmanaged(_delegates), GCHandleType.Pinned);
+
+            var value = Instances.GetOrAdd(_managed, this);
+            Interlocked.Increment(ref value._delegates.Times);
+            if (value._handle != _handle)
+                _handle.Free();
+
+            return value._handle.AddrOfPinnedObject();
+        }
+
+        /// <inheritdoc cref="GCHandle.Free"/>
+        public static void Free(ManagedToUnmanagedIn value)
+        {
+            if (Interlocked.Decrement(ref value._delegates.Times) == 0 && Instances.TryRemove(value._managed, out _))
+            {
+                value._handle.Free();
+            }
+        }
+    }
+
+    private sealed class Delegates(IMaaCustomController managed)
+    {
+        public int Times = 0;
+        public ConnectDelegate Connect = (nint transArg) => managed.Connect().ToMaaBool();
+        public RequestUuidDelegate RequestUuid = (nint transArg, MaaStringBufferHandle buffer) => managed.RequestUuid(new MaaStringBuffer(buffer)).ToMaaBool();
+        public StartAppDelegate StartApp = (string intent, nint transArg) => managed.StartApp(intent).ToMaaBool();
+        public StopAppDelegate StopApp = (string intent, nint transArg) => managed.StopApp(intent).ToMaaBool();
+        public ScreencapDelegate Screencap = (nint transArg, MaaImageBufferHandle buffer) => managed.Screencap(new MaaImageBuffer(buffer)).ToMaaBool();
+        public ClickDelegate Click = (int x, int y, nint transArg) => managed.Click(x, y).ToMaaBool();
+        public SwipeDelegate Swipe = (int x1, int y1, int x2, int y2, int duration, nint transArg) => managed.Swipe(x1, y1, x2, y2, duration).ToMaaBool();
+        public TouchDownDelegate TouchDown = (int contact, int x, int y, int pressure, nint transArg) => managed.TouchDown(contact, x, y, pressure).ToMaaBool();
+        public TouchMoveDelegate TouchMove = (int contact, int x, int y, int pressure, nint transArg) => managed.TouchMove(contact, x, y, pressure).ToMaaBool();
+        public TouchUpDelegate TouchUp = (int contact, nint transArg) => managed.TouchUp(contact).ToMaaBool();
+        public PressKeyDelegate PressKey = (int keycode, nint transArg) => managed.PressKey(keycode).ToMaaBool();
+        public InputTextDelegate InputText = (string text, nint transArg) => managed.InputText(text).ToMaaBool();
+    };
+
+    /// <summary>
+    ///     The custom controller API.
+    /// </summary>
+    /// <remarks>
+    ///     <para>To create a custom controller, you need to implement this API.</para>
+    ///     <para>You do not have to implement all the functions in this API. Instead, just implement the functions you need. Do note that if an unimplemented function is called, the framework will likely crash.</para>
+    /// </remarks>
+    [StructLayout(LayoutKind.Sequential)]
+    private sealed class Unmanaged(Delegates delegates)
+    {
+        public nint ConnectFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.Connect);
+        public nint RequestUuidFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.RequestUuid);
+        public nint StartAppFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.StartApp);
+        public nint StopAppFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.StopApp);
+        public nint ScreencapFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.Screencap);
+        public nint ClickFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.Click);
+        public nint SwipeFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.Swipe);
+        public nint TouchDownFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.TouchDown);
+        public nint TouchMoveFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.TouchMove);
+        public nint TouchUpFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.TouchUp);
+        public nint PressKeyFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.PressKey);
+        public nint InputTextFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.InputText);
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool ConnectDelegate(nint transArg);
+
+    /// <summary>
+    ///     Write result to buffer.
+    /// </summary>
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool RequestUuidDelegate(nint transArg, MaaStringBufferHandle buffer);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool StartAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool StopAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
+
+    /// <summary>
+    ///     Write result to buffer.
+    /// </summary>
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool ScreencapDelegate(nint transArg, MaaImageBufferHandle buffer);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool ClickDelegate(int x, int y, nint transArg);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool SwipeDelegate(int x1, int y1, int x2, int y2, int duration, nint transArg);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool TouchDownDelegate(int contact, int x, int y, int pressure, nint transArg);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool TouchMoveDelegate(int contact, int x, int y, int pressure, nint transArg);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool TouchUpDelegate(int contact, nint transArg);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool PressKeyDelegate(int keycode, nint transArg);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate MaaBool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, nint transArg);
 }
