@@ -23,7 +23,8 @@ public static partial class MaaToolkit
     public static partial void MaaToolkitDesktopWindowListDestroy(MaaToolkitDesktopWindowListHandle handle);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitDesktopWindowFindAll(MaaToolkitDesktopWindowListHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaToolkitDesktopWindowFindAll(MaaToolkitDesktopWindowListHandle buffer);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaSize MaaToolkitDesktopWindowListSize(MaaToolkitDesktopWindowListHandle list);

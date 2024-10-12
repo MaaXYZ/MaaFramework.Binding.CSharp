@@ -1,5 +1,4 @@
 ﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -92,11 +91,11 @@ public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
     ///     Wrapper of <see cref="MaaRectSet"/>.
     /// </remarks>
     public bool SetValues(int x, int y, int width, int height)
-        => MaaRectSet(Handle, x, y, width, height).ToBoolean();
+        => MaaRectSet(Handle, x, y, width, height);
 
     /// <inheritdoc cref="SetValues(int, int, int, int)"/>
     public static bool Set(MaaRectHandle handle, int x, int y, int width, int height)
-        => MaaRectSet(handle, x, y, width, height).ToBoolean();
+        => MaaRectSet(handle, x, y, width, height);
 
     /// <inheritdoc/>
     public void GetValues(out int x, out int y, out int width, out int height)

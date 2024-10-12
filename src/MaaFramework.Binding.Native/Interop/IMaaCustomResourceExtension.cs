@@ -45,7 +45,7 @@ public static class IMaaCustomResourceExtension
                         RecognitionDetail: recognitionDetail,
                         RecognitionBox: new MaaRectBuffer(boxHandle)
                     )
-                ).ToMaaBool();
+                );
             };
         return callback;
     }
@@ -93,7 +93,7 @@ public static class IMaaCustomResourceExtension
                         Box: new MaaRectBuffer(outBoxHandle),
                         Detail: new MaaStringBuffer(outDetailHandle)
                     )
-                ).ToMaaBool();
+                );
             };
         return callback;
     }

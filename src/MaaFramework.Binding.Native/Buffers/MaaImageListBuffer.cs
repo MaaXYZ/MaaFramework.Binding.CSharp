@@ -1,5 +1,4 @@
-﻿using MaaFramework.Binding.Interop.Native;
-using static MaaFramework.Binding.Interop.Native.MaaBuffer;
+﻿using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -37,7 +36,7 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferIsEmpty"/>.
     /// </remarks>
-    public override bool IsEmpty => MaaImageListBufferIsEmpty(Handle).ToBoolean();
+    public override bool IsEmpty => MaaImageListBufferIsEmpty(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -57,21 +56,21 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
     /// </remarks>
     public override bool Add(MaaImageBuffer item)
         => item is not null
-           && MaaImageListBufferAppend(Handle, item.Handle).ToBoolean();
+           && MaaImageListBufferAppend(Handle, item.Handle);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferRemove"/>.
     /// </remarks>
     public override bool RemoveAt(MaaSize index)
-        => MaaImageListBufferRemove(Handle, index).ToBoolean();
+        => MaaImageListBufferRemove(Handle, index);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferClear"/>.
     /// </remarks>
     public override bool Clear()
-        => MaaImageListBufferClear(Handle).ToBoolean();
+        => MaaImageListBufferClear(Handle);
 
     /// <inheritdoc/>
     public override bool IsReadOnly => false;

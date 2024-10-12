@@ -1,5 +1,4 @@
 ﻿using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Interop.Native;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaContext;
 
@@ -77,7 +76,7 @@ public class MaaContext : IMaaContext<nint>
     ///     Wrapper of <see cref="MaaContextOverridePipeline"/>.
     /// </remarks>
     public bool OverridePipeline(string pipelineOverride)
-        => MaaContextOverridePipeline(Handle, pipelineOverride).ToBoolean();
+        => MaaContextOverridePipeline(Handle, pipelineOverride);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -85,7 +84,7 @@ public class MaaContext : IMaaContext<nint>
     /// </remarks>
     public bool OverrideNext(string taskName, IEnumerable<string> nextList)
         => MaaStringListBuffer.Set(nextList, listBuffer
-            => MaaContextOverrideNext(Handle, taskName, listBuffer).ToBoolean());
+            => MaaContextOverrideNext(Handle, taskName, listBuffer));
 
     /// <inheritdoc/>
     /// <remarks>

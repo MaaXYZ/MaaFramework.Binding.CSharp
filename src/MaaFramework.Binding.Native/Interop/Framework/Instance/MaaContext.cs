@@ -26,10 +26,12 @@ public static partial class MaaContext
     public static partial MaaNodeId MaaContextRunAction(MaaContextHandle context, string entry, string pipelineOverride, MaaRectHandle box, string recoDetail);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaContextOverridePipeline(MaaContextHandle context, string pipelineOverride);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaContextOverridePipeline(MaaContextHandle context, string pipelineOverride);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaContextOverrideNext(MaaContextHandle context, string name, MaaStringListBufferHandle nextList);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaContextOverrideNext(MaaContextHandle context, string name, MaaStringListBufferHandle nextList);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaTaskId MaaContextGetTaskId(MaaContextHandle context);

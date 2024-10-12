@@ -99,10 +99,10 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     public bool Register<T>(T custom) where T : IMaaCustomResource => custom switch
     {
         IMaaCustomAction res
-            => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero).ToBoolean()
+            => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero)
             && _actions.Set(res.Name, callback),
         IMaaCustomRecognition res
-            => MaaResourceRegisterCustomRecognition(Handle, res.Name, res.Convert(out var callback), nint.Zero).ToBoolean()
+            => MaaResourceRegisterCustomRecognition(Handle, res.Name, res.Convert(out var callback), nint.Zero)
             && _recognitions.Set(res.Name, callback),
         _
             => throw new NotImplementedException(),
@@ -116,10 +116,10 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
         var t = typeof(T);
         if (typeof(IMaaCustomAction).IsAssignableFrom(t))
-            return MaaResourceUnregisterCustomAction(Handle, name).ToBoolean()
+            return MaaResourceUnregisterCustomAction(Handle, name)
                 && _actions.Remove(name);
         if (typeof(IMaaCustomRecognition).IsAssignableFrom(t))
-            return MaaResourceUnregisterCustomRecognition(Handle, name).ToBoolean()
+            return MaaResourceUnregisterCustomRecognition(Handle, name)
                 && _recognitions.Remove(name);
 
         throw new NotImplementedException();
@@ -132,10 +132,10 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     public bool Unregister<T>(T custom) where T : IMaaCustomResource => custom switch
     {
         IMaaCustomAction
-            => MaaResourceUnregisterCustomAction(Handle, custom.Name).ToBoolean()
+            => MaaResourceUnregisterCustomAction(Handle, custom.Name)
             && _actions.Remove(custom.Name),
         IMaaCustomRecognition
-            => MaaResourceUnregisterCustomRecognition(Handle, custom.Name).ToBoolean()
+            => MaaResourceUnregisterCustomRecognition(Handle, custom.Name)
             && _recognitions.Remove(custom.Name),
         _
             => throw new NotImplementedException(),
@@ -148,10 +148,10 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     public bool Clear<T>() where T : IMaaCustomResource => typeof(T).Name switch
     {
         nameof(IMaaCustomAction)
-            => MaaResourceClearCustomAction(Handle).ToBoolean()
+            => MaaResourceClearCustomAction(Handle)
             && _actions.Clear(),
         nameof(IMaaCustomRecognition)
-            => MaaResourceClearCustomRecognition(Handle).ToBoolean()
+            => MaaResourceClearCustomRecognition(Handle)
             && _recognitions.Clear(),
         _
             => throw new NotImplementedException()
@@ -164,7 +164,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     public bool Clear(bool includeCustomResource = false)
     {
         _postedPaths.Clear();
-        var ret = MaaResourceClear(Handle).ToBoolean();
+        var ret = MaaResourceClear(Handle);
         if (!includeCustomResource) return ret;
         ret &= Clear<IMaaCustomAction>();
         ret &= Clear<IMaaCustomRecognition>();
@@ -208,7 +208,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceLoaded"/>.
     /// </remarks>
-    public bool Loaded => MaaResourceLoaded(Handle).ToBoolean();
+    public bool Loaded => MaaResourceLoaded(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -226,7 +226,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             _ => throw new InvalidOperationException(),
         };
 
-        return MaaResourceSetOption(Handle, (MaaResOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
+        return MaaResourceSetOption(Handle, (MaaResOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
         */
     }
 
@@ -239,7 +239,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         get
         {
             using var buffer = new MaaStringBuffer();
-            var ret = MaaResourceGetHash(Handle, buffer.Handle).ToBoolean();
+            var ret = MaaResourceGetHash(Handle, buffer.Handle);
             return ret ? buffer.ToString() : null;
         }
     }
@@ -253,7 +253,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         get
         {
             if (!MaaStringListBuffer.Get(out var list, h
-                    => MaaResourceGetTaskList(Handle, h).ToBoolean()))
+                    => MaaResourceGetTaskList(Handle, h)))
                 throw new InvalidOperationException();
             return list;
         }

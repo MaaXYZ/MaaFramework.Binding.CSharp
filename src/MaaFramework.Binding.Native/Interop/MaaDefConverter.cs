@@ -18,18 +18,6 @@ public static class MaaDefConverter
         : Marshal.PtrToStringUTF8(value, (int)size);
 
     /// <summary>
-    ///     Converts a MaaBool (<see cref="MaaBool"/>) to a <see cref="bool"/>.
-    /// </summary>
-    public static bool ToBoolean(this MaaBool value)
-        => 0 != value;
-
-    /// <summary>
-    ///     Converts a <see cref="bool"/> to a MaaBool (<see cref="MaaBool"/>).
-    /// </summary>
-    public static MaaBool ToMaaBool(this bool value)
-        => (MaaBool)(value ? 1 : 0);
-
-    /// <summary>
     ///     Converts a <see cref="int"/> to a MaaOptionValue (<see cref="byte"/>[]).
     /// </summary>
     public static byte[] ToMaaOptionValue(this int value)
@@ -50,9 +38,6 @@ public static class MaaDefConverter
     /// <summary>
     ///     Converts a <see cref="string"/> to a <see cref="byte"/>[].
     /// </summary>
-    /// <remarks>
-    ///     Passes byte[] to avoid garbage collection.
-    /// </remarks>
     public static byte[] ToBytes(this string value)
         => Encoding.UTF8.GetBytes(value);
 }

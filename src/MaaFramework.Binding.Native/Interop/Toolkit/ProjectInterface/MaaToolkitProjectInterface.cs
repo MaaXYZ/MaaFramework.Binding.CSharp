@@ -23,5 +23,6 @@ public static partial class MaaToolkit
     public static partial void MaaToolkitProjectInterfaceRegisterCustomAction(ulong instId, string name, MaaCustomActionCallback action, nint transArg);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitProjectInterfaceRunCli(ulong instId, string resourcePath, string userPath, MaaBool directly, MaaNotificationCallback notify, nint notifyTransArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaToolkitProjectInterfaceRunCli(ulong instId, string resourcePath, string userPath, [MarshalAs(UnmanagedType.U1)] bool directly, MaaNotificationCallback notify, nint notifyTransArg);
 }

@@ -48,7 +48,7 @@ public class MaaToolkit : IMaaToolkit
         {
             if (userPath == nameof(Environment.CurrentDirectory))
                 userPath = Environment.CurrentDirectory;
-            return MaaToolkitConfigInitOption(userPath, defaultJson).ToBoolean();
+            return MaaToolkitConfigInitOption(userPath, defaultJson);
         }
     }
 
@@ -62,7 +62,7 @@ public class MaaToolkit : IMaaToolkit
             var ret = string.IsNullOrWhiteSpace(adbPath)
                 ? MaaToolkitAdbDeviceFind(list.Handle)
                 : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle);
-            if (!ret.ToBoolean())
+            if (!ret)
                 throw new InvalidOperationException();
             return list;
         }
@@ -76,7 +76,7 @@ public class MaaToolkit : IMaaToolkit
                     ? MaaToolkitAdbDeviceFind(list.Handle)
                     : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle)
             );
-            if (!ret.ToBoolean())
+            if (!ret)
                 throw new InvalidOperationException();
             return list;
         }
@@ -100,7 +100,7 @@ public class MaaToolkit : IMaaToolkit
         {
             var list = new DesktopWindowListBuffer();
             var ret = MaaToolkitDesktopWindowFindAll(list.Handle);
-            if (!ret.ToBoolean())
+            if (!ret)
                 throw new InvalidOperationException();
             return list;
         }
@@ -181,7 +181,7 @@ public class MaaToolkit : IMaaToolkit
         ///     Wrapper of <see cref="MaaToolkitProjectInterfaceRunCli"/>.
         /// </remarks>
         public bool RunCli(string resourcePath, string userPath, bool directly = false)
-            => MaaToolkitProjectInterfaceRunCli(_instanceId, resourcePath, userPath, directly.ToMaaBool(), MaaNotificationCallback, nint.Zero).ToBoolean();
+            => MaaToolkitProjectInterfaceRunCli(_instanceId, resourcePath, userPath, directly, MaaNotificationCallback, nint.Zero);
 
         /// <inheritdoc/>
         public IMaaToolkitProjectInterface this[ulong id] => Get(id);

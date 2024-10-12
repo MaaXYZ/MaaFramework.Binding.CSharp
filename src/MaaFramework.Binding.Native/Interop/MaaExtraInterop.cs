@@ -9,5 +9,6 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaBuffer
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringBufferSetEx(MaaStringBufferHandle handle, nint str, MaaSize size);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringBufferSetEx(MaaStringBufferHandle handle, nint str, MaaSize size);
 }

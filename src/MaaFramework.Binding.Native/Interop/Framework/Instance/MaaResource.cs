@@ -23,28 +23,35 @@ public static partial class MaaResource
     public static partial void MaaResourceDestroy(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceRegisterCustomRecognition(MaaResourceHandle res, string name, MaaCustomRecognitionCallback recognition, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceRegisterCustomRecognition(MaaResourceHandle res, string name, MaaCustomRecognitionCallback recognition, nint transArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceUnregisterCustomRecognition(MaaResourceHandle res, string name);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceUnregisterCustomRecognition(MaaResourceHandle res, string name);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceClearCustomRecognition(MaaResourceHandle res);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceClearCustomRecognition(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceRegisterCustomAction(MaaResourceHandle res, string name, MaaCustomActionCallback action, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceRegisterCustomAction(MaaResourceHandle res, string name, MaaCustomActionCallback action, nint transArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceUnregisterCustomAction(MaaResourceHandle res, string name);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceUnregisterCustomAction(MaaResourceHandle res, string name);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceClearCustomAction(MaaResourceHandle res);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceClearCustomAction(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaResId MaaResourcePostPath(MaaResourceHandle res, string path);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceClear(MaaResourceHandle res);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceClear(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaResourceStatus(MaaResourceHandle res, MaaResId id);
@@ -53,14 +60,18 @@ public static partial class MaaResource
     public static partial MaaStatus MaaResourceWait(MaaResourceHandle res, MaaResId id);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceLoaded(MaaResourceHandle res);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceLoaded(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceSetOption(MaaResourceHandle res, MaaResOption key, byte[] value, MaaOptionValueSize valSize);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceSetOption(MaaResourceHandle res, MaaResOption key, byte[] value, MaaOptionValueSize valSize);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceGetHash(MaaResourceHandle res, MaaStringBufferHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceGetHash(MaaResourceHandle res, MaaStringBufferHandle buffer);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaResourceGetTaskList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceGetTaskList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
 }

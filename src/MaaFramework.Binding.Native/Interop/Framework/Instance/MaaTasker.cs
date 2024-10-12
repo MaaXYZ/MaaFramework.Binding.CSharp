@@ -23,16 +23,20 @@ public static partial class MaaTasker
     public static partial void MaaTaskerDestroy(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerSetOption(MaaTaskerHandle tasker, MaaTaskerOption key, byte[] value, MaaOptionValueSize valSize);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerSetOption(MaaTaskerHandle tasker, MaaTaskerOption key, byte[] value, MaaOptionValueSize valSize);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerBindResource(MaaTaskerHandle tasker, MaaResourceHandle res);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerBindResource(MaaTaskerHandle tasker, MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerBindController(MaaTaskerHandle tasker, MaaControllerHandle ctrl);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerBindController(MaaTaskerHandle tasker, MaaControllerHandle ctrl);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerInited(MaaTaskerHandle tasker);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerInited(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaTaskId MaaTaskerPostPipeline(MaaTaskerHandle tasker, string entry, string pipelineOverride);
@@ -44,10 +48,12 @@ public static partial class MaaTasker
     public static partial MaaStatus MaaTaskerWait(MaaTaskerHandle tasker, MaaTaskId id);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerRunning(MaaTaskerHandle tasker);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerRunning(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerPostStop(MaaTaskerHandle tasker);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerPostStop(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaResourceHandle MaaTaskerGetResource(MaaTaskerHandle tasker);
@@ -56,17 +62,22 @@ public static partial class MaaTasker
     public static partial MaaControllerHandle MaaTaskerGetController(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerClearCache(MaaTaskerHandle tasker);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerClearCache(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerGetRecognitionDetail(MaaTaskerHandle tasker, MaaRecoId recoId, MaaStringBufferHandle name, MaaStringBufferHandle algorithm, out MaaBool hit, MaaRectHandle box, MaaStringBufferHandle detailJson, MaaImageBufferHandle raw, MaaImageListBufferHandle draws);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerGetRecognitionDetail(MaaTaskerHandle tasker, MaaRecoId recoId, MaaStringBufferHandle name, MaaStringBufferHandle algorithm, [MarshalAs(UnmanagedType.U1)] out bool hit, MaaRectHandle box, MaaStringBufferHandle detailJson, MaaImageBufferHandle raw, MaaImageListBufferHandle draws);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerGetNodeDetail(MaaTaskerHandle tasker, MaaNodeId nodeId, MaaStringBufferHandle name, out MaaRecoId recoId, out MaaBool completed);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerGetNodeDetail(MaaTaskerHandle tasker, MaaNodeId nodeId, MaaStringBufferHandle name, out MaaRecoId recoId, [MarshalAs(UnmanagedType.U1)] out bool completed);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerGetTaskDetail(MaaTaskerHandle tasker, MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerGetTaskDetail(MaaTaskerHandle tasker, MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaTaskerGetLatestNode(MaaTaskerHandle tasker, string taskName, out MaaNodeId latestId);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerGetLatestNode(MaaTaskerHandle tasker, string taskName, out MaaNodeId latestId);
 }

@@ -36,6 +36,6 @@ public class MaaUtility : IMaaUtility
             _ => throw new InvalidOperationException(),
         };
 
-        return MaaSetGlobalOption((MaaGlobalOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
+        return MaaSetGlobalOption((MaaGlobalOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
     }
 }

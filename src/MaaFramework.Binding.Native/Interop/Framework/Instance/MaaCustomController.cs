@@ -72,18 +72,18 @@ public static class MaaCustomControllerMarshaller
     private sealed class Delegates(IMaaCustomController managed)
     {
         public int Times = 0;
-        public ConnectDelegate Connect = (nint transArg) => managed.Connect().ToMaaBool();
-        public RequestUuidDelegate RequestUuid = (nint transArg, MaaStringBufferHandle buffer) => managed.RequestUuid(new MaaStringBuffer(buffer)).ToMaaBool();
-        public StartAppDelegate StartApp = (string intent, nint transArg) => managed.StartApp(intent).ToMaaBool();
-        public StopAppDelegate StopApp = (string intent, nint transArg) => managed.StopApp(intent).ToMaaBool();
-        public ScreencapDelegate Screencap = (nint transArg, MaaImageBufferHandle buffer) => managed.Screencap(new MaaImageBuffer(buffer)).ToMaaBool();
-        public ClickDelegate Click = (int x, int y, nint transArg) => managed.Click(x, y).ToMaaBool();
-        public SwipeDelegate Swipe = (int x1, int y1, int x2, int y2, int duration, nint transArg) => managed.Swipe(x1, y1, x2, y2, duration).ToMaaBool();
-        public TouchDownDelegate TouchDown = (int contact, int x, int y, int pressure, nint transArg) => managed.TouchDown(contact, x, y, pressure).ToMaaBool();
-        public TouchMoveDelegate TouchMove = (int contact, int x, int y, int pressure, nint transArg) => managed.TouchMove(contact, x, y, pressure).ToMaaBool();
-        public TouchUpDelegate TouchUp = (int contact, nint transArg) => managed.TouchUp(contact).ToMaaBool();
-        public PressKeyDelegate PressKey = (int keycode, nint transArg) => managed.PressKey(keycode).ToMaaBool();
-        public InputTextDelegate InputText = (string text, nint transArg) => managed.InputText(text).ToMaaBool();
+        public ConnectDelegate Connect = (nint transArg) => managed.Connect();
+        public RequestUuidDelegate RequestUuid = (nint transArg, MaaStringBufferHandle buffer) => managed.RequestUuid(new MaaStringBuffer(buffer));
+        public StartAppDelegate StartApp = (string intent, nint transArg) => managed.StartApp(intent);
+        public StopAppDelegate StopApp = (string intent, nint transArg) => managed.StopApp(intent);
+        public ScreencapDelegate Screencap = (nint transArg, MaaImageBufferHandle buffer) => managed.Screencap(new MaaImageBuffer(buffer));
+        public ClickDelegate Click = (int x, int y, nint transArg) => managed.Click(x, y);
+        public SwipeDelegate Swipe = (int x1, int y1, int x2, int y2, int duration, nint transArg) => managed.Swipe(x1, y1, x2, y2, duration);
+        public TouchDownDelegate TouchDown = (int contact, int x, int y, int pressure, nint transArg) => managed.TouchDown(contact, x, y, pressure);
+        public TouchMoveDelegate TouchMove = (int contact, int x, int y, int pressure, nint transArg) => managed.TouchMove(contact, x, y, pressure);
+        public TouchUpDelegate TouchUp = (int contact, nint transArg) => managed.TouchUp(contact);
+        public PressKeyDelegate PressKey = (int keycode, nint transArg) => managed.PressKey(keycode);
+        public InputTextDelegate InputText = (string text, nint transArg) => managed.InputText(text);
     };
 
     /// <summary>
@@ -111,44 +111,56 @@ public static class MaaCustomControllerMarshaller
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool ConnectDelegate(nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool ConnectDelegate(nint transArg);
 
     /// <summary>
     ///     Write result to buffer.
     /// </summary>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool RequestUuidDelegate(nint transArg, MaaStringBufferHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool RequestUuidDelegate(nint transArg, MaaStringBufferHandle buffer);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool StartAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool StartAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool StopAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool StopAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
 
     /// <summary>
     ///     Write result to buffer.
     /// </summary>
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool ScreencapDelegate(nint transArg, MaaImageBufferHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool ScreencapDelegate(nint transArg, MaaImageBufferHandle buffer);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool ClickDelegate(int x, int y, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool ClickDelegate(int x, int y, nint transArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool SwipeDelegate(int x1, int y1, int x2, int y2, int duration, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool SwipeDelegate(int x1, int y1, int x2, int y2, int duration, nint transArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool TouchDownDelegate(int contact, int x, int y, int pressure, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool TouchDownDelegate(int contact, int x, int y, int pressure, nint transArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool TouchMoveDelegate(int contact, int x, int y, int pressure, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool TouchMoveDelegate(int contact, int x, int y, int pressure, nint transArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool TouchUpDelegate(int contact, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool TouchUpDelegate(int contact, nint transArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool PressKeyDelegate(int keycode, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool PressKeyDelegate(int keycode, nint transArg);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate MaaBool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, nint transArg);
+    [return: MarshalAs(UnmanagedType.U1)]
+    private delegate bool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, nint transArg);
 }

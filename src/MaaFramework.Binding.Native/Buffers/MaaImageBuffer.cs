@@ -1,5 +1,4 @@
 ﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -20,8 +19,8 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
             data: MaaImageBufferGetRawData(Handle),
             width: MaaImageBufferWidth(Handle),
             height: MaaImageBufferHeight(Handle),
-            type: MaaImageBufferType(Handle))
-            .ToBoolean(),
+            type: MaaImageBufferType(Handle)
+            ),
         null => false,
         _ => TrySetEncodedDataStream(buffer.EncodedDataStream),
     };
@@ -57,14 +56,14 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferIsEmpty"/>.
     /// </remarks>
-    public bool IsEmpty => MaaImageBufferIsEmpty(Handle).ToBoolean();
+    public bool IsEmpty => MaaImageBufferIsEmpty(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferClear"/>.
     /// </remarks>
     public bool Clear()
-        => MaaImageBufferClear(Handle).ToBoolean();
+        => MaaImageBufferClear(Handle);
 
     /// <summary>
     ///     Gets the image raw data.
@@ -121,7 +120,7 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     ///     Wrapper of <see cref="MaaImageBufferSetRawData"/>.
     /// </remarks>
     public bool SetRawData(MaaImageRawData data, int width, int height, int type)
-        => MaaImageBufferSetRawData(Handle, data, width, height, type).ToBoolean();
+        => MaaImageBufferSetRawData(Handle, data, width, height, type);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -145,11 +144,11 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
     ///     Wrapper of <see cref="MaaImageBufferSetEncoded"/>.
     /// </remarks>
     public bool SetEncodedData(MaaImageBufferHandle data, MaaSize size)
-        => MaaImageBufferSetEncoded(Handle, data, size).ToBoolean();
+        => MaaImageBufferSetEncoded(Handle, data, size);
 
     /// <inheritdoc cref="SetEncodedData"/>
     public static bool Set(MaaImageBufferHandle handle, MaaImageBufferHandle data, MaaSize size)
-        => MaaImageBufferSetEncoded(handle, data, size).ToBoolean();
+        => MaaImageBufferSetEncoded(handle, data, size);
 
     /// <inheritdoc/>
     public unsafe Stream EncodedDataStream
@@ -179,7 +178,7 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
         // Pin - Pin data in preparation for calling the P/Invoke.
         fixed (void* __data_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(data))
         {
-            return MaaImageBufferSetEncoded(Handle, (nint)__data_native, size).ToBoolean();
+            return MaaImageBufferSetEncoded(Handle, (nint)__data_native, size);
         }
     }
 }

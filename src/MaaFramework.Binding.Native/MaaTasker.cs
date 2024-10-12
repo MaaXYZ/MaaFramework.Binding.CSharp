@@ -1,6 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Interop.Native;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -100,7 +99,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
             _ => throw new InvalidOperationException(),
         };
 
-        return MaaTaskerSetOption(Handle, (MaaTaskerOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
+        return MaaTaskerSetOption(Handle, (MaaTaskerOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
         */
     }
 
@@ -136,7 +135,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
             ArgumentNullException.ThrowIfNull(value);
 
             MaaBindException.ThrowIf(
-                !MaaTaskerBindResource(Handle, value.Handle).ToBoolean(),
+                !MaaTaskerBindResource(Handle, value.Handle),
                 MaaBindException.ResourceMessage);
             _resource = value;
         }
@@ -160,7 +159,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
             ArgumentNullException.ThrowIfNull(value);
 
             MaaBindException.ThrowIf(
-                !MaaTaskerBindController(Handle, value.Handle).ToBoolean(),
+                !MaaTaskerBindController(Handle, value.Handle),
                 MaaBindException.ControllerMessage);
             _controller = value;
         }
@@ -176,7 +175,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerInited"/>.
     /// </remarks>
-    public bool Initialized => MaaTaskerInited(Handle).ToBoolean();
+    public bool Initialized => MaaTaskerInited(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -214,21 +213,21 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerRunning"/>.
     /// </remarks>
-    public bool Running => MaaTaskerRunning(Handle).ToBoolean();
+    public bool Running => MaaTaskerRunning(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerPostStop"/>.
     /// </remarks>
     public bool Abort()
-        => MaaTaskerPostStop(Handle).ToBoolean();
+        => MaaTaskerPostStop(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerClearCache"/>.
     /// </remarks>
     public bool ClearCache()
-        => MaaTaskerClearCache(Handle).ToBoolean();
+        => MaaTaskerClearCache(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -245,11 +244,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
         using var algorithmBuffer = new MaaStringBuffer();
         using var detailJsonBuffer = new MaaStringBuffer();
 
-        var ret = MaaTaskerGetRecognitionDetail(Handle, recognitionId, nameBuffer.Handle, algorithmBuffer.Handle, out var hitByte, hitBoxHandle, detailJsonBuffer.Handle, rawHandle, drawsHandle).ToBoolean();
+        var ret = MaaTaskerGetRecognitionDetail(Handle, recognitionId, nameBuffer.Handle, algorithmBuffer.Handle, out hit, hitBoxHandle, detailJsonBuffer.Handle, rawHandle, drawsHandle);
 
         name = nameBuffer.ToString();
         algorithm = algorithmBuffer.ToString();
-        hit = hitByte.ToBoolean();
         detailJson = detailJsonBuffer.ToString();
         return ret;
     }
@@ -262,10 +260,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     {
         using var nameBuffer = new MaaStringBuffer();
 
-        var ret = MaaTaskerGetNodeDetail(Handle, nodeId, nameBuffer.Handle, out recognitionId, out var completed).ToBoolean();
+        var ret = MaaTaskerGetNodeDetail(Handle, nodeId, nameBuffer.Handle, out recognitionId, out actionCompleted);
 
         name = nameBuffer.ToString();
-        actionCompleted = completed.ToBoolean();
         return ret;
     }
 
@@ -281,12 +278,12 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
         MaaSize nodeIdListSize = 0;
         using var entryBuffer = new MaaStringBuffer();
 
-        if (!MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, null, ref nodeIdListSize).ToBoolean())
+        if (!MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, null, ref nodeIdListSize))
             return false;
 
         entry = entryBuffer.ToString();
         nodeIdList = new MaaNodeId[nodeIdListSize];
-        return MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, nodeIdList, ref nodeIdListSize).ToBoolean();
+        return MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, nodeIdList, ref nodeIdListSize);
     }
 
     /// <inheritdoc/>
@@ -294,5 +291,5 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     ///     Wrapper of <see cref="MaaTaskerGetLatestNode"/>.
     /// </remarks>
     public bool GetLatestNode(string taskName, out MaaNodeId latestId)
-        => MaaTaskerGetLatestNode(Handle, taskName, out latestId).ToBoolean();
+        => MaaTaskerGetLatestNode(Handle, taskName, out latestId);
 }

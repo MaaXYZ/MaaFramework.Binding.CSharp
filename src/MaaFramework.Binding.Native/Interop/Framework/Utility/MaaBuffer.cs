@@ -14,6 +14,7 @@ global using MaaImageRawData = nint;
 global using MaaImageEncodedData = nint;
 
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -26,10 +27,12 @@ public static partial class MaaBuffer
     public static partial void MaaStringBufferDestroy(MaaStringBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringBufferIsEmpty(MaaStringBufferHandle handle);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringBufferIsEmpty(MaaStringBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringBufferClear(MaaStringBufferHandle handle);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringBufferClear(MaaStringBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial nint MaaStringBufferGet(MaaStringBufferHandle handle);
@@ -38,10 +41,12 @@ public static partial class MaaBuffer
     public static partial MaaSize MaaStringBufferSize(MaaStringBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringBufferSet(MaaStringBufferHandle handle, string str);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringBufferSet(MaaStringBufferHandle handle, string str);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringBufferSetEx(MaaStringBufferHandle handle, byte[] str, MaaSize size);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringBufferSetEx(MaaStringBufferHandle handle, byte[] str, MaaSize size);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStringListBufferHandle MaaStringListBufferCreate();
@@ -50,7 +55,8 @@ public static partial class MaaBuffer
     public static partial void MaaStringListBufferDestroy(MaaStringListBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringListBufferIsEmpty(MaaStringListBufferHandle handle);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringListBufferIsEmpty(MaaStringListBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaSize MaaStringListBufferSize(MaaStringListBufferHandle handle);
@@ -59,13 +65,16 @@ public static partial class MaaBuffer
     public static partial MaaStringBufferHandle MaaStringListBufferAt(MaaStringListBufferHandle handle, MaaSize index);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringListBufferAppend(MaaStringListBufferHandle handle, MaaStringBufferHandle value);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringListBufferAppend(MaaStringListBufferHandle handle, MaaStringBufferHandle value);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringListBufferRemove(MaaStringListBufferHandle handle, MaaSize index);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringListBufferRemove(MaaStringListBufferHandle handle, MaaSize index);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaStringListBufferClear(MaaStringListBufferHandle handle);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaStringListBufferClear(MaaStringListBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaImageBufferHandle MaaImageBufferCreate();
@@ -74,10 +83,12 @@ public static partial class MaaBuffer
     public static partial void MaaImageBufferDestroy(MaaImageBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaImageBufferIsEmpty(MaaImageBufferHandle handle);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageBufferIsEmpty(MaaImageBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaImageBufferClear(MaaImageBufferHandle handle);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageBufferClear(MaaImageBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaImageRawData MaaImageBufferGetRawData(MaaImageBufferHandle handle);
@@ -95,7 +106,8 @@ public static partial class MaaBuffer
     public static partial int MaaImageBufferType(MaaImageBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaImageBufferSetRawData(MaaImageBufferHandle handle, MaaImageRawData data, int width, int height, int type);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageBufferSetRawData(MaaImageBufferHandle handle, MaaImageRawData data, int width, int height, int type);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaImageEncodedData MaaImageBufferGetEncoded(MaaImageBufferHandle handle);
@@ -104,7 +116,8 @@ public static partial class MaaBuffer
     public static partial MaaSize MaaImageBufferGetEncodedSize(MaaImageBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaImageBufferSetEncoded(MaaImageBufferHandle handle, MaaImageEncodedData data, MaaSize size);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageBufferSetEncoded(MaaImageBufferHandle handle, MaaImageEncodedData data, MaaSize size);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaImageListBufferHandle MaaImageListBufferCreate();
@@ -113,7 +126,8 @@ public static partial class MaaBuffer
     public static partial void MaaImageListBufferDestroy(MaaImageListBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaImageListBufferIsEmpty(MaaImageListBufferHandle handle);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageListBufferIsEmpty(MaaImageListBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaSize MaaImageListBufferSize(MaaImageListBufferHandle handle);
@@ -122,13 +136,16 @@ public static partial class MaaBuffer
     public static partial MaaImageBufferHandle MaaImageListBufferAt(MaaImageListBufferHandle handle, MaaSize index);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaImageListBufferAppend(MaaImageListBufferHandle handle, MaaImageBufferHandle value);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageListBufferAppend(MaaImageListBufferHandle handle, MaaImageBufferHandle value);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaImageListBufferRemove(MaaImageListBufferHandle handle, MaaSize index);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageListBufferRemove(MaaImageListBufferHandle handle, MaaSize index);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaImageListBufferClear(MaaImageListBufferHandle handle);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageListBufferClear(MaaImageListBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaRectHandle MaaRectCreate();
@@ -149,5 +166,6 @@ public static partial class MaaBuffer
     public static partial int MaaRectGetH(MaaRectHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaRectSet(MaaRectHandle handle, int x, int y, int w, int h);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaRectSet(MaaRectHandle handle, int x, int y, int w, int h);
 }

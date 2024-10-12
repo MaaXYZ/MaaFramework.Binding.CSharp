@@ -20,5 +20,6 @@ public static partial class MaaUtility
     public static partial nint MaaVersion();
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaSetGlobalOption(MaaGlobalOption key, byte[] value, MaaOptionValueSize valSize);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaSetGlobalOption(MaaGlobalOption key, byte[] value, MaaOptionValueSize valSize);
 }

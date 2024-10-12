@@ -1,5 +1,4 @@
-﻿using MaaFramework.Binding.Interop.Native;
-using static MaaFramework.Binding.Interop.Native.MaaBuffer;
+﻿using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -37,7 +36,7 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferIsEmpty"/>.
     /// </remarks>
-    public override bool IsEmpty => MaaStringListBufferIsEmpty(Handle).ToBoolean();
+    public override bool IsEmpty => MaaStringListBufferIsEmpty(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -57,21 +56,21 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     /// </remarks>
     public override bool Add(MaaStringBuffer item)
         => item is not null
-           && MaaStringListBufferAppend(Handle, item.Handle).ToBoolean();
+           && MaaStringListBufferAppend(Handle, item.Handle);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferRemove"/>.
     /// </remarks>
     public override bool RemoveAt(MaaSize index)
-        => MaaStringListBufferRemove(Handle, index).ToBoolean();
+        => MaaStringListBufferRemove(Handle, index);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferClear"/>.
     /// </remarks>
     public override bool Clear()
-        => MaaStringListBufferClear(Handle).ToBoolean();
+        => MaaStringListBufferClear(Handle);
 
     /// <inheritdoc/>
     public override bool IsReadOnly => false;
@@ -135,7 +134,7 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
         => list.All(s =>
         {
             var h = MaaStringBufferCreate();
-            var ret = MaaStringBuffer.Set(h, s) && MaaStringListBufferAppend(handle, h).ToBoolean();
+            var ret = MaaStringBuffer.Set(h, s) && MaaStringListBufferAppend(handle, h);
             MaaStringBufferDestroy(h);
             return ret;
         });

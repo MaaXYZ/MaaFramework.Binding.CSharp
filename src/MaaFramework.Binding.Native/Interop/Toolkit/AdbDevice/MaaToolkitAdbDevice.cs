@@ -23,10 +23,12 @@ public static partial class MaaToolkit
     public static partial void MaaToolkitAdbDeviceListDestroy(MaaToolkitAdbDeviceListHandle handle);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitAdbDeviceFind(MaaToolkitAdbDeviceListHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaToolkitAdbDeviceFind(MaaToolkitAdbDeviceListHandle buffer);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitAdbDeviceFindSpecified(string adbPath, MaaToolkitAdbDeviceListHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaToolkitAdbDeviceFindSpecified(string adbPath, MaaToolkitAdbDeviceListHandle buffer);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaSize MaaToolkitAdbDeviceListSize(MaaToolkitAdbDeviceListHandle list);

@@ -45,7 +45,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
             _ => throw new InvalidOperationException(),
         };
 
-        return MaaControllerSetOption(Handle, (MaaCtrlOption)opt, optValue, (MaaOptionValueSize)optValue.Length).ToBoolean();
+        return MaaControllerSetOption(Handle, (MaaCtrlOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
     }
 
     /// <inheritdoc/>
@@ -185,7 +185,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     ///     Wrapper of <see cref="MaaControllerConnected"/>.
     /// </remarks>
     public bool LinkStop()
-        => MaaControllerConnected(Handle).ToBoolean();
+        => MaaControllerConnected(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -202,7 +202,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     {
         ArgumentNullException.ThrowIfNull(maaImage);
 
-        return MaaControllerCachedImage(Handle, maaImage.Handle).ToBoolean();
+        return MaaControllerCachedImage(Handle, maaImage.Handle);
     }
 
     /// <inheritdoc/>
@@ -214,7 +214,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
         get
         {
             using var buffer = new MaaStringBuffer();
-            return MaaControllerGetUuid(Handle, buffer.Handle).ToBoolean()
+            return MaaControllerGetUuid(Handle, buffer.Handle)
                 ? buffer.ToString()
                 : null;
         }

@@ -35,7 +35,8 @@ public static partial class MaaController
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaControllerSetOption(MaaControllerHandle ctrl, MaaCtrlOption key, byte[] value, MaaOptionValueSize valSize);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerSetOption(MaaControllerHandle ctrl, MaaCtrlOption key, byte[] value, MaaOptionValueSize valSize);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostConnection(MaaControllerHandle ctrl);
@@ -77,11 +78,14 @@ public static partial class MaaController
     public static partial MaaStatus MaaControllerWait(MaaControllerHandle ctrl, MaaCtrlId id);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaControllerConnected(MaaControllerHandle ctrl);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerConnected(MaaControllerHandle ctrl);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaControllerCachedImage(MaaControllerHandle ctrl, MaaImageBufferHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerCachedImage(MaaControllerHandle ctrl, MaaImageBufferHandle buffer);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaControllerGetUuid(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerGetUuid(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
 }

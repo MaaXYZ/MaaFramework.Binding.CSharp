@@ -17,5 +17,6 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaToolkit
 {
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaBool MaaToolkitConfigInitOption(string userPath, string defaultJson);
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaToolkitConfigInitOption(string userPath, string defaultJson);
 }
