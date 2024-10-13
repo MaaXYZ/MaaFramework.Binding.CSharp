@@ -11,6 +11,7 @@
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -37,13 +38,16 @@ public static partial class MaaToolkit
     public static partial MaaToolkitAdbDeviceHandle MaaToolkitAdbDeviceListAt(MaaToolkitAdbDeviceListHandle list, MaaSize index);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial nint MaaToolkitAdbDeviceGetName(MaaToolkitAdbDeviceHandle device);
+    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    public static partial string MaaToolkitAdbDeviceGetName(MaaToolkitAdbDeviceHandle device);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial nint MaaToolkitAdbDeviceGetAdbPath(MaaToolkitAdbDeviceHandle device);
+    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    public static partial string MaaToolkitAdbDeviceGetAdbPath(MaaToolkitAdbDeviceHandle device);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial nint MaaToolkitAdbDeviceGetAddress(MaaToolkitAdbDeviceHandle device);
+    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    public static partial string MaaToolkitAdbDeviceGetAddress(MaaToolkitAdbDeviceHandle device);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaAdbScreencapMethod MaaToolkitAdbDeviceGetScreencapMethods(MaaToolkitAdbDeviceHandle device);
@@ -52,5 +56,6 @@ public static partial class MaaToolkit
     public static partial MaaAdbInputMethod MaaToolkitAdbDeviceGetInputMethods(MaaToolkitAdbDeviceHandle device);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial nint MaaToolkitAdbDeviceGetConfig(MaaToolkitAdbDeviceHandle device);
+    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    public static partial string MaaToolkitAdbDeviceGetConfig(MaaToolkitAdbDeviceHandle device);
 }

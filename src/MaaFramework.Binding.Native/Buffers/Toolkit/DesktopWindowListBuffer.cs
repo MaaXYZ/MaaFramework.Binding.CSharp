@@ -1,5 +1,4 @@
-﻿using MaaFramework.Binding.Interop.Native;
-using static MaaFramework.Binding.Interop.Native.MaaToolkit;
+﻿using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -83,7 +82,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
     /// <param name="InfoHandle">The <see cref="MaaToolkitDesktopWindow"/> handle in the <see cref="AdbDeviceListBuffer"/>.</param>
     protected internal sealed record MaaToolkitDesktopWindow(nint InfoHandle) : DesktopWindowInfo(
         Handle: MaaToolkitDesktopWindowGetHandle(InfoHandle),
-        ClassName: MaaToolkitDesktopWindowGetClassName(InfoHandle).ToStringUtf8(),
-        Name: MaaToolkitDesktopWindowGetWindowName(InfoHandle).ToStringUtf8()
+        ClassName: MaaToolkitDesktopWindowGetClassName(InfoHandle),
+        Name: MaaToolkitDesktopWindowGetWindowName(InfoHandle)
     );
 }

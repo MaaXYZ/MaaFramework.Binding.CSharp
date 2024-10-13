@@ -11,13 +11,15 @@
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Native;
 
 public static partial class MaaUtility
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial nint MaaVersion();
+    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    public static partial string MaaVersion();
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]

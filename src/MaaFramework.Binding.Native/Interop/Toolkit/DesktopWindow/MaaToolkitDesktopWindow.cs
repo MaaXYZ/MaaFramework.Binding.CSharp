@@ -11,6 +11,7 @@
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -36,8 +37,10 @@ public static partial class MaaToolkit
     public static partial nint MaaToolkitDesktopWindowGetHandle(MaaToolkitDesktopWindowHandle window);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial nint MaaToolkitDesktopWindowGetClassName(MaaToolkitDesktopWindowHandle window);
+    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    public static partial string MaaToolkitDesktopWindowGetClassName(MaaToolkitDesktopWindowHandle window);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial nint MaaToolkitDesktopWindowGetWindowName(MaaToolkitDesktopWindowHandle window);
+    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    public static partial string MaaToolkitDesktopWindowGetWindowName(MaaToolkitDesktopWindowHandle window);
 }

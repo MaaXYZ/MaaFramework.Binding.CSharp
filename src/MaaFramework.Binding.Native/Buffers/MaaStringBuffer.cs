@@ -12,11 +12,10 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     /// <inheritdoc/>
     public bool CopyTo(IMaaStringBuffer buffer) => buffer switch
     {
-        MaaStringBuffer native => MaaStringBufferSetEx(
+        MaaStringBuffer native => MaaStringBufferSetExFromNint(
             handle: native.Handle,
-            str: MaaStringBufferGet(Handle),
-            size: MaaStringBufferSize(Handle))
-            ,
+            str: MaaStringBufferGetToNint(Handle),
+            size: MaaStringBufferSize(Handle)),
         null => false,
         _ => buffer.SetValue(GetValue()),
     };
@@ -66,11 +65,11 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     ///     Wrapper of <see cref="MaaStringBufferGet"/>.
     /// </remarks>
     public string GetValue()
-        => IsEmpty ? string.Empty : MaaStringBufferGet(Handle).ToStringUtf8(Size);
+        => IsEmpty ? string.Empty : MaaStringBufferGetToNint(Handle).ToStringUtf8(Size);
 
     /// <inheritdoc cref="GetValue"/>
     public static string Get(MaaStringBufferHandle handle)
-        => MaaStringBufferIsEmpty(handle) ? string.Empty : MaaStringBufferGet(handle).ToStringUtf8(MaaStringBufferSize(handle));
+        => MaaStringBufferIsEmpty(handle) ? string.Empty : MaaStringBufferGetToNint(handle).ToStringUtf8(MaaStringBufferSize(handle));
 
     /// <inheritdoc cref="GetValue"/>
     public static string Get(Action<MaaStringBufferHandle> action)

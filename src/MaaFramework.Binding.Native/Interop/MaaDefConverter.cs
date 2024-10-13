@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
 namespace MaaFramework.Binding.Interop.Native;
@@ -40,4 +41,13 @@ public static class MaaDefConverter
     /// </summary>
     public static byte[] ToBytes(this string value)
         => Encoding.UTF8.GetBytes(value);
+}
+
+/// <inheritdoc cref="Utf8StringMarshaller"/>
+[CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(MaaStringViewMarshaller))]
+public static unsafe class MaaStringViewMarshaller
+{
+    /// <inheritdoc cref="Utf8StringMarshaller.ConvertToManaged"/>
+    public static string ConvertToManaged(byte* unmanaged)
+        => Marshal.PtrToStringUTF8((nint)unmanaged) ?? throw new ArgumentNullException(nameof(unmanaged));
 }

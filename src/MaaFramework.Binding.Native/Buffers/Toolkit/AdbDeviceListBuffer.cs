@@ -1,5 +1,4 @@
-﻿using MaaFramework.Binding.Interop.Native;
-using static MaaFramework.Binding.Interop.Native.MaaToolkit;
+﻿using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -82,11 +81,11 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
     /// </summary>
     /// <param name="InfoHandle">The <see cref="MaaToolkitAdbDevice"/> handle in the <see cref="AdbDeviceListBuffer"/>.</param>
     protected internal sealed record MaaToolkitAdbDevice(MaaToolkitAdbDeviceHandle InfoHandle) : AdbDeviceInfo(
-        Name: MaaToolkitAdbDeviceGetName(InfoHandle).ToStringUtf8(),
-        AdbPath: MaaToolkitAdbDeviceGetAdbPath(InfoHandle).ToStringUtf8(),
-        AdbSerial: MaaToolkitAdbDeviceGetAddress(InfoHandle).ToStringUtf8(),
+        Name: MaaToolkitAdbDeviceGetName(InfoHandle),
+        AdbPath: MaaToolkitAdbDeviceGetAdbPath(InfoHandle),
+        AdbSerial: MaaToolkitAdbDeviceGetAddress(InfoHandle),
         ScreencapMethods: (AdbScreencapMethods)MaaToolkitAdbDeviceGetScreencapMethods(InfoHandle),
         InputMethods: (AdbInputMethods)MaaToolkitAdbDeviceGetInputMethods(InfoHandle),
-        Config: MaaToolkitAdbDeviceGetConfig(InfoHandle).ToStringUtf8()
+        Config: MaaToolkitAdbDeviceGetConfig(InfoHandle)
     );
 }
