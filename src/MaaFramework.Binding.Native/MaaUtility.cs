@@ -24,14 +24,14 @@ public class MaaUtility : IMaaUtility
 
         var optValue = (value, opt) switch
         {
-            (int vvvv, GlobalOption.StdoutLevel) => vvvv.ToMaaOptionValue(),
-            (string v, GlobalOption.LogDir) => v.ToMaaOptionValue(),
+            (int vvvv, GlobalOption.StdoutLevel) => MaaMarshaller.ConvertToMaaOptionValue(vvvv),
+            (string v, GlobalOption.LogDir) => MaaMarshaller.ConvertToMaaOptionValue(v),
             (bool vvv, GlobalOption.SaveDraw
                     or GlobalOption.Recording
                     or GlobalOption.ShowHitDraw
-                    or GlobalOption.DebugMode) => vvv.ToMaaOptionValue(),
+                    or GlobalOption.DebugMode) => MaaMarshaller.ConvertToMaaOptionValue(vvv),
 
-            (LoggingLevel v, GlobalOption.StdoutLevel) => ((int)v).ToMaaOptionValue(),
+            (LoggingLevel v, GlobalOption.StdoutLevel) => MaaMarshaller.ConvertToMaaOptionValue((int)v),
 
             _ => throw new InvalidOperationException(),
         };

@@ -37,10 +37,10 @@ public static partial class MaaToolkit
     public static partial nint MaaToolkitDesktopWindowGetHandle(MaaToolkitDesktopWindowHandle window);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaToolkitDesktopWindowGetClassName(MaaToolkitDesktopWindowHandle window);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaToolkitDesktopWindowGetWindowName(MaaToolkitDesktopWindowHandle window);
 }

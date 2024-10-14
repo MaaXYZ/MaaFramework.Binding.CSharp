@@ -18,7 +18,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaUtility
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaVersion();
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

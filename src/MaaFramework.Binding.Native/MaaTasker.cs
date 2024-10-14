@@ -95,7 +95,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
         /*
         var optValue = (value, opt) switch
         {
-            (int vvvv, TaskerOption.Invalid) => vvvv.ToMaaOptionValue(),
+            (int vvvv, TaskerOption.Invalid) => vvvv.ConvertToMaaOptionValue(),
             _ => throw new InvalidOperationException(),
         };
 

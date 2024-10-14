@@ -65,11 +65,11 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     ///     Wrapper of <see cref="MaaStringBufferGet"/>.
     /// </remarks>
     public string GetValue()
-        => IsEmpty ? string.Empty : MaaStringBufferGetToNint(Handle).ToStringUtf8(Size);
+        => IsEmpty ? string.Empty : MaaMarshaller.ConvertToString(MaaStringBufferGetToNint(Handle), Size);
 
     /// <inheritdoc cref="GetValue"/>
     public static string Get(MaaStringBufferHandle handle)
-        => MaaStringBufferIsEmpty(handle) ? string.Empty : MaaStringBufferGetToNint(handle).ToStringUtf8(MaaStringBufferSize(handle));
+        => MaaStringBufferIsEmpty(handle) ? string.Empty : MaaMarshaller.ConvertToString(MaaStringBufferGetToNint(handle), MaaStringBufferSize(handle));
 
     /// <inheritdoc cref="GetValue"/>
     public static string Get(Action<MaaStringBufferHandle> action)
@@ -92,24 +92,11 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     ///     Wrapper of <see cref="MaaStringBufferSet"/> and <see cref="MaaStringBufferSetEx(nint,byte[],ulong)"/>.
     /// </remarks>
     public bool SetValue(string str, bool useEx = true)
-    {
-        if (!useEx)
-            return MaaStringBufferSet(Handle, str);
-
-        var bytes = str.ToBytes();
-        return MaaStringBufferSetEx(Handle, bytes, (MaaSize)bytes.LongLength);
-
-    }
+        => useEx ? MaaStringBufferSetEx(Handle, str) : MaaStringBufferSet(Handle, str);
 
     /// <inheritdoc cref="SetValue"/>
     public static bool Set(MaaStringBufferHandle handle, string str, bool useEx = true)
-    {
-        if (!useEx)
-            return MaaStringBufferSet(handle, str);
-
-        var bytes = str.ToBytes();
-        return MaaStringBufferSetEx(handle, bytes, (MaaSize)bytes.LongLength);
-    }
+        => useEx ? MaaStringBufferSetEx(handle, str) : MaaStringBufferSet(handle, str);
 
     /// <inheritdoc cref="GetValue"/>
     public override string ToString()

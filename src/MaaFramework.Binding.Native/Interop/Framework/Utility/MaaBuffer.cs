@@ -35,7 +35,7 @@ public static partial class MaaBuffer
     public static partial bool MaaStringBufferClear(MaaStringBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaStringBufferGet(MaaStringBufferHandle handle);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

@@ -38,15 +38,15 @@ public static partial class MaaToolkit
     public static partial MaaToolkitAdbDeviceHandle MaaToolkitAdbDeviceListAt(MaaToolkitAdbDeviceListHandle list, MaaSize index);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaToolkitAdbDeviceGetName(MaaToolkitAdbDeviceHandle device);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaToolkitAdbDeviceGetAdbPath(MaaToolkitAdbDeviceHandle device);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaToolkitAdbDeviceGetAddress(MaaToolkitAdbDeviceHandle device);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
@@ -56,6 +56,6 @@ public static partial class MaaToolkit
     public static partial MaaAdbInputMethod MaaToolkitAdbDeviceGetInputMethods(MaaToolkitAdbDeviceHandle device);
 
     [LibraryImport("MaaToolkit", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalUsing(typeof(MaaStringViewMarshaller))]
+    [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaToolkitAdbDeviceGetConfig(MaaToolkitAdbDeviceHandle device);
 }

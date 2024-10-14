@@ -59,6 +59,8 @@ public static class MaaCustomControllerMarshaller
             return value._handle.AddrOfPinnedObject();
         }
 
+        public void Free() { }
+
         /// <inheritdoc cref="GCHandle.Free"/>
         public static void Free(ManagedToUnmanagedIn value)
         {
