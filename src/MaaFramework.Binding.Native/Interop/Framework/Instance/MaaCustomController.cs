@@ -24,15 +24,15 @@ namespace MaaFramework.Binding.Interop.Native;
 [CustomMarshaller(typeof(IMaaCustomController), MarshalMode.ManagedToUnmanagedIn, typeof(ManagedToUnmanagedIn))]
 public static class MaaCustomControllerMarshaller
 {
-    private static ConcurrentDictionary<IMaaCustomController, ManagedToUnmanagedIn> Instances { get; } = [];
+    private static ConcurrentDictionary<IMaaCustomController, ManagedToUnmanagedIn> s_instances { get; } = [];
 
     /// <inheritdoc cref="GCHandle.Free"/>
     public static void Free(IMaaCustomController managed)
     {
-        if (Instances.TryGetValue(managed, out var value))
-        {
-            ManagedToUnmanagedIn.Free(value);
-        }
+       if (s_instances.TryGetValue(managed, out var value))
+       {
+           ManagedToUnmanagedIn.Free(value);
+       }
     }
 
     public struct ManagedToUnmanagedIn
@@ -51,7 +51,7 @@ public static class MaaCustomControllerMarshaller
         {
             _handle = GCHandle.Alloc(new Unmanaged(_delegates), GCHandleType.Pinned);
 
-            var value = Instances.GetOrAdd(_managed, this);
+            var value = s_instances.GetOrAdd(_managed, this);
             Interlocked.Increment(ref value._delegates.Times);
             if (value._handle != _handle)
                 _handle.Free();
@@ -64,7 +64,7 @@ public static class MaaCustomControllerMarshaller
         /// <inheritdoc cref="GCHandle.Free"/>
         public static void Free(ManagedToUnmanagedIn value)
         {
-            if (Interlocked.Decrement(ref value._delegates.Times) == 0 && Instances.TryRemove(value._managed, out _))
+            if (Interlocked.Decrement(ref value._delegates.Times) == 0 && s_instances.TryRemove(value._managed, out _))
             {
                 value._handle.Free();
             }
@@ -98,71 +98,71 @@ public static class MaaCustomControllerMarshaller
     [StructLayout(LayoutKind.Sequential)]
     private sealed class Unmanaged(Delegates delegates)
     {
-        public nint ConnectFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.Connect);
-        public nint RequestUuidFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.RequestUuid);
-        public nint StartAppFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.StartApp);
-        public nint StopAppFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.StopApp);
-        public nint ScreencapFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.Screencap);
-        public nint ClickFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.Click);
-        public nint SwipeFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.Swipe);
-        public nint TouchDownFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.TouchDown);
-        public nint TouchMoveFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.TouchMove);
-        public nint TouchUpFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.TouchUp);
-        public nint PressKeyFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.PressKey);
-        public nint InputTextFunctionPointer = Marshal.GetFunctionPointerForDelegate(delegates.InputText);
+        public nint Connect = Marshal.GetFunctionPointerForDelegate(delegates.Connect);
+        public nint RequestUuid = Marshal.GetFunctionPointerForDelegate(delegates.RequestUuid);
+        public nint StartApp = Marshal.GetFunctionPointerForDelegate(delegates.StartApp);
+        public nint StopApp = Marshal.GetFunctionPointerForDelegate(delegates.StopApp);
+        public nint Screencap = Marshal.GetFunctionPointerForDelegate(delegates.Screencap);
+        public nint Click = Marshal.GetFunctionPointerForDelegate(delegates.Click);
+        public nint Swipe = Marshal.GetFunctionPointerForDelegate(delegates.Swipe);
+        public nint TouchDown = Marshal.GetFunctionPointerForDelegate(delegates.TouchDown);
+        public nint TouchMove = Marshal.GetFunctionPointerForDelegate(delegates.TouchMove);
+        public nint TouchUp = Marshal.GetFunctionPointerForDelegate(delegates.TouchUp);
+        public nint PressKey = Marshal.GetFunctionPointerForDelegate(delegates.PressKey);
+        public nint InputText = Marshal.GetFunctionPointerForDelegate(delegates.InputText);
     }
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool ConnectDelegate(nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool ConnectDelegate(nint transArg);
 
     /// <summary>
     ///     Write result to buffer.
     /// </summary>
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool RequestUuidDelegate(nint transArg, MaaStringBufferHandle buffer);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool RequestUuidDelegate(nint transArg, MaaStringBufferHandle buffer);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool StartAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool StartAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool StopAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool StopAppDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string intent, nint transArg);
 
     /// <summary>
     ///     Write result to buffer.
     /// </summary>
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool ScreencapDelegate(nint transArg, MaaImageBufferHandle buffer);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool ScreencapDelegate(nint transArg, MaaImageBufferHandle buffer);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool ClickDelegate(int x, int y, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool ClickDelegate(int x, int y, nint transArg);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool SwipeDelegate(int x1, int y1, int x2, int y2, int duration, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool SwipeDelegate(int x1, int y1, int x2, int y2, int duration, nint transArg);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool TouchDownDelegate(int contact, int x, int y, int pressure, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool TouchDownDelegate(int contact, int x, int y, int pressure, nint transArg);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool TouchMoveDelegate(int contact, int x, int y, int pressure, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool TouchMoveDelegate(int contact, int x, int y, int pressure, nint transArg);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool TouchUpDelegate(int contact, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool TouchUpDelegate(int contact, nint transArg);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool PressKeyDelegate(int keycode, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool PressKeyDelegate(int keycode, nint transArg);
 
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.U1)]
-    private delegate bool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, nint transArg);
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, nint transArg);
 }
