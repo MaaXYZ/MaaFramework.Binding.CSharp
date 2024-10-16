@@ -33,8 +33,8 @@ public enum GlobalOption : System.Int32
     ///     Dump all screenshots and actions
     /// </summary>
     /// <remarks>
-    ///     <para>Recording will evaluate to true if any of this or MaaCtrlOptionEnum::MaaCtrlOption_Recording</para>
-    ///     <para>is true. value: bool, eg: true; val_size: sizeof(bool)</para>
+    ///     <para>Recording will evaluate to true if any of this or MaaCtrlOptionEnum::MaaCtrlOption_Recording is true.</para>
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     Recording = 3,
     /// <summary>

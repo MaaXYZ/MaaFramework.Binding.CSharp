@@ -12,15 +12,11 @@
 
 namespace MaaFramework.Binding;
 
-public enum ResourceOption : System.Int32
+public enum InferenceDevice : System.Int32
 {
-    Invalid = 0,
-    /// <summary>
-    ///     Use the specified inference device. Please set this option before loading the model.
-    /// </summary>
-    /// <remarks>
-    ///     <para>value: MaaInferenceDevice, eg: 0; val_size: sizeof(MaaInferenceDevice) default value is MaaInferenceDevice_Auto</para>
-    /// </remarks>
-    InferenceDevice = 1,
+    CPU = -2,
+    Auto = -1,
+    GPU0 = 0,
+    GPU1 = 1,
 }
 
