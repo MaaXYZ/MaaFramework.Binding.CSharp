@@ -9,6 +9,7 @@ namespace MaaFramework.Binding;
 /// <param name="Id">Gets the recognition id.</param>
 /// <param name="Name">Gets the recognition name.</param>
 /// <param name="Algorithm">Gets the algorithm name of the recognition.</param>
+/// <param name="Hit">Gets a value indicates whether the recognition is hit.</param>
 /// <param name="HitBox">Gets the hit box if hit; otherwise <see langword="null"/>.</param>
 /// <param name="Detail">Gets the recognition detail.</param>
 /// <param name="Raw">Gets the raw image on the recognition completing if in debug mode; otherwise <see langword="null"/>.</param>
@@ -17,6 +18,7 @@ public sealed record RecognitionDetail<T>(
     MaaRecoId Id,
     string Name,
     string Algorithm,
+    bool Hit,
     IMaaRectBuffer? HitBox,
     string Detail,
     T? Raw,
@@ -84,6 +86,7 @@ public sealed record RecognitionDetail<T>(
             Id: recognitionId,
             Name: name,
             Algorithm: algorithm,
+            Hit: hit,
             HitBox: hitBox,
             Detail: detail,
             Raw: raw,
