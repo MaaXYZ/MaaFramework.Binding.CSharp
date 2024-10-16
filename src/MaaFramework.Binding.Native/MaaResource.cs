@@ -217,17 +217,16 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     public bool SetOption<T>(ResourceOption opt, T value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        throw new InvalidOperationException();
 
-        /*
-        byte[] optValue = (value, opt) switch
+        var optValue = (value, opt) switch
         {
-            (int vvvv, ResourceOption.Invalid) => vvvv.ToMaaOptionValues(),
+            (int vvvv, ResourceOption.InferenceDevice) => MaaMarshaller.ConvertToMaaOptionValue(vvvv),
+            (InferenceDevice v, ResourceOption.InferenceDevice) => MaaMarshaller.ConvertToMaaOptionValue((int)v),
+
             _ => throw new InvalidOperationException(),
         };
 
         return MaaResourceSetOption(Handle, (MaaResOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
-        */
     }
 
     /// <inheritdoc/>

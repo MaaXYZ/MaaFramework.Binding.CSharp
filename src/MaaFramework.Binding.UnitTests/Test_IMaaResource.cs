@@ -27,6 +27,7 @@ public class Test_IMaaResource
         {
             Assert.IsFalse(data.IsInvalid);
             data.Callback += Common.Callback;
+            data.SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
         }
     }
 
@@ -97,6 +98,16 @@ public class Test_IMaaResource
             0, maaResource.TaskList.Count);
         Assert.IsTrue(
             maaResource.TaskList.Any(s => s == "EmptyTask"));
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceDevice, InferenceDevice.CPU)]
+    public void Interface_SetOption(MaaTypes type, IMaaResource maaResource, ResourceOption opt, object arg)
+    {
+        Assert.IsNotNull(maaResource);
+
+        Assert.IsTrue(
+            maaResource.SetOption(opt, arg));
     }
 
     #region Invalid data tests

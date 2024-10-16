@@ -41,6 +41,8 @@ public class Test_IMaaTasker
                 .AppendPath(Common.ResourcePath)
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Succeeded);
+            data.Resource
+                .SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
             data.Controller
                 .LinkStart()
                 .Wait()
