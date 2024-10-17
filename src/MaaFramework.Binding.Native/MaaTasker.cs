@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaTasker;
+using MaaMarshaller = MaaFramework.Binding.Interop.Native.MaaMarshaller;
 
 namespace MaaFramework.Binding;
 
@@ -39,7 +40,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     {
         var handle = MaaTaskerCreate(MaaNotificationCallback, nint.Zero);
         if (!Instances.TryAdd(handle, this))
-            throw new InvalidOperationException(); // Always returns true, but non-atomic operation may fail to add.
+            throw new InvalidOperationException($"This {nameof(MaaTasker)} already added to {nameof(Instances)}."); // Always returns true, but non-atomic operation may fail to add.
         SetHandle(handle, needReleased: true);
 
         Toolkit = new MaaToolkit(toolkitInit);
@@ -91,16 +92,17 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     public bool SetOption<T>(TaskerOption opt, T value)
     {
         ArgumentNullException.ThrowIfNull(value);
-        throw new InvalidOperationException();
-        /*
+        throw new NotSupportedException($"'{nameof(TaskerOption)}.{opt}' or type '{typeof(T)}' is not supported.");
+
+#pragma warning disable
         var optValue = (value, opt) switch
         {
-            (int vvvv, TaskerOption.Invalid) => vvvv.ConvertToMaaOptionValue(),
-            _ => throw new InvalidOperationException(),
+            (int vvvv, TaskerOption.Invalid) => MaaMarshaller.ConvertToMaaOptionValue(vvvv),
+            _ => throw new NotSupportedException($"'{nameof(TaskerOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
 
         return MaaTaskerSetOption(Handle, (MaaTaskerOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
-        */
+#pragma warning restore
     }
 
     /// <inheritdoc/>

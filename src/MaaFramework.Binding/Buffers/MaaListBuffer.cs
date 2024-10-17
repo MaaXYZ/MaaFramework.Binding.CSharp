@@ -93,12 +93,12 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     T IList<T>.this[int index]
     {
         get => this[(MaaSize)index];
-        set => throw new NotSupportedException("ListBuffer does not support setting the element at the specified index.");
+        set => throw new NotSupportedException($"{nameof(MaaListBuffer<THandle, T>)} does not support setting the element at the specified index.");
     }
     void IList<T>.RemoveAt(int index)
         => RemoveAt((MaaSize)index);
     void IList<T>.Insert(int index, T item)
-        => throw new NotSupportedException();
+        => throw new NotSupportedException($"{nameof(MaaListBuffer<THandle, T>)} does not support insert a element at the specified index.");
 
     #endregion
 }

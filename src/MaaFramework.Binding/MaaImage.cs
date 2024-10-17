@@ -64,7 +64,7 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     /// <param name="stream">The stream to save the image to.</param>
     public void Save(Stream stream)
     {
-        if (Buffer.IsInvalid) throw new InvalidOperationException();
+        if (Buffer.IsInvalid) throw new InvalidOperationException($"The '{nameof(Buffer)}' is disposed.");
 
         Buffer.EncodedDataStream.CopyTo(stream);
     }
@@ -86,7 +86,7 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     public void Save(IMaaImageBuffer buffer)
     {
         ArgumentNullException.ThrowIfNull(buffer);
-        if (Buffer.IsInvalid) throw new InvalidOperationException();
+        if (Buffer.IsInvalid) throw new InvalidOperationException($"The '{nameof(Buffer)}' is disposed.");
 
         Buffer.CopyTo(buffer);
     }

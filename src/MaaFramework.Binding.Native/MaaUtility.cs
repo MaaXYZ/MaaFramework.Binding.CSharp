@@ -33,7 +33,7 @@ public class MaaUtility : IMaaUtility
 
             (LoggingLevel v, GlobalOption.StdoutLevel) => MaaMarshaller.ConvertToMaaOptionValue((int)v),
 
-            _ => throw new InvalidOperationException(),
+            _ => throw new NotSupportedException($"'{nameof(GlobalOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
 
         return MaaSetGlobalOption((MaaGlobalOption)opt, optValue, (MaaOptionValueSize)optValue.Length);

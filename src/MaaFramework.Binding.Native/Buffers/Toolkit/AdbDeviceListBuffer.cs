@@ -49,15 +49,15 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
 
     /// <inheritdoc/>
     public override bool Add(AdbDeviceInfo item)
-        => throw new NotSupportedException();
+        => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
     /// <inheritdoc/>
     public override bool RemoveAt(MaaSize index)
-        => throw new NotSupportedException();
+        => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
     /// <inheritdoc/>
     public override bool Clear()
-        => throw new NotSupportedException();
+        => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
     /// <inheritdoc/>
     public override bool IsReadOnly => true;
@@ -66,7 +66,7 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
     public override bool TryIndexOf(AdbDeviceInfo item, out ulong index)
     {
         if (item is not MaaToolkitAdbDevice info)
-            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitAdbDevice)}");
+            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitAdbDevice)}.");
 
         var count = MaaSizeCount;
         for (index = 0; index < count; index++)

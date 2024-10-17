@@ -29,7 +29,7 @@ public sealed class MaaListEnumerator<T> : IEnumerator<T>
         get
         {
             if (_index >= _getSize())
-                throw new InvalidOperationException($"_index({_index}) should be less than _size{_getSize()}");
+                throw new InvalidOperationException($"_index({_index}) should be less than _size{_getSize()}.");
             return _getAt(_index);
         }
     }

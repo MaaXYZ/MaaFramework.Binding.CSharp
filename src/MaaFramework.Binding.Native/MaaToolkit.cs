@@ -63,7 +63,7 @@ public class MaaToolkit : IMaaToolkit
                 ? MaaToolkitAdbDeviceFind(list.Handle)
                 : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle);
             if (!ret)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Failed to execute {nameof(MaaToolkitAdbDeviceFind)}.");
             return list;
         }
 
@@ -77,7 +77,7 @@ public class MaaToolkit : IMaaToolkit
                     : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle)
             );
             if (!ret)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Failed to execute {nameof(MaaToolkitAdbDeviceFind)}.");
             return list;
         }
     }
@@ -101,7 +101,7 @@ public class MaaToolkit : IMaaToolkit
             var list = new DesktopWindowListBuffer();
             var ret = MaaToolkitDesktopWindowFindAll(list.Handle);
             if (!ret)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Failed to execute {nameof(MaaToolkitDesktopWindowFindAll)}.");
             return list;
         }
     }
@@ -173,7 +173,7 @@ public class MaaToolkit : IMaaToolkit
         {
             IMaaCustomAction res => RegisterCustomAction(res),
             IMaaCustomRecognition res => RegisterCustomRecognition(res),
-            _ => throw new NotImplementedException(),
+            _ => throw new NotImplementedException($"Type '{typeof(T)}' is not implemented."),
         };
 
         /// <inheritdoc/>

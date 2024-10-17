@@ -163,7 +163,7 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
         {
             ArgumentNullException.ThrowIfNull(value);
             if (!TrySetEncodedDataStream(value))
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Failed to execute '{nameof(TrySetEncodedDataStream)}'.");
         }
     }
 

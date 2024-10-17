@@ -49,15 +49,15 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
 
     /// <inheritdoc/>
     public override bool Add(DesktopWindowInfo item)
-        => throw new NotSupportedException();
+        => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
     /// <inheritdoc/>
     public override bool RemoveAt(MaaSize index)
-        => throw new NotSupportedException();
+        => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
     /// <inheritdoc/>
     public override bool Clear()
-        => throw new NotSupportedException();
+        => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
     /// <inheritdoc/>
     public override bool IsReadOnly => true;
@@ -66,7 +66,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
     public override bool TryIndexOf(DesktopWindowInfo item, out ulong index)
     {
         if (item is not MaaToolkitDesktopWindow info)
-            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitDesktopWindow)}");
+            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitDesktopWindow)}.");
 
         var count = MaaSizeCount;
         for (index = 0; index < count; index++)

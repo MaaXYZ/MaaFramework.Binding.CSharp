@@ -105,7 +105,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             => MaaResourceRegisterCustomRecognition(Handle, res.Name, res.Convert(out var callback), nint.Zero)
             && _recognitions.Set(res.Name, callback),
         _
-            => throw new NotImplementedException(),
+            => throw new NotImplementedException($"Type '{typeof(T)}' is not implemented."),
     };
 
     /// <inheritdoc/>
@@ -122,7 +122,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             return MaaResourceUnregisterCustomRecognition(Handle, name)
                 && _recognitions.Remove(name);
 
-        throw new NotImplementedException();
+        throw new NotImplementedException($"Type '{typeof(T)}' is not implemented.");
     }
 
     /// <inheritdoc/>
@@ -138,7 +138,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             => MaaResourceUnregisterCustomRecognition(Handle, custom.Name)
             && _recognitions.Remove(custom.Name),
         _
-            => throw new NotImplementedException(),
+            => throw new NotImplementedException($"Type '{typeof(T)}' is not implemented."),
     };
 
     /// <inheritdoc/>
@@ -154,7 +154,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             => MaaResourceClearCustomRecognition(Handle)
             && _recognitions.Clear(),
         _
-            => throw new NotImplementedException()
+            => throw new NotImplementedException($"Type '{typeof(T)}' is not implemented."),
     };
 
     /// <inheritdoc/>
@@ -223,7 +223,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             (int vvvv, ResourceOption.InferenceDevice) => MaaMarshaller.ConvertToMaaOptionValue(vvvv),
             (InferenceDevice v, ResourceOption.InferenceDevice) => MaaMarshaller.ConvertToMaaOptionValue((int)v),
 
-            _ => throw new InvalidOperationException(),
+            _ => throw new NotSupportedException($"'{nameof(ResourceOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
 
         return MaaResourceSetOption(Handle, (MaaResOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
@@ -253,7 +253,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         {
             if (!MaaStringListBuffer.Get(out var list, h
                     => MaaResourceGetTaskList(Handle, h)))
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Failed to execute {nameof(MaaResourceGetTaskList)}.");
             return list;
         }
     }
