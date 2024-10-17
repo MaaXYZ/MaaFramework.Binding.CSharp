@@ -35,7 +35,7 @@ internal static class Custom
             Assert.AreEqual(TaskName, args.TaskName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
-            var recognitionDetail = context.RunRecognition(DiffEntry, DiffParam, args.Image) as RecognitionDetail<MaaImageBuffer>;
+            var recognitionDetail = context.RunRecognition(DiffEntry, DiffParam, args.Image);
             Assert.IsNotNull(recognitionDetail?.HitBox);
 
             recognitionDetail.HitBox.CopyTo(results.Box);
@@ -66,7 +66,7 @@ internal static class Custom
     {
         public string Name { get; set; } = nameof(TestAction);
 
-        public bool Run<T>(in IMaaContext context, in RunArgs<T> args) where T : IMaaImageBuffer
+        public bool Run(in IMaaContext context, in RunArgs args)
         {
             Assert.AreEqual(TaskName, args.TaskName);
             Assert.AreEqual(ActionParam, args.ActionParam);

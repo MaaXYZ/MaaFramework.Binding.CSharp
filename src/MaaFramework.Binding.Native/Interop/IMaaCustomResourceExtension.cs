@@ -32,11 +32,11 @@ public static class IMaaCustomResourceExtension
                 var context = new Binding.MaaContext(contextHandle);
                 var tasker = context.Tasker;
                 var taskDetail = TaskDetail.Query(taskId, tasker) ?? throw new InvalidOperationException();
-                var recognitionDetail = RecognitionDetail<MaaImageBuffer>.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recoId, tasker) ?? throw new InvalidOperationException();
+                var recognitionDetail = RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recoId, tasker) ?? throw new InvalidOperationException();
                 return resource.Run
                 (
                     context,
-                    new RunArgs<MaaImageBuffer>
+                    new RunArgs
                     (
                         TaskDetail: taskDetail,
                         TaskName: currentTaskName,

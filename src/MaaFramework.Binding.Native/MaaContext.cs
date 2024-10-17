@@ -33,21 +33,22 @@ public class MaaContext : IMaaContext<nint>
             taskId: MaaContextRunPipeline(Handle, entry, pipelineOverride),
             tasker: Tasker);
 
-    object? IMaaContext.RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer image)
+    /// <inheritdoc/>
+    public RecognitionDetail? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer image)
         => RunRecognition(entry, recognitionOverride, (MaaImageBuffer)image);
 
-    object? IMaaContext<nint>.RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer<nint> image)
+    /// <inheritdoc/>
+    public RecognitionDetail? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer<nint> image)
         => RunRecognition(entry, recognitionOverride, (MaaImageBuffer)image);
 
-    /// <value/>
     /// <inheritdoc cref="IMaaContext.RunRecognition"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunRecognition"/>.
     /// </remarks>
-    public RecognitionDetail<MaaImageBuffer>? RunRecognition(string entry, string recognitionOverride, MaaImageBuffer image)
+    public RecognitionDetail? RunRecognition(string entry, string recognitionOverride, MaaImageBuffer image)
     {
         ArgumentNullException.ThrowIfNull(image);
-        return RecognitionDetail<MaaImageBuffer>.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(
+        return RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(
             recognitionId: MaaContextRunRecognition(Handle, entry, recognitionOverride, image.Handle),
             tasker: Tasker);
     }

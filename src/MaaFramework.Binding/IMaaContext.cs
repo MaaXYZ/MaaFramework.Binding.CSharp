@@ -14,7 +14,7 @@ public interface IMaaContext<T> : IMaaContext
     T Handle { get; init; }
 
     /// <inheritdoc cref="IMaaContext.RunRecognition"/>
-    object? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer<T> image);
+    RecognitionDetail? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer<T> image);
 
     /// <inheritdoc cref="IMaaContext.RunAction"/>
     NodeDetail? RunAction(string entry, string actionOverride, IMaaRectBuffer<T> recognitionBox, string recognitionDetail);
@@ -42,11 +42,8 @@ public interface IMaaContext : ICloneable
     /// <param name="entry">The recognition entry name.</param>
     /// <param name="recognitionOverride">The json used to override the recognition.</param>
     /// <param name="image">The image to be recognized.</param>
-    /// <returns><see cref="RecognitionDetail{TImage}"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
-    /// <value>
-    ///     <para><c>var rec = <see cref="object"/>? as RecognitionDetail&lt;MaaImageBuffer&gt;</c></para>
-    /// </value>
-    object? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer image);
+    /// <returns><see cref="RecognitionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
+    RecognitionDetail? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer image);
 
     /// <summary>
     ///     Run an action.

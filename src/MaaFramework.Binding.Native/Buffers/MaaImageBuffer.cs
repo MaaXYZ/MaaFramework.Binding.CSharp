@@ -169,11 +169,23 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
 
     private unsafe bool TrySetEncodedDataStream(Stream value)
     {
-        var size = (MaaSize)value.Length;
-        var data = new byte[size];
         value.Position = 0;
-        _ = value.Read(data, 0, data.Length);
-        value.Dispose();
+        var size = (MaaSize)value.Length;
+        if (value is UnmanagedMemoryStream unmanagedMemoryStream)
+        {
+            return MaaImageBufferSetEncoded(Handle, (nint)unmanagedMemoryStream.PositionPointer, size);
+        }
+
+        byte[] data;
+        if (value is MemoryStream memoryStream && memoryStream.TryGetBuffer(out var seg))
+        {
+            data = seg.Array!;
+        }
+        else
+        {
+            data = new byte[size];
+            _ = value.Read(data, 0, data.Length);
+        }
 
         // Pin - Pin data in preparation for calling the P/Invoke.
         fixed (void* __data_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(data))

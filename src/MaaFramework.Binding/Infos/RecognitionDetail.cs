@@ -1,11 +1,11 @@
-﻿using MaaFramework.Binding.Buffers;
+﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Buffers;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
 ///     A sealed record providing properties of recognition detail.
 /// </summary>
-/// <typeparam name="T">The implemented type of <see cref="IMaaImageBuffer"/>.</typeparam>
 /// <param name="Id">Gets the recognition id.</param>
 /// <param name="Name">Gets the recognition name.</param>
 /// <param name="Algorithm">Gets the algorithm name of the recognition.</param>
@@ -14,18 +14,19 @@ namespace MaaFramework.Binding;
 /// <param name="Detail">Gets the recognition detail.</param>
 /// <param name="Raw">Gets the raw image on the recognition completing if in debug mode; otherwise <see langword="null"/>.</param>
 /// <param name="Draws">Gets the draw images on the recognition completed if in debug mode; otherwise <see langword="null"/>.</param>
-public sealed record RecognitionDetail<T>(
+public sealed record RecognitionDetail(
     MaaRecoId Id,
     string Name,
     string Algorithm,
     bool Hit,
     IMaaRectBuffer? HitBox,
     string Detail,
-    T? Raw,
-    IMaaListBuffer<T>? Draws
-) : IDisposable where T : IMaaImageBuffer
+    MaaImage? Raw,
+    IList<MaaImage>? Draws
+) : IDisposable
 {
     private bool _disposed;
+    private IMaaDisposable? _draws;
 
     /// <inheritdoc/>
     public void Dispose()
@@ -36,7 +37,7 @@ public sealed record RecognitionDetail<T>(
 
         HitBox?.Dispose();
         Raw?.Dispose();
-        Draws?.Dispose();
+        _draws?.Dispose();
     }
 
     /// <summary>
@@ -47,8 +48,8 @@ public sealed record RecognitionDetail<T>(
     /// <typeparam name="TImageList">The implemented type of <see cref="IMaaListBuffer{T}"/>.</typeparam>
     /// <param name="recognitionId">The recognition id from <see cref="NodeDetail.RecognitionId"/>..</param>
     /// <param name="tasker">The maa tasker.</param>
-    /// <returns>A <see cref="RecognitionDetail{T}"/> if query was successful; otherwise, <see langword="null"/>.</returns>
-    public static RecognitionDetail<TImage>? Query<TRect, TImage, TImageList>(MaaRecoId recognitionId, IMaaTasker tasker)
+    /// <returns>A <see cref="RecognitionDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
+    public static RecognitionDetail? Query<TRect, TImage, TImageList>(MaaRecoId recognitionId, IMaaTasker tasker)
         where TRect : IMaaRectBuffer, new()
         where TImage : IMaaImageBuffer, new()
         where TImageList : IMaaListBuffer<TImage>, new()
@@ -82,15 +83,20 @@ public sealed record RecognitionDetail<T>(
             draws = default;
         }
 
-        return new RecognitionDetail<TImage>(
+#pragma warning disable CA2000
+        return new RecognitionDetail(
             Id: recognitionId,
             Name: name,
             Algorithm: algorithm,
             Hit: hit,
             HitBox: hitBox,
             Detail: detail,
-            Raw: raw,
-            Draws: draws
-        );
+            Raw: raw is null ? null : MaaImage.Load(raw),
+            Draws: draws?.Select(x => MaaImage.Load(x)).ToList()
+        )
+        {
+            _draws = draws,
+        };
+#pragma warning restore CA2000
     }
 }
