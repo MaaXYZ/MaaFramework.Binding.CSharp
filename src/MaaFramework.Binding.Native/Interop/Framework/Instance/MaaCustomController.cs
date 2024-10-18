@@ -19,34 +19,48 @@ using System.Runtime.InteropServices.Marshalling;
 namespace MaaFramework.Binding.Interop.Native;
 
 /// <summary>
-///     A static class providing extension methods for the converter of <see cref="IMaaCustomController"/>.
+///     Marshaller for <see cref="IMaaCustomController"/>.
 /// </summary>
 [CustomMarshaller(typeof(IMaaCustomController), MarshalMode.ManagedToUnmanagedIn, typeof(ManagedToUnmanagedIn))]
 public static class MaaCustomControllerMarshaller
 {
-    private static ConcurrentDictionary<IMaaCustomController, ManagedToUnmanagedIn> s_instances { get; } = [];
+    private static readonly ConcurrentDictionary<IMaaCustomController, ManagedToUnmanagedIn> s_instances = [];
 
-    /// <inheritdoc cref="GCHandle.Free"/>
+    /// <summary>
+    ///     Releases a <see cref="IMaaCustomController"/>.
+    /// </summary>
+    /// <param name="managed">The <see cref="IMaaCustomController"/>.</param>
     public static void Free(IMaaCustomController managed)
     {
-       if (s_instances.TryGetValue(managed, out var value))
-       {
-           ManagedToUnmanagedIn.Free(value);
-       }
+        if (s_instances.TryGetValue(managed, out var value))
+        {
+            ManagedToUnmanagedIn.Free(value);
+        }
     }
 
+    /// <summary>
+    ///     Custom marshaller to marshal a managed <see cref="IMaaCustomController"/> as an unmanaged nint.
+    /// </summary>
     public struct ManagedToUnmanagedIn
     {
         private IMaaCustomController _managed;
         private Delegates _delegates;
         private GCHandle _handle;
 
+        /// <summary>
+        ///     Initializes the marshaller with a managed <see cref="IMaaCustomController"/>.
+        /// </summary>
+        /// <param name="managed">The managed <see cref="IMaaCustomController"/> with which to initialize the marshaller.</param>
         public void FromManaged(IMaaCustomController managed)
         {
             _managed = managed;
             _delegates = new Delegates(managed);
         }
 
+        /// <summary>
+        ///     Converts the current managed <see cref="IMaaCustomController"/> to an unmanaged nint.
+        /// </summary>
+        /// <returns>An unmanaged nint.</returns>
         public MaaCustomControllerCallbacksHandle ToUnmanaged()
         {
             _handle = GCHandle.Alloc(new Unmanaged(_delegates), GCHandleType.Pinned);
@@ -59,10 +73,15 @@ public static class MaaCustomControllerMarshaller
             return value._handle.AddrOfPinnedObject();
         }
 
-        public void Free() { }
+        /// <summary>
+        ///     Frees any allocated unmanaged memory.
+        /// </summary>
+        public void Free()
+        {
+            // Free
+        }
 
-        /// <inheritdoc cref="GCHandle.Free"/>
-        public static void Free(ManagedToUnmanagedIn value)
+        internal static void Free(ManagedToUnmanagedIn value)
         {
             if (Interlocked.Decrement(ref value._delegates.Times) == 0 && s_instances.TryRemove(value._managed, out _))
             {

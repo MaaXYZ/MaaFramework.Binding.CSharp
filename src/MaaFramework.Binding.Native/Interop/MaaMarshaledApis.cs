@@ -1,4 +1,6 @@
-﻿namespace MaaFramework.Binding.Interop.Native;
+﻿using System.Collections.Concurrent;
+
+namespace MaaFramework.Binding.Interop.Native;
 
 /// <summary>
 ///     A class providing implementation for managing marshaled parameters in <see cref="Binding"/>.
@@ -6,7 +8,7 @@
 /// <typeparam name="T">The marshaled api.</typeparam>
 internal sealed class MaaMarshaledApis<T>
 {
-    private readonly Dictionary<string, T> _apis = [];
+    private readonly ConcurrentDictionary<string, T> _apis = [];
 
     public IEnumerable<string> Names => _apis.Keys;
 
@@ -18,7 +20,8 @@ internal sealed class MaaMarshaledApis<T>
 
     public bool Remove(string key)
     {
-        return _apis.Remove(key);
+        _apis.TryRemove(key, out _);
+        return true;
     }
 
     public bool Clear()
