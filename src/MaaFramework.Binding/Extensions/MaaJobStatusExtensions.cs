@@ -30,4 +30,44 @@ public static class MaaJobStatusExtensions
     {
         if (current != correct) throw new MaaJobStatusException(current, message, args);
     }
+
+    /// <summary>
+    ///     Gets a value indicates whether current job status is pending.
+    /// </summary>
+    /// <param name="current">The current job status.</param>
+    /// <returns><see langword="true"/> if <paramref name="current"/> is pending; otherwise, <see langword="false"/>.</returns>
+    public static bool IsPending(this MaaJobStatus current)
+        => current is MaaJobStatus.Pending;
+
+    /// <summary>
+    ///     Gets a value indicates whether current job status is running.
+    /// </summary>
+    /// <param name="current">The current job status.</param>
+    /// <returns><see langword="true"/> if <paramref name="current"/> is running; otherwise, <see langword="false"/>.</returns>
+    public static bool IsRunning(this MaaJobStatus current)
+        => current is MaaJobStatus.Running;
+
+    /// <summary>
+    ///     Gets a value indicates whether current job status is succeeded.
+    /// </summary>
+    /// <param name="current">The current job status.</param>
+    /// <returns><see langword="true"/> if <paramref name="current"/> is succeeded; otherwise, <see langword="false"/>.</returns>
+    public static bool IsSucceeded(this MaaJobStatus current)
+        => current is MaaJobStatus.Succeeded;
+
+    /// <summary>
+    ///     Gets a value indicates whether current job status is failed.
+    /// </summary>
+    /// <param name="current">The current job status.</param>
+    /// <returns><see langword="true"/> if <paramref name="current"/> is failed; otherwise, <see langword="false"/>.</returns>
+    public static bool IsFailed(this MaaJobStatus current)
+        => current is MaaJobStatus.Failed;
+
+    /// <summary>
+    ///     Gets a value indicates whether current job status is succeeded or failed.
+    /// </summary>
+    /// <param name="current">The current job status.</param>
+    /// <returns><see langword="true"/> if <paramref name="current"/> is succeeded or failed; otherwise, <see langword="false"/>.</returns>
+    public static bool IsDone(this MaaJobStatus current)
+        => current is MaaJobStatus.Succeeded or MaaJobStatus.Failed;
 }
