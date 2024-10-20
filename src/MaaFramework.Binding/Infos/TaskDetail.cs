@@ -33,7 +33,7 @@ public sealed record TaskDetail(
 /// <summary>
 ///     A static class providing extension methods for the query of task detail.
 /// </summary>
-public static class TaskDetailExtension
+public static class TaskDetailExtensions
 {
     /// <param name="job">The maa task job.</param>
     /// <inheritdoc cref="TaskDetail.Query"/>

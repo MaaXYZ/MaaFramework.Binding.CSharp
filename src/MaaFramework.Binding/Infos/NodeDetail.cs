@@ -36,7 +36,7 @@ public sealed record NodeDetail(
 /// <summary>
 ///     A static class providing extension methods for the query of node detail.
 /// </summary>
-public static class NodeDetailExtension
+public static class NodeDetailExtensions
 {
     /// <param name="taskDetail">The task detail.</param>
     /// <param name="tasker">The maa tasker.</param>

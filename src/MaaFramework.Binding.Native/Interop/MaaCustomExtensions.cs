@@ -6,7 +6,7 @@ namespace MaaFramework.Binding.Interop.Native;
 /// <summary>
 ///     A static class providing extension methods for converting <see cref="IMaaCustomResource"/> to custom callback delegate used in interop invoking.
 /// </summary>
-public static class IMaaCustomResourceExtension
+public static class MaaCustomExtensions
 {
     /// <summary>
     ///     Converts a <see cref="IMaaCustomAction"/> to a <see cref="MaaCustomActionCallback"/>.

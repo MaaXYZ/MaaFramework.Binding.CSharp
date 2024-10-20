@@ -3,7 +3,7 @@
 /// <summary>
 ///     A static class providing extension methods for the creation of MaaWin32Controller.
 /// </summary>
-public static class WindowInfoExtension
+public static class WindowInfoExtensions
 {
     /// <summary>
     ///     Converts a <see cref="DesktopWindowInfo"/> to a <see cref="MaaWin32Controller"/>.

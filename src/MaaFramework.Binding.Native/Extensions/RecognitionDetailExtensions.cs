@@ -5,7 +5,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A static class providing extension methods for the query of recognition detail.
 /// </summary>
-public static class RecognitionDetailExtension
+public static class RecognitionDetailExtensions
 {
     /// <param name="nodeDetail">The node detail.</param>
     /// <param name="tasker">The maa tasker.</param>

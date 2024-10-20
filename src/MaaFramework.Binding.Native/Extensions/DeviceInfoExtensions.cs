@@ -3,7 +3,7 @@
 /// <summary>
 ///     A static class providing extension methods for the creation of MaaAdbController.
 /// </summary>
-public static class DeviceInfoExtension
+public static class DeviceInfoExtensions
 {
     /// <summary>
     ///     Converts a <see cref="AdbDeviceInfo"/> to a <see cref="MaaAdbController"/>.
