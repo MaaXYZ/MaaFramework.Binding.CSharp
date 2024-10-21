@@ -14,7 +14,7 @@ public static class MaaCustomExtensions
     /// <param name="resource">The custom action.</param>
     /// <param name="callback">The callback.</param>
     /// <returns>The callback.</returns>
-    /// <exception cref="InvalidOperationException">Failed to query detail.</exception>
+    /// <exception cref="MaaInteroperationException">Failed to query detail.</exception>
     public static MaaCustomActionCallback Convert(this IMaaCustomAction resource, out MaaCustomActionCallback callback)
     {
         callback =
@@ -31,8 +31,8 @@ public static class MaaCustomExtensions
             {
                 var context = new Binding.MaaContext(contextHandle);
                 var tasker = context.Tasker;
-                var taskDetail = TaskDetail.Query(taskId, tasker) ?? throw new InvalidOperationException();
-                var recognitionDetail = RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recoId, tasker) ?? throw new InvalidOperationException();
+                var taskDetail = TaskDetail.Query(taskId, tasker).ThrowIfNull();
+                var recognitionDetail = RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recoId, tasker).ThrowIfNull();
                 return resource.Run
                 (
                     context,
@@ -56,7 +56,7 @@ public static class MaaCustomExtensions
     /// <param name="resource">The custom recognition.</param>
     /// <param name="callback"></param>
     /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="InvalidOperationException">Failed to query detail.</exception>
     public static MaaCustomRecognitionCallback Convert(this IMaaCustomRecognition resource, out MaaCustomRecognitionCallback callback)
     {
         callback =
@@ -75,7 +75,7 @@ public static class MaaCustomExtensions
             {
                 var context = new Binding.MaaContext(contextHandle);
                 var tasker = context.Tasker;
-                var taskDetail = TaskDetail.Query(taskId, tasker) ?? throw new InvalidOperationException();
+                var taskDetail = TaskDetail.Query(taskId, tasker).ThrowIfNull();
                 return resource.Analyze
                 (
                     context,

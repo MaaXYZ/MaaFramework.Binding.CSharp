@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -162,8 +163,7 @@ public class MaaImageBuffer : MaaDisposableHandle<nint>, IMaaImageBuffer<nint>
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            if (!TrySetEncodedDataStream(value))
-                throw new InvalidOperationException($"Failed to execute '{nameof(TrySetEncodedDataStream)}'.");
+            TrySetEncodedDataStream(value).ThrowIfFalse();
         }
     }
 

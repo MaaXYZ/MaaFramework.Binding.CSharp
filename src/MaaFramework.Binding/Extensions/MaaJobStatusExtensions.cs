@@ -12,7 +12,7 @@ public static class MaaJobStatusExtensions
     /// <param name="incorrect">The incorrect status.</param>
     /// <param name="message">The message.</param>
     /// <param name="args">The key arguments.</param>
-    /// <exception cref="MaaJobStatusException"></exception>
+    /// <exception cref="MaaJobStatusException"/>
     public static void ThrowIf(this MaaJobStatus current, MaaJobStatus incorrect, string message = "", params object?[] args)
     {
         if (current == incorrect) throw new MaaJobStatusException(current, message, args);
@@ -25,7 +25,7 @@ public static class MaaJobStatusExtensions
     /// <param name="correct">The correct status.</param>
     /// <param name="message">The message.</param>
     /// <param name="args">The key arguments.</param>
-    /// <exception cref="MaaJobStatusException"></exception>
+    /// <exception cref="MaaJobStatusException"/>
     public static void ThrowIfNot(this MaaJobStatus current, MaaJobStatus correct, string message = "", params object?[] args)
     {
         if (current != correct) throw new MaaJobStatusException(current, message, args);

@@ -112,7 +112,9 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <summary>
     ///     Gets the cached image.
     /// </summary>
-    /// <returns>An <see cref="IMaaImageBuffer"/> if the hash was successfully got; otherwise, <see langword="null"/>.</returns>
+    /// <param name="maaImage">An <see cref="IMaaImageBuffer"/> used to get the cached image.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
     bool GetCachedImage(IMaaImageBuffer maaImage);
 
     /// <summary>

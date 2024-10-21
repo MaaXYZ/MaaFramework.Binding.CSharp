@@ -18,25 +18,21 @@ public interface IMaaRectBuffer : IMaaBuffer<IMaaRectBuffer>
     /// <summary>
     ///     Gets the horizontal coordinate.
     /// </summary>
-    /// <exception cref="InvalidOperationException" />
     int X { get; }
 
     /// <summary>
     ///     Gets the vertical coordinate.
     /// </summary>
-    /// <exception cref="InvalidOperationException" />
     int Y { get; }
 
     /// <summary>
     ///     Gets the width value.
     /// </summary>
-    /// <exception cref="InvalidOperationException" />
     int Width { get; }
 
     /// <summary>
     ///     Gets the height value.
     /// </summary>
-    /// <exception cref="InvalidOperationException" />
     int Height { get; }
 
     /// <summary>

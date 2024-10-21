@@ -29,13 +29,15 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <summary>
     ///     Gets or sets a resource that binds to the <see cref="IMaaTasker"/>.
     /// </summary>
-    /// <exception cref="MaaBindException"/>
+    /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="MaaInteroperationException"/>
     IMaaResource Resource { get; set; }
 
     /// <summary>
     ///     Gets or sets a controller that binds to the <see cref="IMaaTasker"/>.
     /// </summary>
-    /// <exception cref="MaaBindException"/>
+    /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="MaaInteroperationException"/>
     IMaaController Controller { get; set; }
 
     /// <summary>

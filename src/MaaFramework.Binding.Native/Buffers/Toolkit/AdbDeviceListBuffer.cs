@@ -1,4 +1,5 @@
-﻿using static MaaFramework.Binding.Interop.Native.MaaToolkit;
+﻿using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -45,7 +46,10 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitAdbDeviceListAt"/>.
     /// </remarks>
-    public override AdbDeviceInfo this[MaaSize index] => new MaaToolkitAdbDevice(MaaToolkitAdbDeviceListAt(Handle, index));
+    public override AdbDeviceInfo this[MaaSize index]
+    {
+        get => new MaaToolkitAdbDevice(MaaToolkitAdbDeviceListAt(Handle, index).ThrowIfEquals(nint.Zero));
+    }
 
     /// <inheritdoc/>
     public override bool Add(AdbDeviceInfo item)

@@ -1,10 +1,10 @@
 ﻿using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Interop.Native;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaTasker;
-using MaaMarshaller = MaaFramework.Binding.Interop.Native.MaaMarshaller;
 
 namespace MaaFramework.Binding;
 
@@ -97,7 +97,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
 #pragma warning disable
         var optValue = (value, opt) switch
         {
-            (int vvvv, TaskerOption.Invalid) => MaaMarshaller.ConvertToMaaOptionValue(vvvv),
+            (int vvvv, TaskerOption.Invalid) => vvvv.ToMaaOptionValue(),
             _ => throw new NotSupportedException($"'{nameof(TaskerOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
 
@@ -127,18 +127,13 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     {
         get
         {
-            MaaBindException.ThrowIf(
-                MaaTaskerGetResource(Handle) != _resource.Handle,
-                MaaBindException.ResourceModifiedMessage);
+            MaaTaskerGetResource(Handle).ThrowIfNotEquals(_resource.Handle, MaaInteroperationException.ResourceModifiedMessage);
             return _resource;
         }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-
-            MaaBindException.ThrowIf(
-                !MaaTaskerBindResource(Handle, value.Handle),
-                MaaBindException.ResourceMessage);
+            MaaTaskerBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
             _resource = value;
         }
     }
@@ -151,18 +146,13 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     {
         get
         {
-            MaaBindException.ThrowIf(
-                MaaTaskerGetController(Handle) != _controller.Handle,
-                MaaBindException.ControllerModifiedMessage);
+            MaaTaskerGetController(Handle).ThrowIfNotEquals(_controller.Handle, MaaInteroperationException.ControllerModifiedMessage);
             return _controller;
         }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-
-            MaaBindException.ThrowIf(
-                !MaaTaskerBindController(Handle, value.Handle),
-                MaaBindException.ControllerMessage);
+            MaaTaskerBindController(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ControllerBindingFailedMessage);
             _controller = value;
         }
     }

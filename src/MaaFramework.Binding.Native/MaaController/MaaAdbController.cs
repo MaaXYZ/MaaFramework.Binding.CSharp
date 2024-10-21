@@ -21,8 +21,8 @@ public class MaaAdbController : MaaController
     /// <remarks>
     ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
     /// </remarks>
-    /// <exception cref="ArgumentException" />
-    /// <exception cref="MaaJobStatusException" />
+    /// <exception cref="ArgumentException"/>
+    /// <exception cref="MaaJobStatusException"/>
     public MaaAdbController(string adbPath, string adbSerial, AdbScreencapMethods screencapMethods, AdbInputMethods inputMethods, string config, string agentPath = "./MaaAgentBinary", LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);

@@ -35,7 +35,7 @@ public interface IMaaListBuffer<T> : IMaaBuffer<IMaaListBuffer<T>>, IList<T>
     /// </summary>
     /// <param name="index">The zero-based index of the element to get.</param>
     /// <returns>The element at the specified index.</returns>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="index" /> is not a valid index in the <see cref="IMaaListBuffer{T}" />.</exception>
+    /// <exception cref="MaaInteroperationException"><paramref name="index" /> is not a valid index in the <see cref="IMaaListBuffer{T}"/>.</exception>
     [NotNull]
     T this[MaaSize index] { get; }
 
@@ -68,5 +68,6 @@ public interface IMaaListBuffer<T> : IMaaBuffer<IMaaListBuffer<T>>, IList<T>
     /// <param name="item">The element.</param>
     /// <param name="index">The zero-based index of the <paramref name="item"/>.</param>
     /// <returns><see langword="true"/> if the index is got successfully; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="NotSupportedException">The type of item is not supported.</exception>
     bool TryIndexOf(T item, out MaaSize index);
 }

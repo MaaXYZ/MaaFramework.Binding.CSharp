@@ -1,4 +1,5 @@
-﻿using static MaaFramework.Binding.Interop.Native.MaaToolkit;
+﻿using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -45,7 +46,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitDesktopWindowListAt"/>.
     /// </remarks>
-    public override DesktopWindowInfo this[MaaSize index] => new MaaToolkitDesktopWindow(MaaToolkitDesktopWindowListAt(Handle, index));
+    public override DesktopWindowInfo this[MaaSize index] => new MaaToolkitDesktopWindow(MaaToolkitDesktopWindowListAt(Handle, index).ThrowIfEquals(nint.Zero));
 
     /// <inheritdoc/>
     public override bool Add(DesktopWindowInfo item)

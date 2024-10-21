@@ -18,6 +18,7 @@ public sealed record TaskDetail(
     /// <param name="taskId">The task id.</param>
     /// <param name="tasker">The maa tasker.</param>
     /// <returns>A <see cref="TaskDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
     public static TaskDetail? Query(MaaTaskId taskId, IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);

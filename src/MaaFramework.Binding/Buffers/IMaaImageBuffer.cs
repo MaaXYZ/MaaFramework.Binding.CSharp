@@ -55,5 +55,6 @@ public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>
     ///     <para>1. Avoids disposing <see cref="IMaaImageBuffer"/> before the stream is read.</para>
     ///     <para>2. Sets a png image into the <see cref="IMaaImageBuffer"/> if a stream is set.</para>
     /// </remarks>
+    /// <exception cref="ArgumentNullException"/>
     Stream EncodedDataStream { get; set; }
 }

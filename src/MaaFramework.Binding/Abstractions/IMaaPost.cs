@@ -10,6 +10,7 @@ public interface IMaaPost
     /// </summary>
     /// <param name="job">The MaaJob.</param>
     /// <returns>The status of <paramref name="job"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
     MaaJobStatus GetStatus(MaaJob job);
 
     /// <summary>
@@ -17,5 +18,6 @@ public interface IMaaPost
     /// </summary>
     /// <param name="job">The MaaJob.</param>
     /// <returns>The status at the end of the <paramref name="job"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
     MaaJobStatus Wait(MaaJob job);
 }

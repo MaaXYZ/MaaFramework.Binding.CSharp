@@ -39,8 +39,8 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
         var optValue = (value, opt) switch
         {
             (int vvvv, ControllerOption.ScreenshotTargetLongSide
-                    or ControllerOption.ScreenshotTargetShortSide) => MaaMarshaller.ConvertToMaaOptionValue(vvvv),
-            (bool vvv, ControllerOption.Recording) => MaaMarshaller.ConvertToMaaOptionValue(vvv),
+                    or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValue(),
+            (bool vvv, ControllerOption.Recording) => vvv.ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(ControllerOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };

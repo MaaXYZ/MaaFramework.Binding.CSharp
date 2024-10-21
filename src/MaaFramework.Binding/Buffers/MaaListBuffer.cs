@@ -92,7 +92,17 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
 
     T IList<T>.this[int index]
     {
-        get => this[(MaaSize)index];
+        get
+        {
+            try
+            {
+                return this[(MaaSize)index];
+            }
+            catch (MaaInteroperationException)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+        }
         set => throw new NotSupportedException($"{nameof(MaaListBuffer<THandle, T>)} does not support setting the element at the specified index.");
     }
     void IList<T>.RemoveAt(int index)

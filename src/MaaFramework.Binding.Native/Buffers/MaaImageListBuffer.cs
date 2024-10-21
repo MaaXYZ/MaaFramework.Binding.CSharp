@@ -1,4 +1,5 @@
-﻿using static MaaFramework.Binding.Interop.Native.MaaBuffer;
+﻿using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -48,7 +49,7 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferAt"/>.
     /// </remarks>
-    public override MaaImageBuffer this[MaaSize index] => new(MaaImageListBufferAt(Handle, index));
+    public override MaaImageBuffer this[MaaSize index] => new(MaaImageListBufferAt(Handle, index).ThrowIfEquals(nint.Zero));
 
     /// <inheritdoc/>
     /// <remarks>

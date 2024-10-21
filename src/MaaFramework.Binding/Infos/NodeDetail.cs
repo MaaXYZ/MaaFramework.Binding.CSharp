@@ -20,6 +20,7 @@ public sealed record NodeDetail(
     /// <param name="nodeId">The node id.</param>
     /// <param name="tasker">The maa tasker.</param>
     /// <returns>A <see cref="NodeDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
     public static NodeDetail? Query(MaaNodeId nodeId, IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);

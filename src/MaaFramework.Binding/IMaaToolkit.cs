@@ -56,7 +56,7 @@ public interface IMaaToolkitAdbDevice
     /// <returns>
     ///     The List of device information.
     /// </returns>
-    /// <exception cref="InvalidOperationException"/>
+    /// <exception cref="MaaInteroperationException"/>
     IMaaListBuffer<AdbDeviceInfo> Find(string adbPath = "");
 
     /// <summary>
@@ -66,7 +66,7 @@ public interface IMaaToolkitAdbDevice
     /// <returns>
     ///     The task object representing the asynchronous operation.
     /// </returns>
-    /// <exception cref="InvalidOperationException"/>
+    /// <exception cref="MaaInteroperationException"/>
     Task<IMaaListBuffer<AdbDeviceInfo>> FindAsync(string adbPath = "");
 }
 
@@ -92,7 +92,7 @@ public interface IMaaToolkitDesktopWindow
     /// <returns>
     ///     The list of window information.
     /// </returns>
-    /// <exception cref="InvalidOperationException"/>
+    /// <exception cref="MaaInteroperationException"/>
     IMaaListBuffer<DesktopWindowInfo> Find();
 }
 

@@ -15,6 +15,7 @@ public static class WindowInfoExtensions
     /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <returns>A MaaWin32Controller.</returns>
+    /// <exception cref="ArgumentNullException"/>
     public static MaaWin32Controller ToWin32Controller(this DesktopWindowInfo info,
         Win32ScreencapMethod screencapMethod,
         Win32InputMethod inputMethod,

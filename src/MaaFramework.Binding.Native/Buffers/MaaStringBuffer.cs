@@ -65,11 +65,11 @@ public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
     ///     Wrapper of <see cref="MaaStringBufferGet"/>.
     /// </remarks>
     public string GetValue()
-        => IsEmpty ? string.Empty : MaaMarshaller.ConvertToString(MaaStringBufferGetToNint(Handle), Size);
+        => IsEmpty ? string.Empty : MaaStringBufferGetToNint(Handle).ToStringUtf8(Size);
 
     /// <inheritdoc cref="GetValue"/>
     public static string Get(MaaStringBufferHandle handle)
-        => MaaStringBufferIsEmpty(handle) ? string.Empty : MaaMarshaller.ConvertToString(MaaStringBufferGetToNint(handle), MaaStringBufferSize(handle));
+        => MaaStringBufferIsEmpty(handle) ? string.Empty : MaaStringBufferGetToNint(handle).ToStringUtf8(MaaStringBufferSize(handle));
 
     /// <inheritdoc cref="GetValue"/>
     public static string Get(Action<MaaStringBufferHandle> action)

@@ -36,7 +36,8 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <param name="check">Checks AppendPath(path).Wait() status if true; otherwise, not checks.</param>
     /// <param name="paths">The paths of maa resource.</param>
-    /// <exception cref="MaaJobStatusException" />
+    /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="MaaJobStatusException"/>
     /// <inheritdoc cref="MaaResource()"/>
     public MaaResource(CheckStatusOption check, params string[] paths)
         : this()
@@ -220,8 +221,8 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
         var optValue = (value, opt) switch
         {
-            (int vvvv, ResourceOption.InferenceDevice) => MaaMarshaller.ConvertToMaaOptionValue(vvvv),
-            (InferenceDevice v, ResourceOption.InferenceDevice) => MaaMarshaller.ConvertToMaaOptionValue((int)v),
+            (int vvvv, ResourceOption.InferenceDevice) => vvvv.ToMaaOptionValue(),
+            (InferenceDevice v, ResourceOption.InferenceDevice) => ((int)v).ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(ResourceOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
@@ -251,9 +252,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
         get
         {
-            if (!MaaStringListBuffer.Get(out var list, h
-                    => MaaResourceGetTaskList(Handle, h)))
-                throw new InvalidOperationException($"Failed to execute {nameof(MaaResourceGetTaskList)}.");
+            MaaStringListBuffer.Get(out var list, h => MaaResourceGetTaskList(Handle, h)).ThrowIfFalse();
             return list;
         }
     }

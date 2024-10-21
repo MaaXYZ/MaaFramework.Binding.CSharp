@@ -12,7 +12,8 @@ public interface IMaaOption<in TOption> where TOption : Enum
     /// <typeparam name="T">The type specified by the <paramref name="opt"/>(see remarks of enumerations).</typeparam>
     /// <param name="opt">The option.</param>
     /// <param name="value">The value.</param>
-    /// <returns>true if the option was set successfully; otherwise, false.</returns>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <returns><see langword="true"/> if the option was set successfully; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="NotSupportedException">The <paramref name="opt"/> or <paramref name="value"/> is not supported.</exception>
     bool SetOption<T>(TOption opt, T value);
 }

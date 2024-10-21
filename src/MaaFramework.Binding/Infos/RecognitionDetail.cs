@@ -49,6 +49,7 @@ public sealed record RecognitionDetail(
     /// <param name="recognitionId">The recognition id from <see cref="NodeDetail.RecognitionId"/>..</param>
     /// <param name="tasker">The maa tasker.</param>
     /// <returns>A <see cref="RecognitionDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
     public static RecognitionDetail? Query<TRect, TImage, TImageList>(MaaRecoId recognitionId, IMaaTasker tasker)
         where TRect : IMaaRectBuffer, new()
         where TImage : IMaaImageBuffer, new()

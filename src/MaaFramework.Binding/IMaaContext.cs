@@ -43,6 +43,7 @@ public interface IMaaContext : ICloneable
     /// <param name="recognitionOverride">The json used to override the recognition.</param>
     /// <param name="image">The image to be recognized.</param>
     /// <returns><see cref="RecognitionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
     RecognitionDetail? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer image);
 
     /// <summary>
@@ -53,6 +54,7 @@ public interface IMaaContext : ICloneable
     /// <param name="recognitionBox">The rect buffer containing current rect in the recognition result.</param>
     /// <param name="recognitionDetail">The rect detail in the recognition result.</param>
     /// <returns><see cref="NodeDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
     NodeDetail? RunAction(string entry, string actionOverride, IMaaRectBuffer recognitionBox, string recognitionDetail);
 
     /// <summary>

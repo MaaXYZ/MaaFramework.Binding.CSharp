@@ -1,4 +1,5 @@
-﻿using static MaaFramework.Binding.Interop.Native.MaaBuffer;
+﻿using MaaFramework.Binding.Interop.Native;
+using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -48,7 +49,7 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferAt"/>.
     /// </remarks>
-    public override MaaStringBuffer this[MaaSize index] => new(MaaStringListBufferAt(Handle, index));
+    public override MaaStringBuffer this[MaaSize index] => new(MaaStringListBufferAt(Handle, index).ThrowIfEquals(nint.Zero));
 
     /// <inheritdoc/>
     /// <remarks>

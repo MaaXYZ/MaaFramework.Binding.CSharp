@@ -59,11 +59,10 @@ public class MaaToolkit : IMaaToolkit
         public IMaaListBuffer<AdbDeviceInfo> Find(string adbPath = "")
         {
             var list = new AdbDeviceListBuffer();
-            var ret = string.IsNullOrWhiteSpace(adbPath)
-                ? MaaToolkitAdbDeviceFind(list.Handle)
-                : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle);
-            if (!ret)
-                throw new InvalidOperationException($"Failed to execute {nameof(MaaToolkitAdbDeviceFind)}.");
+            if (string.IsNullOrWhiteSpace(adbPath))
+                MaaToolkitAdbDeviceFind(list.Handle).ThrowIfFalse();
+            else
+                MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle).ThrowIfFalse();
             return list;
         }
 
@@ -71,13 +70,13 @@ public class MaaToolkit : IMaaToolkit
         public async Task<IMaaListBuffer<AdbDeviceInfo>> FindAsync(string adbPath = "")
         {
             var list = new AdbDeviceListBuffer();
-            var ret = await Task.Run(() =>
-                string.IsNullOrWhiteSpace(adbPath)
-                    ? MaaToolkitAdbDeviceFind(list.Handle)
-                    : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle)
-            );
-            if (!ret)
-                throw new InvalidOperationException($"Failed to execute {nameof(MaaToolkitAdbDeviceFind)}.");
+            await Task.Run(() =>
+            {
+                if (string.IsNullOrWhiteSpace(adbPath))
+                    MaaToolkitAdbDeviceFind(list.Handle).ThrowIfFalse();
+                else
+                    MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle).ThrowIfFalse();
+            });
             return list;
         }
     }
@@ -99,9 +98,7 @@ public class MaaToolkit : IMaaToolkit
         public IMaaListBuffer<DesktopWindowInfo> Find()
         {
             var list = new DesktopWindowListBuffer();
-            var ret = MaaToolkitDesktopWindowFindAll(list.Handle);
-            if (!ret)
-                throw new InvalidOperationException($"Failed to execute {nameof(MaaToolkitDesktopWindowFindAll)}.");
+            MaaToolkitDesktopWindowFindAll(list.Handle).ThrowIfFalse();
             return list;
         }
     }

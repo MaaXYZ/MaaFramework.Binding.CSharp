@@ -15,10 +15,10 @@ public static class MaaMarshaller
     /// <summary>
     ///     Converts a MaaStringView (<see cref="nint"/>) to a <see cref="string"/>.
     /// </summary>
-    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="MaaInteroperationException"/>
     public static string ConvertToString(nint value, MaaSize size = MaaSize.MinValue)
         => size == MaaSize.MinValue
-        ? Marshal.PtrToStringUTF8(value) ?? throw new ArgumentNullException(nameof(value))
+        ? Marshal.PtrToStringUTF8(value).ThrowIfNull()
         : Marshal.PtrToStringUTF8(value, (int)size);
 
     /// <summary>
@@ -46,5 +46,5 @@ public static unsafe class MaaStringViewMarshaller
 {
     /// <inheritdoc cref="Utf8StringMarshaller.ConvertToManaged"/>
     public static string ConvertToManaged(byte* unmanaged)
-        => Marshal.PtrToStringUTF8((nint)unmanaged) ?? throw new ArgumentNullException(nameof(unmanaged));
+        => Marshal.PtrToStringUTF8((nint)unmanaged).ThrowIfNull();
 }
