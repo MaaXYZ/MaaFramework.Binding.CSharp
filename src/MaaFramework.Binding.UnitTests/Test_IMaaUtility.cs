@@ -67,7 +67,7 @@ public class Test_IMaaMaaUtility
     {
         Assert.IsNotNull(maaUtility);
 
-        Assert.ThrowsException<InvalidOperationException>(() => maaUtility.SetOption(opt, arg));
+        Assert.ThrowsException<NotSupportedException>(() => maaUtility.SetOption(opt, arg));
     }
 
     #endregion

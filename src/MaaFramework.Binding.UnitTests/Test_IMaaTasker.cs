@@ -162,19 +162,15 @@ public class Test_IMaaTasker
 
         // Unregisters custom class
         Assert.IsTrue(
-            maaTasker.Resource.Unregister(Custom.Action));
+            // Actually unregisters IMaaCustomAction instead of TestAction
+            maaTasker.Resource.Unregister(Custom.Action)
+            && maaTasker.Resource.Unregister<IMaaCustomAction>(Custom.Action.Name)
+            && maaTasker.Resource.Unregister<Custom.TestAction>(Custom.Action.Name));
         Assert.IsTrue(
-            maaTasker.Resource.Unregister(Custom.Recognition));
-
-        // Unregisters custom class by name
-        Assert.IsFalse(
-            maaTasker.Resource.Unregister<IMaaCustomAction>(Custom.Action.Name)
-         // Actually unregisters IMaaCustomAction instead of TestAction
-         || maaTasker.Resource.Unregister<Custom.TestAction>(Custom.Action.Name));
-        Assert.IsFalse(
-            maaTasker.Resource.Unregister<IMaaCustomRecognition>(Custom.Recognition.Name)
-         // Actually unregisters IMaaCustomRecognition instead of TestRecognition
-         || maaTasker.Resource.Unregister<Custom.TestRecognition>(Custom.Recognition.Name));
+            // Actually unregisters IMaaCustomRecognition instead of TestRecognition
+            maaTasker.Resource.Unregister(Custom.Recognition)
+            && maaTasker.Resource.Unregister<IMaaCustomRecognition>(Custom.Recognition.Name)
+            && maaTasker.Resource.Unregister<Custom.TestRecognition>(Custom.Recognition.Name));
 
         // Clears custom class by interface
         Assert.IsTrue(
@@ -310,7 +306,7 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
 
-        Assert.ThrowsException<InvalidOperationException>(() => maaTasker.SetOption(opt, arg));
+        Assert.ThrowsException<NotSupportedException>(() => maaTasker.SetOption(opt, arg));
     }
 
     #endregion

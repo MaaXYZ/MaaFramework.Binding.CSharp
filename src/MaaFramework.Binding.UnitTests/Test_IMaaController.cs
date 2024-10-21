@@ -352,7 +352,7 @@ public class Test_IMaaController
     {
         Assert.IsNotNull(maaController);
 
-        Assert.ThrowsException<InvalidOperationException>(() => maaController.SetOption(opt, arg));
+        Assert.ThrowsException<NotSupportedException>(() => maaController.SetOption(opt, arg));
     }
 
     #endregion

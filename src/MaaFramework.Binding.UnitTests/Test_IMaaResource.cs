@@ -118,7 +118,7 @@ public class Test_IMaaResource
     {
         Assert.IsNotNull(maaResource);
 
-        Assert.ThrowsException<InvalidOperationException>(() => maaResource.SetOption(opt, arg));
+        Assert.ThrowsException<NotSupportedException>(() => maaResource.SetOption(opt, arg));
     }
 
     #endregion
