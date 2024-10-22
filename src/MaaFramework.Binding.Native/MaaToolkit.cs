@@ -35,7 +35,7 @@ public class MaaToolkit : IMaaToolkit
     public IMaaToolkitDesktop Desktop { get; } = new DesktopClass();
 
     /// <inheritdoc/>
-    public IMaaToolkitProjectInterface PI { get; } = ProjectInterfaceClass.Get(0);
+    public IMaaToolkitProjectInterface PI { get; set; } = ProjectInterfaceClass.Get(0);
 
     /// <inheritdoc cref="MaaToolkit"/>
     protected internal class ConfigClass : IMaaToolkitConfig

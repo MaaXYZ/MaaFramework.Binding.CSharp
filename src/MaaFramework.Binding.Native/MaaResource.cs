@@ -34,7 +34,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
     }
 
-    /// <param name="check">Checks AppendPath(path).Wait() status if true; otherwise, not checks.</param>
+    /// <param name="check">Checks AppendPath(path).Wait() status if is <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not checks.</param>
     /// <param name="paths">The paths of maa resource.</param>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="MaaJobStatusException"/>

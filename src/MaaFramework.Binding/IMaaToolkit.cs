@@ -27,7 +27,7 @@ public interface IMaaToolkit
     /// <summary>
     ///     Gets the MaaToolkit Project Interface.
     /// </summary>
-    IMaaToolkitProjectInterface PI { get; }
+    IMaaToolkitProjectInterface PI { get; set; }
 }
 
 /// <summary>
@@ -119,7 +119,7 @@ public interface IMaaToolkitProjectInterface : IMaaCommon
     /// <param name="resourcePath">The resource path.</param>
     /// <param name="userPath">The user path.</param>
     /// <param name="directly">A value indicating whether directly runs.</param>
-    /// <returns>true if the option was set successfully; otherwise, false.</returns>
+    /// <returns><see langword="true"/> if the option was set successfully; otherwise, <see langword="false"/>.</returns>
     bool RunCli(string resourcePath, string userPath, bool directly = false);
 
     /// <summary>

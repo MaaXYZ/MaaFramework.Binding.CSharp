@@ -14,7 +14,7 @@ public class MaaJob(MaaId id, IMaaPost maa)
     /// <inheritdoc/>
     public override string ToString() => $"{GetType().Name} {{ {nameof(Status)} = {Status} }}";
 
-    private MaaJobStatus _completedStatus = MaaJobStatus.Invalid;
+    private MaaJobStatus _finalStatus = MaaJobStatus.Invalid;
 
     /// <summary>
     ///     Gets a MaaId.
@@ -27,7 +27,9 @@ public class MaaJob(MaaId id, IMaaPost maa)
     /// <remarks>
     ///     Calls <see cref="IMaaPost.GetStatus"/>.
     /// </remarks>
-    public MaaJobStatus Status => _completedStatus is MaaJobStatus.Succeeded or MaaJobStatus.Failed ? _completedStatus : _completedStatus = maa.GetStatus(this);
+    public MaaJobStatus Status => _finalStatus.IsDone()
+        ? _finalStatus
+        : _finalStatus = maa.GetStatus(this);
 
     /// <summary>
     ///     Waits for a <see cref="MaaJob"/> to complete.
@@ -36,5 +38,5 @@ public class MaaJob(MaaId id, IMaaPost maa)
     /// <remarks>
     ///     Calls <see cref="IMaaPost.Wait"/>.
     /// </remarks>
-    public MaaJobStatus Wait() => _completedStatus = maa.Wait(this);
+    public MaaJobStatus Wait() => _finalStatus = maa.Wait(this);
 }

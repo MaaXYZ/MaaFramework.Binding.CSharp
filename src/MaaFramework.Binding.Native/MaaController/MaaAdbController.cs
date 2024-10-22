@@ -27,10 +27,8 @@ public class MaaAdbController : MaaController
     {
         ArgumentException.ThrowIfNullOrEmpty(adbPath);
         ArgumentException.ThrowIfNullOrEmpty(adbSerial);
-        if (screencapMethods == AdbScreencapMethods.None)
-            throw new ArgumentException($"Value cannot be {AdbScreencapMethods.None}.", nameof(screencapMethods));
-        if (inputMethods == AdbInputMethods.None)
-            throw new ArgumentException($"Value cannot be {AdbInputMethods.None}.", nameof(inputMethods));
+        if (screencapMethods == AdbScreencapMethods.None) throw new ArgumentException($"Value cannot be {AdbScreencapMethods.None}.", nameof(screencapMethods));
+        if (inputMethods == AdbInputMethods.None) throw new ArgumentException($"Value cannot be {AdbInputMethods.None}.", nameof(inputMethods));
         ArgumentException.ThrowIfNullOrEmpty(config);
         ArgumentException.ThrowIfNullOrEmpty(agentPath);
 

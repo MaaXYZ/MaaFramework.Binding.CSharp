@@ -43,7 +43,7 @@ public class MaaInteroperationException : MaaException
     }
 
     /// <summary>
-    ///     Throws a <see cref="MaaInteroperationException"/> when the <paramref name="condition"/> is true.
+    ///     Throws a <see cref="MaaInteroperationException"/> when the <paramref name="condition"/> is <see langword="true"/>.
     /// </summary>
     /// <param name="condition">The condition.</param>
     /// <param name="message">The message of <see cref="MaaInteroperationException"/>.</param>
@@ -55,7 +55,7 @@ public class MaaInteroperationException : MaaException
     }
 
     /// <summary>
-    ///     Throws a <see cref="MaaInteroperationException"/> when the <paramref name="condition"/> is false.
+    ///     Throws a <see cref="MaaInteroperationException"/> when the <paramref name="condition"/> is <see langword="false"/>.
     /// </summary>
     /// <param name="condition">The condition.</param>
     /// <param name="message">The message of <see cref="MaaInteroperationException"/>.</param>
@@ -67,7 +67,7 @@ public class MaaInteroperationException : MaaException
     }
 
     /// <summary>
-    ///     Throws a <see cref="MaaInteroperationException"/> when the <paramref name="operation"/> is null.
+    ///     Throws a <see cref="MaaInteroperationException"/> when the <paramref name="operation"/> is <see langword="null"/>.
     /// </summary>
     /// <typeparam name="T">Any type.</typeparam>
     /// <param name="operation">The operation.</param>

@@ -68,6 +68,6 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
     /// <summary>
     ///     When overridden in a derived class, executes the code required to free the handle.
     /// </summary>
-    /// <returns>true if the handle is released successfully; otherwise, in the event of a catastrophic failure, false.</returns>
+    /// <returns><see langword="true"/> if the handle is released successfully; otherwise, in the event of a catastrophic failure, <see langword="false"/>.</returns>
     protected abstract void ReleaseHandle();
 }
