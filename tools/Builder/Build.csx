@@ -30,17 +30,18 @@ var version = tags.Count switch
     _ => throw new InvalidOperationException("The release labels count > 4."),
 };
 
+var runtimes = NuGetVersion.Parse(
+    XDocument.Load("Directory.Packages.props")
+        .Descendants("PackageVersion")
+        .FirstOrDefault(e => e.Attribute("Include")?.Value == "Maa.Framework.Runtimes")
+        !.Attribute("Version")
+        !.Value);
+
 if (tags.Count is 3 or 4)               // 非最新版本号
 {
     var d = DateTimeOffset.Parse(StartProcess($"gh run view {GITHUB_RUN_ID} --json createdAt --jq .createdAt")).ToOffset(TimeSpan.FromHours(8));
     var dateTime = ((d.Year - 2000) * 1000 + d.Month * 50 + d.Day).ToString("D5");
     var todayBuildTimes = StartProcess($"gh run list --workflow {GITHUB_WORKFLOW} --created {d.ToString("yyyy-MM-ddT00:00:00+08:00")}..{d.ToString("yyyy-MM-ddT23:59:59+08:00")} --limit 99 --json createdAt --jq length");
-    var runtimes = NuGetVersion.Parse(
-        XDocument.Load("Directory.Packages.props")
-            .Descendants("PackageVersion")
-            .FirstOrDefault(e => e.Attribute("Include")?.Value == "Maa.Framework.Runtimes")
-            !.Attribute("Version")
-            !.Value);
     version = new NuGetVersion(runtimes.Major, runtimes.Minor, runtimes.Patch,
         ["preview", dateTime, todayBuildTimes],
         tag);
@@ -62,7 +63,9 @@ File.AppendAllText(GITHUB_STEP_SUMMARY, $"""
 - PackageReference
 
 ```xml
-<PackageReference Include="Maa.Framework.Runtimes" Version="{verStr}" />
+<PackageReference Include="Maa.Framework" Version="{verStr}" />
+<PackageReference Include="Maa.Framework.Native" Version="{verStr}" />
+<PackageReference Include="Maa.Framework.Runtimes" Version="{runtimes}" />
 ```
 
 For more information, please read [add packages](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/#add-packages).
