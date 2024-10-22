@@ -101,11 +101,11 @@ dotnet add package Maa.Framework --prerelease -s https://nuget.pkg.github.com/ma
 ```CSharp
 using MaaFramework.Binding;
 
-var devices = new MaaToolkit(true).Device.Find();
-if (devices.Length < 1)
+var devices = new MaaToolkit(true).AdbDevice.Find();
+if (devices.MaaSizeCount < 1)
     throw new InvalidOperationException();
 
-using var maa = new MaaInstance
+using var maa = new MaaTasker
 {
     Controller = devices[0].ToAdbController(),
     Resource = new MaaResource("./SampleResource"),
@@ -115,9 +115,9 @@ using var maa = new MaaInstance
 if (!maa.Initialized)
     throw new InvalidOperationException();
 
-maa.AppendTask("EmptyTask")
+maa.AppendPipeline("EmptyTask")
    .Wait()
-   .ThrowIfNot(MaaJobStatus.Success);
+   .ThrowIfNot(MaaJobStatus.Succeeded);
 
 Console.WriteLine("EmptyTask Completed");
 ```
@@ -125,9 +125,6 @@ Console.WriteLine("EmptyTask Completed");
 #### 客制化
 
 ```CSharp
-using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Custom;
-
 var taskName = "MyCustomTask";
 var param = $$"""
 {
@@ -146,20 +143,20 @@ var param = $$"""
 }
 """;
 
-maa.Register(new MyRec());
-maa.Register(new MyAct());
-maa.AppendTask(taskName, param)
+maa.Resource.Register(new MyRec());
+maa.Resource.Register(new MyAct());
+maa.AppendPipeline(taskName, param)
     .Wait()
-    .ThrowIfNot(MaaJobStatus.Success);
+    .ThrowIfNot(MaaJobStatus.Succeeded);
 
 internal sealed class MyRec : IMaaCustomRecognition
 {
     public string Name { get; set; } = nameof(MyRec);
 
-    public bool Analyze(in IMaaSyncContext syncContext, IMaaImageBuffer image, string taskName, string customRecognitionParam, in IMaaRectBuffer outBox, in IMaaStringBuffer outDetail)
+    public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
     {
-        outBox.SetValues(0, 0, 100, 100);
-        outDetail.SetValue("Hello World!");
+        results.Box.SetValues(0, 0, 100, 100);
+        results.Detail.SetValue("Hello World!");
         return true;
     }
 }
@@ -168,9 +165,7 @@ internal sealed class MyAct : IMaaCustomAction
 {
     public string Name { get; set; } = nameof(MyAct);
 
-    public void Abort() { }
-
-    public bool Run(in IMaaSyncContext syncContext, string taskName, string customActionParam, IMaaRectBuffer curBox, string curRecDetail)
+    public bool Run(in IMaaContext context, in RunArgs args)
     {
         return true;
     }
