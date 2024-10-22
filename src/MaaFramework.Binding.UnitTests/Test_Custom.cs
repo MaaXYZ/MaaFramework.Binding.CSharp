@@ -35,8 +35,25 @@ internal static class Custom
             Assert.AreEqual(TaskName, args.TaskName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
-            var recognitionDetail = context.RunRecognition(DiffEntry, DiffParam, args.Image);
-            Assert.IsNotNull(recognitionDetail?.HitBox);
+            var cloneContext = (IMaaContext)context.Clone();
+            Assert.IsNull(
+                cloneContext.RunRecognition(DiffEntry, "{}", (IMaaImageBuffer<nint>)args.Image));
+            Assert.AreSame(
+                context.Tasker, cloneContext.Tasker);
+            Assert.AreEqual(
+                context.TaskJob.Id, cloneContext.TaskJob.Id);
+
+            var recognitionDetail =
+                context.RunRecognition(DiffEntry, DiffParam, args.Image);
+            Assert.IsNotNull(
+                recognitionDetail?.HitBox);
+
+            Assert.IsTrue(
+                cloneContext.OverridePipeline(DiffParam));
+            Assert.AreEqual(
+                recognitionDetail.Name, cloneContext.RunPipeline(DiffEntry, "{}")?.QueryRecognitionDetail(cloneContext.Tasker)?.Name);
+            Assert.IsTrue(
+                cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
 
             recognitionDetail.HitBox.CopyTo(results.Box);
             results.Detail.SetValue(recognitionDetail.Detail);

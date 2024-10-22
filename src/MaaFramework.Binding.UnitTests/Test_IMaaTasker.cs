@@ -217,10 +217,10 @@ public class Test_IMaaTasker
 
     private static void Interface_IMaaPost_Success(MaaTaskJob job)
     {
+        Assert.AreNotEqual(
+            MaaJobStatus.Invalid, job.Status);
         Assert.AreEqual(
             MaaJobStatus.Succeeded, job.Wait());
-        Assert.AreEqual(
-            MaaJobStatus.Succeeded, job.Status);
     }
 
     [TestMethod]
@@ -240,9 +240,14 @@ public class Test_IMaaTasker
             nodeIdList.Length > 0);
 
         Assert.IsTrue(
-            maaTasker.GetNodeDetail(nodeIdList[0], out _, out var recognitionId, out var actionCompleted));
+            maaTasker.GetNodeDetail(nodeIdList[0], out var nodeName, out var recognitionId, out var actionCompleted));
         Assert.IsTrue(
             actionCompleted);
+
+        Assert.IsTrue(
+            maaTasker.GetLatestNode(nodeName, out var nodeLatestId));
+        Assert.AreEqual(
+            nodeIdList[0], nodeLatestId);
 
         using var hitBox = new MaaRectBuffer();
         // using var raw = new MaaImageBuffer();
@@ -271,6 +276,10 @@ public class Test_IMaaTasker
         Assert.IsNull(
             job.QueryNodeDetail(index: 1));
 
+        var node = job.QueryNodeDetail();
+        Assert.AreSame(
+            node, node?.QueryLatest(job.Tasker));
+
         // Tip: dispose the recognition detail to dispose HitBox, Raw and Draws after the query is completed.
         using var recognitionDetail = job.QueryRecognitionDetail();
         Assert.IsNotNull(recognitionDetail);
@@ -296,6 +305,15 @@ public class Test_IMaaTasker
         Assert.IsNotNull(maaTasker);
         Assert.IsTrue(
             maaTasker.Abort());
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_ClearCache(MaaTypes type, IMaaTasker maaTasker)
+    {
+        Assert.IsNotNull(maaTasker);
+        Assert.IsTrue(
+            maaTasker.ClearCache());
     }
 
     #region Invalid data tests

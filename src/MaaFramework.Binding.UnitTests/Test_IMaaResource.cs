@@ -67,14 +67,12 @@ public class Test_IMaaResource
             maaResource.Loaded);
     }
 
-    public static void Interface_IMaaPost_Success(MaaJob job)
+    private static void Interface_IMaaPost_Success(MaaJob job)
     {
-        Assert.IsNotNull(job);
-
+        Assert.AreNotEqual(
+            MaaJobStatus.Invalid, job.Status);
         Assert.AreEqual(
             MaaJobStatus.Succeeded, job.Wait());
-        Assert.AreEqual(
-            MaaJobStatus.Succeeded, job.Status);
     }
 
     [TestMethod]
@@ -108,6 +106,16 @@ public class Test_IMaaResource
 
         Assert.IsTrue(
             maaResource.SetOption(opt, arg));
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_Clear(MaaTypes type, IMaaResource maaResource)
+    {
+        Assert.IsNotNull(maaResource);
+
+        Assert.IsTrue(
+            maaResource.Clear(true));
     }
 
     #region Invalid data tests

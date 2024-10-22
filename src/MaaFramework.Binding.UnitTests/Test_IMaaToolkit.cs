@@ -42,7 +42,7 @@ public class Test_IMaaToolkit
     [MaaData(MaaTypes.All, nameof(Data), "", false)]
     [MaaData(MaaTypes.All, nameof(Data), nameof(Common.AdbPath), true)]
     [MaaData(MaaTypes.All, nameof(Data), nameof(Common.AdbPath), false)]
-    public void Interface_Device(MaaTypes type, IMaaToolkit maaToolkit, string arg, bool useAsync)
+    public void Interface_AdbDevice(MaaTypes type, IMaaToolkit maaToolkit, string arg, bool useAsync)
     {
         Assert.IsNotNull(maaToolkit);
 
@@ -78,7 +78,7 @@ public class Test_IMaaToolkit
 #if MAA_WIN32 && !GITHUB_ACTIONS
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Win32_Window(MaaTypes type, IMaaToolkit maaToolkit)
+    public void Interface_Desktop_Window(MaaTypes type, IMaaToolkit maaToolkit)
     {
         Assert.IsNotNull(maaToolkit);
 
@@ -107,4 +107,42 @@ public class Test_IMaaToolkit
             .ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, windows[0].Handle);
     }
 #endif
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_PI(MaaTypes type, IMaaToolkit maaToolkit)
+    {
+        Assert.IsNotNull(maaToolkit);
+
+        var pi0 = maaToolkit.PI;
+        Assert.AreSame(pi0, maaToolkit.PI[0]);
+
+        maaToolkit.PI = maaToolkit.PI[1];
+        Assert.AreSame(maaToolkit.PI, maaToolkit.PI[1]);
+
+        maaToolkit.PI = maaToolkit.PI[0];
+        Assert.AreSame(pi0, maaToolkit.PI[0]);
+    }
+
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_PI_Register(MaaTypes type, IMaaToolkit maaToolkit)
+    {
+        Assert.IsNotNull(maaToolkit);
+
+        maaToolkit.PI.Callback += Common.Callback;
+
+        // Registers custom class
+        Assert.IsTrue(
+            maaToolkit.PI.Register(Custom.Action));
+        Assert.IsTrue(
+            maaToolkit.PI.Register(Custom.Recognition));
+
+        // Updates if name is registered
+        Assert.IsTrue(
+            maaToolkit.PI.Register(Custom.Action.Name, Custom.Action));
+        Assert.IsTrue(
+            maaToolkit.PI.Register(Custom.Recognition.Name, Custom.Recognition));
+    }
 }

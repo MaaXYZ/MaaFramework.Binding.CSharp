@@ -68,6 +68,7 @@ public class Test_IMaaController
         Common.DisposeData(Data.Values.Cast<IMaaDisposable>());
         Common.DisposeData(MiniTouchData.Values.Cast<IMaaDisposable>());
         Common.DisposeData(MaaTouchData.Values.Cast<IMaaDisposable>());
+        Common.DisposeData(TestLinkData.Values.Cast<IMaaDisposable>());
     }
 
 #pragma warning disable S2699 // Tests should include assertions
@@ -103,8 +104,8 @@ public class Test_IMaaController
             CheckStatusOption.None);
         #endregion
 
-        #region MaaWin32Controller
 #if !GITHUB_ACTIONS
+        #region MaaWin32Controller
         var toolkit = new MaaToolkit();
         var windowInfo = toolkit.Desktop.Window.Find().First(x => x.Name.Contains("Visual Studio", StringComparison.OrdinalIgnoreCase));
 
@@ -123,8 +124,8 @@ public class Test_IMaaController
             Win32InputMethod.SendMessage,
             LinkOption.Start,
             CheckStatusOption.None);
-#endif
         #endregion
+#endif
 #endif
     }
 #pragma warning restore S2699 // Tests should include assertions
@@ -141,27 +142,23 @@ public class Test_IMaaController
             maaController.SetOption(opt, arg));
     }
 
-    public static void Interface_IMaaPost_Success(MaaJob job)
+    private static void Interface_IMaaPost_Success(MaaJob job)
     {
-        Assert.IsNotNull(job);
-
+        Assert.AreNotEqual(
+            MaaJobStatus.Invalid, job.Status);
         Assert.AreEqual(
             MaaJobStatus.Succeeded, job.Wait());
-        Assert.AreEqual(
-            MaaJobStatus.Succeeded, job.Status);
     }
 
-    public static void Interface_IMaaPost_Failed(MaaJob job)
+    private static void Interface_IMaaPost_Failed(MaaJob job)
     {
-        Assert.IsNotNull(job);
-
+        Assert.AreNotEqual(
+            MaaJobStatus.Invalid, job.Status);
         Assert.AreEqual(
             MaaJobStatus.Failed, job.Wait());
-        Assert.AreEqual(
-            MaaJobStatus.Failed, job.Status);
     }
 
-    public static void Interface_IMaaPost(bool assertSuccess, MaaJob job)
+    private static void Interface_IMaaPost(bool assertSuccess, MaaJob job)
     {
         if (assertSuccess)
             Interface_IMaaPost_Success(job);
@@ -353,6 +350,26 @@ public class Test_IMaaController
         Assert.IsNotNull(maaController);
 
         Assert.ThrowsException<NotSupportedException>(() => maaController.SetOption(opt, arg));
+    }
+
+    [TestMethod]
+    public void CreateInvalidInstances()
+    {
+
+#if MAA_NATIVE
+        #region MaaAdbController
+        Assert.ThrowsException<ArgumentException>(() => new MaaAdbController("test", "test", AdbScreencapMethods.None, AdbInputMethods.All, "test", "test"));
+        Assert.ThrowsException<ArgumentException>(() => new MaaAdbController("test", "test", AdbScreencapMethods.All, AdbInputMethods.None, "test", "test"));
+        #endregion
+
+#if !GITHUB_ACTIONS
+        #region MaaWin32Controller
+        Assert.ThrowsException<ArgumentException>(() => new MaaWin32Controller(0, Win32ScreencapMethod.GDI, Win32InputMethod.Seize));
+        Assert.ThrowsException<ArgumentException>(() => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize));
+        Assert.ThrowsException<ArgumentException>(() => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None));
+        #endregion
+#endif
+#endif
     }
 
     #endregion
