@@ -32,6 +32,29 @@ public sealed record NodeDetail(
                 ActionCompleted: actionCompleted)
             : null;
     }
+
+    /// <summary>
+    ///     Queries the latest node detail.
+    /// </summary>
+    /// <param name="name">The node name.</param>
+    /// <param name="tasker">The maa tasker.</param>
+    /// <returns>A <see cref="NodeDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
+    public static NodeDetail? QueryLatest(string name, IMaaTasker tasker)
+    {
+        ArgumentNullException.ThrowIfNull(tasker);
+        return tasker.GetLatestNode(name, out var nodeId)
+            ? Query(nodeId, tasker)
+            : null;
+    }
+
+    /// <inheritdoc cref="QueryLatest(string, IMaaTasker)"/>
+    public NodeDetail? QueryLatest(IMaaTasker tasker)
+    {
+        ArgumentNullException.ThrowIfNull(tasker);
+        if (!tasker.GetLatestNode(Name, out var nodeId)) return null;
+        return nodeId == Id ? this : Query(nodeId, tasker);
+    }
 }
 
 /// <summary>
