@@ -1,30 +1,31 @@
 ### NuGet Link
 
-[![](https://img.shields.io/badge/NuGet-Maa.Framework-%23004880)](https://www.nuget.org/packages/Maa.Framework/2.0.3) [![](https://img.shields.io/badge/NuGet-Maa.Framework.Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Native/2.0.3) [![](https://img.shields.io/badge/NuGet-Binding-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding/2.0.3) [![](https://img.shields.io/badge/NuGet-Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Native/2.0.3)
+[![](https://img.shields.io/badge/NuGet-Maa.Framework-%23004880)](https://www.nuget.org/packages/Maa.Framework/2.1.2) [![](https://img.shields.io/badge/NuGet-Maa.Framework.Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Native/2.1.2) [![](https://img.shields.io/badge/NuGet-Binding-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding/2.1.2) [![](https://img.shields.io/badge/NuGet-Native-%23004880)](https://www.nuget.org/packages/Maa.Framework.Binding.Native/2.1.2)
 
-## What's Changed in v2.0.3
+## What's Changed in v2.1.2
 
-**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v1.8.9.2...v2.0.3
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v2.0.3...v2.1.2
+
+### Breaking changes
+
+- chore(UnitTests): update @moomiji
+- refactor: rename to `MaaInteroperationException` from `MaaBindException` @moomiji
+- chore: append `s` to `Extension` class @moomiji
+- refactor: add `MaaImage` class as return value instead of generic `IMaaImageBuffer` @moomiji
+- refactor: rename to `MaaMarshaller` from `MaaDefConverter` @moomiji
 
 ### New features
 
-- support android native library @moomiji
-- support platform rid differential nupkgs @moomiji
-- support MaaToolkit project interface @moomiji
-
-### Perfect
-
-- pretty debugger display @moomiji
-
-### Fix
-
-- NuGet package metadata errors @moomiji
+- add NodeDetail.QueryLatest() @moomiji
+- add MaaMarshallingExtensions @moomiji
+- standardized v2 interface design @moomiji
+- make RecognitionDetail include `hit` @moomiji
+- support ResourceOption.InferenceDevice @moomiji
 
 ### Other
 
-- remove custom executors @moomiji
-- Create README_zh.md & add MFAWPF (#7) @SweetSmellFox
-- add solution builder @moomiji
-- add preview article @moomiji
-- update package version @moomiji
-- update interop to framework 2.0.3 @moomiji
+- improve exception messages @moomiji
+- update interop to framework 2.1.2 @moomiji
+- use CustomMarshaller for string returned @moomiji
+- use U1 Marshaller for MaaBool @moomiji
+- use CustomMarshaller for custom controller @moomiji
