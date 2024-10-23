@@ -34,7 +34,7 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
         => MaaToolkitAdbDeviceListDestroy(Handle);
 
     /// <inheritdoc/>
-    public override bool IsEmpty => MaaToolkitAdbDeviceListSize(Handle) != 0;
+    public override bool IsEmpty => MaaToolkitAdbDeviceListSize(Handle) == 0;
 
     /// <inheritdoc/>
     /// <remarks>

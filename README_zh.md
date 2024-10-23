@@ -102,7 +102,7 @@ dotnet add package Maa.Framework --prerelease -s https://nuget.pkg.github.com/ma
 using MaaFramework.Binding;
 
 var devices = new MaaToolkit(true).AdbDevice.Find();
-if (devices.MaaSizeCount < 1)
+if (devices.IsEmpty)
     throw new InvalidOperationException();
 
 using var maa = new MaaTasker
@@ -125,6 +125,9 @@ Console.WriteLine("EmptyTask Completed");
 #### 客制化
 
 ```CSharp
+using MaaFramework.Binding.Buffers;
+using MaaFramework.Binding.Custom;
+
 var taskName = "MyCustomTask";
 var param = $$"""
 {

@@ -34,7 +34,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
         => MaaToolkitDesktopWindowListDestroy(Handle);
 
     /// <inheritdoc/>
-    public override bool IsEmpty => MaaToolkitDesktopWindowListSize(Handle) != 0;
+    public override bool IsEmpty => MaaToolkitDesktopWindowListSize(Handle) == 0;
 
     /// <inheritdoc/>
     /// <remarks>
