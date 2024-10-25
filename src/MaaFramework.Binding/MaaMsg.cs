@@ -38,6 +38,14 @@ public static class MaaMsg
             /// <remarks>
             ///     <para>payload: { res_id: number, hash: string, path: string, }</para>
             /// </remarks>
+            public const string Prefix = "Resource.Loading";
+
+            /// <summary>
+            ///     The message for the resource loading.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { res_id: number, hash: string, path: string, }</para>
+            /// </remarks>
             public const string Succeeded = "Resource.Loading.Succeeded";
 
             /// <summary>
@@ -61,6 +69,14 @@ public static class MaaMsg
             ///     <para>payload: { ctrl_id: number, uuid: string, action: string, }</para>
             /// </remarks>
             public const string Starting = "Controller.Action.Starting";
+
+            /// <summary>
+            ///     Message for the controller actions.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, }</para>
+            /// </remarks>
+            public const string Prefix = "Controller.Action";
 
             /// <summary>
             ///     Message for the controller actions.
@@ -98,6 +114,14 @@ public static class MaaMsg
             /// <remarks>
             ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
             /// </remarks>
+            public const string Prefix = "Tasker.Task";
+
+            /// <summary>
+            ///     Message for the tasks.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
+            /// </remarks>
             public const string Succeeded = "Tasker.Task.Succeeded";
 
             /// <summary>
@@ -121,6 +145,14 @@ public static class MaaMsg
             ///     <para>payload: { task_id: number, name: string, list: string[], }</para>
             /// </remarks>
             public const string Starting = "Task.NextList.Starting";
+
+            /// <summary>
+            ///     Message for the Recognition List.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, name: string, list: string[], }</para>
+            /// </remarks>
+            public const string Prefix = "Task.NextList";
 
             /// <summary>
             ///     Message for the Recognition List.
@@ -155,6 +187,14 @@ public static class MaaMsg
             /// <remarks>
             ///     <para>payload: { task_id: number, reco_id: number, name: string, }</para>
             /// </remarks>
+            public const string Prefix = "Task.Recognition";
+
+            /// <summary>
+            ///     Message for the recognition list.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, reco_id: number, name: string, }</para>
+            /// </remarks>
             public const string Succeeded = "Task.Recognition.Succeeded";
 
             /// <summary>
@@ -175,6 +215,14 @@ public static class MaaMsg
             ///     <para>payload: { task_id: number, node_id: number, name: string, }</para>
             /// </remarks>
             public const string Starting = "Task.Action.Starting";
+
+            /// <summary>
+            ///     Message for the task action.
+            /// </summary>
+            /// <remarks>
+            ///     <para>payload: { task_id: number, node_id: number, name: string, }</para>
+            /// </remarks>
+            public const string Prefix = "Task.Action";
 
             /// <summary>
             ///     Message for the task action.
