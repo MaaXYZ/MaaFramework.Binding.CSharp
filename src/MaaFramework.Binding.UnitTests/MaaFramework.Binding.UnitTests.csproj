@@ -1,45 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="MSTest.TestAdapter" />
-    <PackageReference Include="MSTest.TestFramework" />
-    <PackageReference Include="SixLabors.ImageSharp" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="MSTest.TestAdapter" />
+        <PackageReference Include="MSTest.TestFramework" />
+        <PackageReference Include="SixLabors.ImageSharp" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\Common\TestParam.runsettings" />
-    <None Include="SampleResource\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\Common\TestParam.runsettings" />
+        <None Include="SampleResource\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MaaFramework\MaaFramework.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\MaaFramework\MaaFramework.csproj" />
+        <ProjectReference Include="..\MaaFramework.Binding.Extensions\MaaFramework.Binding.Extensions.csproj" />
+    </ItemGroup>
 
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);MAA_NATIVE;</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup>
+        <DefineConstants>$(DefineConstants);MAA_NATIVE;</DefineConstants>
+    </PropertyGroup>
 
-  <Choose>
-    <When Condition="$([System.OperatingSystem]::IsOSPlatform('WINDOWS'))">
-      <PropertyGroup>
-        <DefineConstants>$(DefineConstants);MAA_WIN32;</DefineConstants>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-    </Otherwise>
-  </Choose>
+    <Choose>
+        <When Condition="$([System.OperatingSystem]::IsOSPlatform('WINDOWS'))">
+            <PropertyGroup>
+                <DefineConstants>$(DefineConstants);MAA_WIN32;</DefineConstants>
+            </PropertyGroup>
+        </When>
+        <Otherwise>
+        </Otherwise>
+    </Choose>
 
-  <Choose>
-    <When Condition="$([System.Environment]::GetEnvironmentVariable('GITHUB_ACTIONS')) == 'true'">
-      <PropertyGroup>
-        <DefineConstants>$(DefineConstants);GITHUB_ACTIONS;</DefineConstants>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-    </Otherwise>
-  </Choose>
+    <Choose>
+        <When Condition="$([System.Environment]::GetEnvironmentVariable('GITHUB_ACTIONS')) == 'true'">
+            <PropertyGroup>
+                <DefineConstants>$(DefineConstants);GITHUB_ACTIONS;</DefineConstants>
+            </PropertyGroup>
+        </When>
+        <Otherwise>
+        </Otherwise>
+    </Choose>
 
 </Project>

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- Package Properties -->
+    <PropertyGroup>
+        <PackageId>Maa.Framework.Binding.Extensions</PackageId>
+        <Title>Maa Framework Binding Extensions</Title>
+        <description>MaaFramework.Binding.Extensions contains useful but non-essential extensions.</description>
+        <PackageTags>MAA;c-sharp;cross-platform;dotnet;extensions</PackageTags>
+
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <IncludeSymbols>True</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MaaFramework.Binding\MaaFramework.Binding.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -167,6 +167,12 @@
       "Maa.Framework.Binding": {
         "type": "Project"
       },
+      "Maa.Framework.Binding.Extensions": {
+        "type": "Project",
+        "dependencies": {
+          "Maa.Framework.Binding": "[1.0.0-dev, )"
+        }
+      },
       "Maa.Framework.Binding.Native": {
         "type": "Project",
         "dependencies": {
@@ -366,6 +372,12 @@
       },
       "Maa.Framework.Binding": {
         "type": "Project"
+      },
+      "Maa.Framework.Binding.Extensions": {
+        "type": "Project",
+        "dependencies": {
+          "Maa.Framework.Binding": "[1.0.0-dev, )"
+        }
       },
       "Maa.Framework.Binding.Native": {
         "type": "Project",
