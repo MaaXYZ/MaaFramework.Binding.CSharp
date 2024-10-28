@@ -1,8 +1,6 @@
-﻿using MaaFramework.Binding.Messages;
-using System.Text.Json;
+﻿using System.Text.Json;
 
-
-namespace MaaFramework.Binding.Extensions.Notification;
+namespace MaaFramework.Binding.Notification;
 
 /// <summary>
 ///     Represents the method that will handle a notification when the notification provides detail.

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MaaFramework.Binding.Extensions.Notification;
+namespace MaaFramework.Binding.Notification;
 
 /// <inheritdoc cref="JsonSerializerContext"/>
 [JsonSerializable(typeof(ResourceLoadingDetail))]

@@ -1,4 +1,4 @@
-﻿namespace MaaFramework.Binding.Extensions.Notification;
+﻿namespace MaaFramework.Binding.Notification;
 
 /// <summary>
 ///     Notification type.

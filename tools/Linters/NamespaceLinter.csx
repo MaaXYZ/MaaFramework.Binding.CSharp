@@ -5,7 +5,6 @@ var directoriesNamespaces = new Dictionary<string, string>
 {
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/Interop/"), "MaaFramework.Binding.Interop.Native" },
 
-
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding/Abstractions/"), "MaaFramework.Binding.Abstractions" },
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/Abstractions/"), "MaaFramework.Binding.Abstractions.Native" },
 
@@ -14,9 +13,11 @@ var directoriesNamespaces = new Dictionary<string, string>
 
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding/Custom/"), "MaaFramework.Binding.Custom" },
 
+    { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding/MaaMsg.cs"), "MaaFramework.Binding.Notification" },
+    { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Extensions/Notification"), "MaaFramework.Binding.Notification" },
+
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.UnitTests/"), string.Empty },
 
-    { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding/MaaMsg.cs"), "MaaFramework.Binding.Messages" },
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding"), "MaaFramework.Binding" },
 };
 
