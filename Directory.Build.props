@@ -27,7 +27,7 @@
 
   <!-- Analyzer Properties -->
   <PropertyGroup>
-    <AnalysisLevel>preview</AnalysisLevel>
+    <AnalysisLevel>8</AnalysisLevel>
     <AnalysisMode>All</AnalysisMode>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
