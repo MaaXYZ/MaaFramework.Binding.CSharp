@@ -22,16 +22,23 @@ public enum ControllerOption : System.Int32
     ///     Only one of long and short side can be set, and the other is automatically scaled according to the aspect ratio.
     /// </summary>
     /// <remarks>
-    ///     <para>value: int, eg: 1920; val_size: sizeof(int)</para>
+    ///     <para>value: int, eg: 1280; val_size: sizeof(int)</para>
     /// </remarks>
     ScreenshotTargetLongSide = 1,
     /// <summary>
     ///     Only one of long and short side can be set, and the other is automatically scaled according to the aspect ratio.
     /// </summary>
     /// <remarks>
-    ///     <para>value: int, eg: 1080; val_size: sizeof(int)</para>
+    ///     <para>value: int, eg: 720; val_size: sizeof(int)</para>
     /// </remarks>
     ScreenshotTargetShortSide = 2,
+    /// <summary>
+    ///     Screenshot use raw size without scaling. Please note that this option may cause incorrect coordinates on user devices with different resolutions if scaling is not performed.
+    /// </summary>
+    /// <remarks>
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
+    /// </remarks>
+    ScreenshotUseRawSize = 3,
     /// <summary>
     ///     Dump all screenshots and actions
     /// </summary>

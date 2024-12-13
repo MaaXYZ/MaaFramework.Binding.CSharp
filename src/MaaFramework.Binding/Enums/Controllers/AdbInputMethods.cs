@@ -18,11 +18,11 @@ namespace MaaFramework.Binding;
 [Flags]
 public enum AdbInputMethods : System.UInt64
 {
-    None = 0,
     AdbShell = 1,
     MinitouchAndAdbKey = (1 << 1),
     Maatouch = (1 << 2),
     EmulatorExtras = (1 << 3),
+    None = 0,
     All = (~None),
     Default = (All & (~EmulatorExtras)),
 }
