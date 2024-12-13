@@ -12,21 +12,12 @@
 
 namespace MaaFramework.Binding;
 
-/// <remarks>
-///     <para>Use bitwise OR to set the method you need, MaaFramework will test their speed and use the fastest one.</para>
-/// </remarks>
-[Flags]
-public enum AdbScreencapMethods : System.UInt64
+public enum InferenceExecutionProvider : System.Int32
 {
-    EncodeToFileAndPull = 1,
-    Encode = (1 << 1),
-    RawWithGzip = (1 << 2),
-    RawByNetcat = (1 << 3),
-    MinicapDirect = (1 << 4),
-    MinicapStream = (1 << 5),
-    EmulatorExtras = (1 << 6),
-    None = 0,
-    All = (~None),
-    Default = (All & (~RawByNetcat) & (~MinicapDirect) & (~MinicapStream)),
+    Auto = 0,
+    CPU = 1,
+    DirectML = 2,
+    CoreML = 3,
+    CUDA = 4,
 }
 

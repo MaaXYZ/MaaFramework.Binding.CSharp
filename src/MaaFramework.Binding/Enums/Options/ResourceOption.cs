@@ -22,5 +22,12 @@ public enum ResourceOption : System.Int32
     ///     <para>value: MaaInferenceDevice, eg: 0; val_size: sizeof(MaaInferenceDevice) default value is MaaInferenceDevice_Auto</para>
     /// </remarks>
     InferenceDevice = 1,
+    /// <summary>
+    ///     Use the specified inference execution provider Please set this option before loading the model.
+    /// </summary>
+    /// <remarks>
+    ///     <para>value: MaaInferenceExecutionProvider, eg: 0; val_size: sizeof(MaaInferenceExecutionProvider) default value is MaaInferenceExecutionProvider_Auto</para>
+    /// </remarks>
+    InferenceExecutionProvider = 2,
 }
 

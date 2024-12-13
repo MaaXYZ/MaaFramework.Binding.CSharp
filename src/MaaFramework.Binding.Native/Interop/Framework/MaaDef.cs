@@ -34,6 +34,7 @@ global using MaaOptionValueSize = System.UInt64;
 global using MaaGlobalOption = System.Int32;
 global using MaaResOption = System.Int32;
 global using MaaInferenceDevice = System.Int32;
+global using MaaInferenceExecutionProvider = System.Int32;
 global using MaaCtrlOption = System.Int32;
 global using MaaTaskerOption = System.Int32;
 // Use bitwise OR to set the method you need, MaaFramework will test their speed and use the fastest one.

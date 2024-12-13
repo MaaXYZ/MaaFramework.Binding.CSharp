@@ -10,9 +10,9 @@
 #pragma warning disable CS1573 // 参数在 XML 注释中没有匹配的 param 标记
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
-namespace MaaFramework.Binding.Notification;
+﻿namespace MaaFramework.Binding.Notification;
 
-//MaaApiDocument Version: (main) v2.1.2
+//MaaApiDocument Version: (main) v2.3.1
 /// <summary>
 ///  A callback consists of a message and a payload.
 ///  The message is a string that indicates the type of the message.

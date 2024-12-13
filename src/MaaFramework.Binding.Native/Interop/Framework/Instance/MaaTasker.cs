@@ -53,8 +53,7 @@ public static partial class MaaTasker
     public static partial bool MaaTaskerRunning(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaTaskerPostStop(MaaTaskerHandle tasker);
+    public static partial MaaTaskId MaaTaskerPostStop(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaResourceHandle MaaTaskerGetResource(MaaTaskerHandle tasker);
@@ -76,7 +75,7 @@ public static partial class MaaTasker
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaTaskerGetTaskDetail(MaaTaskerHandle tasker, MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize);
+    public static partial bool MaaTaskerGetTaskDetail(MaaTaskerHandle tasker, MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize, out MaaStatus status);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
