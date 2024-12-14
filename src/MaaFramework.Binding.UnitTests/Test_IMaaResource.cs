@@ -81,17 +81,15 @@ public class Test_IMaaResource
     {
         Assert.IsNotNull(maaResource);
 
-        Assert.IsFalse(
+        Assert.IsTrue(
             string.IsNullOrWhiteSpace(maaResource.Hash));
-        Assert.AreEqual(
-            "0", maaResource.Hash);
         Assert.AreEqual(
             0, maaResource.TaskList.Count);
 
         Interface_IMaaPost_Success(
             maaResource.AppendPath(Common.ResourcePath));
-        Assert.AreNotEqual(
-            "0", maaResource.Hash);
+        Assert.IsFalse(
+            string.IsNullOrWhiteSpace(maaResource.Hash));
         Assert.AreNotEqual(
             0, maaResource.TaskList.Count);
         Assert.IsTrue(
