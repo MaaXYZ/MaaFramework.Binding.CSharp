@@ -20,7 +20,6 @@ public class MaaWin32Controller : MaaController
     /// </remarks>
     public MaaWin32Controller(nint hWnd, Win32ScreencapMethod screencapMethod, Win32InputMethod inputMethod, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
-        if (hWnd == nint.Zero) throw new ArgumentException($"Value cannot be {nint.Zero}.", nameof(hWnd));
         if (screencapMethod == Win32ScreencapMethod.None) throw new ArgumentException($"Value cannot be {Win32ScreencapMethod.None}.", nameof(screencapMethod));
         if (inputMethod == Win32InputMethod.None) throw new ArgumentException($"Value cannot be {Win32InputMethod.None}.", nameof(inputMethod));
 

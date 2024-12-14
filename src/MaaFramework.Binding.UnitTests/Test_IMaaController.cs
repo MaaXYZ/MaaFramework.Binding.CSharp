@@ -364,7 +364,6 @@ public class Test_IMaaController
 
 #if !GITHUB_ACTIONS
         #region MaaWin32Controller
-        Assert.ThrowsException<ArgumentException>(() => new MaaWin32Controller(0, Win32ScreencapMethod.GDI, Win32InputMethod.Seize));
         Assert.ThrowsException<ArgumentException>(() => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize));
         Assert.ThrowsException<ArgumentException>(() => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None));
         #endregion
