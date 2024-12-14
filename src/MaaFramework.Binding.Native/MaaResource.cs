@@ -221,8 +221,11 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
         var optValue = (value, opt) switch
         {
-            (int vvvv, ResourceOption.InferenceDevice) => vvvv.ToMaaOptionValue(),
+            (int vvvv, ResourceOption.InferenceDevice
+                    or ResourceOption.InferenceExecutionProvider) => vvvv.ToMaaOptionValue(),
+
             (InferenceDevice v, ResourceOption.InferenceDevice) => ((int)v).ToMaaOptionValue(),
+            (InferenceExecutionProvider v, ResourceOption.InferenceExecutionProvider) => ((int)v).ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(ResourceOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
