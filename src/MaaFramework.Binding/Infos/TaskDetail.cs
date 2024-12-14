@@ -6,10 +6,12 @@
 /// <param name="Id">Gets the task id.</param>
 /// <param name="Entry">Gets the name of task entry.</param>
 /// <param name="NodeIdList">Gets the node id list.</param>
+/// <param name="Status">Gets the status of the task.</param>
 public sealed record TaskDetail(
     MaaTaskId Id,
     string Entry,
-    IList<MaaNodeId> NodeIdList
+    IList<MaaNodeId> NodeIdList,
+    MaaJobStatus Status
 )
 {
     /// <summary>
@@ -22,11 +24,12 @@ public sealed record TaskDetail(
     public static TaskDetail? Query(MaaTaskId taskId, IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);
-        return tasker.GetTaskDetail(taskId, out var entry, out var nodeIdList)
+        return tasker.GetTaskDetail(taskId, out var entry, out var nodeIdList, out var status)
             ? new TaskDetail(
                 Id: taskId,
                 Entry: entry,
-                NodeIdList: nodeIdList)
+                NodeIdList: nodeIdList,
+                Status: status)
             : null;
     }
 }

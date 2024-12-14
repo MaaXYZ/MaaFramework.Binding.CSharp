@@ -233,11 +233,13 @@ public class Test_IMaaTasker
         Interface_IMaaPost_Success(job);
 
         Assert.IsTrue(
-            maaTasker.GetTaskDetail(job.Id, out var enter, out var nodeIdList));
+            maaTasker.GetTaskDetail(job.Id, out var enter, out var nodeIdList, out var status));
         Assert.AreEqual(
             taskEntryName, enter);
         Assert.IsTrue(
             nodeIdList.Length > 0);
+        Assert.AreEqual(
+            MaaJobStatus.Succeeded, status);
 
         Assert.IsTrue(
             maaTasker.GetNodeDetail(nodeIdList[0], out var nodeName, out var recognitionId, out var actionCompleted));

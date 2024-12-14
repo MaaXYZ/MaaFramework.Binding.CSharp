@@ -113,8 +113,9 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <param name="taskId">The task id.</param>
     /// <param name="entry">The name of task entry.</param>
     /// <param name="nodeIdList">The node id list.</param>
+    /// <param name="status">The status of the task.</param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
-    bool GetTaskDetail(MaaTaskId taskId, out string entry, out MaaNodeId[] nodeIdList);
+    bool GetTaskDetail(MaaTaskId taskId, out string entry, out MaaNodeId[] nodeIdList, out MaaJobStatus status);
 
     /// <summary>
     ///     Gets the latest node.

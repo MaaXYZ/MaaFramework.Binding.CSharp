@@ -265,7 +265,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetTaskDetail"/>.
     /// </remarks>
-    public bool GetTaskDetail(MaaTaskId taskId, out string entry, out MaaNodeId[] nodeIdList)
+    public bool GetTaskDetail(MaaTaskId taskId, out string entry, out MaaNodeId[] nodeIdList, out MaaJobStatus status)
     {
         entry = string.Empty;
         nodeIdList = [];
@@ -273,12 +273,17 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
         MaaSize nodeIdListSize = 0;
         using var entryBuffer = new MaaStringBuffer();
 
-        if (!MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, null, ref nodeIdListSize))
+        if (!MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, null, ref nodeIdListSize, out var statusInt))
+        {
+            status = (MaaJobStatus)statusInt;
             return false;
+        }
 
         entry = entryBuffer.ToString();
         nodeIdList = new MaaNodeId[nodeIdListSize];
-        return MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, nodeIdList, ref nodeIdListSize);
+        var ret = MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, nodeIdList, ref nodeIdListSize, out statusInt);
+        status = (MaaJobStatus)statusInt;
+        return ret;
     }
 
     /// <inheritdoc/>
