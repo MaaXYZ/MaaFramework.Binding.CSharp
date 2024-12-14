@@ -40,7 +40,8 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
         {
             (int vvvv, ControllerOption.ScreenshotTargetLongSide
                     or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValue(),
-            (bool vvv, ControllerOption.Recording) => vvv.ToMaaOptionValue(),
+            (bool vvv, ControllerOption.Recording
+                    or ControllerOption.ScreenshotUseRawSize) => vvv.ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(ControllerOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
