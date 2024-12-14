@@ -56,4 +56,8 @@ public static class MaaOptionExtensions
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOptionInferenceDevice(this IMaaOption<ResourceOption>? opt, int value)
         => opt?.SetOption(ResourceOption.InferenceDevice, value) ?? throw new ArgumentNullException(nameof(opt));
+
+    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
+    public static bool SetOptionInferenceDevice(this IMaaOption<ResourceOption>? opt, InferenceExecutionProvider value)
+        => opt?.SetOption(ResourceOption.InferenceExecutionProvider, value) ?? throw new ArgumentNullException(nameof(opt));
 }

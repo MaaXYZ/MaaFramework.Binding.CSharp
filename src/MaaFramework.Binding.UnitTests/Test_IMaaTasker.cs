@@ -43,6 +43,8 @@ public class Test_IMaaTasker
                 .ThrowIfNot(MaaJobStatus.Succeeded);
             data.Resource
                 .SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
+            data.Resource
+                .SetOption(ResourceOption.InferenceExecutionProvider, InferenceExecutionProvider.CPU);
             data.Controller
                 .LinkStart()
                 .Wait()

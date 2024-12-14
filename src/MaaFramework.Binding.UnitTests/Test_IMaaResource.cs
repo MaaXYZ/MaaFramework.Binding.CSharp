@@ -100,6 +100,7 @@ public class Test_IMaaResource
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceDevice, InferenceDevice.CPU)]
+    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceExecutionProvider, InferenceExecutionProvider.CPU)]
     public void Interface_SetOption(MaaTypes type, IMaaResource maaResource, ResourceOption opt, object arg)
     {
         Assert.IsNotNull(maaResource);
@@ -122,6 +123,8 @@ public class Test_IMaaResource
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), ResourceOption.Invalid, "Anything")]
+    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceDevice, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceExecutionProvider, 0.0)]
     public void Interface_SetOption_InvalidData(MaaTypes type, IMaaResource maaResource, ResourceOption opt, object arg)
     {
         Assert.IsNotNull(maaResource);
