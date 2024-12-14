@@ -73,8 +73,8 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <summary>
     ///     Stops all appended tasks, the <see cref="IMaaResource"/> and the <see cref="IMaaController"/>. 
     /// </summary>
-    /// <returns><see langword="true"/> if the <see cref="IMaaTasker"/> stopped successfully; otherwise, <see langword="false"/>.</returns>
-    bool Abort();
+    /// <returns>A stop job.</returns>
+    MaaTaskJob Abort();
 
     /// <summary>
     ///     Clear the runtime cache.

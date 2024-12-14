@@ -303,8 +303,9 @@ public class Test_IMaaTasker
     public void Interface_Abort(MaaTypes type, IMaaTasker maaTasker)
     {
         Assert.IsNotNull(maaTasker);
-        Assert.IsTrue(
-            maaTasker.Abort());
+        var job =
+            maaTasker.Abort();
+        Interface_IMaaPost_Success(job);
     }
 
     [TestMethod]
