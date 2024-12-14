@@ -18,6 +18,10 @@ public static class MaaOptionExtensions
         => opt?.SetOption(ControllerOption.ScreenshotTargetShortSide, value) ?? throw new ArgumentNullException(nameof(opt));
 
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
+    public static bool SetOptionScreenshotUseRawSize(this IMaaOption<ControllerOption>? opt, bool value)
+        => opt?.SetOption(ControllerOption.ScreenshotUseRawSize, value) ?? throw new ArgumentNullException(nameof(opt));
+
+    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOptionRecording(this IMaaOption<ControllerOption>? opt, bool value)
         => opt?.SetOption(ControllerOption.Recording, value) ?? throw new ArgumentNullException(nameof(opt));
 
