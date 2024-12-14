@@ -4,7 +4,7 @@
 
 # MaaFramework.Binding.CSharp
 
-_✨ The csharp binding of [MaaFramework](https://github.com/MaaXYZ/MaaFramework/blob/v2.1.2) ✨_
+_✨ The csharp binding of [MaaFramework](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1) ✨_
 
 _💫 A common interoperable API wrapper 💫_
 
@@ -43,7 +43,7 @@ Your computer should meet the minimum system requirements before you run and use
 
 ### Prepare Resources
 
-See MaaFramework document ( [English](https://github.com/MaaXYZ/MaaFramework/blob/v2.1.2/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) | [简体中文](https://github.com/MaaXYZ/MaaFramework/blob/v2.1.2/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6) ) .
+See MaaFramework document ( [English](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) | [简体中文](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6) ) .
 
 Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) in `MaaFramework.Binding.CSharp`.
 

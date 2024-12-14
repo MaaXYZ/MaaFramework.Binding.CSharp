@@ -1,3 +1,30 @@
+## v2.3.1
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v2.1.2...v2.3.1
+
+### Breaking changes
+
+- feat: add `MaaStatus` to `MaaTaskerGetTaskDetail` @moomiji
+- feat: `MaaTaskerPostStop` return `MaaTaskId` @moomiji
+- chore: unify namespaces `MaaFramework.Binding.Messages` to `MaaFramework.Binding.Notification` @moomiji
+
+### New features
+
+- support ResourceOption.InferenceExecutionProvider @moomiji
+- support ControllerOption.ScreenshotUseRawSize @moomiji
+- MaaWin32Controller allows hWnd to be Zero @moomiji
+- add notification extensions as a new project @moomiji
+- add `MaaTaskJob MaaTaskJob.WaitFor()` @moomiji
+- add `Prefix` properties in MaaMsg @moomiji
+
+### Fix
+
+- unexpected value from ListBuffer.IsEmpty @moomiji
+
+### Other
+
+- update interop to framework 2.3.1 @moomiji
+
 ## v2.1.2
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v2.0.3...v2.1.2
