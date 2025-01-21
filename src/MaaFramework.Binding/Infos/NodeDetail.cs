@@ -52,7 +52,7 @@ public sealed record NodeDetail(
     public NodeDetail? QueryLatest(IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);
-        if (!tasker.GetLatestNode(Name, out var nodeId)) return null;
+        if (!tasker.GetLatestNode(NodeName, out var nodeId)) return null;
         return nodeId == Id ? this : Query(nodeId, tasker);
     }
 }
