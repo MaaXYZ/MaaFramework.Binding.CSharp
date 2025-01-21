@@ -48,7 +48,7 @@ public static partial class MaaResource
     public static partial bool MaaResourceClearCustomAction(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaResId MaaResourcePostPath(MaaResourceHandle res, string path);
+    public static partial MaaResId MaaResourcePostBundle(MaaResourceHandle res, string path);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
@@ -74,5 +74,5 @@ public static partial class MaaResource
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaResourceGetTaskList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
+    public static partial bool MaaResourceGetNodeList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
 }

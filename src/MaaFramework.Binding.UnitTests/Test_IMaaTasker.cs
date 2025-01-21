@@ -38,7 +38,7 @@ public class Test_IMaaTasker
             Assert.IsFalse(data.IsInvalid);
             data.Callback += Common.Callback;
             data.Resource
-                .AppendPath(Common.ResourcePath)
+                .AppendBundle(Common.ResourcePath)
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Succeeded);
             data.Resource
@@ -130,7 +130,7 @@ public class Test_IMaaTasker
         Assert.IsFalse(maaTasker.Initialized);
         maaTasker
             .Resource
-            .AppendPath(Common.ResourcePath)
+            .AppendBundle(Common.ResourcePath)
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded);
         maaTasker.Controller
@@ -160,7 +160,7 @@ public class Test_IMaaTasker
 
         // Runs a custom task
         Assert.AreEqual(MaaJobStatus.Succeeded,
-            maaTasker.AppendPipeline(Custom.TaskName, Custom.Param).Wait());
+            maaTasker.AppendTask(Custom.NodeName, Custom.Param).Wait());
 
         // Unregisters custom class
         Assert.IsTrue(
@@ -195,17 +195,17 @@ public class Test_IMaaTasker
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), "EmptyTask")]
-    public void Interface_AppendPipeline(MaaTypes type, IMaaTasker maaTasker, string taskEntryName)
+    public void Interface_AppendTask(MaaTypes type, IMaaTasker maaTasker, string taskEntryName)
     {
         Assert.IsNotNull(maaTasker);
 
         // First job
-        _ = maaTasker.AppendPipeline(taskEntryName);
+        _ = maaTasker.AppendTask(taskEntryName);
         // Second job appended on running first job
-        _ = maaTasker.AppendPipeline(taskEntryName);
+        _ = maaTasker.AppendTask(taskEntryName);
         // Third job
         var job =
-            maaTasker.AppendPipeline(taskEntryName);
+            maaTasker.AppendTask(taskEntryName);
         // Wait the third job
         Interface_IMaaPost_Success(job);
         Interface_Running(maaTasker);
@@ -231,7 +231,7 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
         var job =
-            maaTasker.AppendPipeline(taskEntryName, diff);
+            maaTasker.AppendTask(taskEntryName, diff);
         Interface_IMaaPost_Success(job);
 
         Assert.IsTrue(
@@ -272,7 +272,7 @@ public class Test_IMaaTasker
             maaTasker.Utility.SetOption(GlobalOption.DebugMode, debugMode));
 
         var job =
-            maaTasker.AppendPipeline(taskEntryName, diff);
+            maaTasker.AppendTask(taskEntryName, diff);
         Interface_IMaaPost_Success(job);
 
         Assert.IsNotNull(

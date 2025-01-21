@@ -171,11 +171,11 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaTaskerPostPipeline"/>.
+    ///     Wrapper of <see cref="MaaTaskerPostTask"/>.
     /// </remarks>
-    public MaaTaskJob AppendPipeline(string entry, string pipelineOverride = "{}")
+    public MaaTaskJob AppendTask(string entry, string pipelineOverride = "{}")
     {
-        var id = MaaTaskerPostPipeline(Handle, entry, pipelineOverride);
+        var id = MaaTaskerPostTask(Handle, entry, pipelineOverride);
         return new MaaTaskJob(id, this);
     }
 
@@ -290,6 +290,6 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetLatestNode"/>.
     /// </remarks>
-    public bool GetLatestNode(string taskName, out MaaNodeId latestId)
-        => MaaTaskerGetLatestNode(Handle, taskName, out latestId);
+    public bool GetLatestNode(string nodeName, out MaaNodeId latestId)
+        => MaaTaskerGetLatestNode(Handle, nodeName, out latestId);
 }

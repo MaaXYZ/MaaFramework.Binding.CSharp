@@ -19,10 +19,10 @@ public interface IMaaCustomAction : IMaaCustomResource
 /// <summary>
 ///     The arguments used for run.
 /// </summary>
-/// <param name="TaskName">Gets the task name.</param>
+/// <param name="NodeName">Gets the task name.</param>
 /// <param name="TaskDetail">Gets the task detail</param>
 /// <param name="ActionName">Gets the action name.</param>
 /// <param name="ActionParam">Gets the action param.</param>
 /// <param name="RecognitionDetail">Gets the recognition detail.</param>
 /// <param name="RecognitionBox">Gets the recognition box.</param>
-public sealed record RunArgs(string TaskName, TaskDetail TaskDetail, string ActionName, string ActionParam, RecognitionDetail RecognitionDetail, IMaaRectBuffer RecognitionBox);
+public sealed record RunArgs(string NodeName, TaskDetail TaskDetail, string ActionName, string ActionParam, RecognitionDetail RecognitionDetail, IMaaRectBuffer RecognitionBox);

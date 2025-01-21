@@ -34,7 +34,7 @@ public interface IMaaContext : ICloneable
     /// <param name="entry">The pipeline entry name.</param>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns><see cref="TaskDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
-    TaskDetail? RunPipeline(string entry, string pipelineOverride);
+    TaskDetail? RunTask(string entry, string pipelineOverride);
 
     /// <summary>
     ///     Run a recognition.
@@ -67,10 +67,10 @@ public interface IMaaContext : ICloneable
     /// <summary>
     ///     Override the property field "next" in a task.
     /// </summary>
-    /// <param name="taskName">The task name.</param>
+    /// <param name="nodeName">The task name.</param>
     /// <param name="nextList">The next list.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    bool OverrideNext(string taskName, IEnumerable<string> nextList);
+    bool OverrideNext(string nodeName, IEnumerable<string> nextList);
 
     /// <summary>
     ///     Gets the task job from the <see cref="IMaaContext"/>.

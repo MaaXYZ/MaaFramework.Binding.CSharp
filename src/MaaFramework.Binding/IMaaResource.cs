@@ -58,7 +58,7 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     /// </summary>
     /// <param name="path">The resource path.</param>
     /// <returns>A load resource <see cref="MaaJob"/>.</returns>
-    MaaJob AppendPath(string path);
+    MaaJob AppendBundle(string path);
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaResource"/> is fully loaded.

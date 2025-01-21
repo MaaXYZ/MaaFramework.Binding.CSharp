@@ -54,14 +54,14 @@ public class Test_IMaaResource
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_AppendPath_Loaded(MaaTypes type, IMaaResource maaResource)
+    public void Interface_AppendBundle_Loaded(MaaTypes type, IMaaResource maaResource)
     {
         Assert.IsNotNull(maaResource);
 
         Assert.IsTrue(
             maaResource.Loaded);
         var job =
-            maaResource.AppendPath(Common.ResourcePath);
+            maaResource.AppendBundle(Common.ResourcePath);
         Interface_IMaaPost_Success(job);
         Assert.IsTrue(
             maaResource.Loaded);
@@ -87,7 +87,7 @@ public class Test_IMaaResource
             0, maaResource.TaskList.Count);
 
         Interface_IMaaPost_Success(
-            maaResource.AppendPath(Common.ResourcePath));
+            maaResource.AppendBundle(Common.ResourcePath));
         Assert.IsFalse(
             string.IsNullOrWhiteSpace(maaResource.Hash));
         Assert.AreNotEqual(

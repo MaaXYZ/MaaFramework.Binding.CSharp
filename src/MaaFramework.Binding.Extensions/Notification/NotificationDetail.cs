@@ -25,14 +25,14 @@ public record TaskerTaskDetail(
 );
 
 /// <inheritdoc cref="MaaMsg.Task.NextList.Prefix"/>
-public record TaskNextListDetail(
+public record NodeNextListDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("list")] IReadOnlyList<string> NextList
 );
 
 /// <inheritdoc cref="MaaMsg.Task.Recognition.Prefix"/>
-public record TaskRecognitionDetail(
+public record NodeRecognitionDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("reco_id")] int RecognitionId,
     [property: JsonPropertyName("name")] string Name

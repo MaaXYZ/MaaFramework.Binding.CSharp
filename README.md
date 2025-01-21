@@ -115,7 +115,7 @@ using var maa = new MaaTasker
 if (!maa.Initialized)
     throw new InvalidOperationException();
 
-maa.AppendPipeline("EmptyTask")
+maa.AppendTask("EmptyTask")
    .Wait()
    .ThrowIfNot(MaaJobStatus.Succeeded);
 
@@ -128,10 +128,10 @@ Console.WriteLine("EmptyTask Completed");
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
-var taskName = "MyCustomTask";
+var nodeName = "MyCustomTask";
 var param = $$"""
 {
-  "{{taskName}}": {
+  "{{nodeName}}": {
       "recognition": "Custom",
       "custom_recognition": "MyRec",
       "custom_recognition_param": {
@@ -148,7 +148,7 @@ var param = $$"""
 
 maa.Resource.Register(new MyRec());
 maa.Resource.Register(new MyAct());
-maa.AppendPipeline(taskName, param)
+maa.AppendTask(nodeName, param)
     .Wait()
     .ThrowIfNot(MaaJobStatus.Succeeded);
 

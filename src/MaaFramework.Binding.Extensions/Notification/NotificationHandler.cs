@@ -86,11 +86,11 @@ public static class NotificationHandlerExtensions
         => notify.ToCallback(MaaMsg.Tasker.Task.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<TaskNextListDetail> notify)
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodeNextListDetail> notify)
         => notify.ToCallback(MaaMsg.Task.NextList.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<TaskRecognitionDetail> notify)
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodeRecognitionDetail> notify)
         => notify.ToCallback(MaaMsg.Task.Recognition.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail}"/>

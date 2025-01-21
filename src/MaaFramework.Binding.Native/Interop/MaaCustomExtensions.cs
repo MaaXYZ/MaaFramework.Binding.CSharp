@@ -21,7 +21,7 @@ public static class MaaCustomExtensions
             (
                 MaaContextHandle contextHandle,
                 MaaTaskId taskId,
-                string currentTaskName,
+                string nodeName,
                 string customActionName,
                 string customActionParam,
                 MaaRecoId recoId,
@@ -39,7 +39,7 @@ public static class MaaCustomExtensions
                     new RunArgs
                     (
                         TaskDetail: taskDetail,
-                        TaskName: currentTaskName,
+                        NodeName: nodeName,
                         ActionName: customActionName,
                         ActionParam: customActionParam,
                         RecognitionDetail: recognitionDetail,
@@ -63,7 +63,7 @@ public static class MaaCustomExtensions
             (
                 MaaContextHandle contextHandle,
                 MaaTaskId taskId,
-                string currentTaskName,
+                string nodeName,
                 string customRecognitionName,
                 string customRecognitionParam,
                 MaaImageBufferHandle imageHandle,
@@ -82,7 +82,7 @@ public static class MaaCustomExtensions
                     new AnalyzeArgs
                     (
                         TaskDetail: taskDetail,
-                        TaskName: currentTaskName,
+                        NodeName: nodeName,
                         RecognitionName: customRecognitionName,
                         RecognitionParam: customRecognitionParam,
                         Image: new MaaImageBuffer(imageHandle),

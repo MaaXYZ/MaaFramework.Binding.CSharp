@@ -26,11 +26,11 @@ public class MaaContext : IMaaContext<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaContextRunPipeline"/>.
+    ///     Wrapper of <see cref="MaaContextRunTask"/>.
     /// </remarks>
-    public TaskDetail? RunPipeline(string entry, string pipelineOverride)
+    public TaskDetail? RunTask(string entry, string pipelineOverride)
         => TaskDetail.Query(
-            taskId: MaaContextRunPipeline(Handle, entry, pipelineOverride),
+            taskId: MaaContextRunTask(Handle, entry, pipelineOverride),
             tasker: Tasker);
 
     /// <inheritdoc/>
@@ -83,9 +83,9 @@ public class MaaContext : IMaaContext<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextOverrideNext"/>.
     /// </remarks>
-    public bool OverrideNext(string taskName, IEnumerable<string> nextList)
+    public bool OverrideNext(string nodeName, IEnumerable<string> nextList)
         => MaaStringListBuffer.Set(nextList, listBuffer
-            => MaaContextOverrideNext(Handle, taskName, listBuffer));
+            => MaaContextOverrideNext(Handle, nodeName, listBuffer));
 
     /// <inheritdoc/>
     /// <remarks>

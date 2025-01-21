@@ -34,7 +34,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
     }
 
-    /// <param name="check">Checks AppendPath(path).Wait() status if is <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not checks.</param>
+    /// <param name="check">Checks AppendBundle(path).Wait() status if is <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not checks.</param>
     /// <param name="paths">The paths of maa resource.</param>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="MaaJobStatusException"/>
@@ -46,7 +46,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
         foreach (var path in paths)
         {
-            var status = AppendPath(path).Wait();
+            var status = AppendBundle(path).Wait();
             if (check == CheckStatusOption.ThrowIfNotSucceeded)
             {
                 status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, path);
@@ -68,7 +68,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
         foreach (var path in paths)
         {
-            var status = AppendPath(path).Wait();
+            var status = AppendBundle(path).Wait();
             if (check == CheckStatusOption.ThrowIfNotSucceeded)
             {
                 status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, path);
@@ -174,12 +174,12 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourcePostPath"/>.
+    ///     Wrapper of <see cref="MaaResourcePostBundle"/>.
     /// </remarks>
-    public MaaJob AppendPath(string path)
+    public MaaJob AppendBundle(string path)
     {
         _postedPaths.Add(path);
-        var id = MaaResourcePostPath(Handle, path);
+        var id = MaaResourcePostBundle(Handle, path);
         return new MaaJob(id, this);
     }
 
@@ -249,13 +249,13 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourceGetTaskList"/>.
+    ///     Wrapper of <see cref="MaaResourceGetNodeList"/>.
     /// </remarks>
-    public IList<string> TaskList
+    public IList<string> NodeList
     {
         get
         {
-            MaaStringListBuffer.Get(out var list, h => MaaResourceGetTaskList(Handle, h)).ThrowIfFalse();
+            MaaStringListBuffer.Get(out var list, h => MaaResourceGetNodeList(Handle, h)).ThrowIfFalse();
             return list;
         }
     }
