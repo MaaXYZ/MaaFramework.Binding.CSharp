@@ -51,7 +51,7 @@ internal static class Custom
             Assert.IsTrue(
                 cloneContext.OverridePipeline(DiffParam));
             Assert.AreEqual(
-                recognitionDetail.Name, cloneContext.RunTask(DiffEntry, "{}")?.QueryRecognitionDetail(cloneContext.Tasker)?.Name);
+                recognitionDetail.NodeName, cloneContext.RunTask(DiffEntry, "{}")?.QueryRecognitionDetail(cloneContext.Tasker)?.Name);
             Assert.IsTrue(
                 cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
 
