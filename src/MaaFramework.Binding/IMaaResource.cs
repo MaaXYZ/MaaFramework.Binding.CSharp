@@ -76,5 +76,5 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     ///     Gets the string of current task list.
     /// </summary>
     /// <returns>A <see cref="string"/> if the task list was got successfully; otherwise, <see langword="null"/>.</returns>
-    IList<string> TaskList { get; }
+    IList<string> NodeList { get; }
 }

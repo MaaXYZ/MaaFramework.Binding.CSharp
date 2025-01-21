@@ -84,16 +84,16 @@ public class Test_IMaaResource
         Assert.IsTrue(
             string.IsNullOrWhiteSpace(maaResource.Hash));
         Assert.AreEqual(
-            0, maaResource.TaskList.Count);
+            0, maaResource.NodeList.Count);
 
         Interface_IMaaPost_Success(
             maaResource.AppendBundle(Common.ResourcePath));
         Assert.IsFalse(
             string.IsNullOrWhiteSpace(maaResource.Hash));
         Assert.AreNotEqual(
-            0, maaResource.TaskList.Count);
+            0, maaResource.NodeList.Count);
         Assert.IsTrue(
-            maaResource.TaskList.Any(s => s == "EmptyTask"));
+            maaResource.NodeList.Any(s => s == "EmptyTask"));
     }
 
     [TestMethod]
