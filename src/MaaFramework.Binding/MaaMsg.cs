@@ -12,7 +12,7 @@
 
 ﻿namespace MaaFramework.Binding.Notification;
 
-//MaaApiDocument Version: (main) v2.3.1
+//MaaApiDocument Version: (main) v3.0.1
 /// <summary>
 ///  A callback consists of a message and a payload.
 ///  The message is a string that indicates the type of the message.
@@ -101,7 +101,7 @@ public static class MaaMsg
         public static class Task
         {
             /// <summary>
-            ///     Message for the tasks.
+            ///     Message for the task.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
@@ -109,7 +109,7 @@ public static class MaaMsg
             public const string Starting = "Tasker.Task.Starting";
 
             /// <summary>
-            ///     Message for the tasks.
+            ///     Message for the task.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
@@ -117,7 +117,7 @@ public static class MaaMsg
             public const string Prefix = "Tasker.Task";
 
             /// <summary>
-            ///     Message for the tasks.
+            ///     Message for the task.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
@@ -125,7 +125,7 @@ public static class MaaMsg
             public const string Succeeded = "Tasker.Task.Succeeded";
 
             /// <summary>
-            ///     Message for the tasks.
+            ///     Message for the task.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
@@ -134,111 +134,111 @@ public static class MaaMsg
 
         }
     }
-    public static class Task
+    public static class Node
     {
         public static class NextList
         {
             /// <summary>
-            ///     Message for the Recognition List.
+            ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, name: string, list: string[], }</para>
             /// </remarks>
-            public const string Starting = "Task.NextList.Starting";
+            public const string Starting = "Node.NextList.Starting";
 
             /// <summary>
-            ///     Message for the Recognition List.
+            ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, name: string, list: string[], }</para>
             /// </remarks>
-            public const string Prefix = "Task.NextList";
+            public const string Prefix = "Node.NextList";
 
             /// <summary>
-            ///     Message for the Recognition List.
+            ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, name: string, list: string[], }</para>
             /// </remarks>
-            public const string Succeeded = "Task.NextList.Succeeded";
+            public const string Succeeded = "Node.NextList.Succeeded";
 
             /// <summary>
-            ///     Message for the Recognition List.
+            ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, name: string, list: string[], }</para>
             /// </remarks>
-            public const string Failed = "Task.NextList.Failed";
+            public const string Failed = "Node.NextList.Failed";
 
         }
         public static class Recognition
         {
             /// <summary>
-            ///     Message for the recognition list.
+            ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, reco_id: number, name: string, }</para>
             /// </remarks>
-            public const string Starting = "Task.Recognition.Starting";
+            public const string Starting = "Node.Recognition.Starting";
 
             /// <summary>
-            ///     Message for the recognition list.
+            ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, reco_id: number, name: string, }</para>
             /// </remarks>
-            public const string Prefix = "Task.Recognition";
+            public const string Prefix = "Node.Recognition";
 
             /// <summary>
-            ///     Message for the recognition list.
+            ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, reco_id: number, name: string, }</para>
             /// </remarks>
-            public const string Succeeded = "Task.Recognition.Succeeded";
+            public const string Succeeded = "Node.Recognition.Succeeded";
 
             /// <summary>
-            ///     Message for the recognition list.
+            ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, reco_id: number, name: string, }</para>
             /// </remarks>
-            public const string Failed = "Task.Recognition.Failed";
+            public const string Failed = "Node.Recognition.Failed";
 
         }
         public static class Action
         {
             /// <summary>
-            ///     Message for the task action.
+            ///     Message for the action of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, node_id: number, name: string, }</para>
             /// </remarks>
-            public const string Starting = "Task.Action.Starting";
+            public const string Starting = "Node.Action.Starting";
 
             /// <summary>
-            ///     Message for the task action.
+            ///     Message for the action of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, node_id: number, name: string, }</para>
             /// </remarks>
-            public const string Prefix = "Task.Action";
+            public const string Prefix = "Node.Action";
 
             /// <summary>
-            ///     Message for the task action.
+            ///     Message for the action of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, node_id: number, name: string, }</para>
             /// </remarks>
-            public const string Succeeded = "Task.Action.Succeeded";
+            public const string Succeeded = "Node.Action.Succeeded";
 
             /// <summary>
-            ///     Message for the task action.
+            ///     Message for the action of node.
             /// </summary>
             /// <remarks>
             ///     <para>payload: { task_id: number, node_id: number, name: string, }</para>
             /// </remarks>
-            public const string Failed = "Task.Action.Failed";
+            public const string Failed = "Node.Action.Failed";
 
         }
     }

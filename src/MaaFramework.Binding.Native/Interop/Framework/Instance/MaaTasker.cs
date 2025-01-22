@@ -67,11 +67,11 @@ public static partial class MaaTasker
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaTaskerGetRecognitionDetail(MaaTaskerHandle tasker, MaaRecoId recoId, MaaStringBufferHandle name, MaaStringBufferHandle algorithm, [MarshalAs(UnmanagedType.U1)] out bool hit, MaaRectHandle box, MaaStringBufferHandle detailJson, MaaImageBufferHandle raw, MaaImageListBufferHandle draws);
+    public static partial bool MaaTaskerGetRecognitionDetail(MaaTaskerHandle tasker, MaaRecoId recoId, MaaStringBufferHandle nodeName, MaaStringBufferHandle algorithm, [MarshalAs(UnmanagedType.U1)] out bool hit, MaaRectHandle box, MaaStringBufferHandle detailJson, MaaImageBufferHandle raw, MaaImageListBufferHandle draws);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaTaskerGetNodeDetail(MaaTaskerHandle tasker, MaaNodeId nodeId, MaaStringBufferHandle name, out MaaRecoId recoId, [MarshalAs(UnmanagedType.U1)] out bool completed);
+    public static partial bool MaaTaskerGetNodeDetail(MaaTaskerHandle tasker, MaaNodeId nodeId, MaaStringBufferHandle nodeName, out MaaRecoId recoId, [MarshalAs(UnmanagedType.U1)] out bool completed);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
