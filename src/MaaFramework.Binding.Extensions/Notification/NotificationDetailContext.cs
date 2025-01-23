@@ -8,5 +8,5 @@ namespace MaaFramework.Binding.Notification;
 [JsonSerializable(typeof(TaskerTaskDetail))]
 [JsonSerializable(typeof(NodeNextListDetail))]
 [JsonSerializable(typeof(NodeRecognitionDetail))]
-[JsonSerializable(typeof(TaskActionDetail))]
+[JsonSerializable(typeof(NodeActionDetail))]
 public partial class NotificationDetailContext : JsonSerializerContext { }

@@ -39,7 +39,7 @@ public record NodeRecognitionDetail(
 );
 
 /// <inheritdoc cref="MaaMsg.Node.Action.Prefix"/>
-public record TaskActionDetail(
+public record NodeActionDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("node_id")] int NodeId,
     [property: JsonPropertyName("name")] string Name

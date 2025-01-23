@@ -94,7 +94,7 @@ public static class NotificationHandlerExtensions
         => notify.ToCallback(MaaMsg.Node.Recognition.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<TaskActionDetail> notify)
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodeActionDetail> notify)
         => notify.ToCallback(MaaMsg.Node.Action.Prefix);
 }
 

@@ -38,7 +38,7 @@ public class Test_IMaaTasker
             Assert.IsFalse(data.IsInvalid);
             data.Callback += Common.Callback;
             data.Resource
-                .AppendBundle(Common.ResourcePath)
+                .AppendBundle(Common.BundlePath)
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Succeeded);
             data.Resource
@@ -130,7 +130,7 @@ public class Test_IMaaTasker
         Assert.IsFalse(maaTasker.Initialized);
         maaTasker
             .Resource
-            .AppendBundle(Common.ResourcePath)
+            .AppendBundle(Common.BundlePath)
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded);
         maaTasker.Controller
@@ -194,7 +194,7 @@ public class Test_IMaaTasker
 
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), "EmptyTask")]
+    [MaaData(MaaTypes.All, nameof(Data), "EmptyNode")]
     public void Interface_AppendTask(MaaTypes type, IMaaTasker maaTasker, string taskEntryName)
     {
         Assert.IsNotNull(maaTasker);

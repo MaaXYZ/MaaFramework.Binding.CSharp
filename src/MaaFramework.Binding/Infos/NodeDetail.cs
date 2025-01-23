@@ -36,14 +36,14 @@ public sealed record NodeDetail(
     /// <summary>
     ///     Queries the latest node detail.
     /// </summary>
-    /// <param name="name">The node name.</param>
+    /// <param name="nodeName">The node name.</param>
     /// <param name="tasker">The maa tasker.</param>
     /// <returns>A <see cref="NodeDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    public static NodeDetail? QueryLatest(string name, IMaaTasker tasker)
+    public static NodeDetail? QueryLatest(string nodeName, IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);
-        return tasker.GetLatestNode(name, out var nodeId)
+        return tasker.GetLatestNode(nodeName, out var nodeId)
             ? Query(nodeId, tasker)
             : null;
     }

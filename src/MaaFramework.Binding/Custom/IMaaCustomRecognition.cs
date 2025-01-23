@@ -20,7 +20,7 @@ public interface IMaaCustomRecognition : IMaaCustomResource
 /// <summary>
 ///     The arguments used for analysis.
 /// </summary>
-/// <param name="NodeName">Gets the task name.</param>
+/// <param name="NodeName">Gets the node name.</param>
 /// <param name="TaskDetail">Gets the task detail.</param>
 /// <param name="RecognitionName">Gets the recognition name.</param>
 /// <param name="RecognitionParam">Gets the recognition param.</param>

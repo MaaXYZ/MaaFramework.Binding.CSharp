@@ -57,11 +57,11 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     bool Initialized { get; }
 
     /// <summary>
-    ///     Appends a job of executing a pipeline, could be called multiple times.
+    ///     Appends a job of executing a task, could be called multiple times.
     /// </summary>
-    /// <param name="entry">The entry of the pipeline.</param>
+    /// <param name="entry">The entry name of the task.</param>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
-    /// <returns>A pipeline job.</returns>
+    /// <returns>A task job.</returns>
     MaaTaskJob AppendTask(string entry, string pipelineOverride = "{}");
 
     /// <summary>
@@ -120,8 +120,8 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <summary>
     ///     Gets the latest node.
     /// </summary>
-    /// <param name="nodeName">The name of a task in a pipeline.</param>
-    /// <param name="latestId">The latest node id of the task.</param>
+    /// <param name="nodeName">The name of the node in the task.</param>
+    /// <param name="latestId">The latest node id.</param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
     bool GetLatestNode(string nodeName, out MaaNodeId latestId);
 }

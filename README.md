@@ -115,11 +115,11 @@ using var maa = new MaaTasker
 if (!maa.Initialized)
     throw new InvalidOperationException();
 
-maa.AppendTask("EmptyTask")
+maa.AppendTask("EmptyNode")
    .Wait()
    .ThrowIfNot(MaaJobStatus.Succeeded);
 
-Console.WriteLine("EmptyTask Completed");
+Console.WriteLine("EmptyNode Completed");
 ```
 
 #### Custom
