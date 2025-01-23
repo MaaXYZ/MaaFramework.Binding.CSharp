@@ -83,7 +83,7 @@ dotnet add package Maa.Framework --prerelease -s https://nuget.pkg.github.com/ma
 ```
 
 - NuGet.config
-Please refer to [this config](../NuGet.config) for example, and [this article](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html) for complete information.
+Please refer to [this config](./NuGet.config) for example, and [this article](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html) for complete information.
 
 #### Specifying RIDs
 
@@ -177,8 +177,6 @@ internal sealed class MyAct : IMaaCustomAction
 
 ## Best Practices
 
-- [MBA](https://github.com/MaaXYZ/MBA) BA Assistant
-  A BA Assistant based on MAA's new architecture. Image technology + simulation control, no more clicking! Powered by MaaFramework.
 - [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) MFA Task Manager
   A Universal GUI based on MAA's new architecture. Powered by MaaFramework.
 

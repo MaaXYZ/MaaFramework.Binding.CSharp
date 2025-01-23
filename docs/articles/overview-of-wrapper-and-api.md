@@ -87,14 +87,14 @@
 | --- | --- |
 | MaaResource | MaaResourceCreate |
 | IDisposable.Dispose() | MaaResourceDestroy |
-| IMaaResource.AppendBundle() | MaaResourcePostBundle |
+| IMaaResource.AppendPath() | MaaResourcePostPath |
 | IMaaPost.SetParam() | *Invalid operation.* |
 | IMaaPost.GetStatus() | MaaResourceStatus |
 | IMaaPost.Wait() | MaaResourceWait |
 | IMaaResource.Loaded | MaaResourceLoaded |
 | IMaaOption.SetOption() | MaaResourceSetOption |
 | IMaaResource.Hash | MaaResourceGetHash |
-| IMaaResource.NodeList | MaaResourceGetNodeList |
+| IMaaResource.TaskList | MaaResourceGetTaskList |
 | IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
 | IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
