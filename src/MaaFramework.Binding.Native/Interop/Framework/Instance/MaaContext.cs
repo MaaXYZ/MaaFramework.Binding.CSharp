@@ -18,7 +18,7 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaContext
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaTaskId MaaContextRunPipeline(MaaContextHandle context, string entry, string pipelineOverride);
+    public static partial MaaTaskId MaaContextRunTask(MaaContextHandle context, string entry, string pipelineOverride);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaRecoId MaaContextRunRecognition(MaaContextHandle context, string entry, string pipelineOverride, MaaImageBufferHandle image);
@@ -32,7 +32,7 @@ public static partial class MaaContext
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaContextOverrideNext(MaaContextHandle context, string name, MaaStringListBufferHandle nextList);
+    public static partial bool MaaContextOverrideNext(MaaContextHandle context, string nodeName, MaaStringListBufferHandle nextList);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaTaskId MaaContextGetTaskId(MaaContextHandle context);

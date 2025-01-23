@@ -16,9 +16,9 @@ public static class Common
     internal static string Address { get; set; } = string.Empty;
 
     internal static string DebugPath { get; set; } = Path.GetFullPath("./debug");
-    internal static string ResourcePath { get; set; } = Path.GetFullPath("./SampleResource");
+    internal static string BundlePath { get; set; } = Path.GetFullPath("./SampleResource");
     internal static string AgentPath { get; set; } = Path.GetFullPath($"./MaaAgentBinary");
-    internal static string AdbConfig { get; set; } = File.ReadAllText(Path.GetFullPath($"{ResourcePath}/controller_config.json"));
+    internal static string AdbConfig { get; set; } = File.ReadAllText(Path.GetFullPath($"{BundlePath}/controller_config.json"));
 
     private static void InitializeInfo(TestContext testContext)
     {

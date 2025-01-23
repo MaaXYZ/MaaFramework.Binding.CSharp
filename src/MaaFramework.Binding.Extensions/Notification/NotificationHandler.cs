@@ -19,25 +19,25 @@ public static class NotificationHandlerExtensions
     {
         MaaMsg.Resource.Loading.Starting
             or MaaMsg.Controller.Action.Starting
-            or MaaMsg.Task.Action.Starting
-            or MaaMsg.Task.NextList.Starting
-            or MaaMsg.Task.Recognition.Starting
+            or MaaMsg.Node.Action.Starting
+            or MaaMsg.Node.NextList.Starting
+            or MaaMsg.Node.Recognition.Starting
             or MaaMsg.Tasker.Task.Starting
             => NotificationType.Starting,
 
         MaaMsg.Resource.Loading.Succeeded
             or MaaMsg.Controller.Action.Succeeded
-            or MaaMsg.Task.Action.Succeeded
-            or MaaMsg.Task.NextList.Succeeded
-            or MaaMsg.Task.Recognition.Succeeded
+            or MaaMsg.Node.Action.Succeeded
+            or MaaMsg.Node.NextList.Succeeded
+            or MaaMsg.Node.Recognition.Succeeded
             or MaaMsg.Tasker.Task.Succeeded
             => NotificationType.Succeeded,
 
         MaaMsg.Resource.Loading.Failed
             or MaaMsg.Controller.Action.Failed
-            or MaaMsg.Task.Action.Failed
-            or MaaMsg.Task.NextList.Failed
-            or MaaMsg.Task.Recognition.Failed
+            or MaaMsg.Node.Action.Failed
+            or MaaMsg.Node.NextList.Failed
+            or MaaMsg.Node.Recognition.Failed
             or MaaMsg.Tasker.Task.Failed
             => NotificationType.Failed,
 
@@ -86,15 +86,15 @@ public static class NotificationHandlerExtensions
         => notify.ToCallback(MaaMsg.Tasker.Task.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<TaskNextListDetail> notify)
-        => notify.ToCallback(MaaMsg.Task.NextList.Prefix);
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodeNextListDetail> notify)
+        => notify.ToCallback(MaaMsg.Node.NextList.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<TaskRecognitionDetail> notify)
-        => notify.ToCallback(MaaMsg.Task.Recognition.Prefix);
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodeRecognitionDetail> notify)
+        => notify.ToCallback(MaaMsg.Node.Recognition.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<TaskActionDetail> notify)
-        => notify.ToCallback(MaaMsg.Task.Action.Prefix);
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodeActionDetail> notify)
+        => notify.ToCallback(MaaMsg.Node.Action.Prefix);
 }
 

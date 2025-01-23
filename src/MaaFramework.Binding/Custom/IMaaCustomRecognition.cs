@@ -20,13 +20,13 @@ public interface IMaaCustomRecognition : IMaaCustomResource
 /// <summary>
 ///     The arguments used for analysis.
 /// </summary>
-/// <param name="TaskName">Gets the task name.</param>
+/// <param name="NodeName">Gets the node name.</param>
 /// <param name="TaskDetail">Gets the task detail.</param>
 /// <param name="RecognitionName">Gets the recognition name.</param>
 /// <param name="RecognitionParam">Gets the recognition param.</param>
 /// <param name="Image">Gets the image.</param>
 /// <param name="Roi">Gets the roi.</param>
-public sealed record AnalyzeArgs(string TaskName, TaskDetail TaskDetail, string RecognitionName, string RecognitionParam, IMaaImageBuffer Image, IMaaRectBuffer Roi);
+public sealed record AnalyzeArgs(string NodeName, TaskDetail TaskDetail, string RecognitionName, string RecognitionParam, IMaaImageBuffer Image, IMaaRectBuffer Roi);
 
 /// <summary>
 ///     The recognition analysis results.

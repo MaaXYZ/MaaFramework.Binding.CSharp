@@ -83,7 +83,7 @@ dotnet add package Maa.Framework --prerelease -s https://nuget.pkg.github.com/ma
 ```
 
 - NuGet.config
-例子请参考[该配置](../NuGet.config)，完整信息请参考[该文章](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html)。
+例子请参考[该配置](./NuGet.config)，完整信息请参考[该文章](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html)。
 
 #### 指定 RIDs
 
@@ -115,11 +115,11 @@ using var maa = new MaaTasker
 if (!maa.Initialized)
     throw new InvalidOperationException();
 
-maa.AppendPipeline("EmptyTask")
+maa.AppendTask("EmptyNode")
    .Wait()
    .ThrowIfNot(MaaJobStatus.Succeeded);
 
-Console.WriteLine("EmptyTask Completed");
+Console.WriteLine("EmptyNode Completed");
 ```
 
 #### 客制化
@@ -128,10 +128,10 @@ Console.WriteLine("EmptyTask Completed");
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
-var taskName = "MyCustomTask";
+var nodeName = "MyCustomTask";
 var param = $$"""
 {
-  "{{taskName}}": {
+  "{{nodeName}}": {
       "recognition": "Custom",
       "custom_recognition": "MyRec",
       "custom_recognition_param": {
@@ -148,7 +148,7 @@ var param = $$"""
 
 maa.Resource.Register(new MyRec());
 maa.Resource.Register(new MyAct());
-maa.AppendPipeline(taskName, param)
+maa.AppendTask(nodeName, param)
     .Wait()
     .ThrowIfNot(MaaJobStatus.Succeeded);
 
@@ -177,8 +177,6 @@ internal sealed class MyAct : IMaaCustomAction
 
 ## 最佳实践
 
-- [MBA](https://github.com/MaaXYZ/MBA) BA 小助手
-  基于 MAA 全新架构的 BA 小助手。 图像技术 + 模拟控制，解放双手，不再点点点！由 MaaFramework 强力驱动！
 - [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) MFA 任务管理器
   基于 MAA 全新架构的 通用 GUI。 由 MaaFramework 强力驱动！
 

@@ -171,11 +171,11 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaTaskerPostPipeline"/>.
+    ///     Wrapper of <see cref="MaaTaskerPostTask"/>.
     /// </remarks>
-    public MaaTaskJob AppendPipeline(string entry, string pipelineOverride = "{}")
+    public MaaTaskJob AppendTask(string entry, string pipelineOverride = "{}")
     {
-        var id = MaaTaskerPostPipeline(Handle, entry, pipelineOverride);
+        var id = MaaTaskerPostTask(Handle, entry, pipelineOverride);
         return new MaaTaskJob(id, this);
     }
 
@@ -228,20 +228,20 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetRecognitionDetail"/>.
     /// </remarks>
-    public bool GetRecognitionDetail<T>(MaaRecoId recognitionId, out string name, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, T? raw, IMaaListBuffer<T>? draws)
+    public bool GetRecognitionDetail<T>(MaaRecoId recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, T? raw, IMaaListBuffer<T>? draws)
         where T : IMaaImageBuffer, new()
     {
         var hitBoxHandle = (hitBox as IMaaRectBuffer<nint>)?.Handle ?? MaaRectHandle.Zero;
         var rawHandle = (raw as IMaaImageBuffer<nint>)?.Handle ?? MaaImageBufferHandle.Zero;
         var drawsHandle = (draws as IMaaListBuffer<nint, T>)?.Handle ?? MaaImageListBufferHandle.Zero;
 
-        using var nameBuffer = new MaaStringBuffer();
+        using var nodeNameBuffer = new MaaStringBuffer();
         using var algorithmBuffer = new MaaStringBuffer();
         using var detailJsonBuffer = new MaaStringBuffer();
 
-        var ret = MaaTaskerGetRecognitionDetail(Handle, recognitionId, nameBuffer.Handle, algorithmBuffer.Handle, out hit, hitBoxHandle, detailJsonBuffer.Handle, rawHandle, drawsHandle);
+        var ret = MaaTaskerGetRecognitionDetail(Handle, recognitionId, nodeNameBuffer.Handle, algorithmBuffer.Handle, out hit, hitBoxHandle, detailJsonBuffer.Handle, rawHandle, drawsHandle);
 
-        name = nameBuffer.ToString();
+        nodeName = nodeNameBuffer.ToString();
         algorithm = algorithmBuffer.ToString();
         detailJson = detailJsonBuffer.ToString();
         return ret;
@@ -251,13 +251,13 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetNodeDetail"/>.
     /// </remarks>
-    public bool GetNodeDetail(MaaNodeId nodeId, out string name, out MaaRecoId recognitionId, out bool actionCompleted)
+    public bool GetNodeDetail(MaaNodeId nodeId, out string nodeName, out MaaRecoId recognitionId, out bool actionCompleted)
     {
-        using var nameBuffer = new MaaStringBuffer();
+        using var nodeNameBuffer = new MaaStringBuffer();
 
-        var ret = MaaTaskerGetNodeDetail(Handle, nodeId, nameBuffer.Handle, out recognitionId, out actionCompleted);
+        var ret = MaaTaskerGetNodeDetail(Handle, nodeId, nodeNameBuffer.Handle, out recognitionId, out actionCompleted);
 
-        name = nameBuffer.ToString();
+        nodeName = nodeNameBuffer.ToString();
         return ret;
     }
 
@@ -290,6 +290,6 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetLatestNode"/>.
     /// </remarks>
-    public bool GetLatestNode(string taskName, out MaaNodeId latestId)
-        => MaaTaskerGetLatestNode(Handle, taskName, out latestId);
+    public bool GetLatestNode(string nodeName, out MaaNodeId latestId)
+        => MaaTaskerGetLatestNode(Handle, nodeName, out latestId);
 }

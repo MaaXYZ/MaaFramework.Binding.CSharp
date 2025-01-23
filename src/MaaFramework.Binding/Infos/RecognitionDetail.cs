@@ -7,7 +7,7 @@ namespace MaaFramework.Binding;
 ///     A sealed record providing properties of recognition detail.
 /// </summary>
 /// <param name="Id">Gets the recognition id.</param>
-/// <param name="Name">Gets the recognition name.</param>
+/// <param name="NodeName">Gets the node name.</param>
 /// <param name="Algorithm">Gets the algorithm name of the recognition.</param>
 /// <param name="Hit">Gets a value indicates whether the recognition is hit.</param>
 /// <param name="HitBox">Gets the hit box if hit; otherwise <see langword="null"/>.</param>
@@ -16,7 +16,7 @@ namespace MaaFramework.Binding;
 /// <param name="Draws">Gets the draw images on the recognition completed if in debug mode; otherwise <see langword="null"/>.</param>
 public sealed record RecognitionDetail(
     MaaRecoId Id,
-    string Name,
+    string NodeName,
     string Algorithm,
     bool Hit,
     IMaaRectBuffer? HitBox,
@@ -60,7 +60,7 @@ public sealed record RecognitionDetail(
         var hitBox = new TRect();
         var raw = new TImage();
         var draws = new TImageList();
-        if (!tasker.GetRecognitionDetail(recognitionId, out var name, out var algorithm, out var hit, hitBox, out var detail, raw, draws))
+        if (!tasker.GetRecognitionDetail(recognitionId, out var nodeName, out var algorithm, out var hit, hitBox, out var detail, raw, draws))
         {
             hitBox.Dispose();
             raw.Dispose();
@@ -87,7 +87,7 @@ public sealed record RecognitionDetail(
 #pragma warning disable CA2000
         return new RecognitionDetail(
             Id: recognitionId,
-            Name: name,
+            NodeName: nodeName,
             Algorithm: algorithm,
             Hit: hit,
             HitBox: hitBox,

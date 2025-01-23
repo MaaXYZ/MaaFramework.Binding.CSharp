@@ -4,12 +4,12 @@
 ///     A sealed record providing properties of node detail.
 /// </summary>
 /// <param name="Id">Gets the node id.</param>
-/// <param name="Name">Gets the node name.</param>
+/// <param name="NodeName">Gets the node name.</param>
 /// <param name="RecognitionId">Gets the recognition id.</param>
 /// <param name="ActionCompleted">Gets a value indicating whether the action run completed.</param>
 public sealed record NodeDetail(
     MaaNodeId Id,
-    string Name,
+    string NodeName,
     MaaRecoId RecognitionId,
     bool ActionCompleted
 )
@@ -24,10 +24,10 @@ public sealed record NodeDetail(
     public static NodeDetail? Query(MaaNodeId nodeId, IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);
-        return tasker.GetNodeDetail(nodeId, out var name, out var recognitionId, out var actionCompleted)
+        return tasker.GetNodeDetail(nodeId, out var nodeName, out var recognitionId, out var actionCompleted)
             ? new NodeDetail(
                 Id: nodeId,
-                Name: name,
+                NodeName: nodeName,
                 RecognitionId: recognitionId,
                 ActionCompleted: actionCompleted)
             : null;
@@ -36,14 +36,14 @@ public sealed record NodeDetail(
     /// <summary>
     ///     Queries the latest node detail.
     /// </summary>
-    /// <param name="name">The node name.</param>
+    /// <param name="nodeName">The node name.</param>
     /// <param name="tasker">The maa tasker.</param>
     /// <returns>A <see cref="NodeDetail"/> if query was successful; otherwise, <see langword="null"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    public static NodeDetail? QueryLatest(string name, IMaaTasker tasker)
+    public static NodeDetail? QueryLatest(string nodeName, IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);
-        return tasker.GetLatestNode(name, out var nodeId)
+        return tasker.GetLatestNode(nodeName, out var nodeId)
             ? Query(nodeId, tasker)
             : null;
     }
@@ -52,7 +52,7 @@ public sealed record NodeDetail(
     public NodeDetail? QueryLatest(IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);
-        if (!tasker.GetLatestNode(Name, out var nodeId)) return null;
+        if (!tasker.GetLatestNode(NodeName, out var nodeId)) return null;
         return nodeId == Id ? this : Query(nodeId, tasker);
     }
 }

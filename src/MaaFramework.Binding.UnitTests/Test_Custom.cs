@@ -9,10 +9,10 @@ internal static class Custom
     public static TestAction Action { get; } = new();
     public static TestRecognition Recognition { get; } = new();
     public static TestResource Resource { get; } = new();
-    public static string TaskName => "中文字符测试";
+    public static string NodeName => "中文字符测试";
     public static string Param => $$"""
     {
-        "{{TaskName}}": {
+        "{{NodeName}}": {
             "recognition": "Custom",
             "custom_recognition": "{{Recognition.Name}}",
             "custom_recognition_param": {{RecognitionParam}},
@@ -32,7 +32,7 @@ internal static class Custom
         public string Name { get; set; } = nameof(TestRecognition);
         public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
         {
-            Assert.AreEqual(TaskName, args.TaskName);
+            Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
             var cloneContext = (IMaaContext)context.Clone();
@@ -51,7 +51,7 @@ internal static class Custom
             Assert.IsTrue(
                 cloneContext.OverridePipeline(DiffParam));
             Assert.AreEqual(
-                recognitionDetail.Name, cloneContext.RunPipeline(DiffEntry, "{}")?.QueryRecognitionDetail(cloneContext.Tasker)?.Name);
+                recognitionDetail.NodeName, cloneContext.RunTask(DiffEntry, "{}")?.QueryRecognitionDetail(cloneContext.Tasker)?.NodeName);
             Assert.IsTrue(
                 cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
 
@@ -85,7 +85,7 @@ internal static class Custom
 
         public bool Run(in IMaaContext context, in RunArgs args)
         {
-            Assert.AreEqual(TaskName, args.TaskName);
+            Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(ActionParam, args.ActionParam);
 
             Assert.AreNotEqual(Detail, args.RecognitionDetail.Detail);

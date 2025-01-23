@@ -44,9 +44,9 @@ public class Test_IMaaResource
     {
 #if MAA_NATIVE
         using var native1 = new MaaResource();
-        using var native2 = new MaaResource(Common.ResourcePath, Common.ResourcePath);
-        using var native3 = new MaaResource(CheckStatusOption.None, Common.ResourcePath);
-        using var native4 = new MaaResource(new List<string> { Common.ResourcePath, Common.ResourcePath });
+        using var native2 = new MaaResource(Common.BundlePath, Common.BundlePath);
+        using var native3 = new MaaResource(CheckStatusOption.None, Common.BundlePath);
+        using var native4 = new MaaResource(new List<string> { Common.BundlePath, Common.BundlePath });
         using var native5 = new MaaResource(CheckStatusOption.None, new List<string>());
 #endif
     }
@@ -54,14 +54,14 @@ public class Test_IMaaResource
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_AppendPath_Loaded(MaaTypes type, IMaaResource maaResource)
+    public void Interface_AppendBundle_Loaded(MaaTypes type, IMaaResource maaResource)
     {
         Assert.IsNotNull(maaResource);
 
         Assert.IsTrue(
             maaResource.Loaded);
         var job =
-            maaResource.AppendPath(Common.ResourcePath);
+            maaResource.AppendBundle(Common.BundlePath);
         Interface_IMaaPost_Success(job);
         Assert.IsTrue(
             maaResource.Loaded);
@@ -77,23 +77,23 @@ public class Test_IMaaResource
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(UnloadedData))]
-    public void Interface_Hash_TaskList(MaaTypes type, IMaaResource maaResource)
+    public void Interface_Hash_NodeList(MaaTypes type, IMaaResource maaResource)
     {
         Assert.IsNotNull(maaResource);
 
         Assert.IsTrue(
             string.IsNullOrWhiteSpace(maaResource.Hash));
         Assert.AreEqual(
-            0, maaResource.TaskList.Count);
+            0, maaResource.NodeList.Count);
 
         Interface_IMaaPost_Success(
-            maaResource.AppendPath(Common.ResourcePath));
+            maaResource.AppendBundle(Common.BundlePath));
         Assert.IsFalse(
             string.IsNullOrWhiteSpace(maaResource.Hash));
         Assert.AreNotEqual(
-            0, maaResource.TaskList.Count);
+            0, maaResource.NodeList.Count);
         Assert.IsTrue(
-            maaResource.TaskList.Any(s => s == "EmptyTask"));
+            maaResource.NodeList.Any(s => s == "EmptyNode"));
     }
 
     [TestMethod]

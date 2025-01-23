@@ -83,7 +83,7 @@ dotnet add package Maa.Framework --prerelease -s https://nuget.pkg.github.com/ma
 ```
 
 - NuGet.config
-Please refer to [this config](../NuGet.config) for example, and [this article](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html) for complete information.
+Please refer to [this config](./NuGet.config) for example, and [this article](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html) for complete information.
 
 #### Specifying RIDs
 
@@ -115,11 +115,11 @@ using var maa = new MaaTasker
 if (!maa.Initialized)
     throw new InvalidOperationException();
 
-maa.AppendPipeline("EmptyTask")
+maa.AppendTask("EmptyNode")
    .Wait()
    .ThrowIfNot(MaaJobStatus.Succeeded);
 
-Console.WriteLine("EmptyTask Completed");
+Console.WriteLine("EmptyNode Completed");
 ```
 
 #### Custom
@@ -128,10 +128,10 @@ Console.WriteLine("EmptyTask Completed");
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
-var taskName = "MyCustomTask";
+var nodeName = "MyCustomTask";
 var param = $$"""
 {
-  "{{taskName}}": {
+  "{{nodeName}}": {
       "recognition": "Custom",
       "custom_recognition": "MyRec",
       "custom_recognition_param": {
@@ -148,7 +148,7 @@ var param = $$"""
 
 maa.Resource.Register(new MyRec());
 maa.Resource.Register(new MyAct());
-maa.AppendPipeline(taskName, param)
+maa.AppendTask(nodeName, param)
     .Wait()
     .ThrowIfNot(MaaJobStatus.Succeeded);
 
@@ -177,8 +177,6 @@ internal sealed class MyAct : IMaaCustomAction
 
 ## Best Practices
 
-- [MBA](https://github.com/MaaXYZ/MBA) BA Assistant
-  A BA Assistant based on MAA's new architecture. Image technology + simulation control, no more clicking! Powered by MaaFramework.
 - [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) MFA Task Manager
   A Universal GUI based on MAA's new architecture. Powered by MaaFramework.
 

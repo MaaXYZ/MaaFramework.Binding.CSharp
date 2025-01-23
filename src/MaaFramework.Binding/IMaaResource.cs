@@ -48,17 +48,17 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     bool Clear<T>() where T : IMaaCustomResource;
 
     /// <summary>
-    ///     Clear the loaded resource paths.
+    ///     Clear the loaded resource.
     /// </summary>
     /// <returns><see langword="true"/> if the <see cref="IMaaResource"/> is cleared successfully; otherwise, <see langword="false"/>.</returns>
     bool Clear(bool includeCustomResource = false);
 
     /// <summary>
-    ///     Appends a job for loading resource from <paramref name="path"/> , could be called multiple times.
+    ///     Appends a job for loading bundle from <paramref name="path"/> , could be called multiple times.
     /// </summary>
-    /// <param name="path">The resource path.</param>
-    /// <returns>A load resource <see cref="MaaJob"/>.</returns>
-    MaaJob AppendPath(string path);
+    /// <param name="path">The bundle path.</param>
+    /// <returns>A load bundle <see cref="MaaJob"/>.</returns>
+    MaaJob AppendBundle(string path);
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaResource"/> is fully loaded.
@@ -73,8 +73,8 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     string? Hash { get; }
 
     /// <summary>
-    ///     Gets the string of current task list.
+    ///     Gets the string of current node list.
     /// </summary>
-    /// <returns>A <see cref="string"/> if the task list was got successfully; otherwise, <see langword="null"/>.</returns>
-    IList<string> TaskList { get; }
+    /// <returns>A <see cref="string"/> if the node list was got successfully; otherwise, <see langword="null"/>.</returns>
+    IList<string> NodeList { get; }
 }

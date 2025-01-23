@@ -59,11 +59,11 @@ public delegate void MaaNotificationCallback([MarshalAs(UnmanagedType.LPUTF8Str)
 
 [return: MarshalAs(UnmanagedType.U1)]
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public delegate bool MaaCustomRecognitionCallback(MaaContextHandle context, MaaTaskId taskId, [MarshalAs(UnmanagedType.LPUTF8Str)] string currentTaskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionParam, MaaImageBufferHandle image, MaaRectHandle roi, nint transArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
+public delegate bool MaaCustomRecognitionCallback(MaaContextHandle context, MaaTaskId taskId, [MarshalAs(UnmanagedType.LPUTF8Str)] string nodeName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customRecognitionParam, MaaImageBufferHandle image, MaaRectHandle roi, nint transArg, MaaRectHandle outBox, MaaStringBufferHandle outDetail);
 
 [return: MarshalAs(UnmanagedType.U1)]
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-public delegate bool MaaCustomActionCallback(MaaContextHandle context, MaaTaskId taskId, [MarshalAs(UnmanagedType.LPUTF8Str)] string currentTaskName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionParam, MaaRecoId recoId, MaaRectHandle box, nint transArg);
+public delegate bool MaaCustomActionCallback(MaaContextHandle context, MaaTaskId taskId, [MarshalAs(UnmanagedType.LPUTF8Str)] string nodeName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionName, [MarshalAs(UnmanagedType.LPUTF8Str)] string customActionParam, MaaRecoId recoId, MaaRectHandle box, nint transArg);
 
 public static partial class MaaDef
 {

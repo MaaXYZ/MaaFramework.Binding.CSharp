@@ -29,49 +29,49 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     }
 
     /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
-    public MaaResource(params string[] paths)
-        : this(CheckStatusOption.ThrowIfNotSucceeded, paths)
+    public MaaResource(params string[] bundlePaths)
+        : this(CheckStatusOption.ThrowIfNotSucceeded, bundlePaths)
     {
     }
 
-    /// <param name="check">Checks AppendPath(path).Wait() status if is <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not checks.</param>
-    /// <param name="paths">The paths of maa resource.</param>
+    /// <param name="check">Checks AppendBundle(bundlePath).Wait() status if is <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not checks.</param>
+    /// <param name="bundlePaths">The paths of maa bundle.</param>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="MaaJobStatusException"/>
     /// <inheritdoc cref="MaaResource()"/>
-    public MaaResource(CheckStatusOption check, params string[] paths)
+    public MaaResource(CheckStatusOption check, params string[] bundlePaths)
         : this()
     {
-        ArgumentNullException.ThrowIfNull(paths);
+        ArgumentNullException.ThrowIfNull(bundlePaths);
 
-        foreach (var path in paths)
+        foreach (var bundlePath in bundlePaths)
         {
-            var status = AppendPath(path).Wait();
+            var status = AppendBundle(bundlePath).Wait();
             if (check == CheckStatusOption.ThrowIfNotSucceeded)
             {
-                status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, path);
+                status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, bundlePath);
             }
         }
     }
 
     /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
-    public MaaResource(IEnumerable<string> paths)
-        : this(CheckStatusOption.ThrowIfNotSucceeded, paths)
+    public MaaResource(IEnumerable<string> bundlePaths)
+        : this(CheckStatusOption.ThrowIfNotSucceeded, bundlePaths)
     {
     }
 
     /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
-    public MaaResource(CheckStatusOption check, IEnumerable<string> paths)
+    public MaaResource(CheckStatusOption check, IEnumerable<string> bundlePaths)
         : this()
     {
-        ArgumentNullException.ThrowIfNull(paths);
+        ArgumentNullException.ThrowIfNull(bundlePaths);
 
-        foreach (var path in paths)
+        foreach (var bundlePath in bundlePaths)
         {
-            var status = AppendPath(path).Wait();
+            var status = AppendBundle(bundlePath).Wait();
             if (check == CheckStatusOption.ThrowIfNotSucceeded)
             {
-                status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, path);
+                status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, bundlePath);
             }
         }
     }
@@ -174,12 +174,12 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourcePostPath"/>.
+    ///     Wrapper of <see cref="MaaResourcePostBundle"/>.
     /// </remarks>
-    public MaaJob AppendPath(string path)
+    public MaaJob AppendBundle(string path)
     {
         _postedPaths.Add(path);
-        var id = MaaResourcePostPath(Handle, path);
+        var id = MaaResourcePostBundle(Handle, path);
         return new MaaJob(id, this);
     }
 
@@ -249,13 +249,13 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaResourceGetTaskList"/>.
+    ///     Wrapper of <see cref="MaaResourceGetNodeList"/>.
     /// </remarks>
-    public IList<string> TaskList
+    public IList<string> NodeList
     {
         get
         {
-            MaaStringListBuffer.Get(out var list, h => MaaResourceGetTaskList(Handle, h)).ThrowIfFalse();
+            MaaStringListBuffer.Get(out var list, h => MaaResourceGetNodeList(Handle, h)).ThrowIfFalse();
             return list;
         }
     }

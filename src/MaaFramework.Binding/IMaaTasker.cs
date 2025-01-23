@@ -57,12 +57,12 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     bool Initialized { get; }
 
     /// <summary>
-    ///     Appends a job of executing a pipeline, could be called multiple times.
+    ///     Appends a job of executing a task, could be called multiple times.
     /// </summary>
-    /// <param name="entry">The entry of the pipeline.</param>
+    /// <param name="entry">The entry name of the task.</param>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
-    /// <returns>A pipeline job.</returns>
-    MaaTaskJob AppendPipeline(string entry, string pipelineOverride = "{}");
+    /// <returns>A task job.</returns>
+    MaaTaskJob AppendTask(string entry, string pipelineOverride = "{}");
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaTasker"/> is running.
@@ -86,7 +86,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     ///     Gets the recognition detail.
     /// </summary>
     /// <param name="recognitionId">The recognition id.</param>
-    /// <param name="name">The recognition name.</param>
+    /// <param name="nodeName">The node name.</param>
     /// <param name="algorithm">The algorithm name of the recognition.</param>
     /// <param name="hit">A value indicating whether the recognition hits.</param>
     /// <param name="hitBox">The hit box.</param>
@@ -94,18 +94,18 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <param name="raw">The raw image on the recognition completing.<para>Only valid in debug mode.</para></param>
     /// <param name="draws">The draw images on the recognition completed.<para>Only valid in debug mode.</para></param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
-    bool GetRecognitionDetail<T>(MaaRecoId recognitionId, out string name, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, T? raw, IMaaListBuffer<T>? draws)
+    bool GetRecognitionDetail<T>(MaaRecoId recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, T? raw, IMaaListBuffer<T>? draws)
         where T : IMaaImageBuffer, new();
 
     /// <summary>
     ///     Gets the node detail.
     /// </summary>
     /// <param name="nodeId">The node id.</param>
-    /// <param name="name">The node name.</param>
+    /// <param name="nodeName">The node name.</param>
     /// <param name="recognitionId">The recognition id.</param>
     /// <param name="actionCompleted">A value indicating whether the action run completed.</param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
-    bool GetNodeDetail(MaaNodeId nodeId, out string name, out MaaRecoId recognitionId, out bool actionCompleted);
+    bool GetNodeDetail(MaaNodeId nodeId, out string nodeName, out MaaRecoId recognitionId, out bool actionCompleted);
 
     /// <summary>
     ///     Gets the task detail.
@@ -120,8 +120,8 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <summary>
     ///     Gets the latest node.
     /// </summary>
-    /// <param name="taskName">The name of a task in a pipeline.</param>
-    /// <param name="latestId">The latest node id of the task.</param>
+    /// <param name="nodeName">The name of the node in the task.</param>
+    /// <param name="latestId">The latest node id.</param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
-    bool GetLatestNode(string taskName, out MaaNodeId latestId);
+    bool GetLatestNode(string nodeName, out MaaNodeId latestId);
 }

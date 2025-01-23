@@ -26,49 +26,51 @@ public class MaaContext : IMaaContext<nint>
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaContextRunPipeline"/>.
+    ///     Wrapper of <see cref="MaaContextRunTask"/>.
     /// </remarks>
-    public TaskDetail? RunPipeline(string entry, string pipelineOverride)
+    public TaskDetail? RunTask(string entry, string pipelineOverride)
         => TaskDetail.Query(
-            taskId: MaaContextRunPipeline(Handle, entry, pipelineOverride),
+            taskId: MaaContextRunTask(Handle, entry, pipelineOverride),
             tasker: Tasker);
 
     /// <inheritdoc/>
-    public RecognitionDetail? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer image)
-        => RunRecognition(entry, recognitionOverride, (MaaImageBuffer)image);
+    public RecognitionDetail? RunRecognition(string entry, string pipelineOverride, IMaaImageBuffer image)
+        => RunRecognition(entry, pipelineOverride, (MaaImageBuffer)image);
 
     /// <inheritdoc/>
-    public RecognitionDetail? RunRecognition(string entry, string recognitionOverride, IMaaImageBuffer<nint> image)
-        => RunRecognition(entry, recognitionOverride, (MaaImageBuffer)image);
+    public RecognitionDetail? RunRecognition(string entry, string pipelineOverride, IMaaImageBuffer<nint> image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        return RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(
+            recognitionId: MaaContextRunRecognition(Handle, entry, pipelineOverride, image.Handle),
+            tasker: Tasker);
+    }
 
     /// <inheritdoc cref="IMaaContext.RunRecognition"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunRecognition"/>.
     /// </remarks>
-    public RecognitionDetail? RunRecognition(string entry, string recognitionOverride, MaaImageBuffer image)
+    public RecognitionDetail? RunRecognition(string entry, string pipelineOverride, MaaImageBuffer image)
     {
         ArgumentNullException.ThrowIfNull(image);
         return RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(
-            recognitionId: MaaContextRunRecognition(Handle, entry, recognitionOverride, image.Handle),
+            recognitionId: MaaContextRunRecognition(Handle, entry, pipelineOverride, image.Handle),
             tasker: Tasker);
     }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaContextRunAction"/>.
-    /// </remarks>
-    public NodeDetail? RunAction(string entry, string actionOverride, IMaaRectBuffer recognitionBox, string recognitionDetail)
-        => RunAction(entry, actionOverride, (IMaaRectBuffer<nint>)recognitionBox, recognitionDetail);
+    public NodeDetail? RunAction(string entry, string pipelineOverride, IMaaRectBuffer recognitionBox, string recognitionDetail)
+        => RunAction(entry, pipelineOverride, (IMaaRectBuffer<nint>)recognitionBox, recognitionDetail);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunAction"/>.
     /// </remarks>
-    public NodeDetail? RunAction(string entry, string actionOverride, IMaaRectBuffer<nint> recognitionBox, string recognitionDetail)
+    public NodeDetail? RunAction(string entry, string pipelineOverride, IMaaRectBuffer<nint> recognitionBox, string recognitionDetail)
     {
         ArgumentNullException.ThrowIfNull(recognitionBox);
         return NodeDetail.Query(
-            nodeId: MaaContextRunAction(Handle, entry, actionOverride, recognitionBox.Handle, recognitionDetail),
+            nodeId: MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail),
             tasker: Tasker);
     }
 
@@ -83,9 +85,9 @@ public class MaaContext : IMaaContext<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextOverrideNext"/>.
     /// </remarks>
-    public bool OverrideNext(string taskName, IEnumerable<string> nextList)
+    public bool OverrideNext(string nodeName, IEnumerable<string> nextList)
         => MaaStringListBuffer.Set(nextList, listBuffer
-            => MaaContextOverrideNext(Handle, taskName, listBuffer));
+            => MaaContextOverrideNext(Handle, nodeName, listBuffer));
 
     /// <inheritdoc/>
     /// <remarks>

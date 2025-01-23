@@ -116,7 +116,7 @@ public interface IMaaToolkitProjectInterface : IMaaCommon
     /// <summary>
     ///     Runs a cli.
     /// </summary>
-    /// <param name="resourcePath">The resource path.</param>
+    /// <param name="resourcePath">The resource path, including interface.json.</param>
     /// <param name="userPath">The user path.</param>
     /// <param name="directly">A value indicating whether directly runs.</param>
     /// <returns><see langword="true"/> if the option was set successfully; otherwise, <see langword="false"/>.</returns>
