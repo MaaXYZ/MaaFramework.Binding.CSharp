@@ -75,7 +75,7 @@
         "contentHash": "09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA=="
       }
     },
-    "net8.0": {
+    "net9.0": {
       "Maa.Framework.Runtimes": {
         "type": "Direct",
         "requested": "[3.0.1, )",

@@ -207,7 +207,7 @@
         }
       }
     },
-    "net8.0": {
+    "net9.0": {
       "Microsoft.NET.Test.Sdk": {
         "type": "Direct",
         "requested": "[17.11.1, )",

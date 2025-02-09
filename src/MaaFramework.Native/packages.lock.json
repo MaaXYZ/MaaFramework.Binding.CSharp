@@ -24,7 +24,7 @@
         }
       }
     },
-    "net8.0": {
+    "net9.0": {
       "Maa.AgentBinary": {
         "type": "Direct",
         "requested": "[1.0.0, )",
