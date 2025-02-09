@@ -3,8 +3,8 @@
     <!-- Package Properties -->
     <PropertyGroup>
         <PackageId>Maa.Framework.Binding</PackageId>
-        <Title>Maa Framework Binding (Abstractions)</Title>
-        <description>MaaFramework.Binding is a common interoperable API wrapper of MaaFramework for .NET 7.</description>
+        <Title>MaaFramework Binding (Abstractions)</Title>
+        <description>A common interoperable API wrapper around MaaFramework for .NET 7+.</description>
         <PackageTags>MAA;c-sharp;cross-platform;dotnet;wrapper;abstractions</PackageTags>
 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>

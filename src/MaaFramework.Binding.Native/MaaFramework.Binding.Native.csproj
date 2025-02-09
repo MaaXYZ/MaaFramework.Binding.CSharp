@@ -3,8 +3,8 @@
     <!-- Package Properties -->
     <PropertyGroup>
         <PackageId>Maa.Framework.Binding.Native</PackageId>
-        <Title>Maa Framework Binding (Native)</Title>
-        <description>MaaFramework.Binding.Native is a common interoperable API wrapper of MaaFramework FFI parts for .NET 7.</description>
+        <Title>MaaFramework Binding (Native)</Title>
+        <description>A common interoperable API wrapper around MaaFramework FFI parts for .NET 7+.</description>
         <PackageTags>MAA;c-sharp;cross-platform;dotnet;wrapper;ffi</PackageTags>
 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>

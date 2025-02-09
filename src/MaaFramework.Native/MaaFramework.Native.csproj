@@ -3,9 +3,9 @@
     <!-- Package Properties -->
     <PropertyGroup>
         <PackageId>Maa.Framework.Native</PackageId>
-        <Title>Maa Framework Native Metapackage</Title>
-        <description>Maa.Framework.Native is a metapackage with references to Maa.Framework.Binding.Native, Maa.AgentBinary.</description>
-        <PackageTags>MAA;c-sharp;cross-platform;dotnet;wrapper</PackageTags>
+        <Title>MaaFramework Native Metapackage</Title>
+        <description>A metapackage with references to Maa.Framework.Binding.Native, Maa.AgentBinary.</description>
+        <PackageTags>MAA;c-sharp;cross-platform;dotnet;metapackage</PackageTags>
 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <PackageReadmeFile>README.md</PackageReadmeFile>

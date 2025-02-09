@@ -3,8 +3,8 @@
     <!-- Package Properties -->
     <PropertyGroup>
         <PackageId>Maa.Framework.Binding.Extensions</PackageId>
-        <Title>Maa Framework Binding Extensions</Title>
-        <description>MaaFramework.Binding.Extensions contains useful but non-essential extensions.</description>
+        <Title>MaaFramework Binding Extensions</Title>
+        <description>Extensions built around Maa.Framework.Binding offering useful but optional features.</description>
         <PackageTags>MAA;c-sharp;cross-platform;dotnet;extensions</PackageTags>
 
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
