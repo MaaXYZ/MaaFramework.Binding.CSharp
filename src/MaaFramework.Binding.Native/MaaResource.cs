@@ -83,8 +83,8 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     protected override void ReleaseHandle()
         => MaaResourceDestroy(Handle);
 
-    private readonly MaaMarshaledApis<MaaCustomActionCallback> _actions = new();
-    private readonly MaaMarshaledApis<MaaCustomRecognitionCallback> _recognitions = new();
+    private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
+    private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
 
     /// <inheritdoc/>
     public bool Register<T>(string name, T custom) where T : IMaaCustomResource
@@ -101,10 +101,10 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
         IMaaCustomAction res
             => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero)
-            && _actions.Set(res.Name, callback),
+            && _actions.Register(res.Name, callback),
         IMaaCustomRecognition res
             => MaaResourceRegisterCustomRecognition(Handle, res.Name, res.Convert(out var callback), nint.Zero)
-            && _recognitions.Set(res.Name, callback),
+            && _recognitions.Register(res.Name, callback),
         _
             => throw new NotImplementedException($"Type '{typeof(T)}' is not implemented."),
     };

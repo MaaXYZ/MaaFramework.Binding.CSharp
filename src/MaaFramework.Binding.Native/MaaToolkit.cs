@@ -141,18 +141,18 @@ public class MaaToolkit : IMaaToolkit
 
         private readonly ulong _instanceId;
         private static readonly ConcurrentDictionary<ulong, ProjectInterfaceClass> s_instances = [];
-        private readonly MaaMarshaledApis<MaaCustomActionCallback> _actions = new();
-        private readonly MaaMarshaledApis<MaaCustomRecognitionCallback> _recognitions = new();
+        private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
+        private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
 
         private bool RegisterCustomAction(IMaaCustomAction res)
         {
             MaaToolkitProjectInterfaceRegisterCustomAction(_instanceId, res.Name, res.Convert(out var callback), nint.Zero);
-            return _actions.Set(res.Name, callback);
+            return _actions.Register(res.Name, callback);
         }
         private bool RegisterCustomRecognition(IMaaCustomRecognition res)
         {
             MaaToolkitProjectInterfaceRegisterCustomRecognition(_instanceId, res.Name, res.Convert(out var callback), nint.Zero);
-            return _recognitions.Set(res.Name, callback);
+            return _recognitions.Register(res.Name, callback);
         }
 
         /// <inheritdoc/>

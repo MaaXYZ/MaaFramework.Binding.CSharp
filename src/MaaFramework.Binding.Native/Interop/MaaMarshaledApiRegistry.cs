@@ -6,13 +6,13 @@ namespace MaaFramework.Binding.Interop.Native;
 ///     A class providing implementation for managing marshaled parameters in <see cref="Binding"/>.
 /// </summary>
 /// <typeparam name="T">The marshaled api.</typeparam>
-internal sealed class MaaMarshaledApis<T>
+internal sealed class MaaMarshaledApiRegistry<T>
 {
     private readonly ConcurrentDictionary<string, T> _apis = [];
 
     public IEnumerable<string> Names => _apis.Keys;
 
-    public bool Set(string key, T tuple)
+    public bool Register(string key, T tuple)
     {
         _apis[key] = tuple;
         return true;
