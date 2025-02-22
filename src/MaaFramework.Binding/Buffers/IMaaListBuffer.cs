@@ -8,7 +8,7 @@ namespace MaaFramework.Binding.Buffers;
 /// </summary>
 /// <typeparam name="THandle">The type of handle.</typeparam>
 /// <typeparam name="T">The type of element.</typeparam>
-public interface IMaaListBuffer<out THandle, T> : IMaaListBuffer<T>, IMaaDisposableHandle<THandle>
+public interface IMaaListBuffer<THandle, T> : IMaaListBuffer<T>, IMaaBuffer<THandle, IMaaListBuffer<THandle, T>>, IMaaDisposableHandle<THandle>
 {
 }
 
@@ -40,7 +40,7 @@ public interface IMaaListBuffer<T> : IMaaBuffer<IMaaListBuffer<T>>, IList<T>
     T this[MaaSize index] { get; }
 
     /// <summary>
-    ///     Adds an element to the <see cref="IMaaListBuffer{T}"/>.
+    ///     Adds (Copys) an element to the <see cref="IMaaListBuffer{T}"/>.
     /// </summary>
     /// <param name="item">The object to add to the <see cref="IMaaListBuffer{T}"/>.</param>
     /// <returns><see langword="true"/> if the element is added successfully; otherwise, <see langword="false"/>.</returns>

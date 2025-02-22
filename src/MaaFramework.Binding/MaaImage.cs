@@ -4,7 +4,7 @@ using MaaFramework.Binding.Buffers;
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A non-generic sealed class used to wrap <see cref="IMaaImageBuffer"/>.
+///     A non-generic sealed record used to wrap <see cref="IMaaImageBuffer"/>.
 /// </summary>
 /// <param name="Buffer">The IMaaImageBuffer.</param>
 public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
@@ -12,12 +12,13 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     /// <inheritdoc/>
     public override string ToString()
     {
-        var info = Info;
+        var info = GetInfo();
         return $"{GetType().Name}: {info.Width}x{info.Height} {{ {nameof(info.Channels)} = {info.Channels}, {nameof(info.Type)} = {info.Type} }}";
     }
 
-    /// <inheritdoc cref="IMaaImageBuffer.Info"/>
-    public ImageInfo Info => Buffer.Info;
+    /// <inheritdoc cref="IMaaImageBuffer.GetInfo"/>
+    public ImageInfo GetInfo()
+        => Buffer.GetInfo();
 
     /// <inheritdoc/>
     public bool IsInvalid => Buffer.IsInvalid;
@@ -34,7 +35,7 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     /// <param name="stream">The stream containing image information.</param>
     /// <returns>A <see cref="MaaImage"/>.</returns>
     public static MaaImage Load<T>(Stream stream) where T : IMaaImageBuffer, new()
-        => new(new T
+        => new MaaImage(new T
         {
             EncodedDataStream = stream
         });
@@ -42,11 +43,11 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     /// <summary>
     ///     Creates a new instance of the <see cref="MaaImage"/> class from the given file.
     /// </summary>
-    /// <param name="filename">The filename of an image.</param>
+    /// <param name="filePath">The file path of an image.</param>
     /// <returns>A <see cref="MaaImage"/>.</returns>
-    public static MaaImage Load<T>(string filename) where T : IMaaImageBuffer, new()
+    public static MaaImage Load<T>(string filePath) where T : IMaaImageBuffer, new()
     {
-        using var stream = File.OpenRead(filename);
+        using var stream = File.OpenRead(filePath);
         return Load<T>(stream);
     }
 
@@ -73,7 +74,7 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     /// <summary>
     ///  Saves this <see cref="MaaImage"/> to the specified file.
     /// </summary>
-    /// <param name="filename">The filename to save the image to.</param>
+    /// <param name="filename">The filePath to save the image to.</param>
     public void Save(string filename)
     {
         using var stream = File.OpenWrite(filename);

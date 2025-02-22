@@ -6,10 +6,30 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa Rect Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
 /// </summary>
-public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
+public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<MaaRectHandle>
 {
     /// <inheritdoc/>
     public override string ToString() => $"{GetType().Name} {{ {nameof(X)} = {X}, {nameof(Y)} = {Y}, {nameof(Width)} = {Width}, {nameof(Height)} = {Height} }}";
+
+    /// <inheritdoc/>
+    public bool CopyTo(MaaRectHandle bufferHandle) => Set(
+            handle: bufferHandle,
+            x: MaaRectGetX(Handle),
+            y: MaaRectGetY(Handle),
+            width: MaaRectGetW(Handle),
+            height: MaaRectGetH(Handle));
+
+    /// <inheritdoc/>
+    public bool CopyTo(IMaaRectBuffer<MaaRectHandle> buffer) => buffer switch
+    {
+        // MaaRectBuffer native => native method is same to wrapped method
+        null => false,
+        _ => buffer.SetValues(
+            x: MaaRectGetX(Handle),
+            y: MaaRectGetY(Handle),
+            width: MaaRectGetW(Handle),
+            height: MaaRectGetH(Handle)),
+    };
 
     /// <inheritdoc/>
     public bool CopyTo(IMaaRectBuffer buffer) => buffer switch
@@ -105,6 +125,15 @@ public class MaaRectBuffer : MaaDisposableHandle<nint>, IMaaRectBuffer<nint>
         width = MaaRectGetW(Handle);
         height = MaaRectGetH(Handle);
     }
+
+    /// <inheritdoc/>
+    public RectInfo GetValues() => new
+    (
+        X: MaaRectGetX(Handle),
+        Y: MaaRectGetY(Handle),
+        Width: MaaRectGetW(Handle),
+        Height: MaaRectGetH(Handle)
+    );
 
     /// <inheritdoc cref="GetValues(out int, out int, out int, out int)"/>
     public static void Get(MaaRectHandle handle, out int x, out int y, out int width, out int height)

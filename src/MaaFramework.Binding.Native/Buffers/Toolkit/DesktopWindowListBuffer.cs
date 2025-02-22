@@ -6,13 +6,23 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa Toolkit Desktop Window List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaToolkit"/>.
 /// </summary>
-public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
+public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowListHandle, DesktopWindowInfo>
 {
+    /// <summary>
+    ///     A sealed record providing a reference implementation for <see cref="DesktopWindowInfo"/>.
+    /// </summary>
+    /// <param name="InfoHandle">The MaaToolkitDesktopWindowHandle in the <see cref="AdbDeviceListBuffer"/>.</param>
+    protected internal sealed record MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowHandle InfoHandle) : DesktopWindowInfo(
+        Handle: MaaToolkitDesktopWindowGetHandle(InfoHandle),
+        ClassName: MaaToolkitDesktopWindowGetClassName(InfoHandle),
+        Name: MaaToolkitDesktopWindowGetWindowName(InfoHandle)
+    );
+
     /// <summary>
     ///     Creates a <see cref="DesktopWindowListBuffer"/> instance.
     /// </summary>
     /// <param name="handle">The MaaToolkitDesktopWindowListHandle.</param>
-    public DesktopWindowListBuffer(MaaToolkitDesktopWindowListHandle handle) : base(nint.Zero)
+    public DesktopWindowListBuffer(MaaToolkitDesktopWindowListHandle handle) : base(MaaToolkitDesktopWindowListHandle.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
@@ -21,7 +31,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitDesktopWindowListCreate"/>.
     /// </remarks>
-    public DesktopWindowListBuffer() : base(nint.Zero)
+    public DesktopWindowListBuffer() : base(MaaToolkitDesktopWindowListHandle.Zero)
     {
         SetHandle(MaaToolkitDesktopWindowListCreate(), needReleased: true);
     }
@@ -46,7 +56,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitDesktopWindowListAt"/>.
     /// </remarks>
-    public override DesktopWindowInfo this[MaaSize index] => new MaaToolkitDesktopWindow(MaaToolkitDesktopWindowListAt(Handle, index).ThrowIfEquals(nint.Zero));
+    public override DesktopWindowInfo this[MaaSize index] => new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(Handle, index).ThrowIfEquals(MaaToolkitDesktopWindowHandle.Zero));
 
     /// <inheritdoc/>
     public override bool Add(DesktopWindowInfo item)
@@ -66,8 +76,8 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
     /// <inheritdoc/>
     public override bool TryIndexOf(DesktopWindowInfo item, out ulong index)
     {
-        if (item is not MaaToolkitDesktopWindow info)
-            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitDesktopWindow)}.");
+        if (item is not MaaToolkitDesktopWindowInfo info)
+            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitDesktopWindowInfo)}.");
 
         var count = MaaSizeCount;
         for (index = 0; index < count; index++)
@@ -77,13 +87,43 @@ public class DesktopWindowListBuffer : MaaListBuffer<nint, DesktopWindowInfo>
         return false;
     }
 
+    /// <inheritdoc/>
+    public override bool CopyTo(MaaImageListBufferHandle bufferHandle)
+        => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
+
     /// <summary>
-    ///     A sealed record providing a reference implementation for <see cref="DesktopWindowInfo"/>.
+    ///     Gets a <see cref="DesktopWindowInfo"/> list from a MaaToolkitDesktopWindowListHandle.
     /// </summary>
-    /// <param name="InfoHandle">The <see cref="MaaToolkitDesktopWindow"/> handle in the <see cref="AdbDeviceListBuffer"/>.</param>
-    protected internal sealed record MaaToolkitDesktopWindow(nint InfoHandle) : DesktopWindowInfo(
-        Handle: MaaToolkitDesktopWindowGetHandle(InfoHandle),
-        ClassName: MaaToolkitDesktopWindowGetClassName(InfoHandle),
-        Name: MaaToolkitDesktopWindowGetWindowName(InfoHandle)
-    );
+    /// <param name="handle">The MaaToolkitDesktopWindowListHandle.</param>
+    /// <returns>The <see cref="DesktopWindowInfo"/> list.</returns>
+    public static IList<DesktopWindowInfo> Get(MaaToolkitDesktopWindowListHandle handle)
+    {
+        var count = MaaToolkitDesktopWindowListSize(handle);
+        if (count <= int.MaxValue)
+        {
+            return Enumerable.Range(0, (int)count)
+                .Select(index => new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(handle, (MaaSize)index)) as DesktopWindowInfo)
+                .ToList();
+        }
+
+        var list = new List<DesktopWindowInfo>();
+        for (MaaSize index = 0; index < count; index++)
+            list.Add(new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(handle, index)));
+        return list;
+    }
+
+    /// <summary>
+    ///     Gets a <see cref="DesktopWindowInfo"/> list from a MaaToolkitDesktopWindowListHandle.
+    /// </summary>
+    /// <param name="list">The <see cref="DesktopWindowInfo"/> list.</param>
+    /// <param name="func">A function that takes a MaaToolkitDesktopWindowListHandle and returns a boolean indicating success or failure.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    public static bool Get(out IList<DesktopWindowInfo> list, Func<MaaToolkitDesktopWindowListHandle, bool> func)
+    {
+        var h = MaaToolkitDesktopWindowListCreate();
+        var ret = func?.Invoke(h) ?? false;
+        list = Get(h);
+        MaaToolkitDesktopWindowListDestroy(h);
+        return ret;
+    }
 }

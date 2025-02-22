@@ -6,13 +6,26 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa Toolkit Adb Device List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaToolkit"/>.
 /// </summary>
-public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
+public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, AdbDeviceInfo>
 {
+    /// <summary>
+    ///     A sealed record providing a reference implementation for <see cref="AdbDeviceInfo"/>.
+    /// </summary>
+    /// <param name="InfoHandle">The MaaToolkitAdbDeviceHandle in the <see cref="AdbDeviceListBuffer"/>.</param>
+    protected internal sealed record MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceHandle InfoHandle) : AdbDeviceInfo(
+        Name: MaaToolkitAdbDeviceGetName(InfoHandle),
+        AdbPath: MaaToolkitAdbDeviceGetAdbPath(InfoHandle),
+        AdbSerial: MaaToolkitAdbDeviceGetAddress(InfoHandle),
+        ScreencapMethods: (AdbScreencapMethods)MaaToolkitAdbDeviceGetScreencapMethods(InfoHandle),
+        InputMethods: (AdbInputMethods)MaaToolkitAdbDeviceGetInputMethods(InfoHandle),
+        Config: MaaToolkitAdbDeviceGetConfig(InfoHandle)
+    );
+
     /// <summary>
     ///     Creates a <see cref="AdbDeviceListBuffer"/> instance.
     /// </summary>
     /// <param name="handle">The MaaToolkitAdbDeviceListHandle.</param>
-    public AdbDeviceListBuffer(MaaToolkitAdbDeviceListHandle handle) : base(nint.Zero)
+    public AdbDeviceListBuffer(MaaToolkitAdbDeviceListHandle handle) : base(MaaToolkitAdbDeviceListHandle.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
@@ -21,7 +34,7 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitAdbDeviceListCreate"/>.
     /// </remarks>
-    public AdbDeviceListBuffer() : base(nint.Zero)
+    public AdbDeviceListBuffer() : base(MaaToolkitAdbDeviceListHandle.Zero)
     {
         SetHandle(MaaToolkitAdbDeviceListCreate(), needReleased: true);
     }
@@ -48,7 +61,7 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
     /// </remarks>
     public override AdbDeviceInfo this[MaaSize index]
     {
-        get => new MaaToolkitAdbDevice(MaaToolkitAdbDeviceListAt(Handle, index).ThrowIfEquals(nint.Zero));
+        get => new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(Handle, index).ThrowIfEquals(MaaToolkitAdbDeviceHandle.Zero));
     }
 
     /// <inheritdoc/>
@@ -69,8 +82,8 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
     /// <inheritdoc/>
     public override bool TryIndexOf(AdbDeviceInfo item, out ulong index)
     {
-        if (item is not MaaToolkitAdbDevice info)
-            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitAdbDevice)}.");
+        if (item is not MaaToolkitAdbDeviceInfo info)
+            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitAdbDeviceInfo)}.");
 
         var count = MaaSizeCount;
         for (index = 0; index < count; index++)
@@ -80,16 +93,43 @@ public class AdbDeviceListBuffer : MaaListBuffer<nint, AdbDeviceInfo>
         return false;
     }
 
+    /// <inheritdoc/>
+    public override bool CopyTo(MaaImageListBufferHandle bufferHandle)
+        => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
+
     /// <summary>
-    ///     A sealed record providing a reference implementation for <see cref="AdbDeviceInfo"/>.
+    ///     Gets a <see cref="AdbDeviceInfo"/> list from a MaaToolkitAdbDeviceListHandle.
     /// </summary>
-    /// <param name="InfoHandle">The <see cref="MaaToolkitAdbDevice"/> handle in the <see cref="AdbDeviceListBuffer"/>.</param>
-    protected internal sealed record MaaToolkitAdbDevice(MaaToolkitAdbDeviceHandle InfoHandle) : AdbDeviceInfo(
-        Name: MaaToolkitAdbDeviceGetName(InfoHandle),
-        AdbPath: MaaToolkitAdbDeviceGetAdbPath(InfoHandle),
-        AdbSerial: MaaToolkitAdbDeviceGetAddress(InfoHandle),
-        ScreencapMethods: (AdbScreencapMethods)MaaToolkitAdbDeviceGetScreencapMethods(InfoHandle),
-        InputMethods: (AdbInputMethods)MaaToolkitAdbDeviceGetInputMethods(InfoHandle),
-        Config: MaaToolkitAdbDeviceGetConfig(InfoHandle)
-    );
+    /// <param name="handle">The MaaToolkitAdbDeviceListHandle.</param>
+    /// <returns>The <see cref="AdbDeviceInfo"/> list.</returns>
+    public static IList<AdbDeviceInfo> Get(MaaToolkitAdbDeviceListHandle handle)
+    {
+        var count = MaaToolkitAdbDeviceListSize(handle);
+        if (count <= int.MaxValue)
+        {
+            return Enumerable.Range(0, (int)count)
+                .Select(index => new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(handle, (MaaSize)index)) as AdbDeviceInfo)
+                .ToList();
+        }
+
+        var list = new List<AdbDeviceInfo>();
+        for (MaaSize index = 0; index < count; index++)
+            list.Add(new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(handle, index)));
+        return list;
+    }
+
+    /// <summary>
+    ///     Gets a <see cref="AdbDeviceInfo"/> list from a MaaToolkitAdbDeviceListHandle.
+    /// </summary>
+    /// <param name="list">The <see cref="AdbDeviceInfo"/> list.</param>
+    /// <param name="func">A function that takes a MaaToolkitAdbDeviceListHandle and returns a boolean indicating success or failure.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    public static bool Get(out IList<AdbDeviceInfo> list, Func<MaaToolkitAdbDeviceListHandle, bool> func)
+    {
+        var h = MaaToolkitAdbDeviceListCreate();
+        var ret = func?.Invoke(h) ?? false;
+        list = Get(h);
+        MaaToolkitAdbDeviceListDestroy(h);
+        return ret;
+    }
 }

@@ -5,8 +5,8 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     An interface defining wrapped members for MaaRectBuffer with generic handle.
 /// </summary>
-/// <typeparam name="T">The type of handle.</typeparam>
-public interface IMaaRectBuffer<out T> : IMaaRectBuffer, IMaaDisposableHandle<T>
+/// <typeparam name="THandle">The type of handle.</typeparam>
+public interface IMaaRectBuffer<THandle> : IMaaRectBuffer, IMaaBuffer<THandle, IMaaRectBuffer<THandle>>, IMaaDisposableHandle<THandle>
 {
 }
 
@@ -26,12 +26,12 @@ public interface IMaaRectBuffer : IMaaBuffer<IMaaRectBuffer>
     int Y { get; }
 
     /// <summary>
-    ///     Gets the width value.
+    ///     Gets the width.
     /// </summary>
     int Width { get; }
 
     /// <summary>
-    ///     Gets the height value.
+    ///     Gets the height.
     /// </summary>
     int Height { get; }
 
@@ -52,7 +52,12 @@ public interface IMaaRectBuffer : IMaaBuffer<IMaaRectBuffer>
     /// <param name="y">The vertical coordinate.</param>
     /// <param name="width">The width.</param>
     /// <param name="height">The height.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     void GetValues(out int x, out int y, out int width, out int height);
+
+    /// <summary>
+    ///     Gets the rect info.
+    /// </summary>
+    /// <returns>The info including x, y, width, height.</returns>
+    RectInfo GetValues();
 }
 

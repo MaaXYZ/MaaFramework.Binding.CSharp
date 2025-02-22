@@ -7,8 +7,25 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa String Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
 /// </summary>
-public class MaaStringBuffer : MaaDisposableHandle<nint>, IMaaStringBuffer<nint>
+public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaStringBuffer<MaaStringBufferHandle>
 {
+    /// <inheritdoc/>
+    public bool CopyTo(MaaStringBufferHandle bufferHandle) => MaaStringBufferSetExFromNint(
+            handle: bufferHandle,
+            str: MaaStringBufferGetToNint(Handle),
+            size: MaaStringBufferSize(Handle));
+
+    /// <inheritdoc/>
+    public bool CopyTo(IMaaStringBuffer<MaaStringBufferHandle> buffer) => buffer switch
+    {
+        MaaStringBuffer native => MaaStringBufferSetExFromNint(
+            handle: native.Handle,
+            str: MaaStringBufferGetToNint(Handle),
+            size: MaaStringBufferSize(Handle)),
+        null => false,
+        _ => buffer.SetValue(GetValue()),
+    };
+
     /// <inheritdoc/>
     public bool CopyTo(IMaaStringBuffer buffer) => buffer switch
     {

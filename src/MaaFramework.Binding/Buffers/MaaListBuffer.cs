@@ -52,10 +52,18 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     /// <inheritdoc/>
     public int Count => (int)MaaSizeCount;
     /// <inheritdoc/>
-    public bool CopyTo(IMaaListBuffer<T> buffer)
-        => buffer is not null
-           && MaaSizeCount <= MaaSize.MaxValue - buffer.MaaSizeCount
-           && this.All(buffer.Add);
+    public abstract bool CopyTo(THandle bufferHandle);
+    /// <inheritdoc/>
+    public bool CopyTo(IMaaListBuffer<THandle, T> buffer)
+        => buffer is not null && CopyTo(buffer.Handle);
+    /// <inheritdoc/>
+    public bool CopyTo(IMaaListBuffer<T> buffer) => buffer switch
+    {
+        IMaaListBuffer<THandle, T> bufferWithHandle => CopyTo(bufferWithHandle),
+        null => false,
+        _ => MaaSizeCount <= MaaSize.MaxValue - buffer.MaaSizeCount
+            && this.All(buffer.Add),
+    };
     /// <inheritdoc/>
     public void CopyTo(T[] array, int arrayIndex)
     {
@@ -73,8 +81,8 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     /// <inheritdoc/>
     public IEnumerator<T> GetEnumerator()
         => new MaaListEnumerator<T>(
-            i => this[i],
-            () => MaaSizeCount);
+            getAt: i => this[i],
+            getSize: () => MaaSizeCount);
 
     #endregion
 
@@ -82,8 +90,8 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
 
     IEnumerator IEnumerable.GetEnumerator()
         => new MaaListEnumerator<T>(
-            i => this[i],
-            () => MaaSizeCount);
+            getAt: i => this[i],
+            getSize: () => MaaSizeCount);
 
     void ICollection<T>.Add(T item)
         => Add(item);

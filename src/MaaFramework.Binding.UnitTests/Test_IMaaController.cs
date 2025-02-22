@@ -292,7 +292,7 @@ public class Test_IMaaController
         CollectionAssert.AreNotEqual(new byte[size], pngImageData);
 
         // if (type is MaaTypes.Native) { }
-        var info = buffer.Info;
+        var info = buffer.GetInfo();
         var length = info.Width * info.Height * info.Channels;
         var rawDataHandle = buffer.GetRawData();
         var cv2MatData = new byte[length];

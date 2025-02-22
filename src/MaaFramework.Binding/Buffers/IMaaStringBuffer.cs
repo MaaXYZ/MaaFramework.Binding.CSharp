@@ -5,8 +5,8 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     An interface defining wrapped members for MaaStringBuffer with generic handle.
 /// </summary>
-/// <typeparam name="T">The type of handle.</typeparam>
-public interface IMaaStringBuffer<out T> : IMaaStringBuffer, IMaaDisposableHandle<T>
+/// <typeparam name="THandle">The type of handle.</typeparam>
+public interface IMaaStringBuffer<THandle> : IMaaStringBuffer, IMaaBuffer<THandle, IMaaStringBuffer<THandle>>, IMaaDisposableHandle<THandle>
 {
 }
 

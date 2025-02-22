@@ -89,6 +89,23 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
         return false;
     }
 
+    /// <inheritdoc/>
+    public override bool CopyTo(MaaStringListBufferHandle bufferHandle)
+    {
+        var count = MaaStringListBufferSize(Handle);
+        if (count > MaaSize.MaxValue - MaaStringListBufferSize(bufferHandle))
+            return false;
+
+        for (MaaSize index = 0; index < count; index++)
+        {
+            var item = MaaStringListBufferAt(Handle, index);
+            if (!MaaStringListBufferAppend(bufferHandle, item))
+                return false;
+        }
+
+        return true;
+    }
+
     /// <summary>
     ///     Gets a string list from a MaaStringListBufferHandle.
     /// </summary>
@@ -132,13 +149,12 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     /// <param name="list">The string list.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     public static bool Set(MaaStringListBufferHandle handle, IEnumerable<string> list)
-        => list.All(s =>
-        {
-            var h = MaaStringBufferCreate();
-            var ret = MaaStringBuffer.Set(h, s) && MaaStringListBufferAppend(handle, h);
-            MaaStringBufferDestroy(h);
-            return ret;
-        });
+    {
+        var h = MaaStringBufferCreate();
+        var ret = list.All(s => MaaStringBuffer.Set(h, s) && MaaStringListBufferAppend(handle, h));
+        MaaStringBufferDestroy(h);
+        return ret;
+    }
 
     /// <summary>
     ///     Sets a string <paramref name="list"/> to a MaaStringListBufferHandle,
