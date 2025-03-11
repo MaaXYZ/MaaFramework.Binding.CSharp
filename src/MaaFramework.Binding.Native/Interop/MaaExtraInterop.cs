@@ -16,7 +16,7 @@ public static partial class MaaBuffer
         return MaaStringBufferSetEx(handle, bytes, (MaaSize)bytes.LongLength);
     }
 
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("MaaFramework", EntryPoint = "MaaStringBufferSetEx", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaStringBufferSetExFromNint(MaaStringBufferHandle handle, nint str, MaaSize size);
 
