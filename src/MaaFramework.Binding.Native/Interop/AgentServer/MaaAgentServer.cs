@@ -17,6 +17,11 @@ namespace MaaFramework.Binding.Interop.Native;
 
 public static partial class MaaAgentServer
 {
+    static MaaAgentServer()
+    {
+        NativeLibrary.Init(true);
+    }
+
     [LibraryImport("MaaAgentServer", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaAgentServerRegisterCustomRecognition(string name, MaaCustomRecognitionCallback recognition, nint transArg);
