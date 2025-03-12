@@ -88,12 +88,13 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientCreateSocket"/>.
     /// </remarks>
-    public bool CreateSocket(string identifier)
+    public string? CreateSocket(string identifier = "")
     {
         var handle = MaaStringBufferCreate();
-        var ret = MaaStringBufferSetEx(Handle, identifier) && MaaAgentClientCreateSocket(Handle, handle);
+        var ret = MaaStringBufferSetEx(handle, identifier) && MaaAgentClientCreateSocket(Handle, handle);
+        var socketId = Buffers.MaaStringBuffer.Get(handle);
         MaaStringBufferDestroy(handle);
-        return ret;
+        return ret ? socketId : null;
     }
 
     /// <inheritdoc/>

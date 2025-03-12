@@ -34,7 +34,7 @@ public interface IMaaAgentClient : IMaaDisposable
     /// </summary>
     /// <param name="identifier"></param>
     /// <returns></returns>
-    bool CreateSocket(string identifier);
+    string? CreateSocket(string identifier = "");
 
     /// <summary>
     ///     Connects the address specified by the constructor.

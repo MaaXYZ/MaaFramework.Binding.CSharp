@@ -2,7 +2,7 @@
 using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaAgentServer;
 
-namespace MaaFramework.Binding.Native;
+namespace MaaFramework.Binding;
 
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaAgentServer"/>.
