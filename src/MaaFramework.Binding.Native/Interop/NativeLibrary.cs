@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MaaFramework.Binding;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -74,11 +73,11 @@ internal static partial class NativeLibrary
 
     private static IEnumerable<string> GetRuntimesPaths(string libraryFullName)
     {
-        var args1 = new string[]
-        {
+        var args1 = s_searchPath.Concat(
+        [
             Path.GetDirectoryName(s_assembly.Location) ?? "./",
             Environment.CurrentDirectory,
-        };
+        ]);
         var args2 = new string[]
         {
             $"/runtimes/{GetArchitectureName()}/native/",
