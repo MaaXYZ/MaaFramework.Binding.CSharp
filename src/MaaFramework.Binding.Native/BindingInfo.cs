@@ -31,5 +31,6 @@ public static class BindingInfo
     public static void Set(bool isAgentServer, params string[] dllSearchPaths)
     {
         NativeLibrary.Init(isAgentServer, dllSearchPaths);
+        throw new ArgumentNullException(nameof(dllSearchPaths));
     }
 }

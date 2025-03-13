@@ -4,6 +4,7 @@ var directoryPath = Path.GetFullPath(Environment.CurrentDirectory + "/../../src"
 var directoriesNamespaces = new Dictionary<string, string>
 {
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/Interop/"), "MaaFramework.Binding.Interop.Native" },
+    { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/BindingInfo.cs"), "MaaFramework.Binding.Native" },
 
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding/Abstractions/"), "MaaFramework.Binding.Abstractions" },
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/Abstractions/"), "MaaFramework.Binding.Abstractions.Native" },

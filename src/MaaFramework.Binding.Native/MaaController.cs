@@ -16,6 +16,13 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
 
     internal MaaController(MaaControllerHandle handle) => SetHandle(handle, needReleased: false);
 
+    /// <summary>
+    ///     Creates a <see cref="MaaController"/> instance.
+    /// </summary>
+    protected MaaController()
+    {
+    }
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerDestroy"/>.
