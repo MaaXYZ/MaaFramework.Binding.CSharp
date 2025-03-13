@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MaaFramework.Binding.Native;
+using MaaFramework.Binding;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -43,9 +43,9 @@ internal static partial class NativeLibrary
         if (!TryGetRuntimesPath(libraryName, out var dllPath) || !TryLoad(dllPath, out libraryHandle))
         {
             s_libraryHandles.Add(libraryName, nint.Zero);
-            BindingInfo.NativeAssemblyDirectory = null;
-            BindingInfo.IsStatelessMode = false;
-            BindingInfo.ApiInfo = "Using default dll resolver.";
+            NativeBindingInfo.NativeAssemblyDirectory = null;
+            NativeBindingInfo.IsStatelessMode = false;
+            NativeBindingInfo.ApiInfo = "Using default dll resolver.";
             return nint.Zero;
         }
 
@@ -54,13 +54,13 @@ internal static partial class NativeLibrary
         var dllDir = Path.GetDirectoryName(dllPath);
         if (s_libraryHandles.Count == 1)
         {
-            BindingInfo.NativeAssemblyDirectory ??= dllDir;
-            BindingInfo.IsStatelessMode = s_isAgentServer;
-            BindingInfo.ApiInfo = s_isAgentServer ? "In MaaAgentServer context." : "In MaaFramework context.";
+            NativeBindingInfo.NativeAssemblyDirectory ??= dllDir;
+            NativeBindingInfo.IsStatelessMode = s_isAgentServer;
+            NativeBindingInfo.ApiInfo = s_isAgentServer ? "In MaaAgentServer context." : "In MaaFramework context.";
         }
 
-        if (BindingInfo.NativeAssemblyDirectory != dllDir)
-            throw new InvalidOperationException($"The native assembly directory '{BindingInfo.NativeAssemblyDirectory}' was switched to '{dllDir}'.");
+        if (NativeBindingInfo.NativeAssemblyDirectory != dllDir)
+            throw new InvalidOperationException($"The native assembly directory '{NativeBindingInfo.NativeAssemblyDirectory}' was switched to '{dllDir}'.");
 
         return libraryHandle;
     }
