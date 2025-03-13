@@ -10,16 +10,11 @@ namespace MaaFramework.Binding;
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaController"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public abstract class MaaController : MaaCommon, IMaaController<nint>
+public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
 
-    /// <summary>
-    ///     Creates a <see cref="MaaController"/> instance.
-    /// </summary>
-    protected MaaController()
-    {
-    }
+    internal MaaController(MaaControllerHandle handle) => SetHandle(handle, needReleased: false);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -193,13 +188,13 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     ///     Wrapper of <see cref="MaaControllerCachedImage"/>.
     /// </remarks>
     public bool GetCachedImage(IMaaImageBuffer maaImage)
-        => GetCachedImage((IMaaImageBuffer<nint>)maaImage);
+        => GetCachedImage((IMaaImageBuffer<MaaImageBufferHandle>)maaImage);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerCachedImage"/>.
     /// </remarks>
-    public bool GetCachedImage(IMaaImageBuffer<nint> maaImage)
+    public bool GetCachedImage(IMaaImageBuffer<MaaImageBufferHandle> maaImage)
     {
         ArgumentNullException.ThrowIfNull(maaImage);
 

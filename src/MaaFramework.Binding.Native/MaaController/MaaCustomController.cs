@@ -19,7 +19,6 @@ public class MaaCustomController : MaaController
     ///     Wrapper of <see cref="MaaCustomControllerCreate"/>.
     /// </remarks>
     public MaaCustomController(IMaaCustomController api)
-        : base()
     {
         _api = api;
         var handle = MaaCustomControllerCreate(_api, nint.Zero, MaaNotificationCallback, nint.Zero);

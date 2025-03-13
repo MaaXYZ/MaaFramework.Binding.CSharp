@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using MaaFramework.Binding.Native;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -19,7 +20,7 @@ internal static partial class NativeLibrary
 
     public static void Init(bool isAgentServer, params string[] paths)
     {
-        if (s_libraryHandles.Count > 0)
+        if (s_libraryHandles.Count != 0)
             throw new InvalidOperationException("NativeLibrary is already loaded.");
 
         s_isAgentServer = isAgentServer;
@@ -39,13 +40,29 @@ internal static partial class NativeLibrary
         if (s_libraryHandles.TryGetValue(libraryName, out var libraryHandle))
             return libraryHandle;
 
-        if (TryGetRuntimesPath(libraryName, out var dllPath)
-            && TryLoad(dllPath, out libraryHandle)
-            && s_libraryHandles.TryAdd(libraryName, libraryHandle))
-            return libraryHandle;
+        if (!TryGetRuntimesPath(libraryName, out var dllPath) || !TryLoad(dllPath, out libraryHandle))
+        {
+            s_libraryHandles.Add(libraryName, nint.Zero);
+            BindingInfo.NativeAssemblyDirectory = null;
+            BindingInfo.IsStatelessMode = false;
+            BindingInfo.ApiInfo = "Using default dll resolver.";
+            return nint.Zero;
+        }
 
-        s_libraryHandles.TryAdd(libraryName, nint.Zero);
-        return nint.Zero;
+        s_libraryHandles.Add(libraryName, libraryHandle);
+
+        var dllDir = Path.GetDirectoryName(dllPath);
+        if (s_libraryHandles.Count == 1)
+        {
+            BindingInfo.NativeAssemblyDirectory ??= dllDir;
+            BindingInfo.IsStatelessMode = s_isAgentServer;
+            BindingInfo.ApiInfo = s_isAgentServer ? "In MaaAgentServer context." : "In MaaFramework context.";
+        }
+
+        if (BindingInfo.NativeAssemblyDirectory != dllDir)
+            throw new InvalidOperationException($"The native assembly directory '{BindingInfo.NativeAssemblyDirectory}' was switched to '{dllDir}'.");
+
+        return libraryHandle;
     }
 
     private static bool TryGetRuntimesPath(string libraryName, out string dllPath)

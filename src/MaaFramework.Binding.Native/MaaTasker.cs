@@ -12,13 +12,13 @@ namespace MaaFramework.Binding;
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaTasker"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class MaaTasker : MaaCommon, IMaaTasker<nint>
+public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
 
 #pragma warning disable CA2213
-    private IMaaResource<nint> _resource = default!;
-    private IMaaController<nint> _controller = default!;
+    private IMaaResource<MaaResourceHandle> _resource = default!;
+    private IMaaController<MaaControllerHandle> _controller = default!;
 #pragma warning restore CA2213
 
     /// <summary>
@@ -28,6 +28,20 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     ///     A property used to simplify design of <see cref="MaaContext.Tasker"/>.
     /// </remarks>
     protected internal static ConcurrentDictionary<MaaTaskerHandle, MaaTasker> Instances { get; } = [];
+
+
+#pragma warning disable CS8618
+    [SetsRequiredMembers]
+    internal MaaTasker(MaaTaskerHandle handle)
+    {
+        SetHandle(handle, needReleased: false);
+        _resource = new MaaResource(MaaTaskerGetResource(handle));
+        _controller = new MaaController(MaaTaskerGetController(handle));
+        DisposeOptions = DisposeOptions.None;
+        Toolkit = new MaaToolkit();
+        Utility = new MaaUtility();
+    }
+#pragma warning restore CS8618
 
     /// <summary>
     ///     Creates a <see cref="MaaTasker"/> instance.
@@ -53,7 +67,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <param name="toolkitInit">Whether initializes the <see cref="Toolkit"/>.</param>
     /// <inheritdoc cref="MaaTasker(bool)"/>
     [SetsRequiredMembers]
-    public MaaTasker(IMaaController<nint> controller, IMaaResource<nint> resource, DisposeOptions disposeOptions, bool toolkitInit = false)
+    public MaaTasker(IMaaController<MaaResourceHandle> controller, IMaaResource<MaaResourceHandle> resource, DisposeOptions disposeOptions, bool toolkitInit = false)
         : this(toolkitInit)
     {
         Resource = resource;

@@ -105,7 +105,17 @@ public class MaaContext : IMaaContext<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextGetTasker"/>.
     /// </remarks>
-    public IMaaTasker<nint> Tasker => MaaTasker.Instances[MaaContextGetTasker(Handle)];
+    public IMaaTasker<nint> Tasker
+    {
+        get
+        {
+            var taskerHandle = MaaContextGetTasker(Handle);
+            if (Native.BindingInfo.IsStatelessMode)
+                return new MaaTasker(taskerHandle);
+            else
+                return MaaTasker.Instances[taskerHandle];
+        }
+    }
 
     /// <inheritdoc/>
     /// <remarks>
