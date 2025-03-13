@@ -1,11 +1,11 @@
 ﻿using MaaFramework.Binding.Interop.Native;
 
-namespace MaaFramework.Binding.Native;
+namespace MaaFramework.Binding;
 
 /// <summary>
 /// 
 /// </summary>
-public static class BindingInfo
+public static class NativeBindingInfo
 {
     /// <summary>
     /// 

@@ -12,3 +12,5 @@
 
 global using MaaAgentClientHandle = nint;
 
+namespace MaaFramework.Binding.Interop.Native;
+
