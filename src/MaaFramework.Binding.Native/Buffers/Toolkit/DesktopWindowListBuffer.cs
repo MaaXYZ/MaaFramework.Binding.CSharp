@@ -88,7 +88,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     }
 
     /// <inheritdoc/>
-    public override bool CopyTo(MaaImageListBufferHandle bufferHandle)
+    public override bool TryCopyTo(MaaImageListBufferHandle bufferHandle)
         => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
     /// <summary>

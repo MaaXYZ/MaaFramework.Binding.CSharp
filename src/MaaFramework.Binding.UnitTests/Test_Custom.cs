@@ -55,7 +55,7 @@ internal static class Custom
             Assert.IsTrue(
                 cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
 
-            recognitionDetail.HitBox.CopyTo(results.Box);
+            recognitionDetail.HitBox.TryCopyTo(results.Box);
             results.Detail.SetValue(recognitionDetail.Detail);
             // return ret;
 

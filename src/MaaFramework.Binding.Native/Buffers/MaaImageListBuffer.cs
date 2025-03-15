@@ -143,7 +143,7 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
     }
 
     /// <inheritdoc/>
-    public override bool CopyTo(MaaImageListBufferHandle bufferHandle)
+    public override bool TryCopyTo(MaaImageListBufferHandle bufferHandle)
     {
         var count = MaaImageListBufferSize(Handle);
         if (count > MaaSize.MaxValue - MaaImageListBufferSize(bufferHandle))

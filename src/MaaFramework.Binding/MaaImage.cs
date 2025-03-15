@@ -92,6 +92,6 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
         ArgumentNullException.ThrowIfNull(buffer);
         MaaInteroperationException.ThrowIf(Buffer.IsInvalid, $"The '{nameof(Buffer)}' is disposed.");
 
-        Buffer.CopyTo(buffer);
+        Buffer.TryCopyTo(buffer);
     }
 }

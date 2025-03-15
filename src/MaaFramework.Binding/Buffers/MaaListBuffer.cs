@@ -52,14 +52,14 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     /// <inheritdoc/>
     public int Count => (int)MaaSizeCount;
     /// <inheritdoc/>
-    public abstract bool CopyTo(THandle bufferHandle);
+    public abstract bool TryCopyTo(THandle bufferHandle);
     /// <inheritdoc/>
-    public bool CopyTo(IMaaListBuffer<THandle, T> buffer)
-        => buffer is not null && CopyTo(buffer.Handle);
+    public bool TryCopyTo(IMaaListBuffer<THandle, T> buffer)
+        => buffer is not null && TryCopyTo(buffer.Handle);
     /// <inheritdoc/>
-    public bool CopyTo(IMaaListBuffer<T> buffer) => buffer switch
+    public bool TryCopyTo(IMaaListBuffer<T> buffer) => buffer switch
     {
-        IMaaListBuffer<THandle, T> bufferWithHandle => CopyTo(bufferWithHandle),
+        IMaaListBuffer<THandle, T> bufferWithHandle => TryCopyTo(bufferWithHandle),
         null => false,
         _ => MaaSizeCount <= MaaSize.MaxValue - buffer.MaaSizeCount
             && this.All(buffer.Add),

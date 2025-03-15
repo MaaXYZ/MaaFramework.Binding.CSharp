@@ -12,7 +12,7 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     public override string ToString() => $"{GetType().Name} {{ {nameof(X)} = {X}, {nameof(Y)} = {Y}, {nameof(Width)} = {Width}, {nameof(Height)} = {Height} }}";
 
     /// <inheritdoc/>
-    public bool CopyTo(MaaRectHandle bufferHandle) => Set(
+    public bool TryCopyTo(MaaRectHandle bufferHandle) => Set(
             handle: bufferHandle,
             x: MaaRectGetX(Handle),
             y: MaaRectGetY(Handle),
@@ -20,7 +20,7 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
             height: MaaRectGetH(Handle));
 
     /// <inheritdoc/>
-    public bool CopyTo(IMaaRectBuffer<MaaRectHandle> buffer) => buffer switch
+    public bool TryCopyTo(IMaaRectBuffer<MaaRectHandle> buffer) => buffer switch
     {
         // MaaRectBuffer native => native method is same to wrapped method
         null => false,
@@ -32,7 +32,7 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     };
 
     /// <inheritdoc/>
-    public bool CopyTo(IMaaRectBuffer buffer) => buffer switch
+    public bool TryCopyTo(IMaaRectBuffer buffer) => buffer switch
     {
         // MaaRectBuffer native => native method is same to wrapped method
         null => false,

@@ -94,7 +94,7 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
     }
 
     /// <inheritdoc/>
-    public override bool CopyTo(MaaImageListBufferHandle bufferHandle)
+    public override bool TryCopyTo(MaaImageListBufferHandle bufferHandle)
         => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
     /// <summary>

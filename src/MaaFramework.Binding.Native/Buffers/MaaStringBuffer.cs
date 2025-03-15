@@ -10,13 +10,13 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaStringBuffer<MaaStringBufferHandle>
 {
     /// <inheritdoc/>
-    public bool CopyTo(MaaStringBufferHandle bufferHandle) => MaaStringBufferSetExFromNint(
+    public bool TryCopyTo(MaaStringBufferHandle bufferHandle) => MaaStringBufferSetExFromNint(
             handle: bufferHandle,
             str: MaaStringBufferGetToNint(Handle),
             size: MaaStringBufferSize(Handle));
 
     /// <inheritdoc/>
-    public bool CopyTo(IMaaStringBuffer<MaaStringBufferHandle> buffer) => buffer switch
+    public bool TryCopyTo(IMaaStringBuffer<MaaStringBufferHandle> buffer) => buffer switch
     {
         MaaStringBuffer native => MaaStringBufferSetExFromNint(
             handle: native.Handle,
@@ -27,7 +27,7 @@ public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaS
     };
 
     /// <inheritdoc/>
-    public bool CopyTo(IMaaStringBuffer buffer) => buffer switch
+    public bool TryCopyTo(IMaaStringBuffer buffer) => buffer switch
     {
         MaaStringBuffer native => MaaStringBufferSetExFromNint(
             handle: native.Handle,

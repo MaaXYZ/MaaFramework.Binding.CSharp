@@ -90,7 +90,7 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     }
 
     /// <inheritdoc/>
-    public override bool CopyTo(MaaStringListBufferHandle bufferHandle)
+    public override bool TryCopyTo(MaaStringListBufferHandle bufferHandle)
     {
         var count = MaaStringListBufferSize(Handle);
         if (count > MaaSize.MaxValue - MaaStringListBufferSize(bufferHandle))

@@ -15,7 +15,7 @@ public interface IMaaBuffer<in THandle, in TBuffer> : IMaaBuffer<TBuffer>
     /// <param name="bufferHandle">The hadle of the buffer that is the destination of values copied from the current buffer.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     /// <exception cref="NotSupportedException">The <see cref="IMaaBuffer{THandle, TBuffer}"/> is read-only.</exception>
-    bool CopyTo(THandle bufferHandle);
+    bool TryCopyTo(THandle bufferHandle);
 }
 
 /// <summary>
@@ -30,5 +30,5 @@ public interface IMaaBuffer<in TBuffer> : IMaaDisposable
     /// <param name="buffer">The buffer that is the destination of values copied from the current buffer.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     /// <exception cref="NotSupportedException">The <see cref="IMaaBuffer{TBuffer}"/> is read-only.</exception>
-    bool CopyTo(TBuffer buffer);
+    bool TryCopyTo(TBuffer buffer);
 }

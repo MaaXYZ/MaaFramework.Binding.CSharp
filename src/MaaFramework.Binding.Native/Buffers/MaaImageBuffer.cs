@@ -13,7 +13,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     public override string ToString() => $"{GetType().Name}: {Width}x{Height} {{ {nameof(Channels)} = {Channels}, {nameof(Type)} = {Type} }}";
 
     /// <inheritdoc/>
-    public bool CopyTo(MaaImageBufferHandle bufferHandle) => MaaImageBufferSetRawData(
+    public bool TryCopyTo(MaaImageBufferHandle bufferHandle) => MaaImageBufferSetRawData(
             handle: bufferHandle,
             data: MaaImageBufferGetRawData(Handle),
             width: MaaImageBufferWidth(Handle),
@@ -21,7 +21,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
             type: MaaImageBufferType(Handle));
 
     /// <inheritdoc/>
-    public bool CopyTo(IMaaImageBuffer<MaaImageBufferHandle> buffer) => buffer switch
+    public bool TryCopyTo(IMaaImageBuffer<MaaImageBufferHandle> buffer) => buffer switch
     {
         MaaImageBuffer native => MaaImageBufferSetRawData(
             handle: native.Handle,
@@ -34,7 +34,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     };
 
     /// <inheritdoc/>
-    public bool CopyTo(IMaaImageBuffer buffer) => buffer switch
+    public bool TryCopyTo(IMaaImageBuffer buffer) => buffer switch
     {
         MaaImageBuffer native => MaaImageBufferSetRawData(
             handle: native.Handle,
