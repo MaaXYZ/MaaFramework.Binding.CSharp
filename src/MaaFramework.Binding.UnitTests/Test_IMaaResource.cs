@@ -59,12 +59,12 @@ public class Test_IMaaResource
         Assert.IsNotNull(maaResource);
 
         Assert.IsTrue(
-            maaResource.Loaded);
+            maaResource.IsLoaded);
         var job =
             maaResource.AppendBundle(Common.BundlePath);
         Interface_IMaaPost_Success(job);
         Assert.IsTrue(
-            maaResource.Loaded);
+            maaResource.IsLoaded);
     }
 
     private static void Interface_IMaaPost_Success(MaaJob job)

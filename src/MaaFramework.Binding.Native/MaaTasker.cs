@@ -167,7 +167,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerInited"/>.
     /// </remarks>
-    public bool Initialized => MaaTaskerInited(Handle);
+    public bool IsInitialized => MaaTaskerInited(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -205,7 +205,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerRunning"/>.
     /// </remarks>
-    public bool Running => MaaTaskerRunning(Handle);
+    public bool IsRunning => MaaTaskerRunning(Handle);
 
     /// <inheritdoc/>
     /// <remarks>

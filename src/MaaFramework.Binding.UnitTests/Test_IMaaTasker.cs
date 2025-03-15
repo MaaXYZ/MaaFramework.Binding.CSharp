@@ -51,7 +51,7 @@ public class Test_IMaaTasker
                 .ThrowIfNot(MaaJobStatus.Succeeded);
             data.Controller
                 .SetOption(ControllerOption.ScreenshotTargetShortSide, 720);
-            Assert.IsTrue(data.Initialized);
+            Assert.IsTrue(data.IsInitialized);
         }
     }
 
@@ -127,7 +127,7 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
 
-        Assert.IsFalse(maaTasker.Initialized);
+        Assert.IsFalse(maaTasker.IsInitialized);
         maaTasker
             .Resource
             .AppendBundle(Common.BundlePath)
@@ -137,7 +137,7 @@ public class Test_IMaaTasker
             .LinkStart()
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded);
-        Assert.IsTrue(maaTasker.Initialized);
+        Assert.IsTrue(maaTasker.IsInitialized);
     }
 
     [TestMethod]
@@ -214,7 +214,7 @@ public class Test_IMaaTasker
     private static void Interface_Running(IMaaTasker maaTasker)
     {
         Assert.IsFalse(
-            maaTasker.Running);
+            maaTasker.IsRunning);
     }
 
     private static void Interface_IMaaPost_Success(MaaTaskJob job)

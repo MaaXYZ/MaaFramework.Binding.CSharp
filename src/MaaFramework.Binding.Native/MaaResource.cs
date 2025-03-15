@@ -209,7 +209,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceLoaded"/>.
     /// </remarks>
-    public bool Loaded => MaaResourceLoaded(Handle);
+    public bool IsLoaded => MaaResourceLoaded(Handle);
 
     /// <inheritdoc/>
     /// <remarks>

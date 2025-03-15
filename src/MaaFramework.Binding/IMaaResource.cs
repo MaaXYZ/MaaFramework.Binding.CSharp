@@ -64,7 +64,7 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     ///     Gets whether the <see cref="IMaaResource"/> is fully loaded.
     /// </summary>
     /// <returns><see langword="true"/> if the <see cref="IMaaResource"/> is fully loaded; otherwise, <see langword="false"/>.</returns>
-    bool Loaded { get; }
+    bool IsLoaded { get; }
 
     /// <summary>
     ///     Gets the hash string of the <see cref="IMaaResource"/>.

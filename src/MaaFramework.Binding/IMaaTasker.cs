@@ -54,7 +54,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     ///     Gets whether the <see cref="IMaaTasker"/> is fully initialized.
     /// </summary>
     /// <returns><see langword="true"/> if the <see cref="IMaaTasker"/> was fully initialized; otherwise, <see langword="false"/>.</returns>
-    bool Initialized { get; }
+    bool IsInitialized { get; }
 
     /// <summary>
     ///     Appends a job of executing a task, could be called multiple times.
@@ -68,7 +68,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     ///     Gets whether the <see cref="IMaaTasker"/> is running.
     /// </summary>
     /// <returns><see langword="true"/> if <see cref="IMaaTasker"/> is running; otherwise, <see langword="false"/>.</returns>
-    bool Running { get; }
+    bool IsRunning { get; }
 
     /// <summary>
     ///     Stops all appended tasks, the <see cref="IMaaResource"/> and the <see cref="IMaaController"/>. 
