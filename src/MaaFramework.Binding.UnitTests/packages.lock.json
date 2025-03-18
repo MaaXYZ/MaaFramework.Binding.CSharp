@@ -182,15 +182,15 @@
       "Maa.Framework.Native": {
         "type": "Project",
         "dependencies": {
-          "Maa.AgentBinary": "[1.0.0, )",
+          "Maa.AgentBinary": "[1.1.0, )",
           "Maa.Framework.Binding.Native": "[1.0.0-dev, )"
         }
       },
       "Maa.AgentBinary": {
         "type": "CentralTransitive",
-        "requested": "[1.0.0, )",
-        "resolved": "1.0.0",
-        "contentHash": "09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA=="
+        "requested": "[1.1.0, )",
+        "resolved": "1.1.0",
+        "contentHash": "SITxxo/h53R/WlhaaG6CK4qWGwmc6/fcPykCnXG3tIs2Mx4iS2Y4XfRWlCtwpMoP0lyanjl+ZvqMUQ4vEV9U7A=="
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
@@ -388,15 +388,15 @@
       "Maa.Framework.Native": {
         "type": "Project",
         "dependencies": {
-          "Maa.AgentBinary": "[1.0.0, )",
+          "Maa.AgentBinary": "[1.1.0, )",
           "Maa.Framework.Binding.Native": "[1.0.0-dev, )"
         }
       },
       "Maa.AgentBinary": {
         "type": "CentralTransitive",
-        "requested": "[1.0.0, )",
-        "resolved": "1.0.0",
-        "contentHash": "09TsLd4LbaxoK68AZAg4MZFle/kkX8JZTbjRbkJYptyUCPCtdbVr8odukKG1CUzL4Wumbu+Fk7ppNX/OSlRMOA=="
+        "requested": "[1.1.0, )",
+        "resolved": "1.1.0",
+        "contentHash": "SITxxo/h53R/WlhaaG6CK4qWGwmc6/fcPykCnXG3tIs2Mx4iS2Y4XfRWlCtwpMoP0lyanjl+ZvqMUQ4vEV9U7A=="
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
