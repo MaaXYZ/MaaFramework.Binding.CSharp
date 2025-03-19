@@ -12,7 +12,7 @@
 
 ﻿namespace MaaFramework.Binding.Notification;
 
-//MaaApiDocument Version: (main) v3.0.4
+//MaaApiDocument Version: (main) v4.0.0
 /// <summary>
 ///  A callback consists of a message and a payload.
 ///  The message is a string that indicates the type of the message.
