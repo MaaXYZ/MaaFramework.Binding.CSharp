@@ -11,12 +11,12 @@ public class MaaInteroperationException : MaaException
     /// <summary>
     ///     Resource binding failed message.
     /// </summary>
-    public const string ResourceBindingFailedMessage = "MaaTasker failed to bind MaaResource.";
+    public const string ResourceBindingFailedMessage = "Failed to bind MaaResource.";
 
     /// <summary>
     ///     Controller binding failed message.
     /// </summary>
-    public const string ControllerBindingFailedMessage = "MaaTasker failed to bind MaaController.";
+    public const string ControllerBindingFailedMessage = "Failed to bind MaaController.";
 
     /// <summary>
     ///     Resource modified message.
