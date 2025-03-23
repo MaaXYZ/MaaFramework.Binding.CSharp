@@ -4,11 +4,42 @@ using MaaFramework.Binding.Buffers;
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A non-generic sealed record used to wrap <see cref="IMaaImageBuffer"/>.
+///     A non-generic sealed class used to wrap <see cref="IMaaImageBuffer"/>.
 /// </summary>
-/// <param name="Buffer">The IMaaImageBuffer.</param>
-public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
+/// <param name="buffer">The IMaaImageBuffer.</param>
+public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
 {
+    private bool _isCached;
+    private readonly MemoryStream _cacheStream = new();
+    private ImageInfo _cacheInfo = new(-1, -1, -1, -1);
+
+    /// <summary>
+    ///     Gets the IMaaImageBuffer.
+    /// </summary>
+    public IMaaImageBuffer Buffer { get; } = buffer;
+
+    /// <summary>
+    ///     Caches the image data from the <see cref="IMaaImageBuffer"/>.
+    /// </summary>
+    /// <returns><see langword="true"/> if the image was cached successfully; otherwise, <see langword="false"/>.</returns>
+    public bool TryCache()
+    {
+        if (_isCached && Buffer.IsInvalid)
+            return true;
+
+        var ret = Buffer.TryGetEncodedData(out Stream stream);
+        using (stream)
+        {
+            if (!ret || !stream.CanRead)
+                return false;
+
+            _cacheInfo = Buffer.GetInfo();
+            _cacheStream.SetLength(0);
+            stream.CopyTo(_cacheStream);
+            return _isCached = true;
+        }
+    }
+
     /// <inheritdoc/>
     public override string ToString()
     {
@@ -18,16 +49,19 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
 
     /// <inheritdoc cref="IMaaImageBuffer.GetInfo"/>
     public ImageInfo GetInfo()
-        => Buffer.GetInfo();
+        => _isCached ? _cacheInfo : Buffer.GetInfo();
 
     /// <inheritdoc/>
-    public bool IsInvalid => Buffer.IsInvalid;
+    public bool IsInvalid => !_isCached && Buffer.IsInvalid;
 
     /// <inheritdoc/>
     public void Dispose()
     {
         Buffer.Dispose();
+        _cacheStream.Dispose();
     }
+
+    #region Load & Save
 
     /// <summary>
     ///     Creates a new instance of the <see cref="MaaImage"/> class from the given <paramref name="stream"/>.
@@ -35,10 +69,13 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     /// <param name="stream">The stream containing image information.</param>
     /// <returns>A <see cref="MaaImage"/>.</returns>
     public static MaaImage Load<T>(Stream stream) where T : IMaaImageBuffer, new()
-        => new MaaImage(new T
-        {
-            EncodedDataStream = stream
-        });
+    {
+        var buffer = new T();
+        MaaInteroperationException.ThrowIfNot(
+            buffer.TrySetEncodedData(stream),
+            $"Failed to load png image from '{nameof(stream)}'.");
+        return new(buffer);
+    }
 
     /// <summary>
     ///     Creates a new instance of the <see cref="MaaImage"/> class from the given file.
@@ -49,6 +86,20 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     {
         using var stream = File.OpenRead(filePath);
         return Load<T>(stream);
+    }
+
+    /// <summary>
+    ///     Creates a new instance of the <see cref="MaaImage"/> class from the given <paramref name="span"/>.
+    /// </summary>
+    /// <param name="span">The readonly span containing image data.</param>
+    /// <returns>A <see cref="MaaImage"/>.</returns>
+    public static MaaImage Load<T>(ReadOnlySpan<byte> span) where T : IMaaImageBuffer, new()
+    {
+        var buffer = new T();
+        MaaInteroperationException.ThrowIfNot(
+            buffer.TrySetEncodedData(span),
+            $"Failed to load png image from '{nameof(span)}'.");
+        return new(buffer);
     }
 
     /// <summary>
@@ -66,9 +117,18 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     /// <exception cref="MaaInteroperationException">The <see cref="Buffer"/> is disposed.</exception>
     public void Save(Stream stream)
     {
-        MaaInteroperationException.ThrowIf(Buffer.IsInvalid, $"The '{nameof(Buffer)}' is disposed.");
+        MaaInteroperationException.ThrowIf(IsInvalid, $"The '{nameof(Buffer)}' is disposed.");
+        if (_isCached)
+        {
+            _cacheStream.CopyTo(stream);
+            return;
+        }
 
-        Buffer.EncodedDataStream.CopyTo(stream);
+        MaaInteroperationException.ThrowIfNot(
+            Buffer.TryGetEncodedData(out Stream dataStream),
+            $"Failed to get encoded data from '{nameof(Buffer)}'.");
+        dataStream.CopyTo(stream);
+        dataStream.Close();
     }
 
     /// <summary>
@@ -90,8 +150,14 @@ public sealed record MaaImage(IMaaImageBuffer Buffer) : IMaaDisposable
     public void Save(IMaaImageBuffer buffer)
     {
         ArgumentNullException.ThrowIfNull(buffer);
-        MaaInteroperationException.ThrowIf(Buffer.IsInvalid, $"The '{nameof(Buffer)}' is disposed.");
+        MaaInteroperationException.ThrowIf(IsInvalid, $"The '{nameof(Buffer)}' is disposed.");
 
-        Buffer.TryCopyTo(buffer);
+        var isSuccessful = _isCached
+            ? buffer.TrySetEncodedData(_cacheStream)
+            : Buffer.TryCopyTo(buffer);
+
+        MaaInteroperationException.ThrowIfNot(isSuccessful, $"Failed to set encoded data to '{nameof(buffer)}'.");
     }
+
+    #endregion
 }
