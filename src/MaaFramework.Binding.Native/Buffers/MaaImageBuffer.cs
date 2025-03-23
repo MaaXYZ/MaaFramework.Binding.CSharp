@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Interop.Native;
+using System.Buffers;
+using System.Runtime.InteropServices;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -7,7 +8,7 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa Image Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
 /// </summary>
-public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaImageBuffer<MaaImageBufferHandle>
+public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaImageBuffer<MaaImageBufferHandle>, IMaaImageBufferStatic<MaaImageBufferHandle>
 {
     /// <inheritdoc/>
     public override string ToString() => $"{GetType().Name}: {Width}x{Height} {{ {nameof(Channels)} = {Channels}, {nameof(Type)} = {Type} }}";
@@ -21,19 +22,6 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
             type: MaaImageBufferType(Handle));
 
     /// <inheritdoc/>
-    public bool TryCopyTo(IMaaImageBuffer<MaaImageBufferHandle> buffer) => buffer switch
-    {
-        MaaImageBuffer native => MaaImageBufferSetRawData(
-            handle: native.Handle,
-            data: MaaImageBufferGetRawData(Handle),
-            width: MaaImageBufferWidth(Handle),
-            height: MaaImageBufferHeight(Handle),
-            type: MaaImageBufferType(Handle)),
-        null => false,
-        _ => TrySetEncodedDataStream(Handle, buffer.EncodedDataStream),
-    };
-
-    /// <inheritdoc/>
     public bool TryCopyTo(IMaaImageBuffer buffer) => buffer switch
     {
         MaaImageBuffer native => MaaImageBufferSetRawData(
@@ -43,7 +31,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
             height: MaaImageBufferHeight(Handle),
             type: MaaImageBufferType(Handle)),
         null => false,
-        _ => TrySetEncodedDataStream(Handle, buffer.EncodedDataStream),
+        _ => buffer.TryGetEncodedData(out Stream data) && TrySetEncodedData(Handle, data),
     };
 
     /// <summary>
@@ -83,18 +71,8 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferClear"/>.
     /// </remarks>
-    public bool Clear()
+    public bool TryClear()
         => MaaImageBufferClear(Handle);
-
-    /// <summary>
-    ///     Gets the image raw data.
-    /// </summary>
-    /// <returns>The raw data of image(cv::Mat::data).</returns>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaImageBufferGetRawData"/>.
-    /// </remarks>
-    public MaaImageRawData GetRawData()
-        => MaaImageBufferGetRawData(Handle);
 
     /// <inheritdoc/>
     public ImageInfo GetInfo() => new
@@ -105,129 +83,296 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         Type: MaaImageBufferType(Handle)
     );
 
-    /// <inheritdoc cref="ImageInfo.Width"/>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferWidth"/>.
     /// </remarks>
     public int Width => MaaImageBufferWidth(Handle);
 
-    /// <inheritdoc cref="ImageInfo.Height"/>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferHeight"/>.
     /// </remarks>
     public int Height => MaaImageBufferHeight(Handle);
 
-    /// <inheritdoc cref="ImageInfo.Channels"/>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferChannels"/>.
     /// </remarks>
     public int Channels => MaaImageBufferChannels(Handle);
 
-    /// <inheritdoc cref="ImageInfo.Type"/>
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferType"/>.
     /// </remarks>
     public int Type => MaaImageBufferType(Handle);
 
-    /// <summary>
-    ///     Sets the image raw data.
-    /// </summary>
-    /// <param name="data">The raw data of image.</param>
-    /// <param name="width">The width of image.</param>
-    /// <param name="height">The height of image.</param>
-    /// <param name="type">The type of image.</param>
-    /// <returns><see langword="true"/> if the image raw data was set successfully; otherwise, <see langword="false"/>.</returns>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaImageBufferSetRawData"/>.
-    /// </remarks>
-    public bool SetRawData(MaaImageRawData data, int width, int height, int type)
-        => MaaImageBufferSetRawData(Handle, data, width, height, type);
+    #region EncodedData
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaImageBufferGetEncoded"/> and <see cref="MaaImageBufferGetEncodedSize"/>.
-    /// </remarks>
-    public MaaImageEncodedData GetEncodedData(out MaaSize size)
+    public unsafe bool TryGetEncodedData(out byte[] data)
+        => TryGetEncodedData(Handle, out data);
+
+    /// <inheritdoc/>
+    public bool TryGetEncodedData(out Stream data)
+        => TryGetEncodedData(Handle, out data);
+
+    /// <inheritdoc/>
+    public bool TryGetEncodedData(out ReadOnlySpan<byte> data)
+        => TryGetEncodedData(Handle, out data);
+
+    /// <inheritdoc/>
+    public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out byte[] data)
     {
-        size = MaaImageBufferGetEncodedSize(Handle);
-        return MaaImageBufferGetEncoded(Handle);
+        data = [];
+
+        var dataHandle = MaaImageBufferGetEncoded(handle);
+        if (dataHandle == default)
+            return false;
+
+        var size = MaaImageBufferGetEncodedSize(handle);
+        if (size > (MaaSize)Array.MaxLength)
+            return false;
+
+        data = new byte[size];
+        new Span<byte>((void*)dataHandle, data.Length).CopyTo(data);
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out Stream data)
+    {
+        var dataHandle = MaaImageBufferGetEncoded(handle);
+        if (dataHandle == default)
+        {
+            data = Stream.Null;
+            return false;
+        }
+
+        data = new UnmanagedMemoryStream(
+            (byte*)dataHandle,
+            (long)MaaImageBufferGetEncodedSize(handle));
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out ReadOnlySpan<byte> data)
+    {
+        var dataHandle = MaaImageBufferGetEncoded(handle);
+        if (dataHandle == default)
+        {
+            data = [];
+            return false;
+        }
+
+        data = new ReadOnlySpan<byte>(
+            (void*)dataHandle,
+            (int)MaaImageBufferGetEncodedSize(handle));
+        return true;
     }
 
     /// <param name="handle">The MaaImageBufferHandle.</param>
-    /// <param name="size">The image encoded size.</param>
-    /// <inheritdoc cref="GetEncodedData"/>
-    public static MaaImageEncodedData Get(MaaImageBufferHandle handle, out MaaSize size)
+    /// <param name="data">The image data (PNG).</param>
+    /// <param name="size">The encoded size.</param>
+    /// <inheritdoc cref="TryGetEncodedData(MaaImageBufferHandle, out byte[])"/>
+    public static bool TryGetEncodedData(MaaImageBufferHandle handle, out MaaImageEncodedData data, out MaaSize size)
     {
+        data = MaaImageBufferGetEncoded(handle);
         size = MaaImageBufferGetEncodedSize(handle);
-        return MaaImageBufferGetEncoded(handle);
+        return data != default;
     }
 
-    /// <param name="handle">The MaaImageBufferHandle.</param>
-    /// <inheritdoc cref="GetEncodedData"/>
-    public static unsafe UnmanagedMemoryStream Get(MaaImageBufferHandle handle) => new(
-        (byte*)MaaImageBufferGetEncoded(handle).ToPointer(),
-        (long)MaaImageBufferGetEncodedSize(handle));
-
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaImageBufferSetEncoded"/>.
-    /// </remarks>
-    public bool SetEncodedData(MaaImageEncodedData data, MaaSize size)
-        => MaaImageBufferSetEncoded(Handle, data, size);
-
-    /// <param name="handle">The MaaImageBufferHandle.</param>
-    /// <param name="data">The encoded data of image.</param>
-    /// <param name="size">The encoded size of image.</param>
-    /// <inheritdoc cref="SetEncodedData"/>
-    public static bool Set(MaaImageBufferHandle handle, MaaImageEncodedData data, MaaSize size)
-        => MaaImageBufferSetEncoded(handle, data, size);
-
-    /// <param name="handle">The MaaImageBufferHandle.</param>
-    /// <param name="data">The encoded data of image.</param>
-    /// <inheritdoc cref="SetEncodedData"/>
-    public static bool Set(MaaImageBufferHandle handle, Stream data)
-        => data is not null && TrySetEncodedDataStream(handle, data);
-
-    /// <inheritdoc/>
-    public unsafe Stream EncodedDataStream
+    public static bool TryGetEncodedData(out byte[] data, Func<MaaImageBufferHandle, bool> writeBuffer)
     {
-        get
+        ArgumentNullException.ThrowIfNull(writeBuffer);
+        var handle = MaaImageBufferCreate();
+        if (!writeBuffer.Invoke(handle))
         {
-            return new UnmanagedMemoryStream(
-                (byte*)MaaImageBufferGetEncoded(Handle).ToPointer(),
-                (long)MaaImageBufferGetEncodedSize(Handle));
+            data = [];
+            MaaImageBufferDestroy(handle);
+            return false;
         }
-        set
+
+        var ret = TryGetEncodedData(handle, out data);
+        MaaImageBufferDestroy(handle);
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    public bool TrySetEncodedData(byte[] data)
+        => TrySetEncodedData(Handle, data);
+
+    /// <inheritdoc/>
+    public bool TrySetEncodedData(Stream data)
+        => TrySetEncodedData(Handle, data);
+
+    /// <inheritdoc/>
+    public bool TrySetEncodedData(ReadOnlySpan<byte> data)
+        => TrySetEncodedData(Handle, data);
+
+    /// <inheritdoc/>
+    public static unsafe bool TrySetEncodedData(MaaImageBufferHandle handle, byte[] data)
+    {
+        fixed (byte* __array_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(data))
         {
-            ArgumentNullException.ThrowIfNull(value);
-            TrySetEncodedDataStream(Handle, value).ThrowIfFalse();
+            return MaaImageBufferSetEncoded(handle, (nint)__array_native, (MaaSize)(data?.Length ?? 0));
         }
     }
 
-    private static unsafe bool TrySetEncodedDataStream(MaaImageBufferHandle handle, Stream value)
+    /// <inheritdoc/>
+    public static unsafe bool TrySetEncodedData(MaaImageBufferHandle handle, Stream data)
     {
-        value.Position = 0;
-        var size = (MaaSize)value.Length;
-        if (value is UnmanagedMemoryStream unmanagedMemoryStream)
+        if (data is null || !data.CanRead)
+            return false;
+
+        if (data.CanSeek)
+            data.Position = 0;
+
+        var size = (MaaSize)(data.Length - data.Position);
+        if (data is UnmanagedMemoryStream unmanagedMemoryStream)
         {
             return MaaImageBufferSetEncoded(handle, (nint)unmanagedMemoryStream.PositionPointer, size);
         }
 
-        byte[] data;
-        if (value is MemoryStream memoryStream && memoryStream.TryGetBuffer(out var seg))
+        var intSize = (int)size;
+        if (data is MemoryStream memoryStream && memoryStream.TryGetBuffer(out var seg))
         {
-            data = seg.Array!;
-        }
-        else
-        {
-            data = new byte[size];
-            _ = value.Read(data, 0, data.Length);
+            var span = new ReadOnlySpan<byte>(seg.Array, seg.Offset + (int)memoryStream.Position, intSize);
+            return TrySetEncodedData(handle, span);
         }
 
-        // Pin - Pin data in preparation for calling the P/Invoke.
-        fixed (void* __data_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(data))
+        var array = ArrayPool<byte>.Shared.Rent(intSize); // using NativeMemory.Alloc if data is too big and necessary
+        try
         {
-            return MaaImageBufferSetEncoded(handle, (nint)__data_native, size);
+            if (data.Read(array, 0, intSize) != 0)
+                return false;
+
+            fixed (byte* __array_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(array))
+            {
+                return MaaImageBufferSetEncoded(handle, (nint)__array_native, size);
+            }
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(array);
         }
     }
+
+    /// <inheritdoc/>
+    public static unsafe bool TrySetEncodedData(MaaImageBufferHandle handle, ReadOnlySpan<byte> data)
+    {
+        fixed (byte* __array_native = &MemoryMarshal.GetReference(data))
+        {
+            return MaaImageBufferSetEncoded(handle, (nint)__array_native, (MaaSize)data.Length);
+        }
+    }
+
+    /// <param name="handle">The MaaImageBufferHandle.</param>
+    /// <param name="data">The image data (PNG).</param>
+    /// <param name="size">The encoded size.</param>
+    /// <inheritdoc cref="TrySetEncodedData(MaaImageBufferHandle, ReadOnlySpan{byte})"/>
+    public static bool TrySetEncodedData(MaaImageBufferHandle handle, MaaImageEncodedData data, MaaSize size)
+        => MaaImageBufferSetEncoded(handle, data, size);
+
+    /// <inheritdoc/>
+    public static bool TrySetEncodedData(byte[] data, Func<MaaImageBufferHandle, bool> readBuffer)
+    {
+        ArgumentNullException.ThrowIfNull(readBuffer);
+        var handle = MaaImageBufferCreate();
+        if (!TrySetEncodedData(handle, data))
+        {
+            MaaImageBufferDestroy(handle);
+            return false;
+        }
+
+        var ret = readBuffer.Invoke(handle);
+        MaaImageBufferDestroy(handle);
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    public static bool TrySetEncodedData(Stream data, Func<MaaImageBufferHandle, bool> readBuffer)
+    {
+        ArgumentNullException.ThrowIfNull(readBuffer);
+        var handle = MaaImageBufferCreate();
+        if (!TrySetEncodedData(handle, data))
+        {
+            MaaImageBufferDestroy(handle);
+            return false;
+        }
+
+        var ret = readBuffer.Invoke(handle);
+        MaaImageBufferDestroy(handle);
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    public static bool TrySetEncodedData(ReadOnlySpan<byte> data, Func<MaaImageBufferHandle, bool> readBuffer)
+    {
+        ArgumentNullException.ThrowIfNull(readBuffer);
+        var handle = MaaImageBufferCreate();
+        if (!TrySetEncodedData(handle, data))
+        {
+            MaaImageBufferDestroy(handle);
+            return false;
+        }
+
+        var ret = readBuffer.Invoke(handle);
+        MaaImageBufferDestroy(handle);
+        return ret;
+    }
+
+    #endregion
+
+    #region RawData
+
+    /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
+    public bool TryGetRawData(out MaaImageRawData data)
+    {
+        data = MaaImageBufferGetRawData(Handle);
+        return data != default;
+    }
+
+    /// <summary>
+    ///     Gets the image raw data.
+    /// </summary>
+    /// <param name="handle">The MaaImageBufferHandle.</param>
+    /// <param name="data">The image data (cv::Mat::data).</param>
+    /// <param name="width">The image width.</param>
+    /// <param name="height">The image height.</param>
+    /// <param name="type">The image type.</param>
+    /// <returns><see langword="true"/> if the image raw data was got successfully; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaImageBufferGetRawData"/>.
+    /// </remarks>
+    public static bool TryGetRawData(MaaImageBufferHandle handle, out MaaImageRawData data, out int width, out int height, out int type)
+    {
+        data = MaaImageBufferGetRawData(handle);
+        width = MaaImageBufferWidth(handle);
+        height = MaaImageBufferHeight(handle);
+        type = MaaImageBufferType(handle);
+        return data != default;
+    }
+
+    /// <inheritdoc cref="TrySetRawData(nint, nint, int, int, int)"/>
+    public bool TrySetRawData(MaaImageRawData data, int width, int height, int type)
+        => MaaImageBufferSetRawData(Handle, data, width, height, type);
+
+    /// <summary>
+    ///     Sets the image raw data.
+    /// </summary>
+    /// <param name="handle">The MaaImageBufferHandle.</param>
+    /// <param name="data">The image(cv::Mat::data) data.</param>
+    /// <param name="width">The image width.</param>
+    /// <param name="height">The image height.</param>
+    /// <param name="type">The image type.</param>
+    /// <returns><see langword="true"/> if the image raw data was set successfully; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaImageBufferSetRawData"/>.
+    /// </remarks>
+    public static bool TrySetRawData(MaaImageBufferHandle handle, MaaImageRawData data, int width, int height, int type)
+        => MaaImageBufferSetRawData(handle, data, width, height, type);
+
+    #endregion
 }

@@ -286,15 +286,14 @@ public class Test_IMaaController
         Assert.IsNotNull(maaController);
         using var buffer = GetImage(type, maaController);
 
-        var encodedDataHandle = buffer.GetEncodedData(out var size);
-        var pngImageData = new byte[size];
-        Marshal.Copy(encodedDataHandle, pngImageData, 0, (int)size);
-        CollectionAssert.AreNotEqual(new byte[size], pngImageData);
+        Assert.IsTrue(
+            buffer.TryGetEncodedData(out byte[] pngImageData));
+        CollectionAssert.AreNotEqual(new byte[pngImageData.Length], pngImageData);
 
         // if (type is MaaTypes.Native) { }
-        var info = buffer.GetInfo();
-        var length = info.Width * info.Height * info.Channels;
-        var rawDataHandle = buffer.GetRawData();
+        var length = buffer.Width * buffer.Height * buffer.Channels;
+        Assert.IsTrue(
+            buffer.TryGetRawData(out var rawDataHandle));
         var cv2MatData = new byte[length];
         Marshal.Copy(rawDataHandle, cv2MatData, 0, length);
         CollectionAssert.AreNotEqual(new byte[length], cv2MatData);
@@ -306,23 +305,24 @@ public class Test_IMaaController
     {
         Assert.IsNotNull(maaController);
         using var buffer = GetImage(type, maaController);
-
-        using var image = Image.Load(buffer.EncodedDataStream);
+        Assert.IsTrue(
+            buffer.TryGetEncodedData(out Stream data));
+        using var image = Image.Load(data);
         Assert.AreEqual(
             image.Height, buffer.Height);
         Assert.AreEqual(
             image.Width, buffer.Width);
-        // ReSharper disable AccessToDisposedClosure
-        Assert.ThrowsException<NotSupportedException>(() =>
-            image.Save(buffer.EncodedDataStream, image.Metadata.DecodedImageFormat!));
-        // ReSharper restore AccessToDisposedClosure
 
         using var stream = new MemoryStream();
         image.Mutate(c => c.Resize(30, 30));
         image.Save(stream, image.Metadata.DecodedImageFormat!);
-        buffer.EncodedDataStream = stream;
+        stream.Position = 0;
+        Assert.IsTrue(
+            buffer.TrySetEncodedData(stream));
 
-        using var resizeImage = Image.Load(buffer.EncodedDataStream);
+        Assert.IsTrue(
+            buffer.TryGetEncodedData(out data));
+        using var resizeImage = Image.Load(data);
         Assert.AreEqual(
             30, image.Height);
         Assert.AreEqual(

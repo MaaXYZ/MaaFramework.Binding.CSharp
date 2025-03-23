@@ -6,22 +6,9 @@ namespace MaaFramework.Binding.Buffers;
 ///     An interface defining wrapped members for MaaImageBuffer with generic handle.
 /// </summary>
 /// <typeparam name="THandle">The type of handle.</typeparam>
-public interface IMaaImageBuffer<THandle> : IMaaImageBuffer, IMaaBuffer<THandle, IMaaImageBuffer<THandle>>, IMaaDisposableHandle<THandle>
+public interface IMaaImageBuffer<THandle> : IMaaImageBuffer, IMaaBuffer<THandle, IMaaImageBuffer>, IMaaDisposableHandle<THandle>
 {
-    /// <summary>
-    ///     Gets the image encoded data.
-    /// </summary>
-    /// <param name="size">The image encoded size.</param>
-    /// <returns>The encoded data of image(PNG).</returns>
-    THandle GetEncodedData(out MaaSize size);
-
-    /// <summary>
-    ///     Sets the image encoded data.
-    /// </summary>
-    /// <param name="data">The encoded data of image.</param>
-    /// <param name="size">The encoded size of image.</param>
-    /// <returns><see langword="true"/> if the image encoded data was set successfully; otherwise, <see langword="false"/>.</returns>
-    bool SetEncodedData(THandle data, MaaSize size);
+    // Implement IMaaImageBufferStatic<THandle> at the same time if this interface is implemented.
 }
 
 /// <summary>
@@ -39,7 +26,7 @@ public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>
     ///     Clears the image of the <see cref="IMaaImageBuffer"/>.
     /// </summary>
     /// <returns><see langword="true"/> if the image was cleared successfully; otherwise, <see langword="false"/>.</returns>
-    bool Clear();
+    bool TryClear();
 
     /// <summary>
     ///     Gets the image info.
@@ -47,14 +34,96 @@ public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>
     /// <returns>The info including width, height, channels, type.</returns>
     ImageInfo GetInfo();
 
+    /// <inheritdoc cref="ImageInfo.Width"/>
+    int Width { get; }
+
+    /// <inheritdoc cref="ImageInfo.Height"/>
+    int Height { get; }
+
+    /// <inheritdoc cref="ImageInfo.Channels"/>
+    int Channels { get; }
+
+    /// <inheritdoc cref="ImageInfo.Type"/>
+    int Type { get; }
+
+    /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TryGetEncodedData(THandle, out byte[])"/>
+    bool TryGetEncodedData(out byte[] data);
+
+    /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TryGetEncodedData(THandle, out Stream)"/>
+    bool TryGetEncodedData(out Stream data);
+
+    /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TryGetEncodedData(THandle, out ReadOnlySpan{byte})"/>
+    bool TryGetEncodedData(out ReadOnlySpan<byte> data);
+
+    /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TrySetEncodedData(THandle, byte[])"/>
+    bool TrySetEncodedData(byte[] data);
+
+    /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TrySetEncodedData(THandle, Stream)"/>
+    bool TrySetEncodedData(Stream data);
+
+    /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TrySetEncodedData(THandle, ReadOnlySpan{byte})"/>
+    bool TrySetEncodedData(ReadOnlySpan<byte> data);
+}
+
+/// <summary>
+///     An interface defining wrapped static abstract members for MaaImageBuffer with generic handle.
+/// </summary>
+/// <typeparam name="THandle">The type of handle.</typeparam>
+public interface IMaaImageBufferStatic<THandle>
+{
     /// <summary>
-    ///     Gets or sets the image encoded data stream.
+    ///     Gets the image encoded data from a MaaImageBuffer.
     /// </summary>
-    /// <returns>The stream of image(PNG).</returns>
+    /// <param name="handle">The MaaImageBufferHandle.</param>
+    /// <param name="data">The image data (PNG).</param>
+    /// <returns><see langword="true"/> if the image encoded data was got successfully; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetEncodedData(THandle handle, out byte[] data);
+
     /// <remarks>
-    ///     <para>1. Avoids disposing <see cref="IMaaImageBuffer"/> before the stream is read.</para>
-    ///     <para>2. Sets a png image into the <see cref="IMaaImageBuffer"/> if a stream is set.</para>
+    ///     <para>Avoids disposing <see cref="IMaaImageBuffer"/> before the stream is read.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException"/>
-    Stream EncodedDataStream { get; set; }
+    /// <inheritdoc cref="TryGetEncodedData(THandle, out byte[])"/>
+    static abstract bool TryGetEncodedData(THandle handle, out Stream data);
+
+    /// <remarks>
+    ///     <para>Avoids disposing <see cref="IMaaImageBuffer"/> before the span is read.</para>
+    /// </remarks>
+    /// <inheritdoc cref="TryGetEncodedData(THandle, out byte[])"/>
+    static abstract bool TryGetEncodedData(THandle handle, out ReadOnlySpan<byte> data);
+
+    /// <summary>
+    ///     Gets the image encoded data from a function using MaaRectBuffer.
+    /// </summary>
+    /// <param name="data">The image data (PNG).</param>
+    /// <param name="writeBuffer">The function used to write the data to the buffer.</param>
+    /// <returns><see langword="true"/> if the image encoded data was got successfully; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetEncodedData(out byte[] data, Func<THandle, bool> writeBuffer);
+
+    /// <summary>
+    ///     Sets the image encoded data to a MaaImageBuffer.
+    /// </summary>
+    /// <param name="handle">The MaaImageBufferHandle.</param>
+    /// <param name="data">The image data (PNG).</param>
+    /// <returns><see langword="true"/> if the image encoded data was set successfully; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TrySetEncodedData(THandle handle, byte[] data);
+
+    /// <inheritdoc cref="TrySetEncodedData(THandle, byte[])"/>
+    static abstract bool TrySetEncodedData(THandle handle, Stream data);
+
+    /// <inheritdoc cref="TrySetEncodedData(THandle, byte[])"/>
+    static abstract bool TrySetEncodedData(THandle handle, ReadOnlySpan<byte> data);
+
+    /// <summary>
+    ///     Sets the image encoded data to a function using MaaRectBuffer.
+    /// </summary>
+    /// <param name="data">The image data (PNG).</param>
+    /// <param name="readBuffer">The function used to read the data from the buffer.</param>
+    /// <returns><see langword="true"/> if the image encoded data was set successfully; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TrySetEncodedData(byte[] data, Func<THandle, bool> readBuffer);
+
+    /// <inheritdoc cref="TrySetEncodedData(byte[], Func{THandle, bool})"/>
+    static abstract bool TrySetEncodedData(Stream data, Func<THandle, bool> readBuffer);
+
+    /// <inheritdoc cref="TrySetEncodedData(byte[], Func{THandle, bool})"/>
+    static abstract bool TrySetEncodedData(ReadOnlySpan<byte> data, Func<THandle, bool> readBuffer);
 }

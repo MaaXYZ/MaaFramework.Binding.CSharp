@@ -99,17 +99,9 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     public static IList<DesktopWindowInfo> Get(MaaToolkitDesktopWindowListHandle handle)
     {
         var count = MaaToolkitDesktopWindowListSize(handle);
-        if (count <= int.MaxValue)
-        {
-            return Enumerable.Range(0, (int)count)
-                .Select(index => new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(handle, (MaaSize)index)) as DesktopWindowInfo)
-                .ToList();
-        }
-
-        var list = new List<DesktopWindowInfo>();
-        for (MaaSize index = 0; index < count; index++)
-            list.Add(new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(handle, index)));
-        return list;
+        return Enumerable.Range(0, (int)count)
+            .Select(index => new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(handle, (MaaSize)index)) as DesktopWindowInfo)
+            .ToList();
     }
 
     /// <summary>

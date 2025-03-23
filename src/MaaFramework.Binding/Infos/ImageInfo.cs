@@ -6,7 +6,9 @@
 /// <param name="Width">Gets the image width.</param>
 /// <param name="Height">Gets the image height.</param>
 /// <param name="Channels">Gets the image channels.</param>
-/// <param name="Type">Gets the image type.</param>
+/// <param name="Type">Gets the type of a image matrix element.
+///     <para> This is an identifier compatible with the CvMat type system, like CV_16SC3 or 16-bit signed 3-channel array, and so on.</para>
+/// </param>
 public sealed record ImageInfo(
     int Width,
     int Height,

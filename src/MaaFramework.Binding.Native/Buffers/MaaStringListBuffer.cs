@@ -114,17 +114,9 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     public static IList<string> Get(MaaStringListBufferHandle handle)
     {
         var count = MaaStringListBufferSize(handle);
-        if (count <= int.MaxValue)
-        {
-            return Enumerable.Range(0, (int)count)
-                .Select(index => MaaStringBuffer.Get(MaaStringListBufferAt(handle, (MaaSize)index)))
-                .ToList();
-        }
-
-        var list = new List<string>();
-        for (MaaSize index = 0; index < count; index++)
-            list.Add(MaaStringBuffer.Get(MaaStringListBufferAt(handle, index)));
-        return list;
+        return Enumerable.Range(0, (int)count)
+            .Select(index => MaaStringBuffer.Get(MaaStringListBufferAt(handle, (MaaSize)index)))
+            .ToList();
     }
 
     /// <summary>

@@ -135,8 +135,7 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
                 MaaImageListBufferAt(Handle, index));
             if (imageInList.Equals(imageInItem))
                 return true;
-            else
-                index++;
+            index++;
         }
 
         return false;
@@ -163,30 +162,26 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
     ///     Gets a MaaImageBuffer list from a MaaImageListBufferHandle.
     /// </summary>
     /// <param name="handle">The MaaImageListBufferHandle.</param>
-    /// <returns>The list of UnmanagedMemoryStream from MaaImageBuffer.</returns>
-    public static IList<UnmanagedMemoryStream> Get(MaaImageListBufferHandle handle)
+    /// <returns>The list of Stream from MaaImageBuffer.</returns>
+    public static IList<Stream> Get(MaaImageListBufferHandle handle)
     {
         var count = MaaImageListBufferSize(handle);
-        if (count <= int.MaxValue)
-        {
-            return Enumerable.Range(0, (int)count)
-                .Select(index => MaaImageBuffer.Get(MaaImageListBufferAt(handle, (MaaSize)index)))
-                .ToList();
-        }
-
-        var list = new List<UnmanagedMemoryStream>();
-        for (MaaSize index = 0; index < count; index++)
-            list.Add(MaaImageBuffer.Get(MaaImageListBufferAt(handle, index)));
-        return list;
+        return Enumerable.Range(0, (int)count)
+            .Select(index =>
+            {
+                _ = MaaImageBuffer.TryGetEncodedData(MaaImageListBufferAt(handle, (MaaSize)index), out Stream stream);
+                return stream;
+            })
+            .ToList();
     }
 
     /// <summary>
     ///     Gets a MaaImageBuffer list from a MaaImageListBufferHandle.
     /// </summary>
-    /// <param name="list">The list of UnmanagedMemoryStream from MaaImageBuffer.</param>
+    /// <param name="list">The list of Stream from MaaImageBuffer.</param>
     /// <param name="func">A function that takes a MaaImageListBufferHandle and returns a boolean indicating success or failure.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Get(out IList<UnmanagedMemoryStream> list, Func<MaaImageListBufferHandle, bool> func)
+    public static bool Get(out IList<Stream> list, Func<MaaImageListBufferHandle, bool> func)
     {
         var h = MaaImageListBufferCreate();
         var ret = func?.Invoke(h) ?? false;
@@ -204,7 +199,7 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
     public static bool Set(MaaImageListBufferHandle handle, IEnumerable<Stream> list)
     {
         var h = MaaImageBufferCreate();
-        var ret = list.All(s => MaaImageBuffer.Set(h, s) && MaaImageListBufferAppend(handle, h));
+        var ret = list.All(s => MaaImageBuffer.TrySetEncodedData(h, s) && MaaImageListBufferAppend(handle, h));
         MaaImageBufferDestroy(h);
         return ret;
     }

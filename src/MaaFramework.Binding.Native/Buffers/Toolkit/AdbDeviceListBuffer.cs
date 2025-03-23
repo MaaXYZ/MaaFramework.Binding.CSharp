@@ -105,17 +105,9 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
     public static IList<AdbDeviceInfo> Get(MaaToolkitAdbDeviceListHandle handle)
     {
         var count = MaaToolkitAdbDeviceListSize(handle);
-        if (count <= int.MaxValue)
-        {
-            return Enumerable.Range(0, (int)count)
-                .Select(index => new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(handle, (MaaSize)index)) as AdbDeviceInfo)
-                .ToList();
-        }
-
-        var list = new List<AdbDeviceInfo>();
-        for (MaaSize index = 0; index < count; index++)
-            list.Add(new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(handle, index)));
-        return list;
+        return Enumerable.Range(0, (int)count)
+            .Select(index => new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(handle, (MaaSize)index)) as AdbDeviceInfo)
+            .ToList();
     }
 
     /// <summary>
