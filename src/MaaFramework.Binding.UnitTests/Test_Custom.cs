@@ -56,7 +56,7 @@ internal static class Custom
                 cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
 
             recognitionDetail.HitBox.TryCopyTo(results.Box);
-            results.Detail.SetValue(recognitionDetail.Detail);
+            results.Detail.TrySetValue(recognitionDetail.Detail);
             // return ret;
 
             // Using in assert
@@ -139,8 +139,7 @@ internal static class Custom
         {
             var uuid = c.Uuid;
             if (uuid is null) return false;
-            buffer.SetValue(uuid);
-            return true;
+            return buffer.TrySetValue(uuid);
         }
 
         public bool Screencap(in IMaaImageBuffer buffer)

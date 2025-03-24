@@ -12,7 +12,7 @@ public interface IMaaBuffer<in THandle, in TBuffer> : IMaaBuffer<TBuffer>
     /// <summary>
     ///     Copies all values of the current buffer to the specified buffer.
     /// </summary>
-    /// <param name="bufferHandle">The hadle of the buffer that is the destination of values copied from the current buffer.</param>
+    /// <param name="bufferHandle">The handle of the buffer that is the destination of values copied from the current buffer.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     /// <exception cref="NotSupportedException">The <see cref="IMaaBuffer{THandle, TBuffer}"/> is read-only.</exception>
     bool TryCopyTo(THandle bufferHandle);
