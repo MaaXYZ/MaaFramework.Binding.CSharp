@@ -30,7 +30,7 @@ public interface IMaaAgentClient : IMaaDisposable
     /// </summary>
     /// <param name="identifier">The connection identifier.</param>
     /// <returns><see langword="true"/> if the socket was created successfully; otherwise, <see langword="false"/>.</returns>
-    bool CreateSocket(string identifier);
+    string? CreateSocket(string identifier = "");
 
     /// <summary>
     ///     Starts the connection.

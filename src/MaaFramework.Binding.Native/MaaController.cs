@@ -11,13 +11,18 @@ namespace MaaFramework.Binding;
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaController"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public abstract class MaaController : MaaCommon, IMaaController<nint>
+public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
 {
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ }}";
+
+    internal MaaController(MaaControllerHandle handle)
+    {
+        SetHandle(handle, needReleased: false);
+    }
 
     /// <summary>
     ///     Creates a <see cref="MaaController"/> instance.
