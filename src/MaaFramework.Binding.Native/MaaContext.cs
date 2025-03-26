@@ -97,7 +97,17 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextGetTasker"/>.
     /// </remarks>
-    public MaaTasker Tasker => MaaTasker.Instances[MaaContextGetTasker(Handle)];
+    public MaaTasker Tasker
+    {
+        get
+        {
+            var taskerHandle = MaaContextGetTasker(Handle);
+            if (NativeBindingInfo.IsStatelessMode)
+                return new MaaTasker(taskerHandle);
+            else
+                return MaaTasker.Instances[taskerHandle];
+        }
+    }
 
     object ICloneable.Clone()
         => Clone();

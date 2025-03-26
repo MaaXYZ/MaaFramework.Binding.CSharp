@@ -28,6 +28,17 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     /// </remarks>
     protected internal static ConcurrentDictionary<MaaTaskerHandle, MaaTasker> Instances { get; } = [];
 
+    [SetsRequiredMembers]
+    internal MaaTasker(MaaTaskerHandle handle)
+    {
+        SetHandle(handle, needReleased: false);
+        Resource = new MaaResource(MaaTaskerGetResource(handle));
+        Controller = new MaaController(MaaTaskerGetController(handle));
+        DisposeOptions = DisposeOptions.None;
+        Toolkit = new MaaToolkit();
+        Utility = new MaaUtility();
+    }
+
     /// <summary>
     ///     Creates a <see cref="MaaTasker"/> instance.
     /// </summary>

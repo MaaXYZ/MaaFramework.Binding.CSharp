@@ -1,9 +1,9 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Interop.Native;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaAgentClient;
-using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding;
 
@@ -13,7 +13,13 @@ namespace MaaFramework.Binding;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAgentClient<MaaAgentClientHandle>
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
+    private string? _debugSocketId;
+
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DebuggerDisplay => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ SocketId = {_debugSocketId}, {nameof(DisposeOptions)} = {DisposeOptions} }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
@@ -43,10 +49,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     public required DisposeOptions DisposeOptions { get; set; }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaAgentClientDestroy"/>.
-    /// </remarks>
-    protected override void ReleaseHandle()
+    protected override void Dispose(bool disposing)
     {
         // Cannot destroy Instance before disposing Resource.
 
@@ -55,8 +58,15 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
             Resource.Dispose();
         }
 
-        MaaAgentClientDestroy(Handle);
+        base.Dispose(disposing);
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientDestroy"/>.
+    /// </remarks>
+    protected override void ReleaseHandle()
+        => MaaAgentClientDestroy(Handle);
 
     /// <inheritdoc/>
     IMaaResource IMaaAgentClient.Resource
@@ -84,13 +94,12 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientCreateSocket"/>.
     /// </remarks>
-    public bool CreateSocket(string identifier)
-    {
-        var handle = MaaStringBufferCreate();
-        var ret = MaaStringBufferSetEx(Handle, identifier) && MaaAgentClientCreateSocket(Handle, handle);
-        MaaStringBufferDestroy(handle);
-        return ret;
-    }
+    public string? CreateSocket(string identifier = "")
+        => MaaStringBuffer.TryGetValue(out _debugSocketId, handle
+            => MaaStringBuffer.TrySetValue(handle, identifier)
+            && MaaAgentClientCreateSocket(Handle, handle))
+        ? _debugSocketId
+        : null;
 
     /// <inheritdoc/>
     /// <remarks>
@@ -106,4 +115,3 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     public bool LinkStop()
         => MaaAgentClientDisconnect(Handle);
 }
-
