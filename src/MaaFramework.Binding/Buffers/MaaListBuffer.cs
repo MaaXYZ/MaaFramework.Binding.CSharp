@@ -23,11 +23,11 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     [NotNull]
     public abstract T this[MaaSize index] { get; }
     /// <inheritdoc/>
-    public abstract bool Add(T item);
+    public abstract bool TryAdd(T item);
     /// <inheritdoc/>
-    public abstract bool RemoveAt(MaaSize index);
+    public abstract bool TryRemoveAt(MaaSize index);
     /// <inheritdoc/>
-    public abstract bool Clear();
+    public abstract bool TryClear();
     /// <inheritdoc/>
     public abstract bool IsReadOnly { get; }
 
@@ -37,15 +37,14 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     public abstract bool TryIndexOf(T item, out MaaSize index);
     /// <inheritdoc/>
     public bool Remove(T item)
-        => TryIndexOf(item, out var index) && RemoveAt(index);
+        => TryIndexOf(item, out var index) && TryRemoveAt(index);
     /// <inheritdoc/>
     public bool Contains(T item)
         => TryIndexOf(item, out _);
     /// <inheritdoc/>
     public int IndexOf(T item)
     {
-        if (!TryIndexOf(item, out var index)) return -1;
-        if (index > int.MaxValue) return -2;
+        if (!TryIndexOf(item, out var index) || index > int.MaxValue) return -1;
         return (int)index;
     }
 
@@ -54,15 +53,12 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     /// <inheritdoc/>
     public abstract bool TryCopyTo(THandle bufferHandle);
     /// <inheritdoc/>
-    public bool TryCopyTo(IMaaListBuffer<THandle, T> buffer)
-        => buffer is not null && TryCopyTo(buffer.Handle);
-    /// <inheritdoc/>
     public bool TryCopyTo(IMaaListBuffer<T> buffer) => buffer switch
     {
-        IMaaListBuffer<THandle, T> bufferWithHandle => TryCopyTo(bufferWithHandle),
+        MaaListBuffer<THandle, T> bufferWithHandle => TryCopyTo(bufferWithHandle.Handle),
         null => false,
         _ => MaaSizeCount <= MaaSize.MaxValue - buffer.MaaSizeCount
-            && this.All(buffer.Add),
+            && this.All(buffer.TryAdd),
     };
     /// <inheritdoc/>
     public void CopyTo(T[] array, int arrayIndex)
@@ -86,6 +82,8 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
 
     #endregion
 
+#pragma warning disable CA1033 // 接口方法应可由子类型调用
+
     #region Explicit Interface Implementations
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -94,9 +92,13 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
             getSize: () => MaaSizeCount);
 
     void ICollection<T>.Add(T item)
-        => Add(item);
+        => MaaInteroperationException.ThrowIfNot(
+            TryAdd(item),
+            $"The {nameof(item)} is invalid.");
     void ICollection<T>.Clear()
-        => Clear();
+        => MaaInteroperationException.ThrowIfNot(
+            TryClear(),
+            "The collection is invalid.");
 
     T IList<T>.this[int index]
     {
@@ -114,9 +116,13 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
         set => throw new NotSupportedException($"{nameof(MaaListBuffer<THandle, T>)} does not support setting the element at the specified index.");
     }
     void IList<T>.RemoveAt(int index)
-        => RemoveAt((MaaSize)index);
+        => MaaInteroperationException.ThrowIfNot(
+            TryRemoveAt((MaaSize)index),
+            $"The {nameof(index)} is invalid.");
     void IList<T>.Insert(int index, T item)
         => throw new NotSupportedException($"{nameof(MaaListBuffer<THandle, T>)} does not support insert a element at the specified index.");
 
     #endregion
+
+#pragma warning restore CA1033 // 接口方法应可由子类型调用
 }

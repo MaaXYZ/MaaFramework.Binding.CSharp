@@ -103,6 +103,12 @@ internal static class Custom
 
         public bool IsInvalid => c.IsInvalid;
 
+        public bool ThrowOnInvalid
+        {
+            get => c.ThrowOnInvalid;
+            set => c.ThrowOnInvalid = value;
+        }
+
         public void Dispose() => c.Dispose();
 
         #endregion

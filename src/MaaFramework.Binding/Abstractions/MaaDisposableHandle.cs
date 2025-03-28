@@ -7,7 +7,9 @@
 public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T : IEquatable<T>
 {
     /// <inheritdoc/>
-    public T Handle => _handle;
+    public T Handle => (ThrowOnInvalid && _handle.Equals(_invalidHandle))
+        ? throw new InvalidOperationException($"{GetType().Name}")
+        : _handle;
 
     /// <summary>
     ///     Releases all resources from <see cref="MaaFramework"/>.
@@ -39,6 +41,9 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
 
     /// <inheritdoc/>
     public virtual bool IsInvalid => _handle.Equals(_invalidHandle);
+
+    /// <inheritdoc/>
+    public bool ThrowOnInvalid { get; set; }
 
     /// <summary>
     ///     Creates a <see cref="MaaDisposableHandle{T}"/> instance.

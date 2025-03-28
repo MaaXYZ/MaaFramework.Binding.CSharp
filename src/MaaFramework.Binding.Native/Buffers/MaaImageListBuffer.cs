@@ -7,21 +7,38 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa Image List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
 /// </summary>
-public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
+public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaImageBuffer>
+    , IMaaImageListBufferStatic<MaaImageListBufferHandle>
 {
     private readonly ConcurrentDictionary<MaaSize, MaaImageBuffer> _cache = [];
+    private void ClearCache()
+    {
+        foreach (var buffer in _cache.Values)
+        {
+            buffer.ThrowOnInvalid = true;
+            buffer.Dispose();
+        }
+        _cache.Clear();
+    }
+    private void RemoveCache(MaaSize index)
+    {
+        foreach (var key in _cache.Keys.Where(x => x >= index))
+        {
+            if (_cache.TryRemove(key, out var buffer))
+            {
+                buffer.ThrowOnInvalid = true;
+                buffer.Dispose();
+            }
+        }
+    }
 
     /// <inheritdoc/>
-    // 涉及到 Clear、Remove、Dispose 均需要 Dispose _cache.Values。
+    // 涉及到 TrAdd、TryClear、Remove、Dispose 均需要 Dispose _cache.Values。
     // 由于 ReleaseHandle 有先决条件，故重写 Dispose()方法。
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        foreach (var value in _cache.Values)
-        {
-            value.Dispose();
-        }
-        _cache.Clear();
+        ClearCache();
     }
 
     /// <summary>
@@ -73,26 +90,31 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferAppend"/>.
     /// </remarks>
-    public override bool Add(MaaImageBuffer item)
-        => item is not null
-           && MaaImageListBufferAppend(Handle, item.Handle);
+    public override bool TryAdd(MaaImageBuffer item)
+    {
+        if (IsEmpty)
+        {
+            return item is not null && MaaImageListBufferAppend(Handle, item.Handle);
+        }
+
+        var first = MaaImageListBufferAt(Handle, 0);
+        var ret = item is not null && MaaImageListBufferAppend(Handle, item.Handle);
+        // if std::vector<T> expanded
+        if (ret && first != MaaImageListBufferAt(Handle, 0))
+            ClearCache();
+        return ret;
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferRemove"/>.
     /// </remarks>
-    public override bool RemoveAt(MaaSize index)
+    public override bool TryRemoveAt(MaaSize index)
     {
         if (MaaSizeCount <= index || !MaaImageListBufferRemove(Handle, index))
             return false;
 
-        foreach (var key in _cache.Keys)
-        {
-            if (key < index)
-                continue;
-            if (_cache.TryRemove(key, out var buffer))
-                buffer?.Dispose();
-        }
+        RemoveCache(index);
         return true;
     }
 
@@ -100,17 +122,12 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferClear"/>.
     /// </remarks>
-    public override bool Clear()
+    public override bool TryClear()
     {
         if (!MaaImageListBufferClear(Handle))
             return false;
 
-        foreach (var value in _cache.Values)
-        {
-            value.Dispose();
-        }
-
-        _cache.Clear();
+        ClearCache();
         return true;
     }
 
@@ -125,16 +142,16 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
             return false;
 
         var imageInItem = MaaImageBufferGetRawData(item.Handle);
-        if (imageInItem.Equals(nint.Zero))
+        if (imageInItem == nint.Zero)
             return false;
 
         var count = MaaSizeCount;
         while (index < count)
         {
-            var imageInList = MaaImageBufferGetRawData(
-                MaaImageListBufferAt(Handle, index));
-            if (imageInList.Equals(imageInItem))
+            var imageInList = MaaImageBufferGetRawData(MaaImageListBufferAt(Handle, index));
+            if (imageInList == imageInItem)
                 return true;
+
             index++;
         }
 
@@ -158,65 +175,110 @@ public class MaaImageListBuffer : MaaListBuffer<nint, MaaImageBuffer>
         return true;
     }
 
-    /// <summary>
-    ///     Gets a MaaImageBuffer list from a MaaImageListBufferHandle.
-    /// </summary>
-    /// <param name="handle">The MaaImageListBufferHandle.</param>
-    /// <returns>The list of Stream from MaaImageBuffer.</returns>
-    public static IList<Stream> Get(MaaImageListBufferHandle handle)
+    /// <inheritdoc/>
+    public static bool TryGetEncodedDataList(MaaImageListBufferHandle handle, out IList<byte[]> dataList)
     {
-        var count = MaaImageListBufferSize(handle);
-        return Enumerable.Range(0, (int)count)
-            .Select(index =>
+        var ret = false;
+        var count = (int)MaaImageListBufferSize(handle);
+        var array = (count > 0 && count < Array.MaxLength) ? new byte[count][] : [];
+        for (var i = 0; i < count; i++)
+        {
+            ret |= MaaImageBuffer.TryGetEncodedData(MaaImageListBufferAt(handle, (MaaSize)i), out byte[] data);
+            array[i] = data;
+        }
+
+        dataList = array;
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    public static bool TryGetEncodedDataList(out IList<byte[]> dataList, Func<MaaImageListBufferHandle, bool> writeBuffer)
+    {
+        ArgumentNullException.ThrowIfNull(writeBuffer);
+        var handle = MaaImageListBufferCreate();
+        if (!writeBuffer.Invoke(handle))
+        {
+            dataList = Array.Empty<byte[]>();
+            MaaImageListBufferDestroy(handle);
+            return false;
+        }
+
+        var ret = TryGetEncodedDataList(handle, out dataList);
+        MaaImageListBufferDestroy(handle);
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    public static bool TrySetEncodedDataList(MaaImageListBufferHandle handle, IEnumerable<byte[]> dataList)
+    {
+        var ret = true;
+        var buffer = MaaImageBufferCreate();
+        if (dataList is byte[][] array)
+        {
+            foreach (var data in array)
             {
-                _ = MaaImageBuffer.TryGetEncodedData(MaaImageListBufferAt(handle, (MaaSize)index), out Stream stream);
-                return stream;
-            })
-            .ToList();
-    }
+                ret &= MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer);
+            }
+            MaaImageBufferDestroy(buffer);
+            return ret;
+        }
 
-    /// <summary>
-    ///     Gets a MaaImageBuffer list from a MaaImageListBufferHandle.
-    /// </summary>
-    /// <param name="list">The list of Stream from MaaImageBuffer.</param>
-    /// <param name="func">A function that takes a MaaImageListBufferHandle and returns a boolean indicating success or failure.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Get(out IList<Stream> list, Func<MaaImageListBufferHandle, bool> func)
-    {
-        var h = MaaImageListBufferCreate();
-        var ret = func?.Invoke(h) ?? false;
-        list = Get(h);
-        MaaImageListBufferDestroy(h);
+        ret = dataList.All(
+            data => MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer));
+        MaaImageBufferDestroy(buffer);
         return ret;
     }
 
-    /// <summary>
-    ///     Sets a image encoded data stream <paramref name="list"/> to a MaaImageListBufferHandle.
-    /// </summary>
-    /// <param name="handle">The MaaImageListBufferHandle.</param>
-    /// <param name="list">The image encoded data stream list.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Set(MaaImageListBufferHandle handle, IEnumerable<Stream> list)
+    /// <inheritdoc/>
+    public static bool TrySetEncodedDataList(MaaImageListBufferHandle handle, IEnumerable<Stream> dataList)
     {
-        var h = MaaImageBufferCreate();
-        var ret = list.All(s => MaaImageBuffer.TrySetEncodedData(h, s) && MaaImageListBufferAppend(handle, h));
-        MaaImageBufferDestroy(h);
+        var ret = true;
+        var buffer = MaaImageBufferCreate();
+        if (dataList is Stream[] array)
+        {
+            foreach (var data in array)
+            {
+                ret &= MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer);
+            }
+            MaaImageBufferDestroy(buffer);
+            return ret;
+        }
+
+        ret = dataList.All(
+            data => MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer));
+        MaaImageBufferDestroy(buffer);
         return ret;
     }
 
-    /// <summary>
-    ///     Sets a image encoded data stream <paramref name="list"/> to a MaaImageListBufferHandle,
-    /// then calls a <paramref name="func"/> to use the MaaImageListBufferHandle.
-    /// </summary>
-    /// <param name="list">The image encoded data stream list.</param>
-    /// <param name="func">A function that takes a MaaImageListBufferHandle and returns a boolean indicating success or failure.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Set(IEnumerable<Stream> list, Func<MaaImageListBufferHandle, bool> func)
+    /// <inheritdoc/>
+    public static bool TrySetEncodedDataList(IEnumerable<byte[]> dataList, Func<MaaImageListBufferHandle, bool> readBuffer)
     {
-        if (func is null) return false;
-        var h = MaaImageListBufferCreate();
-        var ret = Set(h, list) && func.Invoke(h);
-        MaaImageListBufferDestroy(h);
+        ArgumentNullException.ThrowIfNull(readBuffer);
+        var handle = MaaImageListBufferCreate();
+        if (!TrySetEncodedDataList(handle, dataList))
+        {
+            MaaImageListBufferDestroy(handle);
+            return false;
+        }
+
+        var ret = readBuffer.Invoke(handle);
+        MaaImageListBufferDestroy(handle);
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    public static bool TrySetEncodedDataList(IEnumerable<Stream> dataList, Func<MaaImageListBufferHandle, bool> readBuffer)
+    {
+        ArgumentNullException.ThrowIfNull(readBuffer);
+        var handle = MaaImageListBufferCreate();
+        if (!TrySetEncodedDataList(handle, dataList))
+        {
+            MaaImageListBufferDestroy(handle);
+            return false;
+        }
+
+        var ret = readBuffer.Invoke(handle);
+        MaaImageListBufferDestroy(handle);
         return ret;
     }
 }

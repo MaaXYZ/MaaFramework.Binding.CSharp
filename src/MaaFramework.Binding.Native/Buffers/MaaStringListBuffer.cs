@@ -6,7 +6,8 @@ namespace MaaFramework.Binding.Buffers;
 /// <summary>
 ///     A class providing a reference implementation for Maa String List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaBuffer"/>.
 /// </summary>
-public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
+public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaStringBuffer>
+    , IMaaStringListBufferStatic<MaaStringListBufferHandle>
 {
     /// <summary>
     ///     Creates a <see cref="MaaStringListBuffer"/> instance.
@@ -55,7 +56,7 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferAppend"/>.
     /// </remarks>
-    public override bool Add(MaaStringBuffer item)
+    public override bool TryAdd(MaaStringBuffer item)
         => item is not null
            && MaaStringListBufferAppend(Handle, item.Handle);
 
@@ -63,14 +64,14 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferRemove"/>.
     /// </remarks>
-    public override bool RemoveAt(MaaSize index)
+    public override bool TryRemoveAt(MaaSize index)
         => MaaStringListBufferRemove(Handle, index);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferClear"/>.
     /// </remarks>
-    public override bool Clear()
+    public override bool TryClear()
         => MaaStringListBufferClear(Handle);
 
     /// <inheritdoc/>
@@ -106,65 +107,73 @@ public class MaaStringListBuffer : MaaListBuffer<nint, MaaStringBuffer>
         return true;
     }
 
-    /// <summary>
-    ///     Gets a string list from a MaaStringListBufferHandle.
-    /// </summary>
-    /// <param name="handle">The MaaStringListBufferHandle.</param>
-    /// <returns>The string list.</returns>
-    public static IList<string> Get(MaaStringListBufferHandle handle)
+    /// <inheritdoc/>
+    public static bool TryGetList(MaaStringListBufferHandle handle, out IList<string> stringList)
     {
-        var count = MaaStringListBufferSize(handle);
-        return Enumerable.Range(0, (int)count)
-            .Select(index =>
+        var ret = false;
+        var count = (int)MaaStringListBufferSize(handle);
+        var array = (count > 0 && count < Array.MaxLength) ? new string[count] : [];
+        for (var i = 0; i < count; i++)
+        {
+            ret |= MaaStringBuffer.TryGetValue(MaaStringListBufferAt(handle, (MaaSize)i), out var str);
+            array[i] = str;
+        }
+
+        stringList = array;
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    public static bool TryGetList(out IList<string> stringList, Func<MaaStringListBufferHandle, bool> writeBuffer)
+    {
+        ArgumentNullException.ThrowIfNull(writeBuffer);
+        var handle = MaaStringListBufferCreate();
+        if (!writeBuffer.Invoke(handle))
+        {
+            stringList = Array.Empty<string>();
+            MaaStringListBufferDestroy(handle);
+            return false;
+        }
+
+        var ret = TryGetList(handle, out stringList);
+        MaaStringListBufferDestroy(handle);
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    public static bool TrySetList(MaaStringListBufferHandle handle, IEnumerable<string> stringList)
+    {
+        var ret = true;
+        var buffer = MaaStringBufferCreate();
+        if (stringList is string[] array)
+        {
+            foreach (var str in array)
             {
-                _ = MaaStringBuffer.TryGetValue(MaaStringListBufferAt(handle, (MaaSize)index), out var str);
-                return str;
-            })
-            .ToList();
-    }
+                ret &= MaaStringBuffer.TrySetValue(buffer, str) && MaaStringListBufferAppend(handle, buffer);
+            }
+            MaaStringBufferDestroy(buffer);
+            return ret;
+        }
 
-    /// <summary>
-    ///     Gets a string list from a MaaStringListBufferHandle.
-    /// </summary>
-    /// <param name="list">The string list.</param>
-    /// <param name="func">A function that takes a MaaStringListBufferHandle and returns a boolean indicating success or failure.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Get(out IList<string> list, Func<MaaStringListBufferHandle, bool> func)
-    {
-        var h = MaaStringListBufferCreate();
-        var ret = func?.Invoke(h) ?? false;
-        list = Get(h);
-        MaaStringListBufferDestroy(h);
+        ret = stringList.All(
+            str => MaaStringBuffer.TrySetValue(buffer, str) && MaaStringListBufferAppend(handle, buffer));
+        MaaStringBufferDestroy(buffer);
         return ret;
     }
 
-    /// <summary>
-    ///     Sets a string <paramref name="list"/> to a MaaStringListBufferHandle.
-    /// </summary>
-    /// <param name="handle">The MaaStringListBufferHandle.</param>
-    /// <param name="list">The string list.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Set(MaaStringListBufferHandle handle, IEnumerable<string> list)
+    /// <inheritdoc/>
+    public static bool TrySetList(IEnumerable<string> stringList, Func<MaaStringListBufferHandle, bool> readBuffer)
     {
-        var h = MaaStringBufferCreate();
-        var ret = list.All(s => MaaStringBuffer.TrySetValue(h, s) && MaaStringListBufferAppend(handle, h));
-        MaaStringBufferDestroy(h);
-        return ret;
-    }
+        ArgumentNullException.ThrowIfNull(readBuffer);
+        var handle = MaaStringListBufferCreate();
+        if (!TrySetList(handle, stringList))
+        {
+            MaaStringListBufferDestroy(handle);
+            return false;
+        }
 
-    /// <summary>
-    ///     Sets a string <paramref name="list"/> to a MaaStringListBufferHandle,
-    /// then calls a <paramref name="func"/> to use the MaaStringListBufferHandle.
-    /// </summary>
-    /// <param name="list">The string list.</param>
-    /// <param name="func">A function that takes a MaaStringListBufferHandle and returns a boolean indicating success or failure.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Set(IEnumerable<string> list, Func<MaaStringListBufferHandle, bool> func)
-    {
-        if (func is null) return false;
-        var h = MaaStringListBufferCreate();
-        var ret = Set(h, list) && func.Invoke(h);
-        MaaStringListBufferDestroy(h);
+        var ret = readBuffer.Invoke(handle);
+        MaaStringListBufferDestroy(handle);
         return ret;
     }
 }

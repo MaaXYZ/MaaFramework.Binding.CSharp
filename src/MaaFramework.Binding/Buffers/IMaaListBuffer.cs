@@ -8,8 +8,9 @@ namespace MaaFramework.Binding.Buffers;
 /// </summary>
 /// <typeparam name="THandle">The type of handle.</typeparam>
 /// <typeparam name="T">The type of element.</typeparam>
-public interface IMaaListBuffer<THandle, T> : IMaaListBuffer<T>, IMaaBuffer<THandle, IMaaListBuffer<THandle, T>>, IMaaDisposableHandle<THandle>
+public interface IMaaListBuffer<THandle, T> : IMaaListBuffer<T>, IMaaBuffer<THandle, IMaaListBuffer<T>>, IMaaDisposableHandle<THandle>
 {
+    // Implement IMaa*ListBufferStatic<THandle> at the same time if this interface is implemented.
 }
 
 /// <summary>
@@ -45,7 +46,7 @@ public interface IMaaListBuffer<T> : IMaaBuffer<IMaaListBuffer<T>>, IList<T>
     /// <param name="item">The object to add to the <see cref="IMaaListBuffer{T}"/>.</param>
     /// <returns><see langword="true"/> if the element is added successfully; otherwise, <see langword="false"/>.</returns>
     /// <exception cref="NotSupportedException">The <see cref="IMaaListBuffer{T}"/> is read-only.</exception>
-    new bool Add(T item);
+    bool TryAdd(T item);
 
     /// <summary>
     ///     Removes the element at the specified index.
@@ -53,14 +54,14 @@ public interface IMaaListBuffer<T> : IMaaBuffer<IMaaListBuffer<T>>, IList<T>
     /// <param name="index">The zero-based index of the element to remove.</param>
     /// <returns><see langword="true"/> if the element is removed successfully; otherwise, <see langword="false"/>.</returns>
     /// <exception cref="NotSupportedException">The <see cref="IMaaListBuffer{T}"/> is read-only.</exception>
-    bool RemoveAt(MaaSize index);
+    bool TryRemoveAt(MaaSize index);
 
     /// <summary>
     ///     Removes all elements from the <see cref="IMaaListBuffer{T}"/>.
     /// </summary>
     /// <returns><see langword="true"/> if all elements are removed successfully; otherwise, <see langword="false"/>.</returns>
     /// <exception cref="NotSupportedException">The <see cref="IMaaListBuffer{T}"/> is read-only.</exception>
-    new bool Clear();
+    bool TryClear();
 
     /// <summary>
     ///     Attempts to get index of the specified element.

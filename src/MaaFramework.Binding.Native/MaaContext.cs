@@ -86,7 +86,7 @@ public class MaaContext : IMaaContext<nint>
     ///     Wrapper of <see cref="MaaContextOverrideNext"/>.
     /// </remarks>
     public bool OverrideNext(string nodeName, IEnumerable<string> nextList)
-        => MaaStringListBuffer.Set(nextList, listBuffer
+        => MaaStringListBuffer.TrySetList(nextList, listBuffer
             => MaaContextOverrideNext(Handle, nodeName, listBuffer));
 
     /// <inheritdoc/>

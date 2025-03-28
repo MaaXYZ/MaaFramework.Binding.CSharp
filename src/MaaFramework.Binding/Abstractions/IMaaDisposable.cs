@@ -6,9 +6,14 @@
 public interface IMaaDisposable : IDisposable
 {
     /// <summary>
-    ///     When overridden in a derived class, gets a value indicating whether the unmanaged resources from <see cref="MaaFramework"/> are invalid.
+    ///     Gets a value indicating whether the unmanaged resources from <see cref="MaaFramework"/> are invalid, when overridden in a derived class.
     /// </summary>
     bool IsInvalid { get; }
+
+    /// <summary>
+    ///     Gets a value indicating whether an <see cref="InvalidOperationException"/> is thrown when current resource is invalid but is called.
+    /// </summary>
+    bool ThrowOnInvalid { get; set; }
 }
 
 //  设计思路：

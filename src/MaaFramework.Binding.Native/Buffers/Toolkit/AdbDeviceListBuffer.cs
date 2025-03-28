@@ -7,6 +7,7 @@ namespace MaaFramework.Binding.Buffers;
 ///     A class providing a reference implementation for Maa Toolkit Adb Device List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaToolkit"/>.
 /// </summary>
 public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, AdbDeviceInfo>
+    , IAdbDeviceListBufferStatic<MaaToolkitAdbDeviceListHandle>
 {
     /// <summary>
     ///     A sealed record providing a reference implementation for <see cref="AdbDeviceInfo"/>.
@@ -65,15 +66,15 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
     }
 
     /// <inheritdoc/>
-    public override bool Add(AdbDeviceInfo item)
+    public override bool TryAdd(AdbDeviceInfo item)
         => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
     /// <inheritdoc/>
-    public override bool RemoveAt(MaaSize index)
+    public override bool TryRemoveAt(MaaSize index)
         => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
     /// <inheritdoc/>
-    public override bool Clear()
+    public override bool TryClear()
         => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
     /// <inheritdoc/>
@@ -97,31 +98,37 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
     public override bool TryCopyTo(MaaImageListBufferHandle bufferHandle)
         => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
-    /// <summary>
-    ///     Gets a <see cref="AdbDeviceInfo"/> list from a MaaToolkitAdbDeviceListHandle.
-    /// </summary>
-    /// <param name="handle">The MaaToolkitAdbDeviceListHandle.</param>
-    /// <returns>The <see cref="AdbDeviceInfo"/> list.</returns>
-    public static IList<AdbDeviceInfo> Get(MaaToolkitAdbDeviceListHandle handle)
+    /// <inheritdoc/>
+    public static bool TryGetList(nint handle, out IList<AdbDeviceInfo> deviceList)
     {
-        var count = MaaToolkitAdbDeviceListSize(handle);
-        return Enumerable.Range(0, (int)count)
-            .Select(index => new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(handle, (MaaSize)index)) as AdbDeviceInfo)
-            .ToList();
+        var ret = false;
+        var count = (int)MaaToolkitAdbDeviceListSize(handle);
+        var array = (count > 0 && count < Array.MaxLength) ? new AdbDeviceInfo[count] : [];
+        for (var i = 0; i < count; i++)
+        {
+            var device = MaaToolkitAdbDeviceListAt(handle, (MaaSize)i);
+            ret |= device != default;
+            array[i] = new MaaToolkitAdbDeviceInfo(device);
+        }
+
+        deviceList = array;
+        return ret;
     }
 
-    /// <summary>
-    ///     Gets a <see cref="AdbDeviceInfo"/> list from a MaaToolkitAdbDeviceListHandle.
-    /// </summary>
-    /// <param name="list">The <see cref="AdbDeviceInfo"/> list.</param>
-    /// <param name="func">A function that takes a MaaToolkitAdbDeviceListHandle and returns a boolean indicating success or failure.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Get(out IList<AdbDeviceInfo> list, Func<MaaToolkitAdbDeviceListHandle, bool> func)
+    /// <inheritdoc/>
+    public static bool TryGetList(out IList<AdbDeviceInfo> deviceList, Func<nint, bool> writeBuffer)
     {
-        var h = MaaToolkitAdbDeviceListCreate();
-        var ret = func?.Invoke(h) ?? false;
-        list = Get(h);
-        MaaToolkitAdbDeviceListDestroy(h);
+        ArgumentNullException.ThrowIfNull(writeBuffer);
+        var handle = MaaToolkitAdbDeviceListCreate();
+        if (!writeBuffer.Invoke(handle))
+        {
+            deviceList = Array.Empty<AdbDeviceInfo>();
+            MaaToolkitAdbDeviceListDestroy(handle);
+            return false;
+        }
+
+        var ret = TryGetList(handle, out deviceList);
+        MaaToolkitAdbDeviceListDestroy(handle);
         return ret;
     }
 }

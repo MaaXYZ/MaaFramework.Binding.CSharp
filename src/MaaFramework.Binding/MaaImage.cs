@@ -16,7 +16,14 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
     /// <summary>
     ///     Gets the IMaaImageBuffer.
     /// </summary>
-    public IMaaImageBuffer Buffer { get; } = buffer;
+    public IMaaImageBuffer Buffer => buffer;
+
+    /// <inheritdoc/>
+    public bool ThrowOnInvalid
+    {
+        get => buffer.ThrowOnInvalid;
+        set => buffer.ThrowOnInvalid = value;
+    }
 
     /// <summary>
     ///     Caches the image data from the <see cref="IMaaImageBuffer"/>.

@@ -7,6 +7,7 @@ namespace MaaFramework.Binding.Buffers;
 ///     A class providing a reference implementation for Maa Toolkit Desktop Window List Buffer section of <see cref="MaaFramework.Binding.Interop.Native.MaaToolkit"/>.
 /// </summary>
 public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowListHandle, DesktopWindowInfo>
+    , IDesktopWindowListBufferStatic<MaaToolkitDesktopWindowListHandle>
 {
     /// <summary>
     ///     A sealed record providing a reference implementation for <see cref="DesktopWindowInfo"/>.
@@ -59,15 +60,15 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     public override DesktopWindowInfo this[MaaSize index] => new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(Handle, index).ThrowIfEquals(MaaToolkitDesktopWindowHandle.Zero));
 
     /// <inheritdoc/>
-    public override bool Add(DesktopWindowInfo item)
+    public override bool TryAdd(DesktopWindowInfo item)
         => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
     /// <inheritdoc/>
-    public override bool RemoveAt(MaaSize index)
+    public override bool TryRemoveAt(MaaSize index)
         => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
     /// <inheritdoc/>
-    public override bool Clear()
+    public override bool TryClear()
         => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
     /// <inheritdoc/>
@@ -91,31 +92,37 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     public override bool TryCopyTo(MaaImageListBufferHandle bufferHandle)
         => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
-    /// <summary>
-    ///     Gets a <see cref="DesktopWindowInfo"/> list from a MaaToolkitDesktopWindowListHandle.
-    /// </summary>
-    /// <param name="handle">The MaaToolkitDesktopWindowListHandle.</param>
-    /// <returns>The <see cref="DesktopWindowInfo"/> list.</returns>
-    public static IList<DesktopWindowInfo> Get(MaaToolkitDesktopWindowListHandle handle)
+    /// <inheritdoc/>
+    public static bool TryGetList(MaaToolkitDesktopWindowListHandle handle, out IList<DesktopWindowInfo> windowList)
     {
-        var count = MaaToolkitDesktopWindowListSize(handle);
-        return Enumerable.Range(0, (int)count)
-            .Select(index => new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(handle, (MaaSize)index)) as DesktopWindowInfo)
-            .ToList();
+        var ret = false;
+        var count = (int)MaaToolkitDesktopWindowListSize(handle);
+        var array = (count > 0 && count < Array.MaxLength) ? new DesktopWindowInfo[count] : [];
+        for (var i = 0; i < count; i++)
+        {
+            var window = MaaToolkitDesktopWindowListAt(handle, (MaaSize)i);
+            ret |= window != default;
+            array[i] = new MaaToolkitDesktopWindowInfo(window);
+        }
+
+        windowList = array;
+        return ret;
     }
 
-    /// <summary>
-    ///     Gets a <see cref="DesktopWindowInfo"/> list from a MaaToolkitDesktopWindowListHandle.
-    /// </summary>
-    /// <param name="list">The <see cref="DesktopWindowInfo"/> list.</param>
-    /// <param name="func">A function that takes a MaaToolkitDesktopWindowListHandle and returns a boolean indicating success or failure.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    public static bool Get(out IList<DesktopWindowInfo> list, Func<MaaToolkitDesktopWindowListHandle, bool> func)
+    /// <inheritdoc/>
+    public static bool TryGetList(out IList<DesktopWindowInfo> windowList, Func<MaaToolkitDesktopWindowListHandle, bool> writeBuffer)
     {
-        var h = MaaToolkitDesktopWindowListCreate();
-        var ret = func?.Invoke(h) ?? false;
-        list = Get(h);
-        MaaToolkitDesktopWindowListDestroy(h);
+        ArgumentNullException.ThrowIfNull(writeBuffer);
+        var handle = MaaToolkitDesktopWindowListCreate();
+        if (!writeBuffer.Invoke(handle))
+        {
+            windowList = Array.Empty<DesktopWindowInfo>();
+            MaaToolkitDesktopWindowListDestroy(handle);
+            return false;
+        }
+
+        var ret = TryGetList(handle, out windowList);
+        MaaToolkitDesktopWindowListDestroy(handle);
         return ret;
     }
 }
