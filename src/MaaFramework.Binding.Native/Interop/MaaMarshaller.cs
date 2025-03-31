@@ -17,7 +17,7 @@ public static class MaaMarshaller
     /// </summary>
     /// <exception cref="MaaInteroperationException"/>
     public static string ConvertToString(nint value, MaaSize size = MaaSize.MinValue)
-        => size == MaaSize.MinValue
+        => (int)size <= 0
         ? Marshal.PtrToStringUTF8(value).ThrowIfNull()
         : Marshal.PtrToStringUTF8(value, (int)size);
 

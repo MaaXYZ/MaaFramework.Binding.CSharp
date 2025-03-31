@@ -112,7 +112,9 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     {
         var ret = false;
         var count = (int)MaaStringListBufferSize(handle);
-        var array = (count > 0 && count < Array.MaxLength) ? new string[count] : [];
+        var array = count <= 0 || count > Array.MaxLength ? [] : new string[count];
+
+        count = array.Length;
         for (var i = 0; i < count; i++)
         {
             ret |= MaaStringBuffer.TryGetValue(MaaStringListBufferAt(handle, (MaaSize)i), out var str);

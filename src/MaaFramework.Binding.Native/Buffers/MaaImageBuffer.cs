@@ -124,18 +124,13 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <inheritdoc/>
     public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out byte[] data)
     {
-        data = [];
-
-        var dataHandle = MaaImageBufferGetEncoded(handle);
-        if (dataHandle == default)
+        if (!TryGetEncodedData(handle, out ReadOnlySpan<byte> span) || span.Length > Array.MaxLength)
+        {
+            data = [];
             return false;
+        }
 
-        var size = MaaImageBufferGetEncodedSize(handle);
-        if (size > (MaaSize)Array.MaxLength)
-            return false;
-
-        data = new byte[size];
-        new Span<byte>((void*)dataHandle, data.Length).CopyTo(data);
+        data = span.ToArray();
         return true;
     }
 
@@ -158,16 +153,14 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <inheritdoc/>
     public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out ReadOnlySpan<byte> data)
     {
-        var dataHandle = MaaImageBufferGetEncoded(handle);
-        if (dataHandle == default)
+        var size = (int)MaaImageBufferGetEncodedSize(handle);
+        if (size <= 0)
         {
             data = [];
             return false;
         }
 
-        data = new ReadOnlySpan<byte>(
-            (void*)dataHandle,
-            (int)MaaImageBufferGetEncodedSize(handle));
+        data = new ReadOnlySpan<byte>((void*)MaaImageBufferGetEncoded(handle), size);
         return true;
     }
 

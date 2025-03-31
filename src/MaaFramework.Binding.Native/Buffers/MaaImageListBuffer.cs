@@ -180,7 +180,9 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     {
         var ret = false;
         var count = (int)MaaImageListBufferSize(handle);
-        var array = (count > 0 && count < Array.MaxLength) ? new byte[count][] : [];
+        var array = count <= 0 || count > Array.MaxLength ? [] : new byte[count][];
+
+        count = array.Length;
         for (var i = 0; i < count; i++)
         {
             ret |= MaaImageBuffer.TryGetEncodedData(MaaImageListBufferAt(handle, (MaaSize)i), out byte[] data);

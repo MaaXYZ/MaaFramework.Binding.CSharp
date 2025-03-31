@@ -103,7 +103,9 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
     {
         var ret = false;
         var count = (int)MaaToolkitAdbDeviceListSize(handle);
-        var array = (count > 0 && count < Array.MaxLength) ? new AdbDeviceInfo[count] : [];
+        var array = count <= 0 || count > Array.MaxLength ? [] : new AdbDeviceInfo[count];
+
+        count = array.Length;
         for (var i = 0; i < count; i++)
         {
             var device = MaaToolkitAdbDeviceListAt(handle, (MaaSize)i);

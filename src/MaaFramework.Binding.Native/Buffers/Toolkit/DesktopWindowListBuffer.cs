@@ -97,7 +97,9 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     {
         var ret = false;
         var count = (int)MaaToolkitDesktopWindowListSize(handle);
-        var array = (count > 0 && count < Array.MaxLength) ? new DesktopWindowInfo[count] : [];
+        var array = count <= 0 || count > Array.MaxLength ? [] : new DesktopWindowInfo[count];
+
+        count = array.Length;
         for (var i = 0; i < count; i++)
         {
             var window = MaaToolkitDesktopWindowListAt(handle, (MaaSize)i);
