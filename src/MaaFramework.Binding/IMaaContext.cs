@@ -12,15 +12,6 @@ public interface IMaaContext<T> : IMaaContext
     ///     Gets or initializes a MaaContextHandle.
     /// </summary>
     T Handle { get; init; }
-
-    /// <inheritdoc cref="IMaaContext.RunRecognition"/>
-    RecognitionDetail? RunRecognition(string entry, string pipelineOverride, IMaaImageBuffer<T> image);
-
-    /// <inheritdoc cref="IMaaContext.RunAction"/>
-    NodeDetail? RunAction(string entry, string pipelineOverride, IMaaRectBuffer<T> recognitionBox, string recognitionDetail);
-
-    /// <inheritdoc cref="IMaaContext.Tasker"/>
-    new IMaaTasker<T> Tasker { get; }
 }
 
 /// <summary>
@@ -83,4 +74,10 @@ public interface IMaaContext : ICloneable
     /// </summary>
     /// <returns>The <see cref="IMaaTasker"/>.</returns>
     IMaaTasker Tasker { get; }
+
+    /// <summary>
+    ///     Creates a new <see cref="IMaaContext"/> that is a deep copy of the current instance.
+    /// </summary>
+    /// <returns>The <see cref="IMaaContext"/></returns>
+    new IMaaContext Clone();
 }

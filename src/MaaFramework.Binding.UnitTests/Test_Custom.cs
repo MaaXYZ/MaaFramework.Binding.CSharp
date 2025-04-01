@@ -35,7 +35,7 @@ internal static class Custom
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
-            var cloneContext = (IMaaContext)context.Clone();
+            var cloneContext = context.Clone();
             Assert.IsNull(
                 cloneContext.RunRecognition(DiffEntry, "{}", (IMaaImageBuffer<nint>)args.Image));
             Assert.AreSame(

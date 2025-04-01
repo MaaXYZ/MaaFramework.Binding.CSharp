@@ -12,13 +12,13 @@ namespace MaaFramework.Binding;
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaTasker"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class MaaTasker : MaaCommon, IMaaTasker<nint>
+public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
 
 #pragma warning disable CA2213
-    private IMaaResource<nint> _resource = default!;
-    private IMaaController<nint> _controller = default!;
+    private MaaResource _resource = default!;
+    private MaaController _controller = default!;
 #pragma warning restore CA2213
 
     /// <summary>
@@ -40,7 +40,8 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     {
         var handle = MaaTaskerCreate(MaaNotificationCallback, nint.Zero);
         if (!Instances.TryAdd(handle, this))
-            throw new InvalidOperationException($"This {nameof(MaaTasker)} already added to {nameof(Instances)}."); // Always returns true, but non-atomic operation may fail to add.
+            // Always returns true, but non-atomic operation may fail to add.
+            throw new InvalidOperationException($"This {nameof(MaaTasker)} already added to {nameof(Instances)}.");
         SetHandle(handle, needReleased: true);
 
         Toolkit = new MaaToolkit(toolkitInit);
@@ -53,7 +54,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
     /// <param name="toolkitInit">Whether initializes the <see cref="Toolkit"/>.</param>
     /// <inheritdoc cref="MaaTasker(bool)"/>
     [SetsRequiredMembers]
-    public MaaTasker(IMaaController<nint> controller, IMaaResource<nint> resource, DisposeOptions disposeOptions, bool toolkitInit = false)
+    public MaaTasker(MaaController controller, MaaResource resource, DisposeOptions disposeOptions, bool toolkitInit = false)
         : this(toolkitInit)
     {
         Resource = resource;
@@ -105,25 +106,23 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
 #pragma warning restore
     }
 
-    /// <inheritdoc/>
     IMaaResource IMaaTasker.Resource
     {
         get => Resource;
-        set => Resource = (IMaaResource<nint>)value;
+        set => Resource = (MaaResource)value;
     }
 
-    /// <inheritdoc/>
     IMaaController IMaaTasker.Controller
     {
         get => Controller;
-        set => Controller = (IMaaController<nint>)value;
+        set => Controller = (MaaController)value;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IMaaTasker.Resource"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerBindResource"/> and <see cref="MaaTaskerGetResource"/>.
     /// </remarks>
-    public required IMaaResource<nint> Resource
+    public required MaaResource Resource
     {
         get
         {
@@ -138,11 +137,11 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IMaaTasker.Controller"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerBindController"/> and <see cref="MaaTaskerGetController"/>.
     /// </remarks>
-    public required IMaaController<nint> Controller
+    public required MaaController Controller
     {
         get
         {
@@ -157,11 +156,14 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
         }
     }
 
-    /// <inheritdoc/>
-    public IMaaToolkit Toolkit { get; set; }
+    IMaaToolkit IMaaTasker.Toolkit { get; set; } = default!;
+    IMaaUtility IMaaTasker.Utility { get; set; } = default!;
 
-    /// <inheritdoc/>
-    public IMaaUtility Utility { get; set; }
+    /// <inheritdoc cref="IMaaTasker.Toolkit"/>
+    public MaaToolkit Toolkit { get => field; set => ((IMaaTasker)this).Toolkit = field = value; }
+
+    /// <inheritdoc cref="IMaaTasker.Utility"/>
+    public MaaUtility Utility { get => field; set => ((IMaaTasker)this).Utility = field = value; }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -225,15 +227,19 @@ public class MaaTasker : MaaCommon, IMaaTasker<nint>
         => MaaTaskerClearCache(Handle);
 
     /// <inheritdoc/>
+    public bool GetRecognitionDetail<T>(long recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, IMaaImageBuffer? raw, IMaaListBuffer<T>? draws)
+        where T : IMaaImageBuffer
+        => GetRecognitionDetail(recognitionId, out nodeName, out algorithm, out hit, (MaaRectBuffer?)hitBox, out detailJson, (MaaImageBuffer?)raw, (MaaImageListBuffer?)draws);
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetRecognitionDetail"/>.
     /// </remarks>
-    public bool GetRecognitionDetail<T>(MaaRecoId recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, T? raw, IMaaListBuffer<T>? draws)
-        where T : IMaaImageBuffer, new()
+    public bool GetRecognitionDetail(MaaRecoId recognitionId, out string nodeName, out string algorithm, out bool hit, MaaRectBuffer? hitBox, out string detailJson, MaaImageBuffer? raw, MaaImageListBuffer? draws)
     {
-        var hitBoxHandle = (hitBox as IMaaRectBuffer<nint>)?.Handle ?? MaaRectHandle.Zero;
-        var rawHandle = (raw as IMaaImageBuffer<nint>)?.Handle ?? MaaImageBufferHandle.Zero;
-        var drawsHandle = (draws as IMaaListBuffer<nint, T>)?.Handle ?? MaaImageListBufferHandle.Zero;
+        var hitBoxHandle = hitBox?.Handle ?? MaaRectHandle.Zero;
+        var rawHandle = raw?.Handle ?? MaaImageBufferHandle.Zero;
+        var drawsHandle = draws?.Handle ?? MaaImageListBufferHandle.Zero;
 
         using var nodeNameBuffer = new MaaStringBuffer();
         using var algorithmBuffer = new MaaStringBuffer();

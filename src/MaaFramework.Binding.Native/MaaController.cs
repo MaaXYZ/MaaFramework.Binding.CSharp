@@ -189,17 +189,14 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
         => MaaControllerConnected(Handle);
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerCachedImage"/>.
-    /// </remarks>
     public bool GetCachedImage(IMaaImageBuffer maaImage)
-        => GetCachedImage((IMaaImageBuffer<nint>)maaImage);
+        => GetCachedImage((MaaImageBuffer)maaImage);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IMaaController.GetCachedImage"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerCachedImage"/>.
     /// </remarks>
-    public bool GetCachedImage(IMaaImageBuffer<nint> maaImage)
+    public bool GetCachedImage(MaaImageBuffer maaImage)
     {
         ArgumentNullException.ThrowIfNull(maaImage);
 

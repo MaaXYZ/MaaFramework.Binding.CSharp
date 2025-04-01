@@ -7,14 +7,7 @@ namespace MaaFramework.Binding;
 ///     An interface defining wrapped members for MaaTasker with generic handle.
 /// </summary>
 /// <typeparam name="T">The type of handle.</typeparam>
-public interface IMaaTasker<T> : IMaaTasker, IMaaDisposableHandle<T>
-{
-    /// <inheritdoc cref="IMaaTasker.Resource"/>
-    new IMaaResource<T> Resource { get; set; }
-
-    /// <inheritdoc cref="IMaaTasker.Controller"/>
-    new IMaaController<T> Controller { get; set; }
-}
+public interface IMaaTasker<T> : IMaaTasker, IMaaDisposableHandle<T>;
 
 /// <summary>
 ///     An interface defining wrapped members for MaaTasker.
@@ -94,8 +87,8 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <param name="raw">The raw image on the recognition completing.<para>Only valid in debug mode.</para></param>
     /// <param name="draws">The draw images on the recognition completed.<para>Only valid in debug mode.</para></param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
-    bool GetRecognitionDetail<T>(MaaRecoId recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, T? raw, IMaaListBuffer<T>? draws)
-        where T : IMaaImageBuffer, new();
+    bool GetRecognitionDetail<T>(MaaRecoId recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, IMaaImageBuffer? raw, IMaaListBuffer<T>? draws)
+        where T : IMaaImageBuffer;
 
     /// <summary>
     ///     Gets the node detail.

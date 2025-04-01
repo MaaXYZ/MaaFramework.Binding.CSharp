@@ -7,11 +7,7 @@ namespace MaaFramework.Binding;
 ///     An interface defining wrapped members for MaaController with generic handle.
 /// </summary>
 /// <typeparam name="T">The type of handle.</typeparam>
-public interface IMaaController<T> : IMaaController, IMaaDisposableHandle<T>
-{
-    /// <inheritdoc cref="IMaaController.GetCachedImage"/>
-    bool GetCachedImage(IMaaImageBuffer<nint> maaImage);
-}
+public interface IMaaController<T> : IMaaController, IMaaDisposableHandle<T>;
 
 /// <summary>
 ///     An interface defining wrapped members for MaaController.

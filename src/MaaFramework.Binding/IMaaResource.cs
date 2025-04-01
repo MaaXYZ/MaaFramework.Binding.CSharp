@@ -7,9 +7,7 @@ namespace MaaFramework.Binding;
 ///     An interface defining wrapped members for MaaResource with generic handle.
 /// </summary>
 /// <typeparam name="T">The type of handle.</typeparam>
-public interface IMaaResource<out T> : IMaaResource, IMaaDisposableHandle<T>
-{
-}
+public interface IMaaResource<T> : IMaaResource, IMaaDisposableHandle<T>;
 
 /// <summary>
 ///     An interface defining wrapped members for MaaResource.

@@ -7,7 +7,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaContext"/>.
 /// </summary>
-public class MaaContext : IMaaContext<nint>
+public class MaaContext : IMaaContext<MaaContextHandle>
 {
     /// <inheritdoc/>
     public required MaaContextHandle Handle { get; init; }
@@ -37,15 +37,6 @@ public class MaaContext : IMaaContext<nint>
     public RecognitionDetail? RunRecognition(string entry, string pipelineOverride, IMaaImageBuffer image)
         => RunRecognition(entry, pipelineOverride, (MaaImageBuffer)image);
 
-    /// <inheritdoc/>
-    public RecognitionDetail? RunRecognition(string entry, string pipelineOverride, IMaaImageBuffer<nint> image)
-    {
-        ArgumentNullException.ThrowIfNull(image);
-        return RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(
-            recognitionId: MaaContextRunRecognition(Handle, entry, pipelineOverride, image.Handle),
-            tasker: Tasker);
-    }
-
     /// <inheritdoc cref="IMaaContext.RunRecognition"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunRecognition"/>.
@@ -60,13 +51,13 @@ public class MaaContext : IMaaContext<nint>
 
     /// <inheritdoc/>
     public NodeDetail? RunAction(string entry, string pipelineOverride, IMaaRectBuffer recognitionBox, string recognitionDetail)
-        => RunAction(entry, pipelineOverride, (IMaaRectBuffer<nint>)recognitionBox, recognitionDetail);
+        => RunAction(entry, pipelineOverride, (MaaRectBuffer)recognitionBox, recognitionDetail);
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IMaaContext.RunAction"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunAction"/>.
     /// </remarks>
-    public NodeDetail? RunAction(string entry, string pipelineOverride, IMaaRectBuffer<nint> recognitionBox, string recognitionDetail)
+    public NodeDetail? RunAction(string entry, string pipelineOverride, MaaRectBuffer recognitionBox, string recognitionDetail)
     {
         ArgumentNullException.ThrowIfNull(recognitionBox);
         return NodeDetail.Query(
@@ -95,22 +86,23 @@ public class MaaContext : IMaaContext<nint>
     /// </remarks>
     public MaaTaskJob TaskJob => new(MaaContextGetTaskId(Handle), Tasker);
 
-    /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaContextGetTasker"/>.
-    /// </remarks>
     IMaaTasker IMaaContext.Tasker => Tasker;
 
-    /// <inheritdoc/>
+    /// <inheritdoc cref="IMaaContext.Tasker"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextGetTasker"/>.
     /// </remarks>
-    public IMaaTasker<nint> Tasker => MaaTasker.Instances[MaaContextGetTasker(Handle)];
+    public MaaTasker Tasker => MaaTasker.Instances[MaaContextGetTasker(Handle)];
 
-    /// <inheritdoc/>
+    object ICloneable.Clone()
+        => Clone();
+    IMaaContext IMaaContext.Clone()
+        => Clone();
+
+    /// <inheritdoc cref="IMaaContext.Clone"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextClone"/>.
     /// </remarks>
-    public object Clone()
-        => new MaaContext(MaaContextClone(Handle));
+    public MaaContext Clone()
+        => new(MaaContextClone(Handle));
 }

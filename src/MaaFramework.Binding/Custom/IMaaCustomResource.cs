@@ -5,6 +5,4 @@
 /// <summary>
 ///     An interface representing implementation is maa custom task.
 /// </summary>
-public interface IMaaCustomResource : IMaaCustom
-{
-}
+public interface IMaaCustomResource : IMaaCustom;
