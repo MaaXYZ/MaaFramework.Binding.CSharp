@@ -6,12 +6,18 @@ namespace MaaFramework.Binding.Interop.Native;
 internal static class MaaMarshallingExtensions
 {
     /// <inheritdoc cref="MaaInteroperationException.ThrowIf"/>
-    internal static void ThrowIfTrue(this bool condition, string message = "", [CallerArgumentExpression(nameof(condition))] string? operationExpression = null)
-        => MaaInteroperationException.ThrowIf(condition, message, operationExpression);
+    internal static bool ThrowIfTrue(this bool condition, string message = "", [CallerArgumentExpression(nameof(condition))] string? operationExpression = null)
+    {
+        MaaInteroperationException.ThrowIf(condition, message, operationExpression);
+        return false;
+    }
 
     /// <inheritdoc cref="MaaInteroperationException.ThrowIfNot"/>
-    internal static void ThrowIfFalse(this bool condition, string message = "", [CallerArgumentExpression(nameof(condition))] string? operationExpression = null)
-        => MaaInteroperationException.ThrowIfNot(condition, message, operationExpression);
+    internal static bool ThrowIfFalse(this bool condition, string message = "", [CallerArgumentExpression(nameof(condition))] string? operationExpression = null)
+    {
+        MaaInteroperationException.ThrowIfNot(condition, message, operationExpression);
+        return true;
+    }
 
     /// <inheritdoc cref="MaaInteroperationException.ThrowIfNull{T}"/>
     internal static T ThrowIfNull<T>([NotNull] this T? operation, string message = "", [CallerArgumentExpression(nameof(operation))] string? operationExpression = null)
