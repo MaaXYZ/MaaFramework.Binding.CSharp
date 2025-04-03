@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -35,7 +36,7 @@ public interface IMaaStringBuffer : IMaaBuffer<IMaaStringBuffer>
     bool TryClear();
 
     /// <inheritdoc cref="IMaaStringBufferStatic{THandle}.TryGetValue(THandle, out string)"/>
-    bool TryGetValue(out string str);
+    bool TryGetValue([MaybeNullWhen(false)] out string str);
 
     /// <inheritdoc cref="IMaaStringBufferStatic{THandle}.TrySetValue(THandle, string, bool)"/>
     bool TrySetValue(string str, bool useEx = true);
@@ -54,7 +55,7 @@ public interface IMaaStringBufferStatic<THandle>
     /// <param name="str">The string.</param>
     /// <returns>The <see cref="string"/>.</returns>
     /// <returns><see langword="true"/> if the string was got successfully; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetValue(THandle handle, out string str);
+    static abstract bool TryGetValue(THandle handle, [MaybeNullWhen(false)] out string str);
 
     /// <summary>
     ///     Gets the string from a function using MaaRectBuffer.
@@ -63,7 +64,7 @@ public interface IMaaStringBufferStatic<THandle>
     /// <param name="writeBuffer">The function used to write the string to the buffer.</param>
     /// <returns>The <see cref="string"/>.</returns>
     /// <returns><see langword="true"/> if the string was got successfully; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetValue(out string str, Func<THandle, bool> writeBuffer);
+    static abstract bool TryGetValue([MaybeNullWhen(false)] out string str, Func<THandle, bool> writeBuffer);
 
     /// <summary>
     ///     Sets the string to a MaaStringBuffer.

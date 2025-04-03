@@ -287,7 +287,7 @@ public class Test_IMaaController
         using var buffer = GetImage(type, maaController);
 
         Assert.IsTrue(
-            buffer.TryGetEncodedData(out byte[] pngImageData));
+            buffer.TryGetEncodedData(out byte[]? pngImageData));
         CollectionAssert.AreNotEqual(new byte[pngImageData.Length], pngImageData);
 
         // if (type is MaaTypes.Native) { }
@@ -306,7 +306,7 @@ public class Test_IMaaController
         Assert.IsNotNull(maaController);
         using var buffer = GetImage(type, maaController);
         Assert.IsTrue(
-            buffer.TryGetEncodedData(out Stream data));
+            buffer.TryGetEncodedData(out Stream? data));
         using var image = Image.Load(data);
         Assert.AreEqual(
             image.Height, buffer.Height);

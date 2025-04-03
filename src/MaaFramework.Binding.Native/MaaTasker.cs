@@ -273,20 +273,19 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     /// </remarks>
     public bool GetTaskDetail(MaaTaskId taskId, out string entry, out MaaNodeId[] nodeIdList, out MaaJobStatus status)
     {
-        entry = string.Empty;
-        nodeIdList = [];
-
         MaaSize nodeIdListSize = 0;
         using var entryBuffer = new MaaStringBuffer();
 
         if (!MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, null, ref nodeIdListSize, out var statusInt))
         {
+            entry = string.Empty;
+            nodeIdList = [];
             status = (MaaJobStatus)statusInt;
             return false;
         }
 
         entry = entryBuffer.ToString();
-        nodeIdList = new MaaNodeId[nodeIdListSize];
+        nodeIdList = nodeIdListSize == 0 ? [] : new MaaNodeId[nodeIdListSize];
         var ret = MaaTaskerGetTaskDetail(Handle, taskId, entryBuffer.Handle, nodeIdList, ref nodeIdListSize, out statusInt);
         status = (MaaJobStatus)statusInt;
         return ret;

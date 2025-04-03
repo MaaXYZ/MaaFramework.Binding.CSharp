@@ -256,7 +256,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
         get
         {
             MaaStringListBuffer.TryGetList(out var list, h => MaaResourceGetNodeList(Handle, h)).ThrowIfFalse();
-            return list;
+            return list!;
         }
     }
 }

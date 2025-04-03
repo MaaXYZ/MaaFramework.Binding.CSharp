@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using System.Buffers;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
@@ -31,7 +32,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
             height: MaaImageBufferHeight(Handle),
             type: MaaImageBufferType(Handle)),
         null => false,
-        _ => buffer.TryGetEncodedData(out Stream data) && TrySetEncodedData(Handle, data),
+        _ => buffer.TryGetEncodedData(out Stream? data) && TrySetEncodedData(Handle, data),
     };
 
     /// <summary>
@@ -110,11 +111,11 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     #region EncodedData
 
     /// <inheritdoc/>
-    public unsafe bool TryGetEncodedData(out byte[] data)
+    public unsafe bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data)
         => TryGetEncodedData(Handle, out data);
 
     /// <inheritdoc/>
-    public bool TryGetEncodedData(out Stream data)
+    public bool TryGetEncodedData([MaybeNullWhen(false)] out Stream data)
         => TryGetEncodedData(Handle, out data);
 
     /// <inheritdoc/>
@@ -122,45 +123,65 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         => TryGetEncodedData(Handle, out data);
 
     /// <inheritdoc/>
-    public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out byte[] data)
+    public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, [MaybeNullWhen(false)] out byte[] data)
     {
-        if (!TryGetEncodedData(handle, out ReadOnlySpan<byte> span) || span.Length > Array.MaxLength)
+        var dataHandle = MaaImageBufferGetEncoded(handle);
+        if (dataHandle == default)
+        {
+            data = default;
+            return false;
+        }
+
+        var size = (int)MaaImageBufferGetEncodedSize(handle);
+        if (size < 0 || size > Array.MaxLength)
         {
             data = [];
             return false;
         }
 
-        data = span.ToArray();
+        data = new ReadOnlySpan<byte>((void*)dataHandle, size).ToArray();
         return true;
     }
 
     /// <inheritdoc/>
-    public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out Stream data)
+    public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, [MaybeNullWhen(false)] out Stream data)
     {
         var dataHandle = MaaImageBufferGetEncoded(handle);
         if (dataHandle == default)
         {
-            data = Stream.Null;
+            data = default;
             return false;
         }
 
-        data = new UnmanagedMemoryStream(
-            (byte*)dataHandle,
-            (long)MaaImageBufferGetEncodedSize(handle));
+        var size = (long)MaaImageBufferGetEncodedSize(handle);
+        if (size < 0)
+        {
+            data = new UnmanagedMemoryStream((byte*)dataHandle, 0);
+            return false;
+        }
+
+        data = new UnmanagedMemoryStream((byte*)dataHandle, size);
         return true;
     }
 
     /// <inheritdoc/>
     public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out ReadOnlySpan<byte> data)
     {
-        var size = (int)MaaImageBufferGetEncodedSize(handle);
-        if (size <= 0)
+        var dataHandle = MaaImageBufferGetEncoded(handle);
+        if (dataHandle == default)
         {
-            data = [];
+            data = default;
             return false;
         }
 
-        data = new ReadOnlySpan<byte>((void*)MaaImageBufferGetEncoded(handle), size);
+        var size = (int)MaaImageBufferGetEncodedSize(handle);
+        if (size < 0)
+        {
+            data = new ReadOnlySpan<byte>((void*)dataHandle, 0);
+            return false;
+        }
+
+        data = new ReadOnlySpan<byte>((void*)dataHandle, size);
         return true;
     }
 
@@ -176,20 +197,24 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     }
 
     /// <inheritdoc/>
-    public static bool TryGetEncodedData(out byte[] data, Func<MaaImageBufferHandle, bool> writeBuffer)
+    public static bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data, Func<MaaImageBufferHandle, bool> writeBuffer)
     {
         ArgumentNullException.ThrowIfNull(writeBuffer);
         var handle = MaaImageBufferCreate();
-        if (!writeBuffer.Invoke(handle))
+        try
         {
-            data = [];
-            MaaImageBufferDestroy(handle);
-            return false;
-        }
+            if (!writeBuffer.Invoke(handle))
+            {
+                data = default;
+                return false;
+            }
 
-        var ret = TryGetEncodedData(handle, out data);
-        MaaImageBufferDestroy(handle);
-        return ret;
+            return TryGetEncodedData(handle, out data);
+        }
+        finally
+        {
+            MaaImageBufferDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>
@@ -273,15 +298,14 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     {
         ArgumentNullException.ThrowIfNull(readBuffer);
         var handle = MaaImageBufferCreate();
-        if (!TrySetEncodedData(handle, data))
+        try
+        {
+            return TrySetEncodedData(handle, data) && readBuffer.Invoke(handle);
+        }
+        finally
         {
             MaaImageBufferDestroy(handle);
-            return false;
         }
-
-        var ret = readBuffer.Invoke(handle);
-        MaaImageBufferDestroy(handle);
-        return ret;
     }
 
     /// <inheritdoc/>
@@ -289,15 +313,14 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     {
         ArgumentNullException.ThrowIfNull(readBuffer);
         var handle = MaaImageBufferCreate();
-        if (!TrySetEncodedData(handle, data))
+        try
+        {
+            return TrySetEncodedData(handle, data) && readBuffer.Invoke(handle);
+        }
+        finally
         {
             MaaImageBufferDestroy(handle);
-            return false;
         }
-
-        var ret = readBuffer.Invoke(handle);
-        MaaImageBufferDestroy(handle);
-        return ret;
     }
 
     /// <inheritdoc/>
@@ -305,15 +328,14 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     {
         ArgumentNullException.ThrowIfNull(readBuffer);
         var handle = MaaImageBufferCreate();
-        if (!TrySetEncodedData(handle, data))
+        try
+        {
+            return TrySetEncodedData(handle, data) && readBuffer.Invoke(handle);
+        }
+        finally
         {
             MaaImageBufferDestroy(handle);
-            return false;
         }
-
-        var ret = readBuffer.Invoke(handle);
-        MaaImageBufferDestroy(handle);
-        return ret;
     }
 
     #endregion
@@ -342,10 +364,16 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     public static bool TryGetRawData(MaaImageBufferHandle handle, out MaaImageRawData data, out int width, out int height, out int type)
     {
         data = MaaImageBufferGetRawData(handle);
+        if (data == default)
+        {
+            width = height = type = default;
+            return false;
+        }
+
         width = MaaImageBufferWidth(handle);
         height = MaaImageBufferHeight(handle);
         type = MaaImageBufferType(handle);
-        return data != default;
+        return true;
     }
 
     /// <inheritdoc cref="TrySetRawData(nint, nint, int, int, int)"/>

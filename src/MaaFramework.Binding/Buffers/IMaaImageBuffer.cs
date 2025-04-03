@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding.Buffers;
 
@@ -47,10 +48,10 @@ public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>
     int Type { get; }
 
     /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TryGetEncodedData(THandle, out byte[])"/>
-    bool TryGetEncodedData(out byte[] data);
+    bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data);
 
     /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TryGetEncodedData(THandle, out Stream)"/>
-    bool TryGetEncodedData(out Stream data);
+    bool TryGetEncodedData([MaybeNullWhen(false)] out Stream data);
 
     /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TryGetEncodedData(THandle, out ReadOnlySpan{byte})"/>
     bool TryGetEncodedData(out ReadOnlySpan<byte> data);
@@ -77,13 +78,13 @@ public interface IMaaImageBufferStatic<THandle>
     /// <param name="handle">The MaaImageBufferHandle.</param>
     /// <param name="data">The image data (PNG).</param>
     /// <returns><see langword="true"/> if the image encoded data was got successfully; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetEncodedData(THandle handle, out byte[] data);
+    static abstract bool TryGetEncodedData(THandle handle, [MaybeNullWhen(false)] out byte[] data);
 
     /// <remarks>
     ///     <para>Avoids disposing <see cref="IMaaImageBuffer"/> before the stream is read.</para>
     /// </remarks>
     /// <inheritdoc cref="TryGetEncodedData(THandle, out byte[])"/>
-    static abstract bool TryGetEncodedData(THandle handle, out Stream data);
+    static abstract bool TryGetEncodedData(THandle handle, [MaybeNullWhen(false)] out Stream data);
 
     /// <remarks>
     ///     <para>Avoids disposing <see cref="IMaaImageBuffer"/> before the span is read.</para>
@@ -97,7 +98,7 @@ public interface IMaaImageBufferStatic<THandle>
     /// <param name="data">The image data (PNG).</param>
     /// <param name="writeBuffer">The function used to write the data to the buffer.</param>
     /// <returns><see langword="true"/> if the image encoded data was got successfully; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetEncodedData(out byte[] data, Func<THandle, bool> writeBuffer);
+    static abstract bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data, Func<THandle, bool> writeBuffer);
 
     /// <summary>
     ///     Sets the image encoded data to a MaaImageBuffer.

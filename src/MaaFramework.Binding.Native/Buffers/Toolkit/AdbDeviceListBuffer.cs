@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding.Buffers;
@@ -81,56 +82,79 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
     public override bool IsReadOnly => true;
 
     /// <inheritdoc/>
-    public override bool TryIndexOf(AdbDeviceInfo item, out ulong index)
+    public override bool TryIndexOf(AdbDeviceInfo item, out MaaSize index)
     {
-        if (item is not MaaToolkitAdbDeviceInfo info)
-            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitAdbDeviceInfo)}.");
+        if (item is MaaToolkitAdbDeviceInfo info)
+        {
+            var count = MaaSizeCount;
+            for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)
+            {
+                if (MaaToolkitAdbDeviceListAt(Handle, tmpIndex).Equals(info.InfoHandle))
+                {
+                    index = tmpIndex;
+                    return true;
+                }
+            }
+        }
 
-        var count = MaaSizeCount;
-        for (index = 0; index < count; index++)
-            if (MaaToolkitAdbDeviceListAt(Handle, index).Equals(info.InfoHandle))
-                return true;
-
+        index = 0;
         return false;
     }
 
     /// <inheritdoc/>
-    public override bool TryCopyTo(MaaImageListBufferHandle bufferHandle)
+    public override bool TryCopyTo(MaaToolkitAdbDeviceHandle bufferHandle)
         => throw new NotSupportedException($"{nameof(AdbDeviceListBuffer)} is read-only.");
 
     /// <inheritdoc/>
-    public static bool TryGetList(nint handle, out IList<AdbDeviceInfo> deviceList)
+    public static bool TryGetList(MaaToolkitAdbDeviceHandle handle, [MaybeNullWhen(false)] out IList<AdbDeviceInfo> deviceList)
     {
-        var ret = false;
-        var count = (int)MaaToolkitAdbDeviceListSize(handle);
-        var array = count <= 0 || count > Array.MaxLength ? [] : new AdbDeviceInfo[count];
+        if (handle == default)
+        {
+            deviceList = default;
+            return false;
+        }
 
-        count = array.Length;
-        for (var i = 0; i < count; i++)
+        var size = (int)MaaToolkitAdbDeviceListSize(handle);
+        if (size < 0 || size > Array.MaxLength)
+        {
+            deviceList = Array.Empty<AdbDeviceInfo>();
+            return false;
+        }
+
+        var array = size == 0 ? [] : new AdbDeviceInfo[size];
+        for (var i = 0; i < size; i++)
         {
             var device = MaaToolkitAdbDeviceListAt(handle, (MaaSize)i);
-            ret |= device != default;
+            if (device == default)
+            {
+                deviceList = Array.Empty<AdbDeviceInfo>();
+                return false;
+            }
             array[i] = new MaaToolkitAdbDeviceInfo(device);
         }
 
         deviceList = array;
-        return ret;
+        return true;
     }
 
     /// <inheritdoc/>
-    public static bool TryGetList(out IList<AdbDeviceInfo> deviceList, Func<nint, bool> writeBuffer)
+    public static bool TryGetList([MaybeNullWhen(false)] out IList<AdbDeviceInfo> deviceList, Func<MaaToolkitAdbDeviceHandle, bool> writeBuffer)
     {
         ArgumentNullException.ThrowIfNull(writeBuffer);
         var handle = MaaToolkitAdbDeviceListCreate();
-        if (!writeBuffer.Invoke(handle))
+        try
         {
-            deviceList = Array.Empty<AdbDeviceInfo>();
-            MaaToolkitAdbDeviceListDestroy(handle);
-            return false;
-        }
+            if (!writeBuffer.Invoke(handle))
+            {
+                deviceList = default;
+                return false;
+            }
 
-        var ret = TryGetList(handle, out deviceList);
-        MaaToolkitAdbDeviceListDestroy(handle);
-        return ret;
+            return TryGetList(handle, out deviceList);
+        }
+        finally
+        {
+            MaaToolkitAdbDeviceListDestroy(handle);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -10,11 +11,7 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaStringBuffer<MaaStringBufferHandle>, IMaaStringBufferStatic<MaaStringBufferHandle>
 {
     /// <inheritdoc/>
-    public override string ToString()
-    {
-        _ = TryGetValue(out var str);
-        return str;
-    }
+    public override string ToString() => TryGetValue(out var str) ? str : string.Empty;
 
     /// <inheritdoc/>
     public bool TryCopyTo(MaaStringBufferHandle bufferHandle) => MaaStringBufferSetExFromNint(
@@ -80,37 +77,48 @@ public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaS
         => MaaStringBufferClear(Handle);
 
     /// <inheritdoc/>
-    public bool TryGetValue(out string str)
+    public bool TryGetValue([MaybeNullWhen(false)] out string str)
         => TryGetValue(Handle, out str);
 
     /// <inheritdoc/>
-    public static bool TryGetValue(MaaStringBufferHandle handle, out string str)
+    public static bool TryGetValue(MaaStringBufferHandle handle, [MaybeNullWhen(false)] out string str)
     {
         if (handle == default)
+        {
+            str = default;
+            return false;
+        }
+
+        var size = (int)MaaStringBufferSize(handle);
+        if (size < 0)
         {
             str = string.Empty;
             return false;
         }
 
-        str = MaaStringBufferIsEmpty(handle) ? string.Empty : MaaStringBufferGetToNint(handle).ToStringUtf8(MaaStringBufferSize(handle));
+        str = size == 0 ? string.Empty : MaaStringBufferGetToNint(handle).ToStringUtf8(size);
         return true;
     }
 
     /// <inheritdoc/>
-    public static bool TryGetValue(out string str, Func<MaaStringBufferHandle, bool> writeBuffer)
+    public static bool TryGetValue([MaybeNullWhen(false)] out string str, Func<MaaStringBufferHandle, bool> writeBuffer)
     {
         ArgumentNullException.ThrowIfNull(writeBuffer);
         var handle = MaaStringBufferCreate();
-        if (!writeBuffer.Invoke(handle))
+        try
         {
-            str = string.Empty;
-            MaaStringBufferDestroy(handle);
-            return false;
-        }
+            if (!writeBuffer.Invoke(handle))
+            {
+                str = default;
+                return false;
+            }
 
-        var ret = TryGetValue(handle, out str);
-        MaaStringBufferDestroy(handle);
-        return ret;
+            return TryGetValue(handle, out str);
+        }
+        finally
+        {
+            MaaStringBufferDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>
@@ -126,14 +134,13 @@ public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaS
     {
         ArgumentNullException.ThrowIfNull(readBuffer);
         var handle = MaaStringBufferCreate();
-        if (!TrySetValue(handle, str, useEx))
+        try
+        {
+            return TrySetValue(handle, str, useEx) && readBuffer.Invoke(handle);
+        }
+        finally
         {
             MaaStringBufferDestroy(handle);
-            return false;
         }
-
-        var ret = readBuffer.Invoke(handle);
-        MaaStringBufferDestroy(handle);
-        return ret;
     }
 }

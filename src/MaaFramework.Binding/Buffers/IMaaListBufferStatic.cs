@@ -1,4 +1,6 @@
-﻿namespace MaaFramework.Binding.Buffers;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
 ///     An interface defining wrapped static abstract members for MaaImageListBuffer with generic handle.
@@ -11,16 +13,16 @@ public interface IMaaImageListBufferStatic<THandle>
     /// </summary>
     /// <param name="handle">The MaaImageListBufferHandle.</param>
     /// <param name="dataList">The list of image data (PNG).</param>
-    /// <returns><see langword="true"/> if any element was got successfully from the MaaImageListBuffer; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetEncodedDataList(THandle handle, out IList<byte[]> dataList);
+    /// <returns><see langword="true"/> if an empty list or each element was got successfully from the MaaImageListBuffer; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetEncodedDataList(THandle handle, [MaybeNullWhen(false)] out IList<byte[]> dataList);
 
     /// <summary>
     ///     Gets the image encoded data list from a function using MaaImageListBuffer.
     /// </summary>
     /// <param name="dataList">The list of image data (PNG).</param>
     /// <param name="writeBuffer">The function used to write the data list to the list buffer.</param>
-    /// <returns><see langword="true"/> if any element was got successfully from the MaaImageListBuffer; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetEncodedDataList(out IList<byte[]> dataList, Func<THandle, bool> writeBuffer);
+    /// <returns><see langword="true"/> if an empty list or each element was got successfully from the MaaImageListBuffer; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetEncodedDataList([MaybeNullWhen(false)] out IList<byte[]> dataList, Func<THandle, bool> writeBuffer);
 
     /// <summary>
     ///     Sets the image encoded data list to a MaaImageListBuffer.
@@ -56,16 +58,16 @@ public interface IMaaStringListBufferStatic<THandle>
     /// </summary>
     /// <param name="handle">The MaaStringListBufferHandle.</param>
     /// <param name="stringList">The list of strings.</param>
-    /// <returns><see langword="true"/> if any element was got successfully from the MaaStringListBuffer; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetList(THandle handle, out IList<string> stringList);
+    /// <returns><see langword="true"/> if an empty list or each element was got successfully from the MaaStringListBuffer; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetList(THandle handle, [MaybeNullWhen(false)] out IList<string> stringList);
 
     /// <summary>
     ///     Gets the <see langword="string"/> list from a function using MaaStringListBuffer.
     /// </summary>
     /// <param name="stringList">The list of strings.</param>
     /// <param name="writeBuffer">The function used to write the string list to the list buffer.</param>
-    /// <returns><see langword="true"/> if any element was got successfully from the MaaStringListBuffer; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetList(out IList<string> stringList, Func<THandle, bool> writeBuffer);
+    /// <returns><see langword="true"/> if an empty list or each element was got successfully from the MaaStringListBuffer; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetList([MaybeNullWhen(false)] out IList<string> stringList, Func<THandle, bool> writeBuffer);
 
     /// <summary>
     ///     Sets the <see langword="string"/> list to a MaaStringListBuffer.
@@ -95,16 +97,16 @@ public interface IDesktopWindowListBufferStatic<THandle>
     /// </summary>
     /// <param name="handle">The DesktopWindowListBufferHandle.</param>
     /// <param name="windowList">The list of windows.</param>
-    /// <returns><see langword="true"/> if any element was got successfully from the DesktopWindowListBuffer; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetList(THandle handle, out IList<DesktopWindowInfo> windowList);
+    /// <returns><see langword="true"/> if an empty list or each element was got successfully from the DesktopWindowListBuffer; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetList(THandle handle, [MaybeNullWhen(false)] out IList<DesktopWindowInfo> windowList);
 
     /// <summary>
     ///     Gets the <see cref="DesktopWindowInfo"/> list from a function using DesktopWindowListBuffer.
     /// </summary>
     /// <param name="windowList">The list of windows.</param>
     /// <param name="writeBuffer">The function used to write the window list to the list buffer.</param>
-    /// <returns><see langword="true"/> if any element was got successfully from the DesktopWindowListBuffer; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetList(out IList<DesktopWindowInfo> windowList, Func<THandle, bool> writeBuffer);
+    /// <returns><see langword="true"/> if an empty list or each element was got successfully from the DesktopWindowListBuffer; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetList([MaybeNullWhen(false)] out IList<DesktopWindowInfo> windowList, Func<THandle, bool> writeBuffer);
 }
 
 /// <summary>
@@ -118,14 +120,14 @@ public interface IAdbDeviceListBufferStatic<THandle>
     /// </summary>
     /// <param name="handle">The AdbDeviceListBufferHandle.</param>
     /// <param name="deviceList">The list of devices.</param>
-    /// <returns><see langword="true"/> if any element was got successfully from the AdbDeviceListBuffer; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetList(THandle handle, out IList<AdbDeviceInfo> deviceList);
+    /// <returns><see langword="true"/> if an empty list or each element was got successfully from the AdbDeviceListBuffer; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetList(THandle handle, [MaybeNullWhen(false)] out IList<AdbDeviceInfo> deviceList);
 
     /// <summary>
     ///     Gets the <see cref="AdbDeviceInfo"/> list from a function using AdbDeviceListBuffer.
     /// </summary>
     /// <param name="deviceList">The list of devices.</param>
     /// <param name="writeBuffer">The function used to write the device list to the list buffer.</param>
-    /// <returns><see langword="true"/> if any element was got successfully from the AdbDeviceListBuffer; otherwise, <see langword="false"/>.</returns>
-    static abstract bool TryGetList(out IList<AdbDeviceInfo> deviceList, Func<THandle, bool> writeBuffer);
+    /// <returns><see langword="true"/> if an empty list or each element was got successfully from the AdbDeviceListBuffer; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryGetList([MaybeNullWhen(false)] out IList<AdbDeviceInfo> deviceList, Func<THandle, bool> writeBuffer);
 }

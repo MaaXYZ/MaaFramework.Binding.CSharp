@@ -44,8 +44,12 @@ internal static class MaaMarshallingExtensions
         return value;
     }
 
-    /// <inheritdoc cref="MaaMarshaller.ConvertToString"/>
-    internal static string ToStringUtf8(this nint value, MaaSize size = MaaSize.MinValue)
+    /// <inheritdoc cref="MaaMarshaller.ConvertToString(nint)"/>
+    internal static string ToStringUtf8(this nint value)
+        => MaaMarshaller.ConvertToString(value);
+
+    /// <inheritdoc cref="MaaMarshaller.ConvertToString(nint, int)"/>
+    internal static string ToStringUtf8(this nint value, int size)
         => MaaMarshaller.ConvertToString(value, size);
 
     /// <inheritdoc cref="MaaMarshaller.ConvertToMaaOptionValue(int)"/>

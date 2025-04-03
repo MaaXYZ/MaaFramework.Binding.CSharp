@@ -95,15 +95,14 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     {
         ArgumentNullException.ThrowIfNull(readBuffer);
         var handle = MaaRectCreate();
-        if (!TrySetValues(handle, x, y, width, height))
+        try
+        {
+            return TrySetValues(handle, x, y, width, height) && readBuffer.Invoke(handle);
+        }
+        finally
         {
             MaaRectDestroy(handle);
-            return false;
         }
-
-        var ret = readBuffer.Invoke(handle);
-        MaaRectDestroy(handle);
-        return ret;
     }
 
     /// <inheritdoc/>
@@ -131,16 +130,15 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     {
         ArgumentNullException.ThrowIfNull(writeBuffer);
         var handle = MaaRectCreate();
-        if (!writeBuffer.Invoke(handle))
+        try
         {
             x = y = width = height = 0;
-            MaaRectDestroy(handle);
-            return false;
+            return writeBuffer.Invoke(handle) && TryGetValues(handle, out x, out y, out width, out height);
         }
-
-        var ret = TryGetValues(handle, out x, out y, out width, out height);
-        MaaRectDestroy(handle);
-        return ret;
+        finally
+        {
+            MaaRectDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>
@@ -161,13 +159,15 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     {
         ArgumentNullException.ThrowIfNull(func);
         var handle = MaaRectCreate();
-        if (!func.Invoke(handle) || !TryGetValues(handle, out var x, out var y, out var width, out var height))
+        try
+        {
+            return func.Invoke(handle) && TryGetValues(handle, out var x, out var y, out var width, out var height)
+                ? new(X: x, Y: y, Width: width, Height: height)
+                : new(0, 0, 0, 0);
+        }
+        finally
         {
             MaaRectDestroy(handle);
-            return new(0, 0, 0, 0);
         }
-
-        MaaRectDestroy(handle);
-        return new(X: x, Y: y, Width: width, Height: height);
     }
 }

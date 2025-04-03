@@ -16,10 +16,12 @@ public static class MaaMarshaller
     ///     Converts a MaaStringView (<see cref="nint"/>) to a <see cref="string"/>.
     /// </summary>
     /// <exception cref="MaaInteroperationException"/>
-    public static string ConvertToString(nint value, MaaSize size = MaaSize.MinValue)
-        => (int)size <= 0
-        ? Marshal.PtrToStringUTF8(value).ThrowIfNull()
-        : Marshal.PtrToStringUTF8(value, (int)size);
+    public static string ConvertToString(nint value)
+        => Marshal.PtrToStringUTF8(value).ThrowIfNull();
+
+    /// <inheritdoc cref="ConvertToString(nint)"/>
+    public static string ConvertToString(nint value, int size)
+        => Marshal.PtrToStringUTF8(value, size).ThrowIfNull();
 
     /// <summary>
     ///     Converts a <see cref="int"/> to a MaaOptionValue (<see cref="byte"/>[]).

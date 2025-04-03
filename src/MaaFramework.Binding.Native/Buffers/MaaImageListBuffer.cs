@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Interop.Native;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -137,24 +138,22 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// <inheritdoc/>
     public override bool TryIndexOf(MaaImageBuffer item, out MaaSize index)
     {
-        index = 0;
-        if (item is null)
-            return false;
-
-        var imageInItem = MaaImageBufferGetRawData(item.Handle);
-        if (imageInItem == nint.Zero)
-            return false;
-
-        var count = MaaSizeCount;
-        while (index < count)
+        var imageInItem = MaaImageBufferGetRawData(item?.Handle ?? nint.Zero);
+        if (imageInItem != nint.Zero)
         {
-            var imageInList = MaaImageBufferGetRawData(MaaImageListBufferAt(Handle, index));
-            if (imageInList == imageInItem)
-                return true;
-
-            index++;
+            var count = MaaSizeCount;
+            for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)
+            {
+                var imageInList = MaaImageBufferGetRawData(MaaImageListBufferAt(Handle, tmpIndex));
+                if (imageInList == imageInItem)
+                {
+                    index = tmpIndex;
+                    return true;
+                }
+            }
         }
 
+        index = 0;
         return false;
     }
 
@@ -176,80 +175,105 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     }
 
     /// <inheritdoc/>
-    public static bool TryGetEncodedDataList(MaaImageListBufferHandle handle, out IList<byte[]> dataList)
+    public static bool TryGetEncodedDataList(MaaImageListBufferHandle handle, [MaybeNullWhen(false)] out IList<byte[]> dataList)
     {
-        var ret = false;
-        var count = (int)MaaImageListBufferSize(handle);
-        var array = count <= 0 || count > Array.MaxLength ? [] : new byte[count][];
-
-        count = array.Length;
-        for (var i = 0; i < count; i++)
+        if (handle == default)
         {
-            ret |= MaaImageBuffer.TryGetEncodedData(MaaImageListBufferAt(handle, (MaaSize)i), out byte[] data);
+            dataList = default;
+            return false;
+        }
+
+        var size = (int)MaaImageListBufferSize(handle);
+        if (size < 0 || size > Array.MaxLength)
+        {
+            dataList = Array.Empty<byte[]>();
+            return false;
+        }
+
+        var array = size == 0 ? [] : new byte[size][];
+        for (var i = 0; i < size; i++)
+        {
+            var buffer = MaaImageListBufferAt(handle, (MaaSize)i);
+            if (!MaaImageBuffer.TryGetEncodedData(buffer, out byte[]? data))
+            {
+                dataList = Array.Empty<byte[]>();
+                return false;
+            }
             array[i] = data;
         }
 
         dataList = array;
-        return ret;
+        return true;
     }
 
     /// <inheritdoc/>
-    public static bool TryGetEncodedDataList(out IList<byte[]> dataList, Func<MaaImageListBufferHandle, bool> writeBuffer)
+    public static bool TryGetEncodedDataList([MaybeNullWhen(false)] out IList<byte[]> dataList, Func<MaaImageListBufferHandle, bool> writeBuffer)
     {
         ArgumentNullException.ThrowIfNull(writeBuffer);
         var handle = MaaImageListBufferCreate();
-        if (!writeBuffer.Invoke(handle))
+        try
         {
-            dataList = Array.Empty<byte[]>();
-            MaaImageListBufferDestroy(handle);
-            return false;
-        }
+            if (!writeBuffer.Invoke(handle))
+            {
+                dataList = default;
+                return false;
+            }
 
-        var ret = TryGetEncodedDataList(handle, out dataList);
-        MaaImageListBufferDestroy(handle);
-        return ret;
+            return TryGetEncodedDataList(handle, out dataList);
+        }
+        finally
+        {
+            MaaImageListBufferDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>
     public static bool TrySetEncodedDataList(MaaImageListBufferHandle handle, IEnumerable<byte[]> dataList)
     {
-        var ret = true;
         var buffer = MaaImageBufferCreate();
-        if (dataList is byte[][] array)
+        try
         {
-            foreach (var data in array)
+            if (dataList is byte[][] array)
             {
-                ret &= MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer);
+                foreach (var data in array)
+                {
+                    if (!MaaImageBuffer.TrySetEncodedData(buffer, data) || !MaaImageListBufferAppend(handle, buffer))
+                        return false;
+                }
+                return true;
             }
-            MaaImageBufferDestroy(buffer);
-            return ret;
-        }
 
-        ret = dataList.All(
-            data => MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer));
-        MaaImageBufferDestroy(buffer);
-        return ret;
+            return dataList.All(data => MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer));
+        }
+        finally
+        {
+            MaaImageBufferDestroy(buffer);
+        }
     }
 
     /// <inheritdoc/>
     public static bool TrySetEncodedDataList(MaaImageListBufferHandle handle, IEnumerable<Stream> dataList)
     {
-        var ret = true;
         var buffer = MaaImageBufferCreate();
-        if (dataList is Stream[] array)
+        try
         {
-            foreach (var data in array)
+            if (dataList is Stream[] array)
             {
-                ret &= MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer);
+                var ret = true;
+                foreach (var data in array)
+                {
+                    if (!MaaImageBuffer.TrySetEncodedData(buffer, data) || !MaaImageListBufferAppend(handle, buffer))
+                        return false;
+                }
+                return ret;
             }
-            MaaImageBufferDestroy(buffer);
-            return ret;
-        }
 
-        ret = dataList.All(
-            data => MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer));
-        MaaImageBufferDestroy(buffer);
-        return ret;
+            return dataList.All(data => MaaImageBuffer.TrySetEncodedData(buffer, data) && MaaImageListBufferAppend(handle, buffer));
+        }
+        finally
+        {
+            MaaImageBufferDestroy(buffer);
+        }
     }
 
     /// <inheritdoc/>
@@ -257,15 +281,14 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     {
         ArgumentNullException.ThrowIfNull(readBuffer);
         var handle = MaaImageListBufferCreate();
-        if (!TrySetEncodedDataList(handle, dataList))
+        try
+        {
+            return TrySetEncodedDataList(handle, dataList) && readBuffer.Invoke(handle);
+        }
+        finally
         {
             MaaImageListBufferDestroy(handle);
-            return false;
         }
-
-        var ret = readBuffer.Invoke(handle);
-        MaaImageListBufferDestroy(handle);
-        return ret;
     }
 
     /// <inheritdoc/>
@@ -273,14 +296,13 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     {
         ArgumentNullException.ThrowIfNull(readBuffer);
         var handle = MaaImageListBufferCreate();
-        if (!TrySetEncodedDataList(handle, dataList))
+        try
+        {
+            return TrySetEncodedDataList(handle, dataList) && readBuffer.Invoke(handle);
+        }
+        finally
         {
             MaaImageListBufferDestroy(handle);
-            return false;
         }
-
-        var ret = readBuffer.Invoke(handle);
-        MaaImageListBufferDestroy(handle);
-        return ret;
     }
 }

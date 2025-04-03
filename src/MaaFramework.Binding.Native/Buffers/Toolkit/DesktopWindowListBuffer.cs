@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding.Buffers;
@@ -75,16 +76,23 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     public override bool IsReadOnly => true;
 
     /// <inheritdoc/>
-    public override bool TryIndexOf(DesktopWindowInfo item, out ulong index)
+    public override bool TryIndexOf(DesktopWindowInfo item, out MaaSize index)
     {
-        if (item is not MaaToolkitDesktopWindowInfo info)
-            throw new NotSupportedException($"{nameof(item)} must be the type: {typeof(MaaToolkitDesktopWindowInfo)}.");
+        if (item is MaaToolkitDesktopWindowInfo info)
+        {
+            var count = MaaSizeCount;
+            for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)
+            {
+                if (MaaToolkitDesktopWindowListAt(Handle, tmpIndex).Equals(info.InfoHandle))
+                {
+                    index = tmpIndex;
+                    return true;
+                }
+            }
 
-        var count = MaaSizeCount;
-        for (index = 0; index < count; index++)
-            if (MaaToolkitDesktopWindowListAt(Handle, index).Equals(info.InfoHandle))
-                return true;
+        }
 
+        index = 0;
         return false;
     }
 
@@ -93,17 +101,31 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
         => throw new NotSupportedException($"{nameof(DesktopWindowListBuffer)} is read-only.");
 
     /// <inheritdoc/>
-    public static bool TryGetList(MaaToolkitDesktopWindowListHandle handle, out IList<DesktopWindowInfo> windowList)
+    public static bool TryGetList(MaaToolkitDesktopWindowListHandle handle, [MaybeNullWhen(false)] out IList<DesktopWindowInfo> windowList)
     {
-        var ret = false;
-        var count = (int)MaaToolkitDesktopWindowListSize(handle);
-        var array = count <= 0 || count > Array.MaxLength ? [] : new DesktopWindowInfo[count];
+        if (handle == default)
+        {
+            windowList = default;
+            return false;
+        }
 
-        count = array.Length;
-        for (var i = 0; i < count; i++)
+        var size = (int)MaaToolkitDesktopWindowListSize(handle);
+        if (size < 0 || size > Array.MaxLength)
+        {
+            windowList = Array.Empty<DesktopWindowInfo>();
+            return false;
+        }
+
+        var ret = size == 0;
+        var array = ret ? [] : new DesktopWindowInfo[size];
+        for (var i = 0; i < size; i++)
         {
             var window = MaaToolkitDesktopWindowListAt(handle, (MaaSize)i);
-            ret |= window != default;
+            if (window == default)
+            {
+                windowList = Array.Empty<DesktopWindowInfo>();
+                return false;
+            }
             array[i] = new MaaToolkitDesktopWindowInfo(window);
         }
 
@@ -112,19 +134,23 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     }
 
     /// <inheritdoc/>
-    public static bool TryGetList(out IList<DesktopWindowInfo> windowList, Func<MaaToolkitDesktopWindowListHandle, bool> writeBuffer)
+    public static bool TryGetList([MaybeNullWhen(false)] out IList<DesktopWindowInfo> windowList, Func<MaaToolkitDesktopWindowListHandle, bool> writeBuffer)
     {
         ArgumentNullException.ThrowIfNull(writeBuffer);
         var handle = MaaToolkitDesktopWindowListCreate();
-        if (!writeBuffer.Invoke(handle))
+        try
         {
-            windowList = Array.Empty<DesktopWindowInfo>();
-            MaaToolkitDesktopWindowListDestroy(handle);
-            return false;
-        }
+            if (!writeBuffer.Invoke(handle))
+            {
+                windowList = default;
+                return false;
+            }
 
-        var ret = TryGetList(handle, out windowList);
-        MaaToolkitDesktopWindowListDestroy(handle);
-        return ret;
+            return TryGetList(handle, out windowList);
+        }
+        finally
+        {
+            MaaToolkitDesktopWindowListDestroy(handle);
+        }
     }
 }

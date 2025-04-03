@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -78,15 +79,22 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     public override bool IsReadOnly => false;
 
     /// <inheritdoc/>
-    public override bool TryIndexOf(MaaStringBuffer item, out ulong index)
+    public override bool TryIndexOf(MaaStringBuffer item, out MaaSize index)
     {
-        index = 0;
-        if (item is null) return false;
-        var count = MaaSizeCount;
-        for (index = 0; index < count; index++)
-            if (MaaStringListBufferAt(Handle, index).Equals(item.Handle))
-                return true;
+        if (item is not null)
+        {
+            var count = MaaSizeCount;
+            for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)
+            {
+                if (MaaStringListBufferAt(Handle, tmpIndex).Equals(item.Handle))
+                {
+                    index = tmpIndex;
+                    return true;
+                }
+            }
+        }
 
+        index = 0;
         return false;
     }
 
@@ -108,59 +116,80 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     }
 
     /// <inheritdoc/>
-    public static bool TryGetList(MaaStringListBufferHandle handle, out IList<string> stringList)
+    public static bool TryGetList(MaaStringListBufferHandle handle, [MaybeNullWhen(false)] out IList<string> stringList)
     {
-        var ret = false;
-        var count = (int)MaaStringListBufferSize(handle);
-        var array = count <= 0 || count > Array.MaxLength ? [] : new string[count];
-
-        count = array.Length;
-        for (var i = 0; i < count; i++)
+        if (handle == default)
         {
-            ret |= MaaStringBuffer.TryGetValue(MaaStringListBufferAt(handle, (MaaSize)i), out var str);
+            stringList = default;
+            return false;
+        }
+
+        var size = (int)MaaStringListBufferSize(handle);
+        if (size < 0 || size > Array.MaxLength)
+        {
+            stringList = Array.Empty<string>();
+            return false;
+        }
+
+        var array = size == 0 ? [] : new string[size];
+        for (var i = 0; i < size; i++)
+        {
+            var buffer = MaaStringListBufferAt(handle, (MaaSize)i);
+            if (!MaaStringBuffer.TryGetValue(buffer, out var str))
+            {
+                stringList = Array.Empty<string>();
+                return false;
+            }
             array[i] = str;
         }
 
         stringList = array;
-        return ret;
+        return true;
     }
 
     /// <inheritdoc/>
-    public static bool TryGetList(out IList<string> stringList, Func<MaaStringListBufferHandle, bool> writeBuffer)
+    public static bool TryGetList([MaybeNullWhen(false)] out IList<string> stringList, Func<MaaStringListBufferHandle, bool> writeBuffer)
     {
         ArgumentNullException.ThrowIfNull(writeBuffer);
         var handle = MaaStringListBufferCreate();
-        if (!writeBuffer.Invoke(handle))
+        try
         {
-            stringList = Array.Empty<string>();
-            MaaStringListBufferDestroy(handle);
-            return false;
-        }
+            if (!writeBuffer.Invoke(handle))
+            {
+                stringList = default;
+                return false;
+            }
 
-        var ret = TryGetList(handle, out stringList);
-        MaaStringListBufferDestroy(handle);
-        return ret;
+            return TryGetList(handle, out stringList);
+        }
+        finally
+        {
+            MaaStringListBufferDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>
     public static bool TrySetList(MaaStringListBufferHandle handle, IEnumerable<string> stringList)
     {
-        var ret = true;
         var buffer = MaaStringBufferCreate();
-        if (stringList is string[] array)
+        try
         {
-            foreach (var str in array)
+            if (stringList is string[] array)
             {
-                ret &= MaaStringBuffer.TrySetValue(buffer, str) && MaaStringListBufferAppend(handle, buffer);
+                foreach (var str in array)
+                {
+                    if (!MaaStringBuffer.TrySetValue(buffer, str) || !MaaStringListBufferAppend(handle, buffer))
+                        return false;
+                }
+                return true;
             }
-            MaaStringBufferDestroy(buffer);
-            return ret;
-        }
 
-        ret = stringList.All(
-            str => MaaStringBuffer.TrySetValue(buffer, str) && MaaStringListBufferAppend(handle, buffer));
-        MaaStringBufferDestroy(buffer);
-        return ret;
+            return stringList.All(str => MaaStringBuffer.TrySetValue(buffer, str) && MaaStringListBufferAppend(handle, buffer));
+        }
+        finally
+        {
+            MaaStringBufferDestroy(buffer);
+        }
     }
 
     /// <inheritdoc/>
@@ -168,14 +197,13 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     {
         ArgumentNullException.ThrowIfNull(readBuffer);
         var handle = MaaStringListBufferCreate();
-        if (!TrySetList(handle, stringList))
+        try
+        {
+            return TrySetList(handle, stringList) && readBuffer.Invoke(handle);
+        }
+        finally
         {
             MaaStringListBufferDestroy(handle);
-            return false;
         }
-
-        var ret = readBuffer.Invoke(handle);
-        MaaStringListBufferDestroy(handle);
-        return ret;
     }
 }

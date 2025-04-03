@@ -34,10 +34,10 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
         if (_isCached && Buffer.IsInvalid)
             return true;
 
-        var ret = Buffer.TryGetEncodedData(out Stream stream);
+        var succeeded = Buffer.TryGetEncodedData(out Stream? stream);
         using (stream)
         {
-            if (!ret || !stream.CanRead)
+            if (!succeeded || !stream!.CanRead)
                 return false;
 
             _cacheInfo = Buffer.GetInfo();
@@ -131,11 +131,13 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
             return;
         }
 
-        MaaInteroperationException.ThrowIfNot(
-            Buffer.TryGetEncodedData(out Stream dataStream),
-            $"Failed to get encoded data from '{nameof(Buffer)}'.");
-        dataStream.CopyTo(stream);
-        dataStream.Close();
+        var succeeded = Buffer.TryGetEncodedData(out Stream? dataStream);
+        using (dataStream)
+        {
+            MaaInteroperationException.ThrowIfNot(succeeded, $"Failed to get encoded data from '{nameof(Buffer)}'.");
+            dataStream!.CopyTo(stream);
+            dataStream.Close();
+        }
     }
 
     /// <summary>
