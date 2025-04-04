@@ -29,9 +29,12 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     ///     Wrapper of <see cref="MaaContextRunTask"/>.
     /// </remarks>
     public TaskDetail? RunTask(string entry, string pipelineOverride)
-        => TaskDetail.Query(
-            taskId: MaaContextRunTask(Handle, entry, pipelineOverride),
-            tasker: Tasker);
+    {
+        var taskId = MaaContextRunTask(Handle, entry, pipelineOverride);
+        if (taskId == Interop.Native.MaaDef.MaaInvalidId)
+            return null;
+        return TaskDetail.Query(taskId, Tasker);
+    }
 
     /// <inheritdoc/>
     public RecognitionDetail? RunRecognition(string entry, string pipelineOverride, IMaaImageBuffer image)
@@ -44,9 +47,10 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     public RecognitionDetail? RunRecognition(string entry, string pipelineOverride, MaaImageBuffer image)
     {
         ArgumentNullException.ThrowIfNull(image);
-        return RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(
-            recognitionId: MaaContextRunRecognition(Handle, entry, pipelineOverride, image.Handle),
-            tasker: Tasker);
+        var recognitionId = MaaContextRunRecognition(Handle, entry, pipelineOverride, image.Handle);
+        if (recognitionId == Interop.Native.MaaDef.MaaInvalidId)
+            return null;
+        return RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recognitionId, Tasker);
     }
 
     /// <inheritdoc/>
@@ -60,9 +64,10 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     public NodeDetail? RunAction(string entry, string pipelineOverride, MaaRectBuffer recognitionBox, string recognitionDetail)
     {
         ArgumentNullException.ThrowIfNull(recognitionBox);
-        return NodeDetail.Query(
-            nodeId: MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail),
-            tasker: Tasker);
+        var nodeId = MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail);
+        if (nodeId == Interop.Native.MaaDef.MaaInvalidId)
+            return null;
+        return NodeDetail.Query(nodeId, Tasker);
     }
 
     /// <inheritdoc/>
