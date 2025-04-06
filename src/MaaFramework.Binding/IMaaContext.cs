@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Buffers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding;
 
@@ -25,7 +26,7 @@ public interface IMaaContext : ICloneable
     /// <param name="entry">The entry name of the task.</param>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns><see cref="TaskDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
-    TaskDetail? RunTask(string entry, string pipelineOverride);
+    TaskDetail? RunTask(string entry, [StringSyntax("Json")] string pipelineOverride);
 
     /// <summary>
     ///     Run a recognition.
@@ -35,7 +36,7 @@ public interface IMaaContext : ICloneable
     /// <param name="image">The image to be recognized.</param>
     /// <returns><see cref="RecognitionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    RecognitionDetail? RunRecognition(string entry, string pipelineOverride, IMaaImageBuffer image);
+    RecognitionDetail? RunRecognition(string entry, [StringSyntax("Json")] string pipelineOverride, IMaaImageBuffer image);
 
     /// <summary>
     ///     Run an action.
@@ -46,14 +47,14 @@ public interface IMaaContext : ICloneable
     /// <param name="recognitionDetail">The rect detail in the recognition result.</param>
     /// <returns><see cref="NodeDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    NodeDetail? RunAction(string entry, string pipelineOverride, IMaaRectBuffer recognitionBox, string recognitionDetail);
+    NodeDetail? RunAction(string entry, [StringSyntax("Json")] string pipelineOverride, IMaaRectBuffer recognitionBox, string recognitionDetail);
 
     /// <summary>
     ///     Override a pipeline.
     /// </summary>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    bool OverridePipeline(string pipelineOverride);
+    bool OverridePipeline([StringSyntax("Json")] string pipelineOverride);
 
     /// <summary>
     ///     Override the property field "next" in a node.

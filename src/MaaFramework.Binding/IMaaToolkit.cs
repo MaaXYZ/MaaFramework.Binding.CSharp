@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding;
 
@@ -41,7 +42,7 @@ public interface IMaaToolkitConfig
     /// <param name="userPath">The user path. Default is <see cref="Environment.CurrentDirectory"/>.</param>
     /// <param name="defaultJson">The default config. Default is an empty json.</param>
     /// <returns><see langword="true"/> if the option config was initialized successfully; otherwise, <see langword="false"/>. </returns>
-    bool InitOption(string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}");
+    bool InitOption(string userPath = nameof(Environment.CurrentDirectory), [StringSyntax("Json")] string defaultJson = "{}");
 }
 
 /// <summary>

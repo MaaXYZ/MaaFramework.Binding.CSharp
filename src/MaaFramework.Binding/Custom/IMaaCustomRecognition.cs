@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Buffers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding.Custom;
 
@@ -26,7 +27,7 @@ public interface IMaaCustomRecognition : IMaaCustomResource
 /// <param name="RecognitionParam">Gets the recognition param.</param>
 /// <param name="Image">Gets the image.</param>
 /// <param name="Roi">Gets the roi.</param>
-public sealed record AnalyzeArgs(string NodeName, TaskDetail TaskDetail, string RecognitionName, string RecognitionParam, IMaaImageBuffer Image, IMaaRectBuffer Roi);
+public sealed record AnalyzeArgs(string NodeName, TaskDetail TaskDetail, string RecognitionName, [StringSyntax("Json")] string RecognitionParam, IMaaImageBuffer Image, IMaaRectBuffer Roi);
 
 /// <summary>
 ///     The recognition analysis results.

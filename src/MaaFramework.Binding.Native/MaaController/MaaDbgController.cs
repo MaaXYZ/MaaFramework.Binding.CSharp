@@ -1,4 +1,5 @@
-﻿using static MaaFramework.Binding.Interop.Native.MaaController;
+﻿using System.Diagnostics.CodeAnalysis;
+using static MaaFramework.Binding.Interop.Native.MaaController;
 
 namespace MaaFramework.Binding;
 
@@ -17,7 +18,7 @@ public class MaaDbgController : MaaController
     /// <remarks>
     ///     Wrapper of <see cref="MaaDbgControllerCreate"/>.
     /// </remarks>
-    public MaaDbgController(string readPath, string writePath, DbgControllerType type, string config)
+    public MaaDbgController(string readPath, string writePath, DbgControllerType type, [StringSyntax("Json")] string config = "{}")
     {
         var handle = MaaDbgControllerCreate(readPath, writePath, (MaaDbgControllerType)type, config, MaaNotificationCallback, nint.Zero);
         SetHandle(handle, needReleased: true);

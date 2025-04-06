@@ -170,7 +170,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerPostTask"/>.
     /// </remarks>
-    public MaaTaskJob AppendTask(string entry, string pipelineOverride = "{}")
+    public MaaTaskJob AppendTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}")
     {
         var id = MaaTaskerPostTask(Handle, entry, pipelineOverride);
         return new MaaTaskJob(id, this);

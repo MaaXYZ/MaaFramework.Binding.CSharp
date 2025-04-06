@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding;
 
@@ -55,7 +56,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     /// <param name="entry">The entry name of the task.</param>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns>A task job.</returns>
-    MaaTaskJob AppendTask(string entry, string pipelineOverride = "{}");
+    MaaTaskJob AppendTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaTasker"/> is running.

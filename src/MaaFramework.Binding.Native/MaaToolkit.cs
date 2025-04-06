@@ -2,6 +2,7 @@
 using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
 namespace MaaFramework.Binding;
@@ -17,7 +18,7 @@ public class MaaToolkit : IMaaToolkit
     /// <param name="init">Whether invokes the <see cref="IMaaToolkitConfig.InitOption"/>.</param>
     /// <param name="userPath">The user path. Default is <see cref="Environment.CurrentDirectory"/>.</param>
     /// <param name="defaultJson">The default config. Default is an empty json.</param>
-    public MaaToolkit(bool init = false, string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}")
+    public MaaToolkit(bool init = false, string userPath = nameof(Environment.CurrentDirectory), [StringSyntax("Json")] string defaultJson = "{}")
     {
         if (init)
         {
@@ -44,7 +45,7 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitConfigInitOption"/>.
         /// </remarks>
-        public bool InitOption(string userPath = nameof(Environment.CurrentDirectory), string defaultJson = "{}")
+        public bool InitOption(string userPath = nameof(Environment.CurrentDirectory), [StringSyntax("Json")] string defaultJson = "{}")
         {
             if (userPath == nameof(Environment.CurrentDirectory))
                 userPath = Environment.CurrentDirectory;
@@ -117,7 +118,7 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Usually invoked by MaaFramework.
         /// </remarks>
-        protected virtual void OnCallback(string message, string detailsJson, nint callbackArg)
+        protected virtual void OnCallback(string message, [StringSyntax("Json")] string detailsJson, nint callbackArg)
             => Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
 
         /// <summary>

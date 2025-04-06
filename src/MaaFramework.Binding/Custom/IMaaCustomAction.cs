@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Buffers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding.Custom;
 
@@ -25,4 +26,4 @@ public interface IMaaCustomAction : IMaaCustomResource
 /// <param name="ActionParam">Gets the action param.</param>
 /// <param name="RecognitionDetail">Gets the recognition detail.</param>
 /// <param name="RecognitionBox">Gets the recognition box.</param>
-public sealed record RunArgs(string NodeName, TaskDetail TaskDetail, string ActionName, string ActionParam, RecognitionDetail RecognitionDetail, IMaaRectBuffer RecognitionBox);
+public sealed record RunArgs(string NodeName, TaskDetail TaskDetail, string ActionName, [StringSyntax("Json")] string ActionParam, RecognitionDetail RecognitionDetail, IMaaRectBuffer RecognitionBox);

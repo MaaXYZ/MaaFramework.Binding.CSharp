@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding.Abstractions.Native;
 
@@ -19,7 +20,7 @@ public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
     /// <remarks>
     ///     Usually invoked by MaaFramework.
     /// </remarks>
-    protected virtual void OnCallback(string message, string detailsJson, nint callbackArg)
+    protected virtual void OnCallback(string message, [StringSyntax("Json")] string detailsJson, nint callbackArg)
         => Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
 
     /// <summary>

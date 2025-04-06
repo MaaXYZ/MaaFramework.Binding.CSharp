@@ -5,6 +5,8 @@ global using MaaNodeId = System.Int64;
 global using MaaRecoId = System.Int64;
 global using MaaSize = System.UInt64;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace MaaFramework.Binding;
 
 /// <summary>
@@ -15,7 +17,7 @@ namespace MaaFramework.Binding;
 /// </remarks>
 /// <param name="message">The callback message.</param>
 /// <param name="details">The callback details json.</param>
-public class MaaCallbackEventArgs(string message, string details) : EventArgs
+public class MaaCallbackEventArgs(string message, [StringSyntax("Json")] string details) : EventArgs
 {
     /// <summary>
     ///     Maa callback message.
