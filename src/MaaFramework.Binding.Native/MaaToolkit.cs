@@ -181,6 +181,6 @@ public class MaaToolkit : IMaaToolkit
 
         /// <inheritdoc cref="this"/>
         public static IMaaToolkitProjectInterface Get(ulong id)
-            => s_instances.GetOrAdd(id, x => new ProjectInterfaceClass(x));
+            => s_instances.GetOrAdd(id, static x => new ProjectInterfaceClass(x));
     }
 }

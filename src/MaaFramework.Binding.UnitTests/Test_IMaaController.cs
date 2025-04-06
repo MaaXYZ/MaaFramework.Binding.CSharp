@@ -108,7 +108,7 @@ public class Test_IMaaController
 #if !GITHUB_ACTIONS
         #region MaaWin32Controller
         var toolkit = new MaaToolkit();
-        var windowInfo = toolkit.Desktop.Window.Find().First(x => x.Name.Contains("Visual Studio", StringComparison.OrdinalIgnoreCase));
+        var windowInfo = toolkit.Desktop.Window.Find().First(static x => x.Name.Contains("Visual Studio", StringComparison.OrdinalIgnoreCase));
 
         using var win32Native1 = new MaaWin32Controller(
             windowInfo.Handle,
@@ -317,7 +317,7 @@ public class Test_IMaaController
             image.Width, buffer.Width);
 
         using var stream = new MemoryStream();
-        image.Mutate(c => c.Resize(30, 30));
+        image.Mutate(static c => c.Resize(30, 30));
         image.Save(stream, image.Metadata.DecodedImageFormat!);
         stream.Position = 0;
         Assert.IsTrue(
@@ -364,14 +364,14 @@ public class Test_IMaaController
 
 #if MAA_NATIVE
         #region MaaAdbController
-        Assert.ThrowsException<ArgumentException>(() => new MaaAdbController("test", "test", AdbScreencapMethods.None, AdbInputMethods.All, "test", "test"));
-        Assert.ThrowsException<ArgumentException>(() => new MaaAdbController("test", "test", AdbScreencapMethods.All, AdbInputMethods.None, "test", "test"));
+        Assert.ThrowsException<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.None, AdbInputMethods.All, "test", "test"));
+        Assert.ThrowsException<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.All, AdbInputMethods.None, "test", "test"));
         #endregion
 
 #if !GITHUB_ACTIONS
         #region MaaWin32Controller
-        Assert.ThrowsException<ArgumentException>(() => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize));
-        Assert.ThrowsException<ArgumentException>(() => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None));
+        Assert.ThrowsException<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize));
+        Assert.ThrowsException<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None));
         #endregion
 #endif
 #endif

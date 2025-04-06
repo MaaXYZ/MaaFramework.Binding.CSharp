@@ -16,7 +16,7 @@ public sealed class MaaDataAttribute : DataRowAttribute, ITestDataSource
     public override string? GetDisplayName(MethodInfo methodInfo, object?[]? data)
         => string.IsNullOrWhiteSpace(DisplayName)
         ? base.GetDisplayName(methodInfo, data)
-        : $"{data?.First((d) => d is MaaTypes)}: {DisplayName}";
+        : $"{data?.First(static d => d is MaaTypes)}: {DisplayName}";
 
     /// <inheritdoc/>
     IEnumerable<object?[]> ITestDataSource.GetData(MethodInfo methodInfo)

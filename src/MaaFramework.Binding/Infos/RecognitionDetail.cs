@@ -93,7 +93,7 @@ public sealed record RecognitionDetail(
             HitBox: hitBox,
             Detail: detail,
             Raw: raw is null ? null : MaaImage.Load(raw),
-            Draws: draws?.Select(x => MaaImage.Load(x)).ToList()
+            Draws: draws?.Select(static x => MaaImage.Load(x)).ToList()
         )
         {
             _draws = draws,

@@ -93,7 +93,7 @@ public class Test_IMaaResource
         Assert.AreNotEqual(
             0, maaResource.NodeList.Count);
         Assert.IsTrue(
-            maaResource.NodeList.Any(s => s == "EmptyNode"));
+            maaResource.NodeList.Any(static s => s == "EmptyNode"));
     }
 
     [TestMethod]
