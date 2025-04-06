@@ -40,6 +40,6 @@ public class MaaAdbController : MaaController
 
         var status = LinkStart().Wait();
         if (check == CheckStatusOption.ThrowIfNotSucceeded)
-            status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, adbPath, adbSerial);
+            _ = status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, adbPath, adbSerial);
     }
 }

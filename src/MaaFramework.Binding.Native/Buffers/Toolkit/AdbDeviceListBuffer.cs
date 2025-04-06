@@ -62,9 +62,7 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
     ///     Wrapper of <see cref="MaaToolkitAdbDeviceListAt"/>.
     /// </remarks>
     public override AdbDeviceInfo this[MaaSize index]
-    {
-        get => new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(Handle, index).ThrowIfEquals(MaaToolkitAdbDeviceHandle.Zero));
-    }
+        => new MaaToolkitAdbDeviceInfo(MaaToolkitAdbDeviceListAt(Handle, index).ThrowIfEquals(MaaToolkitAdbDeviceHandle.Zero));
 
     /// <inheritdoc/>
     public override bool TryAdd(AdbDeviceInfo item)

@@ -16,11 +16,6 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
 
-#pragma warning disable CA2213
-    private MaaResource _resource = default!;
-    private MaaController _controller = default!;
-#pragma warning restore CA2213
-
     /// <summary>
     ///     Gets all maa tasker instances.
     /// </summary>
@@ -126,14 +121,14 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     {
         get
         {
-            MaaTaskerGetResource(Handle).ThrowIfNotEquals(_resource.Handle, MaaInteroperationException.ResourceModifiedMessage);
-            return _resource;
+            _ = MaaTaskerGetResource(Handle).ThrowIfNotEquals(field.Handle, MaaInteroperationException.ResourceModifiedMessage);
+            return field;
         }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            MaaTaskerBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
-            _resource = value;
+            _ = MaaTaskerBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
+            field = value;
         }
     }
 
@@ -145,14 +140,14 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     {
         get
         {
-            MaaTaskerGetController(Handle).ThrowIfNotEquals(_controller.Handle, MaaInteroperationException.ControllerModifiedMessage);
-            return _controller;
+            _ = MaaTaskerGetController(Handle).ThrowIfNotEquals(field.Handle, MaaInteroperationException.ControllerModifiedMessage);
+            return field;
         }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            MaaTaskerBindController(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ControllerBindingFailedMessage);
-            _controller = value;
+            _ = MaaTaskerBindController(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ControllerBindingFailedMessage);
+            field = value;
         }
     }
 

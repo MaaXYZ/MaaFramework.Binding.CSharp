@@ -20,7 +20,7 @@ internal sealed class MaaMarshaledApiRegistry<T>
 
     public bool Remove(string key)
     {
-        _apis.TryRemove(key, out _);
+        _ = _apis.TryRemove(key, out _);
         return true;
     }
 

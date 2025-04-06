@@ -27,12 +27,13 @@
 
   <!-- Analyzer Properties -->
   <PropertyGroup>
-    <AnalysisLevel>8</AnalysisLevel>
+    <AnalysisLevel>preview</AnalysisLevel>
     <AnalysisMode>All</AnalysisMode>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <NoWarn>$(NoWarn),S1133</NoWarn>
+    <NoWarn>$(NoWarn),IDE0045,IDE0046</NoWarn>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors),S1133,S1134,IDE0060,IDE0130,IDE0290</WarningsNotAsErrors>
   </PropertyGroup>
 
   <!-- Global Packages -->

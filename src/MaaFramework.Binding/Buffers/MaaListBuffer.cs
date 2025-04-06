@@ -43,10 +43,7 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
         => TryIndexOf(item, out _);
     /// <inheritdoc/>
     public int IndexOf(T item)
-    {
-        if (!TryIndexOf(item, out var index) || index > int.MaxValue) return -1;
-        return (int)index;
-    }
+        => TryIndexOf(item, out var index) && index <= int.MaxValue ? (int)index : -1;
 
     /// <inheritdoc/>
     public int Count => (int)MaaSizeCount;
@@ -113,14 +110,14 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
         }
-        set => throw new NotSupportedException($"{nameof(MaaListBuffer<THandle, T>)} does not support setting the element at the specified index.");
+        set => throw new NotSupportedException($"{nameof(MaaListBuffer<,>)} does not support setting the element at the specified index.");
     }
     void IList<T>.RemoveAt(int index)
         => MaaInteroperationException.ThrowIfNot(
             TryRemoveAt((MaaSize)index),
             $"The {nameof(index)} is invalid.");
     void IList<T>.Insert(int index, T item)
-        => throw new NotSupportedException($"{nameof(MaaListBuffer<THandle, T>)} does not support insert a element at the specified index.");
+        => throw new NotSupportedException($"{nameof(MaaListBuffer<,>)} does not support insert a element at the specified index.");
 
     #endregion
 

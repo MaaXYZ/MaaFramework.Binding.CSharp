@@ -14,14 +14,9 @@ public sealed class MaaDataAttribute : DataRowAttribute, ITestDataSource
 
     /// <inheritdoc/>
     public override string? GetDisplayName(MethodInfo methodInfo, object?[]? data)
-    {
-        if (!string.IsNullOrWhiteSpace(DisplayName))
-        {
-            return $"{data?.First((d) => d is MaaTypes)}: {DisplayName}";
-        }
-
-        return base.GetDisplayName(methodInfo, data);
-    }
+        => string.IsNullOrWhiteSpace(DisplayName)
+        ? base.GetDisplayName(methodInfo, data)
+        : $"{data?.First((d) => d is MaaTypes)}: {DisplayName}";
 
     /// <inheritdoc/>
     IEnumerable<object?[]> ITestDataSource.GetData(MethodInfo methodInfo)
@@ -59,12 +54,9 @@ public sealed class MaaDataAttribute : DataRowAttribute, ITestDataSource
         var enumerable = obj as IEnumerable<KeyValuePair<MaaTypes, object>>
             ?? throw new ArgumentNullException($"{_maaDataSourceName} is not a IEnumerable<KeyValuePair<MaaTypes, object>> type.");
 
-        if (!enumerable.Any())
-        {
-            throw new ArgumentException($"{_maaDataSourceName} is empty.");
-        }
-
-        return enumerable;
+        return enumerable.Any()
+            ? enumerable
+            : throw new ArgumentException($"{_maaDataSourceName} is empty.");
     }
 
     private object? CheckArgument(MethodInfo methodInfo, object? arg)

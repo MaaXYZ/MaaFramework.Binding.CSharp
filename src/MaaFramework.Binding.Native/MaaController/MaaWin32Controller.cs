@@ -31,6 +31,6 @@ public class MaaWin32Controller : MaaController
 
         var status = LinkStart().Wait();
         if (check == CheckStatusOption.ThrowIfNotSucceeded)
-            status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage);
+            _ = status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage);
     }
 }

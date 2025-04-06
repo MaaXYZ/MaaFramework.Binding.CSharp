@@ -37,19 +37,19 @@ public class Test_IMaaTasker
         {
             Assert.IsFalse(data.IsInvalid);
             data.Callback += Common.Callback;
-            data.Resource
+            _ = data.Resource
                 .AppendBundle(Common.BundlePath)
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Succeeded);
-            data.Resource
+            _ = data.Resource
                 .SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
-            data.Resource
+            _ = data.Resource
                 .SetOption(ResourceOption.InferenceExecutionProvider, InferenceExecutionProvider.CPU);
-            data.Controller
+            _ = data.Controller
                 .LinkStart()
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Succeeded);
-            data.Controller
+            _ = data.Controller
                 .SetOption(ControllerOption.ScreenshotTargetShortSide, 720);
             Assert.IsTrue(data.IsInitialized);
         }
@@ -128,12 +128,11 @@ public class Test_IMaaTasker
         Assert.IsNotNull(maaTasker);
 
         Assert.IsFalse(maaTasker.IsInitialized);
-        maaTasker
-            .Resource
+        _ = maaTasker.Resource
             .AppendBundle(Common.BundlePath)
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded);
-        maaTasker.Controller
+        _ = maaTasker.Controller
             .LinkStart()
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded);
@@ -181,15 +180,15 @@ public class Test_IMaaTasker
             maaTasker.Resource.Clear<IMaaCustomRecognition>());
 
         // Cannot clear a specific implementation
-        Assert.ThrowsException<NotImplementedException>(() =>
-            maaTasker.Resource.Clear<Custom.TestAction>());
-        Assert.ThrowsException<NotImplementedException>(() =>
-            maaTasker.Resource.Clear<Custom.TestRecognition>());
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaTasker.Resource.Clear<Custom.TestAction>());
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaTasker.Resource.Clear<Custom.TestRecognition>());
 
-        Assert.ThrowsException<NotImplementedException>(() =>
-            maaTasker.Resource.Register(Custom.Resource));
-        Assert.ThrowsException<NotImplementedException>(() =>
-            maaTasker.Resource.Unregister(Custom.Resource));
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaTasker.Resource.Register(Custom.Resource));
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaTasker.Resource.Unregister(Custom.Resource));
     }
 
 
@@ -329,7 +328,8 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
 
-        Assert.ThrowsException<NotSupportedException>(() => maaTasker.SetOption(opt, arg));
+        _ = Assert.ThrowsException<NotSupportedException>(()
+            => maaTasker.SetOption(opt, arg));
     }
 
     #endregion

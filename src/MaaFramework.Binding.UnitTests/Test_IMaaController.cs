@@ -53,7 +53,8 @@ public class Test_IMaaController
             {
                 Assert.IsFalse(data.IsInvalid);
                 data.Callback += Common.Callback;
-                data.LinkStart()
+                _ = data
+                    .LinkStart()
                     .Wait()
                     .ThrowIfNot(MaaJobStatus.Succeeded);
                 Assert.IsTrue(
@@ -269,6 +270,8 @@ public class Test_IMaaController
             MaaTypes.Native => new MaaImageBuffer(),
             MaaTypes.Custom => new MaaImageBuffer(),
 #endif
+            MaaTypes.None => throw new NotImplementedException(),
+            MaaTypes.All => throw new NotImplementedException(),
             _ => throw new NotImplementedException(),
         };
         Assert.IsTrue(
@@ -351,7 +354,8 @@ public class Test_IMaaController
     {
         Assert.IsNotNull(maaController);
 
-        Assert.ThrowsException<NotSupportedException>(() => maaController.SetOption(opt, arg));
+        _ = Assert.ThrowsException<NotSupportedException>(()
+            => maaController.SetOption(opt, arg));
     }
 
     [TestMethod]

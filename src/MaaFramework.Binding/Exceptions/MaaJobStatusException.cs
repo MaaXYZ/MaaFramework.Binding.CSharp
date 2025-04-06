@@ -1,5 +1,7 @@
 ﻿namespace MaaFramework.Binding;
 
+#pragma warning disable IDE0290 // 使用主构造函数
+
 /// <summary>
 ///     The exception is thrown when the <see cref="MaaJobStatus"/> of a <see cref="MaaFramework.Binding.MaaJob"/> is unexpected.
 /// </summary>

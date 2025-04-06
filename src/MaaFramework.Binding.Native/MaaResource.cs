@@ -49,7 +49,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             var status = AppendBundle(bundlePath).Wait();
             if (check == CheckStatusOption.ThrowIfNotSucceeded)
             {
-                status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, bundlePath);
+                _ = status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, bundlePath);
             }
         }
     }
@@ -71,7 +71,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
             var status = AppendBundle(bundlePath).Wait();
             if (check == CheckStatusOption.ThrowIfNotSucceeded)
             {
-                status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, bundlePath);
+                _ = status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaResourceMessage, bundlePath);
             }
         }
     }
@@ -117,11 +117,9 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
         var t = typeof(T);
         if (typeof(IMaaCustomAction).IsAssignableFrom(t))
-            return MaaResourceUnregisterCustomAction(Handle, name)
-                && _actions.Remove(name);
+            return MaaResourceUnregisterCustomAction(Handle, name) && _actions.Remove(name);
         if (typeof(IMaaCustomRecognition).IsAssignableFrom(t))
-            return MaaResourceUnregisterCustomRecognition(Handle, name)
-                && _recognitions.Remove(name);
+            return MaaResourceUnregisterCustomRecognition(Handle, name) && _recognitions.Remove(name);
 
         throw new NotImplementedException($"Type '{typeof(T)}' is not implemented.");
     }
@@ -178,7 +176,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     /// </remarks>
     public MaaJob AppendBundle(string path)
     {
-        _postedPaths.Add(path);
+        _ = _postedPaths.Add(path);
         var id = MaaResourcePostBundle(Handle, path);
         return new MaaJob(id, this);
     }
@@ -255,7 +253,7 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
         get
         {
-            MaaStringListBuffer.TryGetList(out var list, h => MaaResourceGetNodeList(Handle, h)).ThrowIfFalse();
+            _ = MaaStringListBuffer.TryGetList(out var list, h => MaaResourceGetNodeList(Handle, h)).ThrowIfFalse();
             return list!;
         }
     }

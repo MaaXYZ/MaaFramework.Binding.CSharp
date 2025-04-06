@@ -14,8 +14,6 @@ public class MaaJob(MaaId id, IMaaPost maa)
     /// <inheritdoc/>
     public override string ToString() => $"{GetType().Name} {{ {nameof(Status)} = {Status} }}";
 
-    private MaaJobStatus _finalStatus = MaaJobStatus.Invalid;
-
     /// <summary>
     ///     Gets a MaaId.
     /// </summary>
@@ -27,9 +25,11 @@ public class MaaJob(MaaId id, IMaaPost maa)
     /// <remarks>
     ///     Calls <see cref="IMaaPost.GetStatus"/>.
     /// </remarks>
-    public MaaJobStatus Status => _finalStatus.IsDone()
-        ? _finalStatus
-        : _finalStatus = maa.GetStatus(this);
+    public MaaJobStatus Status
+    {
+        get => field.IsDone() ? field : field = maa.GetStatus(this);
+        private set;
+    }
 
     /// <summary>
     ///     Waits for a <see cref="MaaJob"/> to complete.
@@ -38,5 +38,5 @@ public class MaaJob(MaaId id, IMaaPost maa)
     /// <remarks>
     ///     Calls <see cref="IMaaPost.Wait"/>.
     /// </remarks>
-    public MaaJobStatus Wait() => _finalStatus = maa.Wait(this);
+    public MaaJobStatus Wait() => Status = maa.Wait(this);
 }

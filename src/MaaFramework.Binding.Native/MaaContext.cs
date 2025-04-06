@@ -31,9 +31,9 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     public TaskDetail? RunTask(string entry, string pipelineOverride)
     {
         var taskId = MaaContextRunTask(Handle, entry, pipelineOverride);
-        if (taskId == Interop.Native.MaaDef.MaaInvalidId)
-            return null;
-        return TaskDetail.Query(taskId, Tasker);
+        return taskId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : TaskDetail.Query(taskId, Tasker);
     }
 
     /// <inheritdoc/>
@@ -48,9 +48,9 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     {
         ArgumentNullException.ThrowIfNull(image);
         var recognitionId = MaaContextRunRecognition(Handle, entry, pipelineOverride, image.Handle);
-        if (recognitionId == Interop.Native.MaaDef.MaaInvalidId)
-            return null;
-        return RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recognitionId, Tasker);
+        return recognitionId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recognitionId, Tasker);
     }
 
     /// <inheritdoc/>
@@ -65,9 +65,9 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     {
         ArgumentNullException.ThrowIfNull(recognitionBox);
         var nodeId = MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail);
-        if (nodeId == Interop.Native.MaaDef.MaaInvalidId)
-            return null;
-        return NodeDetail.Query(nodeId, Tasker);
+        return nodeId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : NodeDetail.Query(nodeId, Tasker);
     }
 
     /// <inheritdoc/>

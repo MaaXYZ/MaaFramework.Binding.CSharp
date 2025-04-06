@@ -9,4 +9,4 @@ namespace MaaFramework.Binding.Notification;
 [JsonSerializable(typeof(NodeNextListDetail))]
 [JsonSerializable(typeof(NodeRecognitionDetail))]
 [JsonSerializable(typeof(NodeActionDetail))]
-public partial class NotificationDetailContext : JsonSerializerContext { }
+public partial class NotificationDetailContext : JsonSerializerContext;

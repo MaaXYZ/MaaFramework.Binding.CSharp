@@ -67,6 +67,9 @@ public class Test_IMaaToolkit
                 inputMethods: AdbInputMethods.AdbShell,
                 link: LinkOption.None),
 #endif
+            MaaTypes.None => throw new NotImplementedException(),
+            MaaTypes.All => throw new NotImplementedException(),
+            MaaTypes.Custom => throw new NotImplementedException(),
             _ => throw new NotImplementedException(),
         };
         maaController
@@ -95,10 +98,15 @@ public class Test_IMaaToolkit
 
         using var maaController = type switch
         {
+#if MAA_NATIVE
             MaaTypes.Native => windows[0].ToWin32Controller(
                 screencapMethod: Win32ScreencapMethod.GDI,
                 inputMethod: Win32InputMethod.SendMessage,
                 link: LinkOption.None),
+#endif
+            MaaTypes.None => throw new NotImplementedException(),
+            MaaTypes.All => throw new NotImplementedException(),
+            MaaTypes.Custom => throw new NotImplementedException(),
             _ => throw new NotImplementedException(),
         };
         maaController

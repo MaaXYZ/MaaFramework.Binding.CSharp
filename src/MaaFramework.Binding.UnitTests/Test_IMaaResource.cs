@@ -27,7 +27,7 @@ public class Test_IMaaResource
         {
             Assert.IsFalse(data.IsInvalid);
             data.Callback += Common.Callback;
-            data.SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
+            _ = data.SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
         }
     }
 
@@ -127,7 +127,8 @@ public class Test_IMaaResource
     {
         Assert.IsNotNull(maaResource);
 
-        Assert.ThrowsException<NotSupportedException>(() => maaResource.SetOption(opt, arg));
+        _ = Assert.ThrowsException<NotSupportedException>(()
+            => maaResource.SetOption(opt, arg));
     }
 
     #endregion

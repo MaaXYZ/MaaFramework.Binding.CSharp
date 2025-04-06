@@ -55,8 +55,10 @@ internal static class Custom
             Assert.IsTrue(
                 cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
 
-            recognitionDetail.HitBox.TryCopyTo(results.Box);
-            results.Detail.TrySetValue(recognitionDetail.Detail);
+            Assert.IsTrue(
+                recognitionDetail.HitBox.TryCopyTo(results.Box));
+            Assert.IsTrue(
+                results.Detail.TrySetValue(recognitionDetail.Detail));
             // return ret;
 
             // Using in assert
@@ -144,8 +146,7 @@ internal static class Custom
         public bool RequestUuid(in IMaaStringBuffer buffer)
         {
             var uuid = c.Uuid;
-            if (uuid is null) return false;
-            return buffer.TrySetValue(uuid);
+            return uuid is not null && buffer.TrySetValue(uuid);
         }
 
         public bool Screencap(in IMaaImageBuffer buffer)

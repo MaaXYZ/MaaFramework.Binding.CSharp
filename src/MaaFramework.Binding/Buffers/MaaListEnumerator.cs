@@ -5,34 +5,19 @@
 ///     A sealed class providing a reference enumerator implementation for <see cref="IMaaListBuffer{T}"/>.
 /// </summary>
 /// <typeparam name="T">The type of buffer.</typeparam>
-public sealed class MaaListEnumerator<T> : IEnumerator<T>
+/// <remarks>
+///     The internal enumerator implementation of <see cref="IMaaListBuffer{T}"/>.
+/// </remarks>
+/// <param name="getAt">Use MaaGetListAt().</param>
+/// <param name="getSize">Use MaaGetListSize().</param>
+public sealed class MaaListEnumerator<T>(Func<MaaSize, T> getAt, Func<MaaSize> getSize) : IEnumerator<T>
 {
-    private readonly Func<MaaSize, T> _getAt;
-    private readonly Func<MaaSize> _getSize;
-    private MaaSize _index;
-
-    /// <summary>
-    ///     The internal enumerator implementation of IMaaListBuffer.
-    /// </summary>
-    /// <param name="getAt">Use MaaGetListAt().</param>
-    /// <param name="getSize">Use MaaGetListSize().</param>
-    public MaaListEnumerator(Func<MaaSize, T> getAt, Func<MaaSize> getSize)
-    {
-        _getAt = getAt;
-        _getSize = getSize;
-        _index = MaaSize.MaxValue;
-    }
+    private MaaSize _index = MaaSize.MaxValue;
 
     /// <inheritdoc/>
-    public T Current
-    {
-        get
-        {
-            if (_index >= _getSize())
-                throw new InvalidOperationException($"_index({_index}) should be less than _size{_getSize()}.");
-            return _getAt(_index);
-        }
-    }
+    public T Current => _index < getSize.Invoke()
+        ? getAt.Invoke(_index)
+        : throw new InvalidOperationException($"_index({_index}) should be less than _size{getSize.Invoke()}.");
 
     object System.Collections.IEnumerator.Current => Current!;
 
@@ -40,7 +25,7 @@ public sealed class MaaListEnumerator<T> : IEnumerator<T>
     public bool MoveNext()
     {
         var index = _index + 1;
-        var length = _getSize();
+        var length = getSize.Invoke();
         if (index >= length)
         {
             _index = length;
@@ -54,5 +39,8 @@ public sealed class MaaListEnumerator<T> : IEnumerator<T>
     public void Reset() => _index = MaaSize.MaxValue;
 
     /// <inheritdoc/>
-    public void Dispose() { }
+    public void Dispose()
+    {
+        // No resources to dispose of
+    }
 }

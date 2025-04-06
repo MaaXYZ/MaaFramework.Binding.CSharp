@@ -20,9 +20,7 @@ public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
     ///     Usually invoked by MaaFramework.
     /// </remarks>
     protected virtual void OnCallback(string message, string detailsJson, nint callbackArg)
-    {
-        Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
-    }
+        => Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
 
     /// <summary>
     ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.

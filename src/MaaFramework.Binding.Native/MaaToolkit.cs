@@ -21,7 +21,7 @@ public class MaaToolkit : IMaaToolkit
     {
         if (init)
         {
-            Config.InitOption(userPath, defaultJson);
+            _ = Config.InitOption(userPath, defaultJson);
         }
     }
 
@@ -59,10 +59,9 @@ public class MaaToolkit : IMaaToolkit
         public IMaaListBuffer<AdbDeviceInfo> Find(string adbPath = "")
         {
             var list = new AdbDeviceListBuffer();
-            if (string.IsNullOrWhiteSpace(adbPath))
-                MaaToolkitAdbDeviceFind(list.Handle).ThrowIfFalse();
-            else
-                MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle).ThrowIfFalse();
+            _ = string.IsNullOrWhiteSpace(adbPath)
+                ? MaaToolkitAdbDeviceFind(list.Handle).ThrowIfFalse()
+                : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle).ThrowIfFalse();
             return list;
         }
 
@@ -72,10 +71,9 @@ public class MaaToolkit : IMaaToolkit
             var list = new AdbDeviceListBuffer();
             await Task.Run(() =>
             {
-                if (string.IsNullOrWhiteSpace(adbPath))
-                    MaaToolkitAdbDeviceFind(list.Handle).ThrowIfFalse();
-                else
-                    MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle).ThrowIfFalse();
+                _ = string.IsNullOrWhiteSpace(adbPath)
+                    ? MaaToolkitAdbDeviceFind(list.Handle).ThrowIfFalse()
+                    : MaaToolkitAdbDeviceFindSpecified(adbPath, list.Handle).ThrowIfFalse();
             });
             return list;
         }
@@ -98,7 +96,7 @@ public class MaaToolkit : IMaaToolkit
         public IMaaListBuffer<DesktopWindowInfo> Find()
         {
             var list = new DesktopWindowListBuffer();
-            MaaToolkitDesktopWindowFindAll(list.Handle).ThrowIfFalse();
+            _ = MaaToolkitDesktopWindowFindAll(list.Handle).ThrowIfFalse();
             return list;
         }
     }
@@ -120,9 +118,7 @@ public class MaaToolkit : IMaaToolkit
         ///     Usually invoked by MaaFramework.
         /// </remarks>
         protected virtual void OnCallback(string message, string detailsJson, nint callbackArg)
-        {
-            Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
-        }
+            => Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
 
         /// <summary>
         ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
