@@ -1,202 +1,300 @@
-# Overview of Wrapper and Api in [v1.4.0](https://github.com/MaaXYZ/MaaFramework/tree/v1.4.0)
+# Overview of Wrapper and Api in [v3.0.4](https://github.com/MaaXYZ/MaaFramework/tree/v3.0.4)
 
 ## Enums
 
 > [!TIP]
 > If the name of an Enum ends in the ***plural***, it means that the Enum, with **Flags**Attribute, can contain more than one kind of information through **"bitwise OR"** operation.
 
+- Enum Type
+
 | Wrapper | MaaDef |
 | --- | --- |
-| MaaJobStatus | MaaStatusEnum |
-| LoggingLevel | MaaLoggingLevelEunm |
-| GlobalOption | MaaGlobalOptionEnum |
-| ResourceOption | MaaResOptionEnum |
-| ControllerOption | MaaCtrlOptionEnum |
-| InstanceOption | MaaInstOptionEnum |
-| AdbControllerTypes | MaaAdbControllerTypeEnum |
-| DbgControllerType | MaaDbgControllerTypeEnum |
-| ThriftControllerType | MaaThriftControllerTypeEnum |
-| Win32ControllerTypes | MaaWin32ControllerTypeEnum |
+| MaaJobStatus | `MaaStatusEnum` |
+| LoggingLevel | `MaaLoggingLevelEnum` |
+| GlobalOption | `MaaGlobalOptionEnum` |
+| ResourceOption | `MaaResOptionEnum` |
+| InferenceDevice | `MaaInferenceDeviceEnum` |
+| InferenceExecutionProvider | `MaaInferenceExecutionProviderEnum` |
+| ControllerOption | `MaaCtrlOptionEnum` |
+| TaskerOption | `MaaTaskerOptionEnum` |
 
-## MaaJob : IMaaJob
+- Macro Definition
+
+| Wrapper | MaaDef |
+| --- | --- |
+| AdbScreencapMethods | `MaaAdbScreencapMethod` |
+| AdbInputMethods | `MaaAdbInputMethod` |
+| Win32ScreencapMethod | `MaaWin32ScreencapMethod` |
+| Win32InputMethod | `MaaWin32InputMethod` |
+| DbgControllerType | `MaaDbgControllerType` |
+
+## MaaTaskJob : MaaJob
 
 | Wrapper | Native API |
 | --- | --- |
-| IMaaJob.Status | MaaControllerStatus <br> MaaResourceStatus <br> MaaTaskStatus |
-| IMaaJob.Wait() | MaaControllerWait <br> MaaResourceWait <br> MaaWaitTask |
-| IMaaJob.SetParam() | MaaSetTaskParam |
+| MaaJob.Id | *The MaaId.* |
+| MaaJob.Status | `MaaControllerStatus` <br> `MaaResourceStatus` <br> `MaaTaskerStatus` |
+| MaaJob.Wait() <br> MaaTaskJob.WaitFor() | `MaaControllerWait` <br> `MaaResourceWait` <br> `MaaTaskerWait` |
+| MaaTaskJob.Tasker | *A property used to simplify design of TaskDetail.Query* |
 
 ## MaaController : IMaaController
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaWin32Controller | MaaWin32ControllerCreate |
-| MaaAdbController | MaaAdbControllerCreateV2 |
-| MaaCustomController | MaaCustomControllerCreate |
-| MaaThriftController | MaaThriftControllerCreate |
-| MaaDbgController | MaaDbgControllerCreate |
-| IDisposable.Dispose() | MaaControllerDestroy |
-| IMaaOption.SetOption() | MaaControllerSetOption |
-| IMaaController.LinkStart() | MaaControllerPostConnection |
-| IMaaController.Click() | MaaControllerPostClick |
-| IMaaController.Swipe() | MaaControllerPostSwipe |
-| IMaaController.PressKey() | MaaControllerPostPressKey |
-| IMaaController.InputText() | MaaControllerPostInputText |
-| IMaaController.TouchDown() | MaaControllerPostTouchDown |
-| IMaaController.TouchMove() | MaaControllerPostTouchMove |
-| IMaaController.TouchUp() | MaaControllerPostTouchUp |
-| IMaaController.Screencap() | MaaControllerPostScreencap |
-| IMaaPost.SetParam() | *Invalid operation.* |
-| IMaaPost.GetStatus() | MaaControllerStatus |
-| IMaaPost.Wait() | MaaControllerWait |
-| IMaaController.LinkStop() | MaaControllerConnected |
-| IMaaController.GetImage() | MaaControllerGetImage |
-| IMaaController.Uuid | MaaControllerGetUUID |
+| MaaAdbController.ctor() | `MaaAdbControllerCreate` |
+| MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` |
+| MaaCustomController.ctor() | `MaaCustomControllerCreate` |
+| MaaDbgController.ctor() | `MaaDbgControllerCreate` |
+| IDisposable.Dispose() | `MaaControllerDestroy` |
+| IMaaOption.SetOption() | `MaaControllerSetOption` |
+| IMaaController.LinkStart() | `MaaControllerPostConnection` |
+| IMaaController.Click() | `MaaControllerPostClick` |
+| IMaaController.Swipe() | `MaaControllerPostSwipe` |
+| IMaaController.PressKey() | `MaaControllerPostPressKey` |
+| IMaaController.InputText() | `MaaControllerPostInputText` |
+| IMaaController.StartApp() | `MaaControllerPostStartApp` |
+| IMaaController.StopApp() | `MaaControllerPostStopApp` |
+| IMaaController.TouchDown() | `MaaControllerPostTouchDown` |
+| IMaaController.TouchMove() | `MaaControllerPostTouchMove` |
+| IMaaController.TouchUp() | `MaaControllerPostTouchUp` |
+| IMaaController.Screencap() | `MaaControllerPostScreencap` |
+| IMaaPost.GetStatus() | `MaaControllerStatus` |
+| IMaaPost.Wait() | `MaaControllerWait` |
+| IMaaController.LinkStop() | `MaaControllerConnected` |
+| IMaaController.GetCachedImage() | `MaaControllerCachedImage` |
+| IMaaController.Uuid | `MaaControllerGetUuid` |
 | IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
 | IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaControllerHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
-## MaaInstance : IMaaInstance
+## MaaTasker : IMaaTasker
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaInstance | MaaCreate |
-| IDisposable.Dispose() | MaaDestroy |
-| IMaaOption.SetOption() | MaaSetOption |
-| IMaaInstance.Resource | MaaBindResource <br> MaaGetResource |
-| IMaaInstance.Controller | MaaBindController <br> MaaGetController |
-| IMaaInstance.Initialized | MaaInited |
-| IMaaInstance.Register() | MaaRegisterCustomRecognizer <br> MaaRegisterCustomAction |
-| IMaaInstance.Unregister() | MaaUnregisterCustomRecognizer <br> MaaUnregisterCustomAction |
-| IMaaInstance.Clear() | MaaClearCustomRecognizer <br> MaaClearCustomAction |
-| IMaaInstance.AppendTask() | MaaPostTask |
-| IMaaPost.SetParam() | MaaSetTaskParam |
-| IMaaPost.GetStatus() | MaaTaskStatus |
-| IMaaPost.Wait() | MaaWaitTask |
-| IMaaInstance.AllTasksFinished | MaaTaskAllFinished |
-| IMaaInstance.Abort() | MaaStop |
+| MaaTasker.ctor() | `MaaTaskerCreate` |
+| IDisposable.Dispose() | `MaaTaskerDestroy` |
+| IMaaOption.SetOption() | `MaaTaskerSetOption` |
+| IMaaTasker.Resource | `MaaTaskerBindResource` <br> `MaaTaskerGetResource` |
+| IMaaTasker.Controller | `MaaTaskerBindController` <br> `MaaTaskerGetController` |
+| IMaaTasker.Toolkit | *Easy to call Toolkit.* |
+| IMaaTasker.Utility | *Easy to call Utility.* |
+| IMaaTasker.IsInitialized | `MaaTaskerInited` |
+| IMaaTasker.AppendTask() | `MaaTaskerPostTask` |
+| IMaaPost.GetStatus() | `MaaTaskerStatus` |
+| IMaaPost.Wait() | `MaaTaskerWait` |
+| IMaaTasker.IsRunning | `MaaTaskerRunning` |
+| IMaaTasker.Abort() | `MaaTaskerPostStop` |
+| IMaaTasker.ClearCache() | `MaaTaskerClearCache` |
+| IMaaTasker.GetRecognitionDetail() <br> RecognitionDetail.Query() <br> NodeDetail.QueryRecognitionDetail() <br> TaskDetail.QueryRecognitionDetail() <br> MaaTaskJob.QueryRecognitionDetail() | `MaaTaskerGetRecognitionDetail` |
+| IMaaTasker.GetNodeDetail() <br> NodeDetail.Query() <br> TaskDetail.QueryNodeDetail() <br> MaaTaskJob.QueryNodeDetail() | `MaaTaskerGetNodeDetail` |
+| IMaaTasker.GetTaskDetail() <br> TaskDetail.Query() <br> MaaTaskJob.QueryTaskDetail() | `MaaTaskerGetTaskDetail` |
+| IMaaTasker.GetLatestNode() <br> NodeDetail.QueryLatest() | `MaaTaskerGetLatestNode` |
+| IMaaTasker.DisposeOptions | *Disposes the Resource or the Controller when Dispose() was invoked.* |
 | IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
 | IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaInstanceHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
 ## MaaResource : IMaaResource
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaResource | MaaResourceCreate |
-| IDisposable.Dispose() | MaaResourceDestroy |
-| IMaaResource.AppendPath() | MaaResourcePostPath |
-| IMaaPost.SetParam() | *Invalid operation.* |
-| IMaaPost.GetStatus() | MaaResourceStatus |
-| IMaaPost.Wait() | MaaResourceWait |
-| IMaaResource.Loaded | MaaResourceLoaded |
-| IMaaOption.SetOption() | MaaResourceSetOption |
-| IMaaResource.Hash | MaaResourceGetHash |
-| IMaaResource.TaskList | MaaResourceGetTaskList |
+| MaaResource.ctor() | `MaaResourceCreate` |
+| IDisposable.Dispose() | `MaaResourceDestroy` |
+| IMaaResource.Register() | `MaaResourceRegisterCustomRecognition` <br> `MaaResourceRegisterCustomAction` |
+| IMaaResource.Unregister() | `MaaResourceUnregisterCustomRecognition`  <br> `MaaResourceUnregisterCustomAction` |
+| IMaaResource.Clear() | `MaaResourceClearCustomRecognition`  <br> `MaaResourceClearCustomAction` <br> `MaaResourceClear` |
+| IMaaResource.AppendBundle() | `MaaResourcePostBundle` |
+| IMaaPost.GetStatus() | `MaaResourceStatus` |
+| IMaaPost.Wait() | `MaaResourceWait` |
+| IMaaResource.IsLoaded | `MaaResourceLoaded` |
+| IMaaOption.SetOption() | `MaaResourceSetOption` |
+| IMaaResource.Hash | `MaaResourceGetHash` |
+| IMaaResource.NodeList | `MaaResourceGetNodeList` |
 | IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
 | IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
-## MaaSyncContext : IMaaSyncContext
+## MaaContext : IMaaContext
 
 | Wrapper | Native API |
 | --- | --- |
-| IMaaSyncContext.Handle | *The MaaSyncContextHandle.* |
-| IMaaSyncContext.RunTask() | MaaSyncContextRunTask |
-| IMaaSyncContext.RunRecognizer() | MaaSyncContextRunRecognizer |
-| IMaaSyncContext.RunAction() | MaaSyncContextRunAction |
-| IMaaSyncContext.Click() | MaaSyncContextClick |
-| IMaaSyncContext.Swipe() | MaaSyncContextSwipe |
-| IMaaSyncContext.PressKey() | MaaSyncContextPressKey |
-| IMaaSyncContext.InputText() | MaaSyncContextInputText |
-| IMaaSyncContext.TouchDown() | MaaSyncContextTouchDown |
-| IMaaSyncContext.TouchMove() | MaaSyncContextTouchMove |
-| IMaaSyncContext.TouchUp() | MaaSyncContextTouchUp |
-| IMaaSyncContext.Screencap() | MaaSyncContextScreencap |
-| IMaaSyncContext.GetTaskResult() | MaaSyncContextGetTaskResult |
+| IMaaContext.Handle | *The MaaContextHandle.* |
+| IMaaContext.RunTask() | `MaaContextRunTask` |
+| IMaaContext.RunRecognition() | `MaaContextRunRecognition` |
+| IMaaContext.RunAction() | `MaaContextRunAction` |
+| IMaaContext.OverridePipeline() | `MaaContextOverridePipeline` |
+| IMaaContext.OverrideNext() | `MaaContextOverrideNext` |
+| IMaaContext.TaskJob | `MaaContextGetTaskId` |
+| IMaaContext.Tasker | `MaaContextGetTasker` |
+| IMaaContext.Clone() <br> ICloneable.Clone() | `MaaContextClone` |
 
 ## Buffers.MaaStringBuffer : Buffers.IMaaStringBuffer
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaStringBuffer | MaaCreateStringBuffer |
-| IDisposable.Dispose() | MaaDestroyStringBuffer |
-| IMaaStringBuffer.IsEmpty | MaaIsStringEmpty |
-| IMaaStringBuffer.Clear() | MaaClearString |
-| IMaaStringBuffer.GetValue() <br> MaaStringBuffer.Get() | MaaGetString |
-| IMaaStringBuffer.Size | MaaGetStringSize |
-| IMaaStringBuffer.SetValue() <br> MaaStringBuffer.Set() | MaaSetString <br> MaaSetStringEx |
-| object.ToString() | MaaGetString |
+| MaaStringBuffer.ctor() | `MaaStringBufferCreate` |
+| IDisposable.Dispose() | `MaaStringBufferDestroy` |
+| IMaaStringBuffer.IsEmpty | `MaaStringBufferIsEmpty` |
+| IMaaStringBuffer.TryClear() | `MaaStringBufferClear` |
+| IMaaStringBuffer.TryGetValue() <br> MaaStringBuffer.TryGetValue() <br> object.ToString() | `MaaStringBufferGet` |
+| IMaaStringBuffer.Size | `MaaStringBufferSize` |
+| IMaaStringBuffer.TrySetValue() <br> MaaStringBuffer.TrySetValue() | `MaaStringBufferSet` <br> `MaaStringBufferSetEx` |
+| IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
 | IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaStringBufferHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
-## Buffers.MaaImageBuffer : Buffers.IMaaImageBuffer
+## Buffers.MaaStringListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
+
+> [!TIP]
+> Be aware that the underlying implementation of `MaaListBuffer` stores the values of the Buffer in a fixed, contiguous memory space, rather than storing the references of the Buffer.
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaImageBuffer | MaaCreateImageBuffer |
-| IDisposable.Dispose() | MaaDestroyImageBuffer |
-| IMaaImageBuffer.IsEmpty | MaaIsImageEmpty |
-| IMaaImageBuffer.Clear() | MaaClearImage |
-| IMaaImageBuffer.Info.Width | MaaGetImageWidth |
-| IMaaImageBuffer.Info.Height | MaaGetImageHeight |
-| IMaaImageBuffer.Info.Type | MaaGetImageType |
-| IMaaImageBuffer.GetEncodedData() <br> MaaImageBuffer.Get() | MaaGetImageEncoded <br> MaaGetImageEncodedSize |
-| IMaaImageBuffer.SetEncodedData() <br> MaaImageBuffer.Set() | MaaSetImageEncoded |
+| MaaStringListBuffer.ctor() | `MaaStringListBufferCreate` |
+| IDisposable.Dispose() | `MaaStringListBufferDestroy` |
+| IMaaListBuffer.IsEmpty | `MaaStringListBufferIsEmpty` |
+| IMaaListBuffer.MaaSizeCount <br> ICollection<>.Count | `MaaStringListBufferSize` |
+| IMaaListBuffer.this[] <br> IMaaListBuffer.TryIndexOf() <br> IMaaBuffer.TryCopyTo() <br> IList<>.this[] <br> IList<>.IndexOf() <br> ICollection<>.Contains() <br> ICollection<>.CopyTo() <br> ICollection<>.Remove() | `MaaStringListBufferAt` |
+| IMaaListBuffer.TryAdd() <br> IMaaBuffer.TryCopyTo() <br> ICollection<>.Add() <br> ICollection<>.CopyTo() | `MaaStringListBufferAppend` |
+| IMaaListBuffer.TryRemoveAt() <br> IList<>.RemoveAt() <br> ICollection<>.Remove() | `MaaStringListBufferRemove` |
+| IMaaListBuffer.TryClear() <br> ICollection<>.Clear() | `MaaStringListBufferClear` |
+| ICollection<>.IsReadOnly | `false` |
+| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
 | IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
+| IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
+| MaaStringListBuffer.TryGetList() <br> MaaStringListBuffer.TrySetList() | *Static utility methods used to avoid creating instances of the class.* |
+
+## Buffers.MaaImageBuffer : Buffers.IMaaImageBuffer
+
+> [!TIP]
+> We designed a tool record `MaaFramework.Binding.MaaImage`, for quickly loading external images, as well as in RecognitionDetail.
+
+| Wrapper | Native API |
+| --- | --- |
+| MaaImageBuffer.ctor() | `MaaImageBufferCreate` |
+| IDisposable.Dispose() | `MaaImageBufferDestroy` |
+| IMaaImageBuffer.IsEmpty | `MaaImageBufferIsEmpty` |
+| IMaaImageBuffer.TryClear() | `MaaImageBufferClear` |
+| MaaImageBuffer.TryGetRawData() | `MaaImageBufferGetRawData` |
+| MaaImageBuffer.TrySetRawData() | `MaaImageBufferSetRawData` |
+| IMaaImageBuffer.GetInfo() <br> MaaImageBuffer.Width <br> MaaImageBuffer.Height <br> MaaImageBuffer.Channels <br> MaaImageBuffer.Type | `MaaImageBufferWidth` <br> `MaaImageBufferHeight` <br> `MaaImageBufferChannels` <br> `MaaImageBufferType` |
+| IMaaImageBuffer.TryGetEncodedData() <br> MaaImageBuffer.TryGetEncodedData() | `MaaImageBufferGetEncoded` <br> `MaaImageBufferGetEncodedSize` |
+| IMaaImageBuffer.TrySetEncodedData() <br> MaaImageBuffer.TrySetEncodedData() | `MaaImageBufferSetEncoded` |
+| IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
+| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaImageBufferHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
-| MaaImageBuffer.Width | MaaGetImageWidth |
-| MaaImageBuffer.Height | MaaGetImageHeight |
-| MaaImageBuffer.Type | MaaGetImageType |
-| MaaImageBuffer.GetRawData() | MaaGetImageRawData |
-| MaaImageBuffer.SetRawData() | MaaSetImageRawData |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
+
+## Buffers.MaaImageListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
+
+> [!TIP]
+> Be aware that the underlying implementation of `MaaListBuffer` stores the values of the Buffer in a fixed, contiguous memory space, rather than storing the references of the Buffer.
+
+> [!IMPORTANT]
+> Please note that after using the `Clear`, `Remove`, or `Dispose` methods, all (or part, if using `Remove`) `MaaImageBuffer` instances will become unavailable.
+>
+> This is because the image types in CSharp have different implementations depending on the chosen framework. Therefore, `MaaImageListBuffer` is based on `MaaImageBuffer` and borrows the memory space from `MaaFramework`.
+>
+> This means that the CSharp Binding violates the design principles of MaaFramework Binding, but it avoids additional space and time consumption.
+
+| Wrapper | Native API |
+| --- | --- |
+| MaaImageListBuffer.ctor() | `MaaImageListBufferCreate` |
+| IDisposable.Dispose() | `MaaImageListBufferDestroy` |
+| IMaaListBuffer.IsEmpty | `MaaImageListBufferIsEmpty` |
+| IMaaListBuffer.MaaSizeCount <br> ICollection<>.Count | `MaaImageListBufferSize` |
+| IMaaListBuffer.this[] <br> IMaaListBuffer.TryIndexOf() <br> IMaaBuffer.TryCopyTo() <br> IList<>.this[] <br> IList<>.IndexOf() <br> ICollection<>.Contains() <br> ICollection<>.CopyTo() <br> ICollection<>.Remove() | `MaaImageListBufferAt` |
+| IMaaListBuffer.TryAdd() <br> IMaaBuffer.TryCopyTo() <br> ICollection<>.Add() <br> ICollection<>.CopyTo() | `MaaImageListBufferAppend` |
+| IMaaListBuffer.TryRemoveAt() <br> IList<>.RemoveAt() <br> ICollection<>.Remove() | `MaaImageListBufferRemove` |
+| IMaaListBuffer.TryClear() <br> ICollection<>.Clear() | `MaaImageListBufferClear` |
+| ICollection<>.IsReadOnly | `false` |
+| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
+| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
+| IMaaDisposableHandle.Handle | *The MaaImageListBufferHandle.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
+| MaaImageListBuffer.TryGetEncodedDataList() <br> MaaImageListBuffer.TryGetEncodedDataList() | *Static utility methods used to avoid creating instances of the class.* |
 
 ## Buffers.MaaRectBuffer : Buffers.IMaaRectBuffer
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaRectBuffer | MaaCreateRectBuffer |
-| IDisposable.Dispose() | MaaDestroyRectBuffer |
-| IMaaRectBuffer.X | MaaGetRectX <br> MaaSetRectX |
-| IMaaRectBuffer.Y | MaaGetRectY <br> MaaSetRectY |
-| IMaaRectBuffer.Width | MaaGetRectW <br> MaaSetRectW |
-| IMaaRectBuffer.Height | MaaGetRectH <br> MaaSetRectH |
-| IMaaRectBuffer.SetValues() <br> MaaRectBuffer.Set() | MaaSetRect |
-| IMaaRectBuffer.GetValues() <br> MaaRectBuffer.Get() | MaaGetRectX <br> MaaGetRectY <br> MaaGetRectW <br> MaaGetRectH |
+| MaaRectBuffer.ctor() | `MaaRectCreate` |
+| IDisposable.Dispose() | `MaaRectDestroy` |
+| IMaaRectBuffer.X <br> IMaaRectBuffer.Y <br> IMaaRectBuffer.Width <br> IMaaRectBuffer.Height <br> IMaaRectBuffer.TryGetValues() <br> IMaaRectBuffer.GetValues() <br> MaaRectBuffer.TryGetValues() <br> MaaRectBuffer.GetValues() | `MaaGetRectX` <br> `MaaGetRectY` <br> `MaaGetRectW` <br> `MaaGetRectH` |
+| IMaaRectBuffer.TrySetValues() <br> MaaRectBuffer.TrySetValues() | `MaaRectSet` |
+| IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
 | IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaRectHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer used.* |
-
-## MaaToolkit : IMaaToolkit
-
-| Wrapper | Native API |
-| --- | --- |
-| IMaaToolkit.Init() | MaaToolKitInit |
-| IMaaToolkit.Uninit() | MaaToolKitUninit |
-| IMaaToolkit.Find() | *The DeviceInfo Array.* |
-| MaaToolkit.FindDevice() | MaaToolKitFindDevice <br> MaaToolKitFindDeviceWithAdb |
-| MaaToolkit.GetDeviceName() | MaaToolKitGetDeviceName |
-| MaaToolkit.GetDeviceAdbPath() | MaaToolKitGetDeviceAdbPath |
-| MaaToolkit.GetDeviceAdbSerial() | MaaToolKitGetDeviceAdbSerial |
-| MaaToolkit.GetDeviceAdbControllerTypes() | MaaToolKitGetDeviceAdbControllerType |
-| MaaToolkit.GetDeviceAdbConfig() | MaaToolKitGetDeviceAdbConfig |
-| MaaToolkit.FindWindow() | MaaToolKitFindWindow |
-| MaaToolkit.SearchWindow() | MaaToolKitSearchWindow |
-| MaaToolkit.GetWindow() | MaaToolKitGetWindow |
-| MaaToolkit.GetCursorWindow() | MaaToolKitGetCursorWindow |
-| MaaToolkit.RegisterCustomRecognizerExecutor() | MaaToolKitRegisterCustomRecognizerExecutor |
-| MaaToolkit.UnregisterCustomRecognizerExecutor() | MaaToolKitUnregisterCustomRecognizerExecutor |
-| MaaToolkit.RegisterCustomActionExecutor() | MaaToolKitRegisterCustomActionExecutor |
-| MaaToolkit.UnregisterCustomActionExecutor() | MaaToolKitUnregisterCustomActionExecutor |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
 ## MaaUtility : IMaaUtility
 
 | Wrapper | Native API |
 | --- | --- |
-| IMaaUtility.Version | MaaVersion |
-| IMaaOption.SetOption() | MaaSetGlobalOption |
+| IMaaUtility.Version | `MaaVersion` |
+| IMaaOption.SetOption() | `MaaSetGlobalOption` |
+
+## MaaToolkit : IMaaToolkit
+
+| Wrapper | Native API |
+| --- | --- |
+| MaaToolkit.ctor() <br> IMaaToolkit.Config.InitOption() | `MaaToolkitConfigInitOption` |
+| IMaaToolkit.AdbDevice.Find() <br> IMaaToolkit.AdbDevice.FindAsync() | `MaaToolkitAdbDeviceFind` <br> `MaaToolkitAdbDeviceFindSpecified` |
+| IMaaToolkit.Desktop.Window.Find() | `MaaToolkitDesktopWindowFindAll` |
+| IMaaToolkit.PI.Register() | `MaaToolkitProjectInterfaceRegisterCustomAction` <br> `MaaToolkitProjectInterfaceRegisterCustomRecognition` |
+| IMaaToolkit.PI.RunCli() | `MaaToolkitProjectInterfaceRunCli` |
+| IMaaToolkit.PI.this[] | *Gets or creates a PI instance.* |
+| IMaaToolkit.PI.Callback | *Occurs when MaaFramework calls back.* |
+
+## Buffers.AdbDeviceListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
+
+> [!TIP]
+> Be aware that the underlying implementation of `MaaListBuffer` stores the values of the Buffer in a fixed, contiguous memory space, rather than storing the references of the Buffer.
+
+| Wrapper | Native API |
+| --- | --- |
+| AdbDeviceListBuffer.MaaToolkitAdbDeviceInfo <br>  : AdbDeviceInfo | `MaaToolkitAdbDeviceGetName` <br> `MaaToolkitAdbDeviceGetAdbPath` <br> `MaaToolkitAdbDeviceGetAddress` <br> `MaaToolkitAdbDeviceGetScreencapMethods` <br> `MaaToolkitAdbDeviceGetInputMethods` <br> `MaaToolkitAdbDeviceGetConfig` |
+| AdbDeviceListBuffer.ctor() | `MaaToolkitAdbDeviceListCreate` |
+| IDisposable.Dispose() | `MaaToolkitAdbDeviceListDestroy` |
+| IMaaListBuffer.IsEmpty <br> IMaaListBuffer.MaaSizeCount <br> ICollection<>.Count | `MaaToolkitAdbDeviceListSize` |
+| IMaaListBuffer.this[] <br> IMaaListBuffer.TryIndexOf() <br> IList<>.this[] <br> IList<>.IndexOf() <br> ICollection<>.Contains() | `MaaToolkitAdbDeviceListAt` |
+| ICollection<>.IsReadOnly | `true` |
+| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
+| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
+| IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
+| AdbDeviceListBuffer.TryGetList() | *Static utility methods used to avoid creating instances of the class.* |
+
+## Buffers.DesktopWindowListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
+
+> [!TIP]
+> Be aware that the underlying implementation of `MaaListBuffer` stores the values of the Buffer in a fixed, contiguous memory space, rather than storing the references of the Buffer.
+
+| Wrapper | Native API |
+| --- | --- |
+| DesktopWindowListBuffer.MaaToolkitDesktopWindowInfo <br>  : DesktopWindowInfo | `MaaToolkitDesktopWindowGetHandle` <br> `MaaToolkitDesktopWindowGetClassName` <br> `MaaToolkitDesktopWindowGetWindowName` |
+| DesktopWindowListBuffer.ctor() | `MaaToolkitDesktopWindowListCreate` |
+| IDisposable.Dispose() | `MaaToolkitDesktopWindowListDestroy` |
+| IMaaListBuffer.IsEmpty <br> IMaaListBuffer.MaaSizeCount <br> ICollection<>.Count | `MaaToolkitDesktopWindowListSize` |
+| IMaaListBuffer.this[] <br> IMaaListBuffer.TryIndexOf() <br> IList<>.this[] <br> IList<>.IndexOf() <br> ICollection<>.Contains() | `MaaToolkitDesktopWindowListAt` |
+| ICollection<>.IsReadOnly | `true` |
+| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
+| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
+| IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
+| DesktopWindowListBuffer.TryGetList() | *Static utility methods used to avoid creating instances of the class.* |

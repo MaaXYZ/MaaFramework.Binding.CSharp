@@ -11,7 +11,7 @@ public interface IMaaDisposable : IDisposable
     bool IsInvalid { get; }
 
     /// <summary>
-    ///     Gets a value indicating whether an <see cref="InvalidOperationException"/> is thrown when current resource is invalid but is called.
+    ///     Gets a value indicating whether an <see cref="InvalidOperationException"/> is thrown when current resource is invalid but still called.
     /// </summary>
     bool ThrowOnInvalid { get; set; }
 }

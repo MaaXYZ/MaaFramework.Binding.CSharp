@@ -2,7 +2,7 @@
 
 Stable versions (and selected previews) of MaaFramework.Binding.CSharp, and related packages, are distributed through <https://nuget.org> (see [add packages](../README.md#add-packages)).
 
-We also publish every successful merge to main branches to our preview NuGet channel called `nightly-build`.
+We also publish every successful merge to main branches to our preview NuGet channel called `nightly-builds`.
 
 To use this channel, you will need to add or edit your [NuGet.Config](https://learn.microsoft.com/nuget/reference/nuget-config-file) file with the following content:
 
@@ -19,7 +19,7 @@ You can also browse the available versions using `https://github.com/MaaXYZ/pkg/
 
 ## Warranty
 
-Packages from `nightly-build` feed are considered experimental. They might not have the usual quality, may contain experimental and breaking changes, and come without warranty.
+Packages from `nightly-builds` feed are considered experimental. They might not have the usual quality, may contain experimental and breaking changes, and come without warranty.
 
 ## Feed information
 
@@ -55,8 +55,8 @@ Therefore, the version number of MaaFramework.Binding.CSharp is defined as follo
 
 | Channel | Definition | Examples | Descriptions |
 | :---: | :---: | :---: | :---: |
-| stable-release | Core[.Revision] | 2.0.0 & 2.0.0-alpha.1 <br> 2.0.0.2 & 2.0.0-alpha.1.2 | official version <br> second revision |
-| preview-release | Major.Minor.Patch-preview.X | 2.0.0-preview.2 | second preview |
-| nightly-build | Major.Minor.Patch-preview.Date.BuildTimes | 2.0.0-preview.24501.2 | second build <br> on October 1, 2024 |
+| stable-releases | Core[.Revision] | 2.0.0 & 2.0.0-alpha.1 <br> 2.0.0.2 & 2.0.0-alpha.1.2 | official version <br> second revision |
+| preview-releases | Major.Minor.Patch-preview.X | 2.0.0-preview.2 | second preview |
+| nightly-builds | Major.Minor.Patch-preview.Date.BuildTimes | 2.0.0-preview.24501.2 | second build <br> on October 1, 2024 |
 
 > The Date 24501 calculates from **(Year 2024 - 2000) * 1000 + Month 10 * 50 + Day 1**.
