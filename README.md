@@ -4,101 +4,100 @@
 
 # MaaFramework.Binding.CSharp
 
-_✨ The csharp binding of [MaaFramework](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1) ✨_
+_✨ C# Binding for [MaaFramework](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1) ✨_
 
-_💫 A common interoperable API wrapper 💫_
+_💫 A universal interop API wrapper 💫_
 
 ![license](https://img.shields.io/github/license/MaaXYZ/MaaFramework) ![language](https://img.shields.io/badge/.NET-≥%207-512BD4?logo=csharp) ![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blueviolet) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Maa.Framework?logo=nuget&color=%23004880)](https://www.nuget.org/packages/Maa.Framework)
 
-[English](./README.md) | [简体中文](./README_zh.md)
+[English](./README.md) | [简体中文](./README.zh_cn.md)
 
 </div>
 
 ## Articles
-
 - [Overview of Wrapper and Api](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/overview-of-wrapper-and-api.html)
 
-## Get Started
+## Quick Start
 
 ### System Requirements
 
-Your computer should meet the minimum system requirements before you run and use `MaaFramework.Binding.CSharp`, which might run on other platforms or versions not listed here.
+Your system must meet minimum requirements to use `MaaFramework.Binding.CSharp`. The framework may work on other platforms not listed here.
 
-| OS Version | Minimum Requirements / Reason |
+| OS Version | Minimum Requirement / Limitation |
 | :---: | :---: |
-| Windows 10+ | Restricted from [.NET 7.0](https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md#windows) |
-| macOS 12+ | Restricted from [MaaFramework](https://github.com/MaaXYZ/MaaFramework/issues/174) |
-| Linux <br> Ubuntu 23.10+ | libc6 2.38+ <br> and more |
-| Android | Unknown |
+| Windows 10+ | Limited by [.NET 7.0](https://github.com/dotnet/core/blob/main/release-notes/7.0/supported-os.md#windows) |
+| macOS 12+ | Limited by [MaaFramework](https://github.com/MaaXYZ/MaaFramework/issues/174) |
+| Linux <br> Ubuntu 23.10+ | libc6 2.38+ required <br> and more |
+| Android | Untested |
 
-- Architectures: X64, Arm64
+- Architecture: x64, arm64
 
-### Install Dependents
+### Dependencies
 
-`MaaFramework.Binding.CSharp` needs the following dependencies installed to run properly.
+Required dependencies for `MaaFramework.Binding.CSharp`:
 
-| Platform | Package Id | Dependent Download |
+| Platform | Package ID | Dependency Link |
 | :---: | :---: | :---: |
-| Windows | `Maa.Framework` <br> `Maa.Framework.Runtimes` <br> `Maa.Framework.Runtime.win-arm64` <br> `Maa.Framework.Runtime.win-x64` | [Visual C++  Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads) |
+| Windows | `Maa.Framework` <br> `Maa.Framework.Runtimes` <br> `Maa.Framework.Runtime.win-arm64` <br> `Maa.Framework.Runtime.win-x64` | [Visual C++  Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) |
 
-### Prepare Resources
+### Resource Setup
 
-See MaaFramework document ( [English](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) | [简体中文](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1/docs/zh_cn/1.1-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B.md#%E5%87%86%E5%A4%87%E8%B5%84%E6%BA%90%E6%96%87%E4%BB%B6) ) .
+Refer to MaaFramework docs: [English](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) | [简体中文](https://github.com/MaaXYZ/MaaFramework/blob/v2.3.1/docs/zh_cn/1.1-快速开始.md#准备资源文件)
 
-Like this [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) in `MaaFramework.Binding.CSharp`.
+See [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) for implementation.
 
-### Add Packages
+### Package Installation
 
-| Package Id | Descriptions |
+| Package ID | Description |
 | :---- | :---- |
-| Maa.Framework | A metapackage with references to Native, Runtimes. |
-| Maa.Framework.Native | A metapackage with references to Binding.Native, AgentBinary. |
-| Maa.Framework.Binding | The abstractions of binding. |
-| Maa.Framework.Binding.Native | The native api wrapper implementation of binding.|
-| Maa.Framework.Runtimes <br> Maa.Framework.Runtime.win-x64 <br> Maa.Framework.Runtime.win-arm64 <br> Maa.Framework.Runtime.linux-x64 <br> Maa.Framework.Runtime.linux-arm64 <br> Maa.Framework.Runtime.osx-x64  <br> Maa.Framework.Runtime.osx-arm64 <br> Maa.Framework.Runtime.android-x64 <br> Maa.Framework.Runtime.android-arm64 | Native binaries of [MaaFramework](https://github.com/MaaXYZ/MaaFramework). <br> **No** reference to android packages in Runtimes. |
-| Maa.AgentBinary | Pre-built [agent](https://github.com/MaaXYZ/MaaAgentBinary) binaries, including minitouch, maatouch and minicap. |
+| Maa.Framework | Meta package (Native + Runtimes) |
+| Maa.Framework.Native | Meta package (Binding.Native + AgentBinary) |
+| Maa.Framework.Binding | Abstraction layer |
+| Maa.Framework.Binding.Native | Native API wrapper |
+| Maa.Framework.Runtimes <br> Platform-specific packages | Prebuilt [MaaFramework](https://github.com/MaaXYZ/MaaFramework) binaries.<br>Android packages excluded by default. |
+| Maa.AgentBinary | Prebuilt [Agent binaries](https://github.com/MaaXYZ/MaaAgentBinary) |
 
-#### Release
+#### Stable Releases
 
-``` ps1
+```ps1
 dotnet add package Maa.Framework --prerelease
 ```
 
-#### Nightly Build
+#### Nightly Builds
 
-##### Add package
+- **Add package**
 
-- shell
-``` ps1
-dotnet add package Maa.Framework --prerelease -s https://nuget.pkg.github.com/maaxyz/index.json
-```
+  ```ps1
+  dotnet add package Maa.Framework --prerelease -s https://maaxyz.github.io/pkg/nuget/index.json
+  ```
 
-##### Add package source
+- **Configure NuGet sources**
 
-- .csproj
-``` xml
-  <PropertyGroup>
+  - .csproj
+    ```xml
+    <PropertyGroup>
     <RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;https://maaxyz.github.io/pkg/nuget/index.json</RestoreSources>
-  </PropertyGroup>
-```
+    </PropertyGroup>
+    ```
 
-- NuGet.config
-Please refer to [this config](./NuGet.config) for example, and [this article](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/preview.html) for complete information.
+  - NuGet.config
 
-#### Specifying RIDs
+    See [sample configuration](./NuGet.config) for implementation examples; Refer to [nightly builds guide](https://maaxyz.github.io/MaaFramework.Binding.CSharp/articles/nightly-builds.html) for full details.
 
-The supported Runtime IDs for `MaaFramework` can be found [here](https://github.com/MaaXYZ/MaaFramework/tree/main/tools/nupkgs).
+#### RID Specification
 
-To use specific RIDs, such as the supported `win` platform packages, please manually reference the following packages:
+Supported Runtime IDs are listed [here](https://github.com/MaaXYZ/MaaFramework/tree/main/tools/nupkgs).
+
+For example, on the Windows platform, you need to manually reference the following packages:
 - `Maa.Framework.Native`
 - `Maa.Framework.Runtime.win-arm64`
 - `Maa.Framework.Runtime.win-x64`
 
-### Run Code
+### Code Example
 
 > Pre-work: `adb connect HOST[:PORT]`
 
-```CSharp
+```csharp
 using MaaFramework.Binding;
 
 var devices = new MaaToolkit(true).AdbDevice.Find();
@@ -112,7 +111,7 @@ using var maa = new MaaTasker
     DisposeOptions = DisposeOptions.All,
 };
 
-if (!maa.Initialized)
+if (!maa.IsInitialized)
     throw new InvalidOperationException();
 
 maa.AppendTask("EmptyNode")
@@ -124,7 +123,7 @@ Console.WriteLine("EmptyNode Completed");
 
 #### Custom
 
-```CSharp
+```csharp
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
@@ -146,6 +145,7 @@ var param = $$"""
 }
 """;
 
+// Register custom components
 maa.Resource.Register(new MyRec());
 maa.Resource.Register(new MyAct());
 maa.AppendTask(nodeName, param)
@@ -155,32 +155,29 @@ maa.AppendTask(nodeName, param)
 internal sealed class MyRec : IMaaCustomRecognition
 {
     public string Name { get; set; } = nameof(MyRec);
-
     public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
     {
-        results.Box.SetValues(0, 0, 100, 100);
-        results.Detail.SetValue("Hello World!");
-        return true;
+        Console.WriteLine($"Enter {Name}");
+        return results.Box.TrySetValues(0, 0, 100, 100)
+            && results.Detail.TrySetValue("Hello World!");
     }
 }
-
 internal sealed class MyAct : IMaaCustomAction
 {
     public string Name { get; set; } = nameof(MyAct);
-
     public bool Run(in IMaaContext context, in RunArgs args)
     {
+        Console.WriteLine($"Enter {Name}");
         return true;
     }
 }
 ```
 
 ## Best Practices
-
 - [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) MFA Task Manager
   A Universal GUI based on MAA's new architecture. Powered by MaaFramework.
 
-- You can also find more examples in the [Unit Tests](./src/MaaFramework.Binding.UnitTests).
+- See [unit tests](./src/MaaFramework.Binding.UnitTests) for more examples
 
 ## Documentation
 
@@ -199,5 +196,4 @@ We welcome contributions to the MaaFramework.Binding.CSharp. If you find a bug o
 `MaaFramework` is open-sourced under the [`LGPL-3.0`](./LICENSE.md) license.
 
 ## Discussion
-
 - QQ Group: 595990173
