@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using System.Runtime.InteropServices;
+using MaaFramework.Binding.Notification;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
@@ -52,7 +53,11 @@ public class Test_IMaaController
             foreach (var data in Data.Values.Cast<IMaaController>())
             {
                 Assert.IsFalse(data.IsInvalid);
-                data.Callback += Common.Callback;
+                // 3 ways to subscribe to the Callback event
+                data.Callback += Common.OnCallback;
+                data.Callback += Common.NotificationHandlerRegistry.OnCallback;
+                data.Callback += Common.OnControllerAction.ToCallback();
+
                 _ = data
                     .LinkStart()
                     .Wait()
@@ -108,7 +113,9 @@ public class Test_IMaaController
 #if !GITHUB_ACTIONS
         #region MaaWin32Controller
         var toolkit = new MaaToolkit();
-        var windowInfo = toolkit.Desktop.Window.Find().First(static x => x.Name.Contains("Visual Studio", StringComparison.OrdinalIgnoreCase));
+        var windowInfo = toolkit.Desktop.Window.Find().First(static x
+            => x.Name.Contains("Visual Studio", StringComparison.OrdinalIgnoreCase)
+               || x.Name.Contains("Maa", StringComparison.OrdinalIgnoreCase));
 
         using var win32Native1 = new MaaWin32Controller(
             windowInfo.Handle,
@@ -266,12 +273,8 @@ public class Test_IMaaController
         Interface_IMaaPost_Success(job);
         var buffer = type switch
         {
-#if MAA_NATIVE
             MaaTypes.Native => new MaaImageBuffer(),
             MaaTypes.Custom => new MaaImageBuffer(),
-#endif
-            MaaTypes.None => throw new NotImplementedException(),
-            MaaTypes.All => throw new NotImplementedException(),
             _ => throw new NotImplementedException(),
         };
         Assert.IsTrue(
@@ -284,7 +287,7 @@ public class Test_IMaaController
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Screencap_GetImage(MaaTypes type, IMaaController maaController)
+    public void Interface_Screencap_GetImage_Array(MaaTypes type, IMaaController maaController)
     {
         Assert.IsNotNull(maaController);
         using var buffer = GetImage(type, maaController);
@@ -304,7 +307,7 @@ public class Test_IMaaController
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Screencap_GetImage_EncodedDataStream(MaaTypes type, IMaaController maaController)
+    public void Interface_Screencap_GetImage_Stream(MaaTypes type, IMaaController maaController)
     {
         Assert.IsNotNull(maaController);
         using var buffer = GetImage(type, maaController);
@@ -364,8 +367,8 @@ public class Test_IMaaController
 
 #if MAA_NATIVE
         #region MaaAdbController
-        Assert.ThrowsException<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.None, AdbInputMethods.All, "test", "test"));
-        Assert.ThrowsException<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.All, AdbInputMethods.None, "test", "test"));
+        Assert.ThrowsException<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.None, AdbInputMethods.All, "{}", "test"));
+        Assert.ThrowsException<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.All, AdbInputMethods.None, "{}", "test"));
         #endregion
 
 #if !GITHUB_ACTIONS

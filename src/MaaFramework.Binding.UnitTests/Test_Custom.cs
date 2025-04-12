@@ -8,7 +8,7 @@ internal static class Custom
 {
     public static TestAction Action { get; } = new();
     public static TestRecognition Recognition { get; } = new();
-    public static TestResource Resource { get; } = new();
+    public static TestInvalidResource InvalidResource { get; } = new();
     public static string NodeName => "中文字符测试";
     public static string Param => $$"""
     {
@@ -35,7 +35,13 @@ internal static class Custom
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
-            var cloneContext = context.Clone();
+            _ = Assert.ThrowsException<ArgumentException>(() => new MaaContext(IntPtr.Zero));
+            var cloneContext = (context as ICloneable).Clone() as IMaaContext;
+            cloneContext = cloneContext?.Clone();
+#if MAA_NATIVE
+            cloneContext = (cloneContext as MaaContext)?.Clone();
+#endif
+            Assert.IsNotNull(cloneContext);
             Assert.IsNull(
                 cloneContext.RunRecognition(DiffEntry, "{}", (IMaaImageBuffer<nint>)args.Image));
             Assert.AreSame(
@@ -171,9 +177,9 @@ internal static class Custom
             => c.TouchUp(contact).Wait() == MaaJobStatus.Succeeded;
     }
 
-    internal sealed class TestResource : IMaaCustomResource
+    internal sealed class TestInvalidResource : IMaaCustomResource
     {
-        public string Name { get; set; } = nameof(TestResource);
+        public string Name { get; set; } = nameof(TestInvalidResource);
     }
 }
 

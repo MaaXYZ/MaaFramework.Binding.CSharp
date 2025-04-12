@@ -1,4 +1,6 @@
-﻿namespace MaaFramework.Binding.UnitTests;
+﻿using MaaFramework.Binding.Notification;
+
+namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
 ///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolkit"/>.
@@ -60,19 +62,15 @@ public class Test_IMaaToolkit
 
         using var maaController = type switch
         {
-#if MAA_NATIVE
             MaaTypes.Native => devices[0].ToAdbController(
                 adbPath: Common.AdbPath,
                 screencapMethods: AdbScreencapMethods.Encode,
                 inputMethods: AdbInputMethods.AdbShell,
                 link: LinkOption.None),
-#endif
-            MaaTypes.None => throw new NotImplementedException(),
-            MaaTypes.All => throw new NotImplementedException(),
-            MaaTypes.Custom => throw new NotImplementedException(),
+
             _ => throw new NotImplementedException(),
         };
-        maaController
+        _ = maaController
             .LinkStart()
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, devices[0].AdbPath, devices[0].AdbSerial);
@@ -98,18 +96,13 @@ public class Test_IMaaToolkit
 
         using var maaController = type switch
         {
-#if MAA_NATIVE
             MaaTypes.Native => windows[0].ToWin32Controller(
                 screencapMethod: Win32ScreencapMethod.GDI,
                 inputMethod: Win32InputMethod.SendMessage,
                 link: LinkOption.None),
-#endif
-            MaaTypes.None => throw new NotImplementedException(),
-            MaaTypes.All => throw new NotImplementedException(),
-            MaaTypes.Custom => throw new NotImplementedException(),
             _ => throw new NotImplementedException(),
         };
-        maaController
+        _ = maaController
             .LinkStart()
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, windows[0].Handle);
@@ -132,14 +125,23 @@ public class Test_IMaaToolkit
         Assert.AreSame(pi0, maaToolkit.PI[0]);
     }
 
-
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
     public void Interface_PI_Register(MaaTypes type, IMaaToolkit maaToolkit)
     {
         Assert.IsNotNull(maaToolkit);
 
-        maaToolkit.PI.Callback += Common.Callback;
+        // 3 ways to subscribe to the Callback event
+        maaToolkit.PI.Callback += Common.OnCallback;
+        maaToolkit.PI.Callback += Common.NotificationHandlerRegistry.OnCallback;
+        {
+            maaToolkit.PI.Callback += Common.OnResourceLoading.ToCallback();
+            maaToolkit.PI.Callback += Common.OnControllerAction.ToCallback();
+            maaToolkit.PI.Callback += Common.OnTaskerTask.ToCallback();
+            maaToolkit.PI.Callback += Common.OnNodeNextList.ToCallback();
+            maaToolkit.PI.Callback += Common.OnNodeRecognition.ToCallback();
+            maaToolkit.PI.Callback += Common.OnNodeAction.ToCallback();
+        }
 
         // Registers custom class
         Assert.IsTrue(
@@ -153,4 +155,19 @@ public class Test_IMaaToolkit
         Assert.IsTrue(
             maaToolkit.PI.Register(Custom.Recognition.Name, Custom.Recognition));
     }
+
+
+    #region Invalid data tests
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_Register_Unregister_InvalidData(MaaTypes type, IMaaToolkit maaToolkit)
+    {
+        Assert.IsNotNull(maaToolkit);
+
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaToolkit.PI.Register(Custom.InvalidResource));
+    }
+
+    #endregion
 }

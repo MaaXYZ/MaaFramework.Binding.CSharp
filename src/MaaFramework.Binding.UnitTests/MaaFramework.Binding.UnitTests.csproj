@@ -20,6 +20,10 @@
     </ItemGroup>
 
     <PropertyGroup>
+        <NoWarn>$(NoWarn);S1121,S1656,S1199,IDE0022,IDE0060,IDE0072</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <DefineConstants>$(DefineConstants);MAA_NATIVE;</DefineConstants>
     </PropertyGroup>
 

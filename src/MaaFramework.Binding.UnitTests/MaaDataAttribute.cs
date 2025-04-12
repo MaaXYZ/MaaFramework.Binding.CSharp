@@ -45,18 +45,52 @@ public sealed class MaaDataAttribute : DataRowAttribute, ITestDataSource
     /// </remarks>
     private IEnumerable<KeyValuePair<MaaTypes, object>> GetMaaObjects(MethodInfo methodInfo)
     {
+        var declaredMethods = methodInfo.DeclaringType?.GetTypeInfo().GetDeclaredMethods(_maaDataSourceName);
+        if (declaredMethods?.Any() is true)
+        {
+            var declaredMethod = declaredMethods.First(
+                x => x.GetParameters().Length == 1
+                     && x.GetParameters()[0].ParameterType.IsAssignableFrom(typeof(MaaTypes))
+                     && methodInfo.GetParameters()[1].ParameterType.IsAssignableFrom(x.ReturnType));
+            List<KeyValuePair<MaaTypes, object>> retList = [];
+            foreach (var maaTypeObject in Enum.GetValuesAsUnderlyingType<MaaTypes>())
+            {
+                var maaType = (MaaTypes)maaTypeObject;
+                try
+                {
+                    var declaredMethodReturn = declaredMethod.Invoke(null, [maaType])!;
+                    retList.Add(new KeyValuePair<MaaTypes, object>(maaType, declaredMethodReturn));
+                }
+                catch (TargetInvocationException e) when (e.InnerException is NotImplementedException)
+                {
+                    // continue
+                }
+            }
+
+            return retList;
+        }
+
         var declaredProperty = (methodInfo.DeclaringType?.GetTypeInfo().GetDeclaredProperty(_maaDataSourceName))
             ?? throw new ArgumentNullException($"{DynamicDataSourceType.Property} {_maaDataSourceName} not exists.");
 
-        var obj = declaredProperty!.GetValue(null, null)
+        var obj = declaredProperty.GetValue(null, null)
             ?? throw new ArgumentNullException($"{_maaDataSourceName}.GetValue returns null.");
 
-        var enumerable = obj as IEnumerable<KeyValuePair<MaaTypes, object>>
-            ?? throw new ArgumentNullException($"{_maaDataSourceName} is not a IEnumerable<KeyValuePair<MaaTypes, object>> type.");
+        var ret = obj switch
+        {
+            IEnumerable<KeyValuePair<MaaTypes, object>> enumerable
+                => enumerable.ToArray(),
+            IEnumerable<KeyValuePair<MaaTypes, object[]>> enumerable
+                => [.. from data in enumerable
+                       from maaObject in data.Value
+                       where methodInfo.GetParameters()[1].ParameterType.IsInstanceOfType(maaObject)
+                       select new KeyValuePair<MaaTypes, object>(data.Key, maaObject)],
+            _ => [],
+        };
 
-        return enumerable.Any()
-            ? enumerable
-            : throw new ArgumentException($"{_maaDataSourceName} is empty.");
+        if (ret.Length == 0)
+            throw new ArgumentException($"{_maaDataSourceName} does not have the required type ({methodInfo.GetParameters()[1].ParameterType.FullName}).");
+        return ret;
     }
 
     private object? CheckArgument(MethodInfo methodInfo, object? arg)
@@ -64,6 +98,7 @@ public sealed class MaaDataAttribute : DataRowAttribute, ITestDataSource
         if (arg is not string str || string.IsNullOrWhiteSpace(str))
             return arg;
 
+        // Gets the Property from test class or common class.
         var val = methodInfo.DeclaringType?.GetTypeInfo().GetDeclaredProperty(str)?.GetValue(null, null)
             ?? _commonTypeInfo.GetDeclaredProperty(str)?.GetValue(null, null);
 

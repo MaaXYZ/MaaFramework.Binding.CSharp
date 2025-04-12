@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <!-- Unit Test Properties -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="MaaFramework.Binding.UnitTests" />
+  </ItemGroup>
   <Choose>
     <When Condition="$(MSBuildProjectName.Contains('Test'))">
       <PropertyGroup>

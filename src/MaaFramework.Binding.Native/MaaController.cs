@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using MaaFramework.Binding.Abstractions.Native;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Interop.Native;
@@ -12,7 +13,9 @@ namespace MaaFramework.Binding;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class MaaController : MaaCommon, IMaaController<nint>
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
 
     /// <summary>
     ///     Creates a <see cref="MaaController"/> instance.

@@ -118,12 +118,14 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Usually invoked by MaaFramework.
         /// </remarks>
+        [ExcludeFromCodeCoverage(Justification = "Can not test RunCli.")]
         protected virtual void OnCallback(string message, [StringSyntax("Json")] string detailsJson, nint callbackArg)
             => Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
 
         /// <summary>
         ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
         /// </summary>
+        [ExcludeFromCodeCoverage(Justification = "Can not test RunCli.")]
         protected MaaNotificationCallback MaaNotificationCallback { get; }
 
         /// <summary>
@@ -174,6 +176,7 @@ public class MaaToolkit : IMaaToolkit
         /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitProjectInterfaceRunCli"/>.
         /// </remarks>
+        [ExcludeFromCodeCoverage(Justification = "Need standard input. " + nameof(MaaNotificationCallback) + nameof(OnCallback))]
         public bool RunCli(string resourcePath, string userPath, bool directly = false)
             => MaaToolkitProjectInterfaceRunCli(_instanceId, resourcePath, userPath, directly, MaaNotificationCallback, nint.Zero);
 

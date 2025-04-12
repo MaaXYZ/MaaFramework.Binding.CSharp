@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
+using MaaFramework.Binding.Notification;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -36,7 +37,16 @@ public class Test_IMaaTasker
         foreach (var data in Data.Values.Cast<IMaaTasker>())
         {
             Assert.IsFalse(data.IsInvalid);
-            data.Callback += Common.Callback;
+            // 3 ways to subscribe to the Callback event
+            data.Callback += Common.OnCallback;
+            data.Callback += Common.NotificationHandlerRegistry.OnCallback;
+            {
+                data.Callback += Common.OnTaskerTask.ToCallback();
+                data.Callback += Common.OnNodeNextList.ToCallback();
+                data.Callback += Common.OnNodeRecognition.ToCallback();
+                data.Callback += Common.OnNodeAction.ToCallback();
+            }
+
             _ = data.Resource
                 .AppendBundle(Common.BundlePath)
                 .Wait()
@@ -87,8 +97,20 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
 
-        Assert.IsNotNull(
-            maaTasker.Resource);
+        Assert.IsNotNull(maaTasker.Resource = maaTasker.Resource);
+        switch (type)
+        {
+            case MaaTypes.Native:
+                var native = maaTasker as MaaTasker;
+                Assert.IsNotNull(native);
+                Assert.IsNotNull(native.Resource = native.Resource);
+                break;
+            case MaaTypes.None:
+            case MaaTypes.All:
+            case MaaTypes.Custom:
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     [TestMethod]
@@ -97,8 +119,20 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
 
-        Assert.IsNotNull(
-            maaTasker.Controller);
+        Assert.IsNotNull(maaTasker.Controller = maaTasker.Controller);
+        switch (type)
+        {
+            case MaaTypes.Native:
+                var native = maaTasker as MaaTasker;
+                Assert.IsNotNull(native);
+                Assert.IsNotNull(native.Controller = native.Controller);
+                break;
+            case MaaTypes.None:
+            case MaaTypes.All:
+            case MaaTypes.Custom:
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     [TestMethod]
@@ -107,8 +141,20 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
 
-        Assert.IsNotNull(
-            maaTasker.Toolkit);
+        Assert.IsNotNull(maaTasker.Toolkit = maaTasker.Toolkit);
+        switch (type)
+        {
+            case MaaTypes.Native:
+                var native = maaTasker as MaaTasker;
+                Assert.IsNotNull(native);
+                Assert.IsNotNull(native.Toolkit = native.Toolkit);
+                break;
+            case MaaTypes.None:
+            case MaaTypes.All:
+            case MaaTypes.Custom:
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     [TestMethod]
@@ -119,11 +165,25 @@ public class Test_IMaaTasker
 
         Assert.IsNotNull(
             maaTasker.Utility);
+        Assert.IsNotNull(maaTasker.Utility = maaTasker.Utility);
+        switch (type)
+        {
+            case MaaTypes.Native:
+                var native = maaTasker as MaaTasker;
+                Assert.IsNotNull(native);
+                Assert.IsNotNull(native.Utility = native.Utility);
+                break;
+            case MaaTypes.None:
+            case MaaTypes.All:
+            case MaaTypes.Custom:
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(UninitializedData))]
-    public void Interface_Initialized(MaaTypes type, IMaaTasker maaTasker)
+    public void Interface_IsInitialized(MaaTypes type, IMaaTasker maaTasker)
     {
         Assert.IsNotNull(maaTasker);
 
@@ -186,9 +246,9 @@ public class Test_IMaaTasker
             => maaTasker.Resource.Clear<Custom.TestRecognition>());
 
         _ = Assert.ThrowsException<NotImplementedException>(()
-            => maaTasker.Resource.Register(Custom.Resource));
+            => maaTasker.Resource.Register(Custom.InvalidResource));
         _ = Assert.ThrowsException<NotImplementedException>(()
-            => maaTasker.Resource.Unregister(Custom.Resource));
+            => maaTasker.Resource.Unregister(Custom.InvalidResource));
     }
 
 
@@ -207,10 +267,10 @@ public class Test_IMaaTasker
             maaTasker.AppendTask(taskEntryName);
         // Wait the third job
         Interface_IMaaPost_Success(job);
-        Interface_Running(maaTasker);
+        Interface_IsRunning(maaTasker);
     }
 
-    private static void Interface_Running(IMaaTasker maaTasker)
+    private static void Interface_IsRunning(IMaaTasker maaTasker)
     {
         Assert.IsFalse(
             maaTasker.IsRunning);
@@ -330,6 +390,22 @@ public class Test_IMaaTasker
 
         _ = Assert.ThrowsException<NotSupportedException>(()
             => maaTasker.SetOption(opt, arg));
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_GetTaskDetail_InvalidData(MaaTypes type, IMaaTasker maaTasker)
+    {
+        Assert.IsNotNull(maaTasker);
+
+        Assert.IsFalse(
+            maaTasker.GetTaskDetail(0, out var entry, out var nodeIdList, out var status));
+        Assert.AreEqual(
+            string.Empty, entry);
+        Assert.AreEqual(
+            0, nodeIdList.Length);
+        Assert.AreEqual(
+            MaaJobStatus.Invalid, status);
     }
 
     #endregion

@@ -14,7 +14,9 @@ namespace MaaFramework.Binding;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)] private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
 
     /// <summary>
     ///     Gets all maa tasker instances.

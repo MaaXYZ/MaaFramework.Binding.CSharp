@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Notification;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -26,7 +27,11 @@ public class Test_IMaaResource
         foreach (var data in Data.Values.Cast<IMaaResource>())
         {
             Assert.IsFalse(data.IsInvalid);
-            data.Callback += Common.Callback;
+            // 3 ways to subscribe to the Callback event
+            data.Callback += Common.OnCallback;
+            data.Callback += Common.NotificationHandlerRegistry.OnCallback;
+            data.Callback += Common.OnResourceLoading.ToCallback();
+
             _ = data.SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
         }
     }
@@ -54,7 +59,7 @@ public class Test_IMaaResource
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_AppendBundle_Loaded(MaaTypes type, IMaaResource maaResource)
+    public void Interface_AppendBundle_IsLoaded(MaaTypes type, IMaaResource maaResource)
     {
         Assert.IsNotNull(maaResource);
 
@@ -73,6 +78,8 @@ public class Test_IMaaResource
             MaaJobStatus.Invalid, job.Status);
         Assert.AreEqual(
             MaaJobStatus.Succeeded, job.Wait());
+        Assert.AreEqual(
+            "MaaJob { Status = Succeeded }", job.ToString());
     }
 
     [TestMethod]
@@ -97,7 +104,9 @@ public class Test_IMaaResource
     }
 
     [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceDevice, (int)InferenceDevice.CPU)]
     [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceDevice, InferenceDevice.CPU)]
+    [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceExecutionProvider, (int)InferenceExecutionProvider.CPU)]
     [MaaData(MaaTypes.All, nameof(Data), ResourceOption.InferenceExecutionProvider, InferenceExecutionProvider.CPU)]
     public void Interface_SetOption(MaaTypes type, IMaaResource maaResource, ResourceOption opt, object arg)
     {
@@ -114,7 +123,9 @@ public class Test_IMaaResource
         Assert.IsNotNull(maaResource);
 
         Assert.IsTrue(
-            maaResource.Clear(true));
+            maaResource.Clear());
+        Assert.IsTrue(
+            maaResource.Clear(includeCustomResource: true));
     }
 
     #region Invalid data tests
@@ -129,6 +140,26 @@ public class Test_IMaaResource
 
         _ = Assert.ThrowsException<NotSupportedException>(()
             => maaResource.SetOption(opt, arg));
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_Register_Unregister_InvalidData(MaaTypes type, IMaaResource maaResource)
+    {
+        Assert.IsNotNull(maaResource);
+
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaResource.Register(Custom.InvalidResource));
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaResource.Register(nameof(Custom.InvalidResource), Custom.InvalidResource));
+
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaResource.Unregister(Custom.InvalidResource));
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaResource.Unregister<Custom.TestInvalidResource>(nameof(Custom.InvalidResource)));
+
+        _ = Assert.ThrowsException<NotImplementedException>(()
+            => maaResource.Clear<Custom.TestInvalidResource>());
     }
 
     #endregion

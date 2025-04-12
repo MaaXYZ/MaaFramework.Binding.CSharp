@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Notification;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -19,6 +20,7 @@ public static class Common
     internal static string BundlePath { get; set; } = Path.GetFullPath("./SampleResource");
     internal static string AgentPath { get; set; } = Path.GetFullPath($"./MaaAgentBinary");
     internal static string AdbConfig { get; set; } = File.ReadAllText(Path.GetFullPath($"{BundlePath}/controller_config.json"));
+    internal static string ImagePath { get; set; } = Path.Join(BundlePath, "empty_1920x1080.png");
 
     private static void InitializeInfo(TestContext testContext)
     {
@@ -70,14 +72,25 @@ public static class Common
         foreach (var d in data)
         {
             d.Dispose();
-            Assert.IsTrue(d.IsInvalid);
+            if (d is not MaaImage)
+            {
+                Assert.IsTrue(d.IsInvalid);
+            }
         }
     }
 
-    internal static void Callback(object? sender, MaaCallbackEventArgs e)
+    internal static void OnCallback(object? sender, MaaCallbackEventArgs e)
     {
         Assert.IsNotNull(sender);
         Assert.IsNotNull(e);
         Assert.IsFalse(string.IsNullOrWhiteSpace(e.Message));
     }
+
+    internal static NotificationHandlerRegistry NotificationHandlerRegistry { get; set; } = new();
+    internal static NotificationHandler<ResourceLoadingDetail> OnResourceLoading = (type, detail) => Assert.IsNotNull(detail);
+    internal static NotificationHandler<ControllerActionDetail> OnControllerAction = (type, detail) => Assert.IsNotNull(detail);
+    internal static NotificationHandler<TaskerTaskDetail> OnTaskerTask = (type, detail) => Assert.IsNotNull(detail);
+    internal static NotificationHandler<NodeNextListDetail> OnNodeNextList = (type, detail) => Assert.IsNotNull(detail);
+    internal static NotificationHandler<NodeRecognitionDetail> OnNodeRecognition = (type, detail) => Assert.IsNotNull(detail);
+    internal static NotificationHandler<NodeActionDetail> OnNodeAction = (type, detail) => Assert.IsNotNull(detail);
 }
