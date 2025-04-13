@@ -22,7 +22,7 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     /// <inheritdoc/>
     public bool TryCopyTo(IMaaRectBuffer buffer) => buffer switch
     {
-        // MaaRectBuffer native => native method is same to wrapped method
+        MaaRectBuffer native => TryCopyTo(native.Handle),
         null => false,
         _ => buffer.TrySetValues(
             x: MaaRectGetX(Handle),

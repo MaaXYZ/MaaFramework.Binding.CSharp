@@ -85,7 +85,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// </remarks>
     // Prohibit internal use of this method unless it is returned as a return value.
     public override MaaImageBuffer this[MaaSize index] => _cache.GetOrAdd(index, i
-        => new(MaaImageListBufferAt(Handle, i).ThrowIfEquals(nint.Zero)));
+        => new(MaaImageListBufferAtWithBoundsChecking(Handle, i).ThrowIfEquals(nint.Zero)));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -112,7 +112,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// </remarks>
     public override bool TryRemoveAt(MaaSize index)
     {
-        if (MaaSizeCount <= index || !MaaImageListBufferRemove(Handle, index))
+        if (!MaaImageListBufferRemoveWithBoundsChecking(Handle, index))
             return false;
 
         RemoveCache(index);
@@ -138,14 +138,13 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// <inheritdoc/>
     public override bool TryIndexOf(MaaImageBuffer item, out MaaSize index)
     {
-        var imageInItem = MaaImageBufferGetRawData(item?.Handle ?? nint.Zero);
-        if (imageInItem != nint.Zero)
+        if (MaaImageBuffer.TryGetRawData(item?.Handle ?? nint.Zero, out var imageInItem))
         {
             var count = MaaSizeCount;
             for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)
             {
-                var imageInList = MaaImageBufferGetRawData(MaaImageListBufferAt(Handle, tmpIndex));
-                if (imageInList == imageInItem)
+                if (MaaImageBuffer.TryGetRawData(MaaImageListBufferAt(Handle, tmpIndex), out var imageInList)
+                    && imageInList.Equals(imageInItem))
                 {
                     index = tmpIndex;
                     return true;

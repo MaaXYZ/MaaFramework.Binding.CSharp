@@ -22,10 +22,7 @@ public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaS
     /// <inheritdoc/>
     public bool TryCopyTo(IMaaStringBuffer buffer) => buffer switch
     {
-        MaaStringBuffer native => MaaStringBufferSetExFromNint(
-            handle: native.Handle,
-            str: MaaStringBufferGetToNint(Handle),
-            size: MaaStringBufferSize(Handle)),
+        MaaStringBuffer native => TryCopyTo(native.Handle),
         null => false,
         _ => buffer.TryGetValue(out var str) && buffer.TrySetValue(str),
     };

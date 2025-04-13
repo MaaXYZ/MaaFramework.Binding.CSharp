@@ -10,7 +10,7 @@ namespace MaaFramework.Binding;
 public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
 {
     private bool _isCached;
-    private readonly MemoryStream _cacheStream = new();
+    private readonly MemoryStream _cacheStream = new(); // MemoryStream implements IDisposable, but does not actually have any resources to dispose.
     private ImageInfo _cacheInfo = new(-1, -1, -1, -1);
 
     /// <summary>
@@ -63,10 +63,7 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
 
     /// <inheritdoc/>
     public void Dispose()
-    {
-        Buffer.Dispose();
-        _cacheStream.Dispose();
-    }
+        => Buffer.Dispose();
 
     #region Load & Save
 

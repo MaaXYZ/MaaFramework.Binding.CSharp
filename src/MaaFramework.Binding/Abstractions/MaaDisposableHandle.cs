@@ -8,7 +8,7 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
 {
     /// <inheritdoc/>
     public T Handle => (ThrowOnInvalid && _handle.Equals(_invalidHandle))
-        ? throw new InvalidOperationException($"{GetType().Name}")
+        ? throw new InvalidOperationException($"Failed to operate an invalid {GetType().Name}.")
         : _handle;
 
     /// <summary>

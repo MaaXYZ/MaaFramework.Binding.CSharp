@@ -25,12 +25,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <inheritdoc/>
     public bool TryCopyTo(IMaaImageBuffer buffer) => buffer switch
     {
-        MaaImageBuffer native => MaaImageBufferSetRawData(
-            handle: native.Handle,
-            data: MaaImageBufferGetRawData(Handle),
-            width: MaaImageBufferWidth(Handle),
-            height: MaaImageBufferHeight(Handle),
-            type: MaaImageBufferType(Handle)),
+        MaaImageBuffer native => TryCopyTo(native.Handle),
         null => false,
         _ => buffer.TryGetEncodedData(out Stream? data) && TrySetEncodedData(Handle, data),
     };
@@ -263,8 +258,8 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         var array = ArrayPool<byte>.Shared.Rent(intSize); // using NativeMemory.Alloc if data is too big and necessary
         try
         {
-            if (data.Read(array, 0, intSize) != 0)
-                return false;
+            if (data.Read(array, 0, intSize) == 0)
+                return true;
 
             fixed (byte* __array_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(array))
             {
@@ -374,6 +369,13 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         height = MaaImageBufferHeight(handle);
         type = MaaImageBufferType(handle);
         return true;
+    }
+
+    /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
+    public static bool TryGetRawData(MaaImageBufferHandle handle, out MaaImageRawData data)
+    {
+        data = MaaImageBufferGetRawData(handle);
+        return data != default;
     }
 
     /// <inheritdoc cref="TrySetRawData(nint, nint, int, int, int)"/>

@@ -58,7 +58,8 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitDesktopWindowListAt"/>.
     /// </remarks>
-    public override DesktopWindowInfo this[MaaSize index] => new MaaToolkitDesktopWindowInfo(MaaToolkitDesktopWindowListAt(Handle, index).ThrowIfEquals(MaaToolkitDesktopWindowHandle.Zero));
+    public override DesktopWindowInfo this[MaaSize index] => new MaaToolkitDesktopWindowInfo(
+        MaaToolkitDesktopWindowListAtWithBoundsChecking(Handle, index).ThrowIfEquals(MaaToolkitDesktopWindowHandle.Zero));
 
     /// <inheritdoc/>
     public override bool TryAdd(DesktopWindowInfo item)
@@ -116,8 +117,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
             return false;
         }
 
-        var ret = size == 0;
-        var array = ret ? [] : new DesktopWindowInfo[size];
+        var array = size == 0 ? [] : new DesktopWindowInfo[size];
         for (var i = 0; i < size; i++)
         {
             var window = MaaToolkitDesktopWindowListAt(handle, (MaaSize)i);
@@ -130,7 +130,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
         }
 
         windowList = array;
-        return ret;
+        return true;
     }
 
     /// <inheritdoc/>

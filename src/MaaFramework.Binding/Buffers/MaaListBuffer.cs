@@ -39,7 +39,9 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     public abstract bool TryIndexOf(T item, out MaaSize index);
     /// <inheritdoc/>
     public bool Remove(T item)
-        => TryIndexOf(item, out var index) && TryRemoveAt(index);
+        => IsReadOnly
+            ? throw new NotSupportedException($"{GetType().Name} is read-only.")
+            : TryIndexOf(item, out var index) && TryRemoveAt(index);
     /// <inheritdoc/>
     public bool Contains(T item)
         => TryIndexOf(item, out _);
@@ -93,11 +95,11 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     void ICollection<T>.Add(T item)
         => MaaInteroperationException.ThrowIfNot(
             TryAdd(item),
-            $"The {nameof(item)} is invalid.");
+            $"The {nameof(item)} was invalid.");
     void ICollection<T>.Clear()
         => MaaInteroperationException.ThrowIfNot(
             TryClear(),
-            "The collection is invalid.");
+            "The collection was invalid.");
 
     T IList<T>.this[int index]
     {
@@ -117,7 +119,7 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     void IList<T>.RemoveAt(int index)
         => MaaInteroperationException.ThrowIfNot(
             TryRemoveAt((MaaSize)index),
-            $"The {nameof(index)} is invalid.");
+            $"The {nameof(index)} was out of range or handle was zero.");
     void IList<T>.Insert(int index, T item)
         => throw new NotSupportedException($"{nameof(MaaListBuffer<,>)} does not support insert a element at the specified index.");
 

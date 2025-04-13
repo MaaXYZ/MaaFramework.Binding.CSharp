@@ -51,7 +51,7 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferAt"/>.
     /// </remarks>
-    public override MaaStringBuffer this[MaaSize index] => new(MaaStringListBufferAt(Handle, index).ThrowIfEquals(nint.Zero));
+    public override MaaStringBuffer this[MaaSize index] => new(MaaStringListBufferAtWithBoundsChecking(Handle, index).ThrowIfEquals(nint.Zero));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -66,7 +66,7 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     ///     Wrapper of <see cref="MaaStringListBufferRemove"/>.
     /// </remarks>
     public override bool TryRemoveAt(MaaSize index)
-        => MaaStringListBufferRemove(Handle, index);
+        => MaaStringListBufferRemoveWithBoundsChecking(Handle, index);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -81,12 +81,13 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     /// <inheritdoc/>
     public override bool TryIndexOf(MaaStringBuffer item, out MaaSize index)
     {
-        if (item is not null)
+        if (MaaStringBuffer.TryGetValue(item?.Handle ?? nint.Zero, out var stringInItem))
         {
             var count = MaaSizeCount;
             for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)
             {
-                if (MaaStringListBufferAt(Handle, tmpIndex).Equals(item.Handle))
+                if (MaaStringBuffer.TryGetValue(MaaStringListBufferAt(Handle, tmpIndex), out var stringInList)
+                    && stringInList.Equals(stringInItem))
                 {
                     index = tmpIndex;
                     return true;
