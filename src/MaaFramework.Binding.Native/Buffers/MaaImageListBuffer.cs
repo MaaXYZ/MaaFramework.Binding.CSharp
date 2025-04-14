@@ -35,10 +35,10 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
 
     /// <inheritdoc/>
     // 涉及到 TrAdd、TryClear、Remove、Dispose 均需要 Dispose _cache.Values。
-    // 由于 ReleaseHandle 有先决条件，故重写 Dispose()方法。
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
+
         ClearCache();
     }
 

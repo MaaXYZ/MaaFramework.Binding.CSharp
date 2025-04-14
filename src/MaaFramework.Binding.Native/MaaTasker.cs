@@ -63,10 +63,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     public required DisposeOptions DisposeOptions { get; set; }
 
     /// <inheritdoc/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaTaskerDestroy"/>.
-    /// </remarks>
-    protected override void ReleaseHandle()
+    protected override void Dispose(bool disposing)
     {
         // Cannot destroy Instance before disposing Controller and Resource.
 
@@ -80,8 +77,15 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
             Resource.Dispose();
         }
 
-        MaaTaskerDestroy(Handle);
+        base.Dispose(disposing);
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerDestroy"/>.
+    /// </remarks>
+    protected override void ReleaseHandle()
+        => MaaTaskerDestroy(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -123,7 +127,8 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     {
         get
         {
-            _ = MaaTaskerGetResource(Handle).ThrowIfNotEquals(field.Handle, MaaInteroperationException.ResourceModifiedMessage);
+            if (!IsInvalid)
+                _ = MaaTaskerGetResource(Handle).ThrowIfNotEquals(field.Handle, MaaInteroperationException.ResourceModifiedMessage);
             return field;
         }
         set
@@ -142,7 +147,8 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     {
         get
         {
-            _ = MaaTaskerGetController(Handle).ThrowIfNotEquals(field.Handle, MaaInteroperationException.ControllerModifiedMessage);
+            if (!IsInvalid)
+                _ = MaaTaskerGetController(Handle).ThrowIfNotEquals(field.Handle, MaaInteroperationException.ControllerModifiedMessage);
             return field;
         }
         set
