@@ -25,22 +25,37 @@ public class MaaAdbController : MaaController
     /// <exception cref="ArgumentException"/>
     /// <exception cref="MaaJobStatusException"/>
     public MaaAdbController(string adbPath, string adbSerial, AdbScreencapMethods screencapMethods, AdbInputMethods inputMethods, [StringSyntax("Json")] string config = "{}", string agentPath = "./MaaAgentBinary", LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+        : this(new AdbDeviceInfo(string.Empty, adbPath, adbSerial, screencapMethods, inputMethods, config),
+              agentPath, link, check)
     {
-        ArgumentException.ThrowIfNullOrEmpty(adbPath);
-        ArgumentException.ThrowIfNullOrEmpty(adbSerial);
-        if (screencapMethods == AdbScreencapMethods.None) throw new ArgumentException($"Value cannot be {AdbScreencapMethods.None}.", nameof(screencapMethods));
-        if (inputMethods == AdbInputMethods.None) throw new ArgumentException($"Value cannot be {AdbInputMethods.None}.", nameof(inputMethods));
-        ArgumentException.ThrowIfNullOrEmpty(config);
+    }
+
+    /// <summary>
+    ///     Creates a <see cref="MaaAdbController"/> instance.
+    /// </summary>
+    /// <param name="adbDevice">The adb device info.</param>
+    /// <param name="agentPath">The path of agent directory. Default is "./MaaAgentBinary" if package "Maa.Framework" or "Maa.AgentBinary" is used.</param>
+    /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
+    /// </remarks>
+    /// <exception cref="ArgumentException"/>
+    /// <exception cref="MaaJobStatusException"/>
+    public MaaAdbController(AdbDeviceInfo adbDevice, string agentPath = "./MaaAgentBinary", LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(adbDevice.AdbPath);
+        ArgumentException.ThrowIfNullOrEmpty(adbDevice.AdbSerial);
+        if (adbDevice.ScreencapMethods == AdbScreencapMethods.None) throw new ArgumentException($"Value cannot be {AdbScreencapMethods.None}.", "adbDevice.ScreencapMethods");
+        if (adbDevice.InputMethods == AdbInputMethods.None) throw new ArgumentException($"Value cannot be {AdbInputMethods.None}.", "adbDevice.InputMethods");
+        ArgumentException.ThrowIfNullOrEmpty(adbDevice.Config);
         ArgumentException.ThrowIfNullOrEmpty(agentPath);
 
-        var handle = MaaAdbControllerCreate(adbPath, adbSerial, (MaaAdbScreencapMethod)screencapMethods, (MaaAdbInputMethod)inputMethods, config, agentPath, MaaNotificationCallback, nint.Zero);
+        var handle = MaaAdbControllerCreate(adbDevice.AdbPath, adbDevice.AdbSerial, (MaaAdbScreencapMethod)adbDevice.ScreencapMethods, (MaaAdbInputMethod)adbDevice.InputMethods, adbDevice.Config, agentPath, MaaNotificationCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
 
-        if (link != LinkOption.Start)
-            return;
 
-        var status = LinkStart().Wait();
-        if (check == CheckStatusOption.ThrowIfNotSucceeded)
-            _ = status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, adbPath, adbSerial);
+        if (link == LinkOption.Start)
+            LinkStartOnConstructed(check, adbDevice);
     }
 }

@@ -24,6 +24,19 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     {
     }
 
+    /// <summary>
+    ///     Connects the address specified by the constructor on constructed.
+    /// </summary>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
+    /// <param name="args">The key arguments.</param>
+    /// <exception cref="MaaJobStatusException"/>
+    protected void LinkStartOnConstructed(CheckStatusOption check, params object?[] args)
+    {
+        var status = LinkStart().Wait();
+        if (check == CheckStatusOption.ThrowIfNotSucceeded)
+            _ = status.ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, args);
+    }
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerDestroy"/>.

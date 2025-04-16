@@ -23,7 +23,7 @@ public class Test_IMaaController
         },
 #pragma warning disable CA2000
         {
-            MaaTypes.Custom, new MaaCustomController(new Custom.TestController(new MaaAdbController(Common.AdbPath, Common.Address, AdbScreencapMethods.Encode, s_inputPreset, Common.AdbConfig, Common.AgentPath, LinkOption.None)))
+            MaaTypes.Custom, new MaaCustomController(new Custom.TestController(new MaaAdbController(Common.AdbPath, Common.Address, AdbScreencapMethods.Encode, s_inputPreset, Common.AdbConfig, Common.AgentPath, LinkOption.None)), LinkOption.None)
         },
 #pragma warning restore CA2000
 #endif

@@ -3,7 +3,7 @@
 /// <summary>
 ///     A static class providing extension methods for the creation of MaaAdbController.
 /// </summary>
-public static class DeviceInfoExtensions
+public static class AdbDeviceInfoExtensions
 {
     /// <summary>
     ///     Converts a <see cref="AdbDeviceInfo"/> to a <see cref="MaaAdbController"/>.
@@ -22,8 +22,8 @@ public static class DeviceInfoExtensions
     public static MaaAdbController ToAdbController(this AdbDeviceInfo info,
         string? adbPath = null,
         string? adbSerial = null,
-        AdbScreencapMethods screencapMethods = AdbScreencapMethods.None,
-        AdbInputMethods inputMethods = AdbInputMethods.None,
+        AdbScreencapMethods? screencapMethods = null,
+        AdbInputMethods? inputMethods = null,
         string? config = null,
         string agentPath = "./MaaAgentBinary",
         LinkOption link = LinkOption.Start,
@@ -31,12 +31,19 @@ public static class DeviceInfoExtensions
     {
         ArgumentNullException.ThrowIfNull(info);
 
+        if (adbPath is null && adbSerial is null && screencapMethods is null
+            && inputMethods is null && config is null)
+            return new MaaAdbController(info, agentPath, link, check);
+
         return new MaaAdbController(
-            adbPath ?? info.AdbPath,
-            adbSerial ?? info.AdbSerial,
-            screencapMethods == AdbScreencapMethods.None ? info.ScreencapMethods : screencapMethods,
-            inputMethods == AdbInputMethods.None ? info.InputMethods : inputMethods,
-            config ?? info.Config,
+            new AdbDeviceInfo(
+                info.Name,
+                adbPath ?? info.AdbPath,
+                adbSerial ?? info.AdbSerial,
+                screencapMethods ?? info.ScreencapMethods,
+                inputMethods ?? AdbInputMethods.None,
+                config ?? info.Config
+            ),
             agentPath,
             link,
             check

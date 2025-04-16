@@ -3,7 +3,7 @@
 /// <summary>
 ///     A static class providing extension methods for the creation of MaaWin32Controller.
 /// </summary>
-public static class WindowInfoExtensions
+public static class DesktopWindowInfoExtensions
 {
     /// <summary>
     ///     Converts a <see cref="DesktopWindowInfo"/> to a <see cref="MaaWin32Controller"/>.
@@ -25,12 +25,8 @@ public static class WindowInfoExtensions
     {
         ArgumentNullException.ThrowIfNull(info);
 
-        return new MaaWin32Controller(
-            hWnd ?? info.Handle,
-            screencapMethod,
-            inputMethod,
-            link,
-            check
-        );
+        return hWnd.HasValue
+            ? new MaaWin32Controller(hWnd.Value, screencapMethod, inputMethod, link, check)
+            : new MaaWin32Controller(info, screencapMethod, inputMethod, link, check);
     }
 }
