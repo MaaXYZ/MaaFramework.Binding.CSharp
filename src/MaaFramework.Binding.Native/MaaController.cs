@@ -15,7 +15,9 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
 {
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
+    private string DebuggerDisplay => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaController"/> instance.
@@ -183,7 +185,9 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return (MaaJobStatus)MaaControllerStatus(Handle, job.Id);
+        return ThrowOnInvalid && IsInvalid
+            ? MaaJobStatus.Invalid
+            : (MaaJobStatus)MaaControllerStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -194,7 +198,9 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return (MaaJobStatus)MaaControllerWait(Handle, job.Id);
+        return ThrowOnInvalid && IsInvalid
+            ? MaaJobStatus.Invalid
+            : (MaaJobStatus)MaaControllerWait(Handle, job.Id);
     }
 
     /// <inheritdoc/>

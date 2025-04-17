@@ -15,7 +15,9 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
 {
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string DebuggerDisplay => $"{{{GetType().Name} {{ Count = {MaaSizeCount}, Disposed = {IsInvalid} }}}}";
+    private string DebuggerDisplay => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ {nameof(Count)} = {MaaSizeCount}, {nameof(IsReadOnly)} = {IsReadOnly} }}";
 
     /// <inheritdoc/>
     public abstract bool IsEmpty { get; }

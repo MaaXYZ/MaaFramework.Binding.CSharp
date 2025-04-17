@@ -14,7 +14,9 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     private readonly HashSet<string> _postedPaths = [];
 
     /// <inheritdoc/>
-    public override string ToString() => $"{GetType().Name} {{ Paths = {string.Join(" & ", _postedPaths)}, CustomActions = {string.Join(" & ", _actions.Names)}, CustomRecognitions = {string.Join(" & ", _recognitions.Names)} }}";
+    public override string ToString() => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ Paths = {string.Join(" & ", _postedPaths)}, CustomActions = {string.Join(" & ", _actions.Names)}, CustomRecognitions = {string.Join(" & ", _recognitions.Names)} }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaResource"/> instance.
@@ -189,7 +191,9 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return (MaaJobStatus)MaaResourceStatus(Handle, job.Id);
+        return ThrowOnInvalid && IsInvalid
+            ? MaaJobStatus.Invalid
+            : (MaaJobStatus)MaaResourceStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -200,7 +204,9 @@ public class MaaResource : MaaCommon, IMaaResource<nint>
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return (MaaJobStatus)MaaResourceWait(Handle, job.Id);
+        return ThrowOnInvalid && IsInvalid
+            ? MaaJobStatus.Invalid
+            : (MaaJobStatus)MaaResourceWait(Handle, job.Id);
     }
 
     /// <inheritdoc/>

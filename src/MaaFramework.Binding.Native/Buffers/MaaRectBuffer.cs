@@ -9,7 +9,9 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<MaaRectHandle>, IMaaRectBufferStatic<MaaRectHandle>
 {
     /// <inheritdoc/>
-    public override string ToString() => $"{GetType().Name} {{ {nameof(X)} = {X}, {nameof(Y)} = {Y}, {nameof(Width)} = {Width}, {nameof(Height)} = {Height} }}";
+    public override string ToString() => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ {nameof(X)} = {X}, {nameof(Y)} = {Y}, {nameof(Width)} = {Width}, {nameof(Height)} = {Height} }}";
 
     /// <inheritdoc/>
     public bool TryCopyTo(MaaRectHandle bufferHandle) => TrySetValues(

@@ -1,12 +1,25 @@
-﻿using static MaaFramework.Binding.Interop.Native.MaaController;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
+using static MaaFramework.Binding.Interop.Native.MaaController;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaWin32ControllerCreate"/>.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaWin32Controller : MaaController
 {
+    private readonly DesktopWindowInfo _debugInfo;
+    private readonly Win32ScreencapMethod _debugScreencapMethod;
+    private readonly Win32InputMethod _debugInputMethod;
+
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DebuggerDisplay => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ {nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethod = {_debugScreencapMethod}, InputMethod = {_debugInputMethod} }}";
+
     /// <summary>
     ///     Creates a <see cref="MaaWin32Controller"/> instance.
     /// </summary>
@@ -47,6 +60,9 @@ public class MaaWin32Controller : MaaController
         var handle = MaaWin32ControllerCreate(desktopWindow.Handle, (MaaWin32ScreencapMethod)screencapMethod, (MaaWin32InputMethod)inputMethod, MaaNotificationCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
 
+        _debugInfo = desktopWindow;
+        _debugScreencapMethod = screencapMethod;
+        _debugInputMethod = inputMethod;
 
         if (link == LinkOption.Start)
             LinkStartOnConstructed(check, desktopWindow, screencapMethod, inputMethod);

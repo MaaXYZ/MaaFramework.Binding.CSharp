@@ -1,4 +1,6 @@
-﻿namespace MaaFramework.Binding;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace MaaFramework.Binding;
 
 /// <summary>
 ///     A record providing properties of adb device information.
@@ -15,5 +17,5 @@ public record AdbDeviceInfo(
     string AdbSerial,
     AdbScreencapMethods ScreencapMethods,
     AdbInputMethods InputMethods,
-    string Config
+    [StringSyntax("Json")] string Config
 );

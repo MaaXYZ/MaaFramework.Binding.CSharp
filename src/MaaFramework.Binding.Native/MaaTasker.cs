@@ -16,7 +16,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
 {
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string DebuggerDisplay => $"{{{GetType().Name} {{ Disposed = {IsInvalid} }}}}";
+    private string DebuggerDisplay => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ {nameof(IsRunning)} = {IsRunning}, {nameof(IsInitialized)} = {IsInitialized}, {nameof(DisposeOptions)} = {DisposeOptions} }}";
 
     /// <summary>
     ///     Gets all maa tasker instances.
@@ -192,7 +194,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return (MaaJobStatus)MaaTaskerStatus(Handle, job.Id);
+        return ThrowOnInvalid && IsInvalid
+            ? MaaJobStatus.Invalid
+            : (MaaJobStatus)MaaTaskerStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -203,7 +207,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return (MaaJobStatus)MaaTaskerWait(Handle, job.Id);
+        return ThrowOnInvalid && IsInvalid
+            ? MaaJobStatus.Invalid
+            : (MaaJobStatus)MaaTaskerWait(Handle, job.Id);
     }
 
     /// <inheritdoc/>

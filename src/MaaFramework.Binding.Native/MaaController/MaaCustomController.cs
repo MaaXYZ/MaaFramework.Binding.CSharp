@@ -1,5 +1,7 @@
 ﻿using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaController;
 
 namespace MaaFramework.Binding;
@@ -7,8 +9,15 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaCustomControllerCreate"/>.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaCustomController : MaaController
 {
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DebuggerDisplay => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ {nameof(_api.Name)} = {_api.Name} }}";
+
     private readonly IMaaCustomController _api;
 
     /// <summary>

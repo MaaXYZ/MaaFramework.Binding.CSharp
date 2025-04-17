@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding;
 
@@ -20,7 +21,7 @@ public sealed record RecognitionDetail(
     string Algorithm,
     bool Hit,
     IMaaRectBuffer? HitBox,
-    string Detail,
+    [StringSyntax("Json")] string Detail,
     MaaImage? Raw,
     IList<MaaImage>? Draws
 ) : IDisposable

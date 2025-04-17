@@ -50,6 +50,9 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
     /// <inheritdoc/>
     public override string ToString()
     {
+        if (IsInvalid)
+            return $"Invalid {GetType().Name}";
+
         var info = GetInfo();
         return $"{GetType().Name}: {info.Width}x{info.Height} {{ {nameof(info.Channels)} = {info.Channels}, {nameof(info.Type)} = {info.Type} }}";
     }

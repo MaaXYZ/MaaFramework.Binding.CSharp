@@ -12,7 +12,7 @@ namespace MaaFramework.Binding;
 public class MaaJob(MaaId id, IMaaPost maa)
 {
     /// <inheritdoc/>
-    public override string ToString() => $"{GetType().Name} {{ {nameof(Status)} = {Status} }}";
+    public override string ToString() => $"{GetType().Name} {{ {nameof(Status)} = {Status}, {nameof(Id)} = {Id} }}";
 
     /// <summary>
     ///     Gets a MaaId.

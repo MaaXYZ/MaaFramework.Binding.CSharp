@@ -79,7 +79,7 @@ public class Test_IMaaResource
         Assert.AreEqual(
             MaaJobStatus.Succeeded, job.Wait());
         Assert.AreEqual(
-            "MaaJob { Status = Succeeded }", job.ToString());
+            $"MaaJob {{ Status = Succeeded, Id = {job.Id} }}", job.ToString());
     }
 
     [TestMethod]

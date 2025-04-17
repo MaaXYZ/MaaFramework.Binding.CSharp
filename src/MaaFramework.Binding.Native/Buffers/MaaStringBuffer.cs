@@ -11,7 +11,13 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaStringBuffer<MaaStringBufferHandle>, IMaaStringBufferStatic<MaaStringBufferHandle>
 {
     /// <inheritdoc/>
-    public override string ToString() => TryGetValue(out var str) ? str : string.Empty;
+    public override string ToString()
+    {
+        if (IsInvalid)
+            return string.Empty;
+
+        return TryGetValue(out var str) ? str : string.Empty;
+    }
 
     /// <inheritdoc/>
     public bool TryCopyTo(MaaStringBufferHandle bufferHandle) => MaaStringBufferSetExFromNint(

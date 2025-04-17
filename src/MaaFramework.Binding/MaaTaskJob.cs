@@ -4,7 +4,14 @@
 public class MaaTaskJob(MaaId id, IMaaTasker tasker) : MaaJob(id, tasker)
 {
     /// <inheritdoc/>
-    public override string ToString() => $"{GetType().Name} {{ {nameof(Status)} = {Status}, {nameof(TaskDetail.Entry)} = {this.QueryTaskDetail()?.Entry} }}";
+    public override string ToString()
+    {
+        if (Status == MaaJobStatus.Invalid)
+            return base.ToString();
+
+        var detail = this.QueryTaskDetail();
+        return $"{GetType().Name} {{ {nameof(detail.Status)} = {detail?.Status}, {nameof(detail.Entry)} = {detail?.Entry}, {nameof(Id)} = {Id} }}";
+    }
 
     /// <summary>
     ///     Gets the maa tasker.

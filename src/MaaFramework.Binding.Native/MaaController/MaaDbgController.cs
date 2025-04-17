@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaController;
 
 namespace MaaFramework.Binding;
@@ -6,8 +7,20 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaDbgControllerCreate"/>.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaDbgController : MaaController
 {
+    private readonly string _debugReadPath;
+    private readonly string _debugWritePath;
+    private readonly DbgControllerType _debugType;
+    private readonly string _debugConfig;
+
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DebuggerDisplay => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ ReadFrom = {_debugReadPath}, WriteTo = {_debugWritePath}, Type = {_debugType}, Config = {_debugConfig} }}";
+
     /// <summary>
     ///     Creates a <see cref="MaaDbgController"/> instance.
     /// </summary>
@@ -31,6 +44,11 @@ public class MaaDbgController : MaaController
 
         var handle = MaaDbgControllerCreate(readPath, writePath, (MaaDbgControllerType)type, config, MaaNotificationCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
+
+        _debugReadPath = readPath;
+        _debugWritePath = writePath;
+        _debugType = type;
+        _debugConfig = config;
 
         if (link == LinkOption.Start)
             LinkStartOnConstructed(check, readPath, writePath, type, config);

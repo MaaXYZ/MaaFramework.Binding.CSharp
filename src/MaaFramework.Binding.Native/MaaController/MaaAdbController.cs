@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaController;
 
 namespace MaaFramework.Binding;
@@ -6,8 +7,18 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaAdbControllerCreate"/>.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaAdbController : MaaController
 {
+    private readonly AdbDeviceInfo _debugInfo;
+    private readonly string _debugAgentPath;
+
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    private string DebuggerDisplay => IsInvalid
+        ? $"Invalid {GetType().Name}"
+        : $"{GetType().Name} {{ {nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.AdbSerial)} = {_debugInfo.AdbSerial}, {nameof(_debugInfo.ScreencapMethods)} = {_debugInfo.ScreencapMethods}, {nameof(_debugInfo.InputMethods)} = {_debugInfo.InputMethods}, AgentPath = {_debugAgentPath} }}";
+
     /// <summary>
     ///     Creates a <see cref="MaaAdbController"/> instance.
     /// </summary>
@@ -54,8 +65,10 @@ public class MaaAdbController : MaaController
         var handle = MaaAdbControllerCreate(adbDevice.AdbPath, adbDevice.AdbSerial, (MaaAdbScreencapMethod)adbDevice.ScreencapMethods, (MaaAdbInputMethod)adbDevice.InputMethods, adbDevice.Config, agentPath, MaaNotificationCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
 
+        _debugInfo = adbDevice;
+        _debugAgentPath = agentPath;
 
         if (link == LinkOption.Start)
-            LinkStartOnConstructed(check, adbDevice);
+            LinkStartOnConstructed(check, adbDevice, _debugAgentPath);
     }
 }
