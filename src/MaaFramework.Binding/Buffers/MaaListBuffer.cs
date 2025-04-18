@@ -58,7 +58,7 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     /// <inheritdoc/>
     public bool TryCopyTo(IMaaListBuffer<T> buffer) => buffer switch
     {
-        MaaListBuffer<THandle, T> bufferWithHandle => TryCopyTo(bufferWithHandle.Handle),
+        MaaListBuffer<THandle, T> bufferWithHandle when GetType().IsInstanceOfType(buffer) => TryCopyTo(bufferWithHandle.Handle),
         null => false,
         _ => MaaSizeCount <= MaaSize.MaxValue - buffer.MaaSizeCount
             && this.All(buffer.TryAdd),
