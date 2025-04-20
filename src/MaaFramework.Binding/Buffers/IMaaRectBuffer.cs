@@ -42,6 +42,12 @@ public interface IMaaRectBuffer : IMaaBuffer<IMaaRectBuffer>
     /// <inheritdoc cref="IMaaRectBufferStatic{THandle}.TryGetValues(THandle, out int, out int, out int, out int)"/>
     bool TryGetValues(out int x, out int y, out int width, out int height);
 
+    /// <summary>
+    ///     Deconstructs the current <see cref="IMaaRectBuffer"/>.
+    /// </summary>
+    /// <inheritdoc cref="IMaaRectBufferStatic{THandle}.TryGetValues(THandle, out int, out int, out int, out int)"/>
+    void Deconstruct(out int x, out int y, out int width, out int height);
+
     /// <inheritdoc cref="IMaaRectBufferStatic{THandle}.GetValues(THandle)"/>
     RectInfo GetValues();
 }

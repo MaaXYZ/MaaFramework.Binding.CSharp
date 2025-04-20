@@ -1156,5 +1156,6 @@ internal sealed class TestRectBuffer : IMaaRectBuffer
     public int Height => throw new NotImplementedException();
     public bool TrySetValues(int x, int y, int width, int height) => throw new NotImplementedException();
     public bool TryGetValues(out int x, out int y, out int width, out int height) => throw new NotImplementedException();
+    public void Deconstruct(out int x, out int y, out int width, out int height) => throw new NotImplementedException();
     public RectInfo GetValues() => throw new NotImplementedException();
 }

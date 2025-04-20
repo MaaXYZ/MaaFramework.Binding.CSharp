@@ -144,6 +144,10 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     }
 
     /// <inheritdoc/>
+    public void Deconstruct(out int x, out int y, out int width, out int height)
+        => TryGetValues(Handle, out x, out y, out width, out height);
+
+    /// <inheritdoc/>
     public RectInfo GetValues()
         => GetValues(Handle);
 
