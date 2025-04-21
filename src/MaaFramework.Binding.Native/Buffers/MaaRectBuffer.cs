@@ -146,34 +146,4 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     /// <inheritdoc/>
     public void Deconstruct(out int x, out int y, out int width, out int height)
         => TryGetValues(Handle, out x, out y, out width, out height);
-
-    /// <inheritdoc/>
-    public RectInfo GetValues()
-        => GetValues(Handle);
-
-    /// <inheritdoc/>
-    public static RectInfo GetValues(MaaRectHandle handle) => new
-    (
-        X: MaaRectGetX(handle),
-        Y: MaaRectGetY(handle),
-        Width: MaaRectGetW(handle),
-        Height: MaaRectGetH(handle)
-    );
-
-    /// <inheritdoc/>
-    public static RectInfo GetValues(Func<MaaRectHandle, bool> func)
-    {
-        ArgumentNullException.ThrowIfNull(func);
-        var handle = MaaRectCreate();
-        try
-        {
-            return func.Invoke(handle) && TryGetValues(handle, out var x, out var y, out var width, out var height)
-                ? new(X: x, Y: y, Width: width, Height: height)
-                : new(0, 0, 0, 0);
-        }
-        finally
-        {
-            MaaRectDestroy(handle);
-        }
-    }
 }

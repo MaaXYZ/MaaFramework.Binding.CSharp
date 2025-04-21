@@ -47,9 +47,6 @@ public interface IMaaRectBuffer : IMaaBuffer<IMaaRectBuffer>
     /// </summary>
     /// <inheritdoc cref="IMaaRectBufferStatic{THandle}.TryGetValues(THandle, out int, out int, out int, out int)"/>
     void Deconstruct(out int x, out int y, out int width, out int height);
-
-    /// <inheritdoc cref="IMaaRectBufferStatic{THandle}.GetValues(THandle)"/>
-    RectInfo GetValues();
 }
 
 /// <summary>
@@ -101,18 +98,4 @@ public interface IMaaRectBufferStatic<THandle>
     /// <param name="writeBuffer">The function used to write the values to the buffer.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     static abstract bool TryGetValues(out int x, out int y, out int width, out int height, Func<THandle, bool> writeBuffer);
-
-    /// <summary>
-    ///     Gets the rect info from a MaaRectBuffer.
-    /// </summary>
-    /// <param name="handle">The MaaRectBufferHandle.</param>
-    /// <returns>The info including x, y, width, height.</returns>
-    static abstract RectInfo GetValues(THandle handle);
-
-    /// <summary>
-    ///     Gets the rect info from a function using MaaRectBuffer.
-    /// </summary>
-    /// <param name="writeBuffer">The function used to write the rect info to the buffer.</param>
-    /// <returns>The info including x, y, width, height.</returns>
-    static abstract RectInfo GetValues(Func<THandle, bool> writeBuffer);
 }

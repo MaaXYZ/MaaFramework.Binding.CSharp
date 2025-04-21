@@ -504,8 +504,6 @@ public class Test_Buffers
             buffer.TryCopyTo(buffer));
         Assert.IsTrue(
             buffer.TryGetValues(out var x, out var y, out var width, out var height));
-        Assert.AreEqual(
-            new RectInfo(X: 0, Y: 0, Width: 0, Height: 0), buffer.GetValues());
         Assert.IsTrue(
             buffer.TrySetValues(x, y, width, height));
         if (type == MaaTypes.Native)
@@ -533,8 +531,6 @@ public class Test_Buffers
             buffer.TryCopyTo(buffer));
         Assert.IsTrue(
             buffer.TryGetValues(out x, out y, out width, out height));
-        Assert.AreEqual(
-            new RectInfo(X: 1, Y: 2, Width: 3, Height: 4), buffer.GetValues());
         Assert.IsTrue(
             buffer.TrySetValues(x, y, width, height));
         if (type == MaaTypes.Native)
@@ -560,9 +556,6 @@ public class Test_Buffers
             CollectionAssert.AreEqual(
                 (int[])[1, 2, 3, 4],
                 (int[])[funcX, funcY, funcWidth, funcHeight]);
-            Assert.AreEqual(
-                new RectInfo(1, 2, 3, 4),
-                MaaRectBuffer.GetValues(handle => MaaRectBuffer.TrySetValues(handle, 1, 2, 3, 4)));
 
             Assert.IsTrue(
                 MaaRectBuffer.TrySetValues(1, 2, 3, 4, handle
@@ -1157,5 +1150,4 @@ internal sealed class TestRectBuffer : IMaaRectBuffer
     public bool TrySetValues(int x, int y, int width, int height) => throw new NotImplementedException();
     public bool TryGetValues(out int x, out int y, out int width, out int height) => throw new NotImplementedException();
     public void Deconstruct(out int x, out int y, out int width, out int height) => throw new NotImplementedException();
-    public RectInfo GetValues() => throw new NotImplementedException();
 }
