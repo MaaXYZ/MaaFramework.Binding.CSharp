@@ -104,7 +104,7 @@ public class Test_Buffers
         image.Dispose();
         Assert.IsTrue(
             image.IsInvalid);
-        _ = Assert.ThrowsException<InvalidOperationException>(() =>
+        _ = Assert.ThrowsException<ObjectDisposedException>(() =>
             image.TryCache());
     }
 
@@ -128,7 +128,7 @@ public class Test_Buffers
             "MaaImage: 1920x1080 { Channels = 3, Type = 16 }", image.ToString());
         Assert.AreEqual(
             new ImageInfo(Width: 1920, Height: 1080, Channels: 3, Type: 16), image.GetInfo());
-        _ = Assert.ThrowsException<InvalidOperationException>(() =>
+        _ = Assert.ThrowsException<ObjectDisposedException>(() =>
             image.Buffer.IsEmpty);
     }
 

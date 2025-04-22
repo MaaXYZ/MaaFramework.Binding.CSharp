@@ -11,7 +11,7 @@ public interface IMaaDisposableHandle<out T> : IMaaDisposable
     /// <remarks>
     ///     Throws if handle is invalid and "ThrowOnInvalid" is <see langword="true"/>.
     /// </remarks>
-    /// <exception cref="InvalidOperationException">The handle is invalid.</exception>
+    /// <exception cref="ObjectDisposedException">The handle is invalid.</exception>
     T Handle { get; }
 
     /// <summary>
