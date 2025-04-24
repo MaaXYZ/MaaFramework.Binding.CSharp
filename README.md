@@ -173,11 +173,13 @@ internal sealed class MyAct : IMaaCustomAction
 }
 ```
 
+#### Additional Resources
+- To view implementation examples with identical functionality to the main MaaFramework repository, visit the [Sample Directory](./sample).
+- For code examples covering the vast majority of framework features, explore the [Unit Test Suite](./src/MaaFramework.Binding.UnitTests).
+
 ## Best Practices
 - [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) MFA Task Manager
   A Universal GUI based on MAA's new architecture. Powered by MaaFramework.
-
-- See [unit tests](./src/MaaFramework.Binding.UnitTests) for more examples
 
 ## Documentation
 

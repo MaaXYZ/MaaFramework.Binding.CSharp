@@ -173,11 +173,13 @@ internal sealed class MyAct : IMaaCustomAction
 }
 ```
 
+#### 更多资源
+- 要查看与 MaaFramework 主仓库功能一致的实现示例，请访问 [示例目录](./sample)。
+- 如需获取覆盖框架绝大多数功能的示例代码，请参考 [单元测试集](./src/MaaFramework.Binding.UnitTests)。
+
 ## 最佳实践
 - [MFAWPF](https://github.com/SweetSmellFox/MFAWPF) MFA 任务管理器
   基于 MAA 全新架构的 通用 GUI。 由 MaaFramework 强力驱动！
-
-- 更多示例请查看 [单元测试](./src/MaaFramework.Binding.UnitTests)
 
 ## 文档
 
