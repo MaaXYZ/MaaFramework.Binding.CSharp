@@ -207,7 +207,7 @@ public abstract class MaaController : MaaCommon, IMaaController<nint>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerConnected"/>.
     /// </remarks>
-    public bool LinkStop()
+    public bool IsConnected
         => MaaControllerConnected(Handle);
 
     /// <inheritdoc/>

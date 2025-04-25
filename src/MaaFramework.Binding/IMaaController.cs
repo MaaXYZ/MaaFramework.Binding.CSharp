@@ -15,7 +15,7 @@ public interface IMaaController<T> : IMaaController, IMaaDisposableHandle<T>;
 public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaaPost, IMaaDisposable
 {
     /// <summary>
-    ///     Connects the address specified by the constructor.
+    ///     Connects the device specified by the constructor.
     /// </summary>
     /// <returns>A connection <see cref="MaaJob"/>.</returns>
     MaaJob LinkStart();
@@ -100,10 +100,10 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob Screencap();
 
     /// <summary>
-    ///     Ends the connection of the address specified by the constructor.
+    ///     Gets whether the <see cref="IMaaController"/> is connected to the device specified by the constructor.
     /// </summary>
-    /// <returns><see langword="true"/> if the connection was ended successfully; otherwise, <see langword="false"/>.</returns>
-    bool LinkStop();
+    /// <returns><see langword="true"/> if the <see cref="IMaaController"/> is connected to the device; otherwise, <see langword="false"/>.</returns>
+    bool IsConnected { get; }
 
     /// <summary>
     ///     Gets the cached image.

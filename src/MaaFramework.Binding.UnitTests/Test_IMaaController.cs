@@ -177,14 +177,14 @@ public class Test_IMaaController
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(TestLinkData))]
-    public void Interface_LinkStart_LinkStop(MaaTypes type, IMaaController maaController)
+    public void Interface_LinkStart_IsConnected(MaaTypes type, IMaaController maaController)
     {
         Assert.IsNotNull(maaController);
 
-        Assert.IsFalse(maaController.LinkStop());
+        Assert.IsFalse(maaController.IsConnected);
         var job = maaController.LinkStart();
         Interface_IMaaPost_Success(job);
-        Assert.IsTrue(maaController.LinkStop());
+        Assert.IsTrue(maaController.IsConnected);
     }
 
     [TestMethod]
