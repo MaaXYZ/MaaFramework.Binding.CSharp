@@ -41,7 +41,7 @@ public static class AdbDeviceInfoExtensions
                 adbPath ?? info.AdbPath,
                 adbSerial ?? info.AdbSerial,
                 screencapMethods ?? info.ScreencapMethods,
-                inputMethods ?? AdbInputMethods.None,
+                inputMethods ?? info.InputMethods,
                 config ?? info.Config
             ),
             agentPath,

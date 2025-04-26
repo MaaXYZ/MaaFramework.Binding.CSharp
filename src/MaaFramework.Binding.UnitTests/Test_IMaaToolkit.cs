@@ -74,6 +74,14 @@ public class Test_IMaaToolkit
             .LinkStart()
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, devices[0].AdbPath, devices[0].AdbSerial);
+
+#if MAA_WIN32
+        using var optionalArgumentDefaultValuesTest = type switch
+        {
+            MaaTypes.Native => devices[0].ToAdbController(),
+            _ => throw new NotImplementedException(),
+        };
+#endif
     }
 
 #if MAA_WIN32 && !GITHUB_ACTIONS
@@ -106,6 +114,16 @@ public class Test_IMaaToolkit
             .LinkStart()
             .Wait()
             .ThrowIfNot(MaaJobStatus.Succeeded, MaaJobStatusException.MaaControllerMessage, windows[0].Handle);
+
+#if MAA_WIN32
+        using var optionalArgumentDefaultValuesTest = type switch
+        {
+            MaaTypes.Native => windows[0].ToWin32Controller(
+                screencapMethod: Win32ScreencapMethod.GDI,
+                inputMethod: Win32InputMethod.SendMessage),
+            _ => throw new NotImplementedException(),
+        };
+#endif
     }
 #endif
 
