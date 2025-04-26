@@ -1,3 +1,42 @@
+## v3.0.4
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v2.3.1...v3.0.4
+
+### Breaking changes
+
+- [Breaking change] fix: rename to `IMaaController.IsConnected` from `LinkStop()` @moomiji
+- [Breaking change] refactor: modify member naming (#8) @moomiji
+- [Breaking change] refactor: buffer wrapper (#8) @moomiji
+- [Breaking change] chore: update interop to framework 3.0.1 (#13) @MistEO
+- feat: modify target framework net8.0 -> net9.0 @moomiji
+
+### New features
+
+- IMaaRectBuffer.Deconstruct() @moomiji
+- (Binding.Extensions) NotificationHandlerRegistry @moomiji
+- identify json using StringSyntaxAttribute @moomiji
+
+### Fix
+
+- check for invalid MaaId (#11) @moomiji
+- buffer boundary judgment @moomiji
+- error entry point in MaaStringBuffer.CopyTo() @moomiji
+
+### Other
+
+- change invalid exception to ObjectDisposedException @moomiji
+- check for validity in `DebuggerDisplay` `ToString` `IMaaPost` @moomiji
+- refactor controller constructors @moomiji
+- implement SRP for ReleaseHandle @moomiji
+- improve README content @moomiji
+- README for MaaFramework.Binding.Extensions @moomiji
+- update articles @moomiji
+- optimize "try" handling statements @moomiji
+- "ThrowIf" extensions return valid value @moomiji
+- refactor: generic Handle class @moomiji
+- update interop to framework 3.0.4 @moomiji
+- modify package description @moomiji
+
 ## v2.3.1
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v2.1.2...v2.3.1
