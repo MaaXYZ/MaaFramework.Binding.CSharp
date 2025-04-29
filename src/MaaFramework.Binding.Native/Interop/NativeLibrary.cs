@@ -23,7 +23,7 @@ internal static partial class NativeLibrary
             throw new InvalidOperationException("NativeLibrary is already loaded.");
 
         s_isAgentServer = isAgentServer;
-        s_searchPath.AddRange(paths.Where(path => !string.IsNullOrWhiteSpace(path)));
+        s_searchPath.AddRange(paths);
     }
 
     public static IntPtr NativeAssemblyResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath) => libraryName switch
@@ -73,21 +73,23 @@ internal static partial class NativeLibrary
 
     private static IEnumerable<string> GetRuntimesPaths(string libraryFullName)
     {
-        var args1 = s_searchPath.Concat(
+        var searchPaths = s_searchPath.Concat(
         [
-            Path.GetDirectoryName(s_assembly.Location) ?? "./",
+            Environment.GetEnvironmentVariable("MAAFW_BINARY_PATH"),
+            Path.GetDirectoryName(s_assembly.Location),
             Environment.CurrentDirectory,
-        ]);
-        var args2 = new string[]
+        ]).Where(path => !string.IsNullOrWhiteSpace(path));
+
+        var runtimePaths = new[]
         {
-            $"/runtimes/{GetArchitectureName()}/native/",
-            "/"
+            $"./runtimes/{GetArchitectureName()}/native/",
+            "./"
         };
 
-        return from arg1 in args1
-               from arg2 in args2
+        return from searchPath in searchPaths
+               from runtimePath in runtimePaths
                select Path.GetFullPath(
-                   string.Concat(arg1, arg2, libraryFullName));
+                   Path.Combine(searchPath, runtimePath, libraryFullName));
     }
 
 #pragma warning disable IDE0072 // 添加缺失的事例
