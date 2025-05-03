@@ -5,25 +5,20 @@
         <PackageReference Include="MSTest.TestAdapter" />
         <PackageReference Include="MSTest.TestFramework" />
         <PackageReference Include="SixLabors.ImageSharp" />
-    </ItemGroup>
 
-    <ItemGroup>
+        <ProjectReference Include="..\MaaFramework\MaaFramework.csproj" />
+        <ProjectReference Include="..\MaaFramework.Binding.Extensions\MaaFramework.Binding.Extensions.csproj" />
+
         <None Include="..\Common\TestParam.runsettings" />
         <None Include="SampleResource\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\MaaFramework\MaaFramework.csproj" />
-        <ProjectReference Include="..\MaaFramework.Binding.Extensions\MaaFramework.Binding.Extensions.csproj" />
-    </ItemGroup>
-
     <PropertyGroup>
+        <GenerateProgramFile>false</GenerateProgramFile>
         <NoWarn>$(NoWarn);S1121,S1656,S1199,IDE0022,IDE0060,IDE0072</NoWarn>
-    </PropertyGroup>
 
-    <PropertyGroup>
         <DefineConstants>$(DefineConstants);MAA_NATIVE;</DefineConstants>
     </PropertyGroup>
 

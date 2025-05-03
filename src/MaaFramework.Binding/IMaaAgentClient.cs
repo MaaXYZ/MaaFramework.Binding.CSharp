@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using System.Diagnostics;
 
 namespace MaaFramework.Binding;
 
@@ -14,9 +15,9 @@ public interface IMaaAgentClient<out T> : IMaaAgentClient, IMaaDisposableHandle<
 public interface IMaaAgentClient : IMaaDisposable
 {
     /// <summary>
-    ///     Gets or sets whether disposes the <see cref="Resource"/> when <see cref="IDisposable.Dispose"/> was invoked.
+    ///     Gets the unique identifier used to communicate with the agent server.
     /// </summary>
-    DisposeOptions DisposeOptions { get; set; }
+    string Id { get; }
 
     /// <summary>
     ///     Gets or sets a resource that binds to the <see cref="IMaaAgentClient"/>.
@@ -26,21 +27,45 @@ public interface IMaaAgentClient : IMaaDisposable
     IMaaResource Resource { get; set; }
 
     /// <summary>
-    ///     Creates a socket connection with the specified identifier.
-    /// </summary>
-    /// <param name="identifier">The connection identifier.</param>
-    /// <returns><see langword="true"/> if the socket was created successfully; otherwise, <see langword="false"/>.</returns>
-    string? CreateSocket(string identifier = "");
-
-    /// <summary>
     ///     Starts the connection.
     /// </summary>
     /// <returns><see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.</returns>
     bool LinkStart();
 
     /// <summary>
+    ///     Starts the agent server process using the specified <see cref="ProcessStartInfo"/> and connects to the agent server.
+    /// </summary>
+    /// <param name="info">The process start info.</param>
+    /// <returns><see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.</returns>
+    bool LinkStart(ProcessStartInfo info);
+
+    /// <summary>
+    ///     Starts the agent server process using the specified method and connects to the agent server.
+    /// </summary>
+    /// <param name="method">The delegate method that defines how to start the agent server process.</param>
+    /// <returns><see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.</returns>
+    bool LinkStart(AgentServerStartupMethod method);
+
+    /// <summary>
     ///     Stops the connection.
     /// </summary>
     /// <returns><see langword="true"/> if the connection was stopped successfully; otherwise, <see langword="false"/>.</returns>
     bool LinkStop();
+
+    /// <summary>
+    ///     Represents a method that starts the agent server process.
+    /// </summary>
+    /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
+    /// <param name="nativeAssemblyDirectory">The directory path where the <see cref="MaaFramework"/> native assemblies are located.</param>
+    /// <returns>
+    ///     A <see cref="Process"/> instance representing the started agent server process, 
+    ///     or <see langword="null"/> if the method is used to synchronize with unmanaged processes.
+    /// </returns>
+    delegate Process? AgentServerStartupMethod(string identifier, string nativeAssemblyDirectory);
+
+    /// <summary>
+    ///     Gets the agent server process managed by <see cref="IMaaAgentClient"/> from method LinkStart.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">The process is unavailable or not managed by <see cref="IMaaAgentClient"/>.</exception>
+    Process AgentServerProcess { get; }
 }
