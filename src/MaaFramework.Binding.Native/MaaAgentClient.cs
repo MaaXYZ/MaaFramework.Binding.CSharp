@@ -13,52 +13,71 @@ namespace MaaFramework.Binding;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAgentClient<MaaAgentClientHandle>
 {
-    private string? _debugSocketId;
+    private bool _isConnected;
+    private Process? _agentServerProcess;
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ SocketId = {_debugSocketId}, {nameof(DisposeOptions)} = {DisposeOptions} }}";
+        : $"{GetType().Name} {{ Id = {Id}, IsConnected = {_isConnected} }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
     /// </summary>
+    /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientCreate"/>.
     /// </remarks>
-    public MaaAgentClient()
+    public MaaAgentClient(string identifier = "")
         : base(invalidHandleValue: MaaAgentClientHandle.Zero)
     {
         var handle = MaaAgentClientCreate();
         SetHandle(handle, needReleased: true);
+        Id = CreateSocket(identifier).ThrowIfNull();
+
+        if (!string.IsNullOrEmpty(identifier))
+            _ = Id.ThrowIfNotEquals(identifier);
     }
 
+    /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
     /// <param name="resource">The resource.</param>
-    /// <param name="disposeOptions">The dispose options.</param>
-    /// <inheritdoc cref="MaaAgentClient()"/>
+    /// <inheritdoc cref="MaaAgentClient(string)"/>
     [SetsRequiredMembers]
-    public MaaAgentClient(MaaResource resource, DisposeOptions disposeOptions)
-        : this()
+    public MaaAgentClient(string identifier, MaaResource resource)
+        : this(identifier)
     {
         Resource = resource;
-        DisposeOptions = disposeOptions;
     }
 
+    /// <inheritdoc cref="MaaAgentClient(string, MaaResource)"/>
+    [SetsRequiredMembers]
+    public MaaAgentClient(MaaResource resource)
+        : this("", resource)
+    {
+    }
+
+    /// <summary>
+    ///     Creates a <see cref="MaaAgentClient"/> instance.
+    /// </summary>
+    /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
+    /// <param name="resource">The resource.</param>
+    /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
+    public static MaaAgentClient Create(string identifier, MaaResource resource)
+        => new(identifier, resource);
+
+    /// <inheritdoc cref="Create(string, MaaResource)"/>
+    public static MaaAgentClient Create(MaaResource resource)
+        => new(resource);
+
     /// <inheritdoc/>
-    public required DisposeOptions DisposeOptions { get; set; }
+    public string Id { get; }
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
-        // Cannot destroy Instance before disposing Resource.
-
-        if (DisposeOptions.HasFlag(DisposeOptions.Resource))
-        {
-            Resource.Dispose();
-        }
-
         base.Dispose(disposing);
+        _agentServerProcess?.Dispose();
     }
 
     /// <inheritdoc/>
@@ -90,15 +109,19 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         }
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    ///     Creates a socket connection with the specified identifier.
+    /// </summary>
+    /// <param name="identifier">The specified identifier.</param>
+    /// <returns><see langword="true"/> if the socket was created successfully; otherwise, <see langword="false"/>.</returns>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientCreateSocket"/>.
     /// </remarks>
-    public string? CreateSocket(string identifier = "")
-        => MaaStringBuffer.TryGetValue(out _debugSocketId, handle
+    protected string? CreateSocket(string identifier = "")
+        => MaaStringBuffer.TryGetValue(out var socketId, handle
             => MaaStringBuffer.TrySetValue(handle, identifier)
             && MaaAgentClientCreateSocket(Handle, handle))
-        ? _debugSocketId
+        ? socketId
         : null;
 
     /// <inheritdoc/>
@@ -106,12 +129,51 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
     /// </remarks>
     public bool LinkStart()
-        => MaaAgentClientConnect(Handle);
+        => _isConnected = MaaAgentClientConnect(Handle);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
+    /// </remarks>
+    public bool LinkStart(ProcessStartInfo info)
+    {
+        _agentServerProcess = Process.Start(info);
+        return LinkStart();
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
+    /// </remarks>
+    public bool LinkStart(IMaaAgentClient.AgentServerStartupMethod method)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(Id);
+        ArgumentException.ThrowIfNullOrEmpty(NativeBindingInfo.NativeAssemblyDirectory);
+
+        _agentServerProcess = method.Invoke(Id, NativeBindingInfo.NativeAssemblyDirectory);
+        return LinkStart();
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientDisconnect"/>.
     /// </remarks>
     public bool LinkStop()
-        => MaaAgentClientDisconnect(Handle);
+    {
+        if (_isConnected)
+        {
+            _isConnected = false;
+            if (!MaaAgentClientDisconnect(Handle))
+            {
+                _isConnected = true;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public Process AgentServerProcess => _agentServerProcess
+        ?? throw new InvalidOperationException($"The agent server process is unavailable or not managed by {nameof(MaaAgentClient)}.");
 }
