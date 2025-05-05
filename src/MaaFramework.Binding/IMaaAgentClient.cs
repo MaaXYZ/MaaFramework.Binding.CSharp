@@ -34,17 +34,36 @@ public interface IMaaAgentClient : IMaaDisposable
 
     /// <summary>
     ///     Starts the agent server process using the specified <see cref="ProcessStartInfo"/> and connects to the agent server.
+    ///     <para>To start a new process, the current <see cref="AgentServerProcess"/> must have exited first.</para>
     /// </summary>
     /// <param name="info">The process start info.</param>
+    /// <param name="cancellationToken">An optional token to cancel the asynchronous operation waiting for the connection.</param>
     /// <returns><see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.</returns>
-    bool LinkStart(ProcessStartInfo info);
+    /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> has had cancellation requested.</exception>
+    bool LinkStart(ProcessStartInfo info, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Starts the agent server process using the specified method and connects to the agent server.
+    ///     <para>To start a new process, the current <see cref="AgentServerProcess"/> must have exited first.</para>
     /// </summary>
     /// <param name="method">The delegate method that defines how to start the agent server process.</param>
+    /// <param name="cancellationToken">An optional token to cancel the asynchronous operation waiting for the connection.</param>
     /// <returns><see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.</returns>
-    bool LinkStart(AgentServerStartupMethod method);
+    /// <exception cref="InvalidOperationException">One or more parameters required by the <paramref name="method"/> are invalid.</exception>
+    /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> has had cancellation requested.</exception>
+    bool LinkStart(AgentServerStartupMethod method, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Starts the connection asynchronously unless the process has exited.
+    /// </summary>
+    /// <param name="process">The process to monitor for exit status.</param>
+    /// <param name="cancellationToken">An optional token to cancel the asynchronous operation waiting for the connection.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation. The task result contains 
+    ///     <see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> has had cancellation requested.</exception>
+    Task<bool> LinkStartUnlessProcessExit(Process process, CancellationToken cancellationToken);
 
     /// <summary>
     ///     Stops the connection.
@@ -58,8 +77,7 @@ public interface IMaaAgentClient : IMaaDisposable
     /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
     /// <param name="nativeAssemblyDirectory">The directory path where the <see cref="MaaFramework"/> native assemblies are located.</param>
     /// <returns>
-    ///     A <see cref="Process"/> instance representing the started agent server process, 
-    ///     or <see langword="null"/> if the method is used to synchronize with unmanaged processes.
+    ///     A new <see cref="Process"/> that is associated with the process resource, or <see langword="null"/> if no process resource is started.
     /// </returns>
     delegate Process? AgentServerStartupMethod(string identifier, string nativeAssemblyDirectory);
 
