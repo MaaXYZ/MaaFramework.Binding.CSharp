@@ -77,7 +77,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        _agentServerProcess?.Dispose();
+        KillAndDisposeAgentServerProcess();
     }
 
     /// <inheritdoc/>
@@ -135,23 +135,74 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
     /// </remarks>
-    public bool LinkStart(ProcessStartInfo info)
+    public bool LinkStart(ProcessStartInfo info, CancellationToken cancellationToken = default)
     {
-        _agentServerProcess = Process.Start(info);
-        return LinkStart();
+        if (_agentServerProcess is null or { HasExited: true })
+        {
+            _agentServerProcess?.Dispose();
+            _agentServerProcess = Process.Start(info);
+
+            if (_agentServerProcess is null or { HasExited: true })
+                return false;
+        }
+
+        return LinkStartUnlessProcessExit(_agentServerProcess, cancellationToken).GetAwaiter().GetResult();
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
     /// </remarks>
-    public bool LinkStart(IMaaAgentClient.AgentServerStartupMethod method)
+    public bool LinkStart(IMaaAgentClient.AgentServerStartupMethod method, CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrEmpty(Id);
-        ArgumentException.ThrowIfNullOrEmpty(NativeBindingInfo.NativeAssemblyDirectory);
+        if (_agentServerProcess is null or { HasExited: true })
+        {
+            if (string.IsNullOrEmpty(Id) || string.IsNullOrEmpty(NativeBindingInfo.NativeAssemblyDirectory))
+            {
+                throw new InvalidOperationException(
+                    $"The {nameof(Id)}({Id ?? "<null>"})" +
+                    $" or {nameof(NativeBindingInfo.NativeAssemblyDirectory)}({NativeBindingInfo.NativeAssemblyDirectory ?? "<null>"})" +
+                    $" is invalid.");
+            }
 
-        _agentServerProcess = method.Invoke(Id, NativeBindingInfo.NativeAssemblyDirectory);
-        return LinkStart();
+            _agentServerProcess?.Dispose();
+            _agentServerProcess = method.Invoke(Id, NativeBindingInfo.NativeAssemblyDirectory);
+
+            if (_agentServerProcess is null or { HasExited: true })
+                return false;
+        }
+
+        return LinkStartUnlessProcessExit(_agentServerProcess, cancellationToken).GetAwaiter().GetResult();
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> LinkStartUnlessProcessExit(Process process, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(process);
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        if (process.HasExited)
+            return false;
+
+        var serverExitTask = process.WaitForExitAsync(cts.Token);
+        var linkStartTask = Task.Run(LinkStart, cts.Token);
+        var completedTask = await Task.WhenAny(linkStartTask, serverExitTask).ConfigureAwait(false);
+
+        try
+        {
+            cts.Token.ThrowIfCancellationRequested();
+            if (completedTask == serverExitTask)
+                return false;
+
+            return linkStartTask.Result;
+        }
+        finally
+        {
+#if NET8_0_OR_GREATER
+            await cts.CancelAsync();
+#else
+            cts.Cancel();
+#endif
+        }
     }
 
     /// <inheritdoc/>
@@ -175,5 +226,20 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
 
     /// <inheritdoc/>
     public Process AgentServerProcess => _agentServerProcess
-        ?? throw new InvalidOperationException($"The agent server process is unavailable or not managed by {nameof(MaaAgentClient)}.");
+            ?? throw new InvalidOperationException($"The agent server process is unavailable or not managed by {nameof(MaaAgentClient)}.");
+
+    private void KillAndDisposeAgentServerProcess()
+    {
+        if (_agentServerProcess is null)
+            return;
+
+        if (!_agentServerProcess.HasExited)
+        {
+            _agentServerProcess.Kill(entireProcessTree: true);
+            _agentServerProcess.WaitForExit();
+        }
+
+        _agentServerProcess.Dispose();
+        _agentServerProcess = null;
+    }
 }
