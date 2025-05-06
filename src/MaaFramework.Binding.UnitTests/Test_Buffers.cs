@@ -22,9 +22,9 @@ public class Test_Buffers
                 new MaaStringBuffer(),
                 new MaaImageListBuffer(),
                 new MaaStringListBuffer(),
-                (AdbDeviceListBuffer)new MaaToolkit().AdbDevice.Find(),
+                (AdbDeviceListBuffer)MaaToolkit.Shared.AdbDevice.Find(),
 #if MAA_WIN32
-                (DesktopWindowListBuffer)new MaaToolkit().Desktop.Window.Find(),
+                (DesktopWindowListBuffer)MaaToolkit.Shared.Desktop.Window.Find(),
 #endif
             ]
         },

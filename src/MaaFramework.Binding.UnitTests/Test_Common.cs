@@ -27,7 +27,7 @@ public static class Common
 #if GITHUB_ACTIONS // use environment "AdbPath"
         AdbDeviceInfo[] devices = [];
 #else
-        var devices = new MaaToolkit().AdbDevice.Find();
+        var devices = MaaToolkit.Shared.AdbDevice.Find();
 #endif
 
         // 请修改 TestParam.runsettings，并在测试资源管理器——设置——配置运行设置
@@ -52,8 +52,8 @@ public static class Common
     {
         ArgumentNullException.ThrowIfNull(testContext);
 
-        _ = new MaaUtility().SetOption(GlobalOption.LogDir, DebugPath);
-        _ = new MaaUtility().SetOption(GlobalOption.StdoutLevel, LoggingLevel.Off);
+        _ = MaaUtility.Shared.SetOptionLogDir(DebugPath);
+        _ = MaaUtility.Shared.SetOptionStdoutLevel(LoggingLevel.Off);
 
         InitializeInfo(testContext);
     }

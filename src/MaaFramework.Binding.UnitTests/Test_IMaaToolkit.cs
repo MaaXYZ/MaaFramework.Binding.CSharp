@@ -12,7 +12,7 @@ public class Test_IMaaToolkit
     public static Dictionary<MaaTypes, object> NewData => new()
     {
 #if MAA_NATIVE
-        { MaaTypes.Native, new MaaToolkit() },
+        { MaaTypes.Native, MaaToolkit.Shared },
 #endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;

@@ -8,6 +8,11 @@ namespace MaaFramework.Binding;
 /// </summary>
 public class MaaUtility : IMaaUtility
 {
+    /// <summary>
+    ///    Gets the shared <see cref="MaaUtility"/> instance.
+    /// </summary>
+    public static MaaUtility Shared { get; } = new();
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaVersion"/>.
