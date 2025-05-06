@@ -35,8 +35,8 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
         Resource = new MaaResource(MaaTaskerGetResource(handle));
         Controller = new MaaController(MaaTaskerGetController(handle));
         DisposeOptions = DisposeOptions.None;
-        Toolkit = new MaaToolkit();
-        Utility = new MaaUtility();
+        Toolkit = MaaToolkit.Shared;
+        Utility = MaaUtility.Shared;
     }
 
     /// <summary>
@@ -54,8 +54,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
             throw new InvalidOperationException($"This {nameof(MaaTasker)} already added to {nameof(Instances)}.");
         SetHandle(handle, needReleased: true);
 
-        Toolkit = new MaaToolkit(toolkitInit);
-        Utility = new MaaUtility();
+        Toolkit = MaaToolkit.Shared;
+        Utility = MaaUtility.Shared;
+        if (toolkitInit)
+            _ = Toolkit.Config.InitOption().ThrowIfFalse();
     }
 
     /// <param name="controller">The controller.</param>

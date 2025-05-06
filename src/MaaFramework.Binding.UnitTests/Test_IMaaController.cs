@@ -112,8 +112,7 @@ public class Test_IMaaController
 
 #if !GITHUB_ACTIONS
         #region MaaWin32Controller
-        var toolkit = new MaaToolkit();
-        var windowInfo = toolkit.Desktop.Window.Find().First(static x
+        var windowInfo = MaaToolkit.Shared.Desktop.Window.Find().First(static x
             => x.Name.Contains("Visual Studio", StringComparison.OrdinalIgnoreCase)
                || x.Name.Contains("Maa", StringComparison.OrdinalIgnoreCase));
 
