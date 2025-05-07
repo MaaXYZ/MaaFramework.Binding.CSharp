@@ -63,7 +63,7 @@ public class Test_IMaaController
                     .Wait()
                     .ThrowIfNot(MaaJobStatus.Succeeded);
                 Assert.IsTrue(
-                    data.SetOption(ControllerOption.ScreenshotTargetShortSide, 720));
+                    data.SetOption_ScreenshotTargetShortSide(720));
             }
         }
     }
