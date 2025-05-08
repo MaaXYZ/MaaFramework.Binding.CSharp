@@ -8,36 +8,41 @@ namespace MaaFramework.Binding;
 public interface IMaaAgentServer
 {
     /// <summary>
+    ///     Configures the unique identifier used to communicate with the agent client.
+    /// </summary>
+    /// <param name="identifier">The unique identifier used to communicate with the agent client.</param>
+    IMaaAgentServer WithIdentifier(string identifier);
+
+    /// <summary>
     ///     Registers a <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/> in the <see cref="IMaaAgentServer"/>.
     /// </summary>
     /// <typeparam name="T">The <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/>.</typeparam>
     /// <param name="name">The new name that will be used to reference the custom resource.</param>
     /// <param name="custom">The custom resource instance to register.</param>
-    /// <returns><see langword="true"/> if the registration was successful; otherwise, <see langword="false"/>.</returns>
-    bool Register<T>(string name, T custom) where T : IMaaCustomResource;
+    /// <exception cref="MaaInteroperationException">Thrown if the registration fails.</exception>
+    IMaaAgentServer Register<T>(string name, T custom) where T : IMaaCustomResource;
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
-    bool Register<T>(T custom) where T : IMaaCustomResource;
+    IMaaAgentServer Register<T>(T custom) where T : IMaaCustomResource;
 
     /// <summary>
     ///     Starts up the agent server to prepare for receiving client messages from the specified connection.
     /// </summary>
-    /// <param name="identifier">The connection identifier.</param>
-    /// <returns><see langword="true"/> if the server started successfully; otherwise, <see langword="false"/>.</returns>
-    bool StartUp(string identifier);
+    /// <exception cref="MaaInteroperationException">Thrown if the registration fails.</exception>
+    IMaaAgentServer StartUp();
 
     /// <summary>
     ///     Shuts down the agent server.
     /// </summary>
-    void ShutDown();
+    IMaaAgentServer ShutDown();
 
     /// <summary>
     ///     Blocks the calling thread until the thread for receiving client messages finishes its execution.
     /// </summary>
-    void Join();
+    IMaaAgentServer Join();
 
     /// <summary>
     ///     Separates the thread for receiving client messages, allowing execution to continue independently.
     /// </summary>
-    void Detach();
+    IMaaAgentServer Detach();
 }
