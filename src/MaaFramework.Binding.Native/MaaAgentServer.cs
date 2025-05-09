@@ -28,7 +28,7 @@ public sealed class MaaAgentServer : IMaaAgentServer
     private MaaAgentServer() { }
     static MaaAgentServer()
     {
-        NativeLibrary.Init(isAgentServer: true);
+        NativeBindingContext.SwitchToAgentServerContext();
         CurrentId = string.Empty;
         Current = new();
     }
@@ -146,7 +146,7 @@ public static class MaaAgentServerExtensions
     /// <param name="paths">The directory paths to search for native libraries.</param>
     public static MaaAgentServer WithNativeLibrary(this MaaAgentServer server, params string[] paths)
     {
-        NativeLibrary.Init(true, paths);
+        NativeBindingContext.AppendNativeLibrarySearchPaths(paths);
         return server;
     }
 }

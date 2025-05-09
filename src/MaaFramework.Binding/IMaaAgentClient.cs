@@ -49,7 +49,6 @@ public interface IMaaAgentClient : IMaaDisposable
     /// <param name="method">The delegate method that defines how to start the agent server process.</param>
     /// <param name="cancellationToken">An optional token to cancel the asynchronous operation waiting for the connection.</param>
     /// <returns><see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.</returns>
-    /// <exception cref="InvalidOperationException">One or more parameters required by the <paramref name="method"/> are invalid.</exception>
     /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> has had cancellation requested.</exception>
     bool LinkStart(AgentServerStartupMethod method, CancellationToken cancellationToken = default);
 
@@ -79,6 +78,10 @@ public interface IMaaAgentClient : IMaaDisposable
     /// <returns>
     ///     A new <see cref="Process"/> that is associated with the process resource, or <see langword="null"/> if no process resource is started.
     /// </returns>
+    /// <remarks>
+    ///     <para>The implementation of this delegate is responsible for validating the provided parameters.</para>
+    ///     <para>Ensure that <paramref name="identifier"/> and <paramref name="nativeAssemblyDirectory"/> are valid and meet the requirements of the agent server process.</para>
+    /// </remarks>
     delegate Process? AgentServerStartupMethod(string identifier, string nativeAssemblyDirectory);
 
     /// <summary>

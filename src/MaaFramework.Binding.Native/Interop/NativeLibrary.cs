@@ -8,25 +8,23 @@ internal static partial class NativeLibrary
 {
     private static readonly Assembly s_assembly = typeof(NativeLibrary).Assembly;
 
-    private static bool s_isAgentServer;
-    private static readonly List<string> s_searchPath = [];
-    private static readonly Dictionary<string, nint> s_libraryHandles = [];
-
 #pragma warning disable CA2255 // 不应在库中使用 “ModuleInitializer” 属性
+#pragma warning disable S2223 // Non-constant static fields should not be visible
+
+    internal static bool IsLoaded;
+    internal static string LoadedDirectory = string.Empty;
+    internal static readonly Dictionary<string, nint> LoadedLibraryHandles = [];
+
+    internal static ApiInfoFlags ApiInfo;
+    internal static readonly List<string> SearchPath = [];
+
     [ModuleInitializer]
-    internal static void SetNativeAssemblyResolver() => SetDllImportResolver(s_assembly, NativeAssemblyResolver);
+    internal static void SetNativeLibraryResolver() => SetDllImportResolver(s_assembly, NativeLibraryResolver);
+
+#pragma warning restore S2223 // Non-constant static fields should not be visible
 #pragma warning restore CA2255 // 不应在库中使用 “ModuleInitializer” 属性
 
-    public static void Init(bool isAgentServer, params string[] paths)
-    {
-        if (s_libraryHandles.Count != 0)
-            throw new InvalidOperationException("NativeLibrary is already loaded.");
-
-        s_isAgentServer = isAgentServer;
-        s_searchPath.AddRange(paths);
-    }
-
-    public static IntPtr NativeAssemblyResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath) => libraryName switch
+    public static nint NativeLibraryResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath) => libraryName switch
     {
         "MaaFramework" or "MaaToolkit"
         or "MaaAgentServer" or "MaaAgentClient" => GetLibraryHandle(libraryName),
@@ -36,32 +34,36 @@ internal static partial class NativeLibrary
 
     private static nint GetLibraryHandle(string libraryName)
     {
-        if (s_libraryHandles.TryGetValue(libraryName, out var libraryHandle))
+        if (LoadedLibraryHandles.TryGetValue(libraryName, out var libraryHandle))
             return libraryHandle;
 
-        if (!TryGetRuntimesPath(libraryName, out var dllPath) || !TryLoad(dllPath, out libraryHandle))
-        {
-            s_libraryHandles.Add(libraryName, nint.Zero);
-            NativeBindingInfo.NativeAssemblyDirectory = null;
-            NativeBindingInfo.IsStatelessMode = false;
-            NativeBindingInfo.ApiInfo = "Using default dll resolver.";
-            return nint.Zero;
-        }
+        IsLoaded = true;
+        var resolver = TryGetRuntimesPath(libraryName, out var dllPath) && TryLoad(dllPath, out libraryHandle)
+            ? ApiInfoFlags.UseBindingResolver
+            : ApiInfoFlags.UseDefaultResolver;
+        SetBindingContext(
+            resolver,
+            dllDir: Path.GetDirectoryName(dllPath) ?? string.Empty,
+            isFirst: LoadedLibraryHandles.Count == 0);
 
-        s_libraryHandles.Add(libraryName, libraryHandle);
-
-        var dllDir = Path.GetDirectoryName(dllPath);
-        if (s_libraryHandles.Count == 1)
-        {
-            NativeBindingInfo.NativeAssemblyDirectory ??= dllDir;
-            NativeBindingInfo.IsStatelessMode = s_isAgentServer;
-            NativeBindingInfo.ApiInfo = s_isAgentServer ? "In MaaAgentServer context." : "In MaaFramework context.";
-        }
-
-        if (NativeBindingInfo.NativeAssemblyDirectory != dllDir)
-            throw new InvalidOperationException($"The native assembly directory '{NativeBindingInfo.NativeAssemblyDirectory}' was switched to '{dllDir}'.");
-
+        LoadedLibraryHandles.Add(libraryName, libraryHandle);
         return libraryHandle;
+    }
+
+    private static void SetBindingContext(ApiInfoFlags resolver, string dllDir, bool isFirst)
+    {
+        if (ApiInfo.HasFlag_ResolverExcept(resolver))
+            throw new InvalidOperationException($"The resolver '{ApiInfo}' was attempted to switch to '{resolver}'.");
+
+        if (isFirst)
+            LoadedDirectory = dllDir;
+
+        if (LoadedDirectory != dllDir)
+            throw new InvalidOperationException($"The native library directory '{LoadedDirectory}' was attempted to switch to '{dllDir}'.");
+
+        ApiInfo |= resolver;
+        if (!ApiInfo.HasFlag_Context())
+            ApiInfo |= ApiInfoFlags.InFrameworkContext;
     }
 
     private static bool TryGetRuntimesPath(string libraryName, out string dllPath)
@@ -73,7 +75,7 @@ internal static partial class NativeLibrary
 
     private static IEnumerable<string> GetRuntimesPaths(string libraryFullName)
     {
-        var searchPaths = s_searchPath.Concat(
+        var searchPaths = SearchPath.Concat(
         [
             Environment.GetEnvironmentVariable("MAAFW_BINARY_PATH"),
             Path.GetDirectoryName(s_assembly.Location),
@@ -82,8 +84,8 @@ internal static partial class NativeLibrary
 
         var runtimePaths = new[]
         {
+            "./",
             $"./runtimes/{GetArchitectureName()}/native/",
-            "./"
         };
 
         return from searchPath in searchPaths
@@ -109,7 +111,7 @@ internal static partial class NativeLibrary
 
     private static string GetFullLibraryName(string libraryName)
     {
-        if (s_isAgentServer && libraryName == "MaaFramework")
+        if (libraryName == "MaaFramework" && ApiInfo.HasFlag(ApiInfoFlags.InAgentServerContext))
             libraryName = "MaaAgentServer";
 
         if (IsWindows)

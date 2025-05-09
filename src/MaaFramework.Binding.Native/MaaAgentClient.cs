@@ -157,16 +157,8 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     {
         if (_agentServerProcess is null or { HasExited: true })
         {
-            if (string.IsNullOrEmpty(Id) || string.IsNullOrEmpty(NativeBindingInfo.NativeAssemblyDirectory))
-            {
-                throw new InvalidOperationException(
-                    $"The {nameof(Id)}({Id ?? "<null>"})" +
-                    $" or {nameof(NativeBindingInfo.NativeAssemblyDirectory)}({NativeBindingInfo.NativeAssemblyDirectory ?? "<null>"})" +
-                    $" is invalid.");
-            }
-
             _agentServerProcess?.Dispose();
-            _agentServerProcess = method.Invoke(Id, NativeBindingInfo.NativeAssemblyDirectory);
+            _agentServerProcess = method.Invoke(Id, NativeBindingContext.LoadedNativeLibraryDirectory);
 
             if (_agentServerProcess is null or { HasExited: true })
                 return false;
