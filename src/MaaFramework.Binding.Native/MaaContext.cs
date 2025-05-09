@@ -102,7 +102,7 @@ public class MaaContext : IMaaContext<MaaContextHandle>
         get
         {
             var taskerHandle = MaaContextGetTasker(Handle);
-            if (NativeBindingInfo.IsStatelessMode)
+            if (NativeBindingContext.IsStatelessMode)
                 return new MaaTasker(taskerHandle);
             else
                 return MaaTasker.Instances[taskerHandle];

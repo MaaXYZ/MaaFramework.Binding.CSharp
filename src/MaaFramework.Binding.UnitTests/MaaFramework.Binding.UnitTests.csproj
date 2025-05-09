@@ -6,7 +6,7 @@
         <PackageReference Include="MSTest.TestFramework" />
         <PackageReference Include="SixLabors.ImageSharp" />
 
-        <ProjectReference Include="..\MaaFramework\MaaFramework.csproj" />
+        <ProjectReference Include="..\MaaFramework\MaaFramework.csproj" Private="false" />
         <ProjectReference Include="..\MaaFramework.Binding.Extensions\MaaFramework.Binding.Extensions.csproj" />
 
         <None Include="..\Common\TestParam.runsettings" />
