@@ -1101,6 +1101,7 @@ internal sealed class TestImageBuffer : IMaaImageBuffer
         get => throw new NotImplementedException();
         set => throw new NotImplementedException();
     }
+    public bool IsStateless => throw new NotImplementedException();
     public bool IsEmpty => throw new NotImplementedException();
     public bool TryClear() => throw new NotImplementedException();
     public ImageInfo GetInfo() => throw new NotImplementedException();
@@ -1126,6 +1127,7 @@ internal sealed class TestStringBuffer : IMaaStringBuffer
         get => throw new NotImplementedException();
         set => throw new NotImplementedException();
     }
+    public bool IsStateless => throw new NotImplementedException();
     public bool IsEmpty => throw new NotImplementedException();
     public ulong Size => throw new NotImplementedException();
     public bool TryClear() => throw new NotImplementedException();
@@ -1143,6 +1145,7 @@ internal sealed class TestRectBuffer : IMaaRectBuffer
         get => throw new NotImplementedException();
         set => throw new NotImplementedException();
     }
+    public bool IsStateless => throw new NotImplementedException();
     public int X => throw new NotImplementedException();
     public int Y => throw new NotImplementedException();
     public int Width => throw new NotImplementedException();

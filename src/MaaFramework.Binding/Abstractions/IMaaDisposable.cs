@@ -11,9 +11,17 @@ public interface IMaaDisposable : IDisposable
     bool IsInvalid { get; }
 
     /// <summary>
-    ///     Gets a value indicating whether an <see cref="ObjectDisposedException"/> is thrown when current instance is invalid but still called.
+    ///     Gets a value indicating whether an <see cref="ObjectDisposedException"/> is thrown when the current instance is invalid but still called.
     /// </summary>
     bool ThrowOnInvalid { get; set; }
+
+    /// <summary>
+    ///     Gets a value indicating whether the current instance is stateless.
+    /// </summary>
+    /// <remarks>
+    ///     The lifetime of unmanaged resources is controlled by <see cref="MaaFramework"/>.
+    /// </remarks>
+    bool IsStateless { get; }
 }
 
 //  设计思路：
