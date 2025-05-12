@@ -13,7 +13,7 @@ public class Test_IMaaAgentClient
     public static Dictionary<MaaTypes, object> NewData => new()
     {
 #if MAA_NATIVE
-        { MaaTypes.Native, new MaaAgentClient(new MaaResource()) },
+        { MaaTypes.Native, MaaAgentClient.Create(new MaaResource()) },
 #endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
@@ -39,11 +39,9 @@ public class Test_IMaaAgentClient
     {
 #if MAA_NATIVE
         var newId = Guid.NewGuid().ToString();
-        using var native1 = new MaaAgentClient(/*identifier = string.Empty*/) { Resource = new MaaResource() };
-        using var native2 = new MaaAgentClient(/*identifier = string.Empty*/ new MaaResource());
-        //    var native3 = new MaaAgentClient(newId, new MaaResource());
+        using var native1 = MaaAgentClient.Create(new MaaResource());
+        using var native2 = MaaAgentClient.Create(new MaaResource());
         using var native3 = MaaAgentClient.Create(newId, new MaaResource());
-        using var native4 = MaaAgentClient.Create(new MaaResource());
 
         Assert.AreNotEqual(native1.Id, native2.Id);
         Assert.AreEqual(newId, native3.Id);
