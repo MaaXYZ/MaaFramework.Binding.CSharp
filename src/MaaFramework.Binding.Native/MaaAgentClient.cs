@@ -29,7 +29,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientCreate"/>.
     /// </remarks>
-    public MaaAgentClient(string identifier = "")
+    protected MaaAgentClient(string identifier = "")
         : base(invalidHandleValue: MaaAgentClientHandle.Zero)
     {
         var handle = MaaAgentClientCreate();
@@ -40,23 +40,6 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
             _ = Id.ThrowIfNotEquals(identifier);
     }
 
-    /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
-    /// <param name="resource">The resource.</param>
-    /// <inheritdoc cref="MaaAgentClient(string)"/>
-    [SetsRequiredMembers]
-    public MaaAgentClient(string identifier, MaaResource resource)
-        : this(identifier)
-    {
-        Resource = resource;
-    }
-
-    /// <inheritdoc cref="MaaAgentClient(string, MaaResource)"/>
-    [SetsRequiredMembers]
-    public MaaAgentClient(MaaResource resource)
-        : this("", resource)
-    {
-    }
-
     /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
     /// </summary>
@@ -64,11 +47,11 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <param name="resource">The resource.</param>
     /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
     public static MaaAgentClient Create(string identifier, MaaResource resource)
-        => new(identifier, resource);
+        => new(identifier) { Resource = resource, };
 
     /// <inheritdoc cref="Create(string, MaaResource)"/>
     public static MaaAgentClient Create(MaaResource resource)
-        => new(resource);
+        => new() { Resource = resource, };
 
     /// <inheritdoc/>
     public string Id { get; }
