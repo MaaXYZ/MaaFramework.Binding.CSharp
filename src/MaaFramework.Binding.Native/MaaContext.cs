@@ -22,6 +22,9 @@ public class MaaContext : IMaaContext<MaaContextHandle>
         if (contextHandle == MaaContextHandle.Zero)
             throw new ArgumentException($"Value cannot be {MaaContextHandle.Zero}.", nameof(contextHandle));
         Handle = contextHandle;
+
+        var taskerHandle = MaaContextGetTasker(Handle);
+        Tasker = NativeBindingContext.IsStatelessMode ? new MaaTasker(taskerHandle) : MaaTasker.Instances[taskerHandle];
     }
 
     /// <inheritdoc/>
@@ -97,17 +100,7 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextGetTasker"/>.
     /// </remarks>
-    public MaaTasker Tasker
-    {
-        get
-        {
-            var taskerHandle = MaaContextGetTasker(Handle);
-            if (NativeBindingContext.IsStatelessMode)
-                return new MaaTasker(taskerHandle);
-            else
-                return MaaTasker.Instances[taskerHandle];
-        }
-    }
+    public MaaTasker Tasker { get; }
 
     object ICloneable.Clone()
         => Clone();
