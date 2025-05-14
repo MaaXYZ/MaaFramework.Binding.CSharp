@@ -28,16 +28,18 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     /// </remarks>
     protected internal static ConcurrentDictionary<MaaTaskerHandle, MaaTasker> Instances { get; } = [];
 
+#pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
     [SetsRequiredMembers]
     internal MaaTasker(MaaTaskerHandle handle)
     {
         SetHandle(handle, needReleased: false);
-        Resource = new MaaResource(MaaTaskerGetResource(handle));
-        Controller = new MaaController(MaaTaskerGetController(handle));
+        _resource = new MaaResource(MaaTaskerGetResource(handle));
+        _controller = new MaaController(MaaTaskerGetController(handle));
         DisposeOptions = DisposeOptions.None;
         Toolkit = MaaToolkit.Shared;
         Utility = MaaUtility.Shared;
     }
+#pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
 
     /// <summary>
     ///     Creates a <see cref="MaaTasker"/> instance.
@@ -80,18 +82,13 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
-        // Cannot destroy Instance before disposing Controller and Resource.
-
         if (DisposeOptions.HasFlag(DisposeOptions.Controller))
-        {
             Controller.Dispose();
-        }
 
         if (DisposeOptions.HasFlag(DisposeOptions.Resource))
-        {
             Resource.Dispose();
-        }
 
+        _ = Instances.TryRemove(new KeyValuePair<MaaTaskerHandle, MaaTasker>(Handle, this));
         base.Dispose(disposing);
     }
 
@@ -122,6 +119,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
 #pragma warning restore
     }
 
+    private MaaResource _resource = null!;
+    private MaaController _controller = null!;
+
     IMaaResource IMaaTasker.Resource
     {
         get => Resource;
@@ -143,14 +143,14 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
         get
         {
             if (!IsInvalid)
-                _ = MaaTaskerGetResource(Handle).ThrowIfNotEquals(field.Handle, MaaInteroperationException.ResourceModifiedMessage);
-            return field;
+                _ = MaaTaskerGetResource(Handle).ThrowIfNotEquals(_resource.Handle, MaaInteroperationException.ResourceModifiedMessage);
+            return _resource;
         }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
             _ = MaaTaskerBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
-            field = value;
+            _resource = value;
         }
     }
 
@@ -163,14 +163,14 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
         get
         {
             if (!IsInvalid)
-                _ = MaaTaskerGetController(Handle).ThrowIfNotEquals(field.Handle, MaaInteroperationException.ControllerModifiedMessage);
-            return field;
+                _ = MaaTaskerGetController(Handle).ThrowIfNotEquals(_controller.Handle, MaaInteroperationException.ControllerModifiedMessage);
+            return _controller;
         }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
             _ = MaaTaskerBindController(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ControllerBindingFailedMessage);
-            field = value;
+            _controller = value;
         }
     }
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MaaFramework.Binding.UnitTests": {
+      "commandName": "Project",
+      "commandLineArgs": "CurrentDirectory CurrentDirectory 6CDC213A-085C-40C8-8665-635820D10425"
+    }
+  }
+}

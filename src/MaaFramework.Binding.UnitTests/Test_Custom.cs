@@ -47,8 +47,12 @@ internal static class Custom
             Assert.IsNotNull(cloneContext);
             Assert.IsNull(
                 cloneContext.RunRecognition(DiffEntry, "{}", (IMaaImageBuffer<nint>)args.Image));
-            Assert.AreSame(
-                context.Tasker, cloneContext.Tasker);
+            if (!context.Tasker.IsStateless)
+            {
+                Assert.AreSame(
+                    context.Tasker, cloneContext.Tasker);
+            }
+
             Assert.AreEqual(
                 context.TaskJob.Id, cloneContext.TaskJob.Id);
 
@@ -142,7 +146,7 @@ internal static class Custom
 
         public bool RequestResolution(out int width, out int height)
         {
-#if MAA_NATIVE           
+#if MAA_NATIVE
             using var image = new MaaImageBuffer();
 #endif
             if (Screencap(image))

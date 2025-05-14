@@ -62,21 +62,7 @@ public class Test_IMaaAgentClient
     {
         _ = Assert.ThrowsException<InvalidOperationException>(() =>
             maaAgentClient.AgentServerProcess);
-        var ret = maaAgentClient.LinkStart((socketId, nativeAssemblyDirectory) =>
-        {
-            string[] arguments =
-            [
-                typeof(Test_IMaaAgentServer).Assembly.Location,
-                nativeAssemblyDirectory,
-                Environment.CurrentDirectory,
-                socketId
-            ];
-
-            return Process.Start(new ProcessStartInfo("dotnet", string.Join(' ', arguments))
-            {
-                UseShellExecute = false,
-            });
-        });
+        var ret = maaAgentClient.LinkStart(StartupAgentServer);
         Assert.IsTrue(
             ret);
         Assert.IsTrue( // double start
@@ -91,5 +77,45 @@ public class Test_IMaaAgentClient
         Task.Delay(100).Wait(); // wait for process exit
         Assert.IsTrue(
             maaAgentClient.AgentServerProcess.HasExited);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void RunTask(MaaTypes type, IMaaAgentClient maaAgentClient)
+    {
+        using var maa = new MaaTasker
+        {
+            Controller = new MaaAdbController(Common.AdbPath, Common.Address, AdbScreencapMethods.Encode, AdbInputMethods.AdbShell, Common.AdbConfig, Common.AgentPath),
+            Resource = new MaaResource(),
+            DisposeOptions = DisposeOptions.All,
+        };
+        Assert.IsTrue(
+            maa.IsInitialized);
+
+        using var agent = MaaAgentClient.Create("6CDC213A-085C-40C8-8665-635820D10425", maa.Resource);
+        using (var cts = new CancellationTokenSource(10000))
+        {
+            Assert.IsTrue(
+            // agent.LinkStart());
+               agent.LinkStart(StartupAgentServer, cts.Token));
+        }
+        var status = maa
+            .AppendTask(Custom.NodeName, Custom.Param)
+            .Wait();
+
+        Assert.AreEqual(MaaJobStatus.Succeeded,
+            status);
+        Assert.IsTrue(
+            agent.LinkStop());
+
+    }
+
+    private static Process? StartupAgentServer(string identifier, string nativeAssemblyDirectory)
+    {
+        return Process.Start(new ProcessStartInfo(
+            "dotnet", $"{typeof(Test_IMaaAgentServer).Assembly.Location} {nativeAssemblyDirectory} {Environment.CurrentDirectory} {identifier}")
+        {
+            UseShellExecute = false,
+        });
     }
 }
