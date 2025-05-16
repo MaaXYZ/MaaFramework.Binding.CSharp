@@ -46,7 +46,7 @@ internal static class Custom
 #endif
             Assert.IsNotNull(cloneContext);
             Assert.IsNull(
-                cloneContext.RunRecognition(DiffEntry, "{}", (IMaaImageBuffer<nint>)args.Image));
+                cloneContext.RunRecognition(DiffEntry, args.Image));
             if (!context.Tasker.IsStateless)
             {
                 Assert.AreSame(
@@ -57,7 +57,7 @@ internal static class Custom
                 context.TaskJob.Id, cloneContext.TaskJob.Id);
 
             var recognitionDetail =
-                context.RunRecognition(DiffEntry, DiffParam, args.Image);
+                context.RunRecognition(DiffEntry, args.Image, DiffParam);
             Assert.IsNotNull(
                 recognitionDetail?.HitBox);
 
@@ -106,7 +106,7 @@ internal static class Custom
             Assert.AreNotEqual(Detail, args.RecognitionDetail.Detail);
             Assert.AreEqual(Box, $"{args.RecognitionBox.X}{args.RecognitionBox.Y}{args.RecognitionBox.Width}{args.RecognitionBox.Height}");
 
-            var nodeDetail = context.RunAction(DiffEntry, DiffParam, args.RecognitionBox, args.RecognitionDetail.Detail);
+            var nodeDetail = context.RunAction(DiffEntry, args.RecognitionBox, args.RecognitionDetail.Detail, DiffParam);
             Assert.IsNotNull(nodeDetail);
             return true;
         }

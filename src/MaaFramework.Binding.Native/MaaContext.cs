@@ -31,7 +31,7 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunTask"/>.
     /// </remarks>
-    public TaskDetail? RunTask(string entry, [StringSyntax("Json")] string pipelineOverride)
+    public TaskDetail? RunTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}")
     {
         var taskId = MaaContextRunTask(Handle, entry, pipelineOverride);
         return taskId == Interop.Native.MaaDef.MaaInvalidId
@@ -40,14 +40,14 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     }
 
     /// <inheritdoc/>
-    public RecognitionDetail? RunRecognition(string entry, [StringSyntax("Json")] string pipelineOverride, IMaaImageBuffer image)
-        => RunRecognition(entry, pipelineOverride, (MaaImageBuffer)image);
+    public RecognitionDetail? RunRecognition(string entry, IMaaImageBuffer image, [StringSyntax("Json")] string pipelineOverride = "{}")
+        => RunRecognition(entry, (MaaImageBuffer)image, pipelineOverride);
 
     /// <inheritdoc cref="IMaaContext.RunRecognition"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunRecognition"/>.
     /// </remarks>
-    public RecognitionDetail? RunRecognition(string entry, [StringSyntax("Json")] string pipelineOverride, MaaImageBuffer image)
+    public RecognitionDetail? RunRecognition(string entry, MaaImageBuffer image, [StringSyntax("Json")] string pipelineOverride = "{}")
     {
         ArgumentNullException.ThrowIfNull(image);
         var recognitionId = MaaContextRunRecognition(Handle, entry, pipelineOverride, image.Handle);
@@ -57,14 +57,14 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     }
 
     /// <inheritdoc/>
-    public NodeDetail? RunAction(string entry, [StringSyntax("Json")] string pipelineOverride, IMaaRectBuffer recognitionBox, string recognitionDetail)
-        => RunAction(entry, pipelineOverride, (MaaRectBuffer)recognitionBox, recognitionDetail);
+    public NodeDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
+        => RunAction(entry, (MaaRectBuffer)recognitionBox, recognitionDetail, pipelineOverride);
 
     /// <inheritdoc cref="IMaaContext.RunAction"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunAction"/>.
     /// </remarks>
-    public NodeDetail? RunAction(string entry, [StringSyntax("Json")] string pipelineOverride, MaaRectBuffer recognitionBox, string recognitionDetail)
+    public NodeDetail? RunAction(string entry, MaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
     {
         ArgumentNullException.ThrowIfNull(recognitionBox);
         var nodeId = MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail);

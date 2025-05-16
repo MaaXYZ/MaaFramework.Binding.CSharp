@@ -26,28 +26,28 @@ public interface IMaaContext : ICloneable
     /// <param name="entry">The entry name of the task.</param>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns><see cref="TaskDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
-    TaskDetail? RunTask(string entry, [StringSyntax("Json")] string pipelineOverride);
+    TaskDetail? RunTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
     ///     Run a recognition.
     /// </summary>
     /// <param name="entry">The recognition entry name.</param>
-    /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <param name="image">The image to be recognized.</param>
+    /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns><see cref="RecognitionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    RecognitionDetail? RunRecognition(string entry, [StringSyntax("Json")] string pipelineOverride, IMaaImageBuffer image);
+    RecognitionDetail? RunRecognition(string entry, IMaaImageBuffer image, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
     ///     Run an action.
     /// </summary>
     /// <param name="entry">The action entry name.</param>
-    /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <param name="recognitionBox">The rect buffer containing current rect in the recognition result.</param>
     /// <param name="recognitionDetail">The rect detail in the recognition result.</param>
+    /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns><see cref="NodeDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    NodeDetail? RunAction(string entry, [StringSyntax("Json")] string pipelineOverride, IMaaRectBuffer recognitionBox, string recognitionDetail);
+    NodeDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
     ///     Override a pipeline.
