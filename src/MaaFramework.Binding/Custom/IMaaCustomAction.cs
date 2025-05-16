@@ -13,8 +13,9 @@ public interface IMaaCustomAction : IMaaCustomResource
     /// </summary>
     /// <param name="context">The context.</param>
     /// <param name="args">The run args.</param>
+    /// <param name="results">The run results.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    bool Run(in IMaaContext context, in RunArgs args);
+    bool Run(in IMaaContext context, in RunArgs args, in RunResults results);
 }
 
 /// <summary>
@@ -27,3 +28,10 @@ public interface IMaaCustomAction : IMaaCustomResource
 /// <param name="RecognitionDetail">Gets the recognition detail.</param>
 /// <param name="RecognitionBox">Gets the recognition box.</param>
 public sealed record RunArgs(string NodeName, TaskDetail TaskDetail, string ActionName, [StringSyntax("Json")] string ActionParam, RecognitionDetail RecognitionDetail, IMaaRectBuffer RecognitionBox);
+
+#pragma warning disable S2094 // Classes should not be empty
+/// <summary>
+///     The action run results.
+/// </summary>
+public sealed record RunResults;
+#pragma warning restore S2094 // Classes should not be empty

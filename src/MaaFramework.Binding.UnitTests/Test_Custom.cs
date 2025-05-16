@@ -98,7 +98,7 @@ internal static class Custom
     {
         public string Name { get; set; } = nameof(TestAction);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(ActionParam, args.ActionParam);
