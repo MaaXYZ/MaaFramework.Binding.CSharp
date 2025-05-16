@@ -44,7 +44,8 @@ public static class MaaCustomExtensions
                         ActionParam: customActionParam,
                         RecognitionDetail: recognitionDetail,
                         RecognitionBox: new MaaRectBuffer(boxHandle)
-                    )
+                    ),
+                    new RunResults()
                 );
             };
         return callback;
