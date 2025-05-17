@@ -1,23 +1,24 @@
 #!/usr/bin/env dotnet-script
+#nullable enable
 
-#r "nuget: Maa.Framework, 3.0.4"
+#r "nuget: Maa.Framework, 4.0.0"
 
 using MaaFramework.Binding;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
-var toolkit = new MaaToolkit();
+MaaUtility.Shared.SetOption_StdoutLevel(LoggingLevel.Info);
 // Register custom action
-toolkit.PI.Register(new MyAction());
+MaaToolkit.Shared.PI.Register(new MyAction());
 // Run MaaPiCli
-toolkit.PI.RunCli("sample/resource", "sample/cache", false);
+MaaToolkit.Shared.PI.RunCli("../resource", ".cache", false);
 
 
 internal sealed class MyAction : IMaaCustomAction
 {
     public string Name { get; set; } = "MyAct";
 
-    public bool Run(in IMaaContext context, in RunArgs args)
+    public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
     {
         Console.WriteLine($"on MyAction.run, context: {context}, args: {args}");
 
@@ -27,9 +28,8 @@ internal sealed class MyAction : IMaaCustomAction
         context.Tasker.Controller.GetCachedImage(image);
         context.Tasker.Controller.Click(100, 100).Wait();
 
-        var RecognitionDetail = context.RunRecognition(
-            "Cat", """{"Cat": {"recognition": "OCR", "expected": "喵喵喵"}}""", image
-        );
+        var RecognitionDetail = context.RunRecognition("Cat", image,
+            """{"Cat": {"recognition": "OCR", "expected": "喵喵喵"}}""");
         // if RecognitionDetail xxxx
 
         return true;

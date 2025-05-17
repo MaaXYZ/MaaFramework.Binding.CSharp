@@ -1,8 +1,9 @@
-#!/usr/bin/env dotnet-script
-#r "nuget: Maa.Framework.Binding.Native, 4.0.0-preview.25163.6"
+﻿#!/usr/bin/env dotnet-script
+#nullable enable
+
+#r "nuget: Maa.Framework.Binding.Native, 4.0.0"
 
 using MaaFramework.Binding;
-using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
 var commandLineArgs = Environment.GetCommandLineArgs();
@@ -16,43 +17,42 @@ var socketId = commandLineArgs[^1];
 var userPath = commandLineArgs[^2];
 var dllPath = commandLineArgs[^3];
 
-NativeBindingInfo.Set(isAgentServer: true, dllPath); // First step
-_ = new MaaToolkit(true, userPath);
-var agentServer = new MaaAgentServer();
-agentServer.Register(new MyRec());
-agentServer.Register(new MyAct());
-agentServer.StartUp(socketId);
-agentServer.Join();
-agentServer.ShutDown();
+MaaAgentServer.Current
+    .WithIdentifier(socketId)
+    .WithNativeLibrary(dllPath)
+    .WithToolkitConfig_InitOption(userPath)
+    .Register(new MyRec())
+    .Register(new MyAct())
+    .StartUp()
+    .Join()
+    .ShutDown();
 
 Console.Write("Press any key to exit:");
 Console.ReadKey();
-return 0;
 
 internal sealed class MyRec : IMaaCustomRecognition
 {
-    public string Name { get; set; } = nameof(MyRec);
+    public string Name { get; set; } = "TestRecognition";
 
     public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
     {
         Console.WriteLine("{0} Called", Name);
-        
-        results.Box.SetValues(0, 0, 100, 100);
-        results.Detail.SetValue("Hello Client!");
-        return true;
+
+        return results.Box.TrySetValues(0, 0, 100, 100)
+            && results.Detail.TrySetValue("Hello Client!");
     }
 }
 
 internal sealed class MyAct : IMaaCustomAction
 {
-    public string Name { get; set; } = nameof(MyAct);
+    public string Name { get; set; } = "TestAction";
 
-    public bool Run(in IMaaContext context, in RunArgs args)
+    public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
     {
         Console.WriteLine("{0} Called", Name);
         Console.WriteLine("recognition detail: {0}", args.RecognitionDetail);
         Console.WriteLine("custom action param: {0}", args.ActionParam);
-        
+
         return true;
     }
 }
