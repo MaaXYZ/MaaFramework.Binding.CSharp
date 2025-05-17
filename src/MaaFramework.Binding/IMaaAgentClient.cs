@@ -74,15 +74,15 @@ public interface IMaaAgentClient : IMaaDisposable
     ///     Represents a method that starts the agent server process.
     /// </summary>
     /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
-    /// <param name="nativeAssemblyDirectory">The directory path where the <see cref="MaaFramework"/> native assemblies are located.</param>
+    /// <param name="nativeLibraryDirectory">The directory path where the <see cref="MaaFramework"/> native libraries are located.</param>
     /// <returns>
     ///     A new <see cref="Process"/> that is associated with the process resource, or <see langword="null"/> if no process resource is started.
     /// </returns>
     /// <remarks>
     ///     <para>The implementation of this delegate is responsible for validating the provided parameters.</para>
-    ///     <para>Ensure that <paramref name="identifier"/> and <paramref name="nativeAssemblyDirectory"/> are valid and meet the requirements of the agent server process.</para>
+    ///     <para>Ensure that <paramref name="identifier"/> and <paramref name="nativeLibraryDirectory"/> are valid and meet the requirements of the agent server process.</para>
     /// </remarks>
-    delegate Process? AgentServerStartupMethod(string identifier, string nativeAssemblyDirectory);
+    delegate Process? AgentServerStartupMethod(string identifier, string nativeLibraryDirectory);
 
     /// <summary>
     ///     Gets the agent server process managed by <see cref="IMaaAgentClient"/> from method LinkStart.

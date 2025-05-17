@@ -110,10 +110,10 @@ public class Test_IMaaAgentClient
 
     }
 
-    private static Process? StartupAgentServer(string identifier, string nativeAssemblyDirectory)
+    private static Process? StartupAgentServer(string identifier, string nativeLibraryDirectory)
     {
         return Process.Start(new ProcessStartInfo(
-            "dotnet", $"{typeof(Test_IMaaAgentServer).Assembly.Location} {nativeAssemblyDirectory} {Environment.CurrentDirectory} {identifier}")
+            "dotnet", $"{typeof(Test_IMaaAgentServer).Assembly.Location} {nativeLibraryDirectory} {Environment.CurrentDirectory} {identifier}")
         {
             UseShellExecute = false,
         });
