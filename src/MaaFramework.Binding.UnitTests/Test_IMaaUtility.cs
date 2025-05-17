@@ -10,7 +10,7 @@ public class Test_IMaaMaaUtility
     public static Dictionary<MaaTypes, object> NewData => new()
     {
 #if MAA_NATIVE
-        { MaaTypes.Native, new MaaUtility() },
+        { MaaTypes.Native, MaaUtility.Shared },
 #endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;

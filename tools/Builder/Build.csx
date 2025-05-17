@@ -31,7 +31,7 @@ var version = tags.Count switch
 };
 
 var runtimes = NuGetVersion.Parse(
-    XDocument.Load("Directory.Packages.props")
+    XDocument.Load("./src/Directory.Packages.props")
         .Descendants("PackageVersion")
         .FirstOrDefault(e => e.Attribute("Include")?.Value == "Maa.Framework.Runtimes")
         !.Attribute("Version")

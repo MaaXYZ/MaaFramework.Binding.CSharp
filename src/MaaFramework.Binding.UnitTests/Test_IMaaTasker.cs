@@ -52,15 +52,15 @@ public class Test_IMaaTasker
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Succeeded);
             _ = data.Resource
-                .SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
+                .SetOption_InferenceDevice(InferenceDevice.CPU);
             _ = data.Resource
-                .SetOption(ResourceOption.InferenceExecutionProvider, InferenceExecutionProvider.CPU);
+                .SetOption_InferenceExecutionProvider(InferenceExecutionProvider.CPU);
             _ = data.Controller
                 .LinkStart()
                 .Wait()
                 .ThrowIfNot(MaaJobStatus.Succeeded);
             _ = data.Controller
-                .SetOption(ControllerOption.ScreenshotTargetShortSide, 720);
+                .SetOption_ScreenshotTargetShortSide(720);
             Assert.IsTrue(data.IsInitialized);
         }
     }
@@ -328,7 +328,7 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
         Assert.IsTrue(
-            maaTasker.Utility.SetOption(GlobalOption.DebugMode, debugMode));
+            maaTasker.Utility.SetOption_DebugMode(debugMode));
 
         var job =
             maaTasker.AppendTask(taskEntryName, diff);
@@ -358,7 +358,7 @@ public class Test_IMaaTasker
         }
 
         Assert.IsTrue(
-            maaTasker.Utility.SetOption(GlobalOption.DebugMode, false));
+            maaTasker.Utility.SetOption_DebugMode(false));
     }
 
     [TestMethod]

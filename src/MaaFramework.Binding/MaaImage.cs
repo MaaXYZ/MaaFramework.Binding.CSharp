@@ -25,6 +25,9 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
         set => buffer.ThrowOnInvalid = value;
     }
 
+    /// <inheritdoc/>
+    public bool IsStateless => buffer.IsStateless;
+
     /// <summary>
     ///     Caches the image data from the <see cref="IMaaImageBuffer"/>.
     /// </summary>

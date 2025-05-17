@@ -35,7 +35,10 @@ internal static class Custom
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
-            _ = Assert.ThrowsException<ArgumentException>(() => new MaaContext(IntPtr.Zero));
+            _ = Assert.ThrowsException<ArgumentException>(() =>
+#if MAA_NATIVE
+                new MaaContext(IntPtr.Zero));
+#endif
             var cloneContext = (context as ICloneable).Clone() as IMaaContext;
             cloneContext = cloneContext?.Clone();
 #if MAA_NATIVE
@@ -43,14 +46,18 @@ internal static class Custom
 #endif
             Assert.IsNotNull(cloneContext);
             Assert.IsNull(
-                cloneContext.RunRecognition(DiffEntry, "{}", (IMaaImageBuffer<nint>)args.Image));
-            Assert.AreSame(
-                context.Tasker, cloneContext.Tasker);
+                cloneContext.RunRecognition(DiffEntry, args.Image));
+            if (!context.Tasker.IsStateless)
+            {
+                Assert.AreSame(
+                    context.Tasker, cloneContext.Tasker);
+            }
+
             Assert.AreEqual(
                 context.TaskJob.Id, cloneContext.TaskJob.Id);
 
             var recognitionDetail =
-                context.RunRecognition(DiffEntry, DiffParam, args.Image);
+                context.RunRecognition(DiffEntry, args.Image, DiffParam);
             Assert.IsNotNull(
                 recognitionDetail?.HitBox);
 
@@ -91,7 +98,7 @@ internal static class Custom
     {
         public string Name { get; set; } = nameof(TestAction);
 
-        public bool Run(in IMaaContext context, in RunArgs args)
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
         {
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(ActionParam, args.ActionParam);
@@ -99,13 +106,13 @@ internal static class Custom
             Assert.AreNotEqual(Detail, args.RecognitionDetail.Detail);
             Assert.AreEqual(Box, $"{args.RecognitionBox.X}{args.RecognitionBox.Y}{args.RecognitionBox.Width}{args.RecognitionBox.Height}");
 
-            var nodeDetail = context.RunAction(DiffEntry, DiffParam, args.RecognitionBox, args.RecognitionDetail.Detail);
+            var nodeDetail = context.RunAction(DiffEntry, args.RecognitionBox, args.RecognitionDetail.Detail, DiffParam);
             Assert.IsNotNull(nodeDetail);
             return true;
         }
     }
 
-    internal sealed class TestController(MaaController c) : IMaaCustomController, IMaaDisposable
+    internal sealed class TestController(IMaaController c) : IMaaCustomController, IMaaDisposable
     {
         #region Test_IMaaDisposable
 
@@ -116,6 +123,8 @@ internal static class Custom
             get => c.ThrowOnInvalid;
             set => c.ThrowOnInvalid = value;
         }
+
+        public bool IsStateless => c.IsStateless;
 
         public void Dispose() => c.Dispose();
 
@@ -137,7 +146,9 @@ internal static class Custom
 
         public bool RequestResolution(out int width, out int height)
         {
+#if MAA_NATIVE
             using var image = new MaaImageBuffer();
+#endif
             if (Screencap(image))
             {
                 width = image.Width;

@@ -9,14 +9,19 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaResource"/>.
 /// </summary>
-public class MaaResource : MaaCommon, IMaaResource<nint>
+public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
 {
     private readonly HashSet<string> _postedPaths = [];
 
     /// <inheritdoc/>
     public override string ToString() => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ Paths = {string.Join(" & ", _postedPaths)}, CustomActions = {string.Join(" & ", _actions.Names)}, CustomRecognitions = {string.Join(" & ", _recognitions.Names)} }}";
+        : $"{GetType().Name} {{ Paths = [{string.Join(", ", _postedPaths)}], CustomActions = [{string.Join(", ", _actions.Names)}] , CustomRecognitions = [{string.Join(" & ", _recognitions.Names)}] }}";
+
+    internal MaaResource(MaaResourceHandle handle)
+    {
+        SetHandle(handle, needReleased: false);
+    }
 
     /// <summary>
     ///     Creates a <see cref="MaaResource"/> instance.

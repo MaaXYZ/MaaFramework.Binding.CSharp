@@ -13,6 +13,11 @@ namespace MaaFramework.Binding;
 public class MaaToolkit : IMaaToolkit
 {
     /// <summary>
+    ///    Gets the shared <see cref="MaaToolkit"/> instance.
+    /// </summary>
+    public static MaaToolkit Shared { get; } = new();
+
+    /// <summary>
     ///     Creates a <see cref="MaaToolkit"/> instance.
     /// </summary>
     /// <param name="init">Whether invokes the <see cref="IMaaToolkitConfig.InitOption"/>.</param>

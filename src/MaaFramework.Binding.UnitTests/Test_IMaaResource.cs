@@ -32,7 +32,7 @@ public class Test_IMaaResource
             data.Callback += Common.NotificationHandlerRegistry.OnCallback;
             data.Callback += Common.OnResourceLoading.ToCallback();
 
-            _ = data.SetOption(ResourceOption.InferenceDevice, InferenceDevice.CPU);
+            _ = data.SetOption_InferenceDevice(InferenceDevice.CPU);
         }
     }
 

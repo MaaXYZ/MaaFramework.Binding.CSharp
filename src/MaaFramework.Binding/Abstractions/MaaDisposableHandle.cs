@@ -45,6 +45,9 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
     /// <inheritdoc/>
     public bool ThrowOnInvalid { get; set; }
 
+    /// <inheritdoc/>
+    public bool IsStateless => !_needReleased;
+
     /// <summary>
     ///     Creates a <see cref="MaaDisposableHandle{T}"/> instance.
     /// </summary>

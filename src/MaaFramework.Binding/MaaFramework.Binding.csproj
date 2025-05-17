@@ -12,4 +12,8 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="MaaFramework.Binding.Native" />
+    </ItemGroup>
+
 </Project>
