@@ -97,17 +97,21 @@ dotnet add package Maa.Framework --prerelease
 
 > 准备工作：`adb connect HOST[:PORT]`
 
-```csharp
-using MaaFramework.Binding;
+从 sample 文件夹中的 [powershell](sample\csharp\QuickStart.ps1) 或 [bash](sample\csharp\QuickStart.sh) 脚本快速开始。
 
-var devices = new MaaToolkit(true).AdbDevice.Find();
+```csharp
+// using MaaFramework.Binding;
+
+MaaToolkit.Shared.Config.InitOption(".cache");
+
+var devices = MaaToolkit.Shared.AdbDevice.Find();
 if (devices.IsEmpty)
     throw new InvalidOperationException();
 
 using var maa = new MaaTasker
 {
     Controller = devices[0].ToAdbController(),
-    Resource = new MaaResource("./SampleResource"),
+    Resource = new MaaResource("../../src/MaaFramework.Binding.UnitTests/SampleResource"),
     DisposeOptions = DisposeOptions.All,
 };
 
@@ -124,8 +128,8 @@ Console.WriteLine("EmptyNode Completed");
 #### 自定义
 
 ```csharp
-using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Custom;
+// using MaaFramework.Binding.Buffers;
+// using MaaFramework.Binding.Custom;
 
 var nodeName = "MyCustomTask";
 var param = $$"""
@@ -165,7 +169,7 @@ internal sealed class MyRec : IMaaCustomRecognition
 internal sealed class MyAct : IMaaCustomAction
 {
     public string Name { get; set; } = nameof(MyAct);
-    public bool Run(in IMaaContext context, in RunArgs args)
+    public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
     {
         Console.WriteLine($"Enter {Name}");
         return true;

@@ -17,18 +17,8 @@ For detailed interface usage, see:
 
 ### Run Samples
 
-```powershell
-# Navigate to project root (ensure current directory contains C# sample)
-cd $PWD/sample/csharp ; cd ../..
-# Initialize local tool manifest
-dotnet new tool-manifest
-# Install script runner tool
-dotnet tool install --local dotnet-script
-# Execute main sample
-dotnet script sample/csharp/main.csx
-# Execute Project Interface CLI sample
-dotnet script sample/csharp/pi_cli.csx
-```
+- [powershell](sample\csharp\QuickStart.ps1)
+- [bash](sample\csharp\QuickStart.sh)
 
 ### Resource Configuration
 

@@ -17,18 +17,8 @@
 
 ### 运行示例
 
-```powershell
-# 进入项目根目录，确保当前目录具有 C# 示例
-cd $PWD/sample/csharp ; cd ../..
-# 初始化本地工具清单
-dotnet new tool-manifest
-# 安装脚本运行工具
-dotnet tool install --local dotnet-script
-# 执行主示例
-dotnet script sample/csharp/main.csx
-# 执行 Project Interface 命令行示例
-dotnet script sample/csharp/pi_cli.csx
-```
+- [powershell](sample\csharp\QuickStart.ps1)
+- [bash](sample\csharp\QuickStart.sh)
 
 ### 资源配置
 

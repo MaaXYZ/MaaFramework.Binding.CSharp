@@ -1,6 +1,6 @@
-$n = [int](Read-Host "(1) Main`n(2) PI`n(3) Agent`nSelect")
-$path = @('main.csx', 'pi_cli.csx', 'Agent/AgentMain.cs')[$n - 1]
-if ($n -lt 1 -or $n -gt 3) {
+$n = [int](Read-Host "(1) Main`n(2) PI`n(3) Agent`n(4) CSBinding README Example`nSelect")
+$path = @('main.csx', 'pi_cli.csx', 'Agent/AgentMain.csx', "CSBinding README Example.csx")[$n - 1]
+if ($n -lt 1 -or $n -gt 4) {
     Write-Error "Invalid selection."
     exit 1
 }
