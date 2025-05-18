@@ -56,7 +56,7 @@ TeeToGithubOutput(
     );
 StartProcess(
     redirectStandardOutputToReturn: false,
-    cmd: $"dotnet build --configuration Release --no-restore -p:Version={verStr};RepositoryBranch={branch};RepositoryCommit={commit};{(isRelease ? string.Empty : "DebugType=embedded;IncludeSymbols=false")}"
+    cmd: $"dotnet build --configuration Release --no-restore -p:ContinuousIntegrationBuild=true;Version={verStr};RepositoryBranch={branch};RepositoryCommit={commit};{(isRelease ? string.Empty : "DebugType=embedded;IncludeSymbols=false")}"
     );
 MoveNupkgFiles("nupkgs");
 File.AppendAllText(GITHUB_STEP_SUMMARY, $"""
