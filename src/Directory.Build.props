@@ -73,13 +73,6 @@
     <RepositoryBranch>$(RepositoryBranch)</RepositoryBranch>
     <RepositoryCommit>$(RepositoryCommit)</RepositoryCommit>
   </PropertyGroup>
-
-  <!-- CI -->
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
-  </PropertyGroup>
-
   <ItemGroup>
     <None Visible="false" Include="..\Common\PackageFiles\**" Pack="true" PackagePath="\" />
   </ItemGroup>
