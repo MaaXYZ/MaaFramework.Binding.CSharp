@@ -35,6 +35,7 @@ public interface IMaaAgentClient : IMaaDisposable
     /// <summary>
     ///     Starts the agent server process using the specified <see cref="ProcessStartInfo"/> and connects to the agent server.
     ///     <para>To start a new process, the current <see cref="AgentServerProcess"/> must have exited first.</para>
+    ///     <para>The agent server process will be killed when <see cref="IDisposable.Dispose"/> is called.</para>
     /// </summary>
     /// <param name="info">The process start info.</param>
     /// <param name="cancellationToken">An optional token to cancel the asynchronous operation waiting for the connection.</param>
@@ -43,8 +44,9 @@ public interface IMaaAgentClient : IMaaDisposable
     bool LinkStart(ProcessStartInfo info, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///     Starts the agent server process using the specified method and connects to the agent server.
+    ///     Starts the agent server process using the specified <see cref="ProcessStartInfo"/> and connects to the agent server.
     ///     <para>To start a new process, the current <see cref="AgentServerProcess"/> must have exited first.</para>
+    ///     <para>The agent server process will be killed when <see cref="IDisposable.Dispose"/> is called.</para>
     /// </summary>
     /// <param name="method">The delegate method that defines how to start the agent server process.</param>
     /// <param name="cancellationToken">An optional token to cancel the asynchronous operation waiting for the connection.</param>
@@ -62,7 +64,7 @@ public interface IMaaAgentClient : IMaaDisposable
     ///     <see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.
     /// </returns>
     /// <exception cref="OperationCanceledException">The <paramref name="cancellationToken"/> has had cancellation requested.</exception>
-    Task<bool> LinkStartUnlessProcessExit(Process process, CancellationToken cancellationToken);
+    Task<bool> LinkStartUnlessProcessExit(Process process, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Stops the connection.

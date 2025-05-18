@@ -151,7 +151,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     }
 
     /// <inheritdoc/>
-    public async Task<bool> LinkStartUnlessProcessExit(Process process, CancellationToken cancellationToken)
+    public async Task<bool> LinkStartUnlessProcessExit(Process process, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(process);
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -173,7 +173,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         finally
         {
 #if NET8_0_OR_GREATER
-            await cts.CancelAsync();
+            await cts.CancelAsync().ConfigureAwait(false);
 #else
             cts.Cancel();
 #endif
