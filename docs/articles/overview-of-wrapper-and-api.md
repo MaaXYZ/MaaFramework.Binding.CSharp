@@ -1,4 +1,4 @@
-# Overview of Wrapper and Api in [v3.0.4](https://github.com/MaaXYZ/MaaFramework/tree/v3.0.4)
+# Overview of Wrapper and Api in [v4.0.0](https://github.com/MaaXYZ/MaaFramework/tree/v4.0.0)
 
 ## Enums
 
@@ -37,6 +37,45 @@
 | MaaJob.Wait() <br> MaaTaskJob.WaitFor() | `MaaControllerWait` <br> `MaaResourceWait` <br> `MaaTaskerWait` |
 | MaaTaskJob.Tasker | *A property used to simplify design of TaskDetail.Query* |
 
+## IMaaCommon
+
+Derived:
+- IMaaController
+- IMaaResource
+- IMaaTasker
+- IMaaToolkit.PI
+
+| Wrapper | MaaDef |
+| --- | --- |
+| IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
+
+## IMaaDisposableHandle : IMaaDisposable : IDisposable
+
+IMaaDisposable Derived:
+- IMaaDisposableHandle
+  - IMaaAgentClient
+  - IMaaController
+  - IMaaResource
+  - IMaaTasker
+  - IMaaRectBuffer
+  - IMaaImageBuffer
+  - IMaaStringBuffer
+  - IMaaListBuffer
+    - MaaStringListBuffer
+    - AdbDeviceListBuffer
+    - DesktopWindowListBuffer
+    - MaaImageListBuffer
+- MaaImage
+
+| Wrapper | MaaDef |
+| --- | --- |
+| IDisposable.Dispose() | *Destroys the unmanaged resources.* |
+| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
+| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resources are invalid but still called.* |
+| IMaaDisposable.IsStateless | *Indicates whether the current instance is stateless.* |
+| IMaaDisposableHandle.Handle | *The unmanaged resource handle.* |
+| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* <br> *If you are not sure when to call it, please use IDisposable.Dispose() instead.* |
+
 ## MaaController : IMaaController
 
 | Wrapper | Native API |
@@ -63,11 +102,7 @@
 | IMaaController.LinkStop() | `MaaControllerConnected` |
 | IMaaController.GetCachedImage() | `MaaControllerCachedImage` |
 | IMaaController.Uuid | `MaaControllerGetUuid` |
-| IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaControllerHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
 ## MaaTasker : IMaaTasker
 
@@ -92,11 +127,7 @@
 | IMaaTasker.GetTaskDetail() <br> TaskDetail.Query() <br> MaaTaskJob.QueryTaskDetail() | `MaaTaskerGetTaskDetail` |
 | IMaaTasker.GetLatestNode() <br> NodeDetail.QueryLatest() | `MaaTaskerGetLatestNode` |
 | IMaaTasker.DisposeOptions | *Disposes the Resource or the Controller when Dispose() was invoked.* |
-| IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaInstanceHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
 ## MaaResource : IMaaResource
 
@@ -114,11 +145,7 @@
 | IMaaOption.SetOption() | `MaaResourceSetOption` |
 | IMaaResource.Hash | `MaaResourceGetHash` |
 | IMaaResource.NodeList | `MaaResourceGetNodeList` |
-| IMaaCommon.Callback | *Occurs when MaaFramework calls back.* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
 ## MaaContext : IMaaContext
 
@@ -146,10 +173,7 @@
 | IMaaStringBuffer.Size | `MaaStringBufferSize` |
 | IMaaStringBuffer.TrySetValue() <br> MaaStringBuffer.TrySetValue() | `MaaStringBufferSet` <br> `MaaStringBufferSetEx` |
 | IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaStringBufferHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
 ## Buffers.MaaStringListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
 
@@ -168,10 +192,7 @@
 | IMaaListBuffer.TryClear() <br> ICollection<>.Clear() | `MaaStringListBufferClear` |
 | ICollection<>.IsReadOnly | `false` |
 | IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 | MaaStringListBuffer.TryGetList() <br> MaaStringListBuffer.TrySetList() | *Static utility methods used to avoid creating instances of the class.* |
 
 ## Buffers.MaaImageBuffer : Buffers.IMaaImageBuffer
@@ -191,10 +212,7 @@
 | IMaaImageBuffer.TryGetEncodedData() <br> MaaImageBuffer.TryGetEncodedData() | `MaaImageBufferGetEncoded` <br> `MaaImageBufferGetEncodedSize` |
 | IMaaImageBuffer.TrySetEncodedData() <br> MaaImageBuffer.TrySetEncodedData() | `MaaImageBufferSetEncoded` |
 | IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaImageBufferHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
 ## Buffers.MaaImageListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
 
@@ -220,10 +238,7 @@
 | IMaaListBuffer.TryClear() <br> ICollection<>.Clear() | `MaaImageListBufferClear` |
 | ICollection<>.IsReadOnly | `false` |
 | IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaImageListBufferHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 | MaaImageListBuffer.TryGetEncodedDataList() <br> MaaImageListBuffer.TryGetEncodedDataList() | *Static utility methods used to avoid creating instances of the class.* |
 
 ## Buffers.MaaRectBuffer : Buffers.IMaaRectBuffer
@@ -235,10 +250,7 @@
 | IMaaRectBuffer.X <br> IMaaRectBuffer.Y <br> IMaaRectBuffer.Width <br> IMaaRectBuffer.Height <br> IMaaRectBuffer.TryGetValues() <br> IMaaRectBuffer.GetValues() <br> MaaRectBuffer.TryGetValues() <br> MaaRectBuffer.GetValues() | `MaaGetRectX` <br> `MaaGetRectY` <br> `MaaGetRectW` <br> `MaaGetRectH` |
 | IMaaRectBuffer.TrySetValues() <br> MaaRectBuffer.TrySetValues() | `MaaRectSet` |
 | IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaRectHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 
 ## MaaUtility : IMaaUtility
 
@@ -257,7 +269,6 @@
 | IMaaToolkit.PI.Register() | `MaaToolkitProjectInterfaceRegisterCustomAction` <br> `MaaToolkitProjectInterfaceRegisterCustomRecognition` |
 | IMaaToolkit.PI.RunCli() | `MaaToolkitProjectInterfaceRunCli` |
 | IMaaToolkit.PI.this[] | *Gets or creates a PI instance.* |
-| IMaaToolkit.PI.Callback | *Occurs when MaaFramework calls back.* |
 
 ## Buffers.AdbDeviceListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
 
@@ -273,10 +284,7 @@
 | IMaaListBuffer.this[] <br> IMaaListBuffer.TryIndexOf() <br> IList<>.this[] <br> IList<>.IndexOf() <br> ICollection<>.Contains() | `MaaToolkitAdbDeviceListAt` |
 | ICollection<>.IsReadOnly | `true` |
 | IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 | AdbDeviceListBuffer.TryGetList() | *Static utility methods used to avoid creating instances of the class.* |
 
 ## Buffers.DesktopWindowListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
@@ -293,8 +301,30 @@
 | IMaaListBuffer.this[] <br> IMaaListBuffer.TryIndexOf() <br> IList<>.this[] <br> IList<>.IndexOf() <br> ICollection<>.Contains() | `MaaToolkitDesktopWindowListAt` |
 | ICollection<>.IsReadOnly | `true` |
 | IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
-| IMaaDisposable.IsInvalid | *Indicates whether the unmanaged resources from MaaFramework are invalid.* |
-| IMaaDisposable.ThrowOnInvalid | *Indicates whether an exception is thrown when current resource is invalid but still called.* |
 | IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
-| IMaaDisposableHandle.SetHandleAsInvalid() | *Marks a handle as no longer available.* |
 | DesktopWindowListBuffer.TryGetList() | *Static utility methods used to avoid creating instances of the class.* |
+
+## MaaAgentClient : IMaaAgentClient
+
+| Wrapper | Native API |
+| --- | --- |
+| MaaAgentClient.Create() | `MaaAgentClientCreate` <br> `MaaAgentClientCreateSocket` |
+| IMaaAgentClient.Id |  |
+| IDisposable.Dispose() | `MaaAgentClientDestroy` |
+| IMaaAgentClient.Resource | `MaaAgentClientBindResource` |
+| IMaaAgentClient.LinkStart() <br> IMaaAgentClient.LinkStartUnlessProcessExit() | `MaaAgentClientConnect` |
+| IMaaAgentClient.LinkStop() | `MaaAgentClientDisconnect` |
+| IMaaAgentClient.AgentServerProcess | *A process created by LinkStart(), whose lifecycle is managed by the current class.* |
+| IMaaAgentClient.AgentServerStartupMethod | *A delegate used to start the agent server process.* |
+| MaaDisposableHandle.Handle | *The MaaAgentClientHandle.* |
+
+## MaaAgentServer : IMaaAgentServer
+
+| Wrapper | Native API |
+| --- | --- |
+| MaaAgentServer.CurrentId <br> IMaaAgentServer.WithIdentifier() | *Used to get and modify the identifier.* |
+| IMaaAgentServer.Register() | `MaaAgentServerRegisterCustomRecognition` <br> `MaaAgentServerRegisterCustomAction` |
+| IMaaAgentServer.StartUp() | `MaaAgentServerStartUp` |
+| IMaaAgentServer.ShutDown() | `MaaAgentServerShutDown` |
+| IMaaAgentServer.Join() | `MaaAgentServerJoin` |
+| IMaaAgentServer.Detach() | `MaaAgentServerDetach` |

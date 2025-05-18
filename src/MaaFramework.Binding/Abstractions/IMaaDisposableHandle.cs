@@ -17,5 +17,8 @@ public interface IMaaDisposableHandle<out T> : IMaaDisposable
     /// <summary>
     ///     Marks a handle as no longer used.
     /// </summary>
+    /// <remarks>
+    ///     If you are not sure when to call it, please use <see cref="IDisposable.Dispose"/> instead.
+    /// </remarks>
     void SetHandleAsInvalid();
 }

@@ -19,7 +19,7 @@ public interface IMaaDisposable : IDisposable
     ///     Gets a value indicating whether the current instance is stateless.
     /// </summary>
     /// <remarks>
-    ///     The lifetime of unmanaged resources is controlled by <see cref="MaaFramework"/>.
+    ///     The lifetime of unmanaged resources is controlled by <see cref="MaaFramework"/> if <see langword="this"/> is stateless.
     /// </remarks>
     bool IsStateless { get; }
 }
