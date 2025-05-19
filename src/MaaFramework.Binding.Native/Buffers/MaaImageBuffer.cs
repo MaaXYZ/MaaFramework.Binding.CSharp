@@ -17,7 +17,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         : $"{GetType().Name}: {Width}x{Height} {{ {nameof(Channels)} = {Channels}, {nameof(Type)} = {Type} }}";
 
     /// <inheritdoc/>
-    public bool TryCopyTo(MaaImageBufferHandle bufferHandle) => MaaImageBufferSetRawData(
+    public bool TryCopyTo(MaaImageBufferHandle bufferHandle) => TrySetRawData(
             handle: bufferHandle,
             data: MaaImageBufferGetRawData(Handle),
             width: MaaImageBufferWidth(Handle),
@@ -122,14 +122,13 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <inheritdoc/>
     public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, [MaybeNullWhen(false)] out byte[] data)
     {
-        var dataHandle = MaaImageBufferGetEncoded(handle);
-        if (dataHandle == default)
+        if (!TryGetEncodedData(handle, out var dataHandle, out var maaSize))
         {
             data = default;
             return false;
         }
 
-        var size = (int)MaaImageBufferGetEncodedSize(handle);
+        var size = (int)maaSize;
         if (size < 0 || size > Array.MaxLength)
         {
             data = [];
@@ -143,14 +142,13 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <inheritdoc/>
     public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, [MaybeNullWhen(false)] out Stream data)
     {
-        var dataHandle = MaaImageBufferGetEncoded(handle);
-        if (dataHandle == default)
+        if (!TryGetEncodedData(handle, out var dataHandle, out var maaSize))
         {
             data = default;
             return false;
         }
 
-        var size = (long)MaaImageBufferGetEncodedSize(handle);
+        var size = (long)maaSize;
         if (size < 0)
         {
             data = new UnmanagedMemoryStream((byte*)dataHandle, 0);
@@ -164,14 +162,13 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <inheritdoc/>
     public static unsafe bool TryGetEncodedData(MaaImageBufferHandle handle, out ReadOnlySpan<byte> data)
     {
-        var dataHandle = MaaImageBufferGetEncoded(handle);
-        if (dataHandle == default)
+        if (!TryGetEncodedData(handle, out var dataHandle, out var maaSize))
         {
             data = default;
             return false;
         }
 
-        var size = (int)MaaImageBufferGetEncodedSize(handle);
+        var size = (int)maaSize;
         if (size < 0)
         {
             data = new ReadOnlySpan<byte>((void*)dataHandle, 0);
@@ -188,9 +185,14 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <inheritdoc cref="TryGetEncodedData(MaaImageBufferHandle, out byte[])"/>
     public static bool TryGetEncodedData(MaaImageBufferHandle handle, out MaaImageEncodedData data, out MaaSize size)
     {
-        data = MaaImageBufferGetEncoded(handle);
         size = MaaImageBufferGetEncodedSize(handle);
-        return data != default;
+        if (size == 0)
+        {
+            data = default;
+            return false;
+        }
+        data = MaaImageBufferGetEncoded(handle);
+        return true;
     }
 
     /// <inheritdoc/>
@@ -231,7 +233,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     {
         fixed (byte* __array_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(data))
         {
-            return MaaImageBufferSetEncoded(handle, (nint)__array_native, (MaaSize)(data?.Length ?? 0));
+            return TrySetEncodedData(handle, (MaaImageEncodedData)__array_native, (MaaSize)(data?.Length ?? 0));
         }
     }
 
@@ -247,7 +249,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         var size = (MaaSize)(data.Length - data.Position);
         if (data is UnmanagedMemoryStream unmanagedMemoryStream)
         {
-            return MaaImageBufferSetEncoded(handle, (nint)unmanagedMemoryStream.PositionPointer, size);
+            return TrySetEncodedData(handle, (MaaImageEncodedData)unmanagedMemoryStream.PositionPointer, size);
         }
 
         var intSize = (int)size;
@@ -265,7 +267,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
 
             fixed (byte* __array_native = &global::System.Runtime.InteropServices.Marshalling.ArrayMarshaller<byte, byte>.ManagedToUnmanagedIn.GetPinnableReference(array))
             {
-                return MaaImageBufferSetEncoded(handle, (nint)__array_native, size);
+                return TrySetEncodedData(handle, (MaaImageEncodedData)__array_native, size);
             }
         }
         finally
@@ -279,7 +281,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     {
         fixed (byte* __array_native = &MemoryMarshal.GetReference(data))
         {
-            return MaaImageBufferSetEncoded(handle, (nint)__array_native, (MaaSize)data.Length);
+            return TrySetEncodedData(handle, (MaaImageEncodedData)__array_native, (MaaSize)data.Length);
         }
     }
 
@@ -341,8 +343,16 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
 
     /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
     public bool TryGetRawData(out MaaImageRawData data)
+        => TryGetRawData(Handle, out data);
+
+    /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
+    public bool TryGetRawData(out MaaImageRawData data, out int width, out int height, out int type)
+        => TryGetRawData(Handle, out data, out width, out height, out type);
+
+    /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
+    public static bool TryGetRawData(MaaImageBufferHandle handle, out MaaImageRawData data)
     {
-        data = MaaImageBufferGetRawData(Handle);
+        data = MaaImageBufferGetRawData(handle);
         return data != default;
     }
 
@@ -360,8 +370,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// </remarks>
     public static bool TryGetRawData(MaaImageBufferHandle handle, out MaaImageRawData data, out int width, out int height, out int type)
     {
-        data = MaaImageBufferGetRawData(handle);
-        if (data == default)
+        if (!TryGetRawData(handle, out data))
         {
             width = height = type = default;
             return false;
@@ -373,16 +382,9 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         return true;
     }
 
-    /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
-    public static bool TryGetRawData(MaaImageBufferHandle handle, out MaaImageRawData data)
-    {
-        data = MaaImageBufferGetRawData(handle);
-        return data != default;
-    }
-
     /// <inheritdoc cref="TrySetRawData(nint, nint, int, int, int)"/>
     public bool TrySetRawData(MaaImageRawData data, int width, int height, int type)
-        => MaaImageBufferSetRawData(Handle, data, width, height, type);
+        => TrySetRawData(Handle, data, width, height, type);
 
     /// <summary>
     ///     Sets the image raw data.
@@ -393,9 +395,6 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <param name="height">The image height.</param>
     /// <param name="type">The image type.</param>
     /// <returns><see langword="true"/> if the image raw data was set successfully; otherwise, <see langword="false"/>.</returns>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaImageBufferSetRawData"/>.
-    /// </remarks>
     public static bool TrySetRawData(MaaImageBufferHandle handle, MaaImageRawData data, int width, int height, int type)
         => MaaImageBufferSetRawData(handle, data, width, height, type);
 

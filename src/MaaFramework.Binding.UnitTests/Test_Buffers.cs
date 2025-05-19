@@ -316,20 +316,23 @@ public class Test_Buffers
 
         if (type == MaaTypes.Native)
         {
-            Assert.IsTrue( // should be false
-                MaaImageBuffer.TryGetEncodedData(native.Handle, out var invalidEncodedDataHandle, out var invalidEncodedDataSize));
+            Assert.IsTrue(
+                native.IsEmpty);
             Assert.IsFalse(
-                MaaImageBuffer.TrySetEncodedData(native.Handle, nint.Zero, invalidEncodedDataSize));
+                MaaImageBuffer.TryGetEncodedData(native.Handle, out var emptyEncodedDataHandle, out var emptyEncodedDataSize));
             Assert.IsFalse(
-                MaaImageBuffer.TryGetRawData(native.Handle, out var invalidRawDataHandle, out _, out _, out _));
-            Assert.IsFalse(
-                MaaImageBuffer.TrySetRawData(native.Handle, nint.Zero, 0, 0, 0));
+                MaaImageBuffer.TrySetEncodedData(native.Handle, emptyEncodedDataHandle, emptyEncodedDataSize));
             Assert.AreEqual(
-                nint.Zero, invalidRawDataHandle);
-            // Assert.AreEqual(
-            //     nint.Zero, invalidEncodedDataHandle);
+                nint.Zero, emptyEncodedDataHandle);
             Assert.AreEqual(
-                ulong.MinValue, invalidEncodedDataSize);
+                ulong.MinValue, emptyEncodedDataSize);
+
+            Assert.IsFalse(
+                MaaImageBuffer.TryGetRawData(native.Handle, out var emptyRawDataHandle, out _, out _, out _));
+            Assert.IsFalse(
+                MaaImageBuffer.TrySetRawData(native.Handle, emptyRawDataHandle, 0, 0, 0));
+            Assert.AreEqual(
+                nint.Zero, emptyRawDataHandle);
 
             Assert.IsFalse(
                 MaaImageBuffer.TrySetEncodedData(encodedDataArray, static _ => false));
@@ -457,9 +460,12 @@ public class Test_Buffers
         if (type == MaaTypes.Native)
         {
             Assert.IsTrue(
+                native.IsEmpty);
+            Assert.IsTrue(
                 MaaStringBuffer.TryGetValue(native.Handle, out var invalidString));
             Assert.AreEqual(
                 string.Empty, invalidString);
+
             Assert.IsFalse(
                 MaaStringBuffer.TryGetValue(nint.Zero, out invalidString));
             Assert.IsNull(
