@@ -82,8 +82,8 @@ internal static class Custom
         }
     }
 
-    private const string DiffEntry = "ColorMatch";
-    private const string DiffParam = $$"""
+    internal const string DiffEntry = "ColorMatch";
+    internal const string DiffParam = $$"""
     {
         "{{DiffEntry}}": {
             "recognition": "ColorMatch",

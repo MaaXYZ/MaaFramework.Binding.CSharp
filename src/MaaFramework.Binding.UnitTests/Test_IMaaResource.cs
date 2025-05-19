@@ -72,6 +72,18 @@ public class Test_IMaaResource
             maaResource.IsLoaded);
     }
 
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_OverridePipeline_OverrideNext(MaaTypes type, IMaaResource maaResource)
+    {
+        var DiffParam = Custom.DiffParam;
+        var DiffEntry = Custom.DiffEntry;
+        Assert.IsTrue(
+            maaResource.OverridePipeline(DiffParam));
+        Assert.IsTrue(
+            maaResource.OverrideNext(DiffEntry, [DiffEntry]));
+    }
+
     private static void Interface_IMaaPost_Success(MaaJob job)
     {
         Assert.AreNotEqual(

@@ -60,6 +60,21 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     MaaJob AppendBundle(string path);
 
     /// <summary>
+    ///     Override a pipeline.
+    /// </summary>
+    /// <param name="pipelineOverride">The json used to override the pipeline.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool OverridePipeline(string pipelineOverride);
+
+    /// <summary>
+    ///     Override the property field "next" in a node.
+    /// </summary>
+    /// <param name="nodeName">The node name.</param>
+    /// <param name="nextList">The next list.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool OverrideNext(string nodeName, IEnumerable<string> nextList);
+
+    /// <summary>
     ///     Gets whether the <see cref="IMaaResource"/> is fully loaded.
     /// </summary>
     /// <returns><see langword="true"/> if the <see cref="IMaaResource"/> is fully loaded; otherwise, <see langword="false"/>.</returns>

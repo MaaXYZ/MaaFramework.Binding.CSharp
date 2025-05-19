@@ -2,6 +2,7 @@
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaResource;
 
 namespace MaaFramework.Binding;
@@ -187,6 +188,21 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
         var id = MaaResourcePostBundle(Handle, path);
         return new MaaJob(id, this);
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceOverridePipeline"/>.
+    /// </remarks>
+    public bool OverridePipeline([StringSyntax("Json")] string pipelineOverride)
+        => MaaResourceOverridePipeline(Handle, pipelineOverride);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceOverrideNext"/>.
+    /// </remarks>
+    public bool OverrideNext(string nodeName, IEnumerable<string> nextList)
+        => MaaStringListBuffer.TrySetList(nextList, listBuffer
+            => MaaResourceOverrideNext(Handle, nodeName, listBuffer));
 
     /// <inheritdoc/>
     /// <remarks>
