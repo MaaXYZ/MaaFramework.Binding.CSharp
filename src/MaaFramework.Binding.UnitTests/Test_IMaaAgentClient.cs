@@ -62,6 +62,9 @@ public class Test_IMaaAgentClient
     {
         _ = Assert.ThrowsException<InvalidOperationException>(() =>
             maaAgentClient.AgentServerProcess);
+        Assert.IsTrue(
+            maaAgentClient.IsConnected);    // IsConnected 的值有问题，先改了一下LinkStop()实现，记得改回来
+
         var ret = maaAgentClient.LinkStart(StartupAgentServer);
         Assert.IsTrue(
             ret);
@@ -69,6 +72,8 @@ public class Test_IMaaAgentClient
             maaAgentClient.LinkStart());
         Assert.IsFalse(
             maaAgentClient.AgentServerProcess.HasExited);
+        Assert.IsTrue(
+            maaAgentClient.IsConnected);
 
         Assert.IsTrue(
             maaAgentClient.LinkStop());
@@ -77,6 +82,8 @@ public class Test_IMaaAgentClient
         Task.Delay(100).Wait(); // wait for process exit
         Assert.IsTrue(
             maaAgentClient.AgentServerProcess.HasExited);
+        Assert.IsTrue(
+            maaAgentClient.IsConnected);
     }
 
     [TestMethod]

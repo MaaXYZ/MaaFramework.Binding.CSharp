@@ -13,31 +13,30 @@ namespace MaaFramework.Binding;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAgentClient<MaaAgentClientHandle>
 {
-    private bool _isConnected;
     private Process? _agentServerProcess;
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ Id = {Id}, IsConnected = {_isConnected} }}";
+        : $"{GetType().Name} {{ {nameof(Id)} = {Id ?? "<null>"}, {nameof(IsConnected)} = {IsConnected} }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
     /// </summary>
     /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaAgentClientCreate"/>.
+    ///     Wrapper of <see cref="MaaAgentClientCreateV2"/>.
     /// </remarks>
     protected MaaAgentClient(string identifier = "")
         : base(invalidHandleValue: MaaAgentClientHandle.Zero)
     {
-        var handle = MaaAgentClientCreate();
-        SetHandle(handle, needReleased: true);
-        Id = CreateSocket(identifier).ThrowIfNull();
-
-        if (!string.IsNullOrEmpty(identifier))
-            _ = Id.ThrowIfNotEquals(identifier);
+        _ = MaaStringBuffer.TrySetValue(identifier, true, buffer =>
+        {
+            var handle = MaaAgentClientCreateV2(buffer);
+            SetHandle(handle, needReleased: true);
+            return true;
+        }).ThrowIfFalse();
     }
 
     /// <summary>
@@ -54,7 +53,17 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         => new() { Resource = resource, };
 
     /// <inheritdoc/>
-    public string Id { get; }
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientIdentifier"/>.
+    /// </remarks>
+    public string? Id
+    {
+        get
+        {
+            _ = MaaStringBuffer.TryGetValue(out var str, buffer => MaaAgentClientIdentifier(Handle, buffer));
+            return str;
+        }
+    }
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
@@ -92,27 +101,12 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         }
     }
 
-    /// <summary>
-    ///     Creates a socket connection with the specified identifier.
-    /// </summary>
-    /// <param name="identifier">The specified identifier.</param>
-    /// <returns><see langword="true"/> if the socket was created successfully; otherwise, <see langword="false"/>.</returns>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaAgentClientCreateSocket"/>.
-    /// </remarks>
-    protected string? CreateSocket(string identifier = "")
-        => MaaStringBuffer.TryGetValue(out var socketId, handle
-            => MaaStringBuffer.TrySetValue(handle, identifier)
-            && MaaAgentClientCreateSocket(Handle, handle))
-        ? socketId
-        : null;
-
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
     /// </remarks>
     public bool LinkStart()
-        => _isConnected = MaaAgentClientConnect(Handle);
+        => MaaAgentClientConnect(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -140,6 +134,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     {
         if (_agentServerProcess is null or { HasExited: true })
         {
+            ArgumentException.ThrowIfNullOrEmpty(Id);
             _agentServerProcess?.Dispose();
             _agentServerProcess = method.Invoke(Id, NativeBindingContext.LoadedNativeLibraryDirectory);
 
@@ -151,6 +146,9 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
+    /// </remarks>
     public async Task<bool> LinkStartUnlessProcessExit(Process process, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(process);
@@ -180,24 +178,36 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         }
     }
 
+    private int _stopping;
+
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientDisconnect"/>.
     /// </remarks>
     public bool LinkStop()
     {
-        if (_isConnected)
+        if (IsConnected && Interlocked.CompareExchange(ref _stopping, 1, 0) == 0)
         {
-            _isConnected = false;
-            if (!MaaAgentClientDisconnect(Handle))
+            return MaaAgentClientDisconnect(Handle);
+#pragma warning disable CS0162 // 检测到无法访问的代码
+            try
             {
-                _isConnected = true;
-                return false;
+                return MaaAgentClientDisconnect(Handle);
             }
+            finally
+            {
+                _stopping = 0;
+            }
+#pragma warning restore CS0162 // 检测到无法访问的代码
         }
-
         return true;
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
+    /// </remarks>
+    public bool IsConnected => MaaAgentClientConnected(Handle);
 
     /// <inheritdoc/>
     public Process AgentServerProcess => _agentServerProcess

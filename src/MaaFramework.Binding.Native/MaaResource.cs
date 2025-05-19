@@ -250,9 +250,8 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     {
         get
         {
-            using var buffer = new MaaStringBuffer();
-            var ret = MaaResourceGetHash(Handle, buffer.Handle);
-            return ret ? buffer.ToString() : null;
+            _ = MaaStringBuffer.TryGetValue(out var str, buffer => MaaResourceGetHash(Handle, buffer));
+            return str;
         }
     }
 

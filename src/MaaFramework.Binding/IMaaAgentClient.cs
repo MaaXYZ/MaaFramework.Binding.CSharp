@@ -17,7 +17,8 @@ public interface IMaaAgentClient : IMaaDisposable
     /// <summary>
     ///     Gets the unique identifier used to communicate with the agent server.
     /// </summary>
-    string Id { get; }
+    /// <returns>A <see cref="string"/> if the identifier was got successfully; otherwise, <see langword="null"/>.</returns>
+    string? Id { get; }
 
     /// <summary>
     ///     Gets or sets a resource that binds to the <see cref="IMaaAgentClient"/>.
@@ -71,6 +72,12 @@ public interface IMaaAgentClient : IMaaDisposable
     /// </summary>
     /// <returns><see langword="true"/> if the connection was stopped successfully; otherwise, <see langword="false"/>.</returns>
     bool LinkStop();
+
+    /// <summary>
+    ///     Gets whether the <see cref="IMaaAgentClient"/> is connected to the agent server.
+    /// </summary>
+    /// <returns><see langword="true"/> if the <see cref="IMaaAgentClient"/> is connected; otherwise, <see langword="false"/>.</returns>
+    bool IsConnected { get; }
 
     /// <summary>
     ///     Represents a method that starts the agent server process.
