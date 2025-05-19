@@ -65,6 +65,12 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     bool IsRunning { get; }
 
     /// <summary>
+    ///     Gets whether the <see cref="IMaaTasker"/> is stopping.
+    /// </summary>
+    /// <returns><see langword="true"/> if <see cref="IMaaTasker"/> is stopping; otherwise, <see langword="false"/>.</returns>
+    bool IsStopping { get; }
+
+    /// <summary>
     ///     Stops all appended tasks, the <see cref="IMaaResource"/> and the <see cref="IMaaController"/>. 
     /// </summary>
     /// <returns>A stop job.</returns>

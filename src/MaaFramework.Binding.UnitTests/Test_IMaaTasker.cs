@@ -254,7 +254,7 @@ public class Test_IMaaTasker
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), "EmptyNode")]
-    public void Interface_AppendTask(MaaTypes type, IMaaTasker maaTasker, string taskEntryName)
+    public void Interface_AppendTask_IsRunning(MaaTypes type, IMaaTasker maaTasker, string taskEntryName)
     {
         Assert.IsNotNull(maaTasker);
 
@@ -265,13 +265,11 @@ public class Test_IMaaTasker
         // Third job
         var job =
             maaTasker.AppendTask(taskEntryName);
+        Assert.IsTrue(
+            maaTasker.IsRunning);
         // Wait the third job
         Interface_IMaaPost_Success(job);
-        Interface_IsRunning(maaTasker);
-    }
-
-    private static void Interface_IsRunning(IMaaTasker maaTasker)
-    {
+        Task.Delay(100).Wait();
         Assert.IsFalse(
             maaTasker.IsRunning);
     }
@@ -363,12 +361,17 @@ public class Test_IMaaTasker
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Stop(MaaTypes type, IMaaTasker maaTasker)
+    public void Interface_Stop_IsStopping(MaaTypes type, IMaaTasker maaTasker)
     {
         Assert.IsNotNull(maaTasker);
         var job =
             maaTasker.Stop();
+        Assert.IsTrue(
+            maaTasker.IsStopping);
         Interface_IMaaPost_Success(job);
+        Task.Delay(100).Wait();
+        Assert.IsFalse(
+            maaTasker.IsStopping);
     }
 
     [TestMethod]

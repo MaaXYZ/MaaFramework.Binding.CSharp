@@ -233,6 +233,12 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerStopping"/>.
+    /// </remarks>
+    public bool IsStopping => MaaTaskerStopping(Handle);
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerPostStop"/>.
     /// </remarks>
     public MaaTaskJob Stop()
