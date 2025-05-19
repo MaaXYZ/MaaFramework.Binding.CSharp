@@ -68,6 +68,10 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IM
     ///     Stops all appended tasks, the <see cref="IMaaResource"/> and the <see cref="IMaaController"/>. 
     /// </summary>
     /// <returns>A stop job.</returns>
+    MaaTaskJob Stop();
+
+    /// <inheritdoc cref="Stop"/>
+    [Obsolete("Use Stop() instead.")]
     MaaTaskJob Abort();
 
     /// <summary>

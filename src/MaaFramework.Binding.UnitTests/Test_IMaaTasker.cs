@@ -363,11 +363,11 @@ public class Test_IMaaTasker
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Abort(MaaTypes type, IMaaTasker maaTasker)
+    public void Interface_Stop(MaaTypes type, IMaaTasker maaTasker)
     {
         Assert.IsNotNull(maaTasker);
         var job =
-            maaTasker.Abort();
+            maaTasker.Stop();
         Interface_IMaaPost_Success(job);
     }
 

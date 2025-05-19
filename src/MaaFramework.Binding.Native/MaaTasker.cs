@@ -235,11 +235,18 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerPostStop"/>.
     /// </remarks>
-    public MaaTaskJob Abort()
+    public MaaTaskJob Stop()
     {
         var id = MaaTaskerPostStop(Handle);
         return new MaaTaskJob(id, this);
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerPostStop"/>.
+    /// </remarks>
+    [Obsolete("Use Stop() instead.")]
+    public MaaTaskJob Abort() => Stop();
 
     /// <inheritdoc/>
     /// <remarks>
