@@ -22,33 +22,4 @@ public static partial class MaaBuffer
 
     [LibraryImport("MaaFramework", EntryPoint = "MaaStringBufferGet", StringMarshalling = StringMarshalling.Utf8)]
     public static partial nint MaaStringBufferGetToNint(MaaStringBufferHandle handle);
-
-    public static MaaImageBufferHandle MaaImageListBufferAtWithBoundsChecking(MaaImageListBufferHandle handle, MaaSize index)
-        => index < MaaImageListBufferSize(handle)
-            ? MaaImageListBufferAt(handle, index)
-            : MaaImageBufferHandle.Zero;
-
-    public static MaaStringBufferHandle MaaStringListBufferAtWithBoundsChecking(MaaStringListBufferHandle handle, MaaSize index)
-        => index < MaaStringListBufferSize(handle)
-            ? MaaStringListBufferAt(handle, index)
-            : MaaStringBufferHandle.Zero;
-
-    public static bool MaaImageListBufferRemoveWithBoundsChecking(MaaImageListBufferHandle handle, MaaSize index)
-        => index < MaaImageListBufferSize(handle)
-           && MaaImageListBufferRemove(handle, index);
-
-    public static bool MaaStringListBufferRemoveWithBoundsChecking(MaaStringListBufferHandle handle, MaaSize index)
-        => index < MaaStringListBufferSize(handle)
-           && MaaStringListBufferRemove(handle, index);
-}
-
-public static partial class MaaToolkit
-{
-    public static MaaToolkitAdbDeviceHandle MaaToolkitAdbDeviceListAtWithBoundsChecking(MaaToolkitAdbDeviceListHandle list, MaaSize index)
-        => MaaToolkitAdbDeviceListAt(list, index);
-
-    public static MaaToolkitDesktopWindowHandle MaaToolkitDesktopWindowListAtWithBoundsChecking(MaaToolkitDesktopWindowListHandle list, MaaSize index)
-        => index < MaaToolkitDesktopWindowListSize(list)
-            ? MaaToolkitDesktopWindowListAt(list, index)
-            : MaaToolkitDesktopWindowHandle.Zero;
 }

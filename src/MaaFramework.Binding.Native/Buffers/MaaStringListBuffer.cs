@@ -51,7 +51,7 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferAt"/>.
     /// </remarks>
-    public override MaaStringBuffer this[MaaSize index] => new(MaaStringListBufferAtWithBoundsChecking(Handle, index).ThrowIfEquals(nint.Zero));
+    public override MaaStringBuffer this[MaaSize index] => new(MaaStringListBufferAt(Handle, index).ThrowIfEquals(nint.Zero));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -66,7 +66,7 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     ///     Wrapper of <see cref="MaaStringListBufferRemove"/>.
     /// </remarks>
     public override bool TryRemoveAt(MaaSize index)
-        => MaaStringListBufferRemoveWithBoundsChecking(Handle, index);
+        => MaaStringListBufferRemove(Handle, index);
 
     /// <inheritdoc/>
     /// <remarks>

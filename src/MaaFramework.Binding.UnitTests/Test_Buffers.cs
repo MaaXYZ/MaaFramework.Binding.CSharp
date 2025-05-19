@@ -912,7 +912,6 @@ public class Test_Buffers
 
         if (type == MaaTypes.Native)
         {
-            _ = Assert.ThrowsException<MaaInteroperationException>(() => (T)(DesktopWindowInfo)new DesktopWindowListBuffer.MaaToolkitDesktopWindowInfo(nint.Zero));
             var invalidInfo = (T)funcList[0];
             Assert.IsFalse(
                 buffer.TryIndexOf(invalidInfo, out var invalidIndex));

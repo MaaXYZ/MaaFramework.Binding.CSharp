@@ -85,7 +85,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// </remarks>
     // Prohibit internal use of this method unless it is returned as a return value.
     public override MaaImageBuffer this[MaaSize index] => _cache.GetOrAdd(index, i
-        => new(MaaImageListBufferAtWithBoundsChecking(Handle, i).ThrowIfEquals(nint.Zero)));
+        => new(MaaImageListBufferAt(Handle, i).ThrowIfEquals(nint.Zero)));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -112,7 +112,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// </remarks>
     public override bool TryRemoveAt(MaaSize index)
     {
-        if (!MaaImageListBufferRemoveWithBoundsChecking(Handle, index))
+        if (!MaaImageListBufferRemove(Handle, index))
             return false;
 
         RemoveCache(index);

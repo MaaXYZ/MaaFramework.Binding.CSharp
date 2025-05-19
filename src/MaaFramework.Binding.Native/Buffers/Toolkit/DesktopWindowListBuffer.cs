@@ -59,7 +59,7 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     ///     Wrapper of <see cref="MaaToolkitDesktopWindowListAt"/>.
     /// </remarks>
     public override DesktopWindowInfo this[MaaSize index] => new MaaToolkitDesktopWindowInfo(
-        MaaToolkitDesktopWindowListAtWithBoundsChecking(Handle, index).ThrowIfEquals(MaaToolkitDesktopWindowHandle.Zero));
+        MaaToolkitDesktopWindowListAt(Handle, index).ThrowIfEquals(MaaToolkitDesktopWindowHandle.Zero));
 
     /// <inheritdoc/>
     public override bool TryAdd(DesktopWindowInfo item)
