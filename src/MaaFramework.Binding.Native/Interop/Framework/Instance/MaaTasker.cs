@@ -56,6 +56,10 @@ public static partial class MaaTasker
     public static partial MaaTaskId MaaTaskerPostStop(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerStopping(MaaTaskerHandle tasker);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaResourceHandle MaaTaskerGetResource(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

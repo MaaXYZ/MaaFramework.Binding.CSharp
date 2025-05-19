@@ -52,6 +52,14 @@ public static partial class MaaResource
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceOverridePipeline(MaaResourceHandle res, string pipelineOverride);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceOverrideNext(MaaResourceHandle res, string nodeName, MaaStringListBufferHandle nextList);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaResourceClear(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

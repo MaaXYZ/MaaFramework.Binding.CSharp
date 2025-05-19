@@ -18,18 +18,18 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaAgentClient
 {
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaAgentClientHandle MaaAgentClientCreate();
+    public static partial MaaAgentClientHandle MaaAgentClientCreateV2(MaaStringBufferHandle identifier);
 
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaAgentClientDestroy(MaaAgentClientHandle client);
 
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaAgentClientBindResource(MaaAgentClientHandle client, MaaResourceHandle res);
+    public static partial bool MaaAgentClientIdentifier(MaaAgentClientHandle client, MaaStringBufferHandle identifier);
 
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaAgentClientCreateSocket(MaaAgentClientHandle client, MaaStringBufferHandle identifier);
+    public static partial bool MaaAgentClientBindResource(MaaAgentClientHandle client, MaaResourceHandle res);
 
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
@@ -38,4 +38,17 @@ public static partial class MaaAgentClient
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaAgentClientDisconnect(MaaAgentClientHandle client);
+
+    [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaAgentClientConnected(MaaAgentClientHandle client);
+
+    [Obsolete]
+    [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaAgentClientHandle MaaAgentClientCreate();
+
+    [Obsolete]
+    [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaAgentClientCreateSocket(MaaAgentClientHandle client, MaaStringBufferHandle identifier);
 }
