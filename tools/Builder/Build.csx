@@ -1,4 +1,4 @@
-﻿#r "nuget: NuGet.Versioning, 6.11.0"
+﻿#r "nuget: NuGet.Versioning, 6.14.0"
 
 using System.Diagnostics;
 using System.Xml.Linq;
@@ -42,9 +42,15 @@ if (tags.Count is 3 or 4)               // 非最新版本号
     var d = DateTimeOffset.Parse(StartProcess($"gh run view {GITHUB_RUN_ID} --json createdAt --jq .createdAt")).ToOffset(TimeSpan.FromHours(8));
     var dateTime = ((d.Year - 2000) * 1000 + d.Month * 50 + d.Day).ToString("D5");
     var todayBuildTimes = StartProcess($"gh run list --workflow {GITHUB_WORKFLOW} --created {d.ToString("yyyy-MM-ddT00:00:00+08:00")}..{d.ToString("yyyy-MM-ddT23:59:59+08:00")} --limit 99 --json createdAt --jq length");
-    version = new NuGetVersion(runtimes.Major, runtimes.Minor, runtimes.Patch,
-        ["preview", dateTime, todayBuildTimes],
-        tag);
+    var isRuntimesNewer = runtimes.Major > version.Major || runtimes.Minor > version.Minor;
+    if (isRuntimesNewer)
+        version = new NuGetVersion(runtimes.Major, runtimes.Minor,
+            ["preview", dateTime, todayBuildTimes],
+            tag);
+    else
+        version = new NuGetVersion(version.Major, version.Minor, version.Patch + 1,
+            ["preview", dateTime, todayBuildTimes],
+            tag);
 }
 
 var verStr = version.ToFullString();

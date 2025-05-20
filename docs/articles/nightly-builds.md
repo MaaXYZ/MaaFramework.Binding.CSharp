@@ -49,13 +49,15 @@ Full documentation of package source mapping can be [found here](https://learn.m
 
 ## Version Number Definition
 
-The `Core` version number follows Maa.Framework.Runtimes, whose [release version](https://github.com/MaaXYZ/MaaFramework/issues/208) is `Major.Minor.Patch[-Preview][-Post]`.
+The `Core` version number follows `Major.Minor` from Maa.Framework.Runtimes, whose [release version](https://github.com/MaaXYZ/MaaFramework/issues/208) is `Major.Minor.Patch[-Preview][-Post]`.
+
+If the Maa.Framework.Runtimes is a pre-release package, the stable version will add its pre-release number. And this will only occur when the `Core` version number is updated.
 
 Therefore, the version number of MaaFramework.Binding.CSharp is defined as follows:
 
 | Channel | Definition | Examples | Descriptions |
 | :---: | :---: | :---: | :---: |
-| stable-releases | Core[.Revision] | 2.0.0 & 2.0.0-alpha.1 <br> 2.0.0.2 & 2.0.0-alpha.1.2 | official version <br> second revision |
+| stable-releases | Core.Minor[-Preview][.Patch] | 2.0.0 & 2.1.0-alpha.1 <br> 2.0.2 & 2.1.0-alpha.1.2 | official version <br> second minor release |
 | preview-releases | Major.Minor.Patch-preview.X | 2.0.0-preview.2 | second preview |
 | nightly-builds | Major.Minor.Patch-preview.Date.BuildTimes | 2.0.0-preview.24501.2 | second build <br> on October 1, 2024 |
 
