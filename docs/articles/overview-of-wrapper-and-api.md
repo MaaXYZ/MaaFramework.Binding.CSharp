@@ -1,4 +1,4 @@
-# Overview of Wrapper and Api in [v4.0.0](https://github.com/MaaXYZ/MaaFramework/tree/v4.0.0)
+# Overview of Wrapper (v4.2.0) and Api ([v4.2.3](https://github.com/MaaXYZ/MaaFramework/tree/v4.2.3))
 
 ## Enums
 
@@ -120,7 +120,8 @@ IMaaDisposable Derived:
 | IMaaPost.GetStatus() | `MaaTaskerStatus` |
 | IMaaPost.Wait() | `MaaTaskerWait` |
 | IMaaTasker.IsRunning | `MaaTaskerRunning` |
-| IMaaTasker.Abort() | `MaaTaskerPostStop` |
+| IMaaTasker.Stop() | `MaaTaskerPostStop` |
+| IMaaTasker.IsStopping | `MaaTaskerStopping` |
 | IMaaTasker.ClearCache() | `MaaTaskerClearCache` |
 | IMaaTasker.GetRecognitionDetail() <br> RecognitionDetail.Query() <br> NodeDetail.QueryRecognitionDetail() <br> TaskDetail.QueryRecognitionDetail() <br> MaaTaskJob.QueryRecognitionDetail() | `MaaTaskerGetRecognitionDetail` |
 | IMaaTasker.GetNodeDetail() <br> NodeDetail.Query() <br> TaskDetail.QueryNodeDetail() <br> MaaTaskJob.QueryNodeDetail() | `MaaTaskerGetNodeDetail` |
@@ -139,6 +140,8 @@ IMaaDisposable Derived:
 | IMaaResource.Unregister() | `MaaResourceUnregisterCustomRecognition`  <br> `MaaResourceUnregisterCustomAction` |
 | IMaaResource.Clear() | `MaaResourceClearCustomRecognition`  <br> `MaaResourceClearCustomAction` <br> `MaaResourceClear` |
 | IMaaResource.AppendBundle() | `MaaResourcePostBundle` |
+| IMaaResource.OverridePipeline() | `MaaResourceOverridePipeline` |
+| IMaaResource.OverrideNext() | `MaaResourceOverrideNext` |
 | IMaaPost.GetStatus() | `MaaResourceStatus` |
 | IMaaPost.Wait() | `MaaResourceWait` |
 | IMaaResource.IsLoaded | `MaaResourceLoaded` |
@@ -308,12 +311,13 @@ IMaaDisposable Derived:
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaAgentClient.Create() | `MaaAgentClientCreate` <br> `MaaAgentClientCreateSocket` |
-| IMaaAgentClient.Id |  |
+| MaaAgentClient.Create() | `MaaAgentClientCreateV2` |
 | IDisposable.Dispose() | `MaaAgentClientDestroy` |
+| IMaaAgentClient.Id | `MaaAgentClientIdentifier` |
 | IMaaAgentClient.Resource | `MaaAgentClientBindResource` |
 | IMaaAgentClient.LinkStart() <br> IMaaAgentClient.LinkStartUnlessProcessExit() | `MaaAgentClientConnect` |
 | IMaaAgentClient.LinkStop() | `MaaAgentClientDisconnect` |
+| IMaaAgentClient.IsConnected | `MaaAgentClientConnected` |
 | IMaaAgentClient.AgentServerProcess | *A process created by LinkStart(), whose lifecycle is managed by the current class.* |
 | IMaaAgentClient.AgentServerStartupMethod | *A delegate used to start the agent server process.* |
 | MaaDisposableHandle.Handle | *The MaaAgentClientHandle.* |
