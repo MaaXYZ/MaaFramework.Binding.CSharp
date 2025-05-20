@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env dotnet-script
 #nullable enable
 
-#r "nuget: Maa.Framework.Binding.Native, 4.0.0"
+#r "nuget: Maa.Framework.Binding.Native, 4.2.0"
 
 using MaaFramework.Binding;
 using MaaFramework.Binding.Custom;
@@ -26,9 +26,6 @@ MaaAgentServer.Current
     .StartUp()
     .Join()
     .ShutDown();
-
-Console.Write("Press any key to exit:");
-Console.ReadKey();
 
 internal sealed class MyRec : IMaaCustomRecognition
 {

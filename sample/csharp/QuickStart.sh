@@ -1,12 +1,12 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 echo -e "(1) Main\n(2) PI\n(3) Agent\n(4) CSBinding README Example\nSelect: "
 read -r n
 case $n in
-    1) path="main.csx" ;;
-    2) path="pi_cli.csx" ;;
-    3) path="Agent/AgentMain.cs" ;;
-    4) path="CSBinding README Example.csx" ;;
+    1) path="1.main.csx" ;;
+    2) path="2.pi_cli.csx" ;;
+    3) path="3.Agent/AgentMain.cs" ;;
+    4) path="4.CSBinding README Example.csx" ;;
     *) echo "Invalid selection."; exit 1 ;;
 esac
 

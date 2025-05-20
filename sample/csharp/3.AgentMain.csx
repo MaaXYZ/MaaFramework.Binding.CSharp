@@ -1,7 +1,7 @@
-#!/usr/bin/env dotnet-script
+﻿#!/usr/bin/env dotnet-script
 #nullable enable
 
-#r "nuget: Maa.Framework, 4.0.0"
+#r "nuget: Maa.Framework, 4.2.0"
 
 using System.Diagnostics;
 using MaaFramework.Binding;
@@ -44,10 +44,10 @@ var detail = maa
 Console.WriteLine($"pipeline detail: {detail}");
 Console.WriteLine($"MyRec detail: {detail.QueryRecognitionDetail(maa, 1)?.Detail}");
 
-agent.LinkStop();
 Console.Write("Press any key to exit:");
 Console.ReadKey();
 
+agent.LinkStop();
 // The agent server process will be killed when Dispose() is called.
 // Uses LinkStart() or LinkStartUnlessProcessExit(Process, CancellationToken)
 // if you do not want the agent to control the life cycle of the process.
@@ -57,7 +57,7 @@ maa.Dispose();
 
 static Process? StartupAgentServer(string identifier, string nativeAssemblyDirectory)
 {
-    var file = "AgentChild.csx";
+    var file = "3.AgentChild.csx";
     var paths = new[]
     {
         file,
