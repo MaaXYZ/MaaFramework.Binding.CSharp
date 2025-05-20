@@ -65,7 +65,7 @@ public class Test_IMaaTasker
         }
     }
 
-    [ClassCleanup]
+    [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
     public static void CleanUpClass()
     {
         Common.DisposeData(Data.Values.Cast<IMaaDisposable>());
@@ -240,14 +240,14 @@ public class Test_IMaaTasker
             maaTasker.Resource.Clear<IMaaCustomRecognition>());
 
         // Cannot clear a specific implementation
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaTasker.Resource.Clear<Custom.TestAction>());
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaTasker.Resource.Clear<Custom.TestRecognition>());
 
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaTasker.Resource.Register(Custom.InvalidResource));
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaTasker.Resource.Unregister(Custom.InvalidResource));
     }
 
@@ -391,7 +391,7 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
 
-        _ = Assert.ThrowsException<NotSupportedException>(()
+        _ = Assert.ThrowsExactly<NotSupportedException>(()
             => maaTasker.SetOption(opt, arg));
     }
 

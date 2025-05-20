@@ -79,7 +79,7 @@ public class Test_Buffers
         Data = NewData;
     }
 
-    [ClassCleanup]
+    [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
     public static void CleanUpClass()
         => Common.DisposeData(Data.Values.SelectMany(objs => objs).Cast<IMaaDisposable>());
 
@@ -104,7 +104,7 @@ public class Test_Buffers
         image.Dispose();
         Assert.IsTrue(
             image.IsInvalid);
-        _ = Assert.ThrowsException<ObjectDisposedException>(() =>
+        _ = Assert.ThrowsExactly<ObjectDisposedException>(() =>
             image.TryCache());
     }
 
@@ -128,7 +128,7 @@ public class Test_Buffers
             "MaaImage: 1920x1080 { Channels = 3, Type = 16 }", image.ToString());
         Assert.AreEqual(
             new ImageInfo(Width: 1920, Height: 1080, Channels: 3, Type: 16), image.GetInfo());
-        _ = Assert.ThrowsException<ObjectDisposedException>(() =>
+        _ = Assert.ThrowsExactly<ObjectDisposedException>(() =>
             image.Buffer.IsEmpty);
     }
 
@@ -311,7 +311,7 @@ public class Test_Buffers
 
         Assert.IsFalse(
             buffer.TryCopyTo(null!));
-        _ = Assert.ThrowsException<NotImplementedException>(() =>
+        _ = Assert.ThrowsExactly<NotImplementedException>(() =>
             buffer.TryCopyTo(new TestImageBuffer()));
 
         if (type == MaaTypes.Native)
@@ -454,7 +454,7 @@ public class Test_Buffers
 
         Assert.IsFalse(
             buffer.TryCopyTo(null!));
-        _ = Assert.ThrowsException<NotImplementedException>(() =>
+        _ = Assert.ThrowsExactly<NotImplementedException>(() =>
             buffer.TryCopyTo(new TestStringBuffer()));
 
         if (type == MaaTypes.Native)
@@ -577,7 +577,7 @@ public class Test_Buffers
 
         Assert.IsFalse(
             buffer.TryCopyTo(null!));
-        _ = Assert.ThrowsException<NotImplementedException>(() =>
+        _ = Assert.ThrowsExactly<NotImplementedException>(() =>
             buffer.TryCopyTo(new TestRectBuffer()));
 
         if (type == MaaTypes.Native)
@@ -943,31 +943,31 @@ public class Test_Buffers
 
     private static void Test_IMaaListBuffer_Readonly<T>(IMaaListBuffer<T> buffer)
     {
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.TryCopyTo(buffer));
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.TryAdd(default!));
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.TryRemoveAt(0));
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.TryClear());
 
         #region IList<T>
 
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             ((IList<T>)buffer)[0] = default!);
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.Insert(0, default!));
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.RemoveAt(0));
 
         Assert.IsTrue(
             buffer.IsReadOnly);
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.Add(default!));
-        _ = Assert.ThrowsException<NotSupportedException>(
+        _ = Assert.ThrowsExactly<NotSupportedException>(
             buffer.Clear);
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.Remove(default!));
 
         var array = new T[buffer.Count];
@@ -1006,9 +1006,9 @@ public class Test_Buffers
 
         #region IList<T>
 
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             ((IList<T>)buffer)[0] = validValue);
-        _ = Assert.ThrowsException<NotSupportedException>(() =>
+        _ = Assert.ThrowsExactly<NotSupportedException>(() =>
             buffer.Insert(0, validValue));
 
         Assert.IsFalse(
@@ -1034,14 +1034,14 @@ public class Test_Buffers
         Assert.AreEqual(
             ulong.MinValue, buffer.MaaSizeCount);
 
-        _ = Assert.ThrowsException<MaaInteroperationException>(() =>
+        _ = Assert.ThrowsExactly<MaaInteroperationException>(() =>
             buffer[0]);
         Assert.IsFalse(
             buffer.TryIndexOf(default!, out _));
 
         #region IList<T>
 
-        _ = Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             ((IList<T>)buffer)[0]);
         Assert.AreEqual(
             -1, buffer.IndexOf(default!));

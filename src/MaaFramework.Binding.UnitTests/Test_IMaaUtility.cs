@@ -21,7 +21,7 @@ public class Test_IMaaMaaUtility
         Data = NewData;
     }
 
-    [ClassCleanup]
+    [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
     public static void CleanUpClass()
     {
         // CleanUp
@@ -67,7 +67,7 @@ public class Test_IMaaMaaUtility
     {
         Assert.IsNotNull(maaUtility);
 
-        _ = Assert.ThrowsException<NotSupportedException>(()
+        _ = Assert.ThrowsExactly<NotSupportedException>(()
             => maaUtility.SetOption(opt, arg));
     }
 

@@ -36,7 +36,7 @@ public class Test_IMaaResource
         }
     }
 
-    [ClassCleanup]
+    [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
     public static void CleanUpClass()
     {
         Common.DisposeData(Data.Values.Cast<IMaaDisposable>());
@@ -150,7 +150,7 @@ public class Test_IMaaResource
     {
         Assert.IsNotNull(maaResource);
 
-        _ = Assert.ThrowsException<NotSupportedException>(()
+        _ = Assert.ThrowsExactly<NotSupportedException>(()
             => maaResource.SetOption(opt, arg));
     }
 
@@ -160,17 +160,17 @@ public class Test_IMaaResource
     {
         Assert.IsNotNull(maaResource);
 
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaResource.Register(Custom.InvalidResource));
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaResource.Register(nameof(Custom.InvalidResource), Custom.InvalidResource));
 
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaResource.Unregister(Custom.InvalidResource));
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaResource.Unregister<Custom.TestInvalidResource>(nameof(Custom.InvalidResource)));
 
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaResource.Clear<Custom.TestInvalidResource>());
     }
 

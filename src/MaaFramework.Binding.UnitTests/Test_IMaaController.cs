@@ -68,7 +68,7 @@ public class Test_IMaaController
         }
     }
 
-    [ClassCleanup]
+    [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
     public static void CleanUpClass()
     {
         Common.DisposeData(Data.Values.Cast<IMaaDisposable>());
@@ -356,7 +356,7 @@ public class Test_IMaaController
     {
         Assert.IsNotNull(maaController);
 
-        _ = Assert.ThrowsException<NotSupportedException>(()
+        _ = Assert.ThrowsExactly<NotSupportedException>(()
             => maaController.SetOption(opt, arg));
     }
 
@@ -366,14 +366,14 @@ public class Test_IMaaController
 
 #if MAA_NATIVE
         #region MaaAdbController
-        Assert.ThrowsException<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.None, AdbInputMethods.All, "{}", "test"));
-        Assert.ThrowsException<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.All, AdbInputMethods.None, "{}", "test"));
+        Assert.ThrowsExactly<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.None, AdbInputMethods.All, "{}", "test"));
+        Assert.ThrowsExactly<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.All, AdbInputMethods.None, "{}", "test"));
         #endregion
 
 #if !GITHUB_ACTIONS
         #region MaaWin32Controller
-        Assert.ThrowsException<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize));
-        Assert.ThrowsException<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None));
+        Assert.ThrowsExactly<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize));
+        Assert.ThrowsExactly<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None));
         #endregion
 #endif
 #endif

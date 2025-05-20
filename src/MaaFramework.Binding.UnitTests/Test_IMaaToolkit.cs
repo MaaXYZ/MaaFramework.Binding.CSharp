@@ -23,7 +23,7 @@ public class Test_IMaaToolkit
         Data = NewData;
     }
 
-    [ClassCleanup]
+    [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
     public static void CleanUpClass()
     {
         // CleanUp
@@ -183,7 +183,7 @@ public class Test_IMaaToolkit
     {
         Assert.IsNotNull(maaToolkit);
 
-        _ = Assert.ThrowsException<NotImplementedException>(()
+        _ = Assert.ThrowsExactly<NotImplementedException>(()
             => maaToolkit.PI.Register(Custom.InvalidResource));
     }
 

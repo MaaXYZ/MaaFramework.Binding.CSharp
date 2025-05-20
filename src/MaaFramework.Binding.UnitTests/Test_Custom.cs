@@ -35,7 +35,7 @@ internal static class Custom
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
-            _ = Assert.ThrowsException<ArgumentException>(() =>
+            _ = Assert.ThrowsExactly<ArgumentException>(() =>
 #if MAA_NATIVE
                 new MaaContext(IntPtr.Zero));
 #endif

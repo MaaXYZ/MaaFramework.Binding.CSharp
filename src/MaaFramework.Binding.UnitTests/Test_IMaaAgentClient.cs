@@ -28,7 +28,7 @@ public class Test_IMaaAgentClient
         }
     }
 
-    [ClassCleanup]
+    [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
     public static void CleanUpClass()
     {
         Common.DisposeData(Data.Values.Cast<IMaaDisposable>());
@@ -60,7 +60,7 @@ public class Test_IMaaAgentClient
     [MaaData(MaaTypes.All, nameof(Data))]
     public void Interface_LinkStart_LinkStop_AgentServerProcess(MaaTypes type, IMaaAgentClient maaAgentClient)
     {
-        _ = Assert.ThrowsException<InvalidOperationException>(() =>
+        _ = Assert.ThrowsExactly<InvalidOperationException>(() =>
             maaAgentClient.AgentServerProcess);
         Assert.IsTrue(
             maaAgentClient.IsConnected);    // IsConnected 的值有问题，先改了一下LinkStop()实现，记得改回来
@@ -103,8 +103,8 @@ public class Test_IMaaAgentClient
         using (var cts = new CancellationTokenSource(10000))
         {
             Assert.IsTrue(
-            // agent.LinkStart());
-               agent.LinkStart(StartupAgentServer, cts.Token));
+            //  agent.LinkStart());
+                agent.LinkStart(StartupAgentServer, cts.Token));
         }
         var status = maa
             .AppendTask(Custom.NodeName, Custom.Param)
@@ -114,7 +114,6 @@ public class Test_IMaaAgentClient
             status);
         Assert.IsTrue(
             agent.LinkStop());
-
     }
 
     private static Process? StartupAgentServer(string identifier, string nativeLibraryDirectory)
