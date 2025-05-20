@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MaaFramework.Binding.Notification;
 
@@ -28,19 +29,22 @@ public record TaskerTaskDetail(
 public record NodeNextListDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("list")] IReadOnlyList<string> NextList
+    [property: JsonPropertyName("list")] IReadOnlyList<string> NextList,
+    [property: JsonPropertyName("focus")] JsonElement? Focus
 );
 
 /// <inheritdoc cref="MaaMsg.Node.Recognition.Prefix"/>
 public record NodeRecognitionDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("reco_id")] int RecognitionId,
-    [property: JsonPropertyName("name")] string Name
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("focus")] JsonElement? Focus
 );
 
 /// <inheritdoc cref="MaaMsg.Node.Action.Prefix"/>
 public record NodeActionDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("node_id")] int NodeId,
-    [property: JsonPropertyName("name")] string Name
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("focus")] JsonElement? Focus
 );
