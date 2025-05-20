@@ -1,3 +1,24 @@
+## v4.2.0
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v4.0.0...v4.2.0
+
+### Breaking changes
+
+- [Breaking change] fix: return value of TryGetEncodedData() using invalid handle @moomiji
+- [Breaking change] chore: use IMaaTasker.Stop() instead of Abort() @moomiji
+- [Breaking change] refactor: new agent client api @moomiji
+
+### New features
+
+- Extensions: any focus @moomiji
+- IMaaResource.OverridePipeline() OverrideNext() @moomiji
+- IMaaTasker.IsStopping @moomiji
+
+### Other
+
+- new version number definition @moomiji
+- update interop to framework 4.2.0 @moomiji
+
 ## v4.0.0
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v3.0.4...v4.0.0
