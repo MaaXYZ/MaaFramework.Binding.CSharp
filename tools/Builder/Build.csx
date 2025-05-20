@@ -44,7 +44,7 @@ if (tags.Count is 3 or 4)               // 非最新版本号
     var todayBuildTimes = StartProcess($"gh run list --workflow {GITHUB_WORKFLOW} --created {d.ToString("yyyy-MM-ddT00:00:00+08:00")}..{d.ToString("yyyy-MM-ddT23:59:59+08:00")} --limit 99 --json createdAt --jq length");
     var isRuntimesNewer = runtimes.Major > version.Major || runtimes.Minor > version.Minor;
     if (isRuntimesNewer)
-        version = new NuGetVersion(runtimes.Major, runtimes.Minor,
+        version = new NuGetVersion(runtimes.Major, runtimes.Minor, 0,
             ["preview", dateTime, todayBuildTimes],
             tag);
     else
