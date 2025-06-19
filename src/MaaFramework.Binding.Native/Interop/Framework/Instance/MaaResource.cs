@@ -60,6 +60,10 @@ public static partial class MaaResource
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceGetNodeData(MaaResourceHandle res, string nodeName, MaaStringBufferHandle buffer);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaResourceClear(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
