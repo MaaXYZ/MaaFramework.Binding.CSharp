@@ -58,12 +58,21 @@ public class Test_IMaaAgentClient
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_LinkStart_LinkStop_AgentServerProcess(MaaTypes type, IMaaAgentClient maaAgentClient)
+    public void Interface_LinkStart_LinkStop_AgentServerProcess_IsConnected_IsAlive_SetTimeout(MaaTypes type, IMaaAgentClient maaAgentClient)
     {
         _ = Assert.ThrowsExactly<InvalidOperationException>(() =>
             maaAgentClient.AgentServerProcess);
+        Assert.IsFalse(
+            maaAgentClient.IsConnected);
+        Assert.IsFalse(
+            maaAgentClient.IsAlive);
+
         Assert.IsTrue(
-            maaAgentClient.IsConnected);    // IsConnected 的值有问题，先改了一下LinkStop()实现，记得改回来
+            maaAgentClient.SetTimeout(TimeSpan.MaxValue));
+        Assert.IsTrue(
+            maaAgentClient.SetTimeout(TimeSpan.MinValue));
+        Assert.IsTrue(
+            maaAgentClient.SetTimeout(TimeSpan.FromMinutes(2)));
 
         var ret = maaAgentClient.LinkStart(StartupAgentServer);
         Assert.IsTrue(
@@ -74,6 +83,8 @@ public class Test_IMaaAgentClient
             maaAgentClient.AgentServerProcess.HasExited);
         Assert.IsTrue(
             maaAgentClient.IsConnected);
+        Assert.IsTrue(
+            maaAgentClient.IsAlive);
 
         Assert.IsTrue(
             maaAgentClient.LinkStop());
@@ -82,25 +93,63 @@ public class Test_IMaaAgentClient
         Task.Delay(100).Wait(); // wait for process exit
         Assert.IsTrue(
             maaAgentClient.AgentServerProcess.HasExited);
-        Assert.IsTrue(
+        Assert.IsFalse(
             maaAgentClient.IsConnected);
+        Assert.IsFalse(
+            maaAgentClient.IsAlive);
     }
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void RunTask(MaaTypes type, IMaaAgentClient maaAgentClient)
+    public void Interface_Cancel_CancelWith(MaaTypes type, IMaaAgentClient maaAgentClient)
     {
-        using var maa = new MaaTasker
-        {
-            Controller = new MaaAdbController(Common.AdbPath, Common.Address, AdbScreencapMethods.Encode, AdbInputMethods.AdbShell, Common.AdbConfig, Common.AgentPath),
-            Resource = new MaaResource(),
-            DisposeOptions = DisposeOptions.All,
-        };
-        Assert.IsTrue(
-            maa.IsInitialized);
+        using var res = new MaaResource();
+        using var agent = MaaAgentClient.Create(res);
+        var ct = new CancellationToken(true);
+        var job = new MaaJob(0, res);
+        Assert.AreEqual(MaaJobStatus.Invalid, job.Wait());
 
-        using var agent = MaaAgentClient.Create("6CDC213A-085C-40C8-8665-635820D10425", maa.Resource);
-        using (var cts = new CancellationTokenSource(10000))
+        Assert.IsFalse(
+            agent.Cancel(waitFunc: agent.LinkStart));
+        Assert.IsFalse(
+            agent.Cancel(waitTask: Task.Run(agent.LinkStart)));
+        Assert.IsFalse(
+            agent.Cancel(waitJob: job));
+
+        Assert.IsFalse(
+            agent.CancelWith(ct, waitFunc: agent.LinkStart));
+        Assert.IsFalse(
+            agent.CancelWith(ct, waitTask: Task.Run(agent.LinkStart)));
+        Assert.IsFalse(
+            agent.CancelWith(ct, waitJob: job));
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Case_RunTask(MaaTypes type, IMaaAgentClient maaAgentClient)
+    {
+        using var maa = type switch
+        {
+#if MAA_NATIVE
+            MaaTypes.Native => new MaaTasker
+            {
+                Controller = new MaaAdbController(Common.AdbPath, Common.Address, AdbScreencapMethods.Encode, AdbInputMethods.AdbShell, Common.AdbConfig, Common.AgentPath),
+                Resource = new MaaResource(),
+                DisposeOptions = DisposeOptions.All,
+            },
+#endif
+            _ => throw new NotImplementedException(),
+        };
+        Assert.IsTrue(maa.IsInitialized);
+
+        using var agent = type switch
+        {
+#if MAA_NATIVE
+            MaaTypes.Native => MaaAgentClient.Create("6CDC213A-085C-40C8-8665-635820D10425", maa.Resource),
+#endif
+            _ => throw new NotImplementedException(),
+        };
+        using (var cts = new CancellationTokenSource(10 * 1000))
         {
             Assert.IsTrue(
             //  agent.LinkStart());

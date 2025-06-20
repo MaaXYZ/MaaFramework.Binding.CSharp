@@ -13,13 +13,14 @@ namespace MaaFramework.Binding;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAgentClient<MaaAgentClientHandle>
 {
+    private long _timeout = -1;
     private Process? _agentServerProcess;
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ {nameof(Id)} = {Id ?? "<null>"}, {nameof(IsConnected)} = {IsConnected} }}";
+        : $"{GetType().Name} {{ {nameof(Id)} = {Id ?? "<null>"}, {nameof(IsConnected)} = {IsConnected}, {nameof(IsAlive)} = {IsAlive}, Timeout = {_timeout} }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
@@ -162,11 +163,11 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
 
         try
         {
+            _ = Cancel(waitTask: linkStartTask);
             cts.Token.ThrowIfCancellationRequested();
-            if (completedTask == serverExitTask)
-                return false;
 
-            return linkStartTask.Result;
+            return completedTask != serverExitTask
+                && linkStartTask.Result;
         }
         finally
         {
@@ -178,36 +179,106 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         }
     }
 
-    private int _stopping;
-
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientDisconnect"/>.
     /// </remarks>
     public bool LinkStop()
-    {
-        if (IsConnected && Interlocked.CompareExchange(ref _stopping, 1, 0) == 0)
-        {
-            return MaaAgentClientDisconnect(Handle);
-#pragma warning disable CS0162 // 检测到无法访问的代码
-            try
-            {
-                return MaaAgentClientDisconnect(Handle);
-            }
-            finally
-            {
-                _stopping = 0;
-            }
-#pragma warning restore CS0162 // 检测到无法访问的代码
-        }
-        return true;
-    }
+        => MaaAgentClientDisconnect(Handle);
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientConnect"/>.
     /// </remarks>
     public bool IsConnected => MaaAgentClientConnected(Handle);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientAlive"/>.
+    /// </remarks>
+    public bool IsAlive => MaaAgentClientAlive(Handle);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientSetTimeout"/>.
+    /// </remarks>
+    public bool SetTimeout(long millisecondsDelay)
+    {
+        _timeout = millisecondsDelay;
+        return MaaAgentClientSetTimeout(Handle, _timeout);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientSetTimeout"/>.
+    /// </remarks>
+    public bool SetTimeout(TimeSpan delay)
+        => SetTimeout((long)delay.TotalMilliseconds);
+
+    private static bool NeedToCancel(Func<bool>? waitFunc, Task<bool>? waitTask, MaaJob? waitJob)
+    {
+        if (waitFunc is not null)
+            return true;
+        if (waitTask is not null && !waitTask.IsCompleted)
+            return true;
+        if (waitJob is not null && !waitJob.Status.IsDone())
+            return true;
+
+        return false;
+    }
+
+    private static bool WaitForCancellation(Func<bool>? waitFunc = null, Task<bool>? waitTask = null, MaaJob? waitJob = null)
+    {
+        var ret = true;
+        if (waitFunc is not null)
+            ret &= waitFunc.Invoke();
+        if (waitTask is not null)
+            ret &= waitTask.GetAwaiter().GetResult();
+        if (waitJob is not null)
+            ret &= waitJob.Wait().IsSucceeded();
+        return ret;
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientSetTimeout"/>.
+    /// </remarks>
+    public bool CancelWith(CancellationToken cancellationToken, Func<bool>? waitFunc = null, Task<bool>? waitTask = null, MaaJob? waitJob = null)
+    {
+        if (!NeedToCancel(waitFunc, waitTask, waitJob))
+            return true;
+
+        var ctr = cancellationToken.Register(() => SetTimeout(0));
+        try
+        {
+            return WaitForCancellation(waitFunc, waitTask, waitJob);
+        }
+        finally
+        {
+            ctr.Dispose();
+            _ = SetTimeout(_timeout).ThrowIfFalse();
+        }
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientSetTimeout"/>.
+    /// </remarks>
+    public bool Cancel(Func<bool>? waitFunc = null, Task<bool>? waitTask = null, MaaJob? waitJob = null)
+    {
+        if (!NeedToCancel(waitFunc, waitTask, waitJob))
+            return true;
+
+        _ = SetTimeout(0).ThrowIfFalse();
+        try
+        {
+            return WaitForCancellation(waitFunc, waitTask, waitJob);
+        }
+        finally
+        {
+            _ = SetTimeout(_timeout).ThrowIfFalse();
+        }
+    }
 
     /// <inheritdoc/>
     public Process AgentServerProcess => _agentServerProcess

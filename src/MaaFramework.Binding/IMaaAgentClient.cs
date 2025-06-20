@@ -80,6 +80,39 @@ public interface IMaaAgentClient : IMaaDisposable
     bool IsConnected { get; }
 
     /// <summary>
+    ///     Gets whether the connection is alive.
+    /// </summary>
+    /// <returns><see langword="true"/> if the connection is alive; otherwise, <see langword="false"/>.</returns>
+    bool IsAlive { get; }
+
+    /// <summary>
+    ///    Sets the timeout for the agent server to respond.
+    /// </summary>
+    /// <param name="millisecondsDelay">The time span to wait before the agent server response.</param>
+    /// <returns><see langword="true"/> if the timeout was set successfully; otherwise, <see langword="false"/>.</returns>
+    bool SetTimeout(long millisecondsDelay);
+
+    /// <param name="delay">The time span to wait before the agent server response.</param>
+    /// <inheritdoc cref="SetTimeout(long)"/>
+    bool SetTimeout(TimeSpan delay);
+
+    /// <summary>
+    ///   Cancels the agent operation with a specified token.
+    /// </summary>
+    /// <param name="cancellationToken">The token used to cancel the waiting operation.</param>
+    /// <param name="waitFunc">The func that needs to be canceled.</param>
+    /// <param name="waitTask">The task that needs to be canceled.</param>
+    /// <param name="waitJob">The job that needs to be canceled.</param>
+    /// <returns>The return value of <paramref name="waitFunc"/> AND <paramref name="waitTask"/>.Result AND <paramref name="waitJob"/>.IsSucceeded().</returns>
+    bool CancelWith(CancellationToken cancellationToken, Func<bool>? waitFunc = null, Task<bool>? waitTask = null, MaaJob? waitJob = null);
+
+    /// <summary>
+    ///   Cancels the agent operation.
+    /// </summary>
+    /// <inheritdoc cref="CancelWith"/>
+    bool Cancel(Func<bool>? waitFunc = null, Task<bool>? waitTask = null, MaaJob? waitJob = null);
+
+    /// <summary>
     ///     Represents a method that starts the agent server process.
     /// </summary>
     /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
