@@ -206,6 +206,14 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceGetNodeData"/>.
+    /// </remarks>
+    public bool GetNodeData(string nodeName, [MaybeNullWhen(false)][StringSyntax("Json")] out string data)
+        => MaaStringBuffer.TryGetValue(out data, buffer
+            => MaaResourceGetNodeData(Handle, nodeName, buffer));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaResourceStatus"/>.
     /// </remarks>
     public MaaJobStatus GetStatus(MaaJob job)

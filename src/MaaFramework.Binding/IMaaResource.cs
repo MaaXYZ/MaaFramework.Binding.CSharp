@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Custom;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding;
 
@@ -73,6 +74,14 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     /// <param name="nextList">The next list.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     bool OverrideNext(string nodeName, IEnumerable<string> nextList);
+
+    /// <summary>
+    ///     Gets the node data from the <see cref="IMaaResource"/> by node name.
+    /// </summary>
+    /// <param name="nodeName">The node name.</param>
+    /// <param name="data">The node data.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool GetNodeData(string nodeName, [MaybeNullWhen(false)][StringSyntax("Json")] out string data);
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaResource"/> is fully loaded.

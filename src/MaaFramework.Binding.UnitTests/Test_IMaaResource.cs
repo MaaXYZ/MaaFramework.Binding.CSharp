@@ -74,7 +74,7 @@ public class Test_IMaaResource
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_OverridePipeline_OverrideNext(MaaTypes type, IMaaResource maaResource)
+    public void Interface_OverridePipeline_OverrideNext_GetNodeData(MaaTypes type, IMaaResource maaResource)
     {
         var DiffParam = Custom.DiffParam;
         var DiffEntry = Custom.DiffEntry;
@@ -82,6 +82,13 @@ public class Test_IMaaResource
             maaResource.OverridePipeline(DiffParam));
         Assert.IsTrue(
             maaResource.OverrideNext(DiffEntry, [DiffEntry]));
+        Assert.IsTrue(
+            maaResource.GetNodeData(DiffEntry, out var data));
+
+        Assert.IsNotNull(
+            data);
+        Assert.IsTrue(
+            data.Contains($"\"next\":[\"{DiffEntry}\"]"));
     }
 
     private static void Interface_IMaaPost_Success(MaaJob job)

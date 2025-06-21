@@ -90,6 +90,14 @@ public class MaaContext : IMaaContext<MaaContextHandle>
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaContextGetNodeData"/>.
+    /// </remarks>
+    public bool GetNodeData(string nodeName, [MaybeNullWhen(false)][StringSyntax("Json")] out string data)
+        => MaaStringBuffer.TryGetValue(out data, buffer
+            => MaaContextGetNodeData(Handle, nodeName, buffer));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaContextGetTaskId"/>.
     /// </remarks>
     public MaaTaskJob TaskJob => new(MaaContextGetTaskId(Handle), Tasker);

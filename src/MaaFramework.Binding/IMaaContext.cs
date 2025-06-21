@@ -65,6 +65,14 @@ public interface IMaaContext : ICloneable
     bool OverrideNext(string nodeName, IEnumerable<string> nextList);
 
     /// <summary>
+    ///     Gets the node data from the <see cref="IMaaContext"/> by node name.
+    /// </summary>
+    /// <param name="nodeName">The node name.</param>
+    /// <param name="data">The node data.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool GetNodeData(string nodeName, [MaybeNullWhen(false)][StringSyntax("Json")] out string data);
+
+    /// <summary>
     ///     Gets the task job from the <see cref="IMaaContext"/>.
     /// </summary>
     /// <returns>The <see cref="MaaTaskJob"/>.</returns>

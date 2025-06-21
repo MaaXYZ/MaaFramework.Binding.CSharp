@@ -56,6 +56,10 @@ internal static class Custom
             Assert.AreEqual(
                 context.TaskJob.Id, cloneContext.TaskJob.Id);
 
+            Assert.IsFalse(
+                context.GetNodeData(DiffEntry, out var data));
+            Assert.IsNull(data);
+
             var recognitionDetail =
                 context.RunRecognition(DiffEntry, args.Image, DiffParam);
             Assert.IsNotNull(
@@ -67,6 +71,17 @@ internal static class Custom
                 recognitionDetail.NodeName, cloneContext.RunTask(DiffEntry, "{}")?.QueryRecognitionDetail(cloneContext.Tasker)?.NodeName);
             Assert.IsTrue(
                 cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
+
+            Assert.IsTrue(
+                cloneContext.GetNodeData(DiffEntry, out data));
+            Assert.IsNotNull(data);
+            Assert.IsTrue(
+                data.Contains($"\"next\":[\"{DiffEntry}\"]"));
+
+            Assert.IsTrue(
+                context.GetNodeData(DiffEntry, out data));
+            Assert.IsFalse(
+                data.Contains($"\"next\":[\"{DiffEntry}\"]"));
 
             Assert.IsTrue(
                 recognitionDetail.HitBox.TryCopyTo(results.Box));
