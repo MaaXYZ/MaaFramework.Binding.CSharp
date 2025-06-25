@@ -19,6 +19,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ }}";
 
+    [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
     internal MaaController(MaaControllerHandle handle)
     {
         SetHandle(handle, needReleased: false);

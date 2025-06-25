@@ -33,5 +33,8 @@ public sealed record RunArgs(string NodeName, TaskDetail TaskDetail, string Acti
 /// <summary>
 ///     The action run results.
 /// </summary>
+/// <remarks>
+///     (This a empty record.)
+/// </remarks>
 public sealed record RunResults;
 #pragma warning restore S2094 // Classes should not be empty

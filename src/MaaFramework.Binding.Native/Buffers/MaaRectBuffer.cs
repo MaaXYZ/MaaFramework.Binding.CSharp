@@ -1,4 +1,5 @@
-﻿using MaaFramework.Binding.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using MaaFramework.Binding.Abstractions;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
 namespace MaaFramework.Binding.Buffers;
@@ -9,6 +10,7 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<MaaRectHandle>, IMaaRectBufferStatic<MaaRectHandle>
 {
     /// <inheritdoc/>
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     public override string ToString() => IsInvalid
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ {nameof(X)} = {X}, {nameof(Y)} = {Y}, {nameof(Width)} = {Width}, {nameof(Height)} = {Height} }}";

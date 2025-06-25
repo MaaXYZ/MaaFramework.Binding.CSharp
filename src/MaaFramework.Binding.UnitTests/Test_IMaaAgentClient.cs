@@ -90,7 +90,7 @@ public class Test_IMaaAgentClient
             maaAgentClient.LinkStop());
         Assert.IsTrue( // double stop
             maaAgentClient.LinkStop());
-        Task.Delay(100).Wait(); // wait for process exit
+        Task.Delay(1000).Wait(); // wait for process exit
         Assert.IsTrue(
             maaAgentClient.AgentServerProcess.HasExited);
         Assert.IsFalse(

@@ -1,9 +1,12 @@
-﻿namespace MaaFramework.Binding;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace MaaFramework.Binding;
 
 /// <inheritdoc/>
 public class MaaTaskJob(MaaId id, IMaaTasker tasker) : MaaJob(id, tasker)
 {
     /// <inheritdoc/>
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     public override string ToString()
     {
         if (Status == MaaJobStatus.Invalid)

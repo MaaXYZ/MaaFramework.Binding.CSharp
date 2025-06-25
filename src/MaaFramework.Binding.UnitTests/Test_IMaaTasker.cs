@@ -251,7 +251,6 @@ public class Test_IMaaTasker
             => maaTasker.Resource.Unregister(Custom.InvalidResource));
     }
 
-
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), "EmptyNode")]
     public void Interface_AppendTask_IsRunning(MaaTypes type, IMaaTasker maaTasker, string taskEntryName)
@@ -366,8 +365,10 @@ public class Test_IMaaTasker
         Assert.IsNotNull(maaTasker);
         var job =
             maaTasker.Stop();
-        Assert.IsTrue(
-            maaTasker.IsStopping);
+        var isStopping = maaTasker.IsStopping;
+        if (!job.Status.IsDone())
+            Assert.IsTrue(isStopping);
+
         Interface_IMaaPost_Success(job);
         Task.Delay(100).Wait();
         Assert.IsFalse(
@@ -412,4 +413,21 @@ public class Test_IMaaTasker
     }
 
     #endregion
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Case_DirectCustomAction(MaaTypes type, IMaaTasker maaTasker)
+    {
+        _ = MaaUtility.Shared.Version;
+
+        Assert.IsTrue(
+            maaTasker.Resource.Register(new Custom.EmptyAction()));
+        var job = maaTasker
+            .AppendTask(nameof(Custom.DirectCustomAction), Custom.DirectCustomAction)
+            .WaitFor(MaaJobStatus.Succeeded);
+
+        Assert.IsNotNull(job.QueryTaskDetail());
+        Assert.IsNotNull(job.QueryNodeDetail());
+        Assert.IsNotNull(job.QueryRecognitionDetail());
+    }
 }

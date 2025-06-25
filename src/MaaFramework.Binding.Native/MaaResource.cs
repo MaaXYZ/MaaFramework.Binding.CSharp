@@ -15,10 +15,12 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     private readonly HashSet<string> _postedPaths = [];
 
     /// <inheritdoc/>
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     public override string ToString() => IsInvalid
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ Paths = [{string.Join(", ", _postedPaths)}], CustomActions = [{string.Join(", ", _actions.Names)}] , CustomRecognitions = [{string.Join(" & ", _recognitions.Names)}] }}";
 
+    [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
     internal MaaResource(MaaResourceHandle handle)
     {
         SetHandle(handle, needReleased: false);

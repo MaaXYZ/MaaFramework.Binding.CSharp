@@ -12,6 +12,7 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaImageBuffer<MaaImageBufferHandle>, IMaaImageBufferStatic<MaaImageBufferHandle>
 {
     /// <inheritdoc/>
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     public override string ToString() => IsInvalid
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name}: {Width}x{Height} {{ {nameof(Channels)} = {Channels}, {nameof(Type)} = {Type} }}";

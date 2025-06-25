@@ -22,6 +22,15 @@ internal static class Custom
         }
     }
     """;
+    public static string DirectCustomAction = $$"""
+    {
+        "{{nameof(DirectCustomAction)}}": {
+            "action": "Custom",
+            "custom_action": "{{nameof(EmptyAction)}}"
+        }
+    }
+    """;
+
     private static string RecognitionParam => $$"""{"{{nameof(RecognitionParam)}}":true}""";
     private static string ActionParam => $$"""{"{{nameof(ActionParam)}}":true}""";
     private static string Detail { get; set; } = string.Empty;
@@ -123,6 +132,16 @@ internal static class Custom
 
             var nodeDetail = context.RunAction(DiffEntry, args.RecognitionBox, args.RecognitionDetail.Detail, DiffParam);
             Assert.IsNotNull(nodeDetail);
+            return true;
+        }
+    }
+
+    internal sealed class EmptyAction : IMaaCustomAction
+    {
+        public string Name { get; set; } = nameof(EmptyAction);
+
+        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
+        {
             return true;
         }
     }

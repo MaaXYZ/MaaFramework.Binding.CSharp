@@ -1,4 +1,5 @@
-﻿using MaaFramework.Binding.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using MaaFramework.Binding.Abstractions;
 
 namespace MaaFramework.Binding;
 
@@ -12,6 +13,7 @@ namespace MaaFramework.Binding;
 public class MaaJob(MaaId id, IMaaPost maa)
 {
     /// <inheritdoc/>
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     public override string ToString() => $"{GetType().Name} {{ {nameof(Status)} = {Status}, {nameof(Id)} = {Id} }}";
 
     /// <summary>

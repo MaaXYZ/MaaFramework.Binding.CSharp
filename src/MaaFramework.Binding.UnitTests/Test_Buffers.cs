@@ -89,6 +89,8 @@ public class Test_Buffers
     {
         Assert.IsNotNull(image);
         Assert.IsNotNull(image.Buffer);
+        Assert.IsFalse(
+            image.IsStateless);
 
         Assert.AreEqual(
             "MaaImage: 1920x1080 { Channels = 3, Type = 16 }", image.ToString());
@@ -114,6 +116,8 @@ public class Test_Buffers
     {
         Assert.IsNotNull(image);
         Assert.IsNotNull(image.Buffer);
+        Assert.IsFalse(
+            image.IsStateless);
 
         Assert.IsTrue(
             image.TryCache());

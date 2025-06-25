@@ -30,6 +30,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
 
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
     [SetsRequiredMembers]
+    [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
     internal MaaTasker(MaaTaskerHandle handle)
     {
         SetHandle(handle, needReleased: false);
@@ -252,6 +253,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     ///     Wrapper of <see cref="MaaTaskerPostStop"/>.
     /// </remarks>
     [Obsolete("Use Stop() instead.")]
+    [ExcludeFromCodeCoverage(Justification = "Use Stop() instead.")]
     public MaaTaskJob Abort() => Stop();
 
     /// <inheritdoc/>

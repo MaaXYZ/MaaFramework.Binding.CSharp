@@ -1,4 +1,5 @@
-﻿using MaaFramework.Binding.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 
 namespace MaaFramework.Binding;
@@ -51,6 +52,7 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
     }
 
     /// <inheritdoc/>
+    [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     public override string ToString()
     {
         if (IsInvalid)
