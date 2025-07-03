@@ -3,6 +3,8 @@ using MaaFramework.Binding.Custom;
 
 namespace MaaFramework.Binding.Interop.Native;
 
+#pragma warning disable IDE0350 // Lambda expression can be simplified
+
 /// <summary>
 ///     A static class providing extension methods for converting <see cref="IMaaCustomResource"/> to custom callback delegate used in interop invoking.
 /// </summary>
