@@ -64,8 +64,8 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaImageListBufferDestroy(Handle);
+    protected override void ReleaseHandle(MaaImageListBufferHandle handle)
+        => MaaImageListBufferDestroy(handle);
 
     /// <inheritdoc/>
     /// <remarks>

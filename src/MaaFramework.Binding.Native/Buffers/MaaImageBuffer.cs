@@ -57,8 +57,8 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaImageBufferDestroy(Handle);
+    protected override void ReleaseHandle(MaaImageBufferHandle handle)
+        => MaaImageBufferDestroy(handle);
 
     /// <inheritdoc/>
     /// <remarks>

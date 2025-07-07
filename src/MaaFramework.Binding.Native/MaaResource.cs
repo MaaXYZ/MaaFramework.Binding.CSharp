@@ -90,8 +90,8 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaResourceDestroy(Handle);
+    protected override void ReleaseHandle(MaaResourceHandle handle)
+        => MaaResourceDestroy(handle);
 
     private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
     private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();

@@ -32,8 +32,8 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaStringListBufferDestroy(Handle);
+    protected override void ReleaseHandle(MaaStringListBufferHandle handle)
+        => MaaStringListBufferDestroy(handle);
 
     /// <inheritdoc/>
     /// <remarks>

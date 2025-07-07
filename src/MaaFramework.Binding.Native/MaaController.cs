@@ -49,8 +49,8 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaControllerDestroy(Handle);
+    protected override void ReleaseHandle(MaaControllerHandle handle)
+        => MaaControllerDestroy(handle);
 
     /// <inheritdoc/>
     /// <remarks>

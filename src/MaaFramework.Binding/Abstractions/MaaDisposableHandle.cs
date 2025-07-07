@@ -24,8 +24,10 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
     protected virtual void Dispose(bool disposing)
     {
         if (_handle.Equals(_invalidHandle)) return;
-        if (_needReleased) ReleaseHandle();
+        var releasingHandle = _handle;
         _handle = _invalidHandle;
+
+        if (_needReleased) ReleaseHandle(releasingHandle);
     }
 
     /// <inheritdoc/>
@@ -76,6 +78,7 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
     /// <summary>
     ///     When overridden in a derived class, executes the code required to free the handle.
     /// </summary>
+    /// <param name="handle">The releasing handle.</param>
     /// <returns><see langword="true"/> if the handle is released successfully; otherwise, in the event of a catastrophic failure, <see langword="false"/>.</returns>
-    protected abstract void ReleaseHandle();
+    protected abstract void ReleaseHandle(T handle);
 }

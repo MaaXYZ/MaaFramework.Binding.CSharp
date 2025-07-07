@@ -42,8 +42,8 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitDesktopWindowListDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaToolkitDesktopWindowListDestroy(Handle);
+    protected override void ReleaseHandle(MaaToolkitDesktopWindowListHandle handle)
+        => MaaToolkitDesktopWindowListDestroy(handle);
 
     /// <inheritdoc/>
     public override bool IsEmpty => MaaToolkitDesktopWindowListSize(Handle) == 0;

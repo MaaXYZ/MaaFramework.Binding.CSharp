@@ -83,22 +83,22 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
+        _ = Instances.TryRemove(new KeyValuePair<MaaTaskerHandle, MaaTasker>(Handle, this));
+        base.Dispose(disposing);
+
         if (DisposeOptions.HasFlag(DisposeOptions.Controller))
             Controller.Dispose();
 
         if (DisposeOptions.HasFlag(DisposeOptions.Resource))
             Resource.Dispose();
-
-        _ = Instances.TryRemove(new KeyValuePair<MaaTaskerHandle, MaaTasker>(Handle, this));
-        base.Dispose(disposing);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaTaskerDestroy(Handle);
+    protected override void ReleaseHandle(MaaTaskerHandle handle)
+        => MaaTaskerDestroy(handle);
 
     /// <inheritdoc/>
     /// <remarks>

@@ -77,8 +77,8 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentClientDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaAgentClientDestroy(Handle);
+    protected override void ReleaseHandle(MaaAgentClientHandle handle)
+        => MaaAgentClientDestroy(handle);
 
     /// <inheritdoc/>
     IMaaResource IMaaAgentClient.Resource

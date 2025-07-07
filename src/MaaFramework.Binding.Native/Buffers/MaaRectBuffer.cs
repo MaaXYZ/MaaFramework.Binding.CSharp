@@ -59,8 +59,8 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     /// <remarks>
     ///     Wrapper of <see cref="MaaRectDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaRectDestroy(Handle);
+    protected override void ReleaseHandle(MaaRectHandle handle)
+        => MaaRectDestroy(handle);
 
     /// <inheritdoc/>
     /// <remarks>

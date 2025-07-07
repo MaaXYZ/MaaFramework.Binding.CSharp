@@ -57,8 +57,8 @@ public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaS
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringBufferDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaStringBufferDestroy(Handle);
+    protected override void ReleaseHandle(MaaStringBufferHandle handle)
+        => MaaStringBufferDestroy(handle);
 
     /// <inheritdoc/>
     /// <remarks>

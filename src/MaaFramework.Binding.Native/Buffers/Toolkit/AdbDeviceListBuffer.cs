@@ -45,8 +45,8 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
     /// <remarks>
     ///     Wrapper of <see cref="MaaToolkitAdbDeviceListDestroy"/>.
     /// </remarks>
-    protected override void ReleaseHandle()
-        => MaaToolkitAdbDeviceListDestroy(Handle);
+    protected override void ReleaseHandle(MaaToolkitAdbDeviceListHandle handle)
+        => MaaToolkitAdbDeviceListDestroy(handle);
 
     /// <inheritdoc/>
     public override bool IsEmpty => MaaToolkitAdbDeviceListSize(Handle) == 0;
