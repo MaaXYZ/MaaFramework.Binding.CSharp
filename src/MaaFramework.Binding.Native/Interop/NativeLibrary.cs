@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -16,7 +17,7 @@ internal static partial class NativeLibrary
     internal static readonly Dictionary<string, nint> LoadedLibraryHandles = [];
 
     internal static ApiInfoFlags ApiInfo;
-    internal static readonly List<string> SearchPath = [];
+    internal static readonly List<string> SearchPaths = [];
 
     [ModuleInitializer]
     internal static void SetNativeLibraryResolver() => SetDllImportResolver(s_assembly, NativeLibraryResolver);
@@ -27,27 +28,42 @@ internal static partial class NativeLibrary
     public static nint NativeLibraryResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath) => libraryName switch
     {
         "MaaFramework" or "MaaToolkit"
-        or "MaaAgentServer" or "MaaAgentClient" => GetLibraryHandle(libraryName),
+        or "MaaAgentServer" or "MaaAgentClient" => GetLibraryHandle(libraryName, searchPath),
 
         _ => IntPtr.Zero,
     };
 
-    private static nint GetLibraryHandle(string libraryName)
+    private static nint GetLibraryHandle(string libraryName, DllImportSearchPath? searchPath)
     {
         if (LoadedLibraryHandles.TryGetValue(libraryName, out var libraryHandle))
             return libraryHandle;
 
         IsLoaded = true;
-        var resolver = TryGetRuntimesPath(libraryName, out var dllPath) && TryLoad(dllPath, out libraryHandle)
-            ? ApiInfoFlags.UseBindingResolver
-            : ApiInfoFlags.UseDefaultResolver;
-        SetBindingContext(
-            resolver,
-            dllDir: Path.GetDirectoryName(dllPath) ?? string.Empty,
-            isFirst: LoadedLibraryHandles.Count == 0);
-
+        UseBindingResolverToLoad(libraryName, searchPath, out libraryHandle);
         LoadedLibraryHandles.Add(libraryName, libraryHandle);
+
         return libraryHandle;
+    }
+
+    private static void UseBindingResolverToLoad(string libraryName, DllImportSearchPath? searchPath, out nint libraryHandle)
+    {
+        libraryName = GetFullLibraryName(libraryName);
+        var dllPath = GetLibraryPaths(libraryName).FirstOrDefault(File.Exists, string.Empty);
+        var dllDir = string.Empty;
+        var resolver = ApiInfoFlags.UseDefaultResolver;
+
+        if (!string.IsNullOrEmpty(dllPath) && TryLoad(dllPath, out libraryHandle))
+        {
+            resolver = ApiInfoFlags.UseBindingResolver;
+            dllDir = Path.GetDirectoryName(dllPath)!;
+        }
+        else if (!TryLoad(libraryName, s_assembly, searchPath, out libraryHandle)) // Not found
+        {
+            IsLoaded = false;
+            return;
+        }
+
+        SetBindingContext(resolver, dllDir, isFirst: LoadedLibraryHandles.Count == 0);
     }
 
     private static void SetBindingContext(ApiInfoFlags resolver, string dllDir, bool isFirst)
@@ -58,7 +74,7 @@ internal static partial class NativeLibrary
         if (isFirst)
             LoadedDirectory = dllDir;
 
-        if (LoadedDirectory != dllDir)
+        else if (LoadedDirectory != dllDir)
             throw new InvalidOperationException($"The native library directory '{LoadedDirectory}' was attempted to switch to '{dllDir}'.");
 
         ApiInfo |= resolver;
@@ -66,32 +82,35 @@ internal static partial class NativeLibrary
             ApiInfo |= ApiInfoFlags.InFrameworkContext;
     }
 
-    private static bool TryGetRuntimesPath(string libraryName, out string dllPath)
+    [UnconditionalSuppressMessage("SingleFile", "IL3000: Avoid accessing Assembly file path when publishing as a single file",
+        Justification = "The code handles the Assembly.Location being null/empty by falling back to AppContext.BaseDirectory.")]
+    private static IEnumerable<string> GetLibraryPaths(string libraryFullName)
     {
-        libraryName = GetFullLibraryName(libraryName);
-        dllPath = GetRuntimesPaths(libraryName).FirstOrDefault(File.Exists, string.Empty);
-        return !string.IsNullOrEmpty(dllPath);
-    }
+        // For single-file deployments, the assembly location is an empty string so we fall back
+        // to AppContext.BaseDirectory which is the directory containing the single-file executable.
+        var assemblyDirectory = string.IsNullOrEmpty(s_assembly.Location)
+            ? AppContext.BaseDirectory
+            : Path.GetDirectoryName(s_assembly.Location)!;
 
-    private static IEnumerable<string> GetRuntimesPaths(string libraryFullName)
-    {
-        var searchPaths = SearchPath.Concat(
+        string?[] basePaths =
         [
+            ..SearchPaths,
             Environment.GetEnvironmentVariable("MAAFW_BINARY_PATH"),
-            Path.GetDirectoryName(s_assembly.Location),
+            assemblyDirectory,
             Environment.CurrentDirectory,
-        ]).Where(path => !string.IsNullOrWhiteSpace(path));
+        ];
 
-        var runtimePaths = new[]
-        {
+        string[] runtimesPaths =
+        [
             "./",
             $"./runtimes/{GetArchitectureName()}/native/",
-        };
+        ];
 
-        return from searchPath in searchPaths
-               from runtimePath in runtimePaths
-               select Path.GetFullPath(
-                   Path.Combine(searchPath, runtimePath, libraryFullName));
+        return from basePath in basePaths.Distinct()
+               where !string.IsNullOrWhiteSpace(basePath)
+               from runtimesPath in runtimesPaths
+               let libraryPath = Path.Combine(basePath, runtimesPath, libraryFullName)
+               select Path.GetFullPath(libraryPath);
     }
 
 #pragma warning disable IDE0072 // 添加缺失的事例

@@ -73,7 +73,7 @@ public static class NativeBindingContext
     public static void AppendNativeLibrarySearchPaths(params IEnumerable<string> paths)
     {
         ThrowIfLoaded();
-        NativeLibrary.SearchPath.AddRange(paths);
+        NativeLibrary.SearchPaths.AddRange(paths);
     }
 
     /// <exception cref="InvalidOperationException">NativeLibrary is already loaded.</exception>
