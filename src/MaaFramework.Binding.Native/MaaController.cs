@@ -50,7 +50,11 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     ///     Wrapper of <see cref="MaaControllerDestroy"/>.
     /// </remarks>
     protected override void ReleaseHandle(MaaControllerHandle handle)
-        => MaaControllerDestroy(handle);
+    {
+        if (LastJob != null)
+            _ = MaaControllerWait(handle, LastJob.Id);
+        MaaControllerDestroy(handle);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -80,7 +84,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob LinkStart()
     {
         var id = MaaControllerPostConnection(Handle);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -90,7 +94,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob Click(int x, int y)
     {
         var id = MaaControllerPostClick(Handle, x, y);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -100,7 +104,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob Swipe(int x1, int y1, int x2, int y2, int duration)
     {
         var id = MaaControllerPostSwipe(Handle, x1, y1, x2, y2, duration);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -110,7 +114,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob PressKey(int keyCode)
     {
         var id = MaaControllerPostPressKey(Handle, keyCode);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -120,7 +124,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob InputText(string text)
     {
         var id = MaaControllerPostInputText(Handle, text);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -130,7 +134,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob StartApp(string intent)
     {
         var id = MaaControllerPostStartApp(Handle, intent);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -140,7 +144,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob StopApp(string intent)
     {
         var id = MaaControllerPostStopApp(Handle, intent);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -150,7 +154,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob TouchDown(int contact, int x, int y, int pressure)
     {
         var id = MaaControllerPostTouchDown(Handle, contact, x, y, pressure);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -160,7 +164,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob TouchMove(int contact, int x, int y, int pressure)
     {
         var id = MaaControllerPostTouchMove(Handle, contact, x, y, pressure);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -170,7 +174,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob TouchUp(int contact)
     {
         var id = MaaControllerPostTouchUp(Handle, contact);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -180,7 +184,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob Screencap()
     {
         var id = MaaControllerPostScreencap(Handle);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -208,6 +212,9 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
             ? MaaJobStatus.Invalid
             : (MaaJobStatus)MaaControllerWait(Handle, job.Id);
     }
+
+    /// <inheritdoc/>
+    public MaaJob? LastJob { get; private set; }
 
     /// <inheritdoc/>
     /// <remarks>

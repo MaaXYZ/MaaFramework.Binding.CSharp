@@ -91,7 +91,11 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     ///     Wrapper of <see cref="MaaResourceDestroy"/>.
     /// </remarks>
     protected override void ReleaseHandle(MaaResourceHandle handle)
-        => MaaResourceDestroy(handle);
+    {
+        if (LastJob != null)
+            _ = MaaResourceWait(handle, LastJob.Id);
+        MaaResourceDestroy(handle);
+    }
 
     private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
     private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
@@ -188,7 +192,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     {
         _ = _postedPaths.Add(path);
         var id = MaaResourcePostBundle(Handle, path);
-        return new MaaJob(id, this);
+        return LastJob = new MaaJob(id, this);
     }
 
     /// <inheritdoc/>
@@ -239,6 +243,9 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
             ? MaaJobStatus.Invalid
             : (MaaJobStatus)MaaResourceWait(Handle, job.Id);
     }
+
+    /// <inheritdoc/>
+    public MaaJob? LastJob { get; private set; }
 
     /// <inheritdoc/>
     /// <remarks>

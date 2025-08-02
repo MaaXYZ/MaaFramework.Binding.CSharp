@@ -98,7 +98,11 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     ///     Wrapper of <see cref="MaaTaskerDestroy"/>.
     /// </remarks>
     protected override void ReleaseHandle(MaaTaskerHandle handle)
-        => MaaTaskerDestroy(handle);
+    {
+        if (LastJob != null)
+            _ = MaaTaskerWait(handle, LastJob.Id);
+        MaaTaskerDestroy(handle);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -197,7 +201,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     public MaaTaskJob AppendTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}")
     {
         var id = MaaTaskerPostTask(Handle, entry, pipelineOverride);
-        return new MaaTaskJob(id, this);
+        var job = new MaaTaskJob(id, this);
+        LastJob = job;
+        return job;
     }
 
     /// <inheritdoc/>
@@ -227,6 +233,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     }
 
     /// <inheritdoc/>
+    public MaaJob? LastJob { get; private set; }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerRunning"/>.
     /// </remarks>
@@ -245,7 +254,9 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     public MaaTaskJob Stop()
     {
         var id = MaaTaskerPostStop(Handle);
-        return new MaaTaskJob(id, this);
+        var job = new MaaTaskJob(id, this);
+        LastJob = job;
+        return job;
     }
 
     /// <inheritdoc/>

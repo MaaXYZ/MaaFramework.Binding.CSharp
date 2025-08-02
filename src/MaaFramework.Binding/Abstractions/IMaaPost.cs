@@ -20,4 +20,10 @@ public interface IMaaPost
     /// <returns>The status at the end of the <paramref name="job"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
     MaaJobStatus Wait(MaaJob job);
+
+    /// <summary>
+    ///     Gets the last posted job.
+    /// </summary>
+    /// <returns>A <see cref="MaaJob"/> if any job has been posted; otherwise, <see langword="null"/>..</returns>
+    MaaJob? LastJob { get; }
 }
