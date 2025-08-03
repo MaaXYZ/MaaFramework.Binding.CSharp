@@ -42,6 +42,7 @@ public sealed class MaaAgentServer : IMaaAgentServer
 
     IMaaAgentServer IMaaAgentServer.WithIdentifier(string identifier) => WithIdentifier(identifier);
     IMaaAgentServer IMaaAgentServer.Register<T>(string name, T custom) => Register(name, custom);
+    IMaaAgentServer IMaaAgentServer.Register<T>(string? name) => Register<T>(name);
     IMaaAgentServer IMaaAgentServer.Register<T>(T custom) => Register(custom);
     IMaaAgentServer IMaaAgentServer.StartUp() => StartUp();
     IMaaAgentServer IMaaAgentServer.ShutDown() => ShutDown();
@@ -59,6 +60,15 @@ public sealed class MaaAgentServer : IMaaAgentServer
     public MaaAgentServer Register<T>(string name, T custom) where T : IMaaCustomResource
     {
         custom.Name = name;
+        return Register(custom);
+    }
+
+    /// <inheritdoc/>
+    public MaaAgentServer Register<T>(string? name = null) where T : IMaaCustomResource, new()
+    {
+        var custom = new T();
+        if (name != null)
+            custom.Name = name;
         return Register(custom);
     }
 

@@ -167,6 +167,15 @@ public class MaaToolkit : IMaaToolkit
         }
 
         /// <inheritdoc/>
+        public bool Register<T>(string? name = null) where T : IMaaCustomResource, new()
+        {
+            var custom = new T();
+            if (name != null)
+                custom.Name = name;
+            return Register(custom);
+        }
+
+        /// <inheritdoc/>
         /// <remarks>
         ///     Wrapper of <see cref="MaaToolkitProjectInterfaceRegisterCustomAction"/> and <see cref="MaaToolkitProjectInterfaceRegisterCustomRecognition"/>.
         /// </remarks>

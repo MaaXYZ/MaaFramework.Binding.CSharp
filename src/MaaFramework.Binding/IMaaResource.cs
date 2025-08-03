@@ -25,6 +25,9 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost
     bool Register<T>(string name, T custom) where T : IMaaCustomResource;
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
+    bool Register<T>(string? name = null) where T : IMaaCustomResource, new();
+
+    /// <inheritdoc cref="Register{T}(string, T)"/>
     bool Register<T>(T custom) where T : IMaaCustomResource;
 
     /// <summary>

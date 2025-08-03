@@ -108,6 +108,15 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     }
 
     /// <inheritdoc/>
+    public bool Register<T>(string? name = null) where T : IMaaCustomResource, new()
+    {
+        var custom = new T();
+        if (name != null)
+            custom.Name = name;
+        return Register(custom);
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceRegisterCustomAction"/> and <see cref="MaaResourceRegisterCustomRecognition"/>.
     /// </remarks>

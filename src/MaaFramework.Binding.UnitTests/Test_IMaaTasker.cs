@@ -211,6 +211,12 @@ public class Test_IMaaTasker
         Assert.IsTrue(
             maaTasker.Resource.Register(Custom.Recognition));
 
+        // Registers custom class by generics
+        Assert.IsTrue(
+            maaTasker.Resource.Register<Custom.TestAction>(name: "GenericTestAction"));
+        Assert.IsTrue(
+            maaTasker.Resource.Register<Custom.TestRecognition>());
+
         // Updates if name is registered
         Assert.IsTrue(
             maaTasker.Resource.Register(Custom.Action.Name, Custom.Action));

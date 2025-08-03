@@ -23,6 +23,9 @@ public interface IMaaAgentServer
     IMaaAgentServer Register<T>(string name, T custom) where T : IMaaCustomResource;
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
+    IMaaAgentServer Register<T>(string? name = null) where T : IMaaCustomResource, new();
+
+    /// <inheritdoc cref="Register{T}(string, T)"/>
     IMaaAgentServer Register<T>(T custom) where T : IMaaCustomResource;
 
     /// <summary>
