@@ -276,6 +276,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
                     or ResourceOption.InferenceExecutionProvider) => vvvv.ToMaaOptionValue(),
 
             (InferenceDevice v, ResourceOption.InferenceDevice) => ((int)v).ToMaaOptionValue(),
+            (InferenceCoreMLFlags v, ResourceOption.InferenceDevice) => ((int)v).ToMaaOptionValue(),
             (InferenceExecutionProvider v, ResourceOption.InferenceExecutionProvider) => ((int)v).ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(ResourceOption)}.{opt}' or type '{typeof(T)}' is not supported."),
