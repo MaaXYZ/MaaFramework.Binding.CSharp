@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -39,13 +40,13 @@ internal static partial class NativeLibrary
             return libraryHandle;
 
         IsLoaded = true;
-        UseBindingResolverToLoad(libraryName, searchPath, out libraryHandle);
+        ResolveLibraryLoading(libraryName, searchPath, out libraryHandle);
         LoadedLibraryHandles.Add(libraryName, libraryHandle);
 
         return libraryHandle;
     }
 
-    private static void UseBindingResolverToLoad(string libraryName, DllImportSearchPath? searchPath, out nint libraryHandle)
+    private static void ResolveLibraryLoading(string libraryName, DllImportSearchPath? searchPath, out nint libraryHandle)
     {
         libraryName = GetFullLibraryName(libraryName);
         var dllPath = GetLibraryPaths(libraryName).FirstOrDefault(File.Exists, string.Empty);
@@ -57,10 +58,15 @@ internal static partial class NativeLibrary
             resolver = ApiInfoFlags.UseBindingResolver;
             dllDir = Path.GetDirectoryName(dllPath)!;
         }
-        else if (!TryLoad(libraryName, s_assembly, searchPath, out libraryHandle)) // Not found
+        else if (TryLoad(libraryName, s_assembly, searchPath, out libraryHandle))
         {
-            IsLoaded = false;
-            return;
+            dllDir = IsOSX
+                ? DyldHelper.PathFromHandle(libraryHandle)
+                : GetLoadedLibraryPath(libraryHandle);
+        }
+        else
+        {
+            // Not found
         }
 
         SetBindingContext(resolver, dllDir, isFirst: LoadedLibraryHandles.Count == 0);
@@ -68,18 +74,15 @@ internal static partial class NativeLibrary
 
     private static void SetBindingContext(ApiInfoFlags resolver, string dllDir, bool isFirst)
     {
-        if (ApiInfo.HasFlag_ResolverExcept(resolver))
-            throw new InvalidOperationException($"The resolver '{ApiInfo}' was attempted to switch to '{resolver}'.");
+        ApiInfo |= resolver;
+        if (!ApiInfo.HasFlag_Context())
+            ApiInfo |= ApiInfoFlags.InFrameworkContext;
 
         if (isFirst)
             LoadedDirectory = dllDir;
 
         else if (LoadedDirectory != dllDir)
-            throw new InvalidOperationException($"The native library directory '{LoadedDirectory}' was attempted to switch to '{dllDir}'.");
-
-        ApiInfo |= resolver;
-        if (!ApiInfo.HasFlag_Context())
-            ApiInfo |= ApiInfoFlags.InFrameworkContext;
+            throw new InvalidOperationException($"The native library directory '{LoadedDirectory}' was attempted to switch to '{dllDir}'.\nCurrent api info is '{ApiInfo}'.");
     }
 
     [UnconditionalSuppressMessage("SingleFile", "IL3000: Avoid accessing Assembly file path when publishing as a single file",
@@ -147,4 +150,54 @@ internal static partial class NativeLibrary
     private static bool IsLinux => OperatingSystem.IsLinux();
     private static bool IsOSX => OperatingSystem.IsMacOS();
     private static bool IsAndroid => OperatingSystem.IsAndroid();
+
+    // macOS / iOS
+    // https://stackoverflow.com/questions/54201384
+    private static partial class DyldHelper
+    {
+#pragma warning disable IDE1006
+        [LibraryImport("libSystem.dylib", StringMarshalling = StringMarshalling.Utf8)]
+        private static partial uint _dyld_image_count();
+
+        [LibraryImport("libSystem.dylib", StringMarshalling = StringMarshalling.Utf8)]
+        private static partial string? _dyld_get_image_name(uint idx);
+
+        [LibraryImport("libSystem.dylib", StringMarshalling = StringMarshalling.Utf8)]
+        private static partial nint dlopen(string path, int mode);
+
+        [LibraryImport("libSystem.dylib", StringMarshalling = StringMarshalling.Utf8)]
+        private static partial int dlclose(nint handle);
+#pragma warning restore IDE1006
+
+        private const int RTLD_LAZY = 0x1;
+
+        public static string PathFromHandle(nint handle)
+        {
+            for (var i = _dyld_image_count() - 1; i >= 0; i--)
+            {
+                var imageName = _dyld_get_image_name(i);
+                if (imageName == null)
+                    continue;
+
+                var probeHandle = dlopen(imageName, RTLD_LAZY);
+                _ = dlclose(probeHandle);
+
+                if (handle == probeHandle)
+                    return imageName;
+            }
+            return string.Empty;
+        }
+    }
+
+    private static string GetLoadedLibraryPath(nint handle)
+    {
+        var modules = Process.GetCurrentProcess().Modules;
+        for (var i = modules.Count - 1; i >= 0; i--)
+        {
+            var module = modules[i];
+            if (handle == module.BaseAddress)
+                return module.FileName;
+        }
+        return string.Empty;
+    }
 }
