@@ -70,6 +70,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
+
         KillAndDisposeAgentServerProcess();
     }
 

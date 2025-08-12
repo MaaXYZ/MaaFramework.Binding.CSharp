@@ -29,6 +29,20 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
     /// <inheritdoc/>
     public bool IsStateless => buffer.IsStateless;
 
+    /// <inheritdoc/>
+    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+    {
+        add => buffer.Disposing += value;
+        remove => buffer.Disposing -= value;
+    }
+
+    /// <inheritdoc/>
+    event EventHandler? IMaaDisposable.Disposed
+    {
+        add => buffer.Disposed += value;
+        remove => buffer.Disposed -= value;
+    }
+
     /// <summary>
     ///     Caches the image data from the <see cref="IMaaImageBuffer"/>.
     /// </summary>

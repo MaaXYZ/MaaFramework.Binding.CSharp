@@ -1102,6 +1102,7 @@ public class Test_Buffers
 
 internal sealed class TestImageBuffer : IMaaImageBuffer
 {
+
     public bool TryCopyTo(IMaaImageBuffer buffer) => throw new NotImplementedException();
     public void Dispose() => throw new NotImplementedException();
     public bool IsInvalid => throw new NotImplementedException();
@@ -1111,6 +1112,17 @@ internal sealed class TestImageBuffer : IMaaImageBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
+    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+    {
+        add => throw new NotImplementedException();
+        remove => throw new NotImplementedException();
+    }
+
+    event EventHandler? IMaaDisposable.Disposed
+    {
+        add => throw new NotImplementedException();
+        remove => throw new NotImplementedException();
+    }
     public bool IsEmpty => throw new NotImplementedException();
     public bool TryClear() => throw new NotImplementedException();
     public ImageInfo GetInfo() => throw new NotImplementedException();
@@ -1137,6 +1149,17 @@ internal sealed class TestStringBuffer : IMaaStringBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
+    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+    {
+        add => throw new NotImplementedException();
+        remove => throw new NotImplementedException();
+    }
+
+    event EventHandler? IMaaDisposable.Disposed
+    {
+        add => throw new NotImplementedException();
+        remove => throw new NotImplementedException();
+    }
     public bool IsEmpty => throw new NotImplementedException();
     public ulong Size => throw new NotImplementedException();
     public bool TryClear() => throw new NotImplementedException();
@@ -1155,6 +1178,17 @@ internal sealed class TestRectBuffer : IMaaRectBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
+    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+    {
+        add => throw new NotImplementedException();
+        remove => throw new NotImplementedException();
+    }
+
+    event EventHandler? IMaaDisposable.Disposed
+    {
+        add => throw new NotImplementedException();
+        remove => throw new NotImplementedException();
+    }
     public int X => throw new NotImplementedException();
     public int Y => throw new NotImplementedException();
     public int Width => throw new NotImplementedException();

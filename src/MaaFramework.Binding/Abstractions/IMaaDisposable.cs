@@ -22,6 +22,16 @@ public interface IMaaDisposable : IDisposable
     ///     The lifetime of unmanaged resources is controlled by <see cref="MaaFramework"/> if <see langword="this"/> is stateless.
     /// </remarks>
     bool IsStateless { get; }
+
+    /// <summary>
+    ///     Occurs directly after <see cref="IDisposable.Dispose"/> is called, and can be handled to cancel the unmanaged resources disposure.
+    /// </summary>
+    event System.ComponentModel.CancelEventHandler? Disposing;
+
+    /// <summary>
+    ///     Occurs when the unmanaged resources is about to dispose.
+    /// </summary>
+    event EventHandler? Disposed;
 }
 
 //  设计思路：
