@@ -67,6 +67,13 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     }
 
     /// <inheritdoc/>
+    public IMaaAgentClient AttachDisposeToResource()
+    {
+        Resource.Disposing += (_, _) => Dispose();
+        return this;
+    }
+
+    /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
@@ -79,7 +86,10 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     ///     Wrapper of <see cref="MaaAgentClientDestroy"/>.
     /// </remarks>
     protected override void ReleaseHandle(MaaAgentClientHandle handle)
-        => MaaAgentClientDestroy(handle);
+    {
+        _ = MaaAgentClientDisconnect(handle).ThrowIfFalse();
+        MaaAgentClientDestroy(handle);
+    }
 
     /// <inheritdoc/>
     IMaaResource IMaaAgentClient.Resource

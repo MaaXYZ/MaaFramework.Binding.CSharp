@@ -173,4 +173,23 @@ public class Test_IMaaAgentClient
             UseShellExecute = false,
         });
     }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_AttachDisposeToResource(MaaTypes type, IMaaAgentClient maaAgentClient)
+    {
+        var res = new MaaResource();
+        var agent = MaaAgentClient
+            .Create(res)
+            .AttachDisposeToResource();
+        Assert.IsFalse(
+            res.IsInvalid);
+        Assert.IsFalse(
+            agent.IsInvalid);
+        res.Dispose();
+        Assert.IsTrue(
+            res.IsInvalid);
+        Assert.IsTrue(
+            agent.IsInvalid);
+    }
 }

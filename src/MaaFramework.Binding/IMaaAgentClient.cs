@@ -28,6 +28,11 @@ public interface IMaaAgentClient : IMaaDisposable
     IMaaResource Resource { get; set; }
 
     /// <summary>
+    ///     Attaches <see langword="this"/> instance's Dispose() to the <see cref="Resource"/>'s Disposing event.
+    /// </summary>
+    IMaaAgentClient AttachDisposeToResource();
+
+    /// <summary>
     ///     Starts the connection.
     /// </summary>
     /// <returns><see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.</returns>
