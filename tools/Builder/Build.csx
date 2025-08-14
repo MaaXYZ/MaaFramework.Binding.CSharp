@@ -54,10 +54,12 @@ if (tags.Count is 3 or 4)               // 非最新版本号
 }
 
 var verStr = version.ToFullString();
+var isPreview = version.ReleaseLabels.Any(x => x.StartsWith("preview", StringComparison.OrdinalIgnoreCase));
 TeeToGithubOutput(
     $"tag={tag}",
     $"version={verStr}",
     $"is_release={isRelease}",
+    $"is_preview={isPreview}",
     $"default_branch={defaultBranch}"
     );
 StartProcess(

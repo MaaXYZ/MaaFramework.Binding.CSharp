@@ -39,9 +39,9 @@ jobs:
           cache: true
           cache-dependency-path: '**/packages.lock.json'
       - run: |
-          dotnet restore --locked-mode
           dotnet tool update -g dotnet-script
           dotnet tool update -g docfx
+          dotnet restore --locked-mode
 
       - id: build
         env:
@@ -62,6 +62,7 @@ jobs:
       tag: ${{ steps.build.outputs.tag }}
       version: ${{ steps.build.outputs.version }}
       is_release: ${{ steps.build.outputs.is_release }}
+      is_preview: ${{ steps.build.outputs.is_preview }}
 
   test:
     needs: [ build ]
@@ -100,9 +101,16 @@ jobs:
           7z x artifact.tar -o'${{ needs.build.outputs.version }}'
           7z a docs.zip '${{ needs.build.outputs.version }}'
 
+      - name: Preview CHANGELOG
+        if: needs.build.outputs.is_preview == 'True'
+        run: |
+          latest="$(gh release view --json tagName --jq .tagName)"
+          python3 tools/ChangelogGenerator/changelog_generator.py --tag "${{ needs.build.outputs.tag }}" --latest "${latest}"
+
       - if: needs.build.outputs.is_release == 'True'
         uses: softprops/action-gh-release@v2
         with:
           body_path: CHANGELOG.md
           tag_name: ${{ needs.build.outputs.tag }}
           files: github-pages/docs.zip
+          prerelease: ${{ needs.build.outputs.is_preview == 'True' }}
