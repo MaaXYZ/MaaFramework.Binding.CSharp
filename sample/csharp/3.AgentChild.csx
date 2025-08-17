@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env dotnet-script
 #nullable enable
 
-#r "nuget: Maa.Framework.Binding.Native, 4.2.0"
+#r "nuget: Maa.Framework.Binding.Native, 4.4.0"
 
 using MaaFramework.Binding;
 using MaaFramework.Binding.Custom;
@@ -21,8 +21,8 @@ MaaAgentServer.Current
     .WithIdentifier(socketId)
     .WithNativeLibrary(dllPath)
     .WithToolkitConfig_InitOption(userPath)
-    .Register(new MyRec())
-    .Register(new MyAct())
+    .Register<MyRec>()
+    .Register<MyAct>()
     .StartUp()
     .Join()
     .ShutDown();

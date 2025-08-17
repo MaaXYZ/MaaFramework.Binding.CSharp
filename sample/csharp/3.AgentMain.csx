@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env dotnet-script
 #nullable enable
 
-#r "nuget: Maa.Framework, 4.2.0"
+#r "nuget: Maa.Framework, 4.4.0w"
 
 using System.Diagnostics;
 using MaaFramework.Binding;
@@ -15,7 +15,9 @@ var maa = new MaaTasker
 if (!maa.IsInitialized)
     throw new InvalidOperationException("Failed to init tasker.");
 
-var agent = MaaAgentClient.Create(maa.Resource);
+var agent = MaaAgentClient
+    .Create(maa.Resource)
+    .AttachDisposeToResource();
 using (var cts = new System.Threading.CancellationTokenSource(10 * 1000))
 {
     if (!agent.LinkStart(StartupAgentServer, cts.Token))
