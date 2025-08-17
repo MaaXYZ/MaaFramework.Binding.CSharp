@@ -1,4 +1,4 @@
-# Overview of Wrapper (v4.2.0) and Api ([v4.2.3](https://github.com/MaaXYZ/MaaFramework/tree/v4.2.3))
+# Overview of Wrapper (v4.4.0) and Api ([v4.4.1](https://github.com/MaaXYZ/MaaFramework/tree/v4.4.1))
 
 ## Enums
 
@@ -142,6 +142,7 @@ IMaaDisposable Derived:
 | IMaaResource.AppendBundle() | `MaaResourcePostBundle` |
 | IMaaResource.OverridePipeline() | `MaaResourceOverridePipeline` |
 | IMaaResource.OverrideNext() | `MaaResourceOverrideNext` |
+| IMaaResource.GetNodeData() | `MaaResourceGetNodeData` |
 | IMaaPost.GetStatus() | `MaaResourceStatus` |
 | IMaaPost.Wait() | `MaaResourceWait` |
 | IMaaResource.IsLoaded | `MaaResourceLoaded` |
@@ -160,6 +161,7 @@ IMaaDisposable Derived:
 | IMaaContext.RunAction() | `MaaContextRunAction` |
 | IMaaContext.OverridePipeline() | `MaaContextOverridePipeline` |
 | IMaaContext.OverrideNext() | `MaaContextOverrideNext` |
+| IMaaContext.GetNodeData() | `MaaContextGetNodeData` |
 | IMaaContext.TaskJob | `MaaContextGetTaskId` |
 | IMaaContext.Tasker | `MaaContextGetTasker` |
 | IMaaContext.Clone() <br> ICloneable.Clone() | `MaaContextClone` |
@@ -318,6 +320,8 @@ IMaaDisposable Derived:
 | IMaaAgentClient.LinkStart() <br> IMaaAgentClient.LinkStartUnlessProcessExit() | `MaaAgentClientConnect` |
 | IMaaAgentClient.LinkStop() | `MaaAgentClientDisconnect` |
 | IMaaAgentClient.IsConnected | `MaaAgentClientConnected` |
+| IMaaAgentClient.IsAlive | `MaaAgentClientAlive` |
+| IMaaAgentClient.SetTimeout() <br> IMaaAgentClient.Cancel() <br> IMaaAgentClient.CancelWith() | `MaaAgentClientSetTimeout` |
 | IMaaAgentClient.AgentServerProcess | *A process created by LinkStart(), whose lifecycle is managed by the current class.* |
 | IMaaAgentClient.AgentServerStartupMethod | *A delegate used to start the agent server process.* |
 | MaaDisposableHandle.Handle | *The MaaAgentClientHandle.* |

@@ -4,7 +4,7 @@
 
 # MaaFramework.Binding.CSharp
 
-_✨ C# Binding for [MaaFramework](https://github.com/MaaXYZ/MaaFramework/blob/v4.2.3) ✨_
+_✨ C# Binding for [MaaFramework](https://github.com/MaaXYZ/MaaFramework/blob/v4.4.1) ✨_
 
 _💫 A universal interop API wrapper 💫_
 
@@ -42,7 +42,7 @@ Required dependencies for `MaaFramework.Binding.CSharp`:
 
 ### Resource Setup
 
-Refer to MaaFramework docs: [English](https://github.com/MaaXYZ/MaaFramework/blob/v4.2.3/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) | [简体中文](https://github.com/MaaXYZ/MaaFramework/blob/v4.2.3/docs/zh_cn/1.1-快速开始.md#准备资源文件)
+Refer to MaaFramework docs: [English](https://github.com/MaaXYZ/MaaFramework/blob/v4.4.1/docs/en_us/1.1-QuickStarted.md#prepare-resource-files) | [简体中文](https://github.com/MaaXYZ/MaaFramework/blob/v4.4.1/docs/zh_cn/1.1-快速开始.md#准备资源文件)
 
 See [SampleResource](./src/MaaFramework.Binding.UnitTests/SampleResource) for implementation.
 
