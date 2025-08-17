@@ -25,6 +25,7 @@ jobs:
     runs-on: windows-latest
     env:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,20 +36,22 @@ jobs:
         with:
           dotnet-version: |
             7.0.x
-            8.0.x
+            9.0.x
           cache: true
           cache-dependency-path: '**/packages.lock.json'
-      - run: |
-          dotnet tool update -g dotnet-script
-          dotnet tool update -g docfx
-          dotnet restore --locked-mode
+      - run: dotnet restore --locked-mode
+      - run: dotnet tool update -g dotnet-script
+      - run: dotnet tool update -g docfx
 
       - id: build
-        env:
-          GH_TOKEN: ${{ github.token }}
+        run: dotnet script ./tools/Builder/Build.csx
+
+      - name: Preview CHANGELOG
+        if: steps.build.outputs.is_preview == 'True'
         run: |
-          dotnet script ./tools/Builder/Build.csx
-          ./docs/build.ps1
+          $latest = gh release view --json tagName --jq .tagName
+          python3 tools/ChangelogGenerator/changelog_generator.py --tag "${{ steps.build.outputs.tag }}" --latest "$latest"
+      - run: ./docs/build.ps1
 
       - uses: actions/upload-artifact@v4
         with:
@@ -100,12 +103,6 @@ jobs:
           cd github-pages
           7z x artifact.tar -o'${{ needs.build.outputs.version }}'
           7z a docs.zip '${{ needs.build.outputs.version }}'
-
-      - name: Preview CHANGELOG
-        if: needs.build.outputs.is_preview == 'True'
-        run: |
-          latest="$(gh release view --json tagName --jq .tagName)"
-          python3 tools/ChangelogGenerator/changelog_generator.py --tag "${{ needs.build.outputs.tag }}" --latest "${latest}"
 
       - if: needs.build.outputs.is_release == 'True'
         uses: softprops/action-gh-release@v2

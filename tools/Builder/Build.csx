@@ -74,6 +74,10 @@ File.AppendAllText(GITHUB_STEP_SUMMARY, $"""
 <PackageReference Include="Maa.Framework" Version="{verStr}" />
 <PackageReference Include="Maa.Framework.Native" Version="{verStr}" />
 <PackageReference Include="Maa.Framework.Runtimes" Version="{runtimes}" />
+
+<PackageReference Include="Maa.Framework.Binding" Version="{verStr}" />
+<PackageReference Include="Maa.Framework.Binding.Native" Version="{verStr}" />
+<PackageReference Include="Maa.Framework.Binding.Extensions" Version="{verStr}" />
 ```
 
 For more information, please read [add packages](https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/#add-packages).
