@@ -160,16 +160,16 @@ internal static class Custom
 
         public bool IsStateless => c.IsStateless;
 
-        event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+        event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
         {
-            add => c.Disposing += value;
-            remove => c.Disposing -= value;
+            add => c.Releasing += value;
+            remove => c.Releasing -= value;
         }
 
-        event EventHandler? IMaaDisposable.Disposed
+        event EventHandler? IMaaDisposable.Released
         {
-            add => c.Disposed += value;
-            remove => c.Disposed -= value;
+            add => c.Released += value;
+            remove => c.Released -= value;
         }
 
         public void Dispose() => c.Dispose();

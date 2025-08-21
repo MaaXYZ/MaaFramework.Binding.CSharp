@@ -26,21 +26,26 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
         if (_handle.Equals(_invalidHandle)) return;
 
         var cea = new System.ComponentModel.CancelEventArgs();
-        Disposing?.Invoke(this, cea);
+        Releasing?.Invoke(this, cea);
         if (cea.Cancel) return;
+        Release();
+        Released?.Invoke(this, EventArgs.Empty);
+    }
 
+    private void Release()
+    {
         var releasingHandle = _handle;
         _handle = _invalidHandle;
-        if (_needReleased) ReleaseHandle(releasingHandle);
+        if (!_needReleased) return;
 
-        Disposed?.Invoke(this, EventArgs.Empty);
+        ReleaseHandle(releasingHandle);
     }
 
     /// <inheritdoc/>
-    public event System.ComponentModel.CancelEventHandler? Disposing;
+    public event System.ComponentModel.CancelEventHandler? Releasing;
 
     /// <inheritdoc/>
-    public event EventHandler? Disposed;
+    public event EventHandler? Released;
 
     /// <inheritdoc/>
     public void SetHandleAsInvalid()

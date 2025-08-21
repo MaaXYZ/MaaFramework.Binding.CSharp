@@ -24,14 +24,14 @@ public interface IMaaDisposable : IDisposable
     bool IsStateless { get; }
 
     /// <summary>
-    ///     Occurs directly after <see cref="IDisposable.Dispose"/> is called, and can be handled to cancel the unmanaged resources disposure.
+    ///     Occurs directly after <see cref="IDisposable.Dispose"/> is called, and can be handled to cancel the unmanaged resources release.
     /// </summary>
-    event System.ComponentModel.CancelEventHandler? Disposing;
+    event System.ComponentModel.CancelEventHandler? Releasing;
 
     /// <summary>
-    ///     Occurs when the unmanaged resources is about to dispose.
+    ///     Occurs when the unmanaged resources is released.
     /// </summary>
-    event EventHandler? Disposed;
+    event EventHandler? Released;
 }
 
 //  设计思路：

@@ -28,7 +28,7 @@ public interface IMaaAgentClient : IMaaDisposable
     IMaaResource Resource { get; set; }
 
     /// <summary>
-    ///     Attaches <see langword="this"/> instance's Dispose() to the <see cref="Resource"/>'s Disposing event.
+    ///     Attaches <see langword="this"/> instance's Dispose() to the <see cref="Resource"/>'s Releasing event.
     /// </summary>
     IMaaAgentClient AttachDisposeToResource();
 

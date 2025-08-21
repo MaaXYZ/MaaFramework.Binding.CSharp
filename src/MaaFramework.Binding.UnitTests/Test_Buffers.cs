@@ -1112,13 +1112,13 @@ internal sealed class TestImageBuffer : IMaaImageBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
-    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();
     }
 
-    event EventHandler? IMaaDisposable.Disposed
+    event EventHandler? IMaaDisposable.Released
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();
@@ -1149,13 +1149,13 @@ internal sealed class TestStringBuffer : IMaaStringBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
-    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();
     }
 
-    event EventHandler? IMaaDisposable.Disposed
+    event EventHandler? IMaaDisposable.Released
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();
@@ -1178,13 +1178,13 @@ internal sealed class TestRectBuffer : IMaaRectBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
-    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();
     }
 
-    event EventHandler? IMaaDisposable.Disposed
+    event EventHandler? IMaaDisposable.Released
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();

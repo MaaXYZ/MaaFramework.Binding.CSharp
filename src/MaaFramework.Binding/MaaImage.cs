@@ -30,17 +30,17 @@ public sealed class MaaImage(IMaaImageBuffer buffer) : IMaaDisposable
     public bool IsStateless => buffer.IsStateless;
 
     /// <inheritdoc/>
-    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Disposing
+    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
     {
-        add => buffer.Disposing += value;
-        remove => buffer.Disposing -= value;
+        add => buffer.Releasing += value;
+        remove => buffer.Releasing -= value;
     }
 
     /// <inheritdoc/>
-    event EventHandler? IMaaDisposable.Disposed
+    event EventHandler? IMaaDisposable.Released
     {
-        add => buffer.Disposed += value;
-        remove => buffer.Disposed -= value;
+        add => buffer.Released += value;
+        remove => buffer.Released -= value;
     }
 
     /// <summary>

@@ -69,7 +69,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <inheritdoc/>
     public IMaaAgentClient AttachDisposeToResource()
     {
-        Resource.Disposing += (_, _) => Dispose();
+        Resource.Releasing += (_, _) => Dispose();
         return this;
     }
 
