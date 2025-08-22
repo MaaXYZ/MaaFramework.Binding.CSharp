@@ -84,6 +84,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
+        if (!disposing) return;
 
         if (DisposeOptions.HasFlag(DisposeOptions.Controller))
             Controller.Dispose();

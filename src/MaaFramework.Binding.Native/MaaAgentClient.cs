@@ -77,8 +77,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-
-        KillAndDisposeAgentServerProcess();
+        KillAndDisposeAgentServerProcess(disposing); // disposing 无关
     }
 
     /// <inheritdoc/>
@@ -295,18 +294,30 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     public Process AgentServerProcess => _agentServerProcess
             ?? throw new InvalidOperationException($"The agent server process is unavailable or not managed by {nameof(MaaAgentClient)}.");
 
-    private void KillAndDisposeAgentServerProcess()
+    private void KillAndDisposeAgentServerProcess(bool disposing)
     {
         if (_agentServerProcess is null)
             return;
 
-        if (!_agentServerProcess.HasExited)
+        try
         {
-            _agentServerProcess.Kill(entireProcessTree: true);
-            _agentServerProcess.WaitForExit();
+            if (!_agentServerProcess.HasExited)
+            {
+                _agentServerProcess.Kill(entireProcessTree: true);
+                _agentServerProcess.WaitForExit();
+            }
         }
-
-        _agentServerProcess.Dispose();
-        _agentServerProcess = null;
+        catch (Exception ex)
+        {
+            Trace.TraceWarning("Failed to kill the agent server process: {0}.", _agentServerProcess.Id);
+            Trace.TraceError(ex.ToString());
+            if (disposing)
+                throw;
+        }
+        finally
+        {
+            _agentServerProcess.Dispose();
+            _agentServerProcess = null;
+        }
     }
 }

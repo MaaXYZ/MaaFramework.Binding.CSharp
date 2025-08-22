@@ -47,8 +47,7 @@ public class MaaCustomController : MaaController
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-
-        MaaCustomControllerMarshaller.Free(_api);
+        MaaCustomControllerMarshaller.Free(_api); // disposing 无关
         _api.Dispose();
     }
 }

@@ -11,6 +11,7 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaImageBuffer>
     , IMaaImageListBufferStatic<MaaImageListBufferHandle>
 {
+    // 涉及到 TryAdd、TryClear、TryRemoveAt、ReleaseHandle 这些 std::vector<T> 空间可能变化的，均需要 Dispose _cache.Values。
     private readonly ConcurrentDictionary<MaaSize, MaaImageBuffer> _cache = [];
     private void ClearCache()
     {
@@ -31,15 +32,6 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
                 buffer.Dispose();
             }
         }
-    }
-
-    /// <inheritdoc/>
-    // 涉及到 TrAdd、TryClear、Remove、Dispose 均需要 Dispose _cache.Values。
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-
-        ClearCache();
     }
 
     /// <summary>
@@ -65,7 +57,10 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     ///     Wrapper of <see cref="MaaImageListBufferDestroy"/>.
     /// </remarks>
     protected override void ReleaseHandle(MaaImageListBufferHandle handle)
-        => MaaImageListBufferDestroy(handle);
+    {
+        ClearCache();
+        MaaImageListBufferDestroy(handle);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
