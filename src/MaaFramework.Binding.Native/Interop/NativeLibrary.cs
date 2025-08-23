@@ -120,7 +120,7 @@ internal static partial class NativeLibrary
     private static string GetArchitectureName() => RuntimeInformation.OSArchitecture switch
     {
         Architecture.X64 when IsWindows => "win-x64",
-        // Architecture.Arm64 when IsWindows => "win-arm64",
+        Architecture.Arm64 when IsWindows => "win-arm64",
         Architecture.X64 when IsLinux => "linux-x64",
         Architecture.Arm64 when IsLinux => "linux-arm64",
         Architecture.X64 when IsOSX => "osx-x64",
