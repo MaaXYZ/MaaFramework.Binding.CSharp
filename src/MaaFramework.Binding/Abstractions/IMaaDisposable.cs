@@ -24,9 +24,9 @@ public interface IMaaDisposable : IDisposable
     bool IsStateless { get; }
 
     /// <summary>
-    ///     Occurs directly after <see cref="IDisposable.Dispose"/> is called, and can be handled to cancel the unmanaged resources release.
+    ///     Occurs directly after <see cref="IDisposable.Dispose"/> is called, before the unmanaged resources is released.
     /// </summary>
-    event System.ComponentModel.CancelEventHandler? Releasing;
+    event EventHandler? Releasing;
 
     /// <summary>
     ///     Occurs when the unmanaged resources is released.

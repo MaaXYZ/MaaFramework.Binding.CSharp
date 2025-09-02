@@ -160,7 +160,7 @@ internal static class Custom
 
         public bool IsStateless => c.IsStateless;
 
-        event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
+        event EventHandler? IMaaDisposable.Releasing
         {
             add => c.Releasing += value;
             remove => c.Releasing -= value;

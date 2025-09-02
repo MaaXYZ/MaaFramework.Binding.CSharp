@@ -1112,7 +1112,7 @@ internal sealed class TestImageBuffer : IMaaImageBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
-    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
+    event EventHandler? IMaaDisposable.Releasing
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();
@@ -1149,7 +1149,7 @@ internal sealed class TestStringBuffer : IMaaStringBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
-    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
+    event EventHandler? IMaaDisposable.Releasing
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();
@@ -1178,7 +1178,7 @@ internal sealed class TestRectBuffer : IMaaRectBuffer
         set => throw new NotImplementedException();
     }
     public bool IsStateless => throw new NotImplementedException();
-    event System.ComponentModel.CancelEventHandler? IMaaDisposable.Releasing
+    event EventHandler? IMaaDisposable.Releasing
     {
         add => throw new NotImplementedException();
         remove => throw new NotImplementedException();

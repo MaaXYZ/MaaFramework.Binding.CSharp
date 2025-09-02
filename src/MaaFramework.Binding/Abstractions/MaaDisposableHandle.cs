@@ -25,9 +25,7 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
     {
         if (_handle.Equals(_invalidHandle)) return;
 
-        var cea = new System.ComponentModel.CancelEventArgs();
-        Releasing?.Invoke(this, cea);
-        if (cea.Cancel) return;
+        Releasing?.Invoke(this, EventArgs.Empty);
         Release();
         Released?.Invoke(this, EventArgs.Empty);
     }
@@ -42,7 +40,7 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
     }
 
     /// <inheritdoc/>
-    public event System.ComponentModel.CancelEventHandler? Releasing;
+    public event EventHandler? Releasing;
 
     /// <inheritdoc/>
     public event EventHandler? Released;
