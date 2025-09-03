@@ -11,11 +11,10 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaImageBuffer>
     , IMaaImageListBufferStatic<MaaImageListBufferHandle>
 {
-    // 涉及到 TryAdd、TryClear、TryRemoveAt、ReleaseHandle 这些 std::vector<T> 空间可能变化的，均需要 Dispose _cache.Values。
-    private readonly ConcurrentDictionary<MaaSize, MaaImageBuffer> _cache = [];
+    private readonly ConcurrentDictionary<MaaImageBuffer, MaaSize> _cache = [];
     private void ClearCache()
     {
-        foreach (var buffer in _cache.Values)
+        foreach (var buffer in _cache.Keys)
         {
             buffer.ThrowOnInvalid = true;
             buffer.Dispose();
@@ -24,13 +23,11 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     }
     private void RemoveCache(MaaSize index)
     {
-        foreach (var key in _cache.Keys.Where(x => x >= index))
+        foreach (var pair in _cache.Where(x => x.Value >= index))
         {
-            if (_cache.TryRemove(key, out var buffer))
-            {
-                buffer.ThrowOnInvalid = true;
-                buffer.Dispose();
-            }
+            _ = _cache.TryRemove(pair);
+            pair.Key.ThrowOnInvalid = true;
+            pair.Key.Dispose();
         }
     }
 
@@ -79,8 +76,16 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     ///     Wrapper of <see cref="MaaImageListBufferAt"/>.
     /// </remarks>
     // Prohibit internal use of this method unless it is returned as a return value.
-    public override MaaImageBuffer this[MaaSize index] => _cache.GetOrAdd(index, i
-        => new(MaaImageListBufferAt(Handle, i).ThrowIfEquals(nint.Zero)));
+    public override MaaImageBuffer this[MaaSize index]
+    {
+        get
+        {
+            var handle = MaaImageListBufferAt(Handle, index).ThrowIfEquals(MaaImageBufferHandle.Zero);
+            var buffer = new MaaImageBuffer(handle);
+            _cache[buffer] = index;
+            return buffer;
+        }
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -88,16 +93,18 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// </remarks>
     public override bool TryAdd(MaaImageBuffer item)
     {
+        if (item is null)
+            return false;
         if (IsEmpty)
-        {
-            return item is not null && MaaImageListBufferAppend(Handle, item.Handle);
-        }
+            return MaaImageListBufferAppend(Handle, item.Handle);
 
         var first = MaaImageListBufferAt(Handle, 0);
-        var ret = item is not null && MaaImageListBufferAppend(Handle, item.Handle);
+        var ret = MaaImageListBufferAppend(Handle, item.Handle);
         // if std::vector<T> expanded
         if (ret && first != MaaImageListBufferAt(Handle, 0))
             ClearCache();
+
+        _version++;
         return ret;
     }
 
@@ -111,6 +118,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
             return false;
 
         RemoveCache(index);
+        _version++;
         return true;
     }
 
@@ -124,6 +132,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
             return false;
 
         ClearCache();
+        _version++;
         return true;
     }
 

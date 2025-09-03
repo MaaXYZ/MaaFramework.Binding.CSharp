@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Interop.Native;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaBuffer;
 
@@ -10,6 +11,26 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaStringBuffer>
     , IMaaStringListBufferStatic<MaaStringListBufferHandle>
 {
+    private readonly ConcurrentDictionary<MaaStringBuffer, MaaSize> _cache = [];
+    private void ClearCache()
+    {
+        foreach (var buffer in _cache.Keys)
+        {
+            buffer.ThrowOnInvalid = true;
+            buffer.Dispose();
+        }
+        _cache.Clear();
+    }
+    private void RemoveCache(MaaSize index)
+    {
+        foreach (var pair in _cache.Where(x => x.Value >= index))
+        {
+            _ = _cache.TryRemove(pair);
+            pair.Key.ThrowOnInvalid = true;
+            pair.Key.Dispose();
+        }
+    }
+
     /// <summary>
     ///     Creates a <see cref="MaaStringListBuffer"/> instance.
     /// </summary>
@@ -33,7 +54,10 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     ///     Wrapper of <see cref="MaaStringListBufferDestroy"/>.
     /// </remarks>
     protected override void ReleaseHandle(MaaStringListBufferHandle handle)
-        => MaaStringListBufferDestroy(handle);
+    {
+        ClearCache();
+        MaaStringListBufferDestroy(handle);
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -51,29 +75,65 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferAt"/>.
     /// </remarks>
-    public override MaaStringBuffer this[MaaSize index] => new(MaaStringListBufferAt(Handle, index).ThrowIfEquals(nint.Zero));
+    public override MaaStringBuffer this[MaaSize index]
+    {
+        get
+        {
+            var handle = MaaStringListBufferAt(Handle, index).ThrowIfEquals(MaaStringBufferHandle.Zero);
+            var buffer = new MaaStringBuffer(handle);
+            _cache[buffer] = index;
+            return buffer;
+        }
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferAppend"/>.
     /// </remarks>
     public override bool TryAdd(MaaStringBuffer item)
-        => item is not null
-           && MaaStringListBufferAppend(Handle, item.Handle);
+    {
+        if (item is null)
+            return false;
+        if (IsEmpty)
+            return MaaStringListBufferAppend(Handle, item.Handle);
+
+        var first = MaaStringListBufferAt(Handle, 0);
+        var ret = MaaStringListBufferAppend(Handle, item.Handle);
+        // if std::vector<T> expanded
+        if (ret && first != MaaStringListBufferAt(Handle, 0))
+            ClearCache();
+
+        _version++;
+        return ret;
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferRemove"/>.
     /// </remarks>
     public override bool TryRemoveAt(MaaSize index)
-        => MaaStringListBufferRemove(Handle, index);
+    {
+        if (!MaaStringListBufferRemove(Handle, index))
+            return false;
+
+        RemoveCache(index);
+        _version++;
+        return true;
+    }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferClear"/>.
     /// </remarks>
     public override bool TryClear()
-        => MaaStringListBufferClear(Handle);
+    {
+        if (!MaaStringListBufferClear(Handle))
+            return false;
+
+        ClearCache();
+        _version++;
+        return true;
+    }
 
     /// <inheritdoc/>
     public override bool IsReadOnly => false;

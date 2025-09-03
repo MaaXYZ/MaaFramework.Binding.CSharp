@@ -196,7 +196,7 @@ IMaaDisposable Derived:
 | IMaaListBuffer.TryRemoveAt() <br> IList<>.RemoveAt() <br> ICollection<>.Remove() | `MaaStringListBufferRemove` |
 | IMaaListBuffer.TryClear() <br> ICollection<>.Clear() | `MaaStringListBufferClear` |
 | ICollection<>.IsReadOnly | `false` |
-| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
+| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListBuffer.Enumerator* |
 | IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
 | MaaStringListBuffer.TryGetList() <br> MaaStringListBuffer.TrySetList() | *Static utility methods used to avoid creating instances of the class.* |
 
@@ -242,7 +242,7 @@ IMaaDisposable Derived:
 | IMaaListBuffer.TryRemoveAt() <br> IList<>.RemoveAt() <br> ICollection<>.Remove() | `MaaImageListBufferRemove` |
 | IMaaListBuffer.TryClear() <br> ICollection<>.Clear() | `MaaImageListBufferClear` |
 | ICollection<>.IsReadOnly | `false` |
-| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
+| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListBuffer.Enumerator* |
 | IMaaDisposableHandle.Handle | *The MaaImageListBufferHandle.* |
 | MaaImageListBuffer.TryGetEncodedDataList() <br> MaaImageListBuffer.TryGetEncodedDataList() | *Static utility methods used to avoid creating instances of the class.* |
 
@@ -288,7 +288,7 @@ IMaaDisposable Derived:
 | IMaaListBuffer.IsEmpty <br> IMaaListBuffer.MaaSizeCount <br> ICollection<>.Count | `MaaToolkitAdbDeviceListSize` |
 | IMaaListBuffer.this[] <br> IMaaListBuffer.TryIndexOf() <br> IList<>.this[] <br> IList<>.IndexOf() <br> ICollection<>.Contains() | `MaaToolkitAdbDeviceListAt` |
 | ICollection<>.IsReadOnly | `true` |
-| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
+| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListBuffer.Enumerator* |
 | IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
 | AdbDeviceListBuffer.TryGetList() | *Static utility methods used to avoid creating instances of the class.* |
 
@@ -305,7 +305,7 @@ IMaaDisposable Derived:
 | IMaaListBuffer.IsEmpty <br> IMaaListBuffer.MaaSizeCount <br> ICollection<>.Count | `MaaToolkitDesktopWindowListSize` |
 | IMaaListBuffer.this[] <br> IMaaListBuffer.TryIndexOf() <br> IList<>.this[] <br> IList<>.IndexOf() <br> ICollection<>.Contains() | `MaaToolkitDesktopWindowListAt` |
 | ICollection<>.IsReadOnly | `true` |
-| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListEnumerator* |
+| IEnumerable<>.GetEnumerator() <br> IEnumerable.GetEnumerator() | *Implemented by class Buffers.MaaListBuffer.Enumerator* |
 | IMaaDisposableHandle.Handle | *The MaaStringListBufferHandle.* |
 | DesktopWindowListBuffer.TryGetList() | *Static utility methods used to avoid creating instances of the class.* |
 
