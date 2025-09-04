@@ -1,6 +1,4 @@
-﻿using MaaFramework.Binding.Abstractions;
-
-namespace MaaFramework.Binding.Buffers;
+﻿namespace MaaFramework.Binding.Buffers;
 
 /// <summary>
 ///     An interface defining common members for MaaBuffer.
@@ -22,7 +20,7 @@ public interface IMaaBuffer<in THandle, in TBuffer> : IMaaBuffer<TBuffer>
 ///     An interface defining common members for MaaBuffer.
 /// </summary>
 /// <typeparam name="TBuffer">The type of buffer.</typeparam>
-public interface IMaaBuffer<in TBuffer> : IMaaDisposable
+public interface IMaaBuffer<in TBuffer>
 {
     /// <summary>
     ///     Copies all values of the current buffer to the specified buffer.

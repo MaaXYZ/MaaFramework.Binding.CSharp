@@ -17,7 +17,7 @@ public interface IMaaListBuffer<THandle, T> : IMaaListBuffer<T>, IMaaBuffer<THan
 ///     An interface defining wrapped members for MaaListBuffer.
 /// </summary>
 /// <typeparam name="T">The type of element.</typeparam>
-public interface IMaaListBuffer<T> : IMaaBuffer<IMaaListBuffer<T>>, IList<T>
+public interface IMaaListBuffer<T> : IMaaBuffer<IMaaListBuffer<T>>, IList<T>, IMaaDisposable
 {
     /// <summary>
     ///     Gets a value indicates whether the <see cref="IMaaListBuffer{T}"/> is empty.

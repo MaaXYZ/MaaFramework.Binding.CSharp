@@ -15,7 +15,7 @@ public interface IMaaImageBuffer<THandle> : IMaaImageBuffer, IMaaBuffer<THandle,
 /// <summary>
 ///     An interface defining wrapped members for MaaImageBuffer.
 /// </summary>
-public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>
+public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>, IMaaDisposable
 {
     /// <summary>
     ///     Gets a value indicates whether the image of the <see cref="IMaaImageBuffer"/> is empty.

@@ -15,7 +15,7 @@ public interface IMaaStringBuffer<THandle> : IMaaStringBuffer, IMaaBuffer<THandl
 /// <summary>
 ///     An interface defining wrapped members for MaaStringBuffer.
 /// </summary>
-public interface IMaaStringBuffer : IMaaBuffer<IMaaStringBuffer>
+public interface IMaaStringBuffer : IMaaBuffer<IMaaStringBuffer>, IMaaDisposable
 {
     /// <summary>
     ///     Gets a value indicates whether the string of the <see cref="IMaaStringBuffer"/> is empty.

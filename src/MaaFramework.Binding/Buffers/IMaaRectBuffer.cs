@@ -14,7 +14,7 @@ public interface IMaaRectBuffer<THandle> : IMaaRectBuffer, IMaaBuffer<THandle, I
 /// <summary>
 ///     An interface defining wrapped members for <see cref="IMaaRectBuffer"/>.
 /// </summary>
-public interface IMaaRectBuffer : IMaaBuffer<IMaaRectBuffer>
+public interface IMaaRectBuffer : IMaaBuffer<IMaaRectBuffer>, IMaaDisposable
 {
     /// <summary>
     ///     Gets the horizontal coordinate.
