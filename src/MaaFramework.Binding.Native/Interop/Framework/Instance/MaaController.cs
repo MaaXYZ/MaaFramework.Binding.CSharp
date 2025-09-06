@@ -48,7 +48,7 @@ public static partial class MaaController
     public static partial MaaCtrlId MaaControllerPostSwipe(MaaControllerHandle ctrl, int x1, int y1, int x2, int y2, int duration);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaCtrlId MaaControllerPostPressKey(MaaControllerHandle ctrl, int keycode);
+    public static partial MaaCtrlId MaaControllerPostClickKey(MaaControllerHandle ctrl, int keycode);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostInputText(MaaControllerHandle ctrl, string text);
@@ -67,6 +67,12 @@ public static partial class MaaController
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostTouchUp(MaaControllerHandle ctrl, int contact);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostKeyDown(MaaControllerHandle ctrl, int keycode);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostKeyUp(MaaControllerHandle ctrl, int keycode);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostScreencap(MaaControllerHandle ctrl);
@@ -88,4 +94,8 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaControllerGetUuid(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
+
+    [Obsolete]
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostPressKey(MaaControllerHandle ctrl, int keycode);
 }

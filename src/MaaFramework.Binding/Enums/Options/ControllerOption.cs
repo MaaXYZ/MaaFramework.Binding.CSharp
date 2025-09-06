@@ -47,6 +47,7 @@ public enum ControllerOption : System.Int32
     ///     <para>MaaGlobalOptionEnum::MaaGlobalOption_Recording is true.</para>
     ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
+    [Obsolete("Deprecated from v4.5.0.")]
     Recording = 5,
 }
 

@@ -103,8 +103,10 @@ public static class MaaCustomControllerMarshaller
         public TouchDownDelegate TouchDown = (int contact, int x, int y, int pressure, nint transArg) => managed.TouchDown(contact, x, y, pressure);
         public TouchMoveDelegate TouchMove = (int contact, int x, int y, int pressure, nint transArg) => managed.TouchMove(contact, x, y, pressure);
         public TouchUpDelegate TouchUp = (int contact, nint transArg) => managed.TouchUp(contact);
-        public PressKeyDelegate PressKey = (int keycode, nint transArg) => managed.PressKey(keycode);
+        public ClickKeyDelegate ClickKey = (int keycode, nint transArg) => managed.ClickKey(keycode);
         public InputTextDelegate InputText = (string text, nint transArg) => managed.InputText(text);
+        public KeyDownDelegate KeyDown = (int keycode, nint transArg) => managed.KeyDown(keycode);
+        public KeyUpDelegate KeyUp = (int keycode, nint transArg) => managed.KeyUp(keycode);
     };
 
     /// <summary>
@@ -127,8 +129,10 @@ public static class MaaCustomControllerMarshaller
         public nint TouchDown = Marshal.GetFunctionPointerForDelegate(delegates.TouchDown);
         public nint TouchMove = Marshal.GetFunctionPointerForDelegate(delegates.TouchMove);
         public nint TouchUp = Marshal.GetFunctionPointerForDelegate(delegates.TouchUp);
-        public nint PressKey = Marshal.GetFunctionPointerForDelegate(delegates.PressKey);
+        public nint ClickKey = Marshal.GetFunctionPointerForDelegate(delegates.ClickKey);
         public nint InputText = Marshal.GetFunctionPointerForDelegate(delegates.InputText);
+        public nint KeyDown = Marshal.GetFunctionPointerForDelegate(delegates.KeyDown);
+        public nint KeyUp = Marshal.GetFunctionPointerForDelegate(delegates.KeyUp);
     }
 
     [return: MarshalAs(UnmanagedType.U1)]
@@ -179,9 +183,17 @@ public static class MaaCustomControllerMarshaller
 
     [return: MarshalAs(UnmanagedType.U1)]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate bool PressKeyDelegate(int keycode, nint transArg);
+    public delegate bool ClickKeyDelegate(int keycode, nint transArg);
 
     [return: MarshalAs(UnmanagedType.U1)]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool InputTextDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string text, nint transArg);
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool KeyDownDelegate(int keycode, nint transArg);
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool KeyUpDelegate(int keycode, nint transArg);
 }

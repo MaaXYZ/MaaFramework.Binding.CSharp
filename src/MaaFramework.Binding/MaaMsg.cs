@@ -12,7 +12,7 @@
 
 ﻿namespace MaaFramework.Binding.Notification;
 
-//MaaApiDocument Version: (main) v4.4.1
+//MaaApiDocument Version: (main) v4.5.2
 /// <summary>
 ///  A callback consists of a message and a payload.
 ///  The message is a string that indicates the type of the message.
@@ -66,7 +66,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, }</para>
+            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
             /// </remarks>
             public const string Starting = "Controller.Action.Starting";
 
@@ -74,7 +74,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, }</para>
+            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
             /// </remarks>
             public const string Prefix = "Controller.Action";
 
@@ -82,7 +82,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, }</para>
+            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
             /// </remarks>
             public const string Succeeded = "Controller.Action.Succeeded";
 
@@ -90,7 +90,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, }</para>
+            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
             /// </remarks>
             public const string Failed = "Controller.Action.Failed";
 
