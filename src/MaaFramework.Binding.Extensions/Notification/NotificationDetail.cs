@@ -14,7 +14,8 @@ public record ResourceLoadingDetail(
 public record ControllerActionDetail(
     [property: JsonPropertyName("ctrl_id")] int ControllerId,
     [property: JsonPropertyName("uuid")] string Uuid,
-    [property: JsonPropertyName("action")] string Action
+    [property: JsonPropertyName("action")] string Action,
+    [property: JsonPropertyName("param")] JsonElement Param
 );
 
 /// <inheritdoc cref="MaaMsg.Tasker.Task.Prefix"/>
