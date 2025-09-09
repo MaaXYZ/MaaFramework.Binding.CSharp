@@ -187,8 +187,8 @@ internal static class Custom
         public bool InputText(string text)
             => c.InputText(text).Wait() == MaaJobStatus.Succeeded;
 
-        public bool PressKey(int keycode)
-            => c.PressKey(keycode).Wait() == MaaJobStatus.Succeeded;
+        public bool ClickKey(int keycode)
+            => c.ClickKey(keycode).Wait() == MaaJobStatus.Succeeded;
 
         public bool RequestResolution(out int width, out int height)
         {
@@ -213,25 +213,30 @@ internal static class Custom
         }
 
         public bool Screencap(in IMaaImageBuffer buffer)
-            => c.Screencap().Wait() == MaaJobStatus.Succeeded && c.GetCachedImage(buffer);
+            => c.Screencap().Wait().IsSucceeded() && c.GetCachedImage(buffer);
 
         public bool StartApp(string intent)
-            => c.StartApp(intent).Wait() == MaaJobStatus.Succeeded;
+            => c.StartApp(intent).Wait().IsSucceeded();
 
         public bool StopApp(string intent)
-            => c.StopApp(intent).Wait() == MaaJobStatus.Succeeded;
+            => c.StopApp(intent).Wait().IsSucceeded();
 
         public bool Swipe(int x1, int y1, int x2, int y2, int duration)
-            => c.Swipe(x1, y1, x2, y2, duration).Wait() == MaaJobStatus.Succeeded;
+            => c.Swipe(x1, y1, x2, y2, duration).Wait().IsSucceeded();
 
         public bool TouchDown(int contact, int x, int y, int pressure)
-            => c.TouchDown(contact, x, y, pressure).Wait() == MaaJobStatus.Succeeded;
+            => c.TouchDown(contact, x, y, pressure).Wait().IsSucceeded();
 
         public bool TouchMove(int contact, int x, int y, int pressure)
-            => c.TouchMove(contact, x, y, pressure).Wait() == MaaJobStatus.Succeeded;
+            => c.TouchMove(contact, x, y, pressure).Wait().IsSucceeded();
 
         public bool TouchUp(int contact)
-            => c.TouchUp(contact).Wait() == MaaJobStatus.Succeeded;
+            => c.TouchUp(contact).Wait().IsSucceeded();
+
+        public bool KeyDown(int keycode)
+            => c.KeyDown(keycode).Wait().IsSucceeded();
+        public bool KeyUp(int keycode)
+            => c.KeyUp(keycode).Wait().IsSucceeded();
     }
 
     internal sealed class TestInvalidResource : IMaaCustomResource

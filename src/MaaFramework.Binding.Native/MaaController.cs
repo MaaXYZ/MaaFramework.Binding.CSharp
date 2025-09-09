@@ -111,9 +111,20 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostPressKey"/>.
     /// </remarks>
+    [Obsolete("Use ClickKey() instead.")]
     public MaaJob PressKey(int keyCode)
     {
         var id = MaaControllerPostPressKey(Handle, keyCode);
+        return LastJob = new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostClickKey"/>.
+    /// </remarks>
+    public MaaJob ClickKey(int keyCode)
+    {
+        var id = MaaControllerPostClickKey(Handle, keyCode);
         return LastJob = new MaaJob(id, this);
     }
 
@@ -174,6 +185,26 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     public MaaJob TouchUp(int contact)
     {
         var id = MaaControllerPostTouchUp(Handle, contact);
+        return LastJob = new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostKeyDown"/>.
+    /// </remarks>
+    public MaaJob KeyDown(int keyCode)
+    {
+        var id = MaaControllerPostKeyDown(Handle, keyCode);
+        return LastJob = new MaaJob(id, this);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostKeyUp"/>.
+    /// </remarks>
+    public MaaJob KeyUp(int keyCode)
+    {
+        var id = MaaControllerPostKeyUp(Handle, keyCode);
         return LastJob = new MaaJob(id, this);
     }
 

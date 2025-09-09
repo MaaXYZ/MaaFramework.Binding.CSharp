@@ -41,10 +41,22 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
 
     /// <summary>
     ///     Presses a key.
+    ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
+    ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>
     /// </summary>
     /// <param name="keyCode">The code of the key.</param>
     /// <returns>A press key <see cref="MaaJob"/>.</returns>
+    [Obsolete("Use ClickKey() instead.")]
     MaaJob PressKey(int keyCode);
+
+    /// <summary>
+    ///     Clicks a key.
+    ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
+    ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>
+    /// </summary>
+    /// <param name="keyCode">The code of the key.</param>
+    /// <returns>A click key <see cref="MaaJob"/>.</returns>
+    MaaJob ClickKey(int keyCode);
 
     /// <summary>
     ///     Inputs a text.
@@ -73,11 +85,9 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
 
     /// <summary>
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
+    ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
+    ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
     /// </summary>
-    /// <remarks>
-    ///     <para>For adb controller, contact means finger id (0 for first finger, 1 for second finger, etc.).</para>
-    ///     <para>For win32 controller, contact means mouse button id (0 for left, 1 for right, 2 for middle).</para>
-    /// </remarks>
     /// <param name="contact">The contact id.</param>
     /// <param name="x">The horizontal coordinate of the point.</param>
     /// <param name="y">The vertical coordinate of the point.</param>
@@ -92,6 +102,19 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <returns>A touch up <see cref="MaaJob"/>.</returns>
     /// <inheritdoc cref="TouchDown"/>
     MaaJob TouchUp(int contact);
+
+    /// <summary>
+    ///     Usage: KeyDown -> KeyUp.
+    ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
+    ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>
+    /// </summary>
+    /// <param name="keyCode">The code of the key.</param>
+    /// <returns>A key down <see cref="MaaJob"/>.</returns>
+    MaaJob KeyDown(int keyCode);
+
+    /// <returns>A key up <see cref="MaaJob"/>.</returns>
+    /// <inheritdoc cref="KeyDown"/>
+    MaaJob KeyUp(int keyCode);
 
     /// <summary>
     ///     Takes a screenshot.

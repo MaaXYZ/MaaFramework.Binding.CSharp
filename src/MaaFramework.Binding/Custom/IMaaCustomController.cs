@@ -32,6 +32,8 @@ public interface IMaaCustomController : IMaaCustomResource, IDisposable
     bool TouchDown(int contact, int x, int y, int pressure);
     bool TouchMove(int contact, int x, int y, int pressure);
     bool TouchUp(int contact);
-    bool PressKey(int keycode);
+    bool ClickKey(int keycode);
     bool InputText(string text);
+    bool KeyDown(int keycode);
+    bool KeyUp(int keycode);
 }

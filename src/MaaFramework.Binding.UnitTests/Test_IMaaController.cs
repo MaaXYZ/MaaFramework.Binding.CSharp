@@ -208,11 +208,11 @@ public class Test_IMaaController
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), true, 4)]  // KEYCODE_BACK
-    public void Interface_PressKey(MaaTypes type, IMaaController maaController, bool assertSuccess, int keyCode)
+    public void Interface_ClickKey(MaaTypes type, IMaaController maaController, bool assertSuccess, int keyCode)
     {
         Assert.IsNotNull(maaController);
 
-        var job = maaController.PressKey(keyCode);
+        var job = maaController.ClickKey(keyCode);
         Interface_IMaaPost(assertSuccess, job);
     }
 
@@ -264,6 +264,23 @@ public class Test_IMaaController
 
         job = maaController.TouchUp(contact);
         Interface_IMaaPost(assertSuccess, job);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), false, 4, "Adb")]
+    [MaaData(MaaTypes.All, nameof(MiniTouchData), false, 4, "MiniTouch")]
+    [MaaData(MaaTypes.All, nameof(MaaTouchData), true, 4, "MaaTouch")]
+    public void Interface_KeyDown_KeyUp(MaaTypes type, IMaaController maaController, bool assertSuccess, int keyCode, string adbControllerTypes)
+    {
+        Assert.IsNotNull(maaController);
+
+        var job = maaController.KeyDown(keyCode);
+        Interface_IMaaPost(assertSuccess, job);
+        Task.Delay(100).Wait();
+
+        job = maaController.KeyUp(keyCode);
+        Interface_IMaaPost(assertSuccess, job);
+        Task.Delay(100).Wait();
     }
 
     private static MaaImageBuffer GetImage(MaaTypes type, IMaaController maaController)
