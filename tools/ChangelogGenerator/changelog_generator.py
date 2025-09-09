@@ -131,9 +131,9 @@ def print_commits(commits: dict, indent: str = "", need_sort: bool = True) -> (s
         for commit_hash, commit_info in commits.items():
             commit_message = commit_info["message"]
 
-            if not with_commitizen:
-                commitizens = r"(?:build|chore|ci|docs?|feat|fix|perf|refactor|rft|style|test)"
-                commit_message = re.sub(rf"^(?:{commitizens}, *)*{commitizens} *(?:\([^\)]*\))*: *", "", commit_message)
+            #if not with_commitizen:
+            #    commitizens = r"(?:build|chore|ci|docs?|feat|fix|perf|refactor|rft|style|test)"
+            #    commit_message = re.sub(rf"^(?:{commitizens}, *)*{commitizens} *(?:\([^\)]*\))*: *", "", commit_message)
 
             ret_message += indent + "- " + commit_message
 
