@@ -31,10 +31,12 @@ public class MaaUtility : IMaaUtility
         {
             (int vvvv, GlobalOption.StdoutLevel) => vvvv.ToMaaOptionValue(),
             (string v, GlobalOption.LogDir) => v.ToMaaOptionValue(),
+#pragma warning disable CS0618 // 类型或成员已过时
             (bool vvv, GlobalOption.SaveDraw
                     or GlobalOption.Recording
                     or GlobalOption.ShowHitDraw
                     or GlobalOption.DebugMode) => vvv.ToMaaOptionValue(),
+#pragma warning restore CS0618 // 类型或成员已过时
 
             (LoggingLevel v, GlobalOption.StdoutLevel) => ((int)v).ToMaaOptionValue(),
 

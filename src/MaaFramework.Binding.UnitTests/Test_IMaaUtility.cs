@@ -40,10 +40,8 @@ public class Test_IMaaMaaUtility
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.LogDir, nameof(Common.DebugPath))]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.SaveDraw, false)]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Recording, false)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, LoggingLevel.Off)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 0)]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.ShowHitDraw, false)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DebugMode, false)]
     public void Interface_SetOption(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
     {
@@ -59,9 +57,7 @@ public class Test_IMaaMaaUtility
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Invalid, "Anything")]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.LogDir, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.SaveDraw, 0.0)]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.Recording, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 0.0)]
-    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.ShowHitDraw, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DebugMode, 0.0)]
     public void Interface_SetOption_InvalidData(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
     {
