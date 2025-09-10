@@ -179,16 +179,16 @@ internal static class Custom
         public string Name { get; set; } = "TestController";
 
         public bool Click(int x, int y)
-            => c.Click(x, y).Wait() == MaaJobStatus.Succeeded;
+            => c.Click(x, y).Wait().IsSucceeded();
 
         public bool Connect()
-            => c.LinkStart().Wait() == MaaJobStatus.Succeeded;
+            => c.LinkStart().Wait().IsSucceeded();
 
         public bool InputText(string text)
-            => c.InputText(text).Wait() == MaaJobStatus.Succeeded;
+            => c.InputText(text).Wait().IsSucceeded();
 
         public bool ClickKey(int keycode)
-            => c.ClickKey(keycode).Wait() == MaaJobStatus.Succeeded;
+            => c.ClickKey(keycode).Wait().IsSucceeded();
 
         public bool RequestResolution(out int width, out int height)
         {

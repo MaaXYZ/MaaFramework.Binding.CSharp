@@ -38,7 +38,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
         SetHandle(handle, needReleased: true);
     }
 
-    /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
+    /// <inheritdoc cref="Binding.MaaResource(CheckStatusOption, string[])"/>
     public MaaResource(params string[] bundlePaths)
         : this(CheckStatusOption.ThrowIfNotSucceeded, bundlePaths)
     {
@@ -48,7 +48,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     /// <param name="bundlePaths">The paths of maa bundle.</param>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="MaaJobStatusException"/>
-    /// <inheritdoc cref="MaaResource()"/>
+    /// <inheritdoc cref="Binding.MaaResource()"/>
     public MaaResource(CheckStatusOption check, params string[] bundlePaths)
         : this()
     {
@@ -64,13 +64,13 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
         }
     }
 
-    /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
+    /// <inheritdoc cref="Binding.MaaResource(CheckStatusOption, string[])"/>
     public MaaResource(IEnumerable<string> bundlePaths)
         : this(CheckStatusOption.ThrowIfNotSucceeded, bundlePaths)
     {
     }
 
-    /// <inheritdoc cref="MaaResource(CheckStatusOption, string[])"/>
+    /// <inheritdoc cref="Binding.MaaResource(CheckStatusOption, string[])"/>
     public MaaResource(CheckStatusOption check, IEnumerable<string> bundlePaths)
         : this()
     {

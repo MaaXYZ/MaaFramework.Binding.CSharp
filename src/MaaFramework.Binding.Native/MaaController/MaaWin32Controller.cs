@@ -23,25 +23,6 @@ public class MaaWin32Controller : MaaController
     /// <summary>
     ///     Creates a <see cref="MaaWin32Controller"/> instance.
     /// </summary>
-    /// <param name="hWnd">The handle to a win32 window.</param>
-    /// <param name="screencapMethod">The screencap method.</param>
-    /// <param name="inputMethod">The input method.</param>
-    /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaWin32ControllerCreate"/>.
-    /// </remarks>
-    /// <exception cref="ArgumentException"/>
-    /// <exception cref="MaaJobStatusException"/>
-    public MaaWin32Controller(nint hWnd, Win32ScreencapMethod screencapMethod, Win32InputMethod inputMethod, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
-        : this(new DesktopWindowInfo(hWnd, string.Empty, string.Empty),
-              screencapMethod, inputMethod, link, check)
-    {
-    }
-
-    /// <summary>
-    ///     Creates a <see cref="MaaWin32Controller"/> instance.
-    /// </summary>
     /// <param name="desktopWindow">The desktop window info.</param>
     /// <param name="screencapMethod">The screencap method.</param>
     /// <param name="inputMethod">The input method.</param>
@@ -66,5 +47,17 @@ public class MaaWin32Controller : MaaController
 
         if (link == LinkOption.Start)
             LinkStartOnConstructed(check, desktopWindow, screencapMethod, inputMethod);
+    }
+
+    /// <param name="hWnd">The handle to a win32 window.</param>
+    /// <param name="screencapMethod">The screencap method.</param>
+    /// <param name="inputMethod">The input method.</param>
+    /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
+    /// <inheritdoc cref="Binding.MaaWin32Controller(DesktopWindowInfo, Win32ScreencapMethod, Win32InputMethod, LinkOption, CheckStatusOption)"/>
+    public MaaWin32Controller(nint hWnd, Win32ScreencapMethod screencapMethod, Win32InputMethod inputMethod, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+        : this(new DesktopWindowInfo(hWnd, string.Empty, string.Empty),
+            screencapMethod, inputMethod, link, check)
+    {
     }
 }

@@ -158,7 +158,7 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
         }
 
         /// <inheritdoc/>
-        public void Dispose()
+        public readonly void Dispose()
         {
         }
 
@@ -185,9 +185,9 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
         }
 
         /// <inheritdoc/>
-        public T Current => _current!;
+        public readonly T Current => _current!;
 
-        object? IEnumerator.Current
+        readonly object? IEnumerator.Current
         {
             get
             {

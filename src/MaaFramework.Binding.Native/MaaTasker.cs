@@ -67,7 +67,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     /// <param name="resource">The resource.</param>
     /// <param name="disposeOptions">The dispose options.</param>
     /// <param name="toolkitInit">Whether initializes the <see cref="Toolkit"/>.</param>
-    /// <inheritdoc cref="MaaTasker(bool)"/>
+    /// <inheritdoc cref="Binding.MaaTasker(bool)"/>
     [SetsRequiredMembers]
     public MaaTasker(MaaController controller, MaaResource resource, DisposeOptions disposeOptions, bool toolkitInit = false)
         : this(toolkitInit)

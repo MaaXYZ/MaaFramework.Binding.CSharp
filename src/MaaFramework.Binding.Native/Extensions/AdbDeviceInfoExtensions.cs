@@ -31,9 +31,14 @@ public static class AdbDeviceInfoExtensions
     {
         ArgumentNullException.ThrowIfNull(info);
 
-        if (adbPath is null && adbSerial is null && screencapMethods is null
-            && inputMethods is null && config is null)
+        if (adbPath is null
+            && adbSerial is null
+            && screencapMethods is null
+            && inputMethods is null
+            && config is null)
+        {
             return new MaaAdbController(info, agentPath, link, check);
+        }
 
         return new MaaAdbController(
             new AdbDeviceInfo(

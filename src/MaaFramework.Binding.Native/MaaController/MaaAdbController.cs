@@ -22,28 +22,6 @@ public class MaaAdbController : MaaController
     /// <summary>
     ///     Creates a <see cref="MaaAdbController"/> instance.
     /// </summary>
-    /// <param name="adbPath">The path of adb executable file.</param>
-    /// <param name="adbSerial">The adb serial.</param>
-    /// <param name="screencapMethods">The screencap methods.</param>
-    /// <param name="inputMethods">The input methods.</param>
-    /// <param name="config">The adb config.</param>
-    /// <param name="agentPath">The path of agent directory. Default is "./MaaAgentBinary" if package "Maa.Framework" or "Maa.AgentBinary" is used.</param>
-    /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
-    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaAdbControllerCreate"/>.
-    /// </remarks>
-    /// <exception cref="ArgumentException"/>
-    /// <exception cref="MaaJobStatusException"/>
-    public MaaAdbController(string adbPath, string adbSerial, AdbScreencapMethods screencapMethods, AdbInputMethods inputMethods, [StringSyntax("Json")] string config = "{}", string agentPath = "./MaaAgentBinary", LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
-        : this(new AdbDeviceInfo(string.Empty, adbPath, adbSerial, screencapMethods, inputMethods, config),
-              agentPath, link, check)
-    {
-    }
-
-    /// <summary>
-    ///     Creates a <see cref="MaaAdbController"/> instance.
-    /// </summary>
     /// <param name="adbDevice">The adb device info.</param>
     /// <param name="agentPath">The path of agent directory. Default is "./MaaAgentBinary" if package "Maa.Framework" or "Maa.AgentBinary" is used.</param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
@@ -70,5 +48,20 @@ public class MaaAdbController : MaaController
 
         if (link == LinkOption.Start)
             LinkStartOnConstructed(check, adbDevice, _debugAgentPath);
+    }
+
+    /// <param name="adbPath">The path of adb executable file.</param>
+    /// <param name="adbSerial">The adb serial.</param>
+    /// <param name="screencapMethods">The screencap methods.</param>
+    /// <param name="inputMethods">The input methods.</param>
+    /// <param name="config">The adb config.</param>
+    /// <param name="agentPath">The path of agent directory. Default is "./MaaAgentBinary" if package "Maa.Framework" or "Maa.AgentBinary" is used.</param>
+    /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
+    /// <inheritdoc cref="Binding.MaaAdbController(AdbDeviceInfo, string, LinkOption, CheckStatusOption)"/>
+    public MaaAdbController(string adbPath, string adbSerial, AdbScreencapMethods screencapMethods, AdbInputMethods inputMethods, [StringSyntax("Json")] string config = "{}", string agentPath = "./MaaAgentBinary", LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+        : this(new AdbDeviceInfo(string.Empty, adbPath, adbSerial, screencapMethods, inputMethods, config),
+            agentPath, link, check)
+    {
     }
 }
