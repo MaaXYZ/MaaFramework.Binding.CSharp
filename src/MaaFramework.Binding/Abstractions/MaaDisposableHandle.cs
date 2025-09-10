@@ -20,14 +20,24 @@ public abstract class MaaDisposableHandle<T> : IMaaDisposableHandle<T> where T :
         GC.SuppressFinalize(this);
     }
 
+    private int _disposed; // false
+
     /// <inheritdoc cref="Dispose()"/>
     protected virtual void Dispose(bool disposing)
     {
-        if (_handle.Equals(_invalidHandle)) return;
-
-        Releasing?.Invoke(this, EventArgs.Empty);
-        Release();
-        Released?.Invoke(this, EventArgs.Empty);
+        if (1 == Interlocked.CompareExchange(ref _disposed, 1, 0)) return; // true
+        if (!_handle.Equals(_invalidHandle))
+        {
+            try
+            {
+                Releasing?.Invoke(this, EventArgs.Empty);
+            }
+            finally
+            {
+                Release();
+            }
+            Released?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void Release()

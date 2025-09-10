@@ -86,7 +86,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// </remarks>
     protected override void ReleaseHandle(MaaAgentClientHandle handle)
     {
-        _ = MaaAgentClientDisconnect(handle).ThrowIfFalse();
+        _ = MaaAgentClientDisconnect(handle);
         MaaAgentClientDestroy(handle);
     }
 
