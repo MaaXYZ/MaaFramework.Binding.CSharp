@@ -6,7 +6,7 @@ var directoriesNamespaces = new Dictionary<string, string>
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/Interop/"), "MaaFramework.Binding.Interop.Native" },
 
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding/Abstractions/"), "MaaFramework.Binding.Abstractions" },
-    { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/Abstractions/"), "MaaFramework.Binding.Abstractions.Native" },
+    { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/Abstractions/"), "MaaFramework.Binding.Abstractions" },
 
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding/Buffers/"), "MaaFramework.Binding.Buffers" },
     { Path.GetFullPath($"{directoryPath}/MaaFramework.Binding.Native/Buffers/"), "MaaFramework.Binding.Buffers" },

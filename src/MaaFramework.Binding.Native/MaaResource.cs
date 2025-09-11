@@ -1,4 +1,4 @@
-﻿using MaaFramework.Binding.Abstractions.Native;
+﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;

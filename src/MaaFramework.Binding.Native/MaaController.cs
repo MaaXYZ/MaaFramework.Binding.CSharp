@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using MaaFramework.Binding.Abstractions.Native;
+using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Interop.Native;
 using static MaaFramework.Binding.Interop.Native.MaaController;

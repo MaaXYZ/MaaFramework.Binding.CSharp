@@ -1,7 +1,7 @@
 ﻿using MaaFramework.Binding.Interop.Native;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MaaFramework.Binding.Abstractions.Native;
+namespace MaaFramework.Binding.Abstractions;
 
 /// <summary>
 ///     An abstract class providing common members for <see cref="MaaController"/>, <see cref="MaaTasker"/> and <see cref="MaaResource"/>.
