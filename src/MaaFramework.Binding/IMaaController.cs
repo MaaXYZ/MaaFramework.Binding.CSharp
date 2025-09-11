@@ -12,8 +12,14 @@ public interface IMaaController<T> : IMaaController, IMaaDisposableHandle<T>;
 /// <summary>
 ///     An interface defining wrapped members for MaaController.
 /// </summary>
-public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaaPost, IMaaDisposable
+public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaaDisposable
 {
+    /// <summary>
+    ///     Gets the last valid posted job.
+    /// </summary>
+    /// <returns>A <see cref="MaaJob"/> if any valid job has been posted; otherwise, <see langword="null"/>..</returns>
+    MaaJob? LastJob { get; }
+
     /// <summary>
     ///     Connects the device specified by the constructor.
     /// </summary>

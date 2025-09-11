@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Interop.Native;
@@ -11,7 +12,7 @@ namespace MaaFramework.Binding;
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaController"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
+public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMaaPost
 {
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -84,30 +85,21 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     ///     Wrapper of <see cref="MaaControllerPostConnection"/>.
     /// </remarks>
     public MaaJob LinkStart()
-    {
-        var id = MaaControllerPostConnection(Handle);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostConnection(Handle));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostClick"/>.
     /// </remarks>
     public MaaJob Click(int x, int y)
-    {
-        var id = MaaControllerPostClick(Handle, x, y);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostClick(Handle, x, y));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostSwipe"/>.
     /// </remarks>
     public MaaJob Swipe(int x1, int y1, int x2, int y2, int duration)
-    {
-        var id = MaaControllerPostSwipe(Handle, x1, y1, x2, y2, duration);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostSwipe(Handle, x1, y1, x2, y2, duration));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -115,135 +107,113 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>
     /// </remarks>
     [Obsolete("Use ClickKey() instead.")]
     public MaaJob PressKey(int keyCode)
-    {
-        var id = MaaControllerPostPressKey(Handle, keyCode);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostPressKey(Handle, keyCode));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostClickKey"/>.
     /// </remarks>
     public MaaJob ClickKey(int keyCode)
-    {
-        var id = MaaControllerPostClickKey(Handle, keyCode);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostClickKey(Handle, keyCode));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostInputText"/>.
     /// </remarks>
     public MaaJob InputText(string text)
-    {
-        var id = MaaControllerPostInputText(Handle, text);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostInputText(Handle, text));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostStartApp"/>.
     /// </remarks>
     public MaaJob StartApp(string intent)
-    {
-        var id = MaaControllerPostStartApp(Handle, intent);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostStartApp(Handle, intent));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostStopApp"/>.
     /// </remarks>
     public MaaJob StopApp(string intent)
-    {
-        var id = MaaControllerPostStopApp(Handle, intent);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostStopApp(Handle, intent));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchDown"/>.
     /// </remarks>
     public MaaJob TouchDown(int contact, int x, int y, int pressure)
-    {
-        var id = MaaControllerPostTouchDown(Handle, contact, x, y, pressure);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostTouchDown(Handle, contact, x, y, pressure));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchMove"/>.
     /// </remarks>
     public MaaJob TouchMove(int contact, int x, int y, int pressure)
-    {
-        var id = MaaControllerPostTouchMove(Handle, contact, x, y, pressure);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostTouchMove(Handle, contact, x, y, pressure));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchUp"/>.
     /// </remarks>
     public MaaJob TouchUp(int contact)
-    {
-        var id = MaaControllerPostTouchUp(Handle, contact);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostTouchUp(Handle, contact));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostKeyDown"/>.
     /// </remarks>
     public MaaJob KeyDown(int keyCode)
-    {
-        var id = MaaControllerPostKeyDown(Handle, keyCode);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostKeyDown(Handle, keyCode));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostKeyUp"/>.
     /// </remarks>
     public MaaJob KeyUp(int keyCode)
-    {
-        var id = MaaControllerPostKeyUp(Handle, keyCode);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostKeyUp(Handle, keyCode));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostScreencap"/>.
     /// </remarks>
     public MaaJob Screencap()
-    {
-        var id = MaaControllerPostScreencap(Handle);
-        return LastJob = new MaaJob(id, this);
-    }
+        => CreateJob(MaaControllerPostScreencap(Handle));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerStatus"/>.
     /// </remarks>
+    [Obsolete("Deprecated from v4.5.0.")]
     public MaaJobStatus GetStatus(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return ThrowOnInvalid && IsInvalid
-            ? MaaJobStatus.Invalid
-            : (MaaJobStatus)MaaControllerStatus(Handle, job.Id);
+        var id = job.Id;
+        var handle = Handle;
+        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaControllerStatus(handle, id);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerWait"/>.
     /// </remarks>
+    [Obsolete("Deprecated from v4.5.0.")]
     public MaaJobStatus Wait(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return ThrowOnInvalid && IsInvalid
-            ? MaaJobStatus.Invalid
-            : (MaaJobStatus)MaaControllerWait(Handle, job.Id);
+        var id = job.Id;
+        var handle = Handle;
+        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaControllerWait(handle, id);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private MaaJob CreateJob(MaaResId id)
+    {
+        var job = new MaaJob(id, this);
+        if (id != MaaDef.MaaInvalidId)
+            LastJob = job;
+        return job;
     }
 
     /// <inheritdoc/>

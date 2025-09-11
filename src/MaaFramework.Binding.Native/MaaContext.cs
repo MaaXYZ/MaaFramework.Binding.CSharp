@@ -100,7 +100,7 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextGetTaskId"/>.
     /// </remarks>
-    public MaaTaskJob TaskJob => new(MaaContextGetTaskId(Handle), Tasker);
+    public MaaTaskJob TaskJob => new(MaaContextGetTaskId(Handle), Tasker, Tasker);
 
     IMaaTasker IMaaContext.Tasker => Tasker;
 

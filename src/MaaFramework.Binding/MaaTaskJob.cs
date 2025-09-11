@@ -1,9 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using MaaFramework.Binding.Abstractions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding;
 
 /// <inheritdoc/>
-public class MaaTaskJob(MaaId id, IMaaTasker tasker) : MaaJob(id, tasker)
+public class MaaTaskJob(MaaId id, IMaaTasker tasker, IMaaPost maa) : MaaJob(id, maa)
 {
     /// <inheritdoc/>
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]

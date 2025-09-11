@@ -13,8 +13,14 @@ public interface IMaaResource<T> : IMaaResource, IMaaDisposableHandle<T>;
 /// <summary>
 ///     An interface defining wrapped members for MaaResource.
 /// </summary>
-public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaPost, IMaaDisposable
+public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaDisposable
 {
+    /// <summary>
+    ///     Gets the last valid posted job.
+    /// </summary>
+    /// <returns>A <see cref="MaaJob"/> if any valid job has been posted; otherwise, <see langword="null"/>..</returns>
+    MaaJob? LastJob { get; }
+
     /// <summary>
     ///     Registers a <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/> in the <see cref="IMaaResource"/>.
     /// </summary>

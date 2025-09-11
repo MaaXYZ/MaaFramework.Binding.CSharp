@@ -13,8 +13,14 @@ public interface IMaaTasker<T> : IMaaTasker, IMaaDisposableHandle<T>;
 /// <summary>
 ///     An interface defining wrapped members for MaaTasker.
 /// </summary>
-public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaPost, IMaaDisposable
+public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposable
 {
+    /// <summary>
+    ///     Gets the last valid posted job.
+    /// </summary>
+    /// <returns>A <see cref="MaaTaskJob"/> if any valid job has been posted; otherwise, <see langword="null"/>..</returns>
+    MaaTaskJob? LastJob { get; }
+
     /// <summary>
     ///     Gets or sets whether disposes the <see cref="Resource"/> or the <see cref="Controller"/> when <see cref="IDisposable.Dispose"/> was invoked.
     /// </summary>

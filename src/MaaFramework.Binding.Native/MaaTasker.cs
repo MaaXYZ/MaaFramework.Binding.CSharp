@@ -4,6 +4,7 @@ using MaaFramework.Binding.Interop.Native;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using static MaaFramework.Binding.Interop.Native.MaaTasker;
 
 namespace MaaFramework.Binding;
@@ -12,7 +13,7 @@ namespace MaaFramework.Binding;
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaTasker"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
+public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
 {
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -200,41 +201,47 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     ///     Wrapper of <see cref="MaaTaskerPostTask"/>.
     /// </remarks>
     public MaaTaskJob AppendTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}")
-    {
-        var id = MaaTaskerPostTask(Handle, entry, pipelineOverride);
-        var job = new MaaTaskJob(id, this);
-        LastJob = job;
-        return job;
-    }
+        => CreateJob(MaaTaskerPostTask(Handle, entry, pipelineOverride));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerStatus"/>.
     /// </remarks>
+    [Obsolete("Deprecated from v4.5.0.")]
     public MaaJobStatus GetStatus(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return ThrowOnInvalid && IsInvalid
-            ? MaaJobStatus.Invalid
-            : (MaaJobStatus)MaaTaskerStatus(Handle, job.Id);
+        var id = job.Id;
+        var handle = Handle;
+        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaTaskerStatus(handle, id);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerWait"/>.
     /// </remarks>
+    [Obsolete("Deprecated from v4.5.0.")]
     public MaaJobStatus Wait(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return ThrowOnInvalid && IsInvalid
-            ? MaaJobStatus.Invalid
-            : (MaaJobStatus)MaaTaskerWait(Handle, job.Id);
+        var id = job.Id;
+        var handle = Handle;
+        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaTaskerWait(handle, id);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private MaaTaskJob CreateJob(MaaTaskId id)
+    {
+        var job = new MaaTaskJob(id, this, this);
+        if (id != MaaDef.MaaInvalidId)
+            LastJob = job;
+        return job;
     }
 
     /// <inheritdoc/>
-    public MaaJob? LastJob { get; private set; }
+    public MaaTaskJob? LastJob { get; private set; }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -253,12 +260,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>
     ///     Wrapper of <see cref="MaaTaskerPostStop"/>.
     /// </remarks>
     public MaaTaskJob Stop()
-    {
-        var id = MaaTaskerPostStop(Handle);
-        var job = new MaaTaskJob(id, this);
-        LastJob = job;
-        return job;
-    }
+        => CreateJob(MaaTaskerPostStop(Handle));
 
     /// <inheritdoc/>
     /// <remarks>

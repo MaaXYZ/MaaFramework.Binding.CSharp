@@ -3,6 +3,7 @@ using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using static MaaFramework.Binding.Interop.Native.MaaResource;
 
 namespace MaaFramework.Binding;
@@ -10,7 +11,7 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaResource"/>.
 /// </summary>
-public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
+public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
 {
     private readonly HashSet<string> _postedPaths = [];
 
@@ -201,7 +202,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     {
         _ = _postedPaths.Add(path);
         var id = MaaResourcePostBundle(Handle, path);
-        return LastJob = new MaaJob(id, this);
+        return CreateJob(id);
     }
 
     /// <inheritdoc/>
@@ -231,26 +232,37 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceStatus"/>.
     /// </remarks>
+    [Obsolete("Deprecated from v4.5.0.")]
     public MaaJobStatus GetStatus(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return ThrowOnInvalid && IsInvalid
-            ? MaaJobStatus.Invalid
-            : (MaaJobStatus)MaaResourceStatus(Handle, job.Id);
+        var id = job.Id;
+        var handle = Handle;
+        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaResourceStatus(handle, id);
     }
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceWait"/>.
     /// </remarks>
+    [Obsolete("Deprecated from v4.5.0.")]
     public MaaJobStatus Wait(MaaJob job)
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        return ThrowOnInvalid && IsInvalid
-            ? MaaJobStatus.Invalid
-            : (MaaJobStatus)MaaResourceWait(Handle, job.Id);
+        var id = job.Id;
+        var handle = Handle;
+        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaResourceWait(handle, id);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private MaaJob CreateJob(MaaResId id)
+    {
+        var job = new MaaJob(id, this);
+        if (id != MaaDef.MaaInvalidId)
+            LastJob = job;
+        return job;
     }
 
     /// <inheritdoc/>
