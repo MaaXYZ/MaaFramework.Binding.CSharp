@@ -33,6 +33,11 @@ public interface IMaaAgentClient : IMaaDisposable
     IMaaAgentClient AttachDisposeToResource();
 
     /// <summary>
+    ///     Detaches <see langword="this"/> instance's Dispose() from the <see cref="Resource"/>'s Releasing event.
+    /// </summary>
+    IMaaAgentClient DetachDisposeToResource();
+
+    /// <summary>
     ///     Starts the connection.
     /// </summary>
     /// <returns><see langword="true"/> if the connection was started successfully; otherwise, <see langword="false"/>.</returns>

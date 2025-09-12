@@ -66,10 +66,20 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         }
     }
 
+    private void OnResourceReleasing(object? sender, EventArgs e)
+        => Dispose();
+
     /// <inheritdoc/>
     public IMaaAgentClient AttachDisposeToResource()
     {
-        Resource.Releasing += (_, _) => Dispose();
+        Resource.Releasing += OnResourceReleasing;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public IMaaAgentClient DetachDisposeToResource()
+    {
+        Resource.Releasing -= OnResourceReleasing;
         return this;
     }
 
