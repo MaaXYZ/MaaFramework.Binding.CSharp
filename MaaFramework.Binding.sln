@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		docs\articles\changelog-all-version.md = docs\articles\changelog-all-version.md
+		CHANGELOG.md = CHANGELOG.md
 		docs\articles\nightly-builds.md = docs\articles\nightly-builds.md
 		docs\articles\overview-of-wrapper-and-api.md = docs\articles\overview-of-wrapper-and-api.md
 		README.md = README.md
