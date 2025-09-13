@@ -29,6 +29,7 @@ var version = tags.Count switch
         string.Join('-', tags[..2])),   //    v2.0.1-rc.1 v2.0.1-rc.1-3-ge878f0b
     _ => throw new InvalidOperationException("The release labels count > 4."),
 };
+var isPreview = version.ReleaseLabels.Any(x => x.StartsWith("preview", StringComparison.OrdinalIgnoreCase));
 
 var runtimes = NuGetVersion.Parse(
     XDocument.Load("./src/Directory.Packages.props")
@@ -48,13 +49,13 @@ if (tags.Count is 3 or 4)               // 非最新版本号
             ["preview", dateTime, todayBuildTimes],
             tag);
     else
-        version = new NuGetVersion(version.Major, version.Minor, version.Patch + 1,
+        version = new NuGetVersion(version.Major, version.Minor, isPreview ? version.Patch : version.Patch + 1,
             ["preview", dateTime, todayBuildTimes],
             tag);
+    isPreview = true;
 }
 
 var verStr = version.ToFullString();
-var isPreview = version.ReleaseLabels.Any(x => x.StartsWith("preview", StringComparison.OrdinalIgnoreCase));
 TeeToGithubOutput(
     $"tag={tag}",
     $"version={verStr}",
