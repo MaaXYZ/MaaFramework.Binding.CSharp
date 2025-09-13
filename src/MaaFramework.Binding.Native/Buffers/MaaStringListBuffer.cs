@@ -55,8 +55,14 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     /// </remarks>
     protected override void ReleaseHandle(MaaStringListBufferHandle handle)
     {
-        ClearCache();
-        MaaStringListBufferDestroy(handle);
+        try
+        {
+            ClearCache();
+        }
+        finally
+        {
+            MaaStringListBufferDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>

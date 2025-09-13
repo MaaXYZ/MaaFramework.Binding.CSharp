@@ -93,9 +93,15 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// </remarks>
     protected override void ReleaseHandle(MaaResourceHandle handle)
     {
-        if (LastJob != null)
-            _ = MaaResourceWait(handle, LastJob.Id);
-        MaaResourceDestroy(handle);
+        try
+        {
+            if (LastJob != null)
+                _ = MaaResourceWait(handle, LastJob.Id);
+        }
+        finally
+        {
+            MaaResourceDestroy(handle);
+        }
     }
 
     private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();

@@ -100,10 +100,16 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     /// </remarks>
     protected override void ReleaseHandle(MaaTaskerHandle handle)
     {
-        if (LastJob != null)
-            _ = MaaTaskerWait(handle, LastJob.Id);
-        MaaTaskerDestroy(handle);
-        _ = Instances.TryRemove(new KeyValuePair<MaaTaskerHandle, MaaTasker>(handle, this));
+        try
+        {
+            if (LastJob != null)
+                _ = MaaTaskerWait(handle, LastJob.Id);
+            _ = Instances.TryRemove(new KeyValuePair<MaaTaskerHandle, MaaTasker>(handle, this));
+        }
+        finally
+        {
+            MaaTaskerDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>

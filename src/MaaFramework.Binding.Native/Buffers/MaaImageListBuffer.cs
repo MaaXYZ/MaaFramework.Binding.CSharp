@@ -55,8 +55,14 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// </remarks>
     protected override void ReleaseHandle(MaaImageListBufferHandle handle)
     {
-        ClearCache();
-        MaaImageListBufferDestroy(handle);
+        try
+        {
+            ClearCache();
+        }
+        finally
+        {
+            MaaImageListBufferDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>

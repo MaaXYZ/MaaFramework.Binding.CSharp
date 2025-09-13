@@ -52,9 +52,15 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     /// </remarks>
     protected override void ReleaseHandle(MaaControllerHandle handle)
     {
-        if (LastJob != null)
-            _ = MaaControllerWait(handle, LastJob.Id);
-        MaaControllerDestroy(handle);
+        try
+        {
+            if (LastJob != null)
+                _ = MaaControllerWait(handle, LastJob.Id);
+        }
+        finally
+        {
+            MaaControllerDestroy(handle);
+        }
     }
 
     /// <inheritdoc/>
