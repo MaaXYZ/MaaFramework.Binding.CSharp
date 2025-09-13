@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env dotnet-script
 #nullable enable
 
-#r "nuget: Maa.Framework, 4.4.0w"
+#r "nuget: Maa.Framework, 4.5.0"
 
 using System.Diagnostics;
 using MaaFramework.Binding;
@@ -49,7 +49,9 @@ Console.WriteLine($"MyRec detail: {detail.QueryRecognitionDetail(maa, 1)?.Detail
 Console.Write("Press any key to exit:");
 Console.ReadKey();
 
-agent.LinkStop();
+agent
+    .DetachDisposeToResource()
+    .LinkStop();
 // The agent server process will be killed when Dispose() is called.
 // Uses LinkStart() or LinkStartUnlessProcessExit(Process, CancellationToken)
 // if you do not want the agent to control the life cycle of the process.

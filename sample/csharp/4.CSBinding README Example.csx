@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env dotnet-script
 #nullable enable
 
-#r "nuget: Maa.Framework, 4.2.0"
+#r "nuget: Maa.Framework, 4.5.0"
 
 using MaaFramework.Binding;
 using MaaFramework.Binding.Buffers;
@@ -13,38 +13,38 @@ Console.ReadKey();
 
 void QuickStart()
 {
-// ### Code Example
-// using MaaFramework.Binding;
+    // ### Code Example
+    // using MaaFramework.Binding;
 
-MaaToolkit.Shared.Config.InitOption(".cache");
+    MaaToolkit.Shared.Config.InitOption(".cache");
 
-var devices = MaaToolkit.Shared.AdbDevice.Find();
-if (devices.IsEmpty)
-    throw new InvalidOperationException();
+    var devices = MaaToolkit.Shared.AdbDevice.Find();
+    if (devices.IsEmpty)
+        throw new InvalidOperationException();
 
-using var maa = new MaaTasker
-{
-    Controller = devices[0].ToAdbController(),
-    Resource = new MaaResource("../../src/MaaFramework.Binding.UnitTests/SampleResource"),
-    DisposeOptions = DisposeOptions.All,
-};
+    using var maa = new MaaTasker
+    {
+        Controller = devices[0].ToAdbController(),
+        Resource = new MaaResource("../../src/MaaFramework.Binding.UnitTests/SampleResource"),
+        DisposeOptions = DisposeOptions.All,
+    };
 
-if (!maa.IsInitialized)
-    throw new InvalidOperationException();
+    if (!maa.IsInitialized)
+        throw new InvalidOperationException();
 
-maa.AppendTask("EmptyNode")
-   .Wait()
-   .ThrowIfNot(MaaJobStatus.Succeeded);
+    maa.AppendTask("EmptyNode")
+       .Wait()
+       .ThrowIfNot(MaaJobStatus.Succeeded);
 
-Console.WriteLine("EmptyNode Completed");
+    Console.WriteLine("EmptyNode Completed");
 
 
-// #### Custom
-// using MaaFramework.Binding.Buffers;
-// using MaaFramework.Binding.Custom;
+    // #### Custom
+    // using MaaFramework.Binding.Buffers;
+    // using MaaFramework.Binding.Custom;
 
-var nodeName = "MyCustomTask";
-var param = $$"""
+    var nodeName = "MyCustomTask";
+    var param = $$"""
 {
   "{{nodeName}}": {
       "recognition": "Custom",
@@ -61,12 +61,12 @@ var param = $$"""
 }
 """;
 
-// Register custom components
-maa.Resource.Register(new MyRec());
-maa.Resource.Register(new MyAct());
-maa.AppendTask(nodeName, param)
-    .Wait()
-    .ThrowIfNot(MaaJobStatus.Succeeded);
+    // Register custom components
+    maa.Resource.Register(new MyRec());
+    maa.Resource.Register(new MyAct());
+    maa.AppendTask(nodeName, param)
+        .Wait()
+        .ThrowIfNot(MaaJobStatus.Succeeded);
 
 }
 

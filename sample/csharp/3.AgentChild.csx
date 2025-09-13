@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env dotnet-script
 #nullable enable
 
-#r "nuget: Maa.Framework.Binding.Native, 4.4.0"
+#r "nuget: Maa.Framework.Binding.Native, 4.5.0"
 
 using MaaFramework.Binding;
 using MaaFramework.Binding.Custom;

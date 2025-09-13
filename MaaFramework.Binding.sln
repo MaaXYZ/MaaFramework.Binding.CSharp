@@ -36,6 +36,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaaFramework.Native", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaaFramework.Binding.Extensions", "src\MaaFramework.Binding.Extensions\MaaFramework.Binding.Extensions.csproj", "{453B0ACA-723D-42A1-8C25-D558A8649FCA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{9FA3D6BD-1EC1-3BA5-80CB-CE02773A58D5}"
+	ProjectSection(SolutionItems) = preProject
+		sample\csharp\1.main.csx = sample\csharp\1.main.csx
+		sample\csharp\2.pi_cli.csx = sample\csharp\2.pi_cli.csx
+		sample\csharp\3.AgentChild.csx = sample\csharp\3.AgentChild.csx
+		sample\csharp\3.AgentMain.csx = sample\csharp\3.AgentMain.csx
+		sample\csharp\4.CSBinding README Example.csx = sample\csharp\4.CSBinding README Example.csx
+		sample\csharp\QuickStart.ps1 = sample\csharp\QuickStart.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

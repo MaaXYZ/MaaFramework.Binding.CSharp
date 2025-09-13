@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env dotnet-script
 #nullable enable
 
-#r "nuget: Maa.Framework, 4.4.0"
+#r "nuget: Maa.Framework, 4.5.0"
 
 using MaaFramework.Binding;
 using MaaFramework.Binding.Buffers;
