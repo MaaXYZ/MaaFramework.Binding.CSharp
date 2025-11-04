@@ -60,7 +60,7 @@ public class Test_IMaaToolkit
 
         using var maaController = type switch
         {
-            MaaTypes.Native => devices[0].ToAdbController(
+            MaaTypes.Native => devices[0].ToAdbControllerWith(
                 adbPath: Common.AdbPath,
                 screencapMethods: AdbScreencapMethods.Encode,
                 inputMethods: AdbInputMethods.AdbShell,
@@ -102,7 +102,7 @@ public class Test_IMaaToolkit
 
         using var maaController = type switch
         {
-            MaaTypes.Native => windows[0].ToWin32Controller(
+            MaaTypes.Native => windows[0].ToWin32ControllerWith(
                 screencapMethod: Win32ScreencapMethod.GDI,
                 mouseMethod: Win32InputMethod.SendMessage,
                 keyboardMethod: Win32InputMethod.SendMessage,
@@ -117,7 +117,7 @@ public class Test_IMaaToolkit
 #if MAA_WIN32
         using var optionalArgumentDefaultValuesTest = type switch
         {
-            MaaTypes.Native => windows[0].ToWin32Controller(
+            MaaTypes.Native => windows[0].ToWin32ControllerWith(
                 screencapMethod: Win32ScreencapMethod.GDI,
                 mouseMethod: Win32InputMethod.SendMessage,
                 keyboardMethod: Win32InputMethod.SendMessage),

@@ -17,18 +17,38 @@ public static class DesktopWindowInfoExtensions
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <returns>A MaaWin32Controller.</returns>
     /// <exception cref="ArgumentNullException"/>
-    public static MaaWin32Controller ToWin32Controller(this DesktopWindowInfo info,
-        Win32ScreencapMethod screencapMethod,
-        Win32InputMethod mouseMethod,
-        Win32InputMethod keyboardMethod,
+    public static MaaWin32Controller ToWin32ControllerWith(this DesktopWindowInfo info,
+        Win32ScreencapMethod? screencapMethod = null,
+        Win32InputMethod? mouseMethod = null,
+        Win32InputMethod? keyboardMethod = null,
         nint? hWnd = null,
         LinkOption link = LinkOption.Start,
         CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
         ArgumentNullException.ThrowIfNull(info);
 
-        return hWnd.HasValue
-            ? new MaaWin32Controller(hWnd.Value, screencapMethod, mouseMethod, keyboardMethod, link, check)
-            : new MaaWin32Controller(info, screencapMethod, mouseMethod, keyboardMethod, link, check);
+        var handle = hWnd ?? info.Handle;
+        return new MaaWin32Controller(
+            new DesktopWindowInfo(
+                handle,
+                handle == info.Handle ? info.Name : string.Empty,
+                handle == info.Handle ? info.ClassName : string.Empty,
+                screencapMethod ?? info.ScreencapMethod,
+                mouseMethod ?? info.MouseMethod,
+                keyboardMethod ?? info.KeyboardMethod
+            ),
+            link,
+            check
+        );
+    }
+
+    /// <inheritdoc cref="ToWin32ControllerWith(DesktopWindowInfo, Win32ScreencapMethod?, Win32InputMethod?, Win32InputMethod?, nint?, LinkOption, CheckStatusOption)"/>
+    public static MaaWin32Controller ToWin32Controller(this DesktopWindowInfo info,
+        LinkOption link = LinkOption.Start,
+        CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+    {
+        ArgumentNullException.ThrowIfNull(info);
+
+        return new MaaWin32Controller(info, link, check);
     }
 }

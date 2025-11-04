@@ -19,26 +19,17 @@ public static class AdbDeviceInfoExtensions
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <returns>A MaaAdbController.</returns>
     /// <exception cref="ArgumentNullException"/>
-    public static MaaAdbController ToAdbController(this AdbDeviceInfo info,
+    public static MaaAdbController ToAdbControllerWith(this AdbDeviceInfo info,
         string? adbPath = null,
         string? adbSerial = null,
         AdbScreencapMethods? screencapMethods = null,
         AdbInputMethods? inputMethods = null,
         string? config = null,
-        string agentPath = "./MaaAgentBinary",
+        string? agentPath = null,
         LinkOption link = LinkOption.Start,
         CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
         ArgumentNullException.ThrowIfNull(info);
-
-        if (adbPath is null
-            && adbSerial is null
-            && screencapMethods is null
-            && inputMethods is null
-            && config is null)
-        {
-            return new MaaAdbController(info, agentPath, link, check);
-        }
 
         return new MaaAdbController(
             new AdbDeviceInfo(
@@ -47,11 +38,17 @@ public static class AdbDeviceInfoExtensions
                 adbSerial ?? info.AdbSerial,
                 screencapMethods ?? info.ScreencapMethods,
                 inputMethods ?? info.InputMethods,
-                config ?? info.Config
+                config ?? info.Config,
+                agentPath ?? info.AgentPath
             ),
-            agentPath,
             link,
             check
         );
     }
+
+    /// <inheritdoc cref="ToAdbControllerWith(AdbDeviceInfo, string?, string?, AdbScreencapMethods?, AdbInputMethods?, string?, string?, LinkOption, CheckStatusOption)"/>
+    public static MaaAdbController ToAdbController(this AdbDeviceInfo info,
+            LinkOption link = LinkOption.Start,
+            CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+        => new(info, link, check);
 }

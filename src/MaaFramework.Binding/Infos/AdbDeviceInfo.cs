@@ -11,11 +11,13 @@ namespace MaaFramework.Binding;
 /// <param name="ScreencapMethods">Gets the <see cref="AdbScreencapMethods"/> of a device.</param>
 /// <param name="InputMethods">Gets the <see cref="AdbInputMethods"/> of a device.</param>
 /// <param name="Config">Gets the config of a device.</param>
+/// <param name="AgentPath">The path of agent directory. Default is "./MaaAgentBinary" if package "Maa.Framework" or "Maa.AgentBinary" is used.</param>
 public record AdbDeviceInfo(
     string Name,
     string AdbPath,
     string AdbSerial,
     AdbScreencapMethods ScreencapMethods,
     AdbInputMethods InputMethods,
-    [StringSyntax("Json")] string Config
+    [StringSyntax("Json")] string Config,
+    string AgentPath = "./MaaAgentBinary"
 );
