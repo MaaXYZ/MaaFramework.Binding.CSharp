@@ -22,11 +22,6 @@ public static class MaaOptionExtensions
         => opt?.SetOption(ControllerOption.ScreenshotUseRawSize, value) ?? throw new ArgumentNullException(nameof(opt));
 
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
-    [Obsolete("Deprecated from v4.5.0.")]
-    public static bool SetOption_Recording(this IMaaOption<ControllerOption>? opt, bool value)
-        => opt?.SetOption(ControllerOption.Recording, value) ?? throw new ArgumentNullException(nameof(opt));
-
-    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_LogDir(this IMaaOption<GlobalOption>? opt, string value)
         => opt?.SetOption(GlobalOption.LogDir, value) ?? throw new ArgumentNullException(nameof(opt));
 
@@ -35,18 +30,8 @@ public static class MaaOptionExtensions
         => opt?.SetOption(GlobalOption.SaveDraw, value) ?? throw new ArgumentNullException(nameof(opt));
 
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
-    [Obsolete("Deprecated from v4.5.0.")]
-    public static bool SetOption_Recording(this IMaaOption<GlobalOption>? opt, bool value)
-        => opt?.SetOption(GlobalOption.Recording, value) ?? throw new ArgumentNullException(nameof(opt));
-
-    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_StdoutLevel(this IMaaOption<GlobalOption>? opt, LoggingLevel value)
         => opt?.SetOption(GlobalOption.StdoutLevel, value) ?? throw new ArgumentNullException(nameof(opt));
-
-    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
-    [Obsolete("Deprecated from v4.5.0.")]
-    public static bool SetOption_ShowHitDraw(this IMaaOption<GlobalOption>? opt, bool value)
-        => opt?.SetOption(GlobalOption.ShowHitDraw, value) ?? throw new ArgumentNullException(nameof(opt));
 
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_DebugMode(this IMaaOption<GlobalOption>? opt, bool value)

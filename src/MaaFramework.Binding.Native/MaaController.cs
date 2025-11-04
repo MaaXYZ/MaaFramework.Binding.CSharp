@@ -75,10 +75,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
         {
             (int vvvv, ControllerOption.ScreenshotTargetLongSide
                     or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValue(),
-#pragma warning disable CS0618 // 类型或成员已过时
-            (bool vvv, ControllerOption.Recording
-                    or ControllerOption.ScreenshotUseRawSize) => vvv.ToMaaOptionValue(),
-#pragma warning restore CS0618 // 类型或成员已过时
+            (bool vvv, ControllerOption.ScreenshotUseRawSize) => vvv.ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(ControllerOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
