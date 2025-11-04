@@ -43,7 +43,6 @@ Derived:
 - IMaaController
 - IMaaResource
 - IMaaTasker
-- IMaaToolkit.PI
 
 | Wrapper | MaaDef |
 | --- | --- |
@@ -271,9 +270,6 @@ IMaaDisposable Derived:
 | MaaToolkit.ctor() <br> IMaaToolkit.Config.InitOption() | `MaaToolkitConfigInitOption` |
 | IMaaToolkit.AdbDevice.Find() <br> IMaaToolkit.AdbDevice.FindAsync() | `MaaToolkitAdbDeviceFind` <br> `MaaToolkitAdbDeviceFindSpecified` |
 | IMaaToolkit.Desktop.Window.Find() | `MaaToolkitDesktopWindowFindAll` |
-| IMaaToolkit.PI.Register() | `MaaToolkitProjectInterfaceRegisterCustomAction` <br> `MaaToolkitProjectInterfaceRegisterCustomRecognition` |
-| IMaaToolkit.PI.RunCli() | `MaaToolkitProjectInterfaceRunCli` |
-| IMaaToolkit.PI.this[] | *Gets or creates a PI instance.* |
 
 ## Buffers.AdbDeviceListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
 

@@ -1,6 +1,4 @@
-﻿using MaaFramework.Binding.Notification;
-
-namespace MaaFramework.Binding.UnitTests;
+﻿namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
 ///     Test <see cref="IMaaToolkit"/> and <see cref="MaaToolkit"/>.
@@ -127,65 +125,7 @@ public class Test_IMaaToolkit
     }
 #endif
 
-    [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_PI(MaaTypes type, IMaaToolkit maaToolkit)
-    {
-        Assert.IsNotNull(maaToolkit);
-
-        var pi0 = maaToolkit.PI;
-        Assert.AreSame(pi0, maaToolkit.PI[0]);
-
-        maaToolkit.PI = maaToolkit.PI[1];
-        Assert.AreSame(maaToolkit.PI, maaToolkit.PI[1]);
-
-        maaToolkit.PI = maaToolkit.PI[0];
-        Assert.AreSame(pi0, maaToolkit.PI[0]);
-    }
-
-    [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_PI_Register(MaaTypes type, IMaaToolkit maaToolkit)
-    {
-        Assert.IsNotNull(maaToolkit);
-
-        // 3 ways to subscribe to the Callback event
-        maaToolkit.PI.Callback += Common.OnCallback;
-        maaToolkit.PI.Callback += Common.NotificationHandlerRegistry.OnCallback;
-        {
-            maaToolkit.PI.Callback += Common.OnResourceLoading.ToCallback();
-            maaToolkit.PI.Callback += Common.OnControllerAction.ToCallback();
-            maaToolkit.PI.Callback += Common.OnTaskerTask.ToCallback();
-            maaToolkit.PI.Callback += Common.OnNodeNextList.ToCallback();
-            maaToolkit.PI.Callback += Common.OnNodeRecognition.ToCallback();
-            maaToolkit.PI.Callback += Common.OnNodeAction.ToCallback();
-        }
-
-        // Registers custom class
-        Assert.IsTrue(
-            maaToolkit.PI.Register(Custom.Action));
-        Assert.IsTrue(
-            maaToolkit.PI.Register(Custom.Recognition));
-
-        // Updates if name is registered
-        Assert.IsTrue(
-            maaToolkit.PI.Register(Custom.Action.Name, Custom.Action));
-        Assert.IsTrue(
-            maaToolkit.PI.Register(Custom.Recognition.Name, Custom.Recognition));
-    }
-
-
     #region Invalid data tests
-
-    [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Register_Unregister_InvalidData(MaaTypes type, IMaaToolkit maaToolkit)
-    {
-        Assert.IsNotNull(maaToolkit);
-
-        _ = Assert.ThrowsExactly<NotImplementedException>(()
-            => maaToolkit.PI.Register(Custom.InvalidResource));
-    }
 
     #endregion
 }

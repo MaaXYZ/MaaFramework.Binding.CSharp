@@ -1,7 +1,5 @@
 ﻿using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Custom;
 using MaaFramework.Binding.Interop.Native;
-using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
 
@@ -39,9 +37,6 @@ public class MaaToolkit : IMaaToolkit
 
     /// <inheritdoc/>
     public IMaaToolkitDesktop Desktop { get; } = new DesktopClass();
-
-    /// <inheritdoc/>
-    public IMaaToolkitProjectInterface PI { get; set; } = ProjectInterfaceClass.Get(0);
 
     /// <inheritdoc cref="MaaToolkit"/>
     protected internal class ConfigClass : IMaaToolkitConfig
@@ -105,100 +100,5 @@ public class MaaToolkit : IMaaToolkit
             _ = MaaToolkitDesktopWindowFindAll(list.Handle).ThrowIfFalse();
             return list;
         }
-    }
-
-    /// <inheritdoc cref="MaaToolkit"/>
-    /// <remarks>Exists risk of memory leak.</remarks>
-    protected internal class ProjectInterfaceClass : IMaaToolkitProjectInterface
-    {
-        /// <inheritdoc/>
-        public event EventHandler<MaaCallbackEventArgs>? Callback;
-
-        /// <summary>
-        ///     Raises the Callback event.
-        /// </summary>
-        /// <param name="message">The MaaStringView.</param>
-        /// <param name="detailsJson">The MaaStringView.</param>
-        /// <param name="callbackArg">The MaaCallbackTransparentArg.</param>
-        /// <remarks>
-        ///     Usually invoked by MaaFramework.
-        /// </remarks>
-        [ExcludeFromCodeCoverage(Justification = "Can not test RunCli.")]
-        protected virtual void OnCallback(string message, [StringSyntax("Json")] string detailsJson, nint callbackArg)
-            => Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
-
-        /// <summary>
-        ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
-        /// </summary>
-        [ExcludeFromCodeCoverage(Justification = "Can not test RunCli.")]
-        protected MaaNotificationCallback MaaNotificationCallback { get; }
-
-        /// <summary>
-        ///     Creates a <see cref="ProjectInterfaceClass"/> instance.
-        /// </summary>
-        /// <param name="instanceId">The instance id.</param>
-        protected ProjectInterfaceClass(ulong instanceId)
-        {
-            _instanceId = instanceId;
-            MaaNotificationCallback = OnCallback;
-        }
-
-        private readonly ulong _instanceId;
-        private static readonly ConcurrentDictionary<ulong, ProjectInterfaceClass> s_instances = [];
-        private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
-        private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
-
-        private bool RegisterCustomAction(IMaaCustomAction res)
-        {
-            MaaToolkitProjectInterfaceRegisterCustomAction(_instanceId, res.Name, res.Convert(out var callback), nint.Zero);
-            return _actions.Register(res.Name, callback);
-        }
-        private bool RegisterCustomRecognition(IMaaCustomRecognition res)
-        {
-            MaaToolkitProjectInterfaceRegisterCustomRecognition(_instanceId, res.Name, res.Convert(out var callback), nint.Zero);
-            return _recognitions.Register(res.Name, callback);
-        }
-
-        /// <inheritdoc/>
-        public bool Register<T>(string name, T custom) where T : IMaaCustomResource
-        {
-            custom.Name = name;
-            return Register(custom);
-        }
-
-        /// <inheritdoc/>
-        public bool Register<T>(string? name = null) where T : IMaaCustomResource, new()
-        {
-            var custom = new T();
-            if (name != null)
-                custom.Name = name;
-            return Register(custom);
-        }
-
-        /// <inheritdoc/>
-        /// <remarks>
-        ///     Wrapper of <see cref="MaaToolkitProjectInterfaceRegisterCustomAction"/> and <see cref="MaaToolkitProjectInterfaceRegisterCustomRecognition"/>.
-        /// </remarks>
-        public bool Register<T>(T custom) where T : IMaaCustomResource => custom switch
-        {
-            IMaaCustomAction res => RegisterCustomAction(res),
-            IMaaCustomRecognition res => RegisterCustomRecognition(res),
-            _ => throw new NotImplementedException($"Type '{typeof(T)}' is not implemented."),
-        };
-
-        /// <inheritdoc/>
-        /// <remarks>
-        ///     Wrapper of <see cref="MaaToolkitProjectInterfaceRunCli"/>.
-        /// </remarks>
-        [ExcludeFromCodeCoverage(Justification = "Need standard input. " + nameof(MaaNotificationCallback) + nameof(OnCallback))]
-        public bool RunCli(string resourcePath, string userPath, bool directly = false)
-            => MaaToolkitProjectInterfaceRunCli(_instanceId, resourcePath, userPath, directly, MaaNotificationCallback, nint.Zero);
-
-        /// <inheritdoc/>
-        public IMaaToolkitProjectInterface this[ulong id] => Get(id);
-
-        /// <inheritdoc cref="this"/>
-        public static IMaaToolkitProjectInterface Get(ulong id)
-            => s_instances.GetOrAdd(id, static x => new ProjectInterfaceClass(x));
     }
 }

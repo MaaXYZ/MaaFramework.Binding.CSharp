@@ -1,6 +1,4 @@
-﻿using MaaFramework.Binding.Abstractions;
-using MaaFramework.Binding.Buffers;
-using MaaFramework.Binding.Custom;
+﻿using MaaFramework.Binding.Buffers;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding;
@@ -24,11 +22,6 @@ public interface IMaaToolkit
     ///     Gets the MaaToolkit Desktop.
     /// </summary>
     IMaaToolkitDesktop Desktop { get; }
-
-    /// <summary>
-    ///     Gets the MaaToolkit Project Interface.
-    /// </summary>
-    IMaaToolkitProjectInterface PI { get; set; }
 }
 
 /// <summary>
@@ -95,41 +88,4 @@ public interface IMaaToolkitDesktopWindow
     /// </returns>
     /// <exception cref="MaaInteroperationException"/>
     IMaaListBuffer<DesktopWindowInfo> Find();
-}
-
-/// <summary>
-///     An interface defining wrapped members for MaaToolkit Project Interface.
-/// </summary>
-public interface IMaaToolkitProjectInterface : IMaaCommon
-{
-    /// <summary>
-    ///     Registers a <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/> in the <see cref="IMaaToolkitProjectInterface"/>.
-    /// </summary>
-    /// <typeparam name="T">The <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/>.</typeparam>
-    /// <param name="name">The new name that will be used to reference it.</param>
-    /// <param name="custom">The <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/>.</param>
-    /// <returns><see langword="true"/> if the custom action or recognition was registered successfully; otherwise, <see langword="false"/>.</returns>
-    bool Register<T>(string name, T custom) where T : IMaaCustomResource;
-
-    /// <inheritdoc cref="Register{T}(string, T)"/>
-    bool Register<T>(string? name = null) where T : IMaaCustomResource, new();
-
-    /// <inheritdoc cref="Register{T}(string, T)"/>
-    bool Register<T>(T custom) where T : IMaaCustomResource;
-
-    /// <summary>
-    ///     Runs a cli.
-    /// </summary>
-    /// <param name="resourcePath">The resource path, including interface.json.</param>
-    /// <param name="userPath">The user path.</param>
-    /// <param name="directly">A value indicating whether directly runs.</param>
-    /// <returns><see langword="true"/> if the option was set successfully; otherwise, <see langword="false"/>.</returns>
-    bool RunCli(string resourcePath, string userPath, bool directly = false);
-
-    /// <summary>
-    ///     Gets a pi with the specific instance <paramref name="id"/>.
-    /// </summary>
-    /// <param name="id">The instance id.</param>
-    /// <returns>The pi.</returns>
-    IMaaToolkitProjectInterface this[ulong id] { get; }
 }
