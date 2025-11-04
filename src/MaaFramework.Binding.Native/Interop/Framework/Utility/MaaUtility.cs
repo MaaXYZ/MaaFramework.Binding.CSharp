@@ -20,8 +20,4 @@ public static partial class MaaUtility
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalUsing(typeof(MaaMarshaller))]
     public static partial string MaaVersion();
-
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaSetGlobalOption(MaaGlobalOption key, byte[] value, MaaOptionValueSize valSize);
 }

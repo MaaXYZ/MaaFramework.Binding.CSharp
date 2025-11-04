@@ -18,10 +18,19 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaResource
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaResourceHandle MaaResourceCreate(MaaNotificationCallback notify, nint notifyTransArg);
+    public static partial MaaResourceHandle MaaResourceCreate();
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaResourceDestroy(MaaResourceHandle res);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaSinkId MaaResourceAddSink(MaaResourceHandle res, MaaEventCallback sink, nint transArg);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial void MaaResourceRemoveSink(MaaResourceHandle res, MaaSinkId sinkId);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial void MaaResourceClearSinks(MaaResourceHandle res);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]

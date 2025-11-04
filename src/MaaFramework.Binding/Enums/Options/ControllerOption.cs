@@ -39,15 +39,5 @@ public enum ControllerOption : System.Int32
     ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     ScreenshotUseRawSize = 3,
-    /// <summary>
-    ///     Dump all screenshots and actions
-    /// </summary>
-    /// <remarks>
-    ///     <para>Recording will evaluate to true if any of this or</para>
-    ///     <para>MaaGlobalOptionEnum::MaaGlobalOption_Recording is true.</para>
-    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
-    /// </remarks>
-    [Obsolete("Deprecated from v4.5.0.")]
-    Recording = 5,
 }
 

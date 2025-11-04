@@ -18,6 +18,7 @@ global using MaaResId = System.Int64;
 global using MaaTaskId = System.Int64;
 global using MaaRecoId = System.Int64;
 global using MaaNodeId = System.Int64;
+global using MaaSinkId = System.Int64;
 global using MaaStringBufferHandle = nint;
 global using MaaImageBufferHandle = nint;
 global using MaaStringListBufferHandle = nint;
@@ -56,6 +57,12 @@ namespace MaaFramework.Binding.Interop.Native;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public delegate void MaaNotificationCallback([MarshalAs(UnmanagedType.LPUTF8Str)] string message, [MarshalAs(UnmanagedType.LPUTF8Str)] string detailsJson, nint notifyTransArg);
+
+/// <remarks>
+///     <para>void* handle:MaaTasker* for MaaTasker eventMaaResource* for MaaResource eventMaaController* for MaaController eventMaaContext* for MaaContext event</para>
+/// </remarks>
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+public delegate void MaaEventCallback(nint handle, [MarshalAs(UnmanagedType.LPUTF8Str)] string message, [MarshalAs(UnmanagedType.LPUTF8Str)] string detailsJson, nint transArg);
 
 [return: MarshalAs(UnmanagedType.U1)]
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

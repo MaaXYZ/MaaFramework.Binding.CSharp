@@ -18,10 +18,28 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaTasker
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaTaskerHandle MaaTaskerCreate(MaaNotificationCallback notify, nint notifyTransArg);
+    public static partial MaaTaskerHandle MaaTaskerCreate();
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaTaskerDestroy(MaaTaskerHandle tasker);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaSinkId MaaTaskerAddSink(MaaTaskerHandle tasker, MaaEventCallback sink, nint transArg);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial void MaaTaskerRemoveSink(MaaTaskerHandle tasker, MaaSinkId sinkId);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial void MaaTaskerClearSinks(MaaTaskerHandle tasker);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaSinkId MaaTaskerAddContextSink(MaaTaskerHandle tasker, MaaEventCallback sink, nint transArg);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial void MaaTaskerRemoveContextSink(MaaTaskerHandle tasker, MaaSinkId sinkId);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial void MaaTaskerClearContextSinks(MaaTaskerHandle tasker);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]

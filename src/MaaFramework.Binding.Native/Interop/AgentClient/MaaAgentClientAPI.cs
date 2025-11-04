@@ -33,6 +33,10 @@ public static partial class MaaAgentClient
 
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaAgentClientRegisterSink(MaaAgentClientHandle client, MaaTaskerHandle tasker, MaaResourceHandle res, MaaControllerHandle ctrl);
+
+    [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaAgentClientConnect(MaaAgentClientHandle client);
 
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]

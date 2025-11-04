@@ -20,19 +20,28 @@ namespace MaaFramework.Binding.Interop.Native;
 public static partial class MaaController
 {
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaAdbControllerCreate(string adbPath, string address, MaaAdbScreencapMethod screencapMethods, MaaAdbInputMethod inputMethods, string config, string agentPath, MaaNotificationCallback notify, nint notifyTransArg);
+    public static partial MaaControllerHandle MaaAdbControllerCreate(string adbPath, string address, MaaAdbScreencapMethod screencapMethods, MaaAdbInputMethod inputMethods, string config, string agentPath);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod inputMethod, MaaNotificationCallback notify, nint notifyTransArg);
+    public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod inputMethod);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaCustomControllerCreate([MarshalUsing(typeof(MaaMarshaller))] Custom.IMaaCustomController controller, nint controllerArg, MaaNotificationCallback notify, nint notifyTransArg);
+    public static partial MaaControllerHandle MaaCustomControllerCreate([MarshalUsing(typeof(MaaMarshaller))] Custom.IMaaCustomController controller, nint controllerArg);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath, string writePath, MaaDbgControllerType type, string config, MaaNotificationCallback notify, nint notifyTransArg);
+    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath, string writePath, MaaDbgControllerType type, string config);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaSinkId MaaControllerAddSink(MaaControllerHandle ctrl, MaaEventCallback sink, nint transArg);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial void MaaControllerRemoveSink(MaaControllerHandle ctrl, MaaSinkId sinkId);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial void MaaControllerClearSinks(MaaControllerHandle ctrl);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]

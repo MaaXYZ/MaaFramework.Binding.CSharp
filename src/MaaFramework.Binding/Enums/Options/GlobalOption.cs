@@ -30,15 +30,6 @@ public enum GlobalOption : System.Int32
     /// </remarks>
     SaveDraw = 2,
     /// <summary>
-    ///     Dump all screenshots and actions
-    /// </summary>
-    /// <remarks>
-    ///     <para>Recording will evaluate to true if any of this or MaaCtrlOptionEnum::MaaCtrlOption_Recording is true.</para>
-    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
-    /// </remarks>
-    [Obsolete("Deprecated from v4.5.0.")]
-    Recording = 3,
-    /// <summary>
     ///     The level of log output to stdout
     /// </summary>
     /// <remarks>
@@ -46,14 +37,6 @@ public enum GlobalOption : System.Int32
     ///     <para>default value is MaaLoggingLevel_Error</para>
     /// </remarks>
     StdoutLevel = 4,
-    /// <summary>
-    ///     Whether to show hit draw
-    /// </summary>
-    /// <remarks>
-    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
-    /// </remarks>
-    [Obsolete("Deprecated from v4.5.0.")]
-    ShowHitDraw = 5,
     /// <summary>
     ///     Whether to debug
     /// </summary>
