@@ -42,7 +42,8 @@ public class MaaDbgController : MaaController
         if (type == DbgControllerType.None) throw new ArgumentException($"Value cannot be {DbgControllerType.None}.", nameof(type));
         ArgumentException.ThrowIfNullOrEmpty(config);
 
-        var handle = MaaDbgControllerCreate(readPath, writePath, (MaaDbgControllerType)type, config, MaaNotificationCallback, nint.Zero);
+        var handle = MaaDbgControllerCreate(readPath, writePath, (MaaDbgControllerType)type, config);
+        _ = MaaControllerAddSink(Handle, MaaEventCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
 
         _debugReadPath = readPath;

@@ -14,26 +14,32 @@ public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
     /// <summary>
     ///     Raises the Callback event.
     /// </summary>
+    /// <param name="handle">
+    ///     <para> - MaaTasker* for MaaTasker event.</para>
+    ///     <para> - MaaResource* for MaaResource event.</para>
+    ///     <para> - MaaController* for MaaController event.</para>
+    ///     <para> - MaaContext* for MaaContext event.</para>
+    /// </param>
     /// <param name="message">The MaaStringView.</param>
     /// <param name="detailsJson">The MaaStringView.</param>
-    /// <param name="callbackArg">The MaaCallbackTransparentArg.</param>
+    /// <param name="transArg">The MaaCallbackTransparentArg.</param>
     /// <remarks>
     ///     Usually invoked by MaaFramework.
     /// </remarks>
-    protected virtual void OnCallback(string message, [StringSyntax("Json")] string detailsJson, nint callbackArg)
+    protected virtual void OnCallback(nint handle, string message, [StringSyntax("Json")] string detailsJson, nint transArg)
         => Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
 
     /// <summary>
     ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
     /// </summary>
-    protected MaaNotificationCallback MaaNotificationCallback { get; }
+    protected MaaEventCallback MaaEventCallback { get; }
 
     /// <summary>
-    ///     Initializes <see cref="MaaNotificationCallback"/>.
+    ///     Initializes <see cref="MaaEventCallback"/>.
     /// </summary>
     protected MaaCommon()
         : base(invalidHandleValue: nint.Zero)
     {
-        MaaNotificationCallback = OnCallback;
+        MaaEventCallback = OnCallback;
     }
 }

@@ -80,10 +80,10 @@ IMaaDisposable Derived:
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaAdbController.ctor() | `MaaAdbControllerCreate` |
-| MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` |
-| MaaCustomController.ctor() | `MaaCustomControllerCreate` |
-| MaaDbgController.ctor() | `MaaDbgControllerCreate` |
+| MaaAdbController.ctor() | `MaaAdbControllerCreate` <br> `MaaControllerAddSink` |
+| MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` <br> `MaaControllerAddSink` |
+| MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
+| MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
 | IDisposable.Dispose() | `MaaControllerDestroy` |
 | IMaaOption.SetOption() | `MaaControllerSetOption` |
 | IMaaController.LinkStart() | `MaaControllerPostConnection` |
@@ -108,7 +108,7 @@ IMaaDisposable Derived:
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaTasker.ctor() | `MaaTaskerCreate` |
+| MaaTasker.ctor() | `MaaTaskerCreate` <br> `MaaTaskerAddSink` |
 | IDisposable.Dispose() | `MaaTaskerDestroy` |
 | IMaaOption.SetOption() | `MaaTaskerSetOption` |
 | IMaaTasker.Resource | `MaaTaskerBindResource` <br> `MaaTaskerGetResource` |
@@ -134,7 +134,7 @@ IMaaDisposable Derived:
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaResource.ctor() | `MaaResourceCreate` |
+| MaaResource.ctor() | `MaaResourceCreate` <br> `MaaResourceAddSink` |
 | IDisposable.Dispose() | `MaaResourceDestroy` |
 | IMaaResource.Register() | `MaaResourceRegisterCustomRecognition` <br> `MaaResourceRegisterCustomAction` |
 | IMaaResource.Unregister() | `MaaResourceUnregisterCustomRecognition`  <br> `MaaResourceUnregisterCustomAction` |

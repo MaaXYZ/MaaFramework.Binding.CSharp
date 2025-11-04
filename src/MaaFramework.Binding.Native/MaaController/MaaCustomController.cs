@@ -36,7 +36,8 @@ public class MaaCustomController : MaaController
         ArgumentNullException.ThrowIfNull(api);
 
         _api = api;
-        var handle = MaaCustomControllerCreate(_api, nint.Zero, MaaNotificationCallback, nint.Zero);
+        var handle = MaaCustomControllerCreate(_api, nint.Zero);
+        _ = MaaControllerAddSink(Handle, MaaEventCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
 
         if (link == LinkOption.Start)

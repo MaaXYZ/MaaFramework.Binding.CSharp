@@ -38,7 +38,8 @@ public class MaaWin32Controller : MaaController
         if (screencapMethod == Win32ScreencapMethod.None) throw new ArgumentException($"Value cannot be {Win32ScreencapMethod.None}.", nameof(screencapMethod));
         if (inputMethod == Win32InputMethod.None) throw new ArgumentException($"Value cannot be {Win32InputMethod.None}.", nameof(inputMethod));
 
-        var handle = MaaWin32ControllerCreate(desktopWindow.Handle, (MaaWin32ScreencapMethod)screencapMethod, (MaaWin32InputMethod)inputMethod, MaaNotificationCallback, nint.Zero);
+        var handle = MaaWin32ControllerCreate(desktopWindow.Handle, (MaaWin32ScreencapMethod)screencapMethod, (MaaWin32InputMethod)inputMethod);
+        _ = MaaControllerAddSink(Handle, MaaEventCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
 
         _debugInfo = desktopWindow;
