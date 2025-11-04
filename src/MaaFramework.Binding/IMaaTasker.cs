@@ -46,9 +46,9 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     IMaaToolkit Toolkit { get; set; }
 
     /// <summary>
-    ///     Gets or sets a utility.
+    ///     Gets or sets a global.
     /// </summary>
-    IMaaUtility Utility { get; set; }
+    IMaaGlobal Global { get; set; }
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaTasker"/> is fully initialized.

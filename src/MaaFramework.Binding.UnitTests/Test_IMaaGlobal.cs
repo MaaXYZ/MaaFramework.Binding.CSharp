@@ -1,16 +1,16 @@
 ﻿namespace MaaFramework.Binding.UnitTests;
 
 /// <summary>
-///     Test <see cref="IMaaUtility"/> and <see cref="MaaUtility"/>.
+///     Test <see cref="IMaaGlobal"/> and <see cref="MaaGlobal"/>.
 /// </summary>
 [TestClass]
 // ReSharper disable InconsistentNaming
-public class Test_IMaaMaaUtility
+public class Test_IMaaGlobal
 {
     public static Dictionary<MaaTypes, object> NewData => new()
     {
 #if MAA_NATIVE
-        { MaaTypes.Native, MaaUtility.Shared },
+        { MaaTypes.Native, MaaGlobal.Shared },
 #endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
@@ -29,12 +29,14 @@ public class Test_IMaaMaaUtility
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Version(MaaTypes type, IMaaUtility maaUtility)
+    public void Interface_Version(MaaTypes type, IMaaGlobal maaGlobal)
     {
-        Assert.IsNotNull(maaUtility);
+        Assert.IsNotNull(maaGlobal);
 
         Assert.IsFalse(string.IsNullOrWhiteSpace(
-            maaUtility.Version));
+            NativeBindingContext.LibraryVersion));
+        Assert.IsFalse(string.IsNullOrWhiteSpace(
+            NativeBindingContext.BindingVersion));
     }
 
     [TestMethod]
@@ -43,12 +45,12 @@ public class Test_IMaaMaaUtility
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, LoggingLevel.Off)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DebugMode, false)]
-    public void Interface_SetOption(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
+    public void Interface_SetOption(MaaTypes type, IMaaGlobal maaGlobal, GlobalOption opt, object arg)
     {
-        Assert.IsNotNull(maaUtility);
+        Assert.IsNotNull(maaGlobal);
 
         Assert.IsTrue(
-            maaUtility.SetOption(opt, arg));
+            maaGlobal.SetOption(opt, arg));
     }
 
     #region Invalid data tests
@@ -59,12 +61,12 @@ public class Test_IMaaMaaUtility
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.SaveDraw, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DebugMode, 0.0)]
-    public void Interface_SetOption_InvalidData(MaaTypes type, IMaaUtility maaUtility, GlobalOption opt, object arg)
+    public void Interface_SetOption_InvalidData(MaaTypes type, IMaaGlobal maaGlobal, GlobalOption opt, object arg)
     {
-        Assert.IsNotNull(maaUtility);
+        Assert.IsNotNull(maaGlobal);
 
         _ = Assert.ThrowsExactly<NotSupportedException>(()
-            => maaUtility.SetOption(opt, arg));
+            => maaGlobal.SetOption(opt, arg));
     }
 
     #endregion

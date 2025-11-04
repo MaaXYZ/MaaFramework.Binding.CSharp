@@ -9,6 +9,16 @@ namespace MaaFramework.Binding;
 public static class NativeBindingContext
 {
     /// <summary>
+    ///     Gets the version of NativeBinding.
+    /// </summary>
+    public static string BindingVersion => "v5.0.0-preview.1";
+
+    /// <summary>
+    ///     Gets the version of MaaFramework.
+    /// </summary>
+    public static string LibraryVersion => MaaUtility.MaaVersion();
+
+    /// <summary>
     ///     Gets a value indicating whether NativeLibrary is already loaded.
     /// </summary>
     public static bool IsLoaded => NativeLibrary.IsLoaded;

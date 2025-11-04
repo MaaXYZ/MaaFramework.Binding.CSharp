@@ -113,7 +113,7 @@ IMaaDisposable Derived:
 | IMaaTasker.Resource | `MaaTaskerBindResource` <br> `MaaTaskerGetResource` |
 | IMaaTasker.Controller | `MaaTaskerBindController` <br> `MaaTaskerGetController` |
 | IMaaTasker.Toolkit | *Easy to call Toolkit.* |
-| IMaaTasker.Utility | *Easy to call Utility.* |
+| IMaaTasker.Global | *Easy to call Global.* |
 | IMaaTasker.IsInitialized | `MaaTaskerInited` |
 | IMaaTasker.AppendTask() | `MaaTaskerPostTask` |
 | IMaaPost.GetStatus() | `MaaTaskerStatus` |
@@ -256,12 +256,18 @@ IMaaDisposable Derived:
 | IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
 | IMaaDisposableHandle.Handle | *The MaaRectHandle.* |
 
-## MaaUtility : IMaaUtility
+## MaaGlobal : IMaaGlobal
 
 | Wrapper | Native API |
 | --- | --- |
-| IMaaUtility.Version | `MaaVersion` |
-| IMaaOption.SetOption() | `MaaSetGlobalOption` |
+| IMaaOption.SetOption() | `MaaGlobalSetOption` |
+| IMaaGlobal.LoadPlugin() | `MaaGlobalLoadPlugin` |
+
+## MaaUtility
+
+| Wrapper | Native API |
+| --- | --- |
+| NativeBindingContext.LibraryVersion | `MaaVersion` |
 
 ## MaaToolkit : IMaaToolkit
 

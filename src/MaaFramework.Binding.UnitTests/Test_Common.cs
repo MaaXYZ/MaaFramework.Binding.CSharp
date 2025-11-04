@@ -52,8 +52,8 @@ public static class Common
     {
         ArgumentNullException.ThrowIfNull(testContext);
 
-        _ = MaaUtility.Shared.SetOption_LogDir(DebugPath);
-        _ = MaaUtility.Shared.SetOption_StdoutLevel(LoggingLevel.Off);
+        _ = MaaGlobal.Shared.SetOption_LogDir(DebugPath);
+        _ = MaaGlobal.Shared.SetOption_StdoutLevel(LoggingLevel.Off);
 
         InitializeInfo(testContext);
     }

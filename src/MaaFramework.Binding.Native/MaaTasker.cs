@@ -39,7 +39,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         _controller = new MaaController(MaaTaskerGetController(handle));
         DisposeOptions = DisposeOptions.None;
         Toolkit = MaaToolkit.Shared;
-        Utility = MaaUtility.Shared;
+        Global = MaaGlobal.Shared;
     }
 #pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
 
@@ -60,7 +60,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         SetHandle(handle, needReleased: true);
 
         Toolkit = MaaToolkit.Shared;
-        Utility = MaaUtility.Shared;
+        Global = MaaGlobal.Shared;
         if (toolkitInit)
             _ = Toolkit.Config.InitOption().ThrowIfFalse();
     }
@@ -189,13 +189,13 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     }
 
     IMaaToolkit IMaaTasker.Toolkit { get; set; } = default!;
-    IMaaUtility IMaaTasker.Utility { get; set; } = default!;
+    IMaaGlobal IMaaTasker.Global { get; set; } = default!;
 
     /// <inheritdoc cref="IMaaTasker.Toolkit"/>
     public MaaToolkit Toolkit { get => field; set => ((IMaaTasker)this).Toolkit = field = value; }
 
-    /// <inheritdoc cref="IMaaTasker.Utility"/>
-    public MaaUtility Utility { get => field; set => ((IMaaTasker)this).Utility = field = value; }
+    /// <inheritdoc cref="IMaaTasker.Global"/>
+    public MaaGlobal Global { get => field; set => ((IMaaTasker)this).Global = field = value; }
 
     /// <inheritdoc/>
     /// <remarks>

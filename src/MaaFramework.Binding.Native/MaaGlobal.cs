@@ -1,27 +1,28 @@
 ﻿using MaaFramework.Binding.Interop.Native;
-using static MaaFramework.Binding.Interop.Native.MaaUtility;
+using static MaaFramework.Binding.Interop.Native.MaaGlobal;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaUtility"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaGlobal"/>.
 /// </summary>
-public class MaaUtility : IMaaUtility
+public class MaaGlobal : IMaaGlobal
 {
     /// <summary>
-    ///    Gets the shared <see cref="MaaUtility"/> instance.
+    ///    Gets the shared <see cref="MaaGlobal"/> instance.
     /// </summary>
-    public static MaaUtility Shared { get; } = new();
+    public static MaaGlobal Shared { get; } = new();
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaVersion"/>.
+    ///     Wrapper of <see cref="MaaUtility.MaaVersion"/>.
     /// </remarks>
-    public string Version => MaaVersion();
+    [Obsolete("Use NativeBindingContext.FrameworkVersion instead.")]
+    public string Version => MaaUtility.MaaVersion();
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaSetGlobalOption"/>.
+    ///     Wrapper of <see cref="MaaGlobalSetOption"/>.
     /// </remarks>
     public bool SetOption<T>(GlobalOption opt, T value)
     {
@@ -31,18 +32,21 @@ public class MaaUtility : IMaaUtility
         {
             (int vvvv, GlobalOption.StdoutLevel) => vvvv.ToMaaOptionValue(),
             (string v, GlobalOption.LogDir) => v.ToMaaOptionValue(),
-#pragma warning disable CS0618 // 类型或成员已过时
             (bool vvv, GlobalOption.SaveDraw
-                    or GlobalOption.Recording
-                    or GlobalOption.ShowHitDraw
                     or GlobalOption.DebugMode) => vvv.ToMaaOptionValue(),
-#pragma warning restore CS0618 // 类型或成员已过时
 
             (LoggingLevel v, GlobalOption.StdoutLevel) => ((int)v).ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(GlobalOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
 
-        return MaaSetGlobalOption((MaaGlobalOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
+        return MaaGlobalSetOption((MaaGlobalOption)opt, optValue, (MaaOptionValueSize)optValue.Length);
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaGlobalLoadPlugin"/>.
+    /// </remarks>
+    public bool LoadPlugin(string libraryPath)
+        => MaaGlobalLoadPlugin(libraryPath);
 }

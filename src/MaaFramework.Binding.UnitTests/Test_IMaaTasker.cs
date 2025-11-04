@@ -159,19 +159,19 @@ public class Test_IMaaTasker
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_Utility(MaaTypes type, IMaaTasker maaTasker)
+    public void Interface_Global(MaaTypes type, IMaaTasker maaTasker)
     {
         Assert.IsNotNull(maaTasker);
 
         Assert.IsNotNull(
-            maaTasker.Utility);
-        Assert.IsNotNull(maaTasker.Utility = maaTasker.Utility);
+            maaTasker.Global);
+        Assert.IsNotNull(maaTasker.Global = maaTasker.Global);
         switch (type)
         {
             case MaaTypes.Native:
                 var native = maaTasker as MaaTasker;
                 Assert.IsNotNull(native);
-                Assert.IsNotNull(native.Utility = native.Utility);
+                Assert.IsNotNull(native.Global = native.Global);
                 break;
             case MaaTypes.None:
             case MaaTypes.All:
@@ -331,7 +331,7 @@ public class Test_IMaaTasker
     {
         Assert.IsNotNull(maaTasker);
         Assert.IsTrue(
-            maaTasker.Utility.SetOption_DebugMode(debugMode));
+            maaTasker.Global.SetOption_DebugMode(debugMode));
 
         var job =
             maaTasker.AppendTask(taskEntryName, diff);
@@ -361,7 +361,7 @@ public class Test_IMaaTasker
         }
 
         Assert.IsTrue(
-            maaTasker.Utility.SetOption_DebugMode(false));
+            maaTasker.Global.SetOption_DebugMode(false));
     }
 
     [TestMethod]
@@ -424,8 +424,6 @@ public class Test_IMaaTasker
     [MaaData(MaaTypes.All, nameof(Data))]
     public void Case_DirectCustomAction(MaaTypes type, IMaaTasker maaTasker)
     {
-        _ = MaaUtility.Shared.Version;
-
         Assert.IsTrue(
             maaTasker.Resource.Register(new Custom.EmptyAction()));
         var job = maaTasker
