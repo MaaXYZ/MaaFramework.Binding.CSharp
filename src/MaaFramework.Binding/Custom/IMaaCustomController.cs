@@ -15,6 +15,7 @@ public interface IMaaCustomController : IMaaCustomResource, IDisposable
     ///     Write result to buffer.
     /// </remarks>
     bool RequestUuid(in IMaaStringBuffer buffer);
+    ControllerFeatures GetFeatures();
 
     /// <remarks>
     ///     Write result to width and height.

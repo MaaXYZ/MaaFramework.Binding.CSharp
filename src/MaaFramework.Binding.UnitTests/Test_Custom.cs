@@ -71,6 +71,8 @@ internal static class Custom
 
             var recognitionDetail =
                 context.RunRecognition(DiffEntry, args.Image, DiffParam);
+            Assert.IsFalse(
+                context.GetNodeData(DiffEntry, out data));
             Assert.IsNotNull(
                 recognitionDetail?.HitBox);
 
@@ -81,16 +83,14 @@ internal static class Custom
             Assert.IsTrue(
                 cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
 
+            Assert.IsFalse(
+                context.GetNodeData(DiffEntry, out data));
             Assert.IsTrue(
                 cloneContext.GetNodeData(DiffEntry, out data));
             Assert.IsNotNull(data);
             Assert.IsTrue(
                 data.Contains($"\"next\":[\"{DiffEntry}\"]"));
 
-            Assert.IsTrue(
-                context.GetNodeData(DiffEntry, out data));
-            Assert.IsFalse(
-                data.Contains($"\"next\":[\"{DiffEntry}\"]"));
 
             Assert.IsTrue(
                 recognitionDetail.HitBox.TryCopyTo(results.Box));
@@ -211,6 +211,8 @@ internal static class Custom
             var uuid = c.Uuid;
             return uuid is not null && buffer.TrySetValue(uuid);
         }
+
+        public ControllerFeatures GetFeatures() => ControllerFeatures.None;
 
         public bool Screencap(in IMaaImageBuffer buffer)
             => c.Screencap().Wait().IsSucceeded() && c.GetCachedImage(buffer);

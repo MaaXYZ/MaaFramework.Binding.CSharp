@@ -10,7 +10,8 @@ public static class DesktopWindowInfoExtensions
     /// </summary>
     /// <param name="info">The DesktopWindowInfo.</param>
     /// <param name="screencapMethod">The screencap method.</param>
-    /// <param name="inputMethod">The input method.</param>
+    /// <param name="mouseMethod">The mouse method.</param>
+    /// <param name="keyboardMethod">The keyboard method.</param>
     /// <param name="hWnd">The new handle to a win32 window.</param>
     /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
@@ -18,7 +19,8 @@ public static class DesktopWindowInfoExtensions
     /// <exception cref="ArgumentNullException"/>
     public static MaaWin32Controller ToWin32Controller(this DesktopWindowInfo info,
         Win32ScreencapMethod screencapMethod,
-        Win32InputMethod inputMethod,
+        Win32InputMethod mouseMethod,
+        Win32InputMethod keyboardMethod,
         nint? hWnd = null,
         LinkOption link = LinkOption.Start,
         CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
@@ -26,7 +28,7 @@ public static class DesktopWindowInfoExtensions
         ArgumentNullException.ThrowIfNull(info);
 
         return hWnd.HasValue
-            ? new MaaWin32Controller(hWnd.Value, screencapMethod, inputMethod, link, check)
-            : new MaaWin32Controller(info, screencapMethod, inputMethod, link, check);
+            ? new MaaWin32Controller(hWnd.Value, screencapMethod, mouseMethod, keyboardMethod, link, check)
+            : new MaaWin32Controller(info, screencapMethod, mouseMethod, keyboardMethod, link, check);
     }
 }

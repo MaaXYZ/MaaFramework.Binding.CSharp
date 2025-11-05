@@ -119,15 +119,18 @@ public class Test_IMaaController
         using var win32Native1 = new MaaWin32Controller(
             windowInfo.Handle,
             Win32ScreencapMethod.GDI,
+            Win32InputMethod.SendMessage,
             Win32InputMethod.SendMessage);
         using var win32Native2 = new MaaWin32Controller(
             windowInfo.Handle,
             Win32ScreencapMethod.GDI,
             Win32InputMethod.SendMessage,
+            Win32InputMethod.SendMessage,
             LinkOption.None);
         using var win32Native3 = new MaaWin32Controller(
             windowInfo.Handle,
             Win32ScreencapMethod.GDI,
+            Win32InputMethod.SendMessage,
             Win32InputMethod.SendMessage,
             LinkOption.Start,
             CheckStatusOption.None);
@@ -387,8 +390,8 @@ public class Test_IMaaController
 
 #if !GITHUB_ACTIONS
         #region MaaWin32Controller
-        Assert.ThrowsExactly<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize));
-        Assert.ThrowsExactly<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None));
+        Assert.ThrowsExactly<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize, Win32InputMethod.Seize));
+        Assert.ThrowsExactly<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None, Win32InputMethod.None));
         #endregion
 #endif
 #endif

@@ -104,7 +104,8 @@ public class Test_IMaaToolkit
         {
             MaaTypes.Native => windows[0].ToWin32Controller(
                 screencapMethod: Win32ScreencapMethod.GDI,
-                inputMethod: Win32InputMethod.SendMessage,
+                mouseMethod: Win32InputMethod.SendMessage,
+                keyboardMethod: Win32InputMethod.SendMessage,
                 link: LinkOption.None),
             _ => throw new NotImplementedException(),
         };
@@ -118,7 +119,8 @@ public class Test_IMaaToolkit
         {
             MaaTypes.Native => windows[0].ToWin32Controller(
                 screencapMethod: Win32ScreencapMethod.GDI,
-                inputMethod: Win32InputMethod.SendMessage),
+                mouseMethod: Win32InputMethod.SendMessage,
+                keyboardMethod: Win32InputMethod.SendMessage),
             _ => throw new NotImplementedException(),
         };
 #endif
