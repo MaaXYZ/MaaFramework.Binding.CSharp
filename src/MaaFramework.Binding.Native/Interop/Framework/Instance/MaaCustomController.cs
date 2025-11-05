@@ -95,6 +95,7 @@ public static class MaaCustomControllerMarshaller
         public int Times = 0;
         public ConnectDelegate Connect = (nint transArg) => managed.Connect();
         public RequestUuidDelegate RequestUuid = (nint transArg, MaaStringBufferHandle buffer) => managed.RequestUuid(new MaaStringBuffer(buffer));
+        public GetFeaturesDelegate GetFeatures = (nint transArg) => (System.UInt64)managed.GetFeatures();
         public StartAppDelegate StartApp = (string intent, nint transArg) => managed.StartApp(intent);
         public StopAppDelegate StopApp = (string intent, nint transArg) => managed.StopApp(intent);
         public ScreencapDelegate Screencap = (nint transArg, MaaImageBufferHandle buffer) => managed.Screencap(new MaaImageBuffer(buffer));
@@ -121,6 +122,7 @@ public static class MaaCustomControllerMarshaller
     {
         public nint Connect = Marshal.GetFunctionPointerForDelegate(delegates.Connect);
         public nint RequestUuid = Marshal.GetFunctionPointerForDelegate(delegates.RequestUuid);
+        public nint GetFeatures = Marshal.GetFunctionPointerForDelegate(delegates.GetFeatures);
         public nint StartApp = Marshal.GetFunctionPointerForDelegate(delegates.StartApp);
         public nint StopApp = Marshal.GetFunctionPointerForDelegate(delegates.StopApp);
         public nint Screencap = Marshal.GetFunctionPointerForDelegate(delegates.Screencap);
@@ -145,6 +147,9 @@ public static class MaaCustomControllerMarshaller
     [return: MarshalAs(UnmanagedType.U1)]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool RequestUuidDelegate(nint transArg, MaaStringBufferHandle buffer);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate MaaControllerFeature GetFeaturesDelegate(nint transArg);
 
     [return: MarshalAs(UnmanagedType.U1)]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

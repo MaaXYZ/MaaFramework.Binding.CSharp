@@ -23,7 +23,7 @@ public static partial class MaaController
     public static partial MaaControllerHandle MaaAdbControllerCreate(string adbPath, string address, MaaAdbScreencapMethod screencapMethods, MaaAdbInputMethod inputMethods, string config, string agentPath);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod inputMethod);
+    public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod mouseMethod, MaaWin32InputMethod keyboardMethod);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaCustomControllerCreate([MarshalUsing(typeof(MaaMarshaller))] Custom.IMaaCustomController controller, nint controllerArg);

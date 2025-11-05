@@ -48,12 +48,16 @@ global using MaaWin32ScreencapMethod = System.UInt64;
 global using MaaWin32InputMethod = System.UInt64;
 // No bitwise OR, just set it
 global using MaaDbgControllerType = System.UInt64;
+global using MaaControllerFeature = System.UInt64;
 global using MaaRectHandle = nint;
 
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace MaaFramework.Binding.Interop.Native;
+
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+public delegate void MaaNotificationCallback([MarshalAs(UnmanagedType.LPUTF8Str)] string message, [MarshalAs(UnmanagedType.LPUTF8Str)] string detailsJson, nint notifyTransArg);
 
 /// <remarks>
 ///     <para>void* handle:MaaTasker* for MaaTasker eventMaaResource* for MaaResource eventMaaController* for MaaController eventMaaContext* for MaaContext event</para>

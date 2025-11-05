@@ -12,7 +12,7 @@
 
 ﻿namespace MaaFramework.Binding.Notification;
 
-//MaaApiDocument Version: (main) v5.0.0-alpha.3
+//MaaApiDocument Version: (main) v5.0.0-alpha.6
 /// <summary>
 ///  A callback consists of a message and a payload.
 ///  The message is a string that indicates the type of the message.
@@ -28,7 +28,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
             /// </remarks>
             public const string Starting = "Resource.Loading.Starting";
 
@@ -36,7 +36,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
             /// </remarks>
             public const string Prefix = "Resource.Loading";
 
@@ -44,7 +44,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
             /// </remarks>
             public const string Succeeded = "Resource.Loading.Succeeded";
 
@@ -52,7 +52,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
             /// </remarks>
             public const string Failed = "Resource.Loading.Failed";
 
@@ -66,7 +66,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
+            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
             /// </remarks>
             public const string Starting = "Controller.Action.Starting";
 
@@ -74,7 +74,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
+            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
             /// </remarks>
             public const string Prefix = "Controller.Action";
 
@@ -82,7 +82,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
+            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
             /// </remarks>
             public const string Succeeded = "Controller.Action.Succeeded";
 
@@ -90,7 +90,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
+            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
             /// </remarks>
             public const string Failed = "Controller.Action.Failed";
 
@@ -104,7 +104,7 @@ public static class MaaMsg
             ///     Message for the task.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
+            ///     <para>details_json: { task_id: number, entry: string, uuid: string, hash: string }</para>
             /// </remarks>
             public const string Starting = "Tasker.Task.Starting";
 
@@ -112,7 +112,7 @@ public static class MaaMsg
             ///     Message for the task.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
+            ///     <para>details_json: { task_id: number, entry: string, uuid: string, hash: string }</para>
             /// </remarks>
             public const string Prefix = "Tasker.Task";
 
@@ -120,7 +120,7 @@ public static class MaaMsg
             ///     Message for the task.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
+            ///     <para>details_json: { task_id: number, entry: string, uuid: string, hash: string }</para>
             /// </remarks>
             public const string Succeeded = "Tasker.Task.Succeeded";
 
@@ -128,7 +128,7 @@ public static class MaaMsg
             ///     Message for the task.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, entry: string, uuid: string, hash: string }</para>
+            ///     <para>details_json: { task_id: number, entry: string, uuid: string, hash: string }</para>
             /// </remarks>
             public const string Failed = "Tasker.Task.Failed";
 
@@ -142,7 +142,7 @@ public static class MaaMsg
             ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, name: string, list: string[], focus: any, }</para>
+            ///     <para>details_json: { task_id: number, name: string, list: string[], focus: any, }</para>
             /// </remarks>
             public const string Starting = "Node.NextList.Starting";
 
@@ -150,7 +150,7 @@ public static class MaaMsg
             ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, name: string, list: string[], focus: any, }</para>
+            ///     <para>details_json: { task_id: number, name: string, list: string[], focus: any, }</para>
             /// </remarks>
             public const string Prefix = "Node.NextList";
 
@@ -158,7 +158,7 @@ public static class MaaMsg
             ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, name: string, list: string[], focus: any, }</para>
+            ///     <para>details_json: { task_id: number, name: string, list: string[], focus: any, }</para>
             /// </remarks>
             public const string Succeeded = "Node.NextList.Succeeded";
 
@@ -166,7 +166,7 @@ public static class MaaMsg
             ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, name: string, list: string[], focus: any, }</para>
+            ///     <para>details_json: { task_id: number, name: string, list: string[], focus: any, }</para>
             /// </remarks>
             public const string Failed = "Node.NextList.Failed";
 
@@ -177,7 +177,7 @@ public static class MaaMsg
             ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, reco_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Starting = "Node.Recognition.Starting";
 
@@ -185,7 +185,7 @@ public static class MaaMsg
             ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, reco_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Prefix = "Node.Recognition";
 
@@ -193,7 +193,7 @@ public static class MaaMsg
             ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, reco_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Succeeded = "Node.Recognition.Succeeded";
 
@@ -201,7 +201,7 @@ public static class MaaMsg
             ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, reco_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Failed = "Node.Recognition.Failed";
 
@@ -212,7 +212,7 @@ public static class MaaMsg
             ///     Message for the action of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Starting = "Node.Action.Starting";
 
@@ -220,7 +220,7 @@ public static class MaaMsg
             ///     Message for the action of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Prefix = "Node.Action";
 
@@ -228,7 +228,7 @@ public static class MaaMsg
             ///     Message for the action of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Succeeded = "Node.Action.Succeeded";
 
@@ -236,7 +236,7 @@ public static class MaaMsg
             ///     Message for the action of node.
             /// </summary>
             /// <remarks>
-            ///     <para>payload: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Failed = "Node.Action.Failed";
 

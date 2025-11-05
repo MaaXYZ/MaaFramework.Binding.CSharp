@@ -36,6 +36,10 @@ public static partial class MaaContext
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaContextOverrideImage(MaaContextHandle context, string imageName, MaaImageBufferHandle image);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaContextGetNodeData(MaaContextHandle context, string nodeName, MaaStringBufferHandle buffer);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

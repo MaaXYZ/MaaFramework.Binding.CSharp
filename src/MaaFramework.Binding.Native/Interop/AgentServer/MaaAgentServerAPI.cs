@@ -26,16 +26,16 @@ public static partial class MaaAgentServer
     public static partial bool MaaAgentServerRegisterCustomAction(string name, MaaCustomActionCallback action, nint transArg);
 
     [LibraryImport("MaaAgentServer", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void MaaAgentServerAddResourceSink(MaaEventCallback sink, nint transArg);
+    public static partial MaaSinkId MaaAgentServerAddResourceSink(MaaEventCallback sink, nint transArg);
 
     [LibraryImport("MaaAgentServer", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void MaaAgentServerAddControllerSink(MaaEventCallback sink, nint transArg);
+    public static partial MaaSinkId MaaAgentServerAddControllerSink(MaaEventCallback sink, nint transArg);
 
     [LibraryImport("MaaAgentServer", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void MaaAgentServerAddTaskerSink(MaaEventCallback sink, nint transArg);
+    public static partial MaaSinkId MaaAgentServerAddTaskerSink(MaaEventCallback sink, nint transArg);
 
     [LibraryImport("MaaAgentServer", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void MaaAgentServerAddContextSink(MaaEventCallback sink, nint transArg);
+    public static partial MaaSinkId MaaAgentServerAddContextSink(MaaEventCallback sink, nint transArg);
 
     [LibraryImport("MaaAgentServer", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
