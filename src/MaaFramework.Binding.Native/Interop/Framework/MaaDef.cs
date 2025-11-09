@@ -17,6 +17,7 @@ global using MaaCtrlId = System.Int64;
 global using MaaResId = System.Int64;
 global using MaaTaskId = System.Int64;
 global using MaaRecoId = System.Int64;
+global using MaaActId = System.Int64;
 global using MaaNodeId = System.Int64;
 global using MaaSinkId = System.Int64;
 global using MaaStringBufferHandle = nint;

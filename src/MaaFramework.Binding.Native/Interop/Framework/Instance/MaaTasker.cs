@@ -93,7 +93,11 @@ public static partial class MaaTasker
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaTaskerGetNodeDetail(MaaTaskerHandle tasker, MaaNodeId nodeId, MaaStringBufferHandle nodeName, out MaaRecoId recoId, [MarshalAs(UnmanagedType.U1)] out bool completed);
+    public static partial bool MaaTaskerGetActionDetail(MaaTaskerHandle tasker, MaaActId actionId, MaaStringBufferHandle nodeName, MaaStringBufferHandle action, MaaRectHandle box, [MarshalAs(UnmanagedType.U1)] out bool success, MaaStringBufferHandle detailJson);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerGetNodeDetail(MaaTaskerHandle tasker, MaaNodeId nodeId, MaaStringBufferHandle nodeName, out MaaRecoId recoId, out MaaActId actionId, [MarshalAs(UnmanagedType.U1)] out bool completed);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]

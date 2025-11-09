@@ -20,6 +20,9 @@ public enum Win32ScreencapMethod : System.UInt64
     None = 0,
     GDI = 1,
     FramePool = (1 << 1),
-    DXGIDesktopDup = (1 << 2),
+    DXGI_DesktopDup = (1 << 2),
+    DXGI_DesktopDup_Window = (1 << 3),
+    PrintWindow = (1 << 4),
+    ScreenDC = (1 << 5),
 }
 

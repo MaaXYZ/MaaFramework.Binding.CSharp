@@ -20,5 +20,8 @@ public enum Win32InputMethod : System.UInt64
     None = 0,
     Seize = 1,
     SendMessage = (1 << 1),
+    PostMessage = (1 << 2),
+    LegacyEvent = (1 << 3),
+    PostThreadMessage = (1 << 4),
 }
 

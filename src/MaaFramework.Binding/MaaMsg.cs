@@ -10,9 +10,9 @@
 #pragma warning disable CS1573 // 参数在 XML 注释中没有匹配的 param 标记
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
-﻿namespace MaaFramework.Binding.Notification;
+namespace MaaFramework.Binding.Notification;
 
-//MaaApiDocument Version: (main) v5.0.0-alpha.6
+//MaaApiDocument Version: (main) v5.0.0-beta.3
 /// <summary>
 ///  A callback consists of a message and a payload.
 ///  The message is a string that indicates the type of the message.
@@ -212,7 +212,7 @@ public static class MaaMsg
             ///     Message for the action of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, node_id: number, action_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Starting = "Node.Action.Starting";
 
@@ -220,7 +220,7 @@ public static class MaaMsg
             ///     Message for the action of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, node_id: number, action_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Prefix = "Node.Action";
 
@@ -228,7 +228,7 @@ public static class MaaMsg
             ///     Message for the action of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, node_id: number, action_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Succeeded = "Node.Action.Succeeded";
 
@@ -236,7 +236,7 @@ public static class MaaMsg
             ///     Message for the action of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, node_id: number, action_id: number, name: string, focus: any, }</para>
             /// </remarks>
             public const string Failed = "Node.Action.Failed";
 

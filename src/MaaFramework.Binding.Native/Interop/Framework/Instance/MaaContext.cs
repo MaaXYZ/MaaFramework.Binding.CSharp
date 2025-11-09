@@ -24,7 +24,7 @@ public static partial class MaaContext
     public static partial MaaRecoId MaaContextRunRecognition(MaaContextHandle context, string entry, string pipelineOverride, MaaImageBufferHandle image);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaNodeId MaaContextRunAction(MaaContextHandle context, string entry, string pipelineOverride, MaaRectHandle box, string recoDetail);
+    public static partial MaaActId MaaContextRunAction(MaaContextHandle context, string entry, string pipelineOverride, MaaRectHandle box, string recoDetail);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
