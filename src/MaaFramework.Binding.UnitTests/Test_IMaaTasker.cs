@@ -306,7 +306,7 @@ public class Test_IMaaTasker
             MaaJobStatus.Succeeded, status);
 
         Assert.IsTrue(
-            maaTasker.GetNodeDetail(nodeIdList[0], out var nodeName, out var recognitionId, out var actionCompleted));
+            maaTasker.GetNodeDetail(nodeIdList[0], out var nodeName, out var recognitionId, out var actionId, out var actionCompleted));
         Assert.IsTrue(
             actionCompleted);
 
@@ -322,6 +322,13 @@ public class Test_IMaaTasker
             maaTasker.GetRecognitionDetail<MaaImageBuffer>(recognitionId, out _, out _, out _, hitBox, out var detailJson, null, null));
         Assert.AreNotEqual(string.Empty,
             detailJson);
+
+        Assert.IsTrue(
+            maaTasker.GetActionDetail(actionId, out _, out _, hitBox, out var isSucceeded, out detailJson));
+        Assert.AreNotEqual(string.Empty,
+            detailJson);
+        Assert.IsTrue(
+            isSucceeded);
     }
 
     [TestMethod]
@@ -359,6 +366,10 @@ public class Test_IMaaTasker
             Assert.IsNull(recognitionDetail.Raw);
             Assert.IsNull(recognitionDetail.Draws);
         }
+
+        // Tip: dispose the action detail to dispose Box after the query is completed.
+        using var actionDetail = job.QueryActionDetail();
+        Assert.IsNotNull(actionDetail);
 
         Assert.IsTrue(
             maaTasker.Global.SetOption_DebugMode(false));
@@ -433,5 +444,6 @@ public class Test_IMaaTasker
         Assert.IsNotNull(job.QueryTaskDetail());
         Assert.IsNotNull(job.QueryNodeDetail());
         Assert.IsNotNull(job.QueryRecognitionDetail());
+        Assert.IsNotNull(job.QueryActionDetail());
     }
 }

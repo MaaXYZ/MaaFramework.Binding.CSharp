@@ -108,14 +108,27 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
         where T : IMaaImageBuffer;
 
     /// <summary>
+    ///     Gets the action detail.
+    /// </summary>
+    /// <param name="actionId">The action id.</param>
+    /// <param name="nodeName">The node name.</param>
+    /// <param name="action">The action.</param>
+    /// <param name="box">The hit box.</param>
+    /// <param name="isSucceeded">A value indicating whether the action is succeeded.</param>
+    /// <param name="detailJson">the action detail</param>
+    /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
+    bool GetActionDetail(MaaActId actionId, out string nodeName, out string action, IMaaRectBuffer? box, out bool isSucceeded, out string detailJson);
+
+    /// <summary>
     ///     Gets the node detail.
     /// </summary>
     /// <param name="nodeId">The node id.</param>
     /// <param name="nodeName">The node name.</param>
     /// <param name="recognitionId">The recognition id.</param>
-    /// <param name="actionCompleted">A value indicating whether the action run completed.</param>
+    /// <param name="actionId">The action id.</param>
+    /// <param name="actionCompleted">A value indicating whether the action is completed.</param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
-    bool GetNodeDetail(MaaNodeId nodeId, out string nodeName, out MaaRecoId recognitionId, out bool actionCompleted);
+    bool GetNodeDetail(MaaNodeId nodeId, out string nodeName, out MaaRecoId recognitionId, out MaaActId actionId, out bool actionCompleted);
 
     /// <summary>
     ///     Gets the task detail.

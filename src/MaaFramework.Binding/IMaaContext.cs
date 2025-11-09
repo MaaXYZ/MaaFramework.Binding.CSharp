@@ -45,9 +45,9 @@ public interface IMaaContext : ICloneable
     /// <param name="recognitionBox">The rect buffer containing current rect in the recognition result.</param>
     /// <param name="recognitionDetail">The rect detail in the recognition result.</param>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
-    /// <returns><see cref="NodeDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
+    /// <returns><see cref="ActionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    NodeDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}");
+    ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
     ///     Override a pipeline.

@@ -6,11 +6,13 @@
 /// <param name="Id">Gets the node id.</param>
 /// <param name="NodeName">Gets the node name.</param>
 /// <param name="RecognitionId">Gets the recognition id.</param>
+/// <param name="ActionId">Gets the action id.</param>
 /// <param name="ActionCompleted">Gets a value indicating whether the action run completed.</param>
 public sealed record NodeDetail(
     MaaNodeId Id,
     string NodeName,
     MaaRecoId RecognitionId,
+    MaaActId ActionId,
     bool ActionCompleted
 )
 {
@@ -24,11 +26,12 @@ public sealed record NodeDetail(
     public static NodeDetail? Query(MaaNodeId nodeId, IMaaTasker tasker)
     {
         ArgumentNullException.ThrowIfNull(tasker);
-        return tasker.GetNodeDetail(nodeId, out var nodeName, out var recognitionId, out var actionCompleted)
+        return tasker.GetNodeDetail(nodeId, out var nodeName, out var recognitionId, out var actionId, out var actionCompleted)
             ? new NodeDetail(
                 Id: nodeId,
                 NodeName: nodeName,
                 RecognitionId: recognitionId,
+                ActionId: actionId,
                 ActionCompleted: actionCompleted)
             : null;
     }

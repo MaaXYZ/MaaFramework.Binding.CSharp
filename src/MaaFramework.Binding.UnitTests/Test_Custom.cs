@@ -69,12 +69,13 @@ internal static class Custom
                 context.GetNodeData(DiffEntry, out var data));
             Assert.IsNull(data);
 
-            var recognitionDetail =
+            using var recognitionDetail =
                 context.RunRecognition(DiffEntry, args.Image, DiffParam);
             Assert.IsFalse(
                 context.GetNodeData(DiffEntry, out data));
             Assert.IsNotNull(
                 recognitionDetail?.HitBox);
+
 
             Assert.IsTrue(
                 cloneContext.OverridePipeline(DiffParam));
@@ -130,8 +131,10 @@ internal static class Custom
             Assert.AreNotEqual(Detail, args.RecognitionDetail.Detail);
             Assert.AreEqual(Box, $"{args.RecognitionBox.X}{args.RecognitionBox.Y}{args.RecognitionBox.Width}{args.RecognitionBox.Height}");
 
-            var nodeDetail = context.RunAction(DiffEntry, args.RecognitionBox, args.RecognitionDetail.Detail, DiffParam);
-            Assert.IsNotNull(nodeDetail);
+            using var actionDetail =
+                context.RunAction(DiffEntry, args.RecognitionBox, args.RecognitionDetail.Detail, DiffParam);
+            Assert.IsNotNull(
+                actionDetail);
             return true;
         }
     }

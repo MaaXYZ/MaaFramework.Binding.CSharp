@@ -312,14 +312,38 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     }
 
     /// <inheritdoc/>
+    public bool GetActionDetail(MaaActId actionId, out string nodeName, out string action, IMaaRectBuffer? box, out bool isSucceeded, out string detailJson)
+        => GetActionDetail(actionId, out nodeName, out action, (MaaRectBuffer?)box, out isSucceeded, out detailJson);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerGetActionDetail"/>.
+    /// </remarks>
+    public bool GetActionDetail(MaaActId actionId, out string nodeName, out string action, MaaRectBuffer? box, out bool isSucceeded, out string detailJson)
+    {
+        var boxHandle = box?.Handle ?? MaaRectHandle.Zero;
+
+        using var nodeNameBuffer = new MaaStringBuffer();
+        using var actionBuffer = new MaaStringBuffer();
+        using var detailJsonBuffer = new MaaStringBuffer();
+
+        var ret = MaaTaskerGetActionDetail(Handle, actionId, nodeNameBuffer.Handle, actionBuffer.Handle, boxHandle, out isSucceeded, detailJsonBuffer.Handle);
+
+        nodeName = nodeNameBuffer.ToString();
+        action = actionBuffer.ToString();
+        detailJson = detailJsonBuffer.ToString();
+        return ret;
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetNodeDetail"/>.
     /// </remarks>
-    public bool GetNodeDetail(MaaNodeId nodeId, out string nodeName, out MaaRecoId recognitionId, out bool actionCompleted)
+    public bool GetNodeDetail(MaaNodeId nodeId, out string nodeName, out MaaRecoId recognitionId, out MaaActId actionId, out bool actionCompleted)
     {
         using var nodeNameBuffer = new MaaStringBuffer();
 
-        var ret = MaaTaskerGetNodeDetail(Handle, nodeId, nodeNameBuffer.Handle, out recognitionId, out actionCompleted);
+        var ret = MaaTaskerGetNodeDetail(Handle, nodeId, nodeNameBuffer.Handle, out recognitionId, out actionId, out actionCompleted);
 
         nodeName = nodeNameBuffer.ToString();
         return ret;

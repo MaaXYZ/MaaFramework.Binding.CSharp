@@ -123,6 +123,7 @@ IMaaDisposable Derived:
 | IMaaTasker.IsStopping | `MaaTaskerStopping` |
 | IMaaTasker.ClearCache() | `MaaTaskerClearCache` |
 | IMaaTasker.GetRecognitionDetail() <br> RecognitionDetail.Query() <br> NodeDetail.QueryRecognitionDetail() <br> TaskDetail.QueryRecognitionDetail() <br> MaaTaskJob.QueryRecognitionDetail() | `MaaTaskerGetRecognitionDetail` |
+| IMaaTasker.GetActionDetail() <br> ActionDetail.Query() <br> NodeDetail.QueryActionDetail() <br> TaskDetail.QueryActionDetail() <br> MaaTaskJob.QueryActionDetail() | `MaaTaskerGetActionDetail` |
 | IMaaTasker.GetNodeDetail() <br> NodeDetail.Query() <br> TaskDetail.QueryNodeDetail() <br> MaaTaskJob.QueryNodeDetail() | `MaaTaskerGetNodeDetail` |
 | IMaaTasker.GetTaskDetail() <br> TaskDetail.Query() <br> MaaTaskJob.QueryTaskDetail() | `MaaTaskerGetTaskDetail` |
 | IMaaTasker.GetLatestNode() <br> NodeDetail.QueryLatest() | `MaaTaskerGetLatestNode` |

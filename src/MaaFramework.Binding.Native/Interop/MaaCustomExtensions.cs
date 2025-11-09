@@ -35,7 +35,6 @@ public static class MaaCustomExtensions
                 var tasker = context.Tasker;
                 var taskDetail = TaskDetail.Query(taskId, tasker).ThrowIfNull();
                 var recognitionDetail = RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recoId, tasker).ThrowIfNull();
-                // TODO: 考虑加不加action
                 return resource.Run
                 (
                     context,

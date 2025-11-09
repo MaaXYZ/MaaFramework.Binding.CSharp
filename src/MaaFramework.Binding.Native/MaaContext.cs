@@ -57,20 +57,20 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     }
 
     /// <inheritdoc/>
-    public NodeDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
+    public ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
         => RunAction(entry, (MaaRectBuffer)recognitionBox, recognitionDetail, pipelineOverride);
 
     /// <inheritdoc cref="IMaaContext.RunAction"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunAction"/>.
     /// </remarks>
-    public NodeDetail? RunAction(string entry, MaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
+    public ActionDetail? RunAction(string entry, MaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
     {
         ArgumentNullException.ThrowIfNull(recognitionBox);
-        var nodeId = MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail);
-        return nodeId == Interop.Native.MaaDef.MaaInvalidId
+        var actionId = MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail);
+        return actionId == Interop.Native.MaaDef.MaaInvalidId
             ? null
-            : NodeDetail.Query(nodeId, Tasker);
+            : ActionDetail.Query<MaaRectBuffer>(actionId, Tasker);
     }
 
     /// <inheritdoc/>
