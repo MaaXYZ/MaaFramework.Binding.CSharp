@@ -56,7 +56,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         if (!Instances.TryAdd(handle, this))
             // Always returns true, but non-atomic operation may fail to add.
             throw new InvalidOperationException($"This {nameof(MaaTasker)} already added to {nameof(Instances)}.");
-        _ = MaaTaskerAddSink(Handle, MaaEventCallback, nint.Zero);
+        _ = MaaTaskerAddSink(handle, MaaEventCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
 
         Toolkit = MaaToolkit.Shared;

@@ -37,7 +37,7 @@ public class MaaAdbController : MaaController
         ArgumentException.ThrowIfNullOrEmpty(info.AgentPath);
 
         var handle = MaaAdbControllerCreate(info.AdbPath, info.AdbSerial, (MaaAdbScreencapMethod)info.ScreencapMethods, (MaaAdbInputMethod)info.InputMethods, info.Config, info.AgentPath);
-        _ = MaaControllerAddSink(Handle, MaaEventCallback, nint.Zero);
+        _ = MaaControllerAddSink(handle, MaaEventCallback, nint.Zero);
         SetHandle(handle, needReleased: true);
 
         _debugInfo = info;
