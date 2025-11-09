@@ -13,7 +13,7 @@ public record DesktopWindowInfo(
     nint Handle,
     string Name,
     string ClassName,
-    Win32ScreencapMethod ScreencapMethod = Win32ScreencapMethod.DXGIDesktopDup,
+    Win32ScreencapMethod ScreencapMethod = Win32ScreencapMethod.DXGI_DesktopDup,
     Win32InputMethod MouseMethod = Win32InputMethod.Seize,
     Win32InputMethod KeyboardMethod = Win32InputMethod.Seize
 );
