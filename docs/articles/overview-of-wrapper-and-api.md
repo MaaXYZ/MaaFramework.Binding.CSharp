@@ -43,6 +43,7 @@ Derived:
 - IMaaController
 - IMaaResource
 - IMaaTasker
+- IMaaAgentServer
 
 | Wrapper | MaaDef |
 | --- | --- |
@@ -107,7 +108,7 @@ IMaaDisposable Derived:
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaTasker.ctor() | `MaaTaskerCreate` <br> `MaaTaskerAddSink` |
+| MaaTasker.ctor() | `MaaTaskerCreate` <br> `MaaTaskerAddSink` <br> `MaaTaskerAddContextSink` |
 | IDisposable.Dispose() | `MaaTaskerDestroy` |
 | IMaaOption.SetOption() | `MaaTaskerSetOption` |
 | IMaaTasker.Resource | `MaaTaskerBindResource` <br> `MaaTaskerGetResource` |
@@ -334,6 +335,7 @@ IMaaDisposable Derived:
 | Wrapper | Native API |
 | --- | --- |
 | MaaAgentServer.CurrentId <br> IMaaAgentServer.WithIdentifier() | *Used to get and modify the identifier.* |
+| IMaaCommon.Callback.add() | `MaaAgentServerAddTaskerSink` <br> `MaaAgentServerAddResourceSink` <br> `MaaAgentServerAddControllerSink` <br> `MaaAgentServerAddContextSink` |
 | IMaaAgentServer.Register() | `MaaAgentServerRegisterCustomRecognition` <br> `MaaAgentServerRegisterCustomAction` |
 | IMaaAgentServer.StartUp() | `MaaAgentServerStartUp` |
 | IMaaAgentServer.ShutDown() | `MaaAgentServerShutDown` |

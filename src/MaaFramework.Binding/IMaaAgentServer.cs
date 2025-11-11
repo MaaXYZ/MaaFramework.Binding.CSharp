@@ -1,11 +1,12 @@
-﻿using MaaFramework.Binding.Custom;
+﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Custom;
 
 namespace MaaFramework.Binding;
 
 /// <summary>
 ///     An interface defining wrapped members for MaaAgentServer.
 /// </summary>
-public interface IMaaAgentServer
+public interface IMaaAgentServer : IMaaCommon
 {
     /// <summary>
     ///     Configures the unique identifier used to communicate with the agent client.

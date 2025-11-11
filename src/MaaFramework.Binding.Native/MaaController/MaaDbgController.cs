@@ -43,7 +43,7 @@ public class MaaDbgController : MaaController
         ArgumentException.ThrowIfNullOrEmpty(config);
 
         var handle = MaaDbgControllerCreate(readPath, writePath, (MaaDbgControllerType)type, config);
-        _ = MaaControllerAddSink(handle, MaaEventCallback, nint.Zero);
+        _ = MaaControllerAddSink(handle, MaaEventCallback, 4);
         SetHandle(handle, needReleased: true);
 
         _debugReadPath = readPath;

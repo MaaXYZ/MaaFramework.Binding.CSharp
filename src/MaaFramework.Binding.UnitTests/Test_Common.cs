@@ -79,8 +79,10 @@ public static class Common
         }
     }
 
+    internal static bool CallbackInvoked { get; set; }
     internal static void OnCallback(object? sender, MaaCallbackEventArgs e)
     {
+        CallbackInvoked = true;
         Assert.IsNotNull(sender);
         Assert.IsNotNull(e);
         Assert.IsFalse(string.IsNullOrWhiteSpace(e.Message));

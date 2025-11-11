@@ -22,12 +22,21 @@ public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
     /// </param>
     /// <param name="message">The MaaStringView.</param>
     /// <param name="detailsJson">The MaaStringView.</param>
-    /// <param name="transArg">The MaaCallbackTransparentArg.</param>
+    /// <param name="transArg">The MaaCallbackTransparentArg.
+    ///     <para> - 1 from MaaTasker constructor.</para>
+    ///     <para> - 2 from MaaResource constructor.</para>
+    ///     <para> - 4 from MaaController constructor.</para>
+    ///     <para> - 8 from MaaContext on MaaTasker constructor.</para>
+    /// </param>
     /// <remarks>
     ///     Usually invoked by MaaFramework.
     /// </remarks>
     protected virtual void OnCallback(nint handle, string message, [StringSyntax("Json")] string detailsJson, nint transArg)
         => Callback?.Invoke(this, new MaaCallbackEventArgs(message, detailsJson));
+
+    /// <inheritdoc cref="OnCallback(nint, string, string, nint)"/>
+    protected void OnContextCallback(nint handle, string message, [StringSyntax("Json")] string detailsJson)
+        => Callback?.Invoke(new MaaContext(handle), new MaaCallbackEventArgs(message, detailsJson));
 
     /// <summary>
     ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.

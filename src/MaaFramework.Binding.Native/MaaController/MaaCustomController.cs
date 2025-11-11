@@ -37,7 +37,7 @@ public class MaaCustomController : MaaController
 
         _api = api;
         var handle = MaaCustomControllerCreate(_api, nint.Zero);
-        _ = MaaControllerAddSink(handle, MaaEventCallback, nint.Zero);
+        _ = MaaControllerAddSink(handle, MaaEventCallback, 4);
         SetHandle(handle, needReleased: true);
 
         if (link == LinkOption.Start)

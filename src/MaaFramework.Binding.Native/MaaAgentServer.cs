@@ -25,7 +25,10 @@ public sealed class MaaAgentServer : IMaaAgentServer
     /// <summary>
     ///     Creates a <see cref="MaaAgentServer"/> instance.
     /// </summary>
-    private MaaAgentServer() { }
+    private MaaAgentServer()
+    {
+        // DO NOT add any MaaAgentServerAPI.
+    }
     static MaaAgentServer()
     {
         NativeBindingContext.SwitchToAgentServerContext();
@@ -33,6 +36,35 @@ public sealed class MaaAgentServer : IMaaAgentServer
         Current = new();
     }
 
+    /// <inheritdoc/>
+    public event EventHandler<MaaCallbackEventArgs>? Callback
+    {
+        add
+        {
+            EnsureCallbacksRegistered();
+            PrivateCallback += value;
+        }
+        remove => PrivateCallback -= value;
+    }
+
+    private void EnsureCallbacksRegistered()
+    {
+        if (_maaEventCallbacks[0] is not null)
+            return;
+
+        _maaEventCallbacks[0] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaTasker(handle), new MaaCallbackEventArgs(message, detailsJson));
+        _maaEventCallbacks[1] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaResource(handle), new MaaCallbackEventArgs(message, detailsJson));
+        _maaEventCallbacks[2] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaController(handle), new MaaCallbackEventArgs(message, detailsJson));
+        _maaEventCallbacks[3] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaContext(handle), new MaaCallbackEventArgs(message, detailsJson));
+
+        _ = MaaAgentServerAddTaskerSink(_maaEventCallbacks[0], 1).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddResourceSink(_maaEventCallbacks[1], 2).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddControllerSink(_maaEventCallbacks[2], 4).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddContextSink(_maaEventCallbacks[3], 8).ThrowIfEquals(MaaDef.MaaInvalidId);
+    }
+
+    private event EventHandler<MaaCallbackEventArgs>? PrivateCallback;
+    private readonly MaaEventCallback[] _maaEventCallbacks = new MaaEventCallback[4];
     private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
     private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
 

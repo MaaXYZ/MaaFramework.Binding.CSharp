@@ -72,6 +72,13 @@ public class Test_IMaaTasker
         Common.DisposeData(UninitializedData.Values.Cast<IMaaDisposable>());
     }
 
+    [TestMethod]
+    public void Test_CallbackInvoked()
+    {
+        Assert.IsTrue(
+            Common.CallbackInvoked);
+    }
+
 #pragma warning disable S2699 // Tests should include assertions
     [TestMethod]
     public void CreateInstances()
