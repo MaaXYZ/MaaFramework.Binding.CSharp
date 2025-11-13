@@ -89,10 +89,10 @@ public static class Common
     }
 
     internal static NotificationHandlerRegistry NotificationHandlerRegistry { get; set; } = new();
-    internal static NotificationHandler<ResourceLoadingDetail> OnResourceLoading = (type, detail) => Assert.IsNotNull(detail);
-    internal static NotificationHandler<ControllerActionDetail> OnControllerAction = (type, detail) => Assert.IsNotNull(detail);
-    internal static NotificationHandler<TaskerTaskDetail> OnTaskerTask = (type, detail) => Assert.IsNotNull(detail);
-    internal static NotificationHandler<NodeNextListDetail> OnNodeNextList = (type, detail) => Assert.IsNotNull(detail);
-    internal static NotificationHandler<NodeRecognitionDetail> OnNodeRecognition = (type, detail) => Assert.IsNotNull(detail);
-    internal static NotificationHandler<NodeActionDetail> OnNodeAction = (type, detail) => Assert.IsNotNull(detail);
+    internal static NotificationHandler<ResourceLoadingDetail, IMaaResource> OnResourceLoading = (type, detail, resource) => Assert.IsNotNull(resource);
+    internal static NotificationHandler<ControllerActionDetail, IMaaController> OnControllerAction = (type, detail, controller) => Assert.IsNotNull(controller);
+    internal static NotificationHandler<TaskerTaskDetail, IMaaTasker> OnTaskerTask = (type, detail, tasker) => Assert.IsNotNull(tasker);
+    internal static NotificationHandler<NodeNextListDetail, IMaaContext> OnNodeNextList = (type, detail, context) => Assert.IsNotNull(context);
+    internal static NotificationHandler<NodeRecognitionDetail, IMaaContext> OnNodeRecognition = (type, detail, context) => Assert.IsNotNull(context);
+    internal static NotificationHandler<NodeActionDetail, IMaaContext> OnNodeAction = (type, detail, context) => Assert.IsNotNull(context);
 }
