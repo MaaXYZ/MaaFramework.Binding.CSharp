@@ -137,10 +137,10 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <summary>
     ///     Gets the cached image.
     /// </summary>
-    /// <param name="maaImage">An <see cref="IMaaImageBuffer"/> used to get the cached image.</param>
+    /// <param name="image">An <see cref="IMaaImageBuffer"/> used to get the cached image.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    bool GetCachedImage(IMaaImageBuffer maaImage);
+    bool GetCachedImage(IMaaImageBuffer image);
 
     /// <summary>
     ///     Gets the uuid string of the <see cref="IMaaController"/>.

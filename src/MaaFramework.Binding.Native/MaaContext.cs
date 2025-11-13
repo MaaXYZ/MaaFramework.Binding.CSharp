@@ -89,6 +89,21 @@ public class MaaContext : IMaaContext<MaaContextHandle>
             => MaaContextOverrideNext(Handle, nodeName, listBuffer));
 
     /// <inheritdoc/>
+    public bool OverrideImage(string imageName, IMaaImageBuffer image)
+        => OverrideImage(imageName, (MaaImageBuffer)image);
+
+    /// <inheritdoc cref="IMaaResource.OverrideImage"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextOverrideImage"/>.
+    /// </remarks>
+    public bool OverrideImage(string imageName, MaaImageBuffer image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+
+        return MaaContextOverrideImage(Handle, imageName, image.Handle);
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextGetNodeData"/>.
     /// </remarks>

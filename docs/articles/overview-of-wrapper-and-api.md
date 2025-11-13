@@ -143,6 +143,7 @@ IMaaDisposable Derived:
 | IMaaResource.AppendBundle() | `MaaResourcePostBundle` |
 | IMaaResource.OverridePipeline() | `MaaResourceOverridePipeline` |
 | IMaaResource.OverrideNext() | `MaaResourceOverrideNext` |
+| IMaaResource.OverrideImage() | `MaaResourceOverrideImage` |
 | IMaaResource.GetNodeData() | `MaaResourceGetNodeData` |
 | IMaaPost.GetStatus() | `MaaResourceStatus` |
 | IMaaPost.Wait() | `MaaResourceWait` |
@@ -162,6 +163,7 @@ IMaaDisposable Derived:
 | IMaaContext.RunAction() | `MaaContextRunAction` |
 | IMaaContext.OverridePipeline() | `MaaContextOverridePipeline` |
 | IMaaContext.OverrideNext() | `MaaContextOverrideNext` |
+| IMaaContext.OverrideImage() | `MaaContextOverrideImage` |
 | IMaaContext.GetNodeData() | `MaaContextGetNodeData` |
 | IMaaContext.TaskJob | `MaaContextGetTaskId` |
 | IMaaContext.Tasker | `MaaContextGetTasker` |

@@ -228,6 +228,21 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
             => MaaResourceOverrideNext(Handle, nodeName, listBuffer));
 
     /// <inheritdoc/>
+    public bool OverrideImage(string imageName, IMaaImageBuffer image)
+        => OverrideImage(imageName, (MaaImageBuffer)image);
+
+    /// <inheritdoc cref="IMaaResource.OverrideImage"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceOverrideImage"/>.
+    /// </remarks>
+    public bool OverrideImage(string imageName, MaaImageBuffer image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+
+        return MaaResourceOverrideImage(Handle, imageName, image.Handle);
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceGetNodeData"/>.
     /// </remarks>

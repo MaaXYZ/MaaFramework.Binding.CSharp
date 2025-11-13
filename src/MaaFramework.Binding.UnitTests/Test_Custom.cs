@@ -83,6 +83,11 @@ internal static class Custom
                 recognitionDetail.NodeName, cloneContext.RunTask(DiffEntry, "{}")?.QueryRecognitionDetail(cloneContext.Tasker)?.NodeName);
             Assert.IsTrue(
                 cloneContext.OverrideNext(DiffEntry, [DiffEntry]));
+#if MAA_NATIVE
+            using var image = MaaImage.Load<MaaImageBuffer>(Common.ImagePath);
+            Assert.IsTrue(
+                cloneContext.OverrideImage("NewImageName", image.Buffer));
+#endif
 
             Assert.IsFalse(
                 context.GetNodeData(DiffEntry, out data));

@@ -65,6 +65,14 @@ public interface IMaaContext : ICloneable
     bool OverrideNext(string nodeName, IEnumerable<string> nextList);
 
     /// <summary>
+    ///     Override the image which name from the value of property field e.g. "template".
+    /// </summary>
+    /// <param name="imageName">The image name.</param>
+    /// <param name="image">An <see cref="IMaaImageBuffer"/> used to set the image.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool OverrideImage(string imageName, IMaaImageBuffer image);
+
+    /// <summary>
     ///     Gets the node data from the <see cref="IMaaContext"/> by node name.
     /// </summary>
     /// <param name="nodeName">The node name.</param>

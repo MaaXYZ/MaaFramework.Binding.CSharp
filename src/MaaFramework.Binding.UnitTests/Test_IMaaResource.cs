@@ -1,4 +1,5 @@
 ﻿using MaaFramework.Binding.Abstractions;
+using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Notification;
 
 namespace MaaFramework.Binding.UnitTests;
@@ -14,6 +15,12 @@ public class Test_IMaaResource
     {
 #if MAA_NATIVE
         { MaaTypes.Native, new MaaResource() },
+#endif
+    };
+    public static Dictionary<MaaTypes, object> ImageData = new()
+    {
+#if MAA_NATIVE
+        { MaaTypes.Native, MaaImage.Load<Buffers.MaaImageBuffer>(Common.ImagePath).Buffer },
 #endif
     };
     public static Dictionary<MaaTypes, object> Data { get; private set; } = default!;
@@ -41,6 +48,7 @@ public class Test_IMaaResource
     {
         Common.DisposeData(Data.Values.Cast<IMaaDisposable>());
         Common.DisposeData(UnloadedData.Values.Cast<IMaaDisposable>());
+        Common.DisposeData(ImageData.Values.Cast<IMaaDisposable>());
     }
 
 #pragma warning disable S2699 // Tests should include assertions
@@ -76,6 +84,8 @@ public class Test_IMaaResource
     [MaaData(MaaTypes.All, nameof(Data))]
     public void Interface_OverridePipeline_OverrideNext_GetNodeData(MaaTypes type, IMaaResource maaResource)
     {
+        Assert.IsNotNull(maaResource);
+
         var DiffParam = Custom.DiffParam;
         var DiffEntry = Custom.DiffEntry;
         Assert.IsTrue(
@@ -89,6 +99,16 @@ public class Test_IMaaResource
             data);
         Assert.IsTrue(
             data.Contains($"\"next\":[\"{DiffEntry}\"]"));
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_OverrideImage(MaaTypes type, IMaaResource maaResource)
+    {
+        Assert.IsNotNull(maaResource);
+
+        Assert.IsTrue(
+            maaResource.OverrideImage("NewImageName", (IMaaImageBuffer)ImageData[type]));
     }
 
     private static void Interface_IMaaPost_Success(MaaJob job)
