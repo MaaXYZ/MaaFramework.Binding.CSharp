@@ -51,7 +51,27 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
 
     /// <inheritdoc cref="Create(string, MaaResource)"/>
     public static MaaAgentClient Create(MaaResource resource)
-        => new() { Resource = resource, };
+        => Create(string.Empty, resource);
+
+    /// <summary>
+    ///     Creates a <see cref="MaaAgentClient"/> instance, the callback (from tasker, resource and controller) will be forwarded to the agent server.
+    /// </summary>
+    /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
+    /// <param name="maa">The tasker inclued resource and controller.</param>
+    /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
+    public static MaaAgentClient Create(string identifier, MaaTasker maa)
+    {
+        var client = new MaaAgentClient(identifier) { Resource = maa.Resource, };
+        _ = MaaAgentClientRegisterTaskerSink(client.Handle, maa.Handle);
+        _ = MaaAgentClientRegisterResourceSink(client.Handle, maa.Resource.Handle);
+        _ = MaaAgentClientRegisterControllerSink(client.Handle, maa.Controller.Handle);
+        return client;
+
+    }
+
+    /// <inheritdoc cref="Create(string, MaaResource)"/>
+    public static MaaAgentClient Create(MaaTasker maa)
+        => Create(string.Empty, maa);
 
     /// <inheritdoc/>
     /// <remarks>

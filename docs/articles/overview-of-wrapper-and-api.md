@@ -317,7 +317,7 @@ IMaaDisposable Derived:
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaAgentClient.Create() | `MaaAgentClientCreateV2` |
+| MaaAgentClient.Create() | `MaaAgentClientCreateV2` <br> `MaaAgentClientRegisterTaskerSink` <br> `MaaAgentClientRegisterResourceSink` <br> `MaaAgentClientRegisterControllerSink` |
 | IDisposable.Dispose() | `MaaAgentClientDestroy` |
 | IMaaAgentClient.Id | `MaaAgentClientIdentifier` |
 | IMaaAgentClient.Resource | `MaaAgentClientBindResource` |

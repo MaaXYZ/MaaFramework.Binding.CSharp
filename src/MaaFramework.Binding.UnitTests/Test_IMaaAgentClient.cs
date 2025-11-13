@@ -145,7 +145,7 @@ public class Test_IMaaAgentClient
         using var agent = type switch
         {
 #if MAA_NATIVE
-            MaaTypes.Native => MaaAgentClient.Create("6CDC213A-085C-40C8-8665-635820D10425", maa.Resource),
+            MaaTypes.Native => MaaAgentClient.Create("6CDC213A-085C-40C8-8665-635820D10425", maa),
 #endif
             _ => throw new NotImplementedException(),
         };
@@ -155,6 +155,10 @@ public class Test_IMaaAgentClient
                 // agent.LinkStart());
                 agent.LinkStart(StartupAgentServer, cts.Token));
         }
+
+        // Test Callback Forwarding
+        _ = maa.Resource.AppendBundle(Common.BundlePath).Wait();
+
         var status = maa
             .AppendTask(Custom.NodeName, Custom.Param)
             .Wait();
