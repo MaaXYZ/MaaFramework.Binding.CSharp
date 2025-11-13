@@ -4,9 +4,9 @@
     "net7.0": {
       "Maa.AgentBinary": {
         "type": "Direct",
-        "requested": "[1.1.0, )",
-        "resolved": "1.1.0",
-        "contentHash": "SITxxo/h53R/WlhaaG6CK4qWGwmc6/fcPykCnXG3tIs2Mx4iS2Y4XfRWlCtwpMoP0lyanjl+ZvqMUQ4vEV9U7A=="
+        "requested": "[1.2.0, )",
+        "resolved": "1.2.0",
+        "contentHash": "Gdl2wIX/1TmwII9PZQzh5He6/k/zjY0MjY6tDH9ovzCnTSKYNvFVVvPWqVgjQ7hRWZYF4nX9lPqAJyGZfI47TA=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",
@@ -27,9 +27,9 @@
     "net9.0": {
       "Maa.AgentBinary": {
         "type": "Direct",
-        "requested": "[1.1.0, )",
-        "resolved": "1.1.0",
-        "contentHash": "SITxxo/h53R/WlhaaG6CK4qWGwmc6/fcPykCnXG3tIs2Mx4iS2Y4XfRWlCtwpMoP0lyanjl+ZvqMUQ4vEV9U7A=="
+        "requested": "[1.2.0, )",
+        "resolved": "1.2.0",
+        "contentHash": "Gdl2wIX/1TmwII9PZQzh5He6/k/zjY0MjY6tDH9ovzCnTSKYNvFVVvPWqVgjQ7hRWZYF4nX9lPqAJyGZfI47TA=="
       },
       "SonarAnalyzer.CSharp": {
         "type": "Direct",

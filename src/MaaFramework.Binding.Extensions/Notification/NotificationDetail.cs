@@ -45,7 +45,7 @@ public record NodeRecognitionDetail(
 /// <inheritdoc cref="MaaMsg.Node.Action.Prefix"/>
 public record NodeActionDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
-    [property: JsonPropertyName("node_id")] int NodeId,
+    [property: JsonPropertyName("action_id")] int ActionId,
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("focus")] JsonElement? Focus
 );

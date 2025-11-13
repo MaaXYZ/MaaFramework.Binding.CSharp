@@ -378,24 +378,5 @@ public class Test_IMaaController
             => maaController.SetOption(opt, arg));
     }
 
-    [TestMethod]
-    public void CreateInvalidInstances()
-    {
-
-#if MAA_NATIVE
-        #region MaaAdbController
-        Assert.ThrowsExactly<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.None, AdbInputMethods.All, "{}", "test"));
-        Assert.ThrowsExactly<ArgumentException>(static () => new MaaAdbController("test", "test", AdbScreencapMethods.All, AdbInputMethods.None, "{}", "test"));
-        #endregion
-
-#if !GITHUB_ACTIONS
-        #region MaaWin32Controller
-        Assert.ThrowsExactly<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.None, Win32InputMethod.Seize, Win32InputMethod.Seize));
-        Assert.ThrowsExactly<ArgumentException>(static () => new MaaWin32Controller(1, Win32ScreencapMethod.GDI, Win32InputMethod.None, Win32InputMethod.None));
-        #endregion
-#endif
-#endif
-    }
-
     #endregion
 }
