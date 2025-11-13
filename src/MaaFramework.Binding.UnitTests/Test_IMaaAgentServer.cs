@@ -22,8 +22,8 @@ internal static class Test_IMaaAgentServer
     public static void Test(string id, string userPath, string dllPath)
     {
         _ = MaaAgentServer.Current // test double call
-            .WithIdentifier(id).WithIdentifier(id)
-            .WithNativeLibrary(dllPath).WithNativeLibrary(dllPath)
+            .WithIdentifier(id).WithIdentifier(id) // before .StartUp()
+            .WithNativeLibrary(dllPath).WithNativeLibrary(dllPath); // before other methods include events
 
         MaaAgentServer.Current.Callback += OnCallback;
         _ = MaaAgentServer.Current

@@ -63,6 +63,7 @@ public sealed class MaaAgentServer : IMaaAgentServer
         _ = MaaAgentServerAddContextSink(_maaEventCallbacks[3], 8).ThrowIfEquals(MaaDef.MaaInvalidId);
     }
 
+    private bool _isStarted;
     private event EventHandler<MaaCallbackEventArgs>? PrivateCallback;
     private readonly MaaEventCallback[] _maaEventCallbacks = new MaaEventCallback[4];
     private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
@@ -84,6 +85,8 @@ public sealed class MaaAgentServer : IMaaAgentServer
     /// <inheritdoc cref="IMaaAgentServer.WithIdentifier"/>
     public MaaAgentServer WithIdentifier(string identifier)
     {
+        if (_isStarted)
+            throw new InvalidOperationException($"""MaaAgentServer has started up and cannot modify identifier to "${identifier}".""");
         CurrentId = identifier;
         return this;
     }
@@ -133,7 +136,7 @@ public sealed class MaaAgentServer : IMaaAgentServer
     {
         if (string.IsNullOrEmpty(CurrentId))
             throw new InvalidOperationException("Identifier is not set. Use 'WithIdentifier' method to set it.");
-        _ = MaaAgentServerStartUp(CurrentId).ThrowIfFalse();
+        _isStarted = MaaAgentServerStartUp(CurrentId).ThrowIfFalse();
         return this;
     }
 
@@ -144,6 +147,7 @@ public sealed class MaaAgentServer : IMaaAgentServer
     public MaaAgentServer ShutDown()
     {
         MaaAgentServerShutDown();
+        _isStarted = false;
         return this;
     }
 
@@ -186,6 +190,10 @@ public static class MaaAgentServerExtensions
     /// </summary>
     /// <param name="server">The server.</param>
     /// <param name="paths">The directory paths to search for native libraries.</param>
+    /// <remarks>
+    ///     Uses this method before other methods inclue events; otherwise, throws an <see cref="InvalidOperationException"/>.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">NativeLibrary is already loaded.</exception>
     public static MaaAgentServer WithNativeLibrary(this MaaAgentServer server, params string[] paths)
     {
         NativeBindingContext.AppendNativeLibrarySearchPaths(paths);

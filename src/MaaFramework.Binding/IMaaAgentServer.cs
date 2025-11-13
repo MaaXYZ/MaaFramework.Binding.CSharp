@@ -12,6 +12,10 @@ public interface IMaaAgentServer : IMaaCommon
     ///     Configures the unique identifier used to communicate with the agent client.
     /// </summary>
     /// <param name="identifier">The unique identifier used to communicate with the agent client.</param>
+    /// <remarks>
+    ///     Uses this method before <see cref="StartUp"/>; otherwise, throws an <see cref="InvalidOperationException"/>.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">MaaAgentServer has started up.</exception>
     IMaaAgentServer WithIdentifier(string identifier);
 
     /// <summary>
