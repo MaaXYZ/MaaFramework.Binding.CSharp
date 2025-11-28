@@ -247,6 +247,8 @@ internal static class Custom
             => c.KeyDown(keycode).Wait().IsSucceeded();
         public bool KeyUp(int keycode)
             => c.KeyUp(keycode).Wait().IsSucceeded();
+        public bool Scroll(int dx, int dy)
+            => c.Scroll(dx, dy).Wait().IsSucceeded();
     }
 
     internal sealed class TestInvalidResource : IMaaCustomResource
