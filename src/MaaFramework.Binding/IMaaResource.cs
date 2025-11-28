@@ -118,4 +118,14 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaDisp
     /// </summary>
     /// <returns>A <see cref="string"/> if the node list was got successfully; otherwise, <see langword="null"/>.</returns>
     IList<string> NodeList { get; }
+
+    /// <summary>
+    ///     Gets the list of registered custom recognitions.
+    /// </summary>
+    IList<string> CustomRecognitionList { get; }
+
+    /// <summary>
+    ///     Gets the list of registered custom actions.
+    /// </summary>
+    IList<string> CustomActionList { get; }
 }

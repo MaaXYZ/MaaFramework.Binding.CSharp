@@ -50,4 +50,20 @@ public static partial class MaaContext
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaContextHandle MaaContextClone(MaaContextHandle context);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaContextSetAnchor(MaaContextHandle context, string anchorName, string nodeName);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaContextGetAnchor(MaaContextHandle context, string anchorName, MaaStringBufferHandle buffer);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaContextGetHitCount(MaaContextHandle context, string nodeName, out MaaSize count);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaContextClearHitCount(MaaContextHandle context, string nodeName);
 }

@@ -356,4 +356,30 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
             _agentServerProcess = null;
         }
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientGetCustomRecognitionList"/>.
+    /// </remarks>
+    public IList<string> CustomRecognitionList
+    {
+        get
+        {
+            _ = MaaStringListBuffer.TryGetList(out var list, h => MaaAgentClientGetCustomRecognitionList(Handle, h)).ThrowIfFalse();
+            return list!;
+        }
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientGetCustomActionList"/>.
+    /// </remarks>
+    public IList<string> CustomActionList
+    {
+        get
+        {
+            _ = MaaStringListBuffer.TryGetList(out var list, h => MaaAgentClientGetCustomActionList(Handle, h)).ThrowIfFalse();
+            return list!;
+        }
+    }
 }
