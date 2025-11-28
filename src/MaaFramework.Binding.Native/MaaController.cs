@@ -184,6 +184,13 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostScroll"/>.
+    /// </remarks>
+    public MaaJob Scroll(int dx, int dy)
+        => CreateJob(MaaControllerPostScroll(Handle, dx, dy));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaControllerStatus"/>.
     /// </remarks>
     [Obsolete("Deprecated from v4.5.0.")]

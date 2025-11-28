@@ -33,7 +33,8 @@ public class MaaGlobal : IMaaGlobal
             (int vvvv, GlobalOption.StdoutLevel) => vvvv.ToMaaOptionValue(),
             (string v, GlobalOption.LogDir) => v.ToMaaOptionValue(),
             (bool vvv, GlobalOption.SaveDraw
-                    or GlobalOption.DebugMode) => vvv.ToMaaOptionValue(),
+                    or GlobalOption.DebugMode
+                    or GlobalOption.SaveOnError) => vvv.ToMaaOptionValue(),
 
             (LoggingLevel v, GlobalOption.StdoutLevel) => ((int)v).ToMaaOptionValue(),
 

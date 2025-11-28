@@ -129,6 +129,15 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob Screencap();
 
     /// <summary>
+    ///     Posts a scroll action.
+    /// </summary>
+    /// <param name="dx">The horizontal scroll delta. Positive values scroll right, negative values scroll left.</param>
+    /// <param name="dy">The vertical scroll delta. Positive values scroll down, negative values scroll up.</param>
+    /// <returns>A scroll <see cref="MaaJob"/>.</returns>
+    /// <remarks>Not all controllers support scroll. If not supported, the action will fail.</remarks>
+    MaaJob Scroll(int dx, int dy);
+
+    /// <summary>
     ///     Gets whether the <see cref="IMaaController"/> is connected to the device specified by the constructor.
     /// </summary>
     /// <returns><see langword="true"/> if the <see cref="IMaaController"/> is connected to the device; otherwise, <see langword="false"/>.</returns>

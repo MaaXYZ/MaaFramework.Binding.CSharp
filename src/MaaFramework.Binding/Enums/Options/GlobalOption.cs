@@ -44,5 +44,12 @@ public enum GlobalOption : System.Int32
     ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     DebugMode = 6,
+    /// <summary>
+    ///     Whether to save screenshot on error
+    /// </summary>
+    /// <remarks>
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
+    /// </remarks>
+    SaveOnError = 7,
 }
 
