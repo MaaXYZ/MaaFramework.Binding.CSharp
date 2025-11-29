@@ -18,7 +18,8 @@
     <PropertyGroup>
         <GenerateProgramFile>false</GenerateProgramFile>
 
-        <NoWarn>$(NoWarn);S1121,S1656,S1199,IDE0022,IDE0060,IDE0072</NoWarn>
+        <AnalysisMode>Default</AnalysisMode>
+        <NoWarn>$(NoWarn),S1121,S1656,S1199,CS1591</NoWarn>
     </PropertyGroup>
 
     <!-- Maa Test Constants -->

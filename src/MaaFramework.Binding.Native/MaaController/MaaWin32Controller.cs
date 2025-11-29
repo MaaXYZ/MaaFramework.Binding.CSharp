@@ -31,6 +31,7 @@ public class MaaWin32Controller : MaaController
     /// <exception cref="MaaJobStatusException"/>
     public MaaWin32Controller(DesktopWindowInfo info, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
+        ArgumentNullException.ThrowIfNull(info);
         if (info.Handle == nint.Zero) throw new ArgumentException("Value cannot be zero.", "info.Handle");
 
         var handle = MaaWin32ControllerCreate(info.Handle, (MaaWin32ScreencapMethod)info.ScreencapMethod, (MaaWin32InputMethod)info.MouseMethod, (MaaWin32InputMethod)info.KeyboardMethod);

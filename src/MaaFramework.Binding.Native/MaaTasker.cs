@@ -143,8 +143,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
 #pragma warning restore
     }
 
+#pragma warning disable CA2213 // 应释放可释放的字段
     private MaaResource _resource = null!;
     private MaaController _controller = null!;
+#pragma warning restore CA2213 // 应释放可释放的字段
 
     IMaaResource IMaaTasker.Resource
     {

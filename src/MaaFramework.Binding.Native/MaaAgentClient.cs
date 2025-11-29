@@ -61,6 +61,8 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
     public static MaaAgentClient Create(string identifier, MaaTasker maa)
     {
+        ArgumentNullException.ThrowIfNull(maa);
+
         var client = new MaaAgentClient(identifier) { Resource = maa.Resource, };
         _ = MaaAgentClientRegisterTaskerSink(client.Handle, maa.Handle);
         _ = MaaAgentClientRegisterResourceSink(client.Handle, maa.Resource.Handle);
@@ -179,6 +181,8 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// </remarks>
     public bool LinkStart(IMaaAgentClient.AgentServerStartupMethod method, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(method);
+
         if (_agentServerProcess is null or { HasExited: true })
         {
             ArgumentException.ThrowIfNullOrEmpty(Id);
@@ -213,7 +217,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
             cts.Token.ThrowIfCancellationRequested();
 
             return completedTask != serverExitTask
-                && linkStartTask.Result;
+                && await linkStartTask;
         }
         finally
         {

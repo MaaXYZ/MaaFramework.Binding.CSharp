@@ -1,6 +1,7 @@
 ﻿namespace MaaFramework.Binding;
 
 #pragma warning disable S2344 // Enumeration type names should not have "Flags" or "Enum" suffixes
+#pragma warning disable CA1711 // 标识符应采用正确的后缀
 
 /// <summary>
 ///     Represents information about binding interoperable API.

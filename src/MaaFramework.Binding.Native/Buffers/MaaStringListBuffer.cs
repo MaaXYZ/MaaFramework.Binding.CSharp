@@ -153,7 +153,7 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
             for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)
             {
                 if (MaaStringBuffer.TryGetValue(MaaStringListBufferAt(Handle, tmpIndex), out var stringInList)
-                    && stringInList.Equals(stringInItem))
+                    && stringInList.Equals(stringInItem, StringComparison.Ordinal))
                 {
                     index = tmpIndex;
                     return true;

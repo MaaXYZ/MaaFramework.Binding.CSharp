@@ -35,7 +35,7 @@ public abstract class MaaListBuffer<THandle, T>(THandle invalidHandleValue)
     /// which may cause the underlying std::vector storage to change,
     /// it is necessary to dispose T and increment _version by 1.
     /// </remarks>
-    protected internal int _version;
+    internal int _version;
     /// <inheritdoc/>
     public abstract bool TryAdd(T item);
     /// <inheritdoc/>

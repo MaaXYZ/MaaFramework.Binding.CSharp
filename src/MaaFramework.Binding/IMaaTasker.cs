@@ -45,10 +45,12 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     /// </summary>
     IMaaToolkit Toolkit { get; set; }
 
+#pragma warning disable CA1716 // 标识符不应与关键字匹配
     /// <summary>
     ///     Gets or sets a global.
     /// </summary>
     IMaaGlobal Global { get; set; }
+#pragma warning restore CA1716 // 标识符不应与关键字匹配
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaTasker"/> is fully initialized.
@@ -76,6 +78,8 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     /// <returns><see langword="true"/> if <see cref="IMaaTasker"/> is stopping; otherwise, <see langword="false"/>.</returns>
     bool IsStopping { get; }
 
+#pragma warning disable S1133 // Deprecated code should be removed
+#pragma warning disable CA1716 // 标识符不应与关键字匹配
     /// <summary>
     ///     Stops all appended tasks, the <see cref="IMaaResource"/> and the <see cref="IMaaController"/>. 
     /// </summary>
@@ -83,8 +87,10 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     MaaTaskJob Stop();
 
     /// <inheritdoc cref="Stop"/>
-    [Obsolete("Use Stop() instead.")]
+    [Obsolete("Use Stop() instead.", error: false)]
     MaaTaskJob Abort();
+#pragma warning restore CA1716 // 标识符不应与关键字匹配
+#pragma warning restore S1133 // Deprecated code should be removed
 
     /// <summary>
     ///     Clear the runtime cache.

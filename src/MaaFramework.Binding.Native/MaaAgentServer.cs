@@ -172,6 +172,8 @@ public sealed class MaaAgentServer : IMaaAgentServer
     }
 }
 
+#pragma warning disable CA1707 // 标识符不应包含下划线
+
 /// <summary>
 ///     A static class providing extension methods for <see cref="MaaAgentServer"/>.
 /// </summary>

@@ -3,6 +3,7 @@
 namespace MaaFramework.Binding;
 
 #pragma warning disable S4136
+#pragma warning disable CA1707 // 标识符不应包含下划线
 
 /// <summary>
 ///     A static class providing extension methods for setting maa option.

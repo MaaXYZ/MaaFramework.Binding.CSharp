@@ -31,6 +31,7 @@ public class MaaAdbController : MaaController
     /// <exception cref="MaaJobStatusException"/>
     public MaaAdbController(AdbDeviceInfo info, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
+        ArgumentNullException.ThrowIfNull(info);
         ArgumentException.ThrowIfNullOrEmpty(info.AdbPath);
         ArgumentException.ThrowIfNullOrEmpty(info.AdbSerial);
         ArgumentException.ThrowIfNullOrEmpty(info.Config);
