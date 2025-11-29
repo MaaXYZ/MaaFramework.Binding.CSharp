@@ -49,7 +49,7 @@ internal static partial class NativeLibrary
     private static void ResolveLibraryLoading(string libraryName, DllImportSearchPath? searchPath, out nint libraryHandle)
     {
         libraryName = GetFullLibraryName(libraryName);
-        var dllPath = GetLibraryPaths(libraryName).FirstOrDefault(File.Exists, string.Empty);
+        var dllPath = GetLibraryPaths(libraryName).FirstOrDefault(File.Exists);
         var dllDir = string.Empty;
         var resolver = ApiInfoFlags.UseDefaultResolver;
 
@@ -60,9 +60,7 @@ internal static partial class NativeLibrary
         }
         else if (TryLoad(libraryName, s_assembly, searchPath, out libraryHandle))
         {
-            dllDir = IsOSX
-                ? DyldHelper.PathFromHandle(libraryHandle)
-                : GetLoadedLibraryPath(libraryHandle);
+            dllDir = GetLoadedLibraryDirectory(libraryHandle);
         }
         else
         {
@@ -189,15 +187,27 @@ internal static partial class NativeLibrary
         }
     }
 
-    private static string GetLoadedLibraryPath(nint handle)
+    private static string GetLoadedLibraryDirectory(nint libraryHandle)
     {
-        var modules = Process.GetCurrentProcess().Modules;
-        for (var i = modules.Count - 1; i >= 0; i--)
+        var dllPath = string.Empty;
+        if (IsOSX)
         {
-            var module = modules[i];
-            if (handle == module.BaseAddress)
-                return module.FileName;
+            dllPath = DyldHelper.PathFromHandle(libraryHandle);
         }
-        return string.Empty;
+        else
+        {
+            var modules = Process.GetCurrentProcess().Modules;
+            for (var i = modules.Count - 1; i >= 0; i--)
+            {
+                var module = modules[i];
+                if (libraryHandle == module.BaseAddress)
+                {
+                    dllPath = module.FileName;
+                    break;
+                }
+            }
+        }
+
+        return Path.GetDirectoryName(dllPath)!;
     }
 }
