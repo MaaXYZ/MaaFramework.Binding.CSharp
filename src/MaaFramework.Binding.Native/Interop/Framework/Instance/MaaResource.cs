@@ -100,4 +100,12 @@ public static partial class MaaResource
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaResourceGetNodeList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceGetCustomRecognitionList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceGetCustomActionList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
 }

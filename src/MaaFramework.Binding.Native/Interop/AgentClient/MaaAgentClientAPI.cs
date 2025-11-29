@@ -63,6 +63,14 @@ public static partial class MaaAgentClient
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaAgentClientSetTimeout(MaaAgentClientHandle client, long milliseconds);
 
+    [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaAgentClientGetCustomRecognitionList(MaaAgentClientHandle client, MaaStringListBufferHandle buffer);
+
+    [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaAgentClientGetCustomActionList(MaaAgentClientHandle client, MaaStringListBufferHandle buffer);
+
     [Obsolete]
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaAgentClientHandle MaaAgentClientCreate();

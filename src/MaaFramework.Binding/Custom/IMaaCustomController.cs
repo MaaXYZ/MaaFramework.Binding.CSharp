@@ -37,4 +37,5 @@ public interface IMaaCustomController : IMaaCustomResource, IDisposable
     bool InputText(string text);
     bool KeyDown(int keycode);
     bool KeyUp(int keycode);
+    bool Scroll(int dx, int dy);
 }

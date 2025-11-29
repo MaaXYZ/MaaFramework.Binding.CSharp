@@ -26,11 +26,44 @@ public record TaskerTaskDetail(
     [property: JsonPropertyName("hash")] string Hash
 );
 
+/// <inheritdoc cref="MaaMsg.Node.PipelineNode.Prefix"/>
+public record NodePipelineNodeDetail(
+    [property: JsonPropertyName("task_id")] int TaskId,
+    [property: JsonPropertyName("node_id")] int NodeId,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("focus")] JsonElement? Focus
+);
+
+/// <inheritdoc cref="MaaMsg.Node.RecognitionNode.Prefix"/>
+public record NodeRecognitionNodeDetail(
+    [property: JsonPropertyName("task_id")] int TaskId,
+    [property: JsonPropertyName("node_id")] int NodeId,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("focus")] JsonElement? Focus
+);
+
+/// <inheritdoc cref="MaaMsg.Node.ActionNode.Prefix"/>
+public record NodeActionNodeDetail(
+    [property: JsonPropertyName("task_id")] int TaskId,
+    [property: JsonPropertyName("node_id")] int NodeId,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("focus")] JsonElement? Focus
+);
+
+/// <summary>
+///     Represents an item in the next list.
+/// </summary>
+public record NodeAttr(
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("jump_back")] bool JumpBack,
+    [property: JsonPropertyName("anchor")] bool Anchor
+);
+
 /// <inheritdoc cref="MaaMsg.Node.NextList.Prefix"/>
 public record NodeNextListDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("list")] IReadOnlyList<string> NextList,
+    [property: JsonPropertyName("list")] IReadOnlyList<NodeAttr> NextList,
     [property: JsonPropertyName("focus")] JsonElement? Focus
 );
 

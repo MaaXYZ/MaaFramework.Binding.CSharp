@@ -97,4 +97,35 @@ public interface IMaaContext : ICloneable
     /// </summary>
     /// <returns>The <see cref="IMaaContext"/></returns>
     new IMaaContext Clone();
+
+    /// <summary>
+    ///     Sets an anchor to a node.
+    /// </summary>
+    /// <param name="anchorName">The anchor name.</param>
+    /// <param name="nodeName">The node name.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool SetAnchor(string anchorName, string nodeName);
+
+    /// <summary>
+    ///     Gets the node name from an anchor.
+    /// </summary>
+    /// <param name="anchorName">The anchor name.</param>
+    /// <param name="nodeName">The node name.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool GetAnchor(string anchorName, [MaybeNullWhen(false)] out string nodeName);
+
+    /// <summary>
+    ///     Gets the hit count of a node.
+    /// </summary>
+    /// <param name="nodeName">The node name.</param>
+    /// <param name="count">The hit count.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool GetHitCount(string nodeName, out ulong count);
+
+    /// <summary>
+    ///     Clears the hit count of a node.
+    /// </summary>
+    /// <param name="nodeName">The node name.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool ClearHitCount(string nodeName);
 }

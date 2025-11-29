@@ -141,4 +141,14 @@ public interface IMaaAgentClient : IMaaDisposable
     /// </summary>
     /// <exception cref="InvalidOperationException">The process is unavailable or not managed by <see cref="IMaaAgentClient"/>.</exception>
     Process AgentServerProcess { get; }
+
+    /// <summary>
+    ///     Gets the list of custom recognitions registered by the agent server.
+    /// </summary>
+    IList<string> CustomRecognitionList { get; }
+
+    /// <summary>
+    ///     Gets the list of custom actions registered by the agent server.
+    /// </summary>
+    IList<string> CustomActionList { get; }
 }

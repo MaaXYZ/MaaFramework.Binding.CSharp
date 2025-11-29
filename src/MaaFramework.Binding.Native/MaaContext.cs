@@ -136,4 +136,33 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     /// </remarks>
     public MaaContext Clone()
         => new(MaaContextClone(Handle));
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextSetAnchor"/>.
+    /// </remarks>
+    public bool SetAnchor(string anchorName, string nodeName)
+        => MaaContextSetAnchor(Handle, anchorName, nodeName);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextGetAnchor"/>.
+    /// </remarks>
+    public bool GetAnchor(string anchorName, [MaybeNullWhen(false)] out string nodeName)
+        => MaaStringBuffer.TryGetValue(out nodeName, buffer
+            => MaaContextGetAnchor(Handle, anchorName, buffer));
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextGetHitCount"/>.
+    /// </remarks>
+    public bool GetHitCount(string nodeName, out ulong count)
+        => MaaContextGetHitCount(Handle, nodeName, out count);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextClearHitCount"/>.
+    /// </remarks>
+    public bool ClearHitCount(string nodeName)
+        => MaaContextClearHitCount(Handle, nodeName);
 }

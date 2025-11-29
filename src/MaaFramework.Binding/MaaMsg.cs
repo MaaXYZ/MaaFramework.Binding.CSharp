@@ -136,13 +136,118 @@ public static class MaaMsg
     }
     public static class Node
     {
+        public static class PipelineNode
+        {
+            /// <summary>
+            ///     Message for the pipeline node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Starting = "Node.PipelineNode.Starting";
+
+            /// <summary>
+            ///     Message for the pipeline node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Prefix = "Node.PipelineNode";
+
+            /// <summary>
+            ///     Message for the pipeline node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Succeeded = "Node.PipelineNode.Succeeded";
+
+            /// <summary>
+            ///     Message for the pipeline node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Failed = "Node.PipelineNode.Failed";
+
+        }
+        public static class RecognitionNode
+        {
+            /// <summary>
+            ///     Message for the recognition node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Starting = "Node.RecognitionNode.Starting";
+
+            /// <summary>
+            ///     Message for the recognition node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Prefix = "Node.RecognitionNode";
+
+            /// <summary>
+            ///     Message for the recognition node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Succeeded = "Node.RecognitionNode.Succeeded";
+
+            /// <summary>
+            ///     Message for the recognition node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Failed = "Node.RecognitionNode.Failed";
+
+        }
+        public static class ActionNode
+        {
+            /// <summary>
+            ///     Message for the action node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Starting = "Node.ActionNode.Starting";
+
+            /// <summary>
+            ///     Message for the action node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Prefix = "Node.ActionNode";
+
+            /// <summary>
+            ///     Message for the action node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Succeeded = "Node.ActionNode.Succeeded";
+
+            /// <summary>
+            ///     Message for the action node.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
+            /// </remarks>
+            public const string Failed = "Node.ActionNode.Failed";
+
+        }
         public static class NextList
         {
             /// <summary>
             ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, name: string, list: string[], focus: any, }</para>
+            ///     <para>details_json: { task_id: number, name: string, list: [{ name: string, jump_back: boolean, anchor: boolean }, ...], focus: any, }</para>
             /// </remarks>
             public const string Starting = "Node.NextList.Starting";
 
@@ -150,7 +255,7 @@ public static class MaaMsg
             ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, name: string, list: string[], focus: any, }</para>
+            ///     <para>details_json: { task_id: number, name: string, list: [{ name: string, jump_back: boolean, anchor: boolean }, ...], focus: any, }</para>
             /// </remarks>
             public const string Prefix = "Node.NextList";
 
@@ -158,7 +263,7 @@ public static class MaaMsg
             ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, name: string, list: string[], focus: any, }</para>
+            ///     <para>details_json: { task_id: number, name: string, list: [{ name: string, jump_back: boolean, anchor: boolean }, ...], focus: any, }</para>
             /// </remarks>
             public const string Succeeded = "Node.NextList.Succeeded";
 
@@ -166,7 +271,7 @@ public static class MaaMsg
             ///     Message for the next list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, name: string, list: string[], focus: any, }</para>
+            ///     <para>details_json: { task_id: number, name: string, list: [{ name: string, jump_back: boolean, anchor: boolean }, ...], focus: any, }</para>
             /// </remarks>
             public const string Failed = "Node.NextList.Failed";
 

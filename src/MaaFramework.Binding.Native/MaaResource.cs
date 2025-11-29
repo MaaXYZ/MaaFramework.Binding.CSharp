@@ -344,4 +344,30 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
             return list!;
         }
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceGetCustomRecognitionList"/>.
+    /// </remarks>
+    public IList<string> CustomRecognitionList
+    {
+        get
+        {
+            _ = MaaStringListBuffer.TryGetList(out var list, h => MaaResourceGetCustomRecognitionList(Handle, h)).ThrowIfFalse();
+            return list!;
+        }
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceGetCustomActionList"/>.
+    /// </remarks>
+    public IList<string> CustomActionList
+    {
+        get
+        {
+            _ = MaaStringListBuffer.TryGetList(out var list, h => MaaResourceGetCustomActionList(Handle, h)).ThrowIfFalse();
+            return list!;
+        }
+    }
 }
