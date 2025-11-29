@@ -151,43 +151,43 @@ public sealed class NotificationHandlerRegistry
         public PipelineNodeRegistry PipelineNode { get; } = new();
         public sealed class PipelineNodeRegistry
         {
-            public event EventHandler<NodePipelineNodeDetail>? Starting;
+            public event EventHandler<PipelineNodeDetail>? Starting;
             internal void OnStarting(object? sender, string details) => Starting?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodePipelineNodeDetail) ?? throw new InvalidCastException());
-            public event EventHandler<NodePipelineNodeDetail>? Succeeded;
+                    NotificationDetailContext.Default.PipelineNodeDetail) ?? throw new InvalidCastException());
+            public event EventHandler<PipelineNodeDetail>? Succeeded;
             internal void OnSucceeded(object? sender, string details) => Succeeded?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodePipelineNodeDetail) ?? throw new InvalidCastException());
-            public event EventHandler<NodePipelineNodeDetail>? Failed;
+                    NotificationDetailContext.Default.PipelineNodeDetail) ?? throw new InvalidCastException());
+            public event EventHandler<PipelineNodeDetail>? Failed;
             internal void OnFailed(object? sender, string details) => Failed?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodePipelineNodeDetail) ?? throw new InvalidCastException());
+                    NotificationDetailContext.Default.PipelineNodeDetail) ?? throw new InvalidCastException());
         }
 
         public RecognitionNodeRegistry RecognitionNode { get; } = new();
         public sealed class RecognitionNodeRegistry
         {
-            public event EventHandler<NodeRecognitionNodeDetail>? Starting;
+            public event EventHandler<RecognitionNodeDetail>? Starting;
             internal void OnStarting(object? sender, string details) => Starting?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodeRecognitionNodeDetail) ?? throw new InvalidCastException());
-            public event EventHandler<NodeRecognitionNodeDetail>? Succeeded;
+                    NotificationDetailContext.Default.RecognitionNodeDetail) ?? throw new InvalidCastException());
+            public event EventHandler<RecognitionNodeDetail>? Succeeded;
             internal void OnSucceeded(object? sender, string details) => Succeeded?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodeRecognitionNodeDetail) ?? throw new InvalidCastException());
-            public event EventHandler<NodeRecognitionNodeDetail>? Failed;
+                    NotificationDetailContext.Default.RecognitionNodeDetail) ?? throw new InvalidCastException());
+            public event EventHandler<RecognitionNodeDetail>? Failed;
             internal void OnFailed(object? sender, string details) => Failed?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodeRecognitionNodeDetail) ?? throw new InvalidCastException());
+                    NotificationDetailContext.Default.RecognitionNodeDetail) ?? throw new InvalidCastException());
         }
 
         public ActionNodeRegistry ActionNode { get; } = new();
         public sealed class ActionNodeRegistry
         {
-            public event EventHandler<NodeActionNodeDetail>? Starting;
+            public event EventHandler<ActionNodeDetail>? Starting;
             internal void OnStarting(object? sender, string details) => Starting?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodeActionNodeDetail) ?? throw new InvalidCastException());
-            public event EventHandler<NodeActionNodeDetail>? Succeeded;
+                    NotificationDetailContext.Default.ActionNodeDetail) ?? throw new InvalidCastException());
+            public event EventHandler<ActionNodeDetail>? Succeeded;
             internal void OnSucceeded(object? sender, string details) => Succeeded?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodeActionNodeDetail) ?? throw new InvalidCastException());
-            public event EventHandler<NodeActionNodeDetail>? Failed;
+                    NotificationDetailContext.Default.ActionNodeDetail) ?? throw new InvalidCastException());
+            public event EventHandler<ActionNodeDetail>? Failed;
             internal void OnFailed(object? sender, string details) => Failed?.Invoke(sender, JsonSerializer.Deserialize(details,
-                    NotificationDetailContext.Default.NodeActionNodeDetail) ?? throw new InvalidCastException());
+                    NotificationDetailContext.Default.ActionNodeDetail) ?? throw new InvalidCastException());
         }
 
         public NextListRegistry NextList { get; } = new();

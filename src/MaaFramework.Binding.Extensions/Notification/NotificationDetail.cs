@@ -27,7 +27,7 @@ public record TaskerTaskDetail(
 );
 
 /// <inheritdoc cref="MaaMsg.Node.PipelineNode.Prefix"/>
-public record NodePipelineNodeDetail(
+public record PipelineNodeDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("node_id")] int NodeId,
     [property: JsonPropertyName("name")] string Name,
@@ -35,7 +35,7 @@ public record NodePipelineNodeDetail(
 );
 
 /// <inheritdoc cref="MaaMsg.Node.RecognitionNode.Prefix"/>
-public record NodeRecognitionNodeDetail(
+public record RecognitionNodeDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("node_id")] int NodeId,
     [property: JsonPropertyName("name")] string Name,
@@ -43,7 +43,7 @@ public record NodeRecognitionNodeDetail(
 );
 
 /// <inheritdoc cref="MaaMsg.Node.ActionNode.Prefix"/>
-public record NodeActionNodeDetail(
+public record ActionNodeDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("node_id")] int NodeId,
     [property: JsonPropertyName("name")] string Name,
@@ -51,7 +51,7 @@ public record NodeActionNodeDetail(
 );
 
 /// <summary>
-///     Represents an item in the next list.
+///     The node name with attributes.
 /// </summary>
 public record NodeAttr(
     [property: JsonPropertyName("name")] string Name,

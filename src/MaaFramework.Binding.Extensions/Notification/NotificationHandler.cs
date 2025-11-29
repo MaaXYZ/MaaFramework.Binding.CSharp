@@ -113,15 +113,15 @@ public static class NotificationHandlerExtensions
         => notify.ToCallback(MaaMsg.Node.Action.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodePipelineNodeDetail, IMaaContext> notify)
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<PipelineNodeDetail, IMaaContext> notify)
         => notify.ToCallback(MaaMsg.Node.PipelineNode.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodeRecognitionNodeDetail, IMaaContext> notify)
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<RecognitionNodeDetail, IMaaContext> notify)
         => notify.ToCallback(MaaMsg.Node.RecognitionNode.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<NodeActionNodeDetail, IMaaContext> notify)
+    public static EventHandler<MaaCallbackEventArgs> ToCallback(this NotificationHandler<ActionNodeDetail, IMaaContext> notify)
         => notify.ToCallback(MaaMsg.Node.ActionNode.Prefix);
 }
 
