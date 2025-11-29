@@ -53,7 +53,7 @@ public record NodeActionNodeDetail(
 /// <summary>
 ///     Represents an item in the next list.
 /// </summary>
-public record NextListItem(
+public record NodeAttr(
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("jump_back")] bool JumpBack,
     [property: JsonPropertyName("anchor")] bool Anchor
@@ -63,7 +63,7 @@ public record NextListItem(
 public record NodeNextListDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("list")] IReadOnlyList<NextListItem> NextList,
+    [property: JsonPropertyName("list")] IReadOnlyList<NodeAttr> NextList,
     [property: JsonPropertyName("focus")] JsonElement? Focus
 );
 

@@ -9,7 +9,7 @@ namespace MaaFramework.Binding.Notification;
 [JsonSerializable(typeof(NodePipelineNodeDetail))]
 [JsonSerializable(typeof(NodeRecognitionNodeDetail))]
 [JsonSerializable(typeof(NodeActionNodeDetail))]
-[JsonSerializable(typeof(NextListItem))]
+[JsonSerializable(typeof(NodeAttr))]
 [JsonSerializable(typeof(NodeNextListDetail))]
 [JsonSerializable(typeof(NodeRecognitionDetail))]
 [JsonSerializable(typeof(NodeActionDetail))]
