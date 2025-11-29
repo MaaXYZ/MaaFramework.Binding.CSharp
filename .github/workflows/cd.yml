@@ -47,7 +47,7 @@ jobs:
         run: dotnet script ./tools/Builder/Build.csx
 
       - name: Preview CHANGELOG
-        if: steps.build.outputs.is_preview == 'True'
+        if: false
         run: |
           $latest = gh release view --json tagName --jq .tagName
           python3 tools/ChangelogGenerator/changelog_generator.py --tag "${{ steps.build.outputs.tag }}" --latest "$latest"
