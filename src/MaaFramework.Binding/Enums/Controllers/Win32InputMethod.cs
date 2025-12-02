@@ -23,5 +23,7 @@ public enum Win32InputMethod : System.UInt64
     PostMessage = (1 << 2),
     LegacyEvent = (1 << 3),
     PostThreadMessage = (1 << 4),
+    SendMessageWithCursorPos = (1 << 5),
+    PostMessageWithCursorPos = (1 << 6),
 }
 
