@@ -63,15 +63,16 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     {
         ArgumentNullException.ThrowIfNull(maa);
 
-        var client = new MaaAgentClient(identifier) { Resource = maa.Resource, };
-        _ = MaaAgentClientRegisterTaskerSink(client.Handle, maa.Handle);
-        _ = MaaAgentClientRegisterResourceSink(client.Handle, maa.Resource.Handle);
-        _ = MaaAgentClientRegisterControllerSink(client.Handle, maa.Controller.Handle);
+        var client = new MaaAgentClient(identifier)
+        {
+            Tasker = maa,
+            Controller = maa.Controller,
+            Resource = maa.Resource,
+        };
         return client;
-
     }
 
-    /// <inheritdoc cref="Create(string, MaaResource)"/>
+    /// <inheritdoc cref="Create(string, MaaTasker)"/>
     public static MaaAgentClient Create(MaaTasker maa)
         => Create(string.Empty, maa);
 
@@ -88,28 +89,18 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         }
     }
 
-    private void OnResourceReleasing(object? sender, EventArgs e)
-        => Dispose();
-
-    /// <inheritdoc/>
-    public IMaaAgentClient AttachDisposeToResource()
-    {
-        Resource.Releasing += OnResourceReleasing;
-        return this;
-    }
-
-    /// <inheritdoc/>
-    public IMaaAgentClient DetachDisposeToResource()
-    {
-        Resource.Releasing -= OnResourceReleasing;
-        return this;
-    }
+#pragma warning disable S1121 // Assignments should not be made from within sub-expressions
 
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        KillAndDisposeAgentServerProcess(disposing); // disposing 无关
+
+        // disposing 无关
+        Tasker?.Releasing -= OnReleasing;
+        Controller?.Releasing -= OnReleasing;
+        Resource.Releasing -= OnReleasing;
+        KillAndDisposeAgentServerProcess(disposing);
     }
 
     /// <inheritdoc/>
@@ -125,6 +116,55 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         finally
         {
             MaaAgentClientDestroy(handle);
+        }
+    }
+
+    private void OnReleasing(object? sender, EventArgs e)
+        => Dispose();
+
+    /// <inheritdoc/>
+    IMaaTasker? IMaaAgentClient.Tasker
+    {
+        get => Tasker;
+        set => Tasker = (MaaTasker?)value;
+    }
+
+    /// <inheritdoc/>
+    public MaaTasker? Tasker
+    {
+        get => field;
+        set
+        {
+            field?.Releasing -= OnReleasing;
+            if (value is not null)
+            {
+                _ = MaaAgentClientRegisterTaskerSink(Handle, value.Handle).ThrowIfFalse();
+                value.Releasing += OnReleasing;
+            }
+            field = value;
+        }
+    }
+
+    /// <inheritdoc/>
+    IMaaController? IMaaAgentClient.Controller
+    {
+        get => Controller;
+        set => Controller = (MaaController?)value;
+    }
+
+    /// <inheritdoc/>
+    public MaaController? Controller
+    {
+        get => field;
+        set
+        {
+            field?.Releasing -= OnReleasing;
+            if (value is not null)
+            {
+                _ = MaaAgentClientRegisterControllerSink(Handle, value.Handle).ThrowIfFalse();
+                value.Releasing += OnReleasing;
+            }
+            field = value;
         }
     }
 
@@ -145,10 +185,17 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         set
         {
             ArgumentNullException.ThrowIfNull(value);
+
+            field?.Releasing -= OnReleasing;
             _ = MaaAgentClientBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
+            _ = MaaAgentClientRegisterResourceSink(Handle, value.Handle).ThrowIfFalse();
+            value.Releasing += OnReleasing;
+
             field = value;
         }
     }
+
+#pragma warning restore S1121 // Assignments should not be made from within sub-expressions
 
     /// <inheritdoc/>
     /// <remarks>

@@ -180,12 +180,10 @@ public class Test_IMaaAgentClient
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
-    public void Interface_AttachDisposeToResource_DetachDisposeToResource(MaaTypes type, IMaaAgentClient maaAgentClient)
+    public void Interface_AttachDisposeToResource(MaaTypes type, IMaaAgentClient maaAgentClient)
     {
         var res = new MaaResource();
-        var agent = MaaAgentClient
-            .Create(res)
-            .AttachDisposeToResource();
+        var agent = MaaAgentClient.Create(res);
         Assert.IsFalse(
             res.IsInvalid);
         Assert.IsFalse(
@@ -195,7 +193,5 @@ public class Test_IMaaAgentClient
             res.IsInvalid);
         Assert.IsTrue(
             agent.IsInvalid);
-
-        _ = agent.DetachDisposeToResource();
     }
 }
