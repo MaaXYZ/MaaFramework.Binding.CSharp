@@ -17,7 +17,7 @@ public class MaaGlobal : IMaaGlobal
     /// <remarks>
     ///     Wrapper of <see cref="MaaUtility.MaaVersion"/>.
     /// </remarks>
-    [Obsolete("Use NativeBindingContext.FrameworkVersion instead.")]
+    [Obsolete($"Use NativeBindingContext.{nameof(NativeBindingContext.LibraryVersion)} instead.")]
     public string Version => MaaUtility.MaaVersion();
 
     /// <inheritdoc/>

@@ -285,7 +285,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerPostStop"/>.
     /// </remarks>
-    [Obsolete("Use Stop() instead.")]
+    [Obsolete($"Use {nameof(Stop)}() instead.")]
     [ExcludeFromCodeCoverage(Justification = "Use Stop() instead.")]
     public MaaTaskJob Abort() => Stop();
 

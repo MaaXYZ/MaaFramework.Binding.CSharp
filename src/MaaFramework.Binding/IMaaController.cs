@@ -52,7 +52,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// </summary>
     /// <param name="keyCode">The code of the key.</param>
     /// <returns>A press key <see cref="MaaJob"/>.</returns>
-    [Obsolete("Use ClickKey() instead.")]
+    [Obsolete($"Use {nameof(ClickKey)}() instead.")]
     MaaJob PressKey(int keyCode);
 
     /// <summary>

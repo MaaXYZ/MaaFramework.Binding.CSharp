@@ -87,7 +87,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     MaaTaskJob Stop();
 
     /// <inheritdoc cref="Stop"/>
-    [Obsolete("Use Stop() instead.", error: false)]
+    [Obsolete($"Use {nameof(Stop)}() instead.", error: false)]
     MaaTaskJob Abort();
 #pragma warning restore CA1716 // 标识符不应与关键字匹配
 #pragma warning restore S1133 // Deprecated code should be removed

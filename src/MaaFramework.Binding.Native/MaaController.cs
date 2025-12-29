@@ -108,7 +108,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostPressKey"/>.
     /// </remarks>
-    [Obsolete("Use ClickKey() instead.")]
+    [Obsolete($"Use {nameof(ClickKey)}() instead.")]
     public MaaJob PressKey(int keyCode)
         => CreateJob(MaaControllerPostPressKey(Handle, keyCode));
 
