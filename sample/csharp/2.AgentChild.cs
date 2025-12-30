@@ -1,7 +1,8 @@
-﻿#!/usr/bin/env dotnet-script
-#nullable enable
+﻿#!/usr/bin/dotnet run
 
-#r "nuget: Maa.Framework.Binding.Native, 4.5.0"
+#:package Maa.Framework.Binding.Native@5.1.0
+
+#nullable enable
 
 using MaaFramework.Binding;
 using MaaFramework.Binding.Custom;
@@ -26,6 +27,8 @@ MaaAgentServer.Current
     .StartUp()
     .Join()
     .ShutDown();
+
+return 0;
 
 internal sealed class MyRec : IMaaCustomRecognition
 {
