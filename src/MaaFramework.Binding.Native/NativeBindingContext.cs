@@ -11,7 +11,7 @@ public static class NativeBindingContext
     /// <summary>
     ///     Gets the version of NativeBinding.
     /// </summary>
-    public static string BindingVersion => "v5.0.0-preview.1";
+    public static string BindingVersion => "v5.1.0";
 
     /// <summary>
     ///     Gets the version of MaaFramework.
