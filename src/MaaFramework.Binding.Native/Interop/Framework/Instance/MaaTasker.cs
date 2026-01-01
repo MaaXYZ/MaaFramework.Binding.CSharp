@@ -61,6 +61,12 @@ public static partial class MaaTasker
     public static partial MaaTaskId MaaTaskerPostTask(MaaTaskerHandle tasker, string entry, string pipelineOverride);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaTaskId MaaTaskerPostRecognition(MaaTaskerHandle tasker, string recoType, string recoParam, MaaImageBufferHandle image);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaTaskId MaaTaskerPostAction(MaaTaskerHandle tasker, string actionType, string actionParam, MaaRectHandle box, string recoDetail);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaTaskerStatus(MaaTaskerHandle tasker, MaaTaskId id);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
