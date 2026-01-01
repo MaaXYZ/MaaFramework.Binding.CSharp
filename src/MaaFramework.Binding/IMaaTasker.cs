@@ -67,6 +67,25 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     MaaTaskJob AppendTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
+    ///     Appends a job of executing a recognition.
+    /// </summary>
+    /// <param name="recoType">The recognition type.</param>
+    /// <param name="recoParam">The recognition parameters json.</param>
+    /// <param name="image">The image to be recognized.</param>
+    /// <returns>A task job.</returns>
+    MaaTaskJob AppendRecognition(string recoType, [StringSyntax("Json")] string recoParam, IMaaImageBuffer image);
+
+    /// <summary>
+    ///     Appends a job of executing an action.
+    /// </summary>
+    /// <param name="actionType">The action type.</param>
+    /// <param name="actionParam">The action parameters json.</param>
+    /// <param name="box">The recognition position.</param>
+    /// <param name="recoDetail">The recognition details.</param>
+    /// <returns>A task job.</returns>
+    MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer box, [StringSyntax("Json")] string recoDetail);
+
+    /// <summary>
     ///     Gets whether the <see cref="IMaaTasker"/> is running.
     /// </summary>
     /// <returns><see langword="true"/> if <see cref="IMaaTasker"/> is running; otherwise, <see langword="false"/>.</returns>

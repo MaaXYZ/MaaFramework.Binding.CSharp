@@ -223,6 +223,34 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         => CreateJob(MaaTaskerPostTask(Handle, entry, pipelineOverride));
 
     /// <inheritdoc/>
+    public MaaTaskJob AppendRecognition(string recoType, [StringSyntax("Json")] string recoParam, IMaaImageBuffer image)
+        => AppendRecognition(recoType, recoParam, (MaaImageBuffer)image);
+
+    /// <inheritdoc cref="IMaaTasker.AppendRecognition"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerPostRecognition"/>.
+    /// </remarks>
+    public MaaTaskJob AppendRecognition(string recoType, [StringSyntax("Json")] string recoParam, MaaImageBuffer image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        return CreateJob(MaaTaskerPostRecognition(Handle, recoType, recoParam, image.Handle));
+    }
+
+    /// <inheritdoc/>
+    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer box, [StringSyntax("Json")] string recoDetail)
+        => AppendAction(actionType, actionParam, (MaaRectBuffer)box, recoDetail);
+
+    /// <inheritdoc cref="IMaaTasker.AppendAction"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerPostAction"/>.
+    /// </remarks>
+    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, MaaRectBuffer box, [StringSyntax("Json")] string recoDetail)
+    {
+        ArgumentNullException.ThrowIfNull(box);
+        return CreateJob(MaaTaskerPostAction(Handle, actionType, actionParam, box.Handle, recoDetail));
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerStatus"/>.
     /// </remarks>

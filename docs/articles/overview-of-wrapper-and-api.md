@@ -119,6 +119,8 @@ IMaaDisposable Derived:
 | IMaaTasker.Global | *Easy to call Global.* |
 | IMaaTasker.IsInitialized | `MaaTaskerInited` |
 | IMaaTasker.AppendTask() | `MaaTaskerPostTask` |
+| IMaaTasker.AppendRecognition() | `MaaTaskerPostRecognition` |
+| IMaaTasker.AppendAction() | `MaaTaskerPostAction` |
 | IMaaPost.GetStatus() | `MaaTaskerStatus` |
 | IMaaPost.Wait() | `MaaTaskerWait` |
 | IMaaTasker.IsRunning | `MaaTaskerRunning` |

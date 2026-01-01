@@ -408,6 +408,42 @@ public class Test_IMaaTasker
             maaTasker.ClearCache());
     }
 
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_AppendRecognition(MaaTypes type, IMaaTasker maaTasker)
+    {
+        Assert.IsNotNull(maaTasker);
+
+        // First take a screenshot
+        var screencapJob = maaTasker.Controller.Screencap();
+        Assert.AreEqual(MaaJobStatus.Succeeded, screencapJob.Wait());
+
+        using var image = new MaaImageBuffer();
+        Assert.IsTrue(maaTasker.Controller.GetCachedImage(image));
+
+        // Append a recognition job
+        var job = maaTasker.AppendRecognition("OCR", "{}", image);
+        Assert.AreNotEqual(MaaJobStatus.Invalid, job.Status);
+        // Note: Recognition may fail if no OCR model is loaded, but the API should work
+        _ = job.Wait();
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_AppendAction(MaaTypes type, IMaaTasker maaTasker)
+    {
+        Assert.IsNotNull(maaTasker);
+
+        using var box = new MaaRectBuffer();
+        Assert.IsTrue(box.TrySetValues(100, 100, 50, 50));
+
+        // Append an action job
+        var job = maaTasker.AppendAction("Click", "{}", box, "{}");
+        Assert.AreNotEqual(MaaJobStatus.Invalid, job.Status);
+        var status = job.Wait();
+        Assert.AreEqual(MaaJobStatus.Succeeded, status);
+    }
+
     #region Invalid data tests
 
     [TestMethod]
