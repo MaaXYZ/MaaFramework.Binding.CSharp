@@ -28,7 +28,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
             /// </remarks>
             public const string Starting = "Resource.Loading.Starting";
 
@@ -36,7 +36,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
             /// </remarks>
             public const string Prefix = "Resource.Loading";
 
@@ -44,7 +44,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
             /// </remarks>
             public const string Succeeded = "Resource.Loading.Succeeded";
 
@@ -52,7 +52,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
             /// </remarks>
             public const string Failed = "Resource.Loading.Failed";
 

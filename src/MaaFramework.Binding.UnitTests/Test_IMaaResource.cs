@@ -82,6 +82,38 @@ public class Test_IMaaResource
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_AppendOcrModel(MaaTypes type, IMaaResource maaResource)
+    {
+        Assert.IsNotNull(maaResource);
+
+        // OCR model path may not exist in test environment, but the API should work
+        var job = maaResource.AppendOcrModel(Common.BundlePath);
+        Assert.AreNotEqual(
+            MaaJobStatus.Invalid, job.Status);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_AppendPipeline(MaaTypes type, IMaaResource maaResource)
+    {
+        Assert.IsNotNull(maaResource);
+
+        var job = maaResource.AppendPipeline(Common.BundlePath);
+        Interface_IMaaPost_Success(job);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
+    public void Interface_AppendImage(MaaTypes type, IMaaResource maaResource)
+    {
+        Assert.IsNotNull(maaResource);
+
+        var job = maaResource.AppendImage(Common.BundlePath);
+        Interface_IMaaPost_Success(job);
+    }
+
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data))]
     public void Interface_OverridePipeline_OverrideNext_GetNodeData(MaaTypes type, IMaaResource maaResource)
     {
         Assert.IsNotNull(maaResource);

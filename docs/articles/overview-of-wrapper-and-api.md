@@ -147,6 +147,9 @@ IMaaDisposable Derived:
 | IMaaResource.Unregister() | `MaaResourceUnregisterCustomRecognition`  <br> `MaaResourceUnregisterCustomAction` |
 | IMaaResource.Clear() | `MaaResourceClearCustomRecognition`  <br> `MaaResourceClearCustomAction` <br> `MaaResourceClear` |
 | IMaaResource.AppendBundle() | `MaaResourcePostBundle` |
+| IMaaResource.AppendOcrModel() | `MaaResourcePostOcrModel` |
+| IMaaResource.AppendPipeline() | `MaaResourcePostPipeline` |
+| IMaaResource.AppendImage() | `MaaResourcePostImage` |
 | IMaaResource.OverridePipeline() | `MaaResourceOverridePipeline` |
 | IMaaResource.OverrideNext() | `MaaResourceOverrideNext` |
 | IMaaResource.OverrideImage() | `MaaResourceOverrideImage` |

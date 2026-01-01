@@ -6,8 +6,9 @@ namespace MaaFramework.Binding.Notification;
 /// <inheritdoc cref="MaaMsg.Resource.Loading.Prefix"/>
 public record ResourceLoadingDetail(
     [property: JsonPropertyName("res_id")] int ResourceId,
-    [property: JsonPropertyName("hash")] string Hash,
-    [property: JsonPropertyName("path")] string Path
+    [property: JsonPropertyName("path")] string Path,
+    [property: JsonPropertyName("type")] string Type,
+    [property: JsonPropertyName("hash")] string Hash
 );
 
 /// <inheritdoc cref="MaaMsg.Controller.Action.Prefix"/>
