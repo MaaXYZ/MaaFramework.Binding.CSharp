@@ -30,7 +30,9 @@ public class MaaGlobal : IMaaGlobal
 
         var optValue = (value, opt) switch
         {
-            (int vvvv, GlobalOption.StdoutLevel) => vvvv.ToMaaOptionValue(),
+            (int vvvv, GlobalOption.StdoutLevel
+                    or GlobalOption.DrawQuality) => vvvv.ToMaaOptionValue(),
+            (nuint vvv, GlobalOption.RecoImageCacheLimit) => vvv.ToMaaOptionValue(),
             (string v, GlobalOption.LogDir) => v.ToMaaOptionValue(),
             (bool vvv, GlobalOption.SaveDraw
                     or GlobalOption.DebugMode

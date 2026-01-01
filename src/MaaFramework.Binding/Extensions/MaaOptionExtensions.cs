@@ -10,46 +10,72 @@ namespace MaaFramework.Binding;
 /// </summary>
 public static class MaaOptionExtensions
 {
+    /// <inheritdoc cref="ControllerOption.ScreenshotTargetLongSide"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_ScreenshotTargetLongSide(this IMaaOption<ControllerOption>? opt, int value)
         => opt?.SetOption(ControllerOption.ScreenshotTargetLongSide, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="ControllerOption.ScreenshotTargetShortSide"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_ScreenshotTargetShortSide(this IMaaOption<ControllerOption>? opt, int value)
         => opt?.SetOption(ControllerOption.ScreenshotTargetShortSide, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="ControllerOption.ScreenshotUseRawSize"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_ScreenshotUseRawSize(this IMaaOption<ControllerOption>? opt, bool value)
         => opt?.SetOption(ControllerOption.ScreenshotUseRawSize, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="GlobalOption.LogDir"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_LogDir(this IMaaOption<GlobalOption>? opt, string value)
         => opt?.SetOption(GlobalOption.LogDir, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="GlobalOption.SaveDraw"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_SaveDraw(this IMaaOption<GlobalOption>? opt, bool value)
         => opt?.SetOption(GlobalOption.SaveDraw, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="GlobalOption.StdoutLevel"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_StdoutLevel(this IMaaOption<GlobalOption>? opt, LoggingLevel value)
         => opt?.SetOption(GlobalOption.StdoutLevel, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="GlobalOption.DebugMode"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_DebugMode(this IMaaOption<GlobalOption>? opt, bool value)
         => opt?.SetOption(GlobalOption.DebugMode, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="GlobalOption.SaveOnError"/>
+    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
+    public static bool SetOption_SaveOnError(this IMaaOption<GlobalOption>? opt, bool value)
+        => opt?.SetOption(GlobalOption.SaveOnError, value) ?? throw new ArgumentNullException(nameof(opt));
+
+    /// <inheritdoc cref="GlobalOption.DrawQuality"/>
+    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
+    public static bool SetOption_DrawQuality(this IMaaOption<GlobalOption>? opt, int value)
+        => opt?.SetOption(GlobalOption.DrawQuality, value) ?? throw new ArgumentNullException(nameof(opt));
+
+    /// <inheritdoc cref="GlobalOption.RecoImageCacheLimit"/>
+    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
+    public static bool SetOption_RecoImageCacheLimit(this IMaaOption<GlobalOption>? opt, nuint value)
+        => opt?.SetOption(GlobalOption.RecoImageCacheLimit, value) ?? throw new ArgumentNullException(nameof(opt));
+
+    /// <inheritdoc cref="ResourceOption.InferenceDevice"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_InferenceDevice(this IMaaOption<ResourceOption>? opt, int value)
         => opt?.SetOption(ResourceOption.InferenceDevice, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="ResourceOption.InferenceDevice"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_InferenceDevice(this IMaaOption<ResourceOption>? opt, InferenceDevice value)
         => opt?.SetOption(ResourceOption.InferenceDevice, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="ResourceOption.InferenceDevice"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_InferenceDevice(this IMaaOption<ResourceOption>? opt, InferenceCoreMLFlags value)
         => opt?.SetOption(ResourceOption.InferenceDevice, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="ResourceOption.InferenceExecutionProvider"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_InferenceExecutionProvider(this IMaaOption<ResourceOption>? opt, InferenceExecutionProvider value)
         => opt?.SetOption(ResourceOption.InferenceExecutionProvider, value) ?? throw new ArgumentNullException(nameof(opt));

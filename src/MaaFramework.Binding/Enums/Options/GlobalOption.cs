@@ -51,5 +51,21 @@ public enum GlobalOption : System.Int32
     ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     SaveOnError = 7,
+    /// <summary>
+    ///     Image quality for draw images
+    /// </summary>
+    /// <remarks>
+    ///     <para>value: int, eg: 85; val_size: sizeof(int)</para>
+    ///     <para>default value is 85, range: [0, 100]</para>
+    /// </remarks>
+    DrawQuality = 8,
+    /// <summary>
+    ///     Recognition image cache limit
+    /// </summary>
+    /// <remarks>
+    ///     <para>value: size_t, eg: 4096; val_size: sizeof(size_t)</para>
+    ///     <para>default value is 4096</para>
+    /// </remarks>
+    RecoImageCacheLimit = 9,
 }
 

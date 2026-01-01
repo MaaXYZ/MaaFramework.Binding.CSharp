@@ -45,9 +45,19 @@ public class Test_IMaaGlobal
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, LoggingLevel.Off)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.StdoutLevel, 0)]
     [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DebugMode, false)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.SaveOnError, false)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.DrawQuality, 85)]
+    [MaaData(MaaTypes.All, nameof(Data), GlobalOption.RecoImageCacheLimit, 4096)]
     public void Interface_SetOption(MaaTypes type, IMaaGlobal maaGlobal, GlobalOption opt, object arg)
     {
         Assert.IsNotNull(maaGlobal);
+
+        if (opt is GlobalOption.RecoImageCacheLimit)
+        {
+            Assert.IsTrue(
+                maaGlobal.SetOption_RecoImageCacheLimit(checked((nuint)(int)arg)));
+            return;
+        }
 
         Assert.IsTrue(
             maaGlobal.SetOption(opt, arg));
