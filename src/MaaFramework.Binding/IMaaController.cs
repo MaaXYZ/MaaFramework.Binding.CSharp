@@ -1,5 +1,6 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MaaFramework.Binding;
 
@@ -129,13 +130,37 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob Screencap();
 
     /// <summary>
-    ///     Posts a scroll action.
+    ///     Appends a job for scroll action.
     /// </summary>
     /// <param name="dx">The horizontal scroll delta. Positive values scroll right, negative values scroll left.</param>
-    /// <param name="dy">The vertical scroll delta. Positive values scroll down, negative values scroll up.</param>
+    /// <param name="dy">The vertical scroll delta. Positive values scroll up, negative values scroll down.</param>
     /// <returns>A scroll <see cref="MaaJob"/>.</returns>
-    /// <remarks>Not all controllers support scroll. If not supported, the action will fail.</remarks>
+    /// <remarks>
+    ///     <para>Not all controllers support scroll. If not supported, the action will fail.</para>
+    ///     <para>The dx/dy values are sent directly as scroll increments. Using multiples of 120 (WHEEL_DELTA) is
+    ///         recommended for best compatibility.
+    ///     </para>
+    /// </remarks>
     MaaJob Scroll(int dx, int dy);
+
+    /// <summary>
+    ///     Appends a job for shell command action.
+    /// </summary>
+    /// <param name="cmd">The shell command to execute.</param>
+    /// <param name="timeout">The timeout in milliseconds. Default is 20000 (20 seconds).</param>
+    /// <returns>A shell <see cref="MaaJob"/>.</returns>
+    /// <remarks>
+    ///     <para>This is only valid for ADB controllers. If the controller is not an ADB controller, the action will fail.</para>
+    ///     <para>See also <see cref="GetShellOutput"/>.</para>
+    /// </remarks>
+    MaaJob Shell(string cmd, long timeout = 20000);
+
+    /// <summary>
+    ///     Gets the cached shell command output.
+    /// </summary>
+    /// <returns>A <see cref="string"/> if the output is available; otherwise, <see langword="null"/>.</returns>
+    /// <remarks>This returns the output from the most recent shell command execution.</remarks>
+    bool GetShellOutput([MaybeNullWhen(false)] out string output);
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaController"/> is connected to the device specified by the constructor.

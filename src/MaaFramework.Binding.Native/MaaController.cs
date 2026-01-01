@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using MaaFramework.Binding.Abstractions;
+﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Interop.Native;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using static MaaFramework.Binding.Interop.Native.MaaController;
 
 namespace MaaFramework.Binding;
@@ -191,6 +191,20 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostShell"/>.
+    /// </remarks>
+    public MaaJob Shell(string cmd, long timeout = 20000)
+        => CreateJob(MaaControllerPostShell(Handle, cmd, timeout));
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerGetShellOutput"/>.
+    /// </remarks>
+    public bool GetShellOutput([MaybeNullWhen(false)] out string output)
+        => MaaStringBuffer.TryGetValue(out output, h => MaaControllerGetShellOutput(Handle, h));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaControllerStatus"/>.
     /// </remarks>
     [Obsolete("Deprecated from v4.5.0.")]
@@ -259,10 +273,8 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     {
         get
         {
-            using var buffer = new MaaStringBuffer();
-            return MaaControllerGetUuid(Handle, buffer.Handle)
-                ? buffer.ToString()
-                : null;
+            _ = MaaStringBuffer.TryGetValue(out var uuid, h => MaaControllerGetUuid(Handle, h));
+            return uuid;
         }
     }
 }

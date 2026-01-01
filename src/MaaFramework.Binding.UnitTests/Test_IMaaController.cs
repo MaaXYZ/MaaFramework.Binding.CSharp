@@ -363,6 +363,23 @@ public class Test_IMaaController
             maaController.Uuid));
     }
 
+    [TestMethod]
+    [MaaData(MaaTypes.All, nameof(Data), true, "echo hello", 20000)]
+    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, bool assertSuccess, string cmd, long timeout)
+    {
+        Assert.IsNotNull(maaController);
+
+        var job = maaController.Shell(cmd, timeout);
+        Interface_IMaaPost(assertSuccess, job);
+
+        Assert.IsTrue(
+            maaController.GetShellOutput(out var output));
+        Assert.IsNotNull(
+            output);
+        Assert.Contains(
+            "hello", output);
+    }
+
     #region Invalid data tests
 
     [TestMethod]
