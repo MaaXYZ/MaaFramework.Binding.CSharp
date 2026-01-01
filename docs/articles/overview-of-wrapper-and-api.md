@@ -85,6 +85,7 @@ IMaaDisposable Derived:
 | MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` <br> `MaaControllerAddSink` |
 | MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
+| MaaPlayCoverController.ctor() | `MaaPlayCoverControllerCreate` <br> `MaaControllerAddSink` |
 | IDisposable.Dispose() | `MaaControllerDestroy` |
 | IMaaOption.SetOption() | `MaaControllerSetOption` |
 | IMaaController.LinkStart() | `MaaControllerPostConnection` |
