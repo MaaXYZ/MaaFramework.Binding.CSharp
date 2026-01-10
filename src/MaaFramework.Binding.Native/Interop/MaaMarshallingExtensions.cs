@@ -63,4 +63,8 @@ internal static class MaaMarshallingExtensions
     /// <inheritdoc cref="MaaMarshaller.ConvertToMaaOptionValue(string)"/>
     internal static byte[] ToMaaOptionValue(this string value)
         => MaaMarshaller.ConvertToMaaOptionValue(value);
+
+    /// <inheritdoc cref="MaaMarshaller.ConvertToMaaOptionValue(nuint)"/>
+    internal static byte[] ToMaaOptionValue(this nuint value)
+        => MaaMarshaller.ConvertToMaaOptionValue(value);
 }

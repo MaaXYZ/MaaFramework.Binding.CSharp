@@ -30,6 +30,12 @@ public static class MaaMarshaller
         => BitConverter.GetBytes(value);
 
     /// <summary>
+    ///     Converts a <see cref="nuint"/> to a MaaOptionValue (<see cref="byte"/>[]).
+    /// </summary>
+    public static byte[] ConvertToMaaOptionValue(nuint value)
+        => BitConverter.GetBytes(value);
+
+    /// <summary>
     ///     Converts a <see cref="bool"/> to a MaaOptionValue (<see cref="byte"/>[]).
     /// </summary>
     public static byte[] ConvertToMaaOptionValue(bool value)

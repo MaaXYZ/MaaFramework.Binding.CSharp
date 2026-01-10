@@ -90,6 +90,16 @@ public static partial class MaaController
     public static partial MaaCtrlId MaaControllerPostScroll(MaaControllerHandle ctrl, int dx, int dy);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostShell(MaaControllerHandle ctrl, string cmd, long timeout);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerGetShellOutput(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaPlayCoverControllerCreate(string address, string uuid);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaControllerStatus(MaaControllerHandle ctrl, MaaCtrlId id);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

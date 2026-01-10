@@ -1,7 +1,8 @@
-﻿#!/usr/bin/env dotnet-script
-#nullable enable
+﻿#!/usr/bin/dotnet run
 
-#r "nuget: Maa.Framework, 4.5.0"
+#:package Maa.Framework@5.1.0
+
+#nullable enable
 
 using System.Diagnostics;
 using MaaFramework.Binding;
@@ -16,8 +17,9 @@ if (!maa.IsInitialized)
     throw new InvalidOperationException("Failed to init tasker.");
 
 var agent = MaaAgentClient
-    .Create(maa.Resource)
-    .AttachDisposeToResource();
+    .Create(maa);
+//  .Create(maa.Resource);
+
 using (var cts = new System.Threading.CancellationTokenSource(10 * 1000))
 {
     if (!agent.LinkStart(StartupAgentServer, cts.Token))
@@ -49,31 +51,25 @@ Console.WriteLine($"MyRec detail: {detail.QueryRecognitionDetail(maa, 1)?.Detail
 Console.Write("Press any key to exit:");
 Console.ReadKey();
 
-agent
-    .DetachDisposeToResource()
-    .LinkStop();
-// The agent server process will be killed when Dispose() is called.
-// Uses LinkStart() or LinkStartUnlessProcessExit(Process, CancellationToken)
-// if you do not want the agent to control the life cycle of the process.
-agent.Dispose();
+/* 
+ * The agent server process will be killed when agent.Dispose() is called.
+ * Uses LinkStart() or LinkStartUnlessProcessExit(Process, CancellationToken)
+ * if you do not want the agent to control the life cycle of the process.
+ * 
+ * agent.LinkStop() will be called when agent.Dispose().
+ * agent.Dispose()  will be called when maa.Dispose().
+ */
+// agent.LinkStop()
+// agent.Dispose();
 maa.Dispose();
 
 
 static Process? StartupAgentServer(string identifier, string nativeAssemblyDirectory)
 {
-    var file = "3.AgentChild.csx";
-    var paths = new[]
-    {
-        file,
-        "Agent/" + file,
-        "csharp/Agent/" + file,
-        "sample/csharp/Agent/" + file,
-    };
-
-    file = paths.First(File.Exists);
+    var file = "2.AgentChild.cs";
     var userPath = Path.Combine(Environment.CurrentDirectory, ".cache");
     return Process.Start(new ProcessStartInfo(
-        "dotnet", $"script {file} {nativeAssemblyDirectory} {userPath} {identifier}")
+        "dotnet", $"run {file} {nativeAssemblyDirectory} {userPath} {identifier}")
     {
         UseShellExecute = true,
     });

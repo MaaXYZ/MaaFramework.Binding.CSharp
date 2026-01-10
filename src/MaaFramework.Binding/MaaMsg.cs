@@ -12,7 +12,7 @@
 
 namespace MaaFramework.Binding.Notification;
 
-//MaaApiDocument _version: (main) v5.1.0
+// MaaApiDocument _version: (main) v5.3.0
 /// <summary>
 ///  A callback consists of a message and a payload.
 ///  The message is a string that indicates the type of the message.
@@ -28,7 +28,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
             /// </remarks>
             public const string Starting = "Resource.Loading.Starting";
 
@@ -36,7 +36,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
             /// </remarks>
             public const string Prefix = "Resource.Loading";
 
@@ -44,7 +44,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
             /// </remarks>
             public const string Succeeded = "Resource.Loading.Succeeded";
 
@@ -52,7 +52,7 @@ public static class MaaMsg
             ///     The message for the resource loading.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { res_id: number, hash: string, path: string, }</para>
+            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
             /// </remarks>
             public const string Failed = "Resource.Loading.Failed";
 

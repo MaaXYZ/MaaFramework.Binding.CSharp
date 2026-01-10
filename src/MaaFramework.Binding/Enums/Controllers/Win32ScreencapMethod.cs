@@ -12,9 +12,21 @@
 
 namespace MaaFramework.Binding;
 
-/// <remarks>
-///     <para>No bitwise OR, just set it</para>
-/// </remarks>
+/// <summary>
+///     Win32 screencap method
+/// <para>No bitwise OR, select ONE method only.</para>
+/// <para>No default value. Client should choose one as default.</para>
+/// <para>Different applications use different rendering methods, there is no universal solution.</para>
+/// <code>| Method                  | Speed     | Compatibility | Require Admin | Background Support | Notes                            |</code>
+/// <code>|-------------------------|-----------|---------------|---------------|--------------------|----------------------------------|</code>
+/// <code>| GDI                     | Fast      | Medium        | No            | No                 |                                  |</code>
+/// <code>| FramePool               | Very Fast | Medium        | No            | Yes                | Requires Windows 10 1903+        |</code>
+/// <code>| DXGI_DesktopDup         | Very Fast | Low           | No            | No                 | Desktop duplication (full screen)|</code>
+/// <code>| DXGI_DesktopDup_Window  | Very Fast | Low           | No            | No                 | Desktop duplication then crop    |</code>
+/// <code>| PrintWindow             | Medium    | Medium        | No            | Yes                |                                  |</code>
+/// <code>| ScreenDC                | Fast      | High          | No            | No                 |                                  |</code>
+/// <para>Note: When a window is minimized on Windows, all screencap methods will fail. Avoid minimizing the target window.</para>
+/// </summary>
 public enum Win32ScreencapMethod : System.UInt64
 {
     None = 0,

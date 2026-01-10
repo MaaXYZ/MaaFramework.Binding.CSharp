@@ -214,6 +214,36 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaResourcePostOcrModel"/>.
+    /// </remarks>
+    public MaaJob AppendOcrModel(string path)
+    {
+        var id = MaaResourcePostOcrModel(Handle, path);
+        return CreateJob(id);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourcePostPipeline"/>.
+    /// </remarks>
+    public MaaJob AppendPipeline(string path)
+    {
+        var id = MaaResourcePostPipeline(Handle, path);
+        return CreateJob(id);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourcePostImage"/>.
+    /// </remarks>
+    public MaaJob AppendImage(string path)
+    {
+        var id = MaaResourcePostImage(Handle, path);
+        return CreateJob(id);
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaResourceOverridePipeline"/>.
     /// </remarks>
     public bool OverridePipeline([StringSyntax("Json")] string pipelineOverride)

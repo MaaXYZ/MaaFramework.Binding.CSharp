@@ -67,6 +67,25 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     MaaTaskJob AppendTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
+    ///     Appends a job of executing a recognition.
+    /// </summary>
+    /// <param name="recoType">The recognition type.</param>
+    /// <param name="recoParam">The recognition parameters json.</param>
+    /// <param name="image">The image to be recognized.</param>
+    /// <returns>A task job.</returns>
+    MaaTaskJob AppendRecognition(string recoType, [StringSyntax("Json")] string recoParam, IMaaImageBuffer image);
+
+    /// <summary>
+    ///     Appends a job of executing an action.
+    /// </summary>
+    /// <param name="actionType">The action type.</param>
+    /// <param name="actionParam">The action parameters json.</param>
+    /// <param name="box">The recognition position.</param>
+    /// <param name="recoDetail">The recognition details.</param>
+    /// <returns>A task job.</returns>
+    MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer box, [StringSyntax("Json")] string recoDetail);
+
+    /// <summary>
     ///     Gets whether the <see cref="IMaaTasker"/> is running.
     /// </summary>
     /// <returns><see langword="true"/> if <see cref="IMaaTasker"/> is running; otherwise, <see langword="false"/>.</returns>
@@ -87,7 +106,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     MaaTaskJob Stop();
 
     /// <inheritdoc cref="Stop"/>
-    [Obsolete("Use Stop() instead.", error: false)]
+    [Obsolete($"Use {nameof(Stop)}() instead.", error: false)]
     MaaTaskJob Abort();
 #pragma warning restore CA1716 // 标识符不应与关键字匹配
 #pragma warning restore S1133 // Deprecated code should be removed

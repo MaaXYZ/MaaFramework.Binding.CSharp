@@ -12,9 +12,23 @@
 
 namespace MaaFramework.Binding;
 
-/// <remarks>
-///     <para>Use bitwise OR to set the method you need, MaaFramework will test their speed and use the fastest one.</para>
-/// </remarks>
+/// <summary>
+///     Adb screencap method flags.
+/// <para>Use bitwise OR to set the methods you need.</para>
+/// <para>MaaFramework will test all provided methods and use the fastest available one.</para>
+/// <para>Default: All methods except RawByNetcat, MinicapDirect, MinicapStream</para>
+/// <para>Note: MinicapDirect and MinicapStream use lossy JPEG encoding, which may</para>
+/// <para>significantly reduce template matching accuracy. Not recommended.</para>
+/// <code>| Method                | Speed      | Compatibility | Encoding | Notes                               |</code>
+/// <code>|-----------------------|------------|---------------|----------|-------------------------------------|</code>
+/// <code>| EncodeToFileAndPull   | Slow       | High          | Lossless |                                     |</code>
+/// <code>| Encode                | Slow       | High          | Lossless |                                     |</code>
+/// <code>| RawWithGzip           | Medium     | High          | Lossless |                                     |</code>
+/// <code>| RawByNetcat           | Fast       | Low           | Lossless |                                     |</code>
+/// <code>| MinicapDirect         | Fast       | Low           | Lossy    |                                     |</code>
+/// <code>| MinicapStream         | Very Fast  | Low           | Lossy    |                                     |</code>
+/// <code>| EmulatorExtras        | Very Fast  | Low           | Lossless | Emulators only: MuMu 12, LDPlayer 9 |</code>
+/// </summary>
 [Flags]
 public enum AdbScreencapMethods : System.UInt64
 {

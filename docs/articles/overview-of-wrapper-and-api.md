@@ -1,4 +1,4 @@
-# Overview of Wrapper (v4.5.0) and Api ([v4.5.3](https://github.com/MaaXYZ/MaaFramework/tree/v4.5.3))
+# Overview of Wrapper (v5.1.0) and Api ([v5.1.4](https://github.com/MaaXYZ/MaaFramework/tree/v5.1.4))
 
 ## Enums
 
@@ -13,10 +13,11 @@
 | LoggingLevel | `MaaLoggingLevelEnum` |
 | GlobalOption | `MaaGlobalOptionEnum` |
 | ResourceOption | `MaaResOptionEnum` |
-| InferenceDevice | `MaaInferenceDeviceEnum` |
-| InferenceExecutionProvider | `MaaInferenceExecutionProviderEnum` |
 | ControllerOption | `MaaCtrlOptionEnum` |
 | TaskerOption | `MaaTaskerOptionEnum` |
+| InferenceDevice | `MaaInferenceDeviceEnum` |
+| InferenceExecutionProvider | `MaaInferenceExecutionProviderEnum` |
+| ControllerFeatures | `` |
 
 - Macro Definition
 
@@ -84,6 +85,7 @@ IMaaDisposable Derived:
 | MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` <br> `MaaControllerAddSink` |
 | MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
+| MaaPlayCoverController.ctor() | `MaaPlayCoverControllerCreate` <br> `MaaControllerAddSink` |
 | IDisposable.Dispose() | `MaaControllerDestroy` |
 | IMaaOption.SetOption() | `MaaControllerSetOption` |
 | IMaaController.LinkStart() | `MaaControllerPostConnection` |
@@ -97,6 +99,9 @@ IMaaDisposable Derived:
 | IMaaController.TouchMove() | `MaaControllerPostTouchMove` |
 | IMaaController.TouchUp() | `MaaControllerPostTouchUp` |
 | IMaaController.Screencap() | `MaaControllerPostScreencap` |
+| IMaaController.Scroll() | `MaaControllerPostScroll` |
+| IMaaController.Shell() | `MaaControllerPostShell` |
+| IMaaController.GetShellOutput() | `MaaControllerGetShellOutput` |
 | IMaaPost.GetStatus() | `MaaControllerStatus` |
 | IMaaPost.Wait() | `MaaControllerWait` |
 | IMaaController.LinkStop() | `MaaControllerConnected` |
@@ -117,6 +122,8 @@ IMaaDisposable Derived:
 | IMaaTasker.Global | *Easy to call Global.* |
 | IMaaTasker.IsInitialized | `MaaTaskerInited` |
 | IMaaTasker.AppendTask() | `MaaTaskerPostTask` |
+| IMaaTasker.AppendRecognition() | `MaaTaskerPostRecognition` |
+| IMaaTasker.AppendAction() | `MaaTaskerPostAction` |
 | IMaaPost.GetStatus() | `MaaTaskerStatus` |
 | IMaaPost.Wait() | `MaaTaskerWait` |
 | IMaaTasker.IsRunning | `MaaTaskerRunning` |
@@ -141,6 +148,9 @@ IMaaDisposable Derived:
 | IMaaResource.Unregister() | `MaaResourceUnregisterCustomRecognition`  <br> `MaaResourceUnregisterCustomAction` |
 | IMaaResource.Clear() | `MaaResourceClearCustomRecognition`  <br> `MaaResourceClearCustomAction` <br> `MaaResourceClear` |
 | IMaaResource.AppendBundle() | `MaaResourcePostBundle` |
+| IMaaResource.AppendOcrModel() | `MaaResourcePostOcrModel` |
+| IMaaResource.AppendPipeline() | `MaaResourcePostPipeline` |
+| IMaaResource.AppendImage() | `MaaResourcePostImage` |
 | IMaaResource.OverridePipeline() | `MaaResourceOverridePipeline` |
 | IMaaResource.OverrideNext() | `MaaResourceOverrideNext` |
 | IMaaResource.OverrideImage() | `MaaResourceOverrideImage` |
@@ -151,6 +161,8 @@ IMaaDisposable Derived:
 | IMaaOption.SetOption() | `MaaResourceSetOption` |
 | IMaaResource.Hash | `MaaResourceGetHash` |
 | IMaaResource.NodeList | `MaaResourceGetNodeList` |
+| IMaaResource.CustomRecognitionList | `MaaResourceGetCustomRecognitionList` |
+| IMaaResource.CustomActionList | `MaaResourceGetCustomActionList` |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
 
 ## MaaContext : IMaaContext
@@ -168,6 +180,10 @@ IMaaDisposable Derived:
 | IMaaContext.TaskJob | `MaaContextGetTaskId` |
 | IMaaContext.Tasker | `MaaContextGetTasker` |
 | IMaaContext.Clone() <br> ICloneable.Clone() | `MaaContextClone` |
+| IMaaContext.SetAnchor() | `MaaContextSetAnchor` |
+| IMaaContext.GetAnchor() | `MaaContextGetAnchor` |
+| IMaaContext.GetHitCount() | `MaaContextGetHitCount` |
+| IMaaContext.ClearHitCount() | `MaaContextClearHitCount` |
 
 ## Buffers.MaaStringBuffer : Buffers.IMaaStringBuffer
 
@@ -271,7 +287,7 @@ IMaaDisposable Derived:
 
 | Wrapper | Native API |
 | --- | --- |
-| NativeBindingContext.LibraryVersion | `MaaVersion` |
+| IMaaUtility.Version <br> NativeBindingContext.LibraryVersion | `MaaVersion` |
 
 ## MaaToolkit : IMaaToolkit
 
@@ -319,15 +335,19 @@ IMaaDisposable Derived:
 
 | Wrapper | Native API |
 | --- | --- |
-| MaaAgentClient.Create() | `MaaAgentClientCreateV2` <br> `MaaAgentClientRegisterTaskerSink` <br> `MaaAgentClientRegisterResourceSink` <br> `MaaAgentClientRegisterControllerSink` |
+| MaaAgentClient.Create() | `MaaAgentClientCreateV2` |
 | IDisposable.Dispose() | `MaaAgentClientDestroy` |
 | IMaaAgentClient.Id | `MaaAgentClientIdentifier` |
-| IMaaAgentClient.Resource | `MaaAgentClientBindResource` |
+| IMaaAgentClient.Tasker | `MaaAgentClientRegisterTaskerSink` |
+| IMaaAgentClient.Controller | `MaaAgentClientRegisterControllerSink` |
+| IMaaAgentClient.Resource | `MaaAgentClientRegisterResourceSink` |
 | IMaaAgentClient.LinkStart() <br> IMaaAgentClient.LinkStartUnlessProcessExit() | `MaaAgentClientConnect` |
 | IMaaAgentClient.LinkStop() | `MaaAgentClientDisconnect` |
 | IMaaAgentClient.IsConnected | `MaaAgentClientConnected` |
 | IMaaAgentClient.IsAlive | `MaaAgentClientAlive` |
 | IMaaAgentClient.SetTimeout() <br> IMaaAgentClient.Cancel() <br> IMaaAgentClient.CancelWith() | `MaaAgentClientSetTimeout` |
+| IMaaAgentClient.CustomRecognitionList | `MaaAgentClientGetCustomRecognitionList` |
+| IMaaAgentClient.CustomActionList | `MaaAgentClientGetCustomActionList` |
 | IMaaAgentClient.AgentServerProcess | *A process created by LinkStart(), whose lifecycle is managed by the current class.* |
 | IMaaAgentClient.AgentServerStartupMethod | *A delegate used to start the agent server process.* |
 | MaaDisposableHandle.Handle | *The MaaAgentClientHandle.* |

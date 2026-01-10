@@ -10,7 +10,6 @@ public interface IMaaGlobal : IMaaOption<GlobalOption>
     /// <summary>
     ///     Gets version of MaaFramework.
     /// </summary>
-    [Obsolete("Use NativeBindingContext.LibraryVersion instead.")]
     string Version { get; }
 
     /// <summary>

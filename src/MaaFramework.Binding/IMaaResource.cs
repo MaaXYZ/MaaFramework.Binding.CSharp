@@ -71,6 +71,27 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaDisp
     MaaJob AppendBundle(string path);
 
     /// <summary>
+    ///     Appends a job for loading OCR model from <paramref name="path"/>.
+    /// </summary>
+    /// <param name="path">The OCR model path.</param>
+    /// <returns>A load OCR model <see cref="MaaJob"/>.</returns>
+    MaaJob AppendOcrModel(string path);
+
+    /// <summary>
+    ///     Appends a job for loading pipeline from <paramref name="path"/>.
+    /// </summary>
+    /// <param name="path">The pipeline path.</param>
+    /// <returns>A load pipeline <see cref="MaaJob"/>.</returns>
+    MaaJob AppendPipeline(string path);
+
+    /// <summary>
+    ///     Appends a job for loading image from <paramref name="path"/>.
+    /// </summary>
+    /// <param name="path">The image path.</param>
+    /// <returns>A load image <see cref="MaaJob"/>.</returns>
+    MaaJob AppendImage(string path);
+
+    /// <summary>
     ///     Override a pipeline.
     /// </summary>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>

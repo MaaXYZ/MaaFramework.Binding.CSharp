@@ -22,7 +22,8 @@ public class MaaJobStatusException : MaaException
     /// </summary>
     /// <param name="message">The message that describes the error.</param>
     /// <param name="args">The key arguments.</param>
-    public MaaJobStatusException(string message = "MaaJobStatus was unexpected.", params object?[] args) : base(string.Join('\n', message, args))
+    public MaaJobStatusException(string message = "MaaJobStatus was unexpected.", params object?[] args)
+        : base(args?.Length > 0 ? string.Join('\n', [message, .. args]) : message)
     {
     }
 

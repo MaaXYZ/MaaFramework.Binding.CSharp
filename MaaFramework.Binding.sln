@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.6.33723.286
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
@@ -39,11 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaaFramework.Binding.Extens
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{9FA3D6BD-1EC1-3BA5-80CB-CE02773A58D5}"
 	ProjectSection(SolutionItems) = preProject
-		sample\csharp\1.main.csx = sample\csharp\1.main.csx
-		sample\csharp\2.pi_cli.csx = sample\csharp\2.pi_cli.csx
-		sample\csharp\3.AgentChild.csx = sample\csharp\3.AgentChild.csx
-		sample\csharp\3.AgentMain.csx = sample\csharp\3.AgentMain.csx
-		sample\csharp\4.CSBinding README Example.csx = sample\csharp\4.CSBinding README Example.csx
+		sample\csharp\1.main.cs = sample\csharp\1.main.cs
+		sample\csharp\2.AgentChild.cs = sample\csharp\2.AgentChild.cs
+		sample\csharp\2.AgentMain.cs = sample\csharp\2.AgentMain.cs
+		sample\csharp\3.CSBinding README Example.cs = sample\csharp\3.CSBinding README Example.cs
 		sample\csharp\QuickStart.ps1 = sample\csharp\QuickStart.ps1
 	EndProjectSection
 EndProject

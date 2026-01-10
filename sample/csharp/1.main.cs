@@ -1,12 +1,14 @@
-﻿#!/usr/bin/env dotnet-script
-#nullable enable
+﻿#!/usr/bin/dotnet run
 
-#r "nuget: Maa.Framework, 4.5.0"
+#:package Maa.Framework@5.1.0
+
+#nullable enable
 
 using MaaFramework.Binding;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
 
+Console.WriteLine(MaaGlobal.Shared.Version);
 var userPath = ".cache";
 var resourcePath = "../resource";
 
@@ -19,7 +21,7 @@ var adbDevice = MaaToolkit.Shared.AdbDevice.Find()[0];
 var maa = new MaaTasker()
 {
     // For demo, we just use the first device.
-    Controller = adbDevice.ToAdbController(screencapMethods: AdbScreencapMethods.Encode),
+    Controller = adbDevice.ToAdbControllerWith(screencapMethods: AdbScreencapMethods.Encode),
     Resource = new MaaResource(resourcePath),
     // For demo, we dispose controller and resource on disposing tasker.
     DisposeOptions = DisposeOptions.All,
@@ -28,11 +30,11 @@ maa.Callback += (s, e) =>
 {
     Console.WriteLine("Callback({0}): {1}", e.Message, e.Details);
 };
-maa.Utility.SetOption_StdoutLevel(LoggingLevel.Info);
+maa.Global.SetOption_StdoutLevel(LoggingLevel.Info);
 
 // By default, Controller and Resource is enabled LinkOption.Start and CheckStatusOption.ThrowIfNotSucceeded.
 // If self-control is required, we can write codes as follows.
-// Controller = adbDevices[0].ToAdbController(link: LinkOption.Start, check: CheckStatusOption.None),
+// Controller = adbDevices[0].ToAdbControllerWith(link: LinkOption.Start, check: CheckStatusOption.None),
 // Resource = new MaaResource(check: CheckStatusOption.None, "../../sample/resource"),
 
 if (!maa.IsInitialized)

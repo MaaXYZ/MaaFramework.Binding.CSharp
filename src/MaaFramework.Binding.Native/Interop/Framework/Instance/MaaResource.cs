@@ -60,6 +60,15 @@ public static partial class MaaResource
     public static partial MaaResId MaaResourcePostBundle(MaaResourceHandle res, string path);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaResId MaaResourcePostOcrModel(MaaResourceHandle res, string path);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaResId MaaResourcePostPipeline(MaaResourceHandle res, string path);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaResId MaaResourcePostImage(MaaResourceHandle res, string path);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaResourceOverridePipeline(MaaResourceHandle res, string pipelineOverride);
 

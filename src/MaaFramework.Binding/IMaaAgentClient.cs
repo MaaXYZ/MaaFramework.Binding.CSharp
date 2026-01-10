@@ -21,21 +21,23 @@ public interface IMaaAgentClient : IMaaDisposable
     string? Id { get; }
 
     /// <summary>
+    ///     Gets or sets a takser that binds to the <see cref="IMaaAgentClient"/>.
+    /// </summary>
+    /// <exception cref="MaaInteroperationException"/>
+    IMaaTasker? Tasker { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a controller that binds to the <see cref="IMaaAgentClient"/>.
+    /// </summary>
+    /// <exception cref="MaaInteroperationException"/>
+    IMaaController? Controller { get; set; }
+
+    /// <summary>
     ///     Gets or sets a resource that binds to the <see cref="IMaaAgentClient"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException"/>
     /// <exception cref="MaaInteroperationException"/>
     IMaaResource Resource { get; set; }
-
-    /// <summary>
-    ///     Attaches <see langword="this"/> instance's Dispose() to the <see cref="Resource"/>'s Releasing event.
-    /// </summary>
-    IMaaAgentClient AttachDisposeToResource();
-
-    /// <summary>
-    ///     Detaches <see langword="this"/> instance's Dispose() from the <see cref="Resource"/>'s Releasing event.
-    /// </summary>
-    IMaaAgentClient DetachDisposeToResource();
 
     /// <summary>
     ///     Starts the connection.
