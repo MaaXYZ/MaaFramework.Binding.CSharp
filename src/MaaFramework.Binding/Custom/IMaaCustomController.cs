@@ -10,6 +10,7 @@ namespace MaaFramework.Binding.Custom;
 public interface IMaaCustomController : IMaaCustomResource, IDisposable
 {
     bool Connect();
+    bool Connected();
 
     /// <remarks>
     ///     Write result to buffer.
@@ -17,10 +18,6 @@ public interface IMaaCustomController : IMaaCustomResource, IDisposable
     bool RequestUuid(in IMaaStringBuffer buffer);
     ControllerFeatures GetFeatures();
 
-    /// <remarks>
-    ///     Write result to width and height.
-    /// </remarks>
-    bool RequestResolution(out int width, out int height);
     bool StartApp(string intent);
     bool StopApp(string intent);
 

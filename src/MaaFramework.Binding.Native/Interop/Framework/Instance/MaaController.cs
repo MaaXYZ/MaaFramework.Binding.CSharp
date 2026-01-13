@@ -53,8 +53,18 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostClick(MaaControllerHandle ctrl, int x, int y);
 
+    // for adb controller, contact means finger id (0 for first finger, 1 for second finger, etc)
+    // for win32 controller, contact means mouse button id (0 for left, 1 for right, 2 for middle)
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostClickV2(MaaControllerHandle ctrl, int x, int y, int contact, int pressure);
+
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostSwipe(MaaControllerHandle ctrl, int x1, int y1, int x2, int y2, int duration);
+
+    // for adb controller, contact means finger id (0 for first finger, 1 for second finger, etc)
+    // for win32 controller, contact means mouse button id (0 for left, 1 for right, 2 for middle)
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostSwipeV2(MaaControllerHandle ctrl, int x1, int y1, int x2, int y2, int duration, int contact, int pressure);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostClickKey(MaaControllerHandle ctrl, int keycode);
@@ -99,6 +109,19 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaPlayCoverControllerCreate(string address, string uuid);
 
+    /// <summary>
+    ///     Create a virtual gamepad controller for Windows.
+    /// </summary>
+    /// <param name="hWnd">Window handle for screencap (optional, can be nint.Zero if screencap not needed).</param>
+    /// <param name="gamepadType">Type of virtual gamepad (MaaGamepadType_Xbox360 or MaaGamepadType_DualShock4).</param>
+    /// <param name="screencapMethod">Win32 screencap method to use. Ignored if hWnd is nint.Zero.</param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    /// <remarks>
+    ///     <para>Requires ViGEm Bus Driver to be installed on the system.</para>
+    /// </remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaGamepadControllerCreate(nint hWnd, MaaGamepadType gamepadType, MaaWin32ScreencapMethod screencapMethod);
+
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaControllerStatus(MaaControllerHandle ctrl, MaaCtrlId id);
 
@@ -116,6 +139,20 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaControllerGetUuid(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
+
+    /// <summary>
+    ///     Get the raw (unscaled) device resolution.
+    /// </summary>
+    /// <param name="ctrl">The controller handle.</param>
+    /// <param name="width">Output parameter for the raw width.</param>
+    /// <param name="height">Output parameter for the raw height.</param>
+    /// <returns>true if the resolution is available, false otherwise.</returns>
+    /// <remarks>
+    ///     <para>This returns the actual device screen resolution before any scaling.</para>
+    /// </remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerGetResolution(MaaControllerHandle ctrl, out int width, out int height);
 
     [Obsolete]
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

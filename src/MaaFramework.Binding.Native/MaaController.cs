@@ -99,10 +99,24 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostClickV2"/>.
+    /// </remarks>
+    public MaaJob Click(int x, int y, int contact, int pressure)
+        => CreateJob(MaaControllerPostClickV2(Handle, x, y, contact, pressure));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostSwipe"/>.
     /// </remarks>
     public MaaJob Swipe(int x1, int y1, int x2, int y2, int duration)
         => CreateJob(MaaControllerPostSwipe(Handle, x1, y1, x2, y2, duration));
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostSwipeV2"/>.
+    /// </remarks>
+    public MaaJob Swipe(int x1, int y1, int x2, int y2, int duration, int contact, int pressure)
+        => CreateJob(MaaControllerPostSwipeV2(Handle, x1, y1, x2, y2, duration, contact, pressure));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -277,4 +291,11 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
             return uuid;
         }
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerGetResolution"/>.
+    /// </remarks>
+    public bool GetResolution(out int width, out int height)
+        => MaaControllerGetResolution(Handle, out width, out height);
 }

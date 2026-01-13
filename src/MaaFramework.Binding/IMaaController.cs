@@ -36,6 +36,18 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob Click(int x, int y);
 
     /// <summary>
+    ///     Clicks a point with extended parameters.
+    ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
+    ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
+    /// </summary>
+    /// <param name="x">The horizontal coordinate of the point.</param>
+    /// <param name="y">The vertical coordinate of the point.</param>
+    /// <param name="contact">The contact id.</param>
+    /// <param name="pressure">The pressure.</param>
+    /// <returns>A click <see cref="MaaJob"/>.</returns>
+    MaaJob Click(int x, int y, int contact, int pressure);
+
+    /// <summary>
     ///     Swipes from a starting point to an ending point with duration.
     /// </summary>
     /// <param name="x1">The horizontal coordinate of the starting point.</param>
@@ -45,6 +57,21 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <param name="duration">The millisecond of the swipe duration(ms).</param>
     /// <returns>A swipe <see cref="MaaJob"/>.</returns>
     MaaJob Swipe(int x1, int y1, int x2, int y2, int duration);
+
+    /// <summary>
+    ///     Swipes from a starting point to an ending point with duration and extended parameters.
+    ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
+    ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
+    /// </summary>
+    /// <param name="x1">The horizontal coordinate of the starting point.</param>
+    /// <param name="y1">The vertical coordinate of the starting point.</param>
+    /// <param name="x2">The horizontal coordinate of the ending point.</param>
+    /// <param name="y2">The vertical coordinate of the ending point.</param>
+    /// <param name="duration">The millisecond of the swipe duration(ms).</param>
+    /// <param name="contact">The contact id.</param>
+    /// <param name="pressure">The pressure.</param>
+    /// <returns>A swipe <see cref="MaaJob"/>.</returns>
+    MaaJob Swipe(int x1, int y1, int x2, int y2, int duration, int contact, int pressure);
 
     /// <summary>
     ///     Presses a key.
@@ -181,4 +208,17 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// </summary>
     /// <returns>A <see cref="string"/> if the hash was successfully got; otherwise, <see langword="null"/>.</returns>
     string? Uuid { get; }
+
+    /// <summary>
+    ///     Gets the raw (unscaled) device resolution.
+    /// </summary>
+    /// <param name="width">Output parameter for the raw width.</param>
+    /// <param name="height">Output parameter for the raw height.</param>
+    /// <returns><see langword="true"/> if the resolution is available; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     <para>This returns the actual device screen resolution before any scaling.</para>
+    ///     <para>The screenshot obtained via <see cref="GetCachedImage"/> is scaled according to the screenshot target size settings,
+    ///     so its dimensions may differ from this raw resolution.</para>
+    /// </remarks>
+    bool GetResolution(out int width, out int height);
 }
