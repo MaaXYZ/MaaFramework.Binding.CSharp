@@ -50,6 +50,10 @@ global using MaaWin32InputMethod = System.UInt64;
 // No bitwise OR, just set it
 global using MaaDbgControllerType = System.UInt64;
 global using MaaControllerFeature = System.UInt64;
+// Gamepad types
+global using MaaGamepadType = System.UInt64;
+global using MaaGamepadButton = System.UInt64;
+global using MaaGamepadTouch = System.UInt64;
 global using MaaRectHandle = nint;
 
 using System.Runtime.InteropServices;

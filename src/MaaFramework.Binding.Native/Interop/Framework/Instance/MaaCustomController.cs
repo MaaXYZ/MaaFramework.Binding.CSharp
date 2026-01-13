@@ -94,6 +94,7 @@ public static class MaaCustomControllerMarshaller
     {
         public int Times = 0;
         public ConnectDelegate Connect = (nint transArg) => managed.Connect();
+        public ConnectedDelegate Connected = (nint transArg) => managed.Connected();
         public RequestUuidDelegate RequestUuid = (nint transArg, MaaStringBufferHandle buffer) => managed.RequestUuid(new MaaStringBuffer(buffer));
         public GetFeaturesDelegate GetFeatures = (nint transArg) => (System.UInt64)managed.GetFeatures();
         public StartAppDelegate StartApp = (string intent, nint transArg) => managed.StartApp(intent);
@@ -122,6 +123,7 @@ public static class MaaCustomControllerMarshaller
     private sealed class Unmanaged(Delegates delegates)
     {
         public nint Connect = Marshal.GetFunctionPointerForDelegate(delegates.Connect);
+        public nint Connected = Marshal.GetFunctionPointerForDelegate(delegates.Connected);
         public nint RequestUuid = Marshal.GetFunctionPointerForDelegate(delegates.RequestUuid);
         public nint GetFeatures = Marshal.GetFunctionPointerForDelegate(delegates.GetFeatures);
         public nint StartApp = Marshal.GetFunctionPointerForDelegate(delegates.StartApp);
@@ -142,6 +144,10 @@ public static class MaaCustomControllerMarshaller
     [return: MarshalAs(UnmanagedType.U1)]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool ConnectDelegate(nint transArg);
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool ConnectedDelegate(nint transArg);
 
     /// <summary>
     ///     Write result to buffer.

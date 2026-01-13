@@ -192,27 +192,14 @@ internal static class Custom
         public bool Connect()
             => c.LinkStart().Wait().IsSucceeded();
 
+        public bool Connected()
+            => c.IsConnected;
+
         public bool InputText(string text)
             => c.InputText(text).Wait().IsSucceeded();
 
         public bool ClickKey(int keycode)
             => c.ClickKey(keycode).Wait().IsSucceeded();
-
-        public bool RequestResolution(out int width, out int height)
-        {
-#if MAA_NATIVE
-            using var image = new MaaImageBuffer();
-#endif
-            if (Screencap(image))
-            {
-                width = image.Width;
-                height = image.Height;
-                return true;
-            }
-
-            width = height = -1;
-            return false;
-        }
 
         public bool RequestUuid(in IMaaStringBuffer buffer)
         {
