@@ -250,17 +250,29 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     }
 
     /// <inheritdoc/>
-    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer box, [StringSyntax("Json")] string recoDetail)
-        => AppendAction(actionType, actionParam, (MaaRectBuffer)box, recoDetail);
+    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer? box = null, [StringSyntax("Json")] string recoDetail = "{}")
+        => AppendAction(actionType, actionParam, (MaaRectBuffer?)box, recoDetail);
 
     /// <inheritdoc cref="IMaaTasker.AppendAction"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerPostAction"/>.
     /// </remarks>
-    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, MaaRectBuffer box, [StringSyntax("Json")] string recoDetail)
+    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, MaaRectBuffer? box = null, [StringSyntax("Json")] string recoDetail = "{}")
     {
-        ArgumentNullException.ThrowIfNull(box);
-        return CreateJob(MaaTaskerPostAction(Handle, actionType, actionParam, box.Handle, recoDetail));
+        MaaRectBuffer? buffer = null;
+        try
+        {
+            if (box is null)
+            {
+                buffer = new MaaRectBuffer();
+                box = buffer;
+            }
+            return CreateJob(MaaTaskerPostAction(Handle, actionType, actionParam, box.Handle, recoDetail));
+        }
+        finally
+        {
+            buffer?.Dispose();
+        }
     }
 
     /// <inheritdoc/>

@@ -85,7 +85,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     /// <param name="box">The recognition position.</param>
     /// <param name="recoDetail">The recognition details.</param>
     /// <returns>A task job.</returns>
-    MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer box, [StringSyntax("Json")] string recoDetail);
+    MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer? box = null, [StringSyntax("Json")] string recoDetail = "{}");
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaTasker"/> is running.
