@@ -11,6 +11,13 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaStringBuffer>
     , IMaaStringListBufferStatic<MaaStringListBufferHandle>
 {
+    internal sealed class NullStringListBuffer : MaaStringListBuffer { internal NullStringListBuffer() : base(MaaStringListBufferHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaStringListBuffer"/> type.
+    /// </summary>
+    public static MaaStringListBuffer Null { get; } = new NullStringListBuffer();
+
     private readonly ConcurrentDictionary<MaaStringBuffer, MaaSize> _cache = [];
     private void ClearCache()
     {
@@ -35,7 +42,7 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     ///     Creates a <see cref="MaaStringListBuffer"/> instance.
     /// </summary>
     /// <param name="handle">The MaaStringListBufferHandle.</param>
-    public MaaStringListBuffer(MaaStringListBufferHandle handle) : base(nint.Zero)
+    public MaaStringListBuffer(MaaStringListBufferHandle handle) : base(MaaStringListBufferHandle.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
@@ -44,7 +51,7 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringListBufferCreate"/>.
     /// </remarks>
-    public MaaStringListBuffer() : base(nint.Zero)
+    public MaaStringListBuffer() : base(MaaStringListBufferHandle.Zero)
     {
         SetHandle(MaaStringListBufferCreate(), needReleased: true);
     }
@@ -147,7 +154,7 @@ public class MaaStringListBuffer : MaaListBuffer<MaaStringListBufferHandle, MaaS
     /// <inheritdoc/>
     public override bool TryIndexOf(MaaStringBuffer item, out MaaSize index)
     {
-        if (MaaStringBuffer.TryGetValue(item?.Handle ?? nint.Zero, out var stringInItem))
+        if (MaaStringBuffer.TryGetValue(item?.Handle ?? MaaStringBufferHandle.Zero, out var stringInItem))
         {
             var count = MaaSizeCount;
             for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)

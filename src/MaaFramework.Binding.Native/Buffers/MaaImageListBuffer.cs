@@ -11,6 +11,13 @@ namespace MaaFramework.Binding.Buffers;
 public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaImageBuffer>
     , IMaaImageListBufferStatic<MaaImageListBufferHandle>
 {
+    internal sealed class NullImageListBuffer : MaaImageListBuffer { internal NullImageListBuffer() : base(MaaImageListBufferHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaImageListBuffer"/> type.
+    /// </summary>
+    public static MaaImageListBuffer Null { get; } = new NullImageListBuffer();
+
     private readonly ConcurrentDictionary<MaaImageBuffer, MaaSize> _cache = [];
     private void ClearCache()
     {
@@ -35,7 +42,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     ///     Creates a <see cref="MaaImageListBuffer"/> instance.
     /// </summary>
     /// <param name="handle">The MaaImageListBufferHandle.</param>
-    public MaaImageListBuffer(MaaImageListBufferHandle handle) : base(nint.Zero)
+    public MaaImageListBuffer(MaaImageListBufferHandle handle) : base(MaaImageListBufferHandle.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
@@ -44,7 +51,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageListBufferCreate"/>.
     /// </remarks>
-    public MaaImageListBuffer() : base(nint.Zero)
+    public MaaImageListBuffer() : base(MaaImageListBufferHandle.Zero)
     {
         SetHandle(MaaImageListBufferCreate(), needReleased: true);
     }
@@ -148,7 +155,7 @@ public class MaaImageListBuffer : MaaListBuffer<MaaImageListBufferHandle, MaaIma
     /// <inheritdoc/>
     public override bool TryIndexOf(MaaImageBuffer item, out MaaSize index)
     {
-        if (MaaImageBuffer.TryGetRawData(item?.Handle ?? nint.Zero, out var imageInItem))
+        if (MaaImageBuffer.TryGetRawData(item?.Handle ?? MaaImageBufferHandle.Zero, out var imageInItem))
         {
             var count = MaaSizeCount;
             for (MaaSize tmpIndex = 0; tmpIndex < count; tmpIndex++)

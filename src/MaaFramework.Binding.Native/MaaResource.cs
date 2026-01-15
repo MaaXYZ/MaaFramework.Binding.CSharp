@@ -21,6 +21,13 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ Paths = [{string.Join(", ", _postedPaths)}], CustomActions = [{string.Join(", ", _actions.Names)}] , CustomRecognitions = [{string.Join(" & ", _recognitions.Names)}] }}";
 
+    internal sealed class NullResource : MaaResource { internal NullResource() : base(MaaResourceHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaResource"/> type.
+    /// </summary>
+    public static MaaResource Null { get; } = new NullResource();
+
     [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
     internal MaaResource(MaaResourceHandle handle)
     {

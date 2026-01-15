@@ -30,6 +30,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     ///     Gets or sets a resource that binds to the <see cref="IMaaTasker"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="InvalidOperationException"/>
     /// <exception cref="MaaInteroperationException"/>
     IMaaResource Resource { get; set; }
 
@@ -37,6 +38,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     ///     Gets or sets a controller that binds to the <see cref="IMaaTasker"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="InvalidOperationException"/>
     /// <exception cref="MaaInteroperationException"/>
     IMaaController Controller { get; set; }
 

@@ -20,6 +20,13 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ }}";
 
+    internal sealed class NullController : MaaController { internal NullController() : base(MaaControllerHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaController"/> type.
+    /// </summary>
+    public static MaaController Null { get; } = new NullController();
+
     [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
     internal MaaController(MaaControllerHandle handle)
     {

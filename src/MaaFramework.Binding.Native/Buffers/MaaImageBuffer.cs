@@ -17,6 +17,13 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name}: {Width}x{Height} {{ {nameof(Channels)} = {Channels}, {nameof(Type)} = {Type} }}";
 
+    internal sealed class NullImageBuffer : MaaImageBuffer { internal NullImageBuffer() : base(MaaImageBufferHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaImageBuffer"/> type.
+    /// </summary>
+    public static MaaImageBuffer Null { get; } = new NullImageBuffer();
+
     /// <inheritdoc/>
     public bool TryCopyTo(MaaImageBufferHandle bufferHandle) => TrySetRawData(
             handle: bufferHandle,
@@ -38,17 +45,17 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// </summary>
     /// <param name="handle">The MaaImageBufferHandle.</param>
     public MaaImageBuffer(MaaImageBufferHandle handle)
-        : base(invalidHandleValue: nint.Zero)
+        : base(invalidHandleValue: MaaImageBufferHandle.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
 
-    /// <inheritdoc cref="MaaImageBuffer(nint)"/>
+    /// <inheritdoc cref="MaaImageBuffer(MaaImageBufferHandle)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaImageBufferCreate"/>.
     /// </remarks>
     public MaaImageBuffer()
-            : base(invalidHandleValue: nint.Zero)
+            : base(invalidHandleValue: MaaImageBufferHandle.Zero)
     {
         SetHandle(MaaImageBufferCreate(), needReleased: true);
     }
@@ -342,15 +349,15 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
 
     #region RawData
 
-    /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
+    /// <inheritdoc cref="TryGetRawData(MaaImageBufferHandle, out MaaImageRawData, out int, out int, out int)"/>
     public bool TryGetRawData(out MaaImageRawData data)
         => TryGetRawData(Handle, out data);
 
-    /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
+    /// <inheritdoc cref="TryGetRawData(MaaImageBufferHandle, out MaaImageRawData, out int, out int, out int)"/>
     public bool TryGetRawData(out MaaImageRawData data, out int width, out int height, out int type)
         => TryGetRawData(Handle, out data, out width, out height, out type);
 
-    /// <inheritdoc cref="TryGetRawData(nint, out nint, out int, out int, out int)"/>
+    /// <inheritdoc cref="TryGetRawData(MaaImageBufferHandle, out MaaImageRawData, out int, out int, out int)"/>
     public static bool TryGetRawData(MaaImageBufferHandle handle, out MaaImageRawData data)
     {
         data = MaaImageBufferGetRawData(handle);
@@ -383,7 +390,7 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
         return true;
     }
 
-    /// <inheritdoc cref="TrySetRawData(nint, nint, int, int, int)"/>
+    /// <inheritdoc cref="TrySetRawData(MaaImageBufferHandle, MaaImageBufferHandle, int, int, int)"/>
     public bool TrySetRawData(MaaImageRawData data, int width, int height, int type)
         => TrySetRawData(Handle, data, width, height, type);
 

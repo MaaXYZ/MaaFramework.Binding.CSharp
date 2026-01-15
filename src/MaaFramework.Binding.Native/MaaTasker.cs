@@ -21,6 +21,13 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ {nameof(IsRunning)} = {IsRunning}, {nameof(IsInitialized)} = {IsInitialized}, {nameof(DisposeOptions)} = {DisposeOptions} }}";
 
+    internal sealed class NullTasker : MaaTasker { [SetsRequiredMembers] internal NullTasker() : base(MaaTaskerHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaTasker"/> type.
+    /// </summary>
+    public static MaaTasker Null { get; } = new NullTasker();
+
     /// <summary>
     ///     Gets all maa tasker instances.
     /// </summary>
@@ -175,7 +182,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            _ = MaaTaskerBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
+            if (value is not MaaResource.NullResource)
+                _ = MaaTaskerBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
+            else if (_resource is not null and not MaaResource.NullResource)
+                throw new InvalidOperationException("Null instance can only be used for init.");
             _resource = value;
         }
     }
@@ -195,7 +205,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            _ = MaaTaskerBindController(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ControllerBindingFailedMessage);
+            if (value is not MaaController.NullController)
+                _ = MaaTaskerBindController(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ControllerBindingFailedMessage);
+            else if (_controller is not null and not MaaController.NullController)
+                throw new InvalidOperationException("Null instance can only be used for init.");
             _controller = value;
         }
     }

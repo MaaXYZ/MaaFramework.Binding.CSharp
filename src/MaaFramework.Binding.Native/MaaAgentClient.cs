@@ -22,6 +22,20 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ {nameof(Id)} = {Id ?? "<null>"}, {nameof(IsConnected)} = {IsConnected}, {nameof(IsAlive)} = {IsAlive}, Timeout = {_timeout} }}";
 
+    internal sealed class NullAgentClient : MaaAgentClient { internal NullAgentClient() : base(MaaAgentClientHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaAgentClient"/> type.
+    /// </summary>
+    public static MaaAgentClient Null { get; } = new NullAgentClient() { Resource = MaaResource.Null, };
+
+    [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
+    internal MaaAgentClient(MaaAgentClientHandle handle)
+        : base(invalidHandleValue: MaaAgentClientHandle.Zero)
+    {
+        SetHandle(handle, needReleased: false);
+    }
+
     /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
     /// </summary>
@@ -136,11 +150,13 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         set
         {
             field?.Releasing -= OnReleasing;
-            if (value is not null)
+            if (value is not null and not MaaTasker.NullTasker)
             {
                 _ = MaaAgentClientRegisterTaskerSink(Handle, value.Handle).ThrowIfFalse();
                 value.Releasing += OnReleasing;
             }
+            else if (field is not null and not MaaTasker.NullTasker)
+                throw new InvalidOperationException("Null instance or null can only be used for init.");
             field = value;
         }
     }
@@ -159,11 +175,14 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         set
         {
             field?.Releasing -= OnReleasing;
-            if (value is not null)
+            if (value is not null and not MaaController.NullController)
             {
                 _ = MaaAgentClientRegisterControllerSink(Handle, value.Handle).ThrowIfFalse();
                 value.Releasing += OnReleasing;
             }
+            else if (field is not null and not MaaController.NullController)
+                throw new InvalidOperationException("Null instance or null can only be used for init.");
+
             field = value;
         }
     }
@@ -187,9 +206,14 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
             ArgumentNullException.ThrowIfNull(value);
 
             field?.Releasing -= OnReleasing;
-            _ = MaaAgentClientBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
-            _ = MaaAgentClientRegisterResourceSink(Handle, value.Handle).ThrowIfFalse();
-            value.Releasing += OnReleasing;
+            if (value is not MaaResource.NullResource)
+            {
+                _ = MaaAgentClientBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
+                _ = MaaAgentClientRegisterResourceSink(Handle, value.Handle).ThrowIfFalse();
+                value.Releasing += OnReleasing;
+            }
+            else if (field is not null and not MaaResource.NullResource)
+                throw new InvalidOperationException("Null instance can only be used for init.");
 
             field = value;
         }

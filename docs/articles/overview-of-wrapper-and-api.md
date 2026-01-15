@@ -340,7 +340,7 @@ IMaaDisposable Derived:
 | IMaaAgentClient.Id | `MaaAgentClientIdentifier` |
 | IMaaAgentClient.Tasker | `MaaAgentClientRegisterTaskerSink` |
 | IMaaAgentClient.Controller | `MaaAgentClientRegisterControllerSink` |
-| IMaaAgentClient.Resource | `MaaAgentClientRegisterResourceSink` |
+| IMaaAgentClient.Resource | `MaaAgentClientBindResource` <br> `MaaAgentClientRegisterResourceSink` |
 | IMaaAgentClient.LinkStart() <br> IMaaAgentClient.LinkStartUnlessProcessExit() | `MaaAgentClientConnect` |
 | IMaaAgentClient.LinkStop() | `MaaAgentClientDisconnect` |
 | IMaaAgentClient.IsConnected | `MaaAgentClientConnected` |

@@ -20,6 +20,13 @@ public class DesktopWindowListBuffer : MaaListBuffer<MaaToolkitDesktopWindowList
         Name: MaaToolkitDesktopWindowGetWindowName(InfoHandle)
     );
 
+    internal sealed class NullDesktopWindowListBuffer : DesktopWindowListBuffer { internal NullDesktopWindowListBuffer() : base(MaaToolkitDesktopWindowListHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="DesktopWindowListBuffer"/> type.
+    /// </summary>
+    public static DesktopWindowListBuffer Null { get; } = new NullDesktopWindowListBuffer();
+
     /// <summary>
     ///     Creates a <see cref="DesktopWindowListBuffer"/> instance.
     /// </summary>
