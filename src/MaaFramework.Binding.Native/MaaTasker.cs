@@ -284,9 +284,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaTaskerStatus(handle, id);
+        return (MaaJobStatus)MaaTaskerStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -298,9 +296,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaTaskerWait(handle, id);
+        return (MaaJobStatus)MaaTaskerWait(Handle, job.Id);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -12,12 +12,7 @@ public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaS
 {
     /// <inheritdoc/>
     public override string ToString()
-    {
-        if (IsInvalid)
-            return string.Empty;
-
-        return TryGetValue(out var str) ? str : string.Empty;
-    }
+        => TryGetValue(Handle, out var str) ? str : string.Empty;
 
     internal sealed class NullStringBuffer : MaaStringBuffer { internal NullStringBuffer() : base(MaaStringBufferHandle.Zero) { } }
 

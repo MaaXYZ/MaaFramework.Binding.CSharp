@@ -296,9 +296,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaResourceStatus(handle, id);
+        return (MaaJobStatus)MaaResourceStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -310,9 +308,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaResourceWait(handle, id);
+        return (MaaJobStatus)MaaResourceWait(Handle, job.Id);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

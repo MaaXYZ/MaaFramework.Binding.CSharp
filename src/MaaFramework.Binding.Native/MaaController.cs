@@ -219,9 +219,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaControllerStatus(handle, id);
+        return (MaaJobStatus)MaaControllerStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -233,9 +231,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaControllerWait(handle, id);
+        return (MaaJobStatus)MaaControllerWait(Handle, job.Id);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
