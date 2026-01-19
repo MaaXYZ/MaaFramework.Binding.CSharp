@@ -21,6 +21,12 @@ public interface IMaaContext<T> : IMaaContext
 public interface IMaaContext : ICloneable
 {
     /// <summary>
+    ///     Gets whether cancellation has been requested for this context.
+    /// </summary>
+    /// <returns><see langword="true"/> if cancellation has been requested; otherwise, <see langword="false"/>.</returns>
+    bool IsCancellationRequested { get; }
+
+    /// <summary>
     ///     Runs a task.
     /// </summary>
     /// <param name="entry">The entry name of the task.</param>

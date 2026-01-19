@@ -28,6 +28,9 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     }
 
     /// <inheritdoc/>
+    public bool IsCancellationRequested => Tasker.IsStopping;
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunTask"/>.
     /// </remarks>
