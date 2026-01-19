@@ -1,3 +1,22 @@
+## v5.3.0
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.1.0...v5.3.0
+
+### New features
+
+- feat: IMaaContext.IsCancellationRequested @moomiji
+- feat: IMaaTasker.AppendAction() support optional parameter @moomiji
+- feat: support null handle wrapper @moomiji
+- feat: support PlayCover controller @moomiji
+- feat: IMaaResource.Append OcrModel Pipeline Image @moomiji
+- feat: new global option @moomiji
+- feat: IMaaController.Shell & GetShellOutput @moomiji
+- feat: IMaaTasker.AppendRecognition & AppendAction @moomiji
+
+### Other
+
+- chore: update interop to framework v5.3.3 @moomiji
+
 ## v5.1.0
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v4.5.0...v5.1.0
