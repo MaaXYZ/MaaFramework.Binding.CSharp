@@ -45,33 +45,33 @@
       },
       "Maa.Framework.Runtime.linux-arm64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "wUbqpekIaEz/t7YUGyE2TVWKOxBk5I3FQIniig/QsxA1js+2Z3Q1JZSUsNrwVyL1z7rYYgpEp5GrMQdZqaOCqg=="
+        "resolved": "5.3.3",
+        "contentHash": "s0/lomvnOAEX978xwoVXB61B3GbbEcbYeksIDmAqrCAeZUpR+C+PNxuML6zu0htybRewYhhhNUn5+0Q3QXpWsA=="
       },
       "Maa.Framework.Runtime.linux-x64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "bQJOYd8qx5jmdtC6hJSFRxCJV4qhZU+EMGi3aMuVCCDyisRSDvggluk6Iiz/efZXip+UZ6vW86fCdLTkcdDrxQ=="
+        "resolved": "5.3.3",
+        "contentHash": "OwpYHYNCH+YxAcPBI89ii2XAZMfZtqnx5Le4jqKzzCSlxB9bL9PHPjZQo2YysFJRhX+jksa2hgOlwVGzcx9Tew=="
       },
       "Maa.Framework.Runtime.osx-arm64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "jEINgzrQw/j6P1AGItv7w4kvLD6zO5RJ/chZZ5IsXpzhgt99ecMKqUqPvnyxb/ssO6DdVO2EtZpAOH6ElQ21fA=="
+        "resolved": "5.3.3",
+        "contentHash": "4Tz7R0p8uT/XjYdIaRRSKME3ntUuT5q8IQelzD/n49kyD/n/9HYwg7EIdVohvgi9+Cc3ev1Bng5f9IkNMlWd8Q=="
       },
       "Maa.Framework.Runtime.osx-x64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "8EyedD6tadNPhsOjNHMk/YqQVU8W8UTE1TnHhqq4vNizEnumWJ6ccbQL4UE9sNDq27BlKJxTcaWXJkzVq4Oy7A=="
+        "resolved": "5.3.3",
+        "contentHash": "MjcuK9w6M++4mvJSM4KfBCeZUm1jDu5zL5mhoGgF+ZC7l8e7/XXtL87WT0NN3o1Q8YEOQDGYNc4gNFtzQnOwlw=="
       },
       "Maa.Framework.Runtime.win-arm64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "aD2/MVTKK052JaqEBaz2bMMoxHFrH6fKdC+ulleMwSI7i+BGQ+0UO7KsY+MoxxImG1rCIcL8qmGajt7AyMfv5A=="
+        "resolved": "5.3.3",
+        "contentHash": "8P+xCMGgPLCNHRSc1AR04orUd7n89ug+KGPkZVCbZz5YwIp1exkOrH6wXmWXQ2Mb3xUbd3m2PUpDRXwOXwW4jA=="
       },
       "Maa.Framework.Runtime.win-x64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "3UfacIDi6XqBOlOD0G/FNnU1SaBfRadQJTco8ICjPPfCMCwZhqXovG/47/9qaFEFGdwC3tO0jSTyxAVT/IOVVw=="
+        "resolved": "5.3.3",
+        "contentHash": "PP1MAJfWq1gq/O27+xBEyqQ1LX1zE1i1/nu0qFKJjmb5wK2Q7Aa74/Ot0FrQUut8IP6G8eQmzPg4Y6wAzhQGDg=="
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
@@ -174,7 +174,7 @@
         "type": "Project",
         "dependencies": {
           "Maa.Framework.Native": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[5.3.0, )"
+          "Maa.Framework.Runtimes": "[5.3.3, )"
         }
       },
       "Maa.Framework.Binding": {
@@ -207,16 +207,16 @@
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
-        "requested": "[5.3.0, )",
-        "resolved": "5.3.0",
-        "contentHash": "rptjiKru1yggsF1gC2QF0R3fG+BoZrFD9NitBfammVm3iI8rxyqQxm/kALEXhH3fV5t6XrLH8pGkH+y3x477OA==",
+        "requested": "[5.3.3, )",
+        "resolved": "5.3.3",
+        "contentHash": "5/WLFzf2yVtzKgpgBNoJJR5keJLIXeyacCYuSfdlIRh7OKHhvZEboWKYfi1CuQSXGqvtm/xNOWwNWKOXd2GE/Q==",
         "dependencies": {
-          "Maa.Framework.Runtime.linux-arm64": "5.3.0",
-          "Maa.Framework.Runtime.linux-x64": "5.3.0",
-          "Maa.Framework.Runtime.osx-arm64": "5.3.0",
-          "Maa.Framework.Runtime.osx-x64": "5.3.0",
-          "Maa.Framework.Runtime.win-arm64": "5.3.0",
-          "Maa.Framework.Runtime.win-x64": "5.3.0"
+          "Maa.Framework.Runtime.linux-arm64": "5.3.3",
+          "Maa.Framework.Runtime.linux-x64": "5.3.3",
+          "Maa.Framework.Runtime.osx-arm64": "5.3.3",
+          "Maa.Framework.Runtime.osx-x64": "5.3.3",
+          "Maa.Framework.Runtime.win-arm64": "5.3.3",
+          "Maa.Framework.Runtime.win-x64": "5.3.3"
         }
       }
     },
@@ -264,33 +264,33 @@
       },
       "Maa.Framework.Runtime.linux-arm64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "wUbqpekIaEz/t7YUGyE2TVWKOxBk5I3FQIniig/QsxA1js+2Z3Q1JZSUsNrwVyL1z7rYYgpEp5GrMQdZqaOCqg=="
+        "resolved": "5.3.3",
+        "contentHash": "s0/lomvnOAEX978xwoVXB61B3GbbEcbYeksIDmAqrCAeZUpR+C+PNxuML6zu0htybRewYhhhNUn5+0Q3QXpWsA=="
       },
       "Maa.Framework.Runtime.linux-x64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "bQJOYd8qx5jmdtC6hJSFRxCJV4qhZU+EMGi3aMuVCCDyisRSDvggluk6Iiz/efZXip+UZ6vW86fCdLTkcdDrxQ=="
+        "resolved": "5.3.3",
+        "contentHash": "OwpYHYNCH+YxAcPBI89ii2XAZMfZtqnx5Le4jqKzzCSlxB9bL9PHPjZQo2YysFJRhX+jksa2hgOlwVGzcx9Tew=="
       },
       "Maa.Framework.Runtime.osx-arm64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "jEINgzrQw/j6P1AGItv7w4kvLD6zO5RJ/chZZ5IsXpzhgt99ecMKqUqPvnyxb/ssO6DdVO2EtZpAOH6ElQ21fA=="
+        "resolved": "5.3.3",
+        "contentHash": "4Tz7R0p8uT/XjYdIaRRSKME3ntUuT5q8IQelzD/n49kyD/n/9HYwg7EIdVohvgi9+Cc3ev1Bng5f9IkNMlWd8Q=="
       },
       "Maa.Framework.Runtime.osx-x64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "8EyedD6tadNPhsOjNHMk/YqQVU8W8UTE1TnHhqq4vNizEnumWJ6ccbQL4UE9sNDq27BlKJxTcaWXJkzVq4Oy7A=="
+        "resolved": "5.3.3",
+        "contentHash": "MjcuK9w6M++4mvJSM4KfBCeZUm1jDu5zL5mhoGgF+ZC7l8e7/XXtL87WT0NN3o1Q8YEOQDGYNc4gNFtzQnOwlw=="
       },
       "Maa.Framework.Runtime.win-arm64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "aD2/MVTKK052JaqEBaz2bMMoxHFrH6fKdC+ulleMwSI7i+BGQ+0UO7KsY+MoxxImG1rCIcL8qmGajt7AyMfv5A=="
+        "resolved": "5.3.3",
+        "contentHash": "8P+xCMGgPLCNHRSc1AR04orUd7n89ug+KGPkZVCbZz5YwIp1exkOrH6wXmWXQ2Mb3xUbd3m2PUpDRXwOXwW4jA=="
       },
       "Maa.Framework.Runtime.win-x64": {
         "type": "Transitive",
-        "resolved": "5.3.0",
-        "contentHash": "3UfacIDi6XqBOlOD0G/FNnU1SaBfRadQJTco8ICjPPfCMCwZhqXovG/47/9qaFEFGdwC3tO0jSTyxAVT/IOVVw=="
+        "resolved": "5.3.3",
+        "contentHash": "PP1MAJfWq1gq/O27+xBEyqQ1LX1zE1i1/nu0qFKJjmb5wK2Q7Aa74/Ot0FrQUut8IP6G8eQmzPg4Y6wAzhQGDg=="
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
@@ -401,7 +401,7 @@
         "type": "Project",
         "dependencies": {
           "Maa.Framework.Native": "[1.0.0-dev, )",
-          "Maa.Framework.Runtimes": "[5.3.0, )"
+          "Maa.Framework.Runtimes": "[5.3.3, )"
         }
       },
       "Maa.Framework.Binding": {
@@ -434,16 +434,16 @@
       },
       "Maa.Framework.Runtimes": {
         "type": "CentralTransitive",
-        "requested": "[5.3.0, )",
-        "resolved": "5.3.0",
-        "contentHash": "rptjiKru1yggsF1gC2QF0R3fG+BoZrFD9NitBfammVm3iI8rxyqQxm/kALEXhH3fV5t6XrLH8pGkH+y3x477OA==",
+        "requested": "[5.3.3, )",
+        "resolved": "5.3.3",
+        "contentHash": "5/WLFzf2yVtzKgpgBNoJJR5keJLIXeyacCYuSfdlIRh7OKHhvZEboWKYfi1CuQSXGqvtm/xNOWwNWKOXd2GE/Q==",
         "dependencies": {
-          "Maa.Framework.Runtime.linux-arm64": "5.3.0",
-          "Maa.Framework.Runtime.linux-x64": "5.3.0",
-          "Maa.Framework.Runtime.osx-arm64": "5.3.0",
-          "Maa.Framework.Runtime.osx-x64": "5.3.0",
-          "Maa.Framework.Runtime.win-arm64": "5.3.0",
-          "Maa.Framework.Runtime.win-x64": "5.3.0"
+          "Maa.Framework.Runtime.linux-arm64": "5.3.3",
+          "Maa.Framework.Runtime.linux-x64": "5.3.3",
+          "Maa.Framework.Runtime.osx-arm64": "5.3.3",
+          "Maa.Framework.Runtime.osx-x64": "5.3.3",
+          "Maa.Framework.Runtime.win-arm64": "5.3.3",
+          "Maa.Framework.Runtime.win-x64": "5.3.3"
         }
       }
     }
