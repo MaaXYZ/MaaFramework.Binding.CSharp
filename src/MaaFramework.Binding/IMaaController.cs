@@ -135,7 +135,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob KeyUp(int keyCode);
 
     /// <summary>
-    ///     Takes a screenshot.
+    ///     Post a screenshot request to the controller.
     /// </summary>
     /// <returns>A screen capture <see cref="MaaJob"/>.</returns>
     MaaJob Screencap();
@@ -180,10 +180,15 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     bool IsConnected { get; }
 
     /// <summary>
-    ///     Gets the cached image.
+    ///     Gets the cached screenshot image.
     /// </summary>
-    /// <param name="image">An <see cref="IMaaImageBuffer"/> used to get the cached image.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    /// <param name="image">An <see cref="IMaaImageBuffer"/> used to store the screenshot image.</param>
+    /// <returns><see langword="true"/> if the screenshot is available; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     <para>The returned image is scaled according to the screenshot target size settings (long side / short side).</para>
+    ///     <para>The image dimensions may differ from the raw device resolution.</para>
+    ///     <para>Use <see cref="GetResolution"/> to get the raw (unscaled) device resolution.</para>
+    /// </remarks>
     /// <exception cref="ArgumentNullException"/>
     bool GetCachedImage(IMaaImageBuffer image);
 
@@ -196,13 +201,13 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <summary>
     ///     Gets the raw (unscaled) device resolution.
     /// </summary>
-    /// <param name="width">Output parameter for the raw width.</param>
-    /// <param name="height">Output parameter for the raw height.</param>
-    /// <returns><see langword="true"/> if the resolution is available; otherwise, <see langword="false"/>.</returns>
+    /// <param name="width">The raw width.</param>
+    /// <param name="height">The raw height.</param>
+    /// <returns><see langword="true"/> if the resolution is available; otherwise, <see langword="false"/> (e.g., not connected or no screenshot taken yet).</returns>
     /// <remarks>
     ///     <para>This returns the actual device screen resolution before any scaling.</para>
     ///     <para>The screenshot obtained via <see cref="GetCachedImage"/> is scaled according to the screenshot target size settings,
-    ///     so its dimensions may differ from this raw resolution.</para>
+    ///         so its dimensions may differ from this raw resolution.</para>
     /// </remarks>
     bool GetResolution(out int width, out int height);
 }
