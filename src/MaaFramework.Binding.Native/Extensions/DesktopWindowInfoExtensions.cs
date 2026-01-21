@@ -51,4 +51,54 @@ public static class DesktopWindowInfoExtensions
 
         return new MaaWin32Controller(info, link, check);
     }
+
+    /// <summary>
+    ///     Converts a <see cref="DesktopWindowInfo"/> to a <see cref="MaaGamepadController"/>.
+    /// </summary>
+    /// <param name="info">The DesktopWindowInfo.</param>
+    /// <param name="gamepadType">The type of virtual gamepad.</param>
+    /// <param name="screencapMethod">The screencap method.</param>
+    /// <param name="hWnd">The new handle to a win32 window.</param>
+    /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
+    /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
+    /// <returns>A MaaGamepadController.</returns>
+    /// <exception cref="ArgumentNullException"/>
+    public static MaaGamepadController ToGamepadControllerWith(this DesktopWindowInfo info,
+        GamepadType gamepadType,
+        Win32ScreencapMethod? screencapMethod = null,
+        nint? hWnd = null,
+        LinkOption link = LinkOption.Start,
+        CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+    {
+        ArgumentNullException.ThrowIfNull(info);
+
+        if (hWnd == nint.Zero)
+            return new MaaGamepadController(gamepadType, null, link, check);
+
+        var handle = hWnd ?? info.Handle;
+        return new MaaGamepadController(
+            gamepadType,
+            new DesktopWindowInfo(
+                handle,
+                handle == info.Handle ? info.Name : string.Empty,
+                handle == info.Handle ? info.ClassName : string.Empty,
+                screencapMethod ?? info.ScreencapMethod,
+                Win32InputMethod.None,
+                Win32InputMethod.None
+            ),
+            link,
+            check
+        );
+    }
+
+    /// <inheritdoc cref="ToGamepadControllerWith(DesktopWindowInfo, GamepadType, Win32ScreencapMethod?, nint?, LinkOption, CheckStatusOption)"/>
+    public static MaaGamepadController ToGamepadController(this DesktopWindowInfo info,
+        GamepadType gamepadType,
+        LinkOption link = LinkOption.Start,
+        CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+    {
+        ArgumentNullException.ThrowIfNull(info);
+
+        return new MaaGamepadController(gamepadType, info, link, check);
+    }
 }

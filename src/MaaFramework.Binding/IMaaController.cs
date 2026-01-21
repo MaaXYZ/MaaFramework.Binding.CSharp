@@ -29,22 +29,30 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
 
     /// <summary>
     ///     Clicks a point.
+    ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
+    ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
     /// </summary>
     /// <param name="x">The horizontal coordinate of the point.</param>
     /// <param name="y">The vertical coordinate of the point.</param>
+    /// <param name="contact">The contact id.</param>
+    /// <param name="pressure">The pressure.</param>
     /// <returns>A click <see cref="MaaJob"/>.</returns>
-    MaaJob Click(int x, int y);
+    MaaJob Click(int x, int y, int contact = 0, int pressure = 1);
 
     /// <summary>
     ///     Swipes from a starting point to an ending point with duration.
+    ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
+    ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
     /// </summary>
     /// <param name="x1">The horizontal coordinate of the starting point.</param>
     /// <param name="y1">The vertical coordinate of the starting point.</param>
     /// <param name="x2">The horizontal coordinate of the ending point.</param>
     /// <param name="y2">The vertical coordinate of the ending point.</param>
     /// <param name="duration">The millisecond of the swipe duration(ms).</param>
+    /// <param name="contact">The contact id.</param>
+    /// <param name="pressure">The pressure.</param>
     /// <returns>A swipe <see cref="MaaJob"/>.</returns>
-    MaaJob Swipe(int x1, int y1, int x2, int y2, int duration);
+    MaaJob Swipe(int x1, int y1, int x2, int y2, int duration, int contact = 0, int pressure = 1);
 
     /// <summary>
     ///     Presses a key.
@@ -60,6 +68,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///     Clicks a key.
     ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
     ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>
+    ///     <para>For gamepad controller, <paramref name="keyCode"/> is from <see cref="GamepadButton"/>.</para>
     /// </summary>
     /// <param name="keyCode">The code of the key.</param>
     /// <returns>A click key <see cref="MaaJob"/>.</returns>
@@ -94,17 +103,18 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
     ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
     ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
+    ///     <para>For gamepad controller, <paramref name="contact"/> is from <see cref="GamepadTouch"/>.</para>
     /// </summary>
     /// <param name="contact">The contact id.</param>
     /// <param name="x">The horizontal coordinate of the point.</param>
     /// <param name="y">The vertical coordinate of the point.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>A touch down <see cref="MaaJob"/>.</returns>
-    MaaJob TouchDown(int contact, int x, int y, int pressure);
+    MaaJob TouchDown(int contact, int x, int y, int pressure = 1);
 
     /// <returns>A touch move <see cref="MaaJob"/>.</returns>
     /// <inheritdoc cref="TouchDown"/>
-    MaaJob TouchMove(int contact, int x, int y, int pressure);
+    MaaJob TouchMove(int contact, int x, int y, int pressure = 1);
 
     /// <returns>A touch up <see cref="MaaJob"/>.</returns>
     /// <inheritdoc cref="TouchDown"/>
@@ -114,6 +124,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///     Usage: KeyDown -> KeyUp.
     ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
     ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>
+    ///     <para>For gamepad controller, <paramref name="keyCode"/> is from <see cref="GamepadButton"/>.</para>
     /// </summary>
     /// <param name="keyCode">The code of the key.</param>
     /// <returns>A key down <see cref="MaaJob"/>.</returns>
@@ -124,7 +135,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob KeyUp(int keyCode);
 
     /// <summary>
-    ///     Takes a screenshot.
+    ///     Post a screenshot request to the controller.
     /// </summary>
     /// <returns>A screen capture <see cref="MaaJob"/>.</returns>
     MaaJob Screencap();
@@ -169,10 +180,15 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     bool IsConnected { get; }
 
     /// <summary>
-    ///     Gets the cached image.
+    ///     Gets the cached screenshot image.
     /// </summary>
-    /// <param name="image">An <see cref="IMaaImageBuffer"/> used to get the cached image.</param>
-    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    /// <param name="image">An <see cref="IMaaImageBuffer"/> used to store the screenshot image.</param>
+    /// <returns><see langword="true"/> if the screenshot is available; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     <para>The returned image is scaled according to the screenshot target size settings (long side / short side).</para>
+    ///     <para>The image dimensions may differ from the raw device resolution.</para>
+    ///     <para>Use <see cref="GetResolution"/> to get the raw (unscaled) device resolution.</para>
+    /// </remarks>
     /// <exception cref="ArgumentNullException"/>
     bool GetCachedImage(IMaaImageBuffer image);
 
@@ -181,4 +197,17 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// </summary>
     /// <returns>A <see cref="string"/> if the hash was successfully got; otherwise, <see langword="null"/>.</returns>
     string? Uuid { get; }
+
+    /// <summary>
+    ///     Gets the raw (unscaled) device resolution.
+    /// </summary>
+    /// <param name="width">The raw width.</param>
+    /// <param name="height">The raw height.</param>
+    /// <returns><see langword="true"/> if the resolution is available; otherwise, <see langword="false"/> (e.g., not connected or no screenshot taken yet).</returns>
+    /// <remarks>
+    ///     <para>This returns the actual device screen resolution before any scaling.</para>
+    ///     <para>The screenshot obtained via <see cref="GetCachedImage"/> is scaled according to the screenshot target size settings,
+    ///         so its dimensions may differ from this raw resolution.</para>
+    /// </remarks>
+    bool GetResolution(out int width, out int height);
 }
