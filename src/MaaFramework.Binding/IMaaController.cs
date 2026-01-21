@@ -68,6 +68,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///     Clicks a key.
     ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
     ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>
+    ///     <para>For gamepad controller, <paramref name="keyCode"/> is from <see cref="GamepadButton"/>.</para>
     /// </summary>
     /// <param name="keyCode">The code of the key.</param>
     /// <returns>A click key <see cref="MaaJob"/>.</returns>
@@ -102,17 +103,18 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///     Usage: TouchDown -> TouchMove -> TouchUp.
     ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
     ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
+    ///     <para>For gamepad controller, <paramref name="contact"/> is from <see cref="GamepadTouch"/>.</para>
     /// </summary>
     /// <param name="contact">The contact id.</param>
     /// <param name="x">The horizontal coordinate of the point.</param>
     /// <param name="y">The vertical coordinate of the point.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>A touch down <see cref="MaaJob"/>.</returns>
-    MaaJob TouchDown(int contact, int x, int y, int pressure);
+    MaaJob TouchDown(int contact, int x, int y, int pressure = 1);
 
     /// <returns>A touch move <see cref="MaaJob"/>.</returns>
     /// <inheritdoc cref="TouchDown"/>
-    MaaJob TouchMove(int contact, int x, int y, int pressure);
+    MaaJob TouchMove(int contact, int x, int y, int pressure = 1);
 
     /// <returns>A touch up <see cref="MaaJob"/>.</returns>
     /// <inheritdoc cref="TouchDown"/>
@@ -122,6 +124,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///     Usage: KeyDown -> KeyUp.
     ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
     ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>
+    ///     <para>For gamepad controller, <paramref name="keyCode"/> is from <see cref="GamepadButton"/>.</para>
     /// </summary>
     /// <param name="keyCode">The code of the key.</param>
     /// <returns>A key down <see cref="MaaJob"/>.</returns>

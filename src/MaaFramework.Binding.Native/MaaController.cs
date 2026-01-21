@@ -144,14 +144,14 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchDown"/>.
     /// </remarks>
-    public MaaJob TouchDown(int contact, int x, int y, int pressure)
+    public MaaJob TouchDown(int contact, int x, int y, int pressure = 1)
         => CreateJob(MaaControllerPostTouchDown(Handle, contact, x, y, pressure));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchMove"/>.
     /// </remarks>
-    public MaaJob TouchMove(int contact, int x, int y, int pressure)
+    public MaaJob TouchMove(int contact, int x, int y, int pressure = 1)
         => CreateJob(MaaControllerPostTouchMove(Handle, contact, x, y, pressure));
 
     /// <inheritdoc/>

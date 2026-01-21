@@ -13,19 +13,22 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     Virtual gamepad touch contact definitions for touch_down/touch_move/touch_up.
-/// </summary>
-/// <remarks>
+///     Virtual gamepad touch contact definitions for touch_down/touch_move/touch_up
 ///     <para>For gamepad controller, the touch functions are repurposed for analog inputs:</para>
 ///     <para>- x, y: Analog stick position</para>
 ///     <para>- pressure: Trigger value (0~255)</para>
+///     <para>Contact mapping:</para>
 ///     <code>| Contact       | Input           | x range       | y range       | pressure   | Description                      |</code>
 ///     <code>|---------------|-----------------|---------------|---------------|------------|----------------------------------|</code>
 ///     <code>| LeftStick     | Left Stick      | -32768~32767  | -32768~32767  | ignored    | Left analog stick X/Y position   |</code>
 ///     <code>| RightStick    | Right Stick     | -32768~32767  | -32768~32767  | ignored    | Right analog stick X/Y position  |</code>
 ///     <code>| LeftTrigger   | Left Trigger    | ignored       | ignored       | 0~255      | Left trigger (LT/L2) value       |</code>
 ///     <code>| RightTrigger  | Right Trigger   | ignored       | ignored       | 0~255      | Right trigger (RT/R2) value      |</code>
-/// </remarks>
+///     <para>Usage:</para>
+///     <para>- touch_down(contact, x, y, pressure): Start analog input</para>
+///     <para>- touch_move(contact, x, y, pressure): Update analog input position/value</para>
+///     <para>- touch_up(contact): Release/reset analog input to center/zero</para>
+/// </summary>
 public enum GamepadTouch : System.UInt64
 {
     LeftStick = 0,

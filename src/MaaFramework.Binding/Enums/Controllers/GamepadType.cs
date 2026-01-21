@@ -14,16 +14,14 @@ namespace MaaFramework.Binding;
 
 /// <summary>
 ///     Virtual gamepad type.
-/// </summary>
-/// <remarks>
 ///     <para>Select ONE type only.</para>
 ///     <code>| Type          | Description                                    |</code>
 ///     <code>|---------------|------------------------------------------------|</code>
 ///     <code>| Xbox360       | Microsoft Xbox 360 Controller (wired)          |</code>
 ///     <code>| DualShock4    | Sony DualShock 4 Controller (wired)            |</code>
-/// </remarks>
+/// </summary>
 public enum GamepadType : System.UInt64
 {
-    Xbox360 = 0,
-    DualShock4 = 1,
+    Xbox360 = 0UL,
+    DualShock4 = 1UL,
 }
