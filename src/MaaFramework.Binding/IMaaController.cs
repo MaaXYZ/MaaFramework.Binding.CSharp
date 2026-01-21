@@ -29,14 +29,6 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
 
     /// <summary>
     ///     Clicks a point.
-    /// </summary>
-    /// <param name="x">The horizontal coordinate of the point.</param>
-    /// <param name="y">The vertical coordinate of the point.</param>
-    /// <returns>A click <see cref="MaaJob"/>.</returns>
-    MaaJob Click(int x, int y);
-
-    /// <summary>
-    ///     Clicks a point with extended parameters.
     ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
     ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
     /// </summary>
@@ -45,21 +37,10 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <param name="contact">The contact id.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>A click <see cref="MaaJob"/>.</returns>
-    MaaJob Click(int x, int y, int contact, int pressure);
+    MaaJob Click(int x, int y, int contact = 0, int pressure = 1);
 
     /// <summary>
     ///     Swipes from a starting point to an ending point with duration.
-    /// </summary>
-    /// <param name="x1">The horizontal coordinate of the starting point.</param>
-    /// <param name="y1">The vertical coordinate of the starting point.</param>
-    /// <param name="x2">The horizontal coordinate of the ending point.</param>
-    /// <param name="y2">The vertical coordinate of the ending point.</param>
-    /// <param name="duration">The millisecond of the swipe duration(ms).</param>
-    /// <returns>A swipe <see cref="MaaJob"/>.</returns>
-    MaaJob Swipe(int x1, int y1, int x2, int y2, int duration);
-
-    /// <summary>
-    ///     Swipes from a starting point to an ending point with duration and extended parameters.
     ///     <para>For adb controller, <paramref name="contact"/> means finger id (0 for first finger, 1 for second finger, etc.).</para>
     ///     <para>For win32 controller, <paramref name="contact"/> means mouse button id (0 for left, 1 for right, 2 for middle).</para>
     /// </summary>
@@ -71,7 +52,7 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     /// <param name="contact">The contact id.</param>
     /// <param name="pressure">The pressure.</param>
     /// <returns>A swipe <see cref="MaaJob"/>.</returns>
-    MaaJob Swipe(int x1, int y1, int x2, int y2, int duration, int contact, int pressure);
+    MaaJob Swipe(int x1, int y1, int x2, int y2, int duration, int contact = 0, int pressure = 1);
 
     /// <summary>
     ///     Presses a key.
