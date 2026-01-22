@@ -5,12 +5,18 @@ using static MaaFramework.Binding.Interop.Native.MaaContext;
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaContext"/>.
+///     A wrapper readonly struct providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaContext"/>.
 /// </summary>
-public class MaaContext : IMaaContext<MaaContextHandle>
+public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>
 {
     /// <inheritdoc/>
     public required MaaContextHandle Handle { get; init; }
+
+    /// <inheritdoc cref="IMaaContext.Tasker"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextGetTasker"/>.
+    /// </remarks>
+    public required MaaTasker Tasker { get; init; }
 
     /// <summary>
     ///     Creates a <see cref="MaaContext"/> instance.
@@ -26,6 +32,29 @@ public class MaaContext : IMaaContext<MaaContextHandle>
         var taskerHandle = MaaContextGetTasker(Handle);
         Tasker = NativeBindingContext.IsStatelessMode ? new MaaTasker(taskerHandle) : MaaTasker.Instances[taskerHandle];
     }
+
+    #region Override equality
+    /// <inheritdoc/>
+    public bool Equals(MaaContext other) => Handle == other.Handle;
+    /// <inheritdoc/>
+    public override bool Equals(object? obj) => obj is MaaContext other && Equals(other);
+    /// <inheritdoc/>
+    public override int GetHashCode() => Handle.GetHashCode();
+    /// <summary>
+    ///     Compares two values to determine equality.
+    /// </summary>
+    /// <param name="left">The left value.</param>
+    /// <param name="right">The right value.</param>
+    /// <returns><see langword="true"/> if <paramref name="left"/> is equal to <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
+    public static bool operator ==(MaaContext left, MaaContext right) => left.Equals(right);
+    /// <summary>
+    ///     Compares two values to determine inequality.
+    /// </summary>
+    /// <param name="left">The left value.</param>
+    /// <param name="right">The right value.</param>
+    /// <returns><see langword="true"/> if <paramref name="left"/> not equal to <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
+    public static bool operator !=(MaaContext left, MaaContext right) => !(left == right);
+    #endregion
 
     /// <inheritdoc/>
     public bool IsCancellationRequested => Tasker.IsStopping;
@@ -88,8 +117,19 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     ///     Wrapper of <see cref="MaaContextOverrideNext"/>.
     /// </remarks>
     public bool OverrideNext(string nodeName, IEnumerable<string> nextList)
-        => MaaStringListBuffer.TrySetList(nextList, listBuffer
-            => MaaContextOverrideNext(Handle, nodeName, listBuffer));
+    // => MaaStringListBuffer.TrySetList(nextList, listBuffer => MaaContextOverrideNext(Handle, nodeName, listBuffer));
+    {
+        var handle = Interop.Native.MaaBuffer.MaaStringListBufferCreate();
+        try
+        {
+            return MaaStringListBuffer.TrySetList(handle, nextList)
+                && MaaContextOverrideNext(Handle, nodeName, handle);
+        }
+        finally
+        {
+            Interop.Native.MaaBuffer.MaaStringListBufferDestroy(handle);
+        }
+    }
 
     /// <inheritdoc/>
     public bool OverrideImage(string imageName, IMaaImageBuffer image)
@@ -111,8 +151,24 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     ///     Wrapper of <see cref="MaaContextGetNodeData"/>.
     /// </remarks>
     public bool GetNodeData(string nodeName, [MaybeNullWhen(false)][StringSyntax("Json")] out string data)
-        => MaaStringBuffer.TryGetValue(out data, buffer
-            => MaaContextGetNodeData(Handle, nodeName, buffer));
+    // => MaaStringBuffer.TryGetValue(out data, buffer => MaaContextGetNodeData(Handle, nodeName, buffer));
+    {
+        var handle = Interop.Native.MaaBuffer.MaaStringBufferCreate();
+        try
+        {
+            if (!MaaContextGetNodeData(Handle, nodeName, handle))
+            {
+                data = default;
+                return false;
+            }
+
+            return MaaStringBuffer.TryGetValue(handle, out data);
+        }
+        finally
+        {
+            Interop.Native.MaaBuffer.MaaStringBufferDestroy(handle);
+        }
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -121,12 +177,6 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     public MaaTaskJob TaskJob => new(MaaContextGetTaskId(Handle), Tasker, Tasker);
 
     IMaaTasker IMaaContext.Tasker => Tasker;
-
-    /// <inheritdoc cref="IMaaContext.Tasker"/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaContextGetTasker"/>.
-    /// </remarks>
-    public MaaTasker Tasker { get; }
 
     object ICloneable.Clone()
         => Clone();
@@ -152,8 +202,24 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     ///     Wrapper of <see cref="MaaContextGetAnchor"/>.
     /// </remarks>
     public bool GetAnchor(string anchorName, [MaybeNullWhen(false)] out string nodeName)
-        => MaaStringBuffer.TryGetValue(out nodeName, buffer
-            => MaaContextGetAnchor(Handle, anchorName, buffer));
+    // => MaaStringBuffer.TryGetValue(out nodeName, buffer => MaaContextGetAnchor(Handle, anchorName, buffer));
+    {
+        var handle = Interop.Native.MaaBuffer.MaaStringBufferCreate();
+        try
+        {
+            if (!MaaContextGetAnchor(Handle, anchorName, handle))
+            {
+                nodeName = default;
+                return false;
+            }
+
+            return MaaStringBuffer.TryGetValue(handle, out nodeName);
+        }
+        finally
+        {
+            Interop.Native.MaaBuffer.MaaStringBufferDestroy(handle);
+        }
+    }
 
     /// <inheritdoc/>
     /// <remarks>

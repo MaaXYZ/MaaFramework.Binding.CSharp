@@ -39,7 +39,7 @@ internal static class Custom
     internal sealed class TestRecognition : IMaaCustomRecognition
     {
         public string Name { get; set; } = nameof(TestRecognition);
-        public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
+        public bool Analyze<T>(T context, in AnalyzeArgs args, in AnalyzeResults results) where T : IMaaContext
         {
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
@@ -51,7 +51,7 @@ internal static class Custom
             var cloneContext = (context as ICloneable).Clone() as IMaaContext;
             cloneContext = cloneContext?.Clone();
 #if MAA_NATIVE
-            cloneContext = (cloneContext as MaaContext)?.Clone();
+            cloneContext = (cloneContext as MaaContext?)?.Clone();
 #endif
             Assert.IsNotNull(cloneContext);
             Assert.IsNull(
@@ -128,7 +128,7 @@ internal static class Custom
     {
         public string Name { get; set; } = nameof(TestAction);
 
-        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
+        public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
         {
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(ActionParam, args.ActionParam);
@@ -148,7 +148,7 @@ internal static class Custom
     {
         public string Name { get; set; } = nameof(EmptyAction);
 
-        public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
+        public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
         {
             return true;
         }
@@ -201,7 +201,7 @@ internal static class Custom
         public bool ClickKey(int keycode)
             => c.ClickKey(keycode).Wait().IsSucceeded();
 
-        public bool RequestUuid(in IMaaStringBuffer buffer)
+        public bool RequestUuid(IMaaStringBuffer buffer)
         {
             var uuid = c.Uuid;
             return uuid is not null && buffer.TrySetValue(uuid);
@@ -209,7 +209,7 @@ internal static class Custom
 
         public ControllerFeatures GetFeatures() => ControllerFeatures.None;
 
-        public bool Screencap(in IMaaImageBuffer buffer)
+        public bool Screencap(IMaaImageBuffer buffer)
             => c.Screencap().Wait().IsSucceeded() && c.GetCachedImage(buffer);
 
         public bool StartApp(string intent)

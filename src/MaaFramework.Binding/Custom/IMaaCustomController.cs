@@ -15,7 +15,7 @@ public interface IMaaCustomController : IMaaCustomResource, IDisposable
     /// <remarks>
     ///     Write result to buffer.
     /// </remarks>
-    bool RequestUuid(in IMaaStringBuffer buffer);
+    bool RequestUuid(IMaaStringBuffer buffer);
     ControllerFeatures GetFeatures();
 
     bool StartApp(string intent);
@@ -24,7 +24,7 @@ public interface IMaaCustomController : IMaaCustomResource, IDisposable
     /// <remarks>
     ///     Write result to buffer.
     /// </remarks>
-    bool Screencap(in IMaaImageBuffer buffer);
+    bool Screencap(IMaaImageBuffer buffer);
     bool Click(int x, int y);
     bool Swipe(int x1, int y1, int x2, int y2, int duration);
     bool TouchDown(int contact, int x, int y, int pressure);
