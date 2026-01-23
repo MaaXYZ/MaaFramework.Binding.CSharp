@@ -77,6 +77,40 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     }
 
     /// <inheritdoc/>
+    public RecognitionDetail? RunRecognitionDirect(string recoType, [StringSyntax("Json")] string recoParam, IMaaImageBuffer image)
+        => RunRecognitionDirect(recoType, recoParam, (MaaImageBuffer)image);
+
+    /// <inheritdoc cref="IMaaContext.RunRecognitionDirect"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextRunRecognitionDirect"/>.
+    /// </remarks>
+    public RecognitionDetail? RunRecognitionDirect(string recoType, [StringSyntax("Json")] string recoParam, MaaImageBuffer image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        var recognitionId = MaaContextRunRecognitionDirect(Handle, recoType, recoParam, image.Handle);
+        return recognitionId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recognitionId, Tasker);
+    }
+
+    /// <inheritdoc/>
+    public ActionDetail? RunActionDirect(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail)
+        => RunActionDirect(actionType, actionParam, (MaaRectBuffer)recognitionBox, recognitionDetail);
+
+    /// <inheritdoc cref="IMaaContext.RunActionDirect"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextRunActionDirect"/>.
+    /// </remarks>
+    public ActionDetail? RunActionDirect(string actionType, [StringSyntax("Json")] string actionParam, MaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail)
+    {
+        ArgumentNullException.ThrowIfNull(recognitionBox);
+        var actionId = MaaContextRunActionDirect(Handle, actionType, actionParam, recognitionBox.Handle, recognitionDetail);
+        return actionId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : ActionDetail.Query<MaaRectBuffer>(actionId, Tasker);
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextOverridePipeline"/>.
     /// </remarks>

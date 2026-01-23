@@ -95,6 +95,10 @@ public static partial class MaaTasker
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerOverridePipeline(MaaTaskerHandle tasker, MaaTaskId taskId, string pipelineOverride);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaTaskerGetRecognitionDetail(MaaTaskerHandle tasker, MaaRecoId recoId, MaaStringBufferHandle nodeName, MaaStringBufferHandle algorithm, [MarshalAs(UnmanagedType.U1)] out bool hit, MaaRectHandle box, MaaStringBufferHandle detailJson, MaaImageBufferHandle raw, MaaImageListBufferHandle draws);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

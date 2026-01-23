@@ -403,4 +403,20 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
             return list!;
         }
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceGetDefaultRecognitionParam"/>.
+    /// </remarks>
+    public bool GetDefaultRecognitionParam(string recoType, [MaybeNullWhen(false)][StringSyntax("Json")] out string param)
+        => MaaStringBuffer.TryGetValue(out param, buffer
+            => MaaResourceGetDefaultRecognitionParam(Handle, recoType, buffer));
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceGetDefaultActionParam"/>.
+    /// </remarks>
+    public bool GetDefaultActionParam(string actionType, [MaybeNullWhen(false)][StringSyntax("Json")] out string param)
+        => MaaStringBuffer.TryGetValue(out param, buffer
+            => MaaResourceGetDefaultActionParam(Handle, actionType, buffer));
 }

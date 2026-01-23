@@ -149,4 +149,20 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaDisp
     ///     Gets the list of registered custom actions.
     /// </summary>
     IList<string> CustomActionList { get; }
+
+    /// <summary>
+    ///     Gets the default recognition parameters for the specified type.
+    /// </summary>
+    /// <param name="recoType">The recognition type (e.g., "OCR", "TemplateMatch").</param>
+    /// <param name="param">The default recognition parameters.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool GetDefaultRecognitionParam(string recoType, [MaybeNullWhen(false)][StringSyntax("Json")] out string param);
+
+    /// <summary>
+    ///     Gets the default action parameters for the specified type.
+    /// </summary>
+    /// <param name="actionType">The action type (e.g., "Click", "Swipe").</param>
+    /// <param name="param">The default action parameters.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool GetDefaultActionParam(string actionType, [MaybeNullWhen(false)][StringSyntax("Json")] out string param);
 }
