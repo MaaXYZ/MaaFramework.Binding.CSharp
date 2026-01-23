@@ -346,6 +346,16 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         => MaaTaskerClearCache(Handle);
 
     /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerOverridePipeline"/>.
+    /// </remarks>
+    public bool OverridePipeline(MaaTaskJob taskJob, [StringSyntax("Json")] string pipelineOverride)
+    {
+        ArgumentNullException.ThrowIfNull(taskJob);
+        return MaaTaskerOverridePipeline(Handle, taskJob.Id, pipelineOverride);
+    }
+
+    /// <inheritdoc/>
     public bool GetRecognitionDetail<T>(long recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, IMaaImageBuffer? raw, IMaaListBuffer<T>? draws)
         where T : IMaaImageBuffer
         => GetRecognitionDetail(recognitionId, out nodeName, out algorithm, out hit, (MaaRectBuffer?)hitBox, out detailJson, (MaaImageBuffer?)raw, (MaaImageListBuffer?)draws);

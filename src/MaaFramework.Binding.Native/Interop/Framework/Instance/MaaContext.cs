@@ -26,6 +26,29 @@ public static partial class MaaContext
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaActId MaaContextRunAction(MaaContextHandle context, string entry, string pipelineOverride, MaaRectHandle box, string recoDetail);
 
+    /// <summary>
+    ///     Run recognition directly with type and parameters, without requiring a pipeline entry.
+    /// </summary>
+    /// <param name="context">The context handle.</param>
+    /// <param name="recoType">Recognition type string (e.g., "OCR", "TemplateMatch").</param>
+    /// <param name="recoParam">Recognition parameters json.</param>
+    /// <param name="image">Image to recognize.</param>
+    /// <returns>The recognition id.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaRecoId MaaContextRunRecognitionDirect(MaaContextHandle context, string recoType, string recoParam, MaaImageBufferHandle image);
+
+    /// <summary>
+    ///     Run action directly with type and parameters, without requiring a pipeline entry.
+    /// </summary>
+    /// <param name="context">The context handle.</param>
+    /// <param name="actionType">Action type string (e.g., "Click", "Swipe").</param>
+    /// <param name="actionParam">Action parameters json.</param>
+    /// <param name="box">Previous recognition position.</param>
+    /// <param name="recoDetail">Previous recognition details.</param>
+    /// <returns>The action id.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaActId MaaContextRunActionDirect(MaaContextHandle context, string actionType, string actionParam, MaaRectHandle box, string recoDetail);
+
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaContextOverridePipeline(MaaContextHandle context, string pipelineOverride);
