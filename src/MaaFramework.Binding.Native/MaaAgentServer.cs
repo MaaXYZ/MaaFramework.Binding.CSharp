@@ -28,6 +28,7 @@ public sealed class MaaAgentServer : IMaaAgentServer
     private MaaAgentServer()
     {
         // DO NOT add any MaaAgentServerAPI.
+        // Due to WithNativeLibrary().
     }
     static MaaAgentServer()
     {
@@ -36,6 +37,7 @@ public sealed class MaaAgentServer : IMaaAgentServer
         Current = new();
     }
 
+    /// <remarks>The sender is current instance.</remarks>
     /// <inheritdoc/>
     public event EventHandler<MaaCallbackEventArgs>? Callback
     {
@@ -49,23 +51,20 @@ public sealed class MaaAgentServer : IMaaAgentServer
 
     private void EnsureCallbacksRegistered()
     {
-        if (_maaEventCallbacks[0] is not null)
+        if (_maaEventCallback is not null)
             return;
 
-        _maaEventCallbacks[0] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaTasker(handle), new MaaCallbackEventArgs(message, detailsJson));
-        _maaEventCallbacks[1] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaResource(handle), new MaaCallbackEventArgs(message, detailsJson));
-        _maaEventCallbacks[2] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaController(handle), new MaaCallbackEventArgs(message, detailsJson));
-        _maaEventCallbacks[3] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaContext(handle), new MaaCallbackEventArgs(message, detailsJson));
+        _maaEventCallback = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(this, new MaaCallbackEventArgs(handle, message, detailsJson, transArg));
 
-        _ = MaaAgentServerAddTaskerSink(_maaEventCallbacks[0], 1).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddResourceSink(_maaEventCallbacks[1], 2).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddControllerSink(_maaEventCallbacks[2], 4).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddContextSink(_maaEventCallbacks[3], 8).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddTaskerSink(_maaEventCallback, (nint)MaaHandleType.Tasker).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddResourceSink(_maaEventCallback, (nint)MaaHandleType.Resource).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddControllerSink(_maaEventCallback, (nint)MaaHandleType.Controller).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddContextSink(_maaEventCallback, (nint)MaaHandleType.Context).ThrowIfEquals(MaaDef.MaaInvalidId);
     }
 
     private bool _isStarted;
+    private MaaEventCallback? _maaEventCallback;
     private event EventHandler<MaaCallbackEventArgs>? PrivateCallback;
-    private readonly MaaEventCallback[] _maaEventCallbacks = new MaaEventCallback[4];
     private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
     private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
 

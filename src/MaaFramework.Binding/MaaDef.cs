@@ -16,9 +16,16 @@ namespace MaaFramework.Binding;
 /// <remarks>
 ///      Creates a <see cref="MaaCallbackEventArgs"/> instance.
 /// </remarks>
+/// <param name="handle">
+///     <para> - MaaTasker* for MaaTasker event.</para>
+///     <para> - MaaResource* for MaaResource event.</para>
+///     <para> - MaaController* for MaaController event.</para>
+///     <para> - MaaContext* for MaaContext event.</para>
+/// </param>
 /// <param name="message">The callback message.</param>
 /// <param name="details">The callback details json.</param>
-public class MaaCallbackEventArgs(string message, [StringSyntax("Json")] string details) : EventArgs
+/// <param name="transArg">The MaaCallbackTransparentArg which value is <see cref="MaaHandleType"/> in <see cref="Binding"/>.</param>
+public class MaaCallbackEventArgs(nint handle, string message, [StringSyntax("Json")] string details, nint transArg) : EventArgs
 {
     /// <summary>
     ///     Maa callback message.
@@ -29,4 +36,14 @@ public class MaaCallbackEventArgs(string message, [StringSyntax("Json")] string 
     ///     Maa callback details json.
     /// </summary>
     public string Details { get; } = details;
+
+    /// <summary>
+    ///     The MaaEventCallback sender handle.
+    /// </summary>
+    public nint Handle { get; } = handle;
+
+    /// <summary>
+    ///     The MaaEventCallback sender handle type.
+    /// </summary>
+    public MaaHandleType HandleType { get; } = (MaaHandleType)transArg;
 }

@@ -55,7 +55,7 @@ public class MaaGamepadController : MaaController
         var handle = info is null
             ? MaaGamepadControllerCreate(nint.Zero, (MaaGamepadType)gamepadType, 0UL)
             : MaaGamepadControllerCreate(info.Handle, (MaaGamepadType)gamepadType, (MaaWin32ScreencapMethod)info.ScreencapMethod);
-        _ = MaaControllerAddSink(handle, MaaEventCallback, 5);
+        _ = MaaControllerAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Controller);
         SetHandle(handle, needReleased: true);
 
         _debugGamepadType = gamepadType;

@@ -25,12 +25,23 @@ public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<Ma
     [SetsRequiredMembers]
     public MaaContext(MaaContextHandle contextHandle)
     {
-        if (contextHandle == MaaContextHandle.Zero)
-            throw new ArgumentException($"Value cannot be {MaaContextHandle.Zero}.", nameof(contextHandle));
+        var taskerHandle = MaaContextGetTasker(contextHandle);
         Handle = contextHandle;
+        Tasker = (NativeBindingContext.IsStatelessMode || taskerHandle == MaaTaskerHandle.Zero)
+            ? new MaaTasker(taskerHandle)
+            : MaaTasker.Instances[taskerHandle];
+    }
 
-        var taskerHandle = MaaContextGetTasker(Handle);
-        Tasker = NativeBindingContext.IsStatelessMode ? new MaaTasker(taskerHandle) : MaaTasker.Instances[taskerHandle];
+    /// <summary>
+    ///     Creates a <see cref="MaaContext"/> instance.
+    /// </summary>
+    /// <param name="contextHandle">The MaaContextHandle.</param>
+    /// <param name="tasker">The MaaTasker.</param>
+    [SetsRequiredMembers]
+    public MaaContext(MaaContextHandle contextHandle, MaaTasker tasker)
+    {
+        Handle = contextHandle;
+        Tasker = tasker;
     }
 
     #region Override equality
@@ -188,7 +199,7 @@ public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<Ma
     ///     Wrapper of <see cref="MaaContextClone"/>.
     /// </remarks>
     public MaaContext Clone()
-        => new(MaaContextClone(Handle));
+        => new(MaaContextClone(Handle), Tasker);
 
     /// <inheritdoc/>
     /// <remarks>

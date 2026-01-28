@@ -40,7 +40,7 @@ public class MaaPlayCoverController : MaaController
         ArgumentException.ThrowIfNullOrEmpty(uuid);
 
         var handle = MaaPlayCoverControllerCreate(address, uuid);
-        _ = MaaControllerAddSink(handle, MaaEventCallback, 4);
+        _ = MaaControllerAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Controller);
         SetHandle(handle, needReleased: true);
 
         _debugAddress = address;

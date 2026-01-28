@@ -43,7 +43,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     public MaaResource()
     {
         var handle = MaaResourceCreate();
-        _ = MaaResourceAddSink(handle, MaaEventCallback, 2);
+        _ = MaaResourceAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Resource);
         SetHandle(handle, needReleased: true);
     }
 

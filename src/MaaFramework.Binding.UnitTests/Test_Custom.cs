@@ -44,10 +44,6 @@ internal static class Custom
             Assert.AreEqual(NodeName, args.NodeName);
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
-            _ = Assert.ThrowsExactly<ArgumentException>(() =>
-#if MAA_NATIVE
-                new MaaContext(IntPtr.Zero));
-#endif
             var cloneContext = (context as ICloneable).Clone() as IMaaContext;
             cloneContext = cloneContext?.Clone();
 #if MAA_NATIVE
