@@ -56,6 +56,27 @@ public interface IMaaContext : ICloneable
     ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
+    ///     Run recognition directly with type and parameters, without requiring a pipeline entry.
+    /// </summary>
+    /// <param name="recoType">Recognition type string (e.g., "OCR", "TemplateMatch").</param>
+    /// <param name="recoParam">Recognition parameters json.</param>
+    /// <param name="image">The image to be recognized.</param>
+    /// <returns><see cref="RecognitionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
+    RecognitionDetail? RunRecognitionDirect(string recoType, [StringSyntax("Json")] string recoParam, IMaaImageBuffer image);
+
+    /// <summary>
+    ///     Run action directly with type and parameters, without requiring a pipeline entry.
+    /// </summary>
+    /// <param name="actionType">Action type string (e.g., "Click", "Swipe").</param>
+    /// <param name="actionParam">Action parameters json.</param>
+    /// <param name="recognitionBox">The rect buffer containing current rect in the recognition result.</param>
+    /// <param name="recognitionDetail">The rect detail in the recognition result.</param>
+    /// <returns><see cref="ActionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
+    ActionDetail? RunActionDirect(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail);
+
+    /// <summary>
     ///     Override a pipeline.
     /// </summary>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>

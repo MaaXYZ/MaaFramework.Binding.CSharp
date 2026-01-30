@@ -120,6 +120,14 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     bool ClearCache();
 
     /// <summary>
+    ///     Overrides the pipeline for a specific task.
+    /// </summary>
+    /// <param name="taskJob">The task job to override pipeline for.</param>
+    /// <param name="pipelineOverride">The json used to override the pipeline.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool OverridePipeline(MaaTaskJob taskJob, [StringSyntax("Json")] string pipelineOverride);
+
+    /// <summary>
     ///     Gets the recognition detail.
     /// </summary>
     /// <param name="recognitionId">The recognition id.</param>
