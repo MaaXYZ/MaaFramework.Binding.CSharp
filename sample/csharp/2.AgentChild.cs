@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/dotnet run
 
-#:package Maa.Framework.Binding.Native@5.3.0
+#:package Maa.Framework.Binding.Native@5.4.0
 
 #nullable enable
 

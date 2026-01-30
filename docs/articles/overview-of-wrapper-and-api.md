@@ -1,4 +1,4 @@
-# Overview of Wrapper (v5.3.0) and Api ([v5.3.3](https://github.com/MaaXYZ/MaaFramework/tree/v5.3.3))
+# Overview of Wrapper (v5.4.0) and Api ([v5.4.3](https://github.com/MaaXYZ/MaaFramework/tree/v5.4.3))
 
 ## Enums
 
@@ -17,7 +17,6 @@
 | TaskerOption | `MaaTaskerOptionEnum` |
 | InferenceDevice | `MaaInferenceDeviceEnum` |
 | InferenceExecutionProvider | `MaaInferenceExecutionProviderEnum` |
-| ControllerFeatures | `` |
 
 - Macro Definition
 
@@ -28,6 +27,10 @@
 | Win32ScreencapMethod | `MaaWin32ScreencapMethod` |
 | Win32InputMethod | `MaaWin32InputMethod` |
 | DbgControllerType | `MaaDbgControllerType` |
+| GamepadType | `MaaGamepadType` |
+| GamepadButton | `MaaGamepadButton` |
+| GamepadTouch | `MaaGamepadTouch` |
+| ControllerFeatures | `MaaControllerFeature` |
 
 ## MaaTaskJob : MaaJob
 
@@ -86,11 +89,12 @@ IMaaDisposable Derived:
 | MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
 | MaaPlayCoverController.ctor() | `MaaPlayCoverControllerCreate` <br> `MaaControllerAddSink` |
+| MaaGamepadController.ctor() | `MaaGamepadControllerCreate` <br> `MaaControllerAddSink` |
 | IDisposable.Dispose() | `MaaControllerDestroy` |
 | IMaaOption.SetOption() | `MaaControllerSetOption` |
 | IMaaController.LinkStart() | `MaaControllerPostConnection` |
-| IMaaController.Click() | `MaaControllerPostClick` |
-| IMaaController.Swipe() | `MaaControllerPostSwipe` |
+| IMaaController.Click() | `MaaControllerPostClickV2` |
+| IMaaController.Swipe() | `MaaControllerPostSwipeV2` |
 | IMaaController.PressKey() | `MaaControllerPostPressKey` |
 | IMaaController.InputText() | `MaaControllerPostInputText` |
 | IMaaController.StartApp() | `MaaControllerPostStartApp` |
@@ -107,6 +111,7 @@ IMaaDisposable Derived:
 | IMaaController.LinkStop() | `MaaControllerConnected` |
 | IMaaController.GetCachedImage() | `MaaControllerCachedImage` |
 | IMaaController.Uuid | `MaaControllerGetUuid` |
+| IMaaController.GetResolution() | `MaaControllerGetResolution` |
 | IMaaDisposableHandle.Handle | *The MaaControllerHandle.* |
 
 ## MaaTasker : IMaaTasker
