@@ -47,7 +47,7 @@ internal static class Custom
             var cloneContext = (context as ICloneable).Clone() as IMaaContext;
             cloneContext = cloneContext?.Clone();
 #if MAA_NATIVE
-            cloneContext = (cloneContext as MaaContext?)?.Clone();
+            cloneContext = (cloneContext as MaaContext)?.Clone();
 #endif
             Assert.IsNotNull(cloneContext);
             Assert.IsNull(

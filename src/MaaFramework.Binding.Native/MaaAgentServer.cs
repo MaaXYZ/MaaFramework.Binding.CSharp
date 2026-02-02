@@ -10,26 +10,35 @@ namespace MaaFramework.Binding;
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaAgentServer"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public sealed class MaaAgentServer : IMaaAgentServer
+public class MaaAgentServer : IMaaAgentServer
 {
     /// <summary>
     ///     Gets the unique identifier used to communicate with the agent client.
     /// </summary>
-    public static string CurrentId { get; private set; }
+    public static string CurrentId { get; protected set; }
 
     /// <summary>
     ///    Gets the current <see cref="MaaAgentServer"/> instance.
     /// </summary>
-    public static MaaAgentServer Current { get; }
+    public static MaaAgentServer Current { get; protected set; }
 
     /// <summary>
     ///     Creates a <see cref="MaaAgentServer"/> instance.
     /// </summary>
-    private MaaAgentServer()
+    protected MaaAgentServer()
     {
         // DO NOT add any MaaAgentServerAPI.
         // Due to WithNativeLibrary().
+
+        MaaEventCallbacks = new Dictionary<MaaHandleType, MaaEventCallback>(4)
+        {
+            [MaaHandleType.Tasker] = (handle, message, detailsJson, transArg) => InvokeCallback(new MaaTasker(handle), new MaaCallbackEventArgs<MaaTaskerHandle>(handle, message, detailsJson, (MaaHandleType)transArg)),
+            [MaaHandleType.Resource] = (handle, message, detailsJson, transArg) => InvokeCallback(new MaaResource(handle), new MaaCallbackEventArgs<MaaResourceHandle>(handle, message, detailsJson, (MaaHandleType)transArg)),
+            [MaaHandleType.Controller] = (handle, message, detailsJson, transArg) => InvokeCallback(new MaaController(handle), new MaaCallbackEventArgs<MaaControllerHandle>(handle, message, detailsJson, (MaaHandleType)transArg)),
+            [MaaHandleType.Context] = (handle, message, detailsJson, transArg) => InvokeCallback(new MaaContext(handle), new MaaCallbackEventArgs<MaaContextHandle>(handle, message, detailsJson, (MaaHandleType)transArg)),
+        };
     }
+
     static MaaAgentServer()
     {
         NativeBindingContext.SwitchToAgentServerContext();
@@ -37,7 +46,6 @@ public sealed class MaaAgentServer : IMaaAgentServer
         Current = new();
     }
 
-    /// <remarks>The sender is current instance.</remarks>
     /// <inheritdoc/>
     public event EventHandler<MaaCallbackEventArgs>? Callback
     {
@@ -51,22 +59,43 @@ public sealed class MaaAgentServer : IMaaAgentServer
 
     private void EnsureCallbacksRegistered()
     {
-        if (_maaEventCallback is not null)
+        if (_isRegistered)
             return;
 
-        _maaEventCallback = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(this, new MaaCallbackEventArgs(handle, message, detailsJson, transArg));
-
-        _ = MaaAgentServerAddTaskerSink(_maaEventCallback, (nint)MaaHandleType.Tasker).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddResourceSink(_maaEventCallback, (nint)MaaHandleType.Resource).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddControllerSink(_maaEventCallback, (nint)MaaHandleType.Controller).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddContextSink(_maaEventCallback, (nint)MaaHandleType.Context).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _isRegistered = true;
+        _ = MaaAgentServerAddTaskerSink(MaaEventCallbacks[MaaHandleType.Tasker], (nint)MaaHandleType.Tasker).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddResourceSink(MaaEventCallbacks[MaaHandleType.Resource], (nint)MaaHandleType.Resource).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddControllerSink(MaaEventCallbacks[MaaHandleType.Controller], (nint)MaaHandleType.Controller).ThrowIfEquals(MaaDef.MaaInvalidId);
+        _ = MaaAgentServerAddContextSink(MaaEventCallbacks[MaaHandleType.Context], (nint)MaaHandleType.Context).ThrowIfEquals(MaaDef.MaaInvalidId);
     }
 
     private bool _isStarted;
-    private MaaEventCallback? _maaEventCallback;
+    private bool _isRegistered;
     private event EventHandler<MaaCallbackEventArgs>? PrivateCallback;
     private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
     private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
+
+    /// <summary>
+    ///     Gets the delegates to avoid garbage collection before MaaFramework calls.
+    /// </summary>
+    protected IReadOnlyDictionary<MaaHandleType, MaaEventCallback> MaaEventCallbacks
+    {
+        get;
+        set
+        {
+            if (_isRegistered)
+                throw new InvalidOperationException("Callbacks are already registered.");
+            field = value;
+        }
+    }
+
+    /// <summary>
+    ///     Raises the Callback event.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">An object that contains the event data.</param>
+    protected void InvokeCallback(object? sender, MaaCallbackEventArgs e)
+        => PrivateCallback?.Invoke(sender, e);
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]

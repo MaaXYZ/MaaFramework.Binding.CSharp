@@ -36,6 +36,16 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     /// </remarks>
     protected internal static ConcurrentDictionary<MaaTaskerHandle, MaaTasker> Instances { get; } = [];
 
+    /// <inheritdoc/>
+    protected override void OnCallback(nint handle, string message, [StringSyntax("Json")] string detailsJson, nint transArg)
+    {
+        var type = (MaaHandleType)transArg;
+        object sender = type == MaaHandleType.Context
+            ? new MaaContext(handle, this)
+            : this;
+        InvokeCallback(sender, e: new MaaCallbackEventArgs<nint>(handle, message, detailsJson, type));
+    }
+
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
     [SetsRequiredMembers]
     [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
@@ -64,7 +74,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
             // Always returns true, but non-atomic operation may fail to add.
             throw new InvalidOperationException($"This {nameof(MaaTasker)} already added to {nameof(Instances)}.");
         _ = MaaTaskerAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Tasker);
-        _ = MaaTaskerAddContextSink(handle, MaaEventCallback, 8);
+        _ = MaaTaskerAddContextSink(handle, MaaEventCallback, (nint)MaaHandleType.Context);
         SetHandle(handle, needReleased: true);
 
         Toolkit = MaaToolkit.Shared;

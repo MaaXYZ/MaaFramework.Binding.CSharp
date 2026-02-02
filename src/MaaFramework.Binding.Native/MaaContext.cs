@@ -5,9 +5,9 @@ using static MaaFramework.Binding.Interop.Native.MaaContext;
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper readonly struct providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaContext"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaContext"/>.
 /// </summary>
-public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>
+public class MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>, IEqualityComparer<MaaContext>
 {
     /// <inheritdoc/>
     public required MaaContextHandle Handle { get; init; }
@@ -46,25 +46,29 @@ public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<Ma
 
     #region Override equality
     /// <inheritdoc/>
-    public bool Equals(MaaContext other) => Handle == other.Handle;
-    /// <inheritdoc/>
-    public override bool Equals(object? obj) => obj is MaaContext other && Equals(other);
+    public int GetHashCode(MaaContext obj) { ArgumentNullException.ThrowIfNull(obj); return obj.Handle.GetHashCode(); }
     /// <inheritdoc/>
     public override int GetHashCode() => Handle.GetHashCode();
+    /// <inheritdoc/>
+    public virtual bool Equals(MaaContext? other) => other is not null && Handle == other.Handle;
+    /// <inheritdoc/>
+    public override bool Equals(object? obj) => obj is MaaContext other && Handle == other.Handle;
+    /// <inheritdoc/>
+    public bool Equals(MaaContext? x, MaaContext? y) => x is null ? y is null : x.Equals(y);
     /// <summary>
     ///     Compares two values to determine equality.
     /// </summary>
     /// <param name="left">The left value.</param>
     /// <param name="right">The right value.</param>
     /// <returns><see langword="true"/> if <paramref name="left"/> is equal to <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
-    public static bool operator ==(MaaContext left, MaaContext right) => left.Equals(right);
+    public static bool operator ==(MaaContext? left, MaaContext? right) => left is null ? right is null : left.Equals(right);
     /// <summary>
     ///     Compares two values to determine inequality.
     /// </summary>
     /// <param name="left">The left value.</param>
     /// <param name="right">The right value.</param>
     /// <returns><see langword="true"/> if <paramref name="left"/> not equal to <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
-    public static bool operator !=(MaaContext left, MaaContext right) => !(left == right);
+    public static bool operator !=(MaaContext? left, MaaContext? right) => !(left == right);
     #endregion
 
     /// <inheritdoc/>
@@ -128,19 +132,8 @@ public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<Ma
     ///     Wrapper of <see cref="MaaContextOverrideNext"/>.
     /// </remarks>
     public bool OverrideNext(string nodeName, IEnumerable<string> nextList)
-    // => MaaStringListBuffer.TrySetList(nextList, listBuffer => MaaContextOverrideNext(Handle, nodeName, listBuffer));
-    {
-        var handle = Interop.Native.MaaBuffer.MaaStringListBufferCreate();
-        try
-        {
-            return MaaStringListBuffer.TrySetList(handle, nextList)
-                && MaaContextOverrideNext(Handle, nodeName, handle);
-        }
-        finally
-        {
-            Interop.Native.MaaBuffer.MaaStringListBufferDestroy(handle);
-        }
-    }
+        => MaaStringListBuffer.TrySetList(nextList, listBuffer
+            => MaaContextOverrideNext(Handle, nodeName, listBuffer));
 
     /// <inheritdoc/>
     public bool OverrideImage(string imageName, IMaaImageBuffer image)
@@ -162,24 +155,8 @@ public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<Ma
     ///     Wrapper of <see cref="MaaContextGetNodeData"/>.
     /// </remarks>
     public bool GetNodeData(string nodeName, [MaybeNullWhen(false)][StringSyntax("Json")] out string data)
-    // => MaaStringBuffer.TryGetValue(out data, buffer => MaaContextGetNodeData(Handle, nodeName, buffer));
-    {
-        var handle = Interop.Native.MaaBuffer.MaaStringBufferCreate();
-        try
-        {
-            if (!MaaContextGetNodeData(Handle, nodeName, handle))
-            {
-                data = default;
-                return false;
-            }
-
-            return MaaStringBuffer.TryGetValue(handle, out data);
-        }
-        finally
-        {
-            Interop.Native.MaaBuffer.MaaStringBufferDestroy(handle);
-        }
-    }
+        => MaaStringBuffer.TryGetValue(out data, buffer
+            => MaaContextGetNodeData(Handle, nodeName, buffer));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -198,7 +175,7 @@ public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<Ma
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextClone"/>.
     /// </remarks>
-    public MaaContext Clone()
+    public virtual MaaContext Clone()
         => new(MaaContextClone(Handle), Tasker);
 
     /// <inheritdoc/>
@@ -213,24 +190,8 @@ public readonly struct MaaContext : IMaaContext<MaaContextHandle>, IEquatable<Ma
     ///     Wrapper of <see cref="MaaContextGetAnchor"/>.
     /// </remarks>
     public bool GetAnchor(string anchorName, [MaybeNullWhen(false)] out string nodeName)
-    // => MaaStringBuffer.TryGetValue(out nodeName, buffer => MaaContextGetAnchor(Handle, anchorName, buffer));
-    {
-        var handle = Interop.Native.MaaBuffer.MaaStringBufferCreate();
-        try
-        {
-            if (!MaaContextGetAnchor(Handle, anchorName, handle))
-            {
-                nodeName = default;
-                return false;
-            }
-
-            return MaaStringBuffer.TryGetValue(handle, out nodeName);
-        }
-        finally
-        {
-            Interop.Native.MaaBuffer.MaaStringBufferDestroy(handle);
-        }
-    }
+        => MaaStringBuffer.TryGetValue(out nodeName, buffer
+            => MaaContextGetAnchor(Handle, anchorName, buffer));
 
     /// <inheritdoc/>
     /// <remarks>

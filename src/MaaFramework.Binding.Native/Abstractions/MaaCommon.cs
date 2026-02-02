@@ -8,7 +8,6 @@ namespace MaaFramework.Binding.Abstractions;
 /// </summary>
 public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
 {
-    /// <remarks>The sender is current instance.</remarks>
     /// <inheritdoc/>
     public event EventHandler<MaaCallbackEventArgs>? Callback;
 
@@ -25,10 +24,18 @@ public abstract class MaaCommon : MaaDisposableHandle<nint>, IMaaCommon
     /// <param name="detailsJson">The MaaStringView.</param>
     /// <param name="transArg">The MaaCallbackTransparentArg which value is <see cref="MaaHandleType"/> in <see cref="Binding"/>.</param>
     /// <remarks>
-    ///     Usually invoked by MaaFramework.
+    ///     Usually invoked by <see cref="MaaFramework"/>.
     /// </remarks>
     protected virtual void OnCallback(nint handle, string message, [StringSyntax("Json")] string detailsJson, nint transArg)
-        => Callback?.Invoke(this, new MaaCallbackEventArgs(handle, message, detailsJson, transArg));
+        => InvokeCallback(this, new MaaCallbackEventArgs<nint>(handle, message, detailsJson, (MaaHandleType)transArg));
+
+    /// <summary>
+    ///     Raises the Callback event.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">An object that contains the event data.</param>
+    protected void InvokeCallback(object? sender, MaaCallbackEventArgs e)
+        => Callback?.Invoke(sender, e);
 
     /// <summary>
     ///     Gets the delegate to avoid garbage collection before MaaFramework calls <see cref="OnCallback"/>.
