@@ -1,14 +1,16 @@
-## v5.4.0
+## v5.4.1
 
-**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.3.0...v5.4.0
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.3.0...v5.4.1
 
 ### Breaking changes
 
+- [Breaking change] revert: MaaContext type @moomiji
 - [Breaking change] chore: change callback sender to current instance @moomiji
 - [Breaking change] perf: simple type use struct @moomiji
 
 ### Other
 
+- perf: remove empty interface @moomiji
 - chore: update interop to framework v5.4.3 @moomiji
 - Add missing C API bindings for MaaFramework (#22) @Copilot
 

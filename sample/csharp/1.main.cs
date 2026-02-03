@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/dotnet run
 
-#:package Maa.Framework@5.4.0
+#:package Maa.Framework@5.4.1
 
 #nullable enable
 
@@ -66,7 +66,7 @@ internal sealed class MyRecongition : IMaaCustomRecognition
 {
     public string Name { get; set; } = "MyRecongition";
 
-    public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
+    public bool Analyze<T>(T context, in AnalyzeArgs args, in AnalyzeResults results) where T : IMaaContext
     {
         var recognitionDetail = context.RunRecognition("MyCustomOCR", args.Image,
             """{"MyCustomOCR": {"recognition": "OCR", "roi": [100, 100, 200, 300]}}""");
@@ -94,7 +94,7 @@ internal sealed class MyAction : IMaaCustomAction
 {
     public string Name { get; set; } = "MyAction";
 
-    public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
+    public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
     {
         Console.WriteLine("MyAction is running!");
         return true;

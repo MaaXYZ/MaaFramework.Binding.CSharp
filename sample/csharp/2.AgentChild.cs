@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/dotnet run
 
-#:package Maa.Framework.Binding.Native@5.4.0
+#:package Maa.Framework.Binding.Native@5.4.1
 
 #nullable enable
 
@@ -34,7 +34,7 @@ internal sealed class MyRec : IMaaCustomRecognition
 {
     public string Name { get; set; } = "TestRecognition";
 
-    public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
+    public bool Analyze<T>(T context, in AnalyzeArgs args, in AnalyzeResults results) where T : IMaaContext
     {
         Console.WriteLine("{0} Called", Name);
 
@@ -47,7 +47,7 @@ internal sealed class MyAct : IMaaCustomAction
 {
     public string Name { get; set; } = "TestAction";
 
-    public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
+    public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
     {
         Console.WriteLine("{0} Called", Name);
         Console.WriteLine("recognition detail: {0}", args.RecognitionDetail);

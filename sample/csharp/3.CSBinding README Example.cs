@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/dotnet run
 
-#:package Maa.Framework@5.4.0
+#:package Maa.Framework@5.4.1
 
 #nullable enable
 
@@ -74,7 +74,7 @@ void QuickStart()
 internal sealed class MyRec : IMaaCustomRecognition
 {
     public string Name { get; set; } = nameof(MyRec);
-    public bool Analyze(in IMaaContext context, in AnalyzeArgs args, in AnalyzeResults results)
+    public bool Analyze<T>(T context, in AnalyzeArgs args, in AnalyzeResults results) where T : IMaaContext
     {
         Console.WriteLine($"Enter {Name}");
         return results.Box.TrySetValues(0, 0, 100, 100)
@@ -84,7 +84,7 @@ internal sealed class MyRec : IMaaCustomRecognition
 internal sealed class MyAct : IMaaCustomAction
 {
     public string Name { get; set; } = nameof(MyAct);
-    public bool Run(in IMaaContext context, in RunArgs args, in RunResults results)
+    public bool Run<T>(T context, in RunArgs args, in RunResults results) where T : IMaaContext
     {
         Console.WriteLine($"Enter {Name}");
         return true;

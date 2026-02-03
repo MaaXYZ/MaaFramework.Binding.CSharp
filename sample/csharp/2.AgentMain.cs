@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/dotnet run
 
-#:package Maa.Framework@5.4.0
+#:package Maa.Framework@5.4.1
 
 #nullable enable
 
@@ -51,11 +51,11 @@ Console.WriteLine($"MyRec detail: {detail.QueryRecognitionDetail(maa, 1)?.Detail
 Console.Write("Press any key to exit:");
 Console.ReadKey();
 
-/* 
+/*
  * The agent server process will be killed when agent.Dispose() is called.
  * Uses LinkStart() or LinkStartUnlessProcessExit(Process, CancellationToken)
  * if you do not want the agent to control the life cycle of the process.
- * 
+ *
  * agent.LinkStop() will be called when agent.Dispose().
  * agent.Dispose()  will be called when maa.Dispose().
  */
