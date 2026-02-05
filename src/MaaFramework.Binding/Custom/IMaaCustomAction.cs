@@ -6,7 +6,7 @@ namespace MaaFramework.Binding.Custom;
 /// <summary>
 ///     An interface representing which implementation is maa custom action.
 /// </summary>
-public interface IMaaCustomAction : IMaaCustomResource
+public interface IMaaCustomAction : IMaaCustom
 {
     /// <summary>
     ///     Run with <paramref name="args"/>, and write the run <paramref name="results"/>.

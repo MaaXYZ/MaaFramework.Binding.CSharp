@@ -120,14 +120,14 @@ public class MaaAgentServer : IMaaAgentServer
     }
 
     /// <inheritdoc cref="IMaaAgentServer.Register{T}(string, T)"/>
-    public MaaAgentServer Register<T>(string name, T custom) where T : IMaaCustomResource
+    public MaaAgentServer Register<T>(string name, T custom) where T : IMaaCustom
     {
         custom.Name = name;
         return Register(custom);
     }
 
     /// <inheritdoc/>
-    public MaaAgentServer Register<T>(string? name = null) where T : IMaaCustomResource, new()
+    public MaaAgentServer Register<T>(string? name = null) where T : IMaaCustom, new()
     {
         var custom = new T();
         if (name != null)
@@ -139,7 +139,7 @@ public class MaaAgentServer : IMaaAgentServer
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentServerRegisterCustomAction"/> and <see cref="MaaAgentServerRegisterCustomRecognition"/>.
     /// </remarks>
-    public MaaAgentServer Register<T>(T custom) where T : IMaaCustomResource
+    public MaaAgentServer Register<T>(T custom) where T : IMaaCustom
     {
         var ret = custom switch
         {

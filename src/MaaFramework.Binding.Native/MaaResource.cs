@@ -116,14 +116,14 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
 
     /// <inheritdoc/>
-    public bool Register<T>(string name, T custom) where T : IMaaCustomResource
+    public bool Register<T>(string name, T custom) where T : IMaaCustom
     {
         custom.Name = name;
         return Register(custom);
     }
 
     /// <inheritdoc/>
-    public bool Register<T>(string? name = null) where T : IMaaCustomResource, new()
+    public bool Register<T>(string? name = null) where T : IMaaCustom, new()
     {
         var custom = new T();
         if (name != null)
@@ -135,11 +135,11 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceRegisterCustomAction"/> and <see cref="MaaResourceRegisterCustomRecognition"/>.
     /// </remarks>
-    public bool Register<T>(T custom) where T : IMaaCustomResource => custom switch
+    public bool Register<T>(T custom) where T : IMaaCustom => custom switch
     {
         IMaaCustomAction res
-            => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero)
-            && _actions.Register(res.Name, callback),
+           => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero)
+           && _actions.Register(res.Name, callback),
         IMaaCustomRecognition res
             => MaaResourceRegisterCustomRecognition(Handle, res.Name, res.Convert(out var callback), nint.Zero)
             && _recognitions.Register(res.Name, callback),
@@ -151,7 +151,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognition"/>.
     /// </remarks>
-    public bool Unregister<T>(string name) where T : IMaaCustomResource
+    public bool Unregister<T>(string name) where T : IMaaCustom
     {
         var t = typeof(T);
         if (typeof(IMaaCustomAction).IsAssignableFrom(t))
@@ -166,7 +166,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognition"/>.
     /// </remarks>
-    public bool Unregister<T>(T custom) where T : IMaaCustomResource => custom switch
+    public bool Unregister<T>(T custom) where T : IMaaCustom => custom switch
     {
         IMaaCustomAction
             => MaaResourceUnregisterCustomAction(Handle, custom.Name)
@@ -182,7 +182,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceClearCustomAction"/> and <see cref="MaaResourceClearCustomRecognition"/>.
     /// </remarks>
-    public bool Clear<T>() where T : IMaaCustomResource => typeof(T).Name switch
+    public bool Clear<T>() where T : IMaaCustom => typeof(T).Name switch
     {
         nameof(IMaaCustomAction)
             => MaaResourceClearCustomAction(Handle)

@@ -234,7 +234,7 @@ internal static class Custom
             => c.Scroll(dx, dy).Wait().IsSucceeded();
     }
 
-    internal sealed class TestInvalidResource : IMaaCustomResource
+    internal sealed class TestInvalidResource : IMaaCustom
     {
         public string Name { get; set; } = nameof(TestInvalidResource);
     }

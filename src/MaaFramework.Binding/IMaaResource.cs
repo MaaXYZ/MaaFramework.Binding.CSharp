@@ -29,13 +29,13 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaDisp
     /// <param name="name">The new name that will be used to reference the custom resource.</param>
     /// <param name="custom">The custom resource instance to register.</param>
     /// <returns><see langword="true"/> if the registration was successful; otherwise, <see langword="false"/>.</returns>
-    bool Register<T>(string name, T custom) where T : IMaaCustomResource;
+    bool Register<T>(string name, T custom) where T : IMaaCustom;
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
-    bool Register<T>(string? name = null) where T : IMaaCustomResource, new();
+    bool Register<T>(string? name = null) where T : IMaaCustom, new();
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
-    bool Register<T>(T custom) where T : IMaaCustomResource;
+    bool Register<T>(T custom) where T : IMaaCustom;
 
     /// <summary>
     ///     Unregisters a <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/> in the <see cref="IMaaResource"/>.
@@ -43,18 +43,18 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaDisp
     /// <typeparam name="T">The <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/>.</typeparam>
     /// <param name="name">The name of the instance when it was registered.</param>
     /// <returns><see langword="true"/> if the unregistration was successful; otherwise, <see langword="false"/>.</returns>
-    bool Unregister<T>(string name) where T : IMaaCustomResource;
+    bool Unregister<T>(string name) where T : IMaaCustom;
 
     /// <inheritdoc cref="Unregister{T}(string)"/>
     /// <param name="custom">The custom resource instance to unregister.</param>
-    bool Unregister<T>(T custom) where T : IMaaCustomResource;
+    bool Unregister<T>(T custom) where T : IMaaCustom;
 
     /// <summary>
     ///     Clears all <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/> registered in the <see cref="IMaaResource"/>.
     /// </summary>
     /// <typeparam name="T">The <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/>.</typeparam>
     /// <returns><see langword="true"/> if custom resource instances were cleared successfully; otherwise, <see langword="false"/>.</returns>
-    bool Clear<T>() where T : IMaaCustomResource;
+    bool Clear<T>() where T : IMaaCustom;
 
     /// <summary>
     ///     Clears the loaded resource.

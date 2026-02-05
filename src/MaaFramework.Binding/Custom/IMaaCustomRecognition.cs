@@ -6,7 +6,7 @@ namespace MaaFramework.Binding.Custom;
 /// <summary>
 ///     An interface representing which implementation is maa custom recognition.
 /// </summary>
-public interface IMaaCustomRecognition : IMaaCustomResource
+public interface IMaaCustomRecognition : IMaaCustom
 {
     /// <summary>
     ///     Analyze with <paramref name="args"/>, and write the recognition <paramref name="results"/>.

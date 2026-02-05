@@ -25,13 +25,13 @@ public interface IMaaAgentServer : IMaaCommon
     /// <param name="name">The new name that will be used to reference the custom resource.</param>
     /// <param name="custom">The custom resource instance to register.</param>
     /// <exception cref="MaaInteroperationException">Thrown if the registration fails.</exception>
-    IMaaAgentServer Register<T>(string name, T custom) where T : IMaaCustomResource;
+    IMaaAgentServer Register<T>(string name, T custom) where T : IMaaCustom;
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
-    IMaaAgentServer Register<T>(string? name = null) where T : IMaaCustomResource, new();
+    IMaaAgentServer Register<T>(string? name = null) where T : IMaaCustom, new();
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
-    IMaaAgentServer Register<T>(T custom) where T : IMaaCustomResource;
+    IMaaAgentServer Register<T>(T custom) where T : IMaaCustom;
 
     /// <summary>
     ///     Starts up the agent server to prepare for receiving client messages from the specified connection.
