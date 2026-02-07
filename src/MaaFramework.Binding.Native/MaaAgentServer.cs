@@ -62,11 +62,19 @@ public class MaaAgentServer : IMaaAgentServer
         if (_isRegistered)
             return;
 
-        _isRegistered = true;
-        _ = MaaAgentServerAddTaskerSink(MaaEventCallbacks[MaaHandleType.Tasker], (nint)MaaHandleType.Tasker).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddResourceSink(MaaEventCallbacks[MaaHandleType.Resource], (nint)MaaHandleType.Resource).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddControllerSink(MaaEventCallbacks[MaaHandleType.Controller], (nint)MaaHandleType.Controller).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddContextSink(MaaEventCallbacks[MaaHandleType.Context], (nint)MaaHandleType.Context).ThrowIfEquals(MaaDef.MaaInvalidId);
+        try
+        {
+            _isRegistered = true;
+            _ = MaaAgentServerAddTaskerSink(MaaEventCallbacks[MaaHandleType.Tasker], (nint)MaaHandleType.Tasker).ThrowIfEquals(MaaDef.MaaInvalidId);
+            _ = MaaAgentServerAddResourceSink(MaaEventCallbacks[MaaHandleType.Resource], (nint)MaaHandleType.Resource).ThrowIfEquals(MaaDef.MaaInvalidId);
+            _ = MaaAgentServerAddControllerSink(MaaEventCallbacks[MaaHandleType.Controller], (nint)MaaHandleType.Controller).ThrowIfEquals(MaaDef.MaaInvalidId);
+            _ = MaaAgentServerAddContextSink(MaaEventCallbacks[MaaHandleType.Context], (nint)MaaHandleType.Context).ThrowIfEquals(MaaDef.MaaInvalidId);
+        }
+        catch
+        {
+            _isRegistered = false;
+            throw;
+        }
     }
 
     private bool _isStarted;

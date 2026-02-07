@@ -27,9 +27,11 @@ public class MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>,
     {
         var taskerHandle = MaaContextGetTasker(contextHandle);
         Handle = contextHandle;
-        Tasker = (NativeBindingContext.IsStatelessMode || taskerHandle == MaaTaskerHandle.Zero)
+        Tasker = (NativeBindingContext.IsStatelessMode
+                || taskerHandle == MaaTaskerHandle.Zero
+                || !MaaTasker.Instances.TryGetValue(taskerHandle, out var tasker))
             ? new MaaTasker(taskerHandle)
-            : MaaTasker.Instances[taskerHandle];
+            : tasker;
     }
 
     /// <summary>
@@ -40,6 +42,8 @@ public class MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>,
     [SetsRequiredMembers]
     public MaaContext(MaaContextHandle contextHandle, MaaTasker tasker)
     {
+        ArgumentNullException.ThrowIfNull(tasker);
+
         Handle = contextHandle;
         Tasker = tasker;
     }

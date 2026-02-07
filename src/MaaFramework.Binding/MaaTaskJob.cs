@@ -37,7 +37,7 @@ public class MaaTaskJob(MaaId id, IMaaTasker tasker, IMaaPost maa) : MaaJob(id, 
     ///     Overrides pipeline for this task, dynamically modifies pipeline configuration during task execution.
     /// </summary>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
-    /// <returns></returns>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     public bool OverridePipeline([StringSyntax("Json")] string pipelineOverride)
         => tasker.OverridePipeline(this, pipelineOverride);
 }

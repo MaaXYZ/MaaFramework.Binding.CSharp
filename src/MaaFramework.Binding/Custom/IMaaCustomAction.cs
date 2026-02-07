@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace MaaFramework.Binding.Custom;
 
 /// <summary>
-///     An interface representing which implementation is maa custom action.
+///     An interface that identifies which implementation is for the MAA custom action.
 /// </summary>
 public interface IMaaCustomAction : IMaaCustom
 {
@@ -34,6 +34,6 @@ public readonly record struct RunArgs(string NodeName, TaskDetail TaskDetail, st
 ///     A readonly record <see langword="struct"/> that packages <c>results</c> in <see cref="IMaaCustomAction.Run"/>.
 /// </summary>
 /// <remarks>
-///     This a empty record.
+///     This is an empty record.
 /// </remarks>
 public readonly record struct RunResults;

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace MaaFramework.Binding.Custom;
 
 /// <summary>
-///     An interface representing which implementation is maa custom recognition.
+///     An interface that identifies which implementation is for the MAA custom recognition.
 /// </summary>
 public interface IMaaCustomRecognition : IMaaCustom
 {
