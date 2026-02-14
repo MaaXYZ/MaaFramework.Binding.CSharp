@@ -348,6 +348,7 @@ IMaaDisposable Derived:
 | Wrapper | Native API |
 | --- | --- |
 | MaaAgentClient.Create() | `MaaAgentClientCreateV2` |
+| MaaAgentClient.CreateTcp() | `MaaAgentClientCreateTcp` |
 | IDisposable.Dispose() | `MaaAgentClientDestroy` |
 | IMaaAgentClient.Id | `MaaAgentClientIdentifier` |
 | IMaaAgentClient.Tasker | `MaaAgentClientRegisterTaskerSink` |

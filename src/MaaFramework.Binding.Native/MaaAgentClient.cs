@@ -48,14 +48,37 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     {
         _ = MaaStringBuffer.TrySetValue(identifier, true, buffer =>
         {
-            var handle = MaaAgentClientCreateV2(buffer);
+            var handle = MaaAgentClientCreateV2(buffer).ThrowIfEquals(MaaAgentClientHandle.Zero);
             SetHandle(handle, needReleased: true);
             return true;
         }).ThrowIfFalse();
     }
 
     /// <summary>
+    ///     Creates a <see cref="MaaAgentClient"/> instance with TCP connection.
+    /// </summary>
+    /// <param name="port">The TCP port number (0-65535), 0 means auto-select.</param>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientCreateTcp"/>.
+    /// </remarks>
+    protected MaaAgentClient(ushort port = 0)
+        : base(invalidHandleValue: MaaAgentClientHandle.Zero)
+    {
+        var handle = MaaAgentClientCreateTcp(port).ThrowIfEquals(MaaAgentClientHandle.Zero);
+        SetHandle(handle, needReleased: true);
+    }
+
+    /// <inheritdoc cref="Create(string, MaaResource)"/>
+    public static MaaAgentClient Create(MaaResource resource)
+        => Create(string.Empty, resource);
+
+    /// <inheritdoc cref="Create(string, MaaTasker)"/>
+    public static MaaAgentClient Create(MaaTasker maa)
+        => Create(string.Empty, maa);
+
+    /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
+    ///     <para>The callback (from resource) will be forwarded to the agent server.</para>
     /// </summary>
     /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
     /// <param name="resource">The resource.</param>
@@ -63,15 +86,12 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     public static MaaAgentClient Create(string identifier, MaaResource resource)
         => new(identifier) { Resource = resource, };
 
-    /// <inheritdoc cref="Create(string, MaaResource)"/>
-    public static MaaAgentClient Create(MaaResource resource)
-        => Create(string.Empty, resource);
-
     /// <summary>
-    ///     Creates a <see cref="MaaAgentClient"/> instance, the callback (from tasker, resource and controller) will be forwarded to the agent server.
+    ///     Creates a <see cref="MaaAgentClient"/> instance.
+    ///     <para>The callback (from tasker, resource and controller) will be forwarded to the agent server.</para>
     /// </summary>
     /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
-    /// <param name="maa">The tasker inclued resource and controller.</param>
+    /// <param name="maa">The tasker including resource and controller.</param>
     /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
     public static MaaAgentClient Create(string identifier, MaaTasker maa)
     {
@@ -86,9 +106,43 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         return client;
     }
 
-    /// <inheritdoc cref="Create(string, MaaTasker)"/>
-    public static MaaAgentClient Create(MaaTasker maa)
-        => Create(string.Empty, maa);
+    /// <summary>
+    ///     Creates a <see cref="MaaAgentClient"/> instance with TCP connection.
+    ///     <para>The callback (from resource) will be forwarded to the agent server.</para>
+    /// </summary>
+    /// <param name="port">The TCP port number (0-65535), 0 means auto-select.</param>
+    /// <param name="resource">The resource.</param>
+    /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
+    /// <remarks>
+    ///     <para>The client listens on 127.0.0.1 at the specified port. If 0 is passed, an available port is automatically selected.</para>
+    ///     <para>AgentServer can use the port number from the identifier property to connect via TCP.</para>
+    /// </remarks>
+    public static MaaAgentClient CreateTcp(ushort port, MaaResource resource)
+        => new(port) { Resource = resource, };
+
+    /// <summary>
+    ///     Creates a <see cref="MaaAgentClient"/> instance with TCP connection.
+    ///     <para>The callback (from resource) will be forwarded to the agent server.</para>
+    /// </summary>
+    /// <param name="port">The TCP port number (0-65535), 0 means auto-select.</param>
+    /// <param name="maa">The tasker including resource and controller.</param>
+    /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
+    /// <remarks>
+    ///     <para>The client listens on 127.0.0.1 at the specified port. If 0 is passed, an available port is automatically selected.</para>
+    ///     <para>AgentServer can use the port number from the identifier property to connect via TCP.</para>
+    /// </remarks>
+    public static MaaAgentClient CreateTcp(ushort port, MaaTasker maa)
+    {
+        ArgumentNullException.ThrowIfNull(maa);
+
+        var client = new MaaAgentClient(port)
+        {
+            Tasker = maa,
+            Controller = maa.Controller,
+            Resource = maa.Resource,
+        };
+        return client;
+    }
 
     /// <inheritdoc/>
     /// <remarks>
