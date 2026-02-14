@@ -113,10 +113,25 @@ public class MaaImageBuffer : MaaDisposableHandle<MaaImageBufferHandle>, IMaaIma
     /// </remarks>
     public int Type => MaaImageBufferType(Handle);
 
+    #region Other
+
+    /// <inheritdoc/>
+    public bool TryResize(int width, int height)
+        => TryResize(Handle, width, height);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaImageBufferResize"/>.
+    /// </remarks>
+    public static bool TryResize(MaaImageBufferHandle handle, int width, int height)
+        => MaaImageBufferResize(handle, width, height);
+
+    #endregion
+
     #region EncodedData
 
     /// <inheritdoc/>
-    public unsafe bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data)
+    public bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data)
         => TryGetEncodedData(Handle, out data);
 
     /// <inheritdoc/>

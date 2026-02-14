@@ -37,6 +37,7 @@
 | MaaJob.Status | `MaaControllerStatus` <br> `MaaResourceStatus` <br> `MaaTaskerStatus` |
 | MaaJob.Wait() <br> MaaTaskJob.WaitFor() | `MaaControllerWait` <br> `MaaResourceWait` <br> `MaaTaskerWait` |
 | MaaTaskJob.Tasker | *A property used to simplify design of TaskDetail.Query* |
+| MaaTaskJob.OverridePipeline() | `MaaTaskerOverridePipeline` |
 
 ## IMaaCommon
 
@@ -130,6 +131,7 @@ IMaaDisposable Derived:
 | IMaaTasker.Stop() | `MaaTaskerPostStop` |
 | IMaaTasker.IsStopping | `MaaTaskerStopping` |
 | IMaaTasker.ClearCache() | `MaaTaskerClearCache` |
+| IMaaTasker.OverridePipeline() <br> MaaTaskJob.OverridePipeline() | `MaaTaskerOverridePipeline` |
 | IMaaTasker.GetRecognitionDetail() <br> RecognitionDetail.Query() <br> NodeDetail.QueryRecognitionDetail() <br> TaskDetail.QueryRecognitionDetail() <br> MaaTaskJob.QueryRecognitionDetail() | `MaaTaskerGetRecognitionDetail` |
 | IMaaTasker.GetActionDetail() <br> ActionDetail.Query() <br> NodeDetail.QueryActionDetail() <br> TaskDetail.QueryActionDetail() <br> MaaTaskJob.QueryActionDetail() | `MaaTaskerGetActionDetail` |
 | IMaaTasker.GetNodeDetail() <br> NodeDetail.Query() <br> TaskDetail.QueryNodeDetail() <br> MaaTaskJob.QueryNodeDetail() | `MaaTaskerGetNodeDetail` |
@@ -237,6 +239,7 @@ IMaaDisposable Derived:
 | MaaImageBuffer.TryGetRawData() | `MaaImageBufferGetRawData` |
 | MaaImageBuffer.TrySetRawData() | `MaaImageBufferSetRawData` |
 | IMaaImageBuffer.GetInfo() <br> MaaImageBuffer.Width <br> MaaImageBuffer.Height <br> MaaImageBuffer.Channels <br> MaaImageBuffer.Type | `MaaImageBufferWidth` <br> `MaaImageBufferHeight` <br> `MaaImageBufferChannels` <br> `MaaImageBufferType` |
+| IMaaImageBuffer.TryResize() <br> MaaImageBuffer.TryResize() | `MaaImageBufferResize` |
 | IMaaImageBuffer.TryGetEncodedData() <br> MaaImageBuffer.TryGetEncodedData() | `MaaImageBufferGetEncoded` <br> `MaaImageBufferGetEncodedSize` |
 | IMaaImageBuffer.TrySetEncodedData() <br> MaaImageBuffer.TrySetEncodedData() | `MaaImageBufferSetEncoded` |
 | IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
