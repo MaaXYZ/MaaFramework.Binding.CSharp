@@ -153,16 +153,16 @@ public interface IMaaResource : IMaaCommon, IMaaOption<ResourceOption>, IMaaDisp
     /// <summary>
     ///     Gets the default recognition parameters for the specified type.
     /// </summary>
-    /// <param name="recoType">The recognition type (e.g., "OCR", "TemplateMatch").</param>
+    /// <param name="type">The recognition type.<para>(e.g., "OCR", "TemplateMatch")</para></param>
     /// <param name="param">The default recognition parameters.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    bool GetDefaultRecognitionParam(string recoType, [MaybeNullWhen(false)][StringSyntax("Json")] out string param);
+    bool GetDefaultRecognitionParam(string type, [MaybeNullWhen(false)][StringSyntax("Json")] out string param);
 
     /// <summary>
     ///     Gets the default action parameters for the specified type.
     /// </summary>
-    /// <param name="actionType">The action type (e.g., "Click", "Swipe").</param>
+    /// <param name="type">The action type.<para>(e.g., "Click", "Swipe")</para></param>
     /// <param name="param">The default action parameters.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
-    bool GetDefaultActionParam(string actionType, [MaybeNullWhen(false)][StringSyntax("Json")] out string param);
+    bool GetDefaultActionParam(string type, [MaybeNullWhen(false)][StringSyntax("Json")] out string param);
 }

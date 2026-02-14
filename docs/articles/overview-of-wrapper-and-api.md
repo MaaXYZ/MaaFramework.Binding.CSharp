@@ -163,6 +163,8 @@ IMaaDisposable Derived:
 | IMaaResource.NodeList | `MaaResourceGetNodeList` |
 | IMaaResource.CustomRecognitionList | `MaaResourceGetCustomRecognitionList` |
 | IMaaResource.CustomActionList | `MaaResourceGetCustomActionList` |
+| IMaaResource.GetDefaultRecognitionParam() | `MaaResourceGetDefaultRecognitionParam` |
+| IMaaResource.GetDefaultActionParam() | `MaaResourceGetDefaultActionParam` |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
 
 ## MaaContext : IMaaContext
@@ -173,6 +175,8 @@ IMaaDisposable Derived:
 | IMaaContext.RunTask() | `MaaContextRunTask` |
 | IMaaContext.RunRecognition() | `MaaContextRunRecognition` |
 | IMaaContext.RunAction() | `MaaContextRunAction` |
+| IMaaContext.RunRecognitionDirect() | `MaaContextRunRecognitionDirect` |
+| IMaaContext.RunActionDirect() | `MaaContextRunActionDirect` |
 | IMaaContext.OverridePipeline() | `MaaContextOverridePipeline` |
 | IMaaContext.OverrideNext() | `MaaContextOverrideNext` |
 | IMaaContext.OverrideImage() | `MaaContextOverrideImage` |
