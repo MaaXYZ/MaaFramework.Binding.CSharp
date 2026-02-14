@@ -218,10 +218,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     IMaaGlobal IMaaTasker.Global { get; set; } = default!;
 
     /// <inheritdoc cref="IMaaTasker.Toolkit"/>
-    public MaaToolkit Toolkit { get => field; set => ((IMaaTasker)this).Toolkit = field = value; }
+    public MaaToolkit Toolkit { get; set => ((IMaaTasker)this).Toolkit = field = value; }
 
     /// <inheritdoc cref="IMaaTasker.Global"/>
-    public MaaGlobal Global { get => field; set => ((IMaaTasker)this).Global = field = value; }
+    public MaaGlobal Global { get; set => ((IMaaTasker)this).Global = field = value; }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -345,6 +345,16 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     /// </remarks>
     public bool ClearCache()
         => MaaTaskerClearCache(Handle);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerOverridePipeline"/>.
+    /// </remarks>
+    public bool OverridePipeline(MaaTaskJob taskJob, [StringSyntax("Json")] string pipelineOverride)
+    {
+        ArgumentNullException.ThrowIfNull(taskJob);
+        return MaaTaskerOverridePipeline(Handle, taskJob.Id, pipelineOverride);
+    }
 
     /// <inheritdoc/>
     public bool GetRecognitionDetail<T>(long recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, IMaaImageBuffer? raw, IMaaListBuffer<T>? draws)

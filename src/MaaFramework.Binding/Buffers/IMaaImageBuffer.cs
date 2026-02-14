@@ -47,6 +47,9 @@ public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>, IMaaDisposable
     /// <inheritdoc cref="ImageInfo.Type"/>
     int Type { get; }
 
+    /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TryResize(THandle, int, int)"/>
+    bool TryResize(int width, int height);
+
     /// <inheritdoc cref="IMaaImageBufferStatic{THandle}.TryGetEncodedData(THandle, out byte[])"/>
     bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data);
 
@@ -72,6 +75,15 @@ public interface IMaaImageBuffer : IMaaBuffer<IMaaImageBuffer>, IMaaDisposable
 /// <typeparam name="THandle">The type of handle.</typeparam>
 public interface IMaaImageBufferStatic<THandle>
 {
+    /// <summary>
+    ///     Resizes the image.
+    /// </summary>
+    /// <param name="handle">The MaaImageBufferHandle.</param>
+    /// <param name="width">The target width.</param>
+    /// <param name="height">The target height.</param>
+    /// <returns><see langword="true"/> if the image was resized successfully; otherwise, <see langword="false"/>.</returns>
+    static abstract bool TryResize(THandle handle, int width, int height);
+
     /// <summary>
     ///     Gets the image encoded data from a MaaImageBuffer.
     /// </summary>

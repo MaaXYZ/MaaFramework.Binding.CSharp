@@ -104,17 +104,51 @@ public class MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>,
     }
 
     /// <inheritdoc/>
-    public ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
+    public ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, string recognitionDetail = "", [StringSyntax("Json")] string pipelineOverride = "{}")
         => RunAction(entry, (MaaRectBuffer)recognitionBox, recognitionDetail, pipelineOverride);
 
     /// <inheritdoc cref="IMaaContext.RunAction"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunAction"/>.
     /// </remarks>
-    public ActionDetail? RunAction(string entry, MaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
+    public ActionDetail? RunAction(string entry, MaaRectBuffer recognitionBox, string recognitionDetail = "", [StringSyntax("Json")] string pipelineOverride = "{}")
     {
         ArgumentNullException.ThrowIfNull(recognitionBox);
         var actionId = MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail);
+        return actionId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : ActionDetail.Query<MaaRectBuffer>(actionId, Tasker);
+    }
+
+    /// <inheritdoc/>
+    public RecognitionDetail? RunRecognitionDirect(string type, [StringSyntax("Json")] string param, IMaaImageBuffer image)
+        => RunRecognitionDirect(type, param, (MaaImageBuffer)image);
+
+    /// <inheritdoc cref="IMaaContext.RunRecognitionDirect"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextRunRecognitionDirect"/>.
+    /// </remarks>
+    public RecognitionDetail? RunRecognitionDirect(string type, [StringSyntax("Json")] string param, MaaImageBuffer image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        var recognitionId = MaaContextRunRecognitionDirect(Handle, type, param, image.Handle);
+        return recognitionId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recognitionId, Tasker);
+    }
+
+    /// <inheritdoc/>
+    public ActionDetail? RunActionDirect(string type, [StringSyntax("Json")] string param, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail = "")
+        => RunActionDirect(type, param, (MaaRectBuffer)recognitionBox, recognitionDetail);
+
+    /// <inheritdoc cref="IMaaContext.RunActionDirect"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextRunActionDirect"/>.
+    /// </remarks>
+    public ActionDetail? RunActionDirect(string type, [StringSyntax("Json")] string param, MaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail = "")
+    {
+        ArgumentNullException.ThrowIfNull(recognitionBox);
+        var actionId = MaaContextRunActionDirect(Handle, type, param, recognitionBox.Handle, recognitionDetail);
         return actionId == Interop.Native.MaaDef.MaaInvalidId
             ? null
             : ActionDetail.Query<MaaRectBuffer>(actionId, Tasker);
