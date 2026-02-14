@@ -159,6 +159,28 @@ public class MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>,
     }
 
     /// <inheritdoc/>
+    public bool WaitFreezes(TimeSpan time, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => WaitFreezes((MaaSize)time.TotalMilliseconds, (MaaRectBuffer)recognitionBox, waitFreezesParam);
+
+    /// <inheritdoc cref="IMaaContext.WaitFreezes(TimeSpan, IMaaRectBuffer, string)"/>
+    public bool WaitFreezes(TimeSpan time, MaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => WaitFreezes((MaaSize)time.TotalMilliseconds, recognitionBox, waitFreezesParam);
+
+    /// <inheritdoc/>
+    public bool WaitFreezes(MaaSize millisecondsTime, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => WaitFreezes(millisecondsTime, (MaaRectBuffer)recognitionBox, waitFreezesParam);
+
+    /// <inheritdoc cref="IMaaContext.WaitFreezes(MaaSize, IMaaRectBuffer, string)"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextWaitFreezes"/>.
+    /// </remarks>
+    public bool WaitFreezes(MaaSize millisecondsTime, MaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}")
+    {
+        ArgumentNullException.ThrowIfNull(recognitionBox);
+        return MaaContextWaitFreezes(Handle, millisecondsTime, recognitionBox.Handle, waitFreezesParam);
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextOverridePipeline"/>.
     /// </remarks>

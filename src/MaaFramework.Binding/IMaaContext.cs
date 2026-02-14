@@ -77,6 +77,29 @@ public interface IMaaContext : ICloneable
     ActionDetail? RunActionDirect(string type, [StringSyntax("Json")] string param, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail = "");
 
     /// <summary>
+    ///     Waits for screen to stabilize (freeze).
+    /// </summary>
+    /// <param name="millisecondsTime">The wait time in milliseconds.</param>
+    /// <param name="recognitionBox">The recognition hit box, used when target is Self to calculate ROI.</param>
+    /// <param name="waitFreezesParam">The wait parameters.<para>Supports time, target, target_offset, threshold, method, rate_limit, timeout.</para></param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     <paramref name="millisecondsTime"/> and <paramref name="waitFreezesParam"/>.time are mutually exclusive.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"/>
+    bool WaitFreezes(MaaSize millisecondsTime, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}");
+
+    /// <param name="time">The wait time.</param>
+    /// <param name="recognitionBox">The recognition hit box, used when target is Self to calculate ROI.</param>
+    /// <param name="waitFreezesParam">The wait parameters.<para>Supports time, target, target_offset, threshold, method, rate_limit, timeout.</para></param>
+    /// <remarks>
+    ///     <paramref name="time"/> and <paramref name="waitFreezesParam"/>.time are mutually exclusive.
+    /// </remarks>
+    /// <inheritdoc cref="WaitFreezes(ulong, IMaaRectBuffer, string)"/>
+    /// <exception cref="ArgumentNullException"/>
+    bool WaitFreezes(TimeSpan time, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}");
+
+    /// <summary>
     ///     Overrides a pipeline.
     /// </summary>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>

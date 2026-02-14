@@ -51,6 +51,10 @@ public static partial class MaaContext
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaContextWaitFreezes(MaaContextHandle context, MaaSize time, MaaRectHandle roi, string waitFreezesParam);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaContextOverridePipeline(MaaContextHandle context, string pipelineOverride);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

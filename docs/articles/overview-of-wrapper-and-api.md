@@ -184,6 +184,7 @@ IMaaDisposable Derived:
 | IMaaContext.RunAction() | `MaaContextRunAction` |
 | IMaaContext.RunRecognitionDirect() | `MaaContextRunRecognitionDirect` |
 | IMaaContext.RunActionDirect() | `MaaContextRunActionDirect` |
+| IMaaContext.WaitFreezes() | `MaaContextWaitFreezes` |
 | IMaaContext.OverridePipeline() | `MaaContextOverridePipeline` |
 | IMaaContext.OverrideNext() | `MaaContextOverrideNext` |
 | IMaaContext.OverrideImage() | `MaaContextOverrideImage` |
