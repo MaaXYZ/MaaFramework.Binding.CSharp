@@ -217,10 +217,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     IMaaGlobal IMaaTasker.Global { get; set; } = default!;
 
     /// <inheritdoc cref="IMaaTasker.Toolkit"/>
-    public MaaToolkit Toolkit { get => field; set => ((IMaaTasker)this).Toolkit = field = value; }
+    public MaaToolkit Toolkit { get; set => ((IMaaTasker)this).Toolkit = field = value; }
 
     /// <inheritdoc cref="IMaaTasker.Global"/>
-    public MaaGlobal Global { get => field; set => ((IMaaTasker)this).Global = field = value; }
+    public MaaGlobal Global { get; set => ((IMaaTasker)this).Global = field = value; }
 
     /// <inheritdoc/>
     /// <remarks>

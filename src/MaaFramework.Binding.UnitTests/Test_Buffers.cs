@@ -1130,6 +1130,7 @@ internal sealed class TestImageBuffer : IMaaImageBuffer
     public int Height => throw new NotImplementedException();
     public int Channels => throw new NotImplementedException();
     public int Type => throw new NotImplementedException();
+    public bool TryResize(int width, int height) => throw new NotImplementedException();
     public bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data) => throw new NotImplementedException();
     public bool TryGetEncodedData([MaybeNullWhen(false)] out Stream data) => throw new NotImplementedException();
     public bool TryGetEncodedData(out ReadOnlySpan<byte> data) => throw new NotImplementedException();

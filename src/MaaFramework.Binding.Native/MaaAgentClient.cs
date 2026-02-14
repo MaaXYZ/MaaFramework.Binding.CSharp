@@ -146,7 +146,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <inheritdoc/>
     public MaaTasker? Tasker
     {
-        get => field;
+        get;
         set
         {
             field?.Releasing -= OnReleasing;
@@ -171,7 +171,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <inheritdoc/>
     public MaaController? Controller
     {
-        get => field;
+        get;
         set
         {
             field?.Releasing -= OnReleasing;
@@ -200,7 +200,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// </remarks>
     public required MaaResource Resource
     {
-        get => field;
+        get;
         set
         {
             ArgumentNullException.ThrowIfNull(value);
