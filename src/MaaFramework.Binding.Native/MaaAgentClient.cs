@@ -106,6 +106,14 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         return client;
     }
 
+    /// <inheritdoc cref="CreateTcp(ushort, MaaResource)"/>
+    public static MaaAgentClient CreateTcp(MaaResource resource)
+        => CreateTcp(0, resource);
+
+    /// <inheritdoc cref="CreateTcp(ushort, MaaTasker)"/>
+    public static MaaAgentClient CreateTcp(MaaTasker maa)
+        => CreateTcp(0, maa);
+
     /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance with TCP connection.
     ///     <para>The callback (from resource) will be forwarded to the agent server.</para>

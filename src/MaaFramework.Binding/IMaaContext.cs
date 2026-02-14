@@ -87,7 +87,7 @@ public interface IMaaContext : ICloneable
     ///     <paramref name="millisecondsTime"/> and <paramref name="waitFreezesParam"/>.time are mutually exclusive.
     /// </remarks>
     /// <exception cref="ArgumentNullException"/>
-    bool WaitFreezes(MaaSize millisecondsTime, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}");
+    bool WaitFreezes(MaaSize millisecondsTime = 0, IMaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}");
 
     /// <param name="time">The wait time.</param>
     /// <param name="recognitionBox">The recognition hit box, used when target is Self to calculate ROI.</param>
@@ -97,7 +97,7 @@ public interface IMaaContext : ICloneable
     /// </remarks>
     /// <inheritdoc cref="WaitFreezes(ulong, IMaaRectBuffer, string)"/>
     /// <exception cref="ArgumentNullException"/>
-    bool WaitFreezes(TimeSpan time, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}");
+    bool WaitFreezes(TimeSpan time = default, IMaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}");
 
     /// <summary>
     ///     Overrides a pipeline.

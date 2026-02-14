@@ -159,26 +159,23 @@ public class MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>,
     }
 
     /// <inheritdoc/>
-    public bool WaitFreezes(TimeSpan time, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}")
-        => WaitFreezes((MaaSize)time.TotalMilliseconds, (MaaRectBuffer)recognitionBox, waitFreezesParam);
+    public bool WaitFreezes(TimeSpan time = default, IMaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => WaitFreezes((MaaSize)time.TotalMilliseconds, (MaaRectBuffer?)recognitionBox, waitFreezesParam);
 
     /// <inheritdoc cref="IMaaContext.WaitFreezes(TimeSpan, IMaaRectBuffer, string)"/>
-    public bool WaitFreezes(TimeSpan time, MaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}")
+    public bool WaitFreezes(TimeSpan time = default, MaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}")
         => WaitFreezes((MaaSize)time.TotalMilliseconds, recognitionBox, waitFreezesParam);
 
     /// <inheritdoc/>
-    public bool WaitFreezes(MaaSize millisecondsTime, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}")
-        => WaitFreezes(millisecondsTime, (MaaRectBuffer)recognitionBox, waitFreezesParam);
+    public bool WaitFreezes(MaaSize millisecondsTime = 0, IMaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => WaitFreezes(millisecondsTime, (MaaRectBuffer?)recognitionBox, waitFreezesParam);
 
     /// <inheritdoc cref="IMaaContext.WaitFreezes(MaaSize, IMaaRectBuffer, string)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextWaitFreezes"/>.
     /// </remarks>
-    public bool WaitFreezes(MaaSize millisecondsTime, MaaRectBuffer recognitionBox, [StringSyntax("Json")] string waitFreezesParam = "{}")
-    {
-        ArgumentNullException.ThrowIfNull(recognitionBox);
-        return MaaContextWaitFreezes(Handle, millisecondsTime, recognitionBox.Handle, waitFreezesParam);
-    }
+    public bool WaitFreezes(MaaSize millisecondsTime = 0, MaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => MaaContextWaitFreezes(Handle, millisecondsTime, recognitionBox?.Handle ?? MaaRectHandle.Zero, waitFreezesParam);
 
     /// <inheritdoc/>
     /// <remarks>
