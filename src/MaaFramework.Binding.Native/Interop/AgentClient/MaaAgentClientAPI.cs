@@ -21,6 +21,9 @@ public static partial class MaaAgentClient
     public static partial MaaAgentClientHandle MaaAgentClientCreateV2(MaaStringBufferHandle identifier);
 
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaAgentClientHandle MaaAgentClientCreateTcp(ushort port);
+
+    [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaAgentClientDestroy(MaaAgentClientHandle client);
 
     [LibraryImport("MaaAgentClient", StringMarshalling = StringMarshalling.Utf8)]
