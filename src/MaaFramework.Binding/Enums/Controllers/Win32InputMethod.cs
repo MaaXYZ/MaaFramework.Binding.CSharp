@@ -17,20 +17,24 @@ namespace MaaFramework.Binding;
 /// <para>No bitwise OR, select ONE method only.</para>
 /// <para>No default value. Client should choose one as default.</para>
 /// <para>Different applications process input differently, there is no universal solution.</para>
-/// <code>| Method                   | Compatibility | Require Admin | Seize Mouse  | Background Support | Notes                              |</code>
-/// <code>|--------------------------|---------------|---------------|--------------|--------------------|------------------------------------|</code>
-/// <code>| Seize                    | High          | No            | Yes          | No  |                                                   |</code>
-/// <code>| SendMessage              | Medium        | Maybe         | No           | Yes |                                                   |</code>
-/// <code>| PostMessage              | Medium        | Maybe         | No           | Yes |                                                   |</code>
-/// <code>| LegacyEvent              | Low           | No            | Yes          | No  |                                                   |</code>
-/// <code>| PostThreadMessage        | Low           | Maybe         | No           | Yes |                                                   |</code>
-/// <code>| SendMessageWithCursorPos | Medium        | Maybe         | Briefly      | Yes | Designed for apps that check real cursor position |</code>
-/// <code>| PostMessageWithCursorPos | Medium        | Maybe         | Briefly      | Yes | Designed for apps that check real cursor position |</code>
+/// <code>| Method                   | Compatibility | Require Admin | Seize Mouse  | Background Support | Notes                                    |</code>
+/// <code>|--------------------------|---------------|---------------|--------------|--------------------|------------------------------------------|</code>
+/// <code>| Seize                    | High          | No            | Yes          | No  |                                                         |</code>
+/// <code>| SendMessage              | Medium        | Maybe         | No           | Yes |                                                         |</code>
+/// <code>| PostMessage              | Medium        | Maybe         | No           | Yes |                                                         |</code>
+/// <code>| LegacyEvent              | Low           | No            | Yes          | No  |                                                         |</code>
+/// <code>| PostThreadMessage        | Low           | Maybe         | No           | Yes |                                                         |</code>
+/// <code>| SendMessageWithCursorPos | Medium        | Maybe         | Briefly      | Yes | Moves cursor to target position, then restores          |</code>
+/// <code>| PostMessageWithCursorPos | Medium        | Maybe         | Briefly      | Yes | Moves cursor to target position, then restores          |</code>
+/// <code>| SendMessageWithWindowPos | Medium        | Maybe         | No           | Yes | Moves window to align target with cursor, then restores |</code>
+/// <code>| PostMessageWithWindowPos | Medium        | Maybe         | No           | Yes | Moves window to align target with cursor, then restores |</code>
 /// <para>Note:</para>
 /// <para>- Admin rights mainly depend on the target application's privilege level.</para>
 /// <para>If the target runs as admin, MaaFramework should also run as admin for compatibility.</para>
 /// <para>- "WithCursorPos" methods briefly move the cursor to target position, send message,</para>
 /// <para>then restore cursor position. This "briefly" seizes the mouse but won't block user operations.</para>
+/// <para>- "WithWindowPos" methods briefly move the window so the target aligns with the current cursor</para>
+/// <para>position, send message, then restore the window position. The cursor is not moved.</para>
 /// </summary>
 public enum Win32InputMethod : System.UInt64
 {
@@ -42,5 +46,7 @@ public enum Win32InputMethod : System.UInt64
     PostThreadMessage = (1 << 4),
     SendMessageWithCursorPos = (1 << 5),
     PostMessageWithCursorPos = (1 << 6),
+    SendMessageWithWindowPos = (1 << 7),
+    PostMessageWithWindowPos = (1 << 8),
 }
 
