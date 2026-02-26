@@ -17,10 +17,10 @@ public static class Common
     internal static string Address { get; set; } = string.Empty;
 
     internal static string DebugPath { get; set; } = Path.GetFullPath("./debug");
-    internal static string BundlePath { get; set; } = Path.GetFullPath("./SampleResource");
+    internal static string BundlePath { get; set; } = Path.GetFullPath("./SampleResource/a_bundle");
     internal static string AgentPath { get; set; } = Path.GetFullPath($"./MaaAgentBinary");
-    internal static string AdbConfig { get; set; } = File.ReadAllText(Path.GetFullPath($"{BundlePath}/controller_config.json"));
-    internal static string ImagePath { get; set; } = Path.Join(BundlePath, "empty_1920x1080.png");
+    internal static string AdbConfig { get; set; } = File.ReadAllText(Path.GetFullPath($"./SampleResource/controller_config.json"));
+    internal static string ImagePath { get; set; } = Path.GetFullPath("./SampleResource/empty_1920x1080.png");
 
     private static void InitializeInfo(TestContext testContext)
     {

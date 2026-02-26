@@ -364,20 +364,33 @@ public class Test_IMaaController
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), true, "echo hello", 20000)]
-    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, bool assertSuccess, string cmd, long timeout)
+    [MaaData(MaaTypes.All, nameof(Data), "echo hello", 20000)]
+    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, string cmd, long timeout)
     {
         Assert.IsNotNull(maaController);
 
         var job = maaController.Shell(cmd, timeout);
-        Interface_IMaaPost(assertSuccess, job);
+        if (maaController is MaaAdbController)
+        {
+            Interface_IMaaPost_Success(job);
 
-        Assert.IsTrue(
-            maaController.GetShellOutput(out var output));
-        Assert.IsNotNull(
-            output);
-        Assert.Contains(
-            "hello", output);
+            Assert.IsTrue(
+                maaController.GetShellOutput(out var output));
+            Assert.IsNotNull(
+                output);
+            Assert.Contains(
+                "hello", output);
+        }
+        else
+        {
+            Interface_IMaaPost_Failed(job);
+            Assert.IsTrue(
+                maaController.GetShellOutput(out var output));
+            Assert.IsNotNull(
+                output);
+            Assert.AreEqual(
+                string.Empty, output);
+        }
     }
 
     #region Invalid data tests

@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Custom;
+using System.Text.Json;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -45,11 +46,41 @@ internal static class Custom
             Assert.AreEqual(RecognitionParam, args.RecognitionParam);
 
             var cloneContext = (context as ICloneable).Clone() as IMaaContext;
-            cloneContext = cloneContext?.Clone();
+            cloneContext = cloneContext!.Clone();
 #if MAA_NATIVE
-            cloneContext = (cloneContext as MaaContext)?.Clone();
+            cloneContext = (cloneContext as MaaContext)!.Clone();
 #endif
             Assert.IsNotNull(cloneContext);
+
+            Assert.IsFalse(
+                context.IsCancellationRequested);
+            Assert.IsTrue(
+                context.WaitFreezes(TimeSpan.FromSeconds(1)));
+
+            Assert.IsFalse(
+                context.GetAnchor(DefaultAnchorName, out var nodeName));
+            Assert.IsNull(
+                nodeName);
+            Assert.IsTrue(
+                context.SetAnchor(DefaultAnchorName, DefaultAnchorNodeName));
+            Assert.IsTrue(
+                context.GetAnchor(DefaultAnchorName, out nodeName));
+            Assert.AreEqual(
+                DefaultAnchorNodeName, nodeName);
+
+            Assert.IsNotNull(
+                context.RunTask(DefaultAnchorNodeName));
+            Assert.IsTrue(
+                context.GetHitCount(DefaultAnchorNodeName, out var hitCount));
+            Assert.AreNotEqual<ulong>(
+                0, hitCount);
+            Assert.IsTrue(
+                context.ClearHitCount(DefaultAnchorNodeName));
+            Assert.IsTrue(
+                context.GetHitCount(DefaultAnchorNodeName, out hitCount));
+            Assert.AreEqual<ulong>(
+                0, hitCount);
+
             Assert.IsNull(
                 cloneContext.RunRecognition(DiffEntry, args.Image));
             if (!context.Tasker.IsStateless)
@@ -73,6 +104,11 @@ internal static class Custom
                 recognitionDetail?.HitBox);
 
 
+            using var recoDirectDetail =
+                context.RunRecognitionDirect(RecoDirectType, RecoDirectParam, args.Image);
+            Assert.IsNotNull(
+                recoDirectDetail?.HitBox);
+
             Assert.IsTrue(
                 cloneContext.OverridePipeline(DiffParam));
             Assert.AreEqual(
@@ -90,8 +126,21 @@ internal static class Custom
             Assert.IsTrue(
                 cloneContext.GetNodeData(DiffEntry, out data));
             Assert.IsNotNull(data);
-            Assert.IsTrue(
-                data.Contains($"\"next\":[\"{DiffEntry}\"]"));
+
+            using var document = JsonDocument.Parse(data);
+            var root = document.RootElement;
+            Assert.IsTrue(root.TryGetProperty("next", out var nextElement),
+                "Expected JSON to contain a 'next' property.");
+            Assert.AreEqual(JsonValueKind.Array, nextElement.ValueKind,
+                "Expected 'next' to be a JSON array.");
+            var containsDiffEntry = nextElement
+                .EnumerateArray()
+                .Any(element =>
+                    element.ValueKind == JsonValueKind.Object &&
+                    element.TryGetProperty("name", out var nameProperty) &&
+                    nameProperty.GetString() == DiffEntry);
+            Assert.IsTrue(containsDiffEntry,
+                $"Expected 'next' array to contain an element with name '{DiffEntry}'.");
 
 
             Assert.IsTrue(
@@ -100,7 +149,7 @@ internal static class Custom
                 results.Detail.TrySetValue(recognitionDetail.Detail));
             // return ret;
 
-            // Using in assert
+            // Assert in other testings
             Detail = recognitionDetail.Detail;
             Box = $"{results.Box.X}{results.Box.Y}{results.Box.Width}{results.Box.Height}";
 
@@ -120,6 +169,21 @@ internal static class Custom
     }
     """;
 
+    internal const string RecoDirectType = "ColorMatch";
+    internal const string RecoDirectParam = """
+    {
+        "recognition": "ColorMatch",
+        "lower": [100, 100, 100],
+        "upper": [255, 255, 255]
+    }
+    """;
+
+    internal const string ActionDirectType = "Click";
+    internal const string ActionDirectParam = "{}";
+
+    internal const string DefaultAnchorName = "DefaultAnchorName";
+    internal const string DefaultAnchorNodeName = "EmptyNode";
+
     internal sealed class TestAction : IMaaCustomAction
     {
         public string Name { get; set; } = nameof(TestAction);
@@ -136,6 +200,11 @@ internal static class Custom
                 context.RunAction(DiffEntry, args.RecognitionBox, args.RecognitionDetail.Detail, DiffParam);
             Assert.IsNotNull(
                 actionDetail);
+
+            using var actionDirectDetail =
+                context.RunActionDirect(ActionDirectType, ActionDirectParam, args.RecognitionBox, args.RecognitionDetail.Detail);
+            Assert.IsNotNull(
+                actionDirectDetail);
             return true;
         }
     }

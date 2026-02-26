@@ -281,8 +281,8 @@ public class Test_Buffers
             CollectionAssert.AreEqual(
                 encodedDataArray, funcArray);
 
-            Assert.IsTrue(img.Buffer.TryGetEncodedData(out encodedDataStream)
-                          && img.Buffer.TryGetEncodedData(out encodedDataSpan));
+            Assert.IsTrue(buffer.TryGetEncodedData(out encodedDataStream)
+                          && buffer.TryGetEncodedData(out encodedDataSpan));
             Assert.IsTrue(
                 MaaImageBuffer.TrySetEncodedData(encodedDataStream, handle
                     => MaaImageBuffer.TryGetEncodedData(handle, out funcArray)));
