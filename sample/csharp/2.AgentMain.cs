@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/dotnet run
 
-#:package Maa.Framework@5.4.1
+#:package Maa.Framework@5.6.0
 
 #nullable enable
 
