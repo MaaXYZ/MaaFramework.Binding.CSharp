@@ -91,6 +91,7 @@ IMaaDisposable Derived:
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
 | MaaPlayCoverController.ctor() | `MaaPlayCoverControllerCreate` <br> `MaaControllerAddSink` |
 | MaaGamepadController.ctor() | `MaaGamepadControllerCreate` <br> `MaaControllerAddSink` |
+| MaaWlRootsController.ctor() | `MaaWlRootsControllerCreate` <br> `MaaControllerAddSink` |
 | IDisposable.Dispose() | `MaaControllerDestroy` |
 | IMaaOption.SetOption() | `MaaControllerSetOption` |
 | IMaaController.LinkStart() | `MaaControllerPostConnection` |
