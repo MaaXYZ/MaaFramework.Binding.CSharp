@@ -66,7 +66,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
+            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, info: object, }</para>
             /// </remarks>
             public const string Starting = "Controller.Action.Starting";
 
@@ -74,7 +74,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
+            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, info: object, }</para>
             /// </remarks>
             public const string Prefix = "Controller.Action";
 
@@ -82,7 +82,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
+            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, info: object, }</para>
             /// </remarks>
             public const string Succeeded = "Controller.Action.Succeeded";
 
@@ -90,7 +90,7 @@ public static class MaaMsg
             ///     Message for the controller actions.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, }</para>
+            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, info: object, }</para>
             /// </remarks>
             public const string Failed = "Controller.Action.Failed";
 

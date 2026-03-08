@@ -204,9 +204,9 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     bool GetCachedImage(IMaaImageBuffer image);
 
     /// <summary>
-    ///     Gets the uuid string of the <see cref="IMaaController"/>.
+    ///     Gets the uuid of the <see cref="IMaaController"/>.
     /// </summary>
-    /// <returns>A <see cref="string"/> if the hash was successfully got; otherwise, <see langword="null"/>.</returns>
+    /// <returns>A <see cref="string"/> if the uuid was successfully got; otherwise, <see langword="null"/>.</returns>
     string? Uuid { get; }
 
     /// <summary>
@@ -221,4 +221,10 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///         so its dimensions may differ from this raw resolution.</para>
     /// </remarks>
     bool GetResolution(out int width, out int height);
+
+    /// <summary>
+    ///     Gets the information of the <see cref="IMaaController"/>.
+    /// </summary>
+    /// <returns>A <see cref="string"/> if the information was successfully got; otherwise, <see langword="null"/>.</returns>
+    string? Info { get; }
 }

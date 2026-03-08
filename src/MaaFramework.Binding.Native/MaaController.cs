@@ -294,4 +294,17 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     /// </remarks>
     public bool GetResolution(out int width, out int height)
         => MaaControllerGetResolution(Handle, out width, out height);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerGetInfo"/>.
+    /// </remarks>
+    public string? Info
+    {
+        get
+        {
+            _ = MaaStringBuffer.TryGetValue(out var info, h => MaaControllerGetInfo(Handle, h));
+            return info;
+        }
+    }
 }

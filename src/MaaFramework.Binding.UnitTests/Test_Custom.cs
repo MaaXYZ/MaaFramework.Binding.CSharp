@@ -303,6 +303,11 @@ internal static class Custom
             => c.Scroll(dx, dy).Wait().IsSucceeded();
         public bool Inactive()
                 => c.Inactive().Wait().IsSucceeded();
+        public bool GetInfo(IMaaStringBuffer buffer)
+        {
+            var info = c.Info;
+            return info is not null && buffer.TrySetValue(info);
+        }
     }
 
     internal sealed class TestInvalidResource : IMaaCustom
