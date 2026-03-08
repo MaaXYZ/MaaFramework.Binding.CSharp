@@ -301,6 +301,8 @@ internal static class Custom
             => c.KeyUp(keycode).Wait().IsSucceeded();
         public bool Scroll(int dx, int dy)
             => c.Scroll(dx, dy).Wait().IsSucceeded();
+        public bool Inactive()
+                => c.Inactive().Wait().IsSucceeded();
     }
 
     internal sealed class TestInvalidResource : IMaaCustom

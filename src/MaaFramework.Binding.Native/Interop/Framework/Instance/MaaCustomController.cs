@@ -110,6 +110,7 @@ public static class MaaCustomControllerMarshaller
         public KeyDownDelegate KeyDown = (int keycode, nint transArg) => managed.KeyDown(keycode);
         public KeyUpDelegate KeyUp = (int keycode, nint transArg) => managed.KeyUp(keycode);
         public ScrollDelegate Scroll = (int dx, int dy, nint transArg) => managed.Scroll(dx, dy);
+        public InactiveDelegate Inactive = (nint transArg) => managed.Inactive();
     };
 
     /// <summary>
@@ -139,6 +140,7 @@ public static class MaaCustomControllerMarshaller
         public nint KeyDown = Marshal.GetFunctionPointerForDelegate(delegates.KeyDown);
         public nint KeyUp = Marshal.GetFunctionPointerForDelegate(delegates.KeyUp);
         public nint Scroll = Marshal.GetFunctionPointerForDelegate(delegates.Scroll);
+        public nint Inactive = Marshal.GetFunctionPointerForDelegate(delegates.Inactive);
     }
 
     [return: MarshalAs(UnmanagedType.U1)]
@@ -213,4 +215,8 @@ public static class MaaCustomControllerMarshaller
     [return: MarshalAs(UnmanagedType.U1)]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool ScrollDelegate(int dx, int dy, nint transArg);
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool InactiveDelegate(nint transArg);
 }

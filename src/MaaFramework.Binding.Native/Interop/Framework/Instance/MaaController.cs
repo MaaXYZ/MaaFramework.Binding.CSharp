@@ -100,6 +100,9 @@ public static partial class MaaController
     public static partial MaaCtrlId MaaControllerPostScroll(MaaControllerHandle ctrl, int dx, int dy);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostInactive(MaaControllerHandle ctrl);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostShell(MaaControllerHandle ctrl, string cmd, long timeout);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
