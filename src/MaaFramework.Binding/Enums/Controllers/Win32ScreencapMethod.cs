@@ -25,7 +25,10 @@ namespace MaaFramework.Binding;
 /// <code>| DXGI_DesktopDup_Window  | Very Fast | Low           | No            | No                 | Desktop duplication then crop    |</code>
 /// <code>| PrintWindow             | Medium    | Medium        | No            | Yes                |                                  |</code>
 /// <code>| ScreenDC                | Fast      | High          | No            | No                 |                                  |</code>
-/// <para>Note: When a window is minimized on Windows, all screencap methods will fail. Avoid minimizing the target window.</para>
+/// <para>Note: FramePool and PrintWindow support pseudo-minimize — when the target window
+/// is minimized, they make it transparent and click-through, then restore it without
+/// activation, allowing screencap to continue without disturbing the user.</para>
+/// <para>Other screencap methods will fail when the target window is minimized.</para>
 /// </summary>
 public enum Win32ScreencapMethod : System.UInt64
 {
