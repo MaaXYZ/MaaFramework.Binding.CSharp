@@ -112,6 +112,9 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaPlayCoverControllerCreate(string address, string uuid);
 
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaWlRootsControllerCreate(string wlr_socket_path);
+
     /// <summary>
     ///     Create a virtual gamepad controller for Windows.
     /// </summary>
