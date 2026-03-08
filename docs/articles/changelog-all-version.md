@@ -1,3 +1,20 @@
+## 5.8.0
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.6.0...5.8.0
+
+### New features
+
+- feat: support IMaaController.Info @moomiji
+- feat: support MaaWlRootsController @moomiji
+- feat: support IMaaController.Inactive() @moomiji
+
+### Other
+
+- RELEASE: v5.8.0 @moomiji
+- chore: update interop to framework v5.8.1 @moomiji
+- chore: update Win32ScreencapMethod document @moomiji
+- chore(UnitTests): fix test cases @moomiji
+
 ## v5.6.0
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.4.1...v5.6.0
