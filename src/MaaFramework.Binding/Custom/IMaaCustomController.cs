@@ -36,4 +36,9 @@ public interface IMaaCustomController : IMaaCustom, IDisposable
     bool KeyUp(int keycode);
     bool Scroll(int dx, int dy);
     bool Inactive();
+
+    /// <remarks>
+    ///     Optional, Write result (JSON string) to buffer.
+    /// </remarks>
+    bool GetInfo(IMaaStringBuffer buffer);
 }

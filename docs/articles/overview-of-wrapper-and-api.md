@@ -115,6 +115,7 @@ IMaaDisposable Derived:
 | IMaaController.GetCachedImage() | `MaaControllerCachedImage` |
 | IMaaController.Uuid | `MaaControllerGetUuid` |
 | IMaaController.GetResolution() | `MaaControllerGetResolution` |
+| IMaaController.Info | `MaaControllerGetInfo` |
 | IMaaDisposableHandle.Handle | *The MaaControllerHandle.* |
 
 ## MaaTasker : IMaaTasker

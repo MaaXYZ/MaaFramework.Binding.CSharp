@@ -16,7 +16,8 @@ public record ControllerActionDetail(
     [property: JsonPropertyName("ctrl_id")] int ControllerId,
     [property: JsonPropertyName("uuid")] string Uuid,
     [property: JsonPropertyName("action")] string Action,
-    [property: JsonPropertyName("param")] JsonElement Param
+    [property: JsonPropertyName("param")] JsonElement Param,
+    [property: JsonPropertyName("info")] JsonElement Info
 );
 
 /// <inheritdoc cref="MaaMsg.Tasker.Task.Prefix"/>

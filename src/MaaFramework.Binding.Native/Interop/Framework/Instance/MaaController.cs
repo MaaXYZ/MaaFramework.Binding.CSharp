@@ -160,6 +160,10 @@ public static partial class MaaController
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaControllerGetResolution(MaaControllerHandle ctrl, out int width, out int height);
 
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerGetInfo(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
+
     [Obsolete]
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostPressKey(MaaControllerHandle ctrl, int keycode);
