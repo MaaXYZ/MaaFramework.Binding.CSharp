@@ -105,6 +105,7 @@ IMaaDisposable Derived:
 | IMaaController.TouchUp() | `MaaControllerPostTouchUp` |
 | IMaaController.Screencap() | `MaaControllerPostScreencap` |
 | IMaaController.Scroll() | `MaaControllerPostScroll` |
+| IMaaController.Inactive() | `MaaControllerPostInactive` |
 | IMaaController.Shell() | `MaaControllerPostShell` |
 | IMaaController.GetShellOutput() | `MaaControllerGetShellOutput` |
 | IMaaPost.GetStatus() | `MaaControllerStatus` |

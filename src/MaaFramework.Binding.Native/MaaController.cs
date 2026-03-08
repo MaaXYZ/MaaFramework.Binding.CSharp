@@ -198,6 +198,13 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostInactive"/>.
+    /// </remarks>
+    public MaaJob Inactive()
+        => CreateJob(MaaControllerPostInactive(Handle));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostShell"/>.
     /// </remarks>
     public MaaJob Shell(string cmd, long timeout = 20000)

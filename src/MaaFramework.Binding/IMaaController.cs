@@ -155,6 +155,17 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob Scroll(int dx, int dy);
 
     /// <summary>
+    ///     Appends a job for inactive action.
+    /// </summary>
+    /// <returns>An inactive action <see cref="MaaJob"/>.</returns>
+    /// <remarks>
+    ///     <para>For Win32 controllers, this restores window position (removes topmost) and unblocks user input.</para>
+    ///     <para>For other controllers, this is a no-op that always succeeds.
+    ///     </para>
+    /// </remarks>
+    MaaJob Inactive();
+
+    /// <summary>
     ///     Appends a job for shell command action.
     /// </summary>
     /// <param name="cmd">The shell command to execute.</param>
