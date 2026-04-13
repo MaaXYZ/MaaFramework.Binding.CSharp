@@ -4,6 +4,7 @@ global using MaaTaskId = System.Int64;
 global using MaaNodeId = System.Int64;
 global using MaaRecoId = System.Int64;
 global using MaaActId = System.Int64;
+global using MaaWfId = System.Int64;
 global using MaaSize = System.UInt64;
 
 using System.Diagnostics.CodeAnalysis;

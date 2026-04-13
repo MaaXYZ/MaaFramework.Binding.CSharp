@@ -155,6 +155,19 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     bool GetActionDetail(MaaActId actionId, out string nodeName, out string action, IMaaRectBuffer? box, out bool isSucceeded, out string detailJson);
 
     /// <summary>
+    ///     Gets the wait freezes detail.
+    /// </summary>
+    /// <param name="wfId">The wait freezes id.</param>
+    /// <param name="nodeName">The node name.</param>
+    /// <param name="phase">The phase (e.g. "pre", "post", "repeat", "context").</param>
+    /// <param name="isSucceeded">A value indicating whether the wait freezes is succeeded.</param>
+    /// <param name="elapsedMs">The elapsed time in milliseconds.</param>
+    /// <param name="recoIdList">The recognition id list.</param>
+    /// <param name="roi">The region of interest.</param>
+    /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
+    bool GetWaitFreezesDetail(MaaWfId wfId, out string nodeName, out string phase, out bool isSucceeded, out ulong elapsedMs, out MaaRecoId[] recoIdList, IMaaRectBuffer? roi);
+
+    /// <summary>
     ///     Gets the node detail.
     /// </summary>
     /// <param name="nodeId">The node id.</param>

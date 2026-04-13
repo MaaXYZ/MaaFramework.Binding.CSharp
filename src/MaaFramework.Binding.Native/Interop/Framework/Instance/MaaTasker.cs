@@ -111,6 +111,10 @@ public static partial class MaaTasker
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerGetWaitFreezesDetail(MaaTaskerHandle tasker, MaaWfId wfId, MaaStringBufferHandle nodeName, MaaStringBufferHandle phase, [MarshalAs(UnmanagedType.U1)] out bool success, out MaaSize elapsedMs, MaaRecoId[]? recoIdList, ref MaaSize recoIdListSize, MaaRectHandle roi);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaTaskerGetTaskDetail(MaaTaskerHandle tasker, MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize, out MaaStatus status);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

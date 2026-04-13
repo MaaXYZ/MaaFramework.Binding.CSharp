@@ -170,6 +170,13 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostRelativeMove"/>.
+    /// </remarks>
+    public MaaJob RelativeMove(int dx, int dy)
+        => CreateJob(MaaControllerPostRelativeMove(Handle, dx, dy));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostKeyDown"/>.
     /// </remarks>
     public MaaJob KeyDown(int keyCode)

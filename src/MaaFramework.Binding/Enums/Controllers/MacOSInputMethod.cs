@@ -10,11 +10,15 @@
 #pragma warning disable CS1573 // 参数在 XML 注释中没有匹配的 param 标记
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
-global using MaaToolkitAdbDeviceHandle = nint;
-global using MaaToolkitAdbDeviceListHandle = nint;
-global using MaaToolkitDesktopWindowHandle = nint;
-global using MaaToolkitDesktopWindowListHandle = nint;
-global using MaaMacOSPermission = System.Int32;
+namespace MaaFramework.Binding;
 
-namespace MaaFramework.Binding.Interop.Native;
-
+/// <summary>
+///     macOS input method.
+/// </summary>
+[System.Flags]
+public enum MacOSInputMethod : System.UInt64
+{
+    None = 0,
+    GlobalEvent = 1,
+    PostToPid = (1 << 1),
+}

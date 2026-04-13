@@ -28,8 +28,48 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaCustomControllerCreate([MarshalUsing(typeof(MaaMarshaller))] Custom.IMaaCustomController controller, nint controllerArg);
 
+    /// <summary>
+    ///     Create a debug controller that serves images from a directory.
+    /// </summary>
+    /// <param name="readPath">Path to a directory of images (or a single image file).</param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath, string writePath, MaaDbgControllerType type, string config);
+    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath);
+
+    /// <summary>
+    ///     Create a macOS controller for native macOS applications.
+    /// </summary>
+    /// <param name="windowId">The CGWindowID of the target window (0 for desktop).</param>
+    /// <param name="screencapMethod">macOS screencap method to use.</param>
+    /// <param name="inputMethod">macOS input method to use.</param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaMacOSControllerCreate(uint windowId, MaaMacOSScreencapMethod screencapMethod, MaaMacOSInputMethod inputMethod);
+
+    /// <summary>
+    ///     Create an Android native controller.
+    /// </summary>
+    /// <param name="configJson">JSON config for the control unit.</param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaAndroidNativeControllerCreate(string configJson);
+
+    /// <summary>
+    ///     Create a replay controller that replays recorded operations.
+    /// </summary>
+    /// <param name="recordingPath">Path to the recording JSONL file.</param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaReplayControllerCreate(string recordingPath);
+
+    /// <summary>
+    ///     Create a record controller that wraps an existing controller and records all operations.
+    /// </summary>
+    /// <param name="inner">The inner controller to forward all operations to.</param>
+    /// <param name="recordingPath">Path to the recording JSONL file to write.</param>
+    /// <returns>The record controller handle, or nint.Zero on failure.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaRecordControllerCreate(MaaControllerHandle inner, string recordingPath);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);
@@ -86,6 +126,9 @@ public static partial class MaaController
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostTouchUp(MaaControllerHandle ctrl, int contact);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostRelativeMove(MaaControllerHandle ctrl, int dx, int dy);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostKeyDown(MaaControllerHandle ctrl, int keycode);

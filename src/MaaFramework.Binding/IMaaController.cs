@@ -121,6 +121,14 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob TouchUp(int contact);
 
     /// <summary>
+    ///     Moves the mouse/pointer relative to its current position.
+    /// </summary>
+    /// <param name="dx">The relative horizontal offset.</param>
+    /// <param name="dy">The relative vertical offset.</param>
+    /// <returns>A relative move <see cref="MaaJob"/>.</returns>
+    MaaJob RelativeMove(int dx, int dy);
+
+    /// <summary>
     ///     Usage: KeyDown -> KeyUp.
     ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
     ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>

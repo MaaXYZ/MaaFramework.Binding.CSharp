@@ -346,5 +346,40 @@ public static class MaaMsg
             public const string Failed = "Node.Action.Failed";
 
         }
+        public static class WaitFreezes
+        {
+            /// <summary>
+            ///     Message for wait freezes.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, wf_id: number, name: string, phase: string, roi: [number, number, number, number], param: { time: number, threshold: number, method: number, rate_limit: number, timeout: number }, reco_ids?: number[], elapsed?: number, focus: any, }</para>
+            /// </remarks>
+            public const string Starting = "Node.WaitFreezes.Starting";
+
+            /// <summary>
+            ///     Message for wait freezes.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, wf_id: number, name: string, phase: string, roi: [number, number, number, number], param: { time: number, threshold: number, method: number, rate_limit: number, timeout: number }, reco_ids?: number[], elapsed?: number, focus: any, }</para>
+            /// </remarks>
+            public const string Prefix = "Node.WaitFreezes";
+
+            /// <summary>
+            ///     Message for wait freezes.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, wf_id: number, name: string, phase: string, roi: [number, number, number, number], param: { time: number, threshold: number, method: number, rate_limit: number, timeout: number }, reco_ids?: number[], elapsed?: number, focus: any, }</para>
+            /// </remarks>
+            public const string Succeeded = "Node.WaitFreezes.Succeeded";
+
+            /// <summary>
+            ///     Message for wait freezes.
+            /// </summary>
+            /// <remarks>
+            ///     <para>details_json: { task_id: number, wf_id: number, name: string, phase: string, roi: [number, number, number, number], param: { time: number, threshold: number, method: number, rate_limit: number, timeout: number }, reco_ids?: number[], elapsed?: number, focus: any, }</para>
+            /// </remarks>
+            public const string Failed = "Node.WaitFreezes.Failed";
+
+        }
     }
 }

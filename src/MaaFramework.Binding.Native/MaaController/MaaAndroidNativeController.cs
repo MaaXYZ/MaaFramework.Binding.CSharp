@@ -5,43 +5,42 @@ using static MaaFramework.Binding.Interop.Native.MaaController;
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     A wrapper class providing a reference implementation for <see cref="MaaDbgControllerCreate"/>.
+///     A wrapper class providing a reference implementation for <see cref="MaaAndroidNativeControllerCreate"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class MaaDbgController : MaaController
+public class MaaAndroidNativeController : MaaController
 {
-    private readonly string _debugReadPath;
+    private readonly string _debugConfigJson;
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ ReadFrom = {_debugReadPath} }}";
+        : $"{GetType().Name} {{ ConfigJson = {_debugConfigJson} }}";
 
     /// <summary>
-    ///     Creates a <see cref="MaaDbgController"/> instance.
+    ///     Creates a <see cref="MaaAndroidNativeController"/> instance.
     /// </summary>
-    /// <param name="readPath">Path to a directory of images (or a single image file).</param>
+    /// <param name="configJson">JSON config for the control unit.</param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaDbgControllerCreate"/>.
-    ///     <para>Images are loaded on connect and cycled through on each screencap request.</para>
-    ///     <para>All input operations (click, swipe, etc.) are no-ops that return success.</para>
+    ///     Wrapper of <see cref="MaaAndroidNativeControllerCreate"/>.
+    ///     <para>This controller is only available on Android.</para>
     /// </remarks>
     /// <exception cref="ArgumentException"/>
     /// <exception cref="MaaJobStatusException"/>
-    public MaaDbgController(string readPath, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+    public MaaAndroidNativeController([StringSyntax("Json")] string configJson, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
     {
-        ArgumentException.ThrowIfNullOrEmpty(readPath);
+        ArgumentException.ThrowIfNullOrEmpty(configJson);
 
-        var handle = MaaDbgControllerCreate(readPath);
+        var handle = MaaAndroidNativeControllerCreate(configJson);
         _ = MaaControllerAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Controller);
         SetHandle(handle, needReleased: true);
 
-        _debugReadPath = readPath;
+        _debugConfigJson = configJson;
 
         if (link == LinkOption.Start)
-            LinkStartOnConstructed(check, readPath);
+            LinkStartOnConstructed(check, configJson);
     }
 }
