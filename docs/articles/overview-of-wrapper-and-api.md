@@ -26,6 +26,8 @@
 | AdbInputMethods | `MaaAdbInputMethod` |
 | Win32ScreencapMethod | `MaaWin32ScreencapMethod` |
 | Win32InputMethod | `MaaWin32InputMethod` |
+| MacOSScreencapMethod | `MaaMacOSScreencapMethod` |
+| MacOSInputMethod | `MaaMacOSInputMethod` |
 | DbgControllerType | `MaaDbgControllerType` |
 | GamepadType | `MaaGamepadType` |
 | GamepadButton | `MaaGamepadButton` |
@@ -87,6 +89,7 @@ IMaaDisposable Derived:
 | --- | --- |
 | MaaAdbController.ctor() | `MaaAdbControllerCreate` <br> `MaaControllerAddSink` |
 | MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` <br> `MaaControllerAddSink` |
+| MaaMacOSController.ctor() | `MaaMacOSControllerCreate` <br> `MaaControllerAddSink` |
 | MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
 | MaaPlayCoverController.ctor() | `MaaPlayCoverControllerCreate` <br> `MaaControllerAddSink` |

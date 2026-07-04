@@ -43,6 +43,13 @@ public static partial class MaaController
     /// <param name="screencapMethod">macOS screencap method to use.</param>
     /// <param name="inputMethod">macOS input method to use.</param>
     /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    /// <remarks>
+    ///     <br/>This controller is designed for native macOS applications.
+    ///     <br/>Requires Screen Recording permission for screencap.
+    ///     <br/>Input simulation requires Accessibility permission.
+    ///     <br/>Some features are not supported: start_app, stop_app, scroll.
+    ///     <br/>Only single touch is supported (contact must be 0).
+    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaMacOSControllerCreate(uint windowId, MaaMacOSScreencapMethod screencapMethod, MaaMacOSInputMethod inputMethod);
 

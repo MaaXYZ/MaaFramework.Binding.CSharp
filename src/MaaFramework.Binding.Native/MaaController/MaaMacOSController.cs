@@ -24,8 +24,8 @@ public class MaaMacOSController : MaaController
     ///     Creates a <see cref="MaaMacOSController"/> instance.
     /// </summary>
     /// <param name="windowId">The CGWindowID of the target window (0 for desktop).</param>
-    /// <param name="screencapMethod">macOS screencap method to use.</param>
-    /// <param name="inputMethod">macOS input method to use.</param>
+    /// <param name="screencapMethod">The macOS screencap method.</param>
+    /// <param name="inputMethod">The macOS input method.</param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <remarks>

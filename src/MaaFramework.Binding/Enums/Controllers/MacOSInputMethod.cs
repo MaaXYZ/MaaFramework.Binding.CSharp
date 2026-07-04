@@ -13,9 +13,17 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     macOS input method.
+///     MacOS input method.
+///
+/// <para>Select ONE method only.</para>
+/// 
+/// <code>| Method          | Description                                                                                                        |
+/// <br/>|-----------------|--------------------------------------------------------------------------------------------------------------------|
+/// <br/>| GlobalEvent     | Injects into the global HID event stream via CGEventPost(kCGHIDEventTap), dispatched by the OS to the front window |
+/// <br/>| PostToPid       | Directly send to target process using CGEventPostToPid                                                             |
+/// </code>
+/// 
 /// </summary>
-[System.Flags]
 public enum MacOSInputMethod : System.UInt64
 {
     None = 0,

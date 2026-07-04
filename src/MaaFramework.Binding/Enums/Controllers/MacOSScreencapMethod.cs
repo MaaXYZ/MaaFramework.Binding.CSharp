@@ -13,7 +13,15 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     macOS screencap method.
+///     MacOS screencap method.
+///
+/// <para>Select ONE method only.</para>
+/// 
+/// <code>| Method          | Description                                    |
+/// <br/>|-----------------|------------------------------------------------|
+/// <br/>| ScreenCaptureKit| Modern macOS screencap using ScreenCaptureKit  |
+/// </code>
+/// 
 /// </summary>
 public enum MacOSScreencapMethod : System.UInt64
 {
