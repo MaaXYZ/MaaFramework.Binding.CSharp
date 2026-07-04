@@ -104,6 +104,7 @@ IMaaDisposable Derived:
 | IMaaController.TouchDown() | `MaaControllerPostTouchDown` |
 | IMaaController.TouchMove() | `MaaControllerPostTouchMove` |
 | IMaaController.TouchUp() | `MaaControllerPostTouchUp` |
+| IMaaController.RelativeMove() | `MaaControllerPostRelativeMove` |
 | IMaaController.Screencap() | `MaaControllerPostScreencap` |
 | IMaaController.Scroll() | `MaaControllerPostScroll` |
 | IMaaController.Inactive() | `MaaControllerPostInactive` |
