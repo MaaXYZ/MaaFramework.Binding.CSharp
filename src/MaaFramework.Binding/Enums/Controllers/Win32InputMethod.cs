@@ -43,6 +43,7 @@ public enum Win32InputMethod : System.UInt64
     SendMessage = (1 << 1),
     PostMessage = (1 << 2),
     LegacyEvent = (1 << 3),
+    [Obsolete("Deprecated from MaaFramework v5.9.0.")]
     PostThreadMessage = (1 << 4),
     SendMessageWithCursorPos = (1 << 5),
     PostMessageWithCursorPos = (1 << 6),
