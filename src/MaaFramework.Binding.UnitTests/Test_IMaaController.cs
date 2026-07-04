@@ -365,11 +365,11 @@ public class Test_IMaaController
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), "echo hello", 20000)]
-    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, string cmd, long timeout)
+    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, string cmd, long millisecondsTimeout)
     {
         Assert.IsNotNull(maaController);
 
-        var job = maaController.Shell(cmd, timeout);
+        var job = maaController.Shell(cmd, millisecondsTimeout);
         if (maaController is MaaAdbController)
         {
             Interface_IMaaPost_Success(job);

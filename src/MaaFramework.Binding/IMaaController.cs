@@ -177,13 +177,13 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///     Appends a job for shell command action.
     /// </summary>
     /// <param name="cmd">The shell command to execute.</param>
-    /// <param name="timeout">The timeout in milliseconds. Default is 20000 (20 seconds).</param>
+    /// <param name="millisecondsTimeout">The timeout in milliseconds. Default is 20000 (20 seconds).</param>
     /// <returns>A shell <see cref="MaaJob"/>.</returns>
     /// <remarks>
-    ///     <para>This is only valid for ADB controllers. If the controller is not an ADB controller, the action will fail.</para>
+    ///     <para>Supported by ADB controllers and custom controllers that implement the shell callback.</para>
     ///     <para>See also <see cref="GetShellOutput"/>.</para>
     /// </remarks>
-    MaaJob Shell(string cmd, long timeout = 20000);
+    MaaJob Shell(string cmd, long millisecondsTimeout = 20000);
 
     /// <summary>
     ///     Gets the cached shell command output.

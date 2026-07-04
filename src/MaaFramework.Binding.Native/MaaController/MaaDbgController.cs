@@ -19,15 +19,17 @@ public class MaaDbgController : MaaController
         : $"{GetType().Name} {{ ReadFrom = {_debugReadPath} }}";
 
     /// <summary>
-    ///     Creates a <see cref="MaaDbgController"/> instance.
+    ///     Creates a <see cref="MaaDbgController"/> instance that serves images from a directory.
     /// </summary>
-    /// <param name="readPath">Path to a directory of images (or a single image file).</param>
+    /// <param name="readPath">
+    ///     <para>Path to a directory of images (or a single image file).</para>
+    ///     <para>Images are loaded on connect and cycled through on each screencap request.</para>
+    ///     <para>All input operations (click, swipe, etc.) are no-ops that return success.</para>
+    /// </param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaDbgControllerCreate"/>.
-    ///     <para>Images are loaded on connect and cycled through on each screencap request.</para>
-    ///     <para>All input operations (click, swipe, etc.) are no-ops that return success.</para>
     /// </remarks>
     /// <exception cref="ArgumentException"/>
     /// <exception cref="MaaJobStatusException"/>

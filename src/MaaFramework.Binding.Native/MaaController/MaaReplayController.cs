@@ -19,14 +19,16 @@ public class MaaReplayController : MaaController
         : $"{GetType().Name} {{ RecordingPath = {_debugRecordingPath} }}";
 
     /// <summary>
-    ///     Creates a <see cref="MaaReplayController"/> instance.
+    ///     Creates a <see cref="MaaReplayController"/> instance that replays recorded operations.
     /// </summary>
-    /// <param name="recordingPath">Path to the recording JSONL file written by <see cref="MaaRecordController"/>.</param>
+    /// <param name="recordingPath">
+    ///     <para>Path to the recording JSONL file written by <see cref="MaaRecordController"/>.</para>
+    ///     <para>Screenshot image paths in the file are resolved relative to this file's parent directory.</para>
+    /// </param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaReplayControllerCreate"/>.
-    ///     <para>Screenshot image paths in the file are resolved relative to this file's parent directory.</para>
     /// </remarks>
     /// <exception cref="ArgumentException"/>
     /// <exception cref="MaaJobStatusException"/>

@@ -29,7 +29,6 @@
 | MacOSScreencapMethod | `MaaMacOSScreencapMethod` |
 | MacOSInputMethod | `MaaMacOSInputMethod` |
 | MacOSPermission | `MaaMacOSPermissionEnum` |
-| DbgControllerType | `MaaDbgControllerType` |
 | GamepadType | `MaaGamepadType` |
 | GamepadButton | `MaaGamepadButton` |
 | GamepadTouch | `MaaGamepadTouch` |
@@ -93,6 +92,8 @@ IMaaDisposable Derived:
 | MaaMacOSController.ctor() | `MaaMacOSControllerCreate` <br> `MaaControllerAddSink` |
 | MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
+| MaaReplayController.ctor() | `MaaReplayControllerCreate` <br> `MaaControllerAddSink` |
+| MaaRecordController.ctor() | `MaaRecordControllerCreate` <br> `MaaControllerAddSink` |
 | MaaPlayCoverController.ctor() | `MaaPlayCoverControllerCreate` <br> `MaaControllerAddSink` |
 | MaaGamepadController.ctor() | `MaaGamepadControllerCreate` <br> `MaaControllerAddSink` |
 | MaaWlRootsController.ctor() | `MaaWlRootsControllerCreate` <br> `MaaControllerAddSink` |

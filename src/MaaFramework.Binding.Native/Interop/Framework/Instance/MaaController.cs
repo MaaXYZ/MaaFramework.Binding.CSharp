@@ -25,17 +25,6 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod mouseMethod, MaaWin32InputMethod keyboardMethod);
 
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaCustomControllerCreate([MarshalUsing(typeof(MaaMarshaller))] Custom.IMaaCustomController controller, nint controllerArg);
-
-    /// <summary>
-    ///     Create a debug controller that serves images from a directory.
-    /// </summary>
-    /// <param name="readPath">Path to a directory of images (or a single image file).</param>
-    /// <returns>The controller handle, or nint.Zero on failure.</returns>
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath);
-
     /// <summary>
     ///     Create a macOS controller for native macOS applications.
     /// </summary>
@@ -61,10 +50,28 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaAndroidNativeControllerCreate(string configJson);
 
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaCustomControllerCreate([MarshalUsing(typeof(MaaMarshaller))] Custom.IMaaCustomController controller, nint controllerArg);
+
+    /// <summary>
+    ///     Create a debug controller that serves images from a directory.
+    /// </summary>
+    /// <param name="readPath">
+    ///     <para>Path to a directory of images (or a single image file).</para>
+    ///     <para>Images are loaded on connect and cycled through on each screencap request.</para>
+    ///     <para>All input operations (click, swipe, etc.) are no-ops that return success.</para>
+    /// </param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath);
+
     /// <summary>
     ///     Create a replay controller that replays recorded operations.
     /// </summary>
-    /// <param name="recordingPath">Path to the recording JSONL file.</param>
+    /// <param name="recordingPath">
+    ///     <para>Path to the recording JSONL file written by MaaRecordControllerCreate.</para>
+    ///     <para>Screenshot image paths in the file are resolved relative to this file's parent directory.</para>
+    /// </param>
     /// <returns>The controller handle, or nint.Zero on failure.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaReplayControllerCreate(string recordingPath);
@@ -72,8 +79,16 @@ public static partial class MaaController
     /// <summary>
     ///     Create a record controller that wraps an existing controller and records all operations.
     /// </summary>
-    /// <param name="inner">The inner controller to forward all operations to.</param>
-    /// <param name="recordingPath">Path to the recording JSONL file to write.</param>
+    /// <param name="inner">
+    ///     <para>The inner controller to forward all operations to. Must not be null.</para>
+    ///     <para>The record controller does NOT take ownership of the inner controller.</para>
+    /// </param>
+    /// <param name="recordingPath">
+    ///     <para>Path to the recording JSONL file to write.</para>
+    ///     <para>Screenshot images will be saved to a "{stem}-Screenshot" folder</para>
+    ///     <para>in the same directory as this file.</para>
+    ///     <para>The recorded file can be replayed using MaaReplayControllerCreate.</para>
+    /// </param>
     /// <returns>The record controller handle, or nint.Zero on failure.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaRecordControllerCreate(MaaControllerHandle inner, string recordingPath);

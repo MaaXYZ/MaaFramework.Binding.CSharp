@@ -47,8 +47,6 @@ global using MaaAdbInputMethod = System.UInt64;
 global using MaaWin32ScreencapMethod = System.UInt64;
 // No bitwise OR, just set it
 global using MaaWin32InputMethod = System.UInt64;
-// No bitwise OR, just set it
-global using MaaDbgControllerType = System.UInt64;
 global using MaaControllerFeature = System.UInt64;
 // macOS controller types
 global using MaaMacOSScreencapMethod = System.UInt64;

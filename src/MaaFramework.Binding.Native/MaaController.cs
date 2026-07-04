@@ -214,8 +214,8 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostShell"/>.
     /// </remarks>
-    public MaaJob Shell(string cmd, long timeout = 20000)
-        => CreateJob(MaaControllerPostShell(Handle, cmd, timeout));
+    public MaaJob Shell(string cmd, long millisecondsTimeout = 20000)
+        => CreateJob(MaaControllerPostShell(Handle, cmd, millisecondsTimeout));
 
     /// <inheritdoc/>
     /// <remarks>
