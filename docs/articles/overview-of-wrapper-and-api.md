@@ -28,6 +28,7 @@
 | Win32InputMethod | `MaaWin32InputMethod` |
 | MacOSScreencapMethod | `MaaMacOSScreencapMethod` |
 | MacOSInputMethod | `MaaMacOSInputMethod` |
+| MacOSPermission | `MaaMacOSPermissionEnum` |
 | DbgControllerType | `MaaDbgControllerType` |
 | GamepadType | `MaaGamepadType` |
 | GamepadButton | `MaaGamepadButton` |
@@ -316,6 +317,9 @@ IMaaDisposable Derived:
 | MaaToolkit.ctor() <br> IMaaToolkit.Config.InitOption() | `MaaToolkitConfigInitOption` |
 | IMaaToolkit.AdbDevice.Find() <br> IMaaToolkit.AdbDevice.FindAsync() | `MaaToolkitAdbDeviceFind` <br> `MaaToolkitAdbDeviceFindSpecified` |
 | IMaaToolkit.Desktop.Window.Find() | `MaaToolkitDesktopWindowFindAll` |
+| IMaaToolkit.MacOS.CheckPermission() | `MaaToolkitMacOSCheckPermission` |
+| IMaaToolkit.MacOS.RequestPermission() | `MaaToolkitMacOSRequestPermission` |
+| IMaaToolkit.MacOS.RevealPermissionSettings() | `MaaToolkitMacOSRevealPermissionSettings` |
 
 ## Buffers.AdbDeviceListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
 

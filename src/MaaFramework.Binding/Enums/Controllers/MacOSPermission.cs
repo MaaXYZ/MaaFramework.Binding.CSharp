@@ -13,7 +13,7 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     macOS permission types.
+///     MacOS permission types.
 /// </summary>
 public enum MacOSPermission : System.Int32
 {
