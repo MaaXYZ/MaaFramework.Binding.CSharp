@@ -145,6 +145,7 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 720)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotUseRawSize, false)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.MouseLockFollow, false)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotResizeMethod, 0)]
     public void Interface_SetOption(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);
@@ -402,6 +403,7 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotUseRawSize, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.MouseLockFollow, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotResizeMethod, 0.0)]
     public void Interface_SetOption_InvalidData(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);

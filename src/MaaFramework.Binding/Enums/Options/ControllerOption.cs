@@ -49,5 +49,16 @@ public enum ControllerOption : System.Int32
     ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     MouseLockFollow = 4,
+
+    /// <summary>
+    ///     Set the interpolation method used when resizing screenshots.
+    /// </summary>
+    /// <remarks>
+    ///     <para>Value corresponds to cv::InterpolationFlags:</para>
+    ///     <code>  INTER_NEAREST=0, INTER_LINEAR=1, INTER_CUBIC=2, INTER_AREA=3, INTER_LANCZOS4=4</code>
+    ///     <para>Default is INTER_AREA (3).</para>
+    ///     <para>value: int, eg: 3; val_size: sizeof(int)</para>
+    /// </remarks>
+    ScreenshotResizeMethod = 6,
 }
 

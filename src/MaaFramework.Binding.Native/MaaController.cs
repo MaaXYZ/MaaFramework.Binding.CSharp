@@ -81,7 +81,8 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
         var optValue = (value, opt) switch
         {
             (int vvvv, ControllerOption.ScreenshotTargetLongSide
-                    or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValue(),
+                    or ControllerOption.ScreenshotTargetShortSide
+                    or ControllerOption.ScreenshotResizeMethod) => vvvv.ToMaaOptionValue(),
             (bool vvv, ControllerOption.ScreenshotUseRawSize
                     or ControllerOption.MouseLockFollow) => vvv.ToMaaOptionValue(),
 
