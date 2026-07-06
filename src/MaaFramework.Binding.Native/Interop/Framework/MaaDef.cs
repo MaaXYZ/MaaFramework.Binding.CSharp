@@ -19,6 +19,7 @@ global using MaaTaskId = System.Int64;
 global using MaaRecoId = System.Int64;
 global using MaaActId = System.Int64;
 global using MaaNodeId = System.Int64;
+global using MaaWfId = System.Int64;
 global using MaaSinkId = System.Int64;
 global using MaaStringBufferHandle = nint;
 global using MaaImageBufferHandle = nint;
@@ -55,8 +56,6 @@ global using MaaMacOSInputMethod = System.UInt64;
 global using MaaGamepadType = System.UInt64;
 global using MaaGamepadButton = System.UInt64;
 global using MaaGamepadTouch = System.UInt64;
-// WaitFreezes id
-global using MaaWfId = System.Int64;
 global using MaaRectHandle = nint;
 
 using System.Runtime.InteropServices;

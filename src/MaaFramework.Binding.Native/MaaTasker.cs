@@ -408,14 +408,14 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     }
 
     /// <inheritdoc/>
-    public bool GetWaitFreezesDetail(MaaWfId wfId, out string nodeName, out string phase, out bool isSucceeded, out ulong elapsedMs, out MaaRecoId[] recoIdList, IMaaRectBuffer? roi)
-        => GetWaitFreezesDetail(wfId, out nodeName, out phase, out isSucceeded, out elapsedMs, out recoIdList, (MaaRectBuffer?)roi);
+    public bool GetWaitFreezesDetail(MaaWfId waitFreezesId, out string nodeName, out string phase, out bool isSucceeded, out MaaSize millisecondsElapsed, out MaaRecoId[] recoIdList, IMaaRectBuffer? roi)
+        => GetWaitFreezesDetail(waitFreezesId, out nodeName, out phase, out isSucceeded, out millisecondsElapsed, out recoIdList, (MaaRectBuffer?)roi);
 
-    /// <inheritdoc cref="IMaaTasker.GetWaitFreezesDetail"/>
+    /// <inheritdoc cref="IMaaTasker.GetWaitFreezesDetail(long, out string, out string, out bool, out ulong, out long[], IMaaRectBuffer?)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerGetWaitFreezesDetail"/>.
     /// </remarks>
-    public bool GetWaitFreezesDetail(MaaWfId wfId, out string nodeName, out string phase, out bool isSucceeded, out ulong elapsedMs, out MaaRecoId[] recoIdList, MaaRectBuffer? roi)
+    public bool GetWaitFreezesDetail(MaaWfId waitFreezesId, out string nodeName, out string phase, out bool isSucceeded, out MaaSize millisecondsElapsed, out MaaRecoId[] recoIdList, MaaRectBuffer? roi)
     {
         var roiHandle = roi?.Handle ?? MaaRectHandle.Zero;
         MaaSize recoIdListSize = 0;
@@ -423,7 +423,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         using var nodeNameBuffer = new MaaStringBuffer();
         using var phaseBuffer = new MaaStringBuffer();
 
-        if (!MaaTaskerGetWaitFreezesDetail(Handle, wfId, nodeNameBuffer.Handle, phaseBuffer.Handle, out isSucceeded, out elapsedMs, null, ref recoIdListSize, roiHandle))
+        if (!MaaTaskerGetWaitFreezesDetail(Handle, waitFreezesId, nodeNameBuffer.Handle, phaseBuffer.Handle, out isSucceeded, out millisecondsElapsed, null, ref recoIdListSize, roiHandle))
         {
             nodeName = string.Empty;
             phase = string.Empty;
@@ -434,7 +434,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         nodeName = nodeNameBuffer.ToString();
         phase = phaseBuffer.ToString();
         recoIdList = recoIdListSize == 0 ? [] : new MaaRecoId[recoIdListSize];
-        return MaaTaskerGetWaitFreezesDetail(Handle, wfId, nodeNameBuffer.Handle, phaseBuffer.Handle, out isSucceeded, out elapsedMs, recoIdList, ref recoIdListSize, roiHandle);
+        return MaaTaskerGetWaitFreezesDetail(Handle, waitFreezesId, nodeNameBuffer.Handle, phaseBuffer.Handle, out isSucceeded, out millisecondsElapsed, recoIdList, ref recoIdListSize, roiHandle);
     }
 
     /// <inheritdoc/>

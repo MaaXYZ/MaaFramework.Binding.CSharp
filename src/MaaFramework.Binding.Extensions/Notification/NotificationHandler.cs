@@ -101,6 +101,18 @@ public static class NotificationHandlerExtensions
         => notify.ToCallback(MaaMsg.Tasker.Task.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
+    public static EventHandler<MaaCallbackEventArgs> ToCallback<TContext>(this NotificationHandler<PipelineNodeDetail, TContext> notify) where TContext : IMaaContext
+        => notify.ToCallback(MaaMsg.Node.PipelineNode.Prefix);
+
+    /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
+    public static EventHandler<MaaCallbackEventArgs> ToCallback<TContext>(this NotificationHandler<RecognitionNodeDetail, TContext> notify) where TContext : IMaaContext
+        => notify.ToCallback(MaaMsg.Node.RecognitionNode.Prefix);
+
+    /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
+    public static EventHandler<MaaCallbackEventArgs> ToCallback<TContext>(this NotificationHandler<ActionNodeDetail, TContext> notify) where TContext : IMaaContext
+        => notify.ToCallback(MaaMsg.Node.ActionNode.Prefix);
+
+    /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
     public static EventHandler<MaaCallbackEventArgs> ToCallback<TContext>(this NotificationHandler<NodeNextListDetail, TContext> notify) where TContext : IMaaContext
         => notify.ToCallback(MaaMsg.Node.NextList.Prefix);
 
@@ -113,15 +125,7 @@ public static class NotificationHandlerExtensions
         => notify.ToCallback(MaaMsg.Node.Action.Prefix);
 
     /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback<TContext>(this NotificationHandler<PipelineNodeDetail, TContext> notify) where TContext : IMaaContext
-        => notify.ToCallback(MaaMsg.Node.PipelineNode.Prefix);
-
-    /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback<TContext>(this NotificationHandler<RecognitionNodeDetail, TContext> notify) where TContext : IMaaContext
-        => notify.ToCallback(MaaMsg.Node.RecognitionNode.Prefix);
-
-    /// <inheritdoc cref="ToCallback{TDetail, TContext}"/>
-    public static EventHandler<MaaCallbackEventArgs> ToCallback<TContext>(this NotificationHandler<ActionNodeDetail, TContext> notify) where TContext : IMaaContext
-        => notify.ToCallback(MaaMsg.Node.ActionNode.Prefix);
+    public static EventHandler<MaaCallbackEventArgs> ToCallback<TContext>(this NotificationHandler<NodeWaitFreezesDetail, TContext> notify) where TContext : IMaaContext
+        => notify.ToCallback(MaaMsg.Node.WaitFreezes.Prefix);
 }
 
