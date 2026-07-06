@@ -39,5 +39,15 @@ public enum ControllerOption : System.Int32
     ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     ScreenshotUseRawSize = 3,
+
+    /// <summary>
+    ///     Enable or disable mouse-lock-follow mode for Win32 controllers.
+    /// </summary>
+    /// <remarks>
+    ///     <para>This is designed for TPS/FPS games that lock the mouse to their window in the background.</para>
+    ///     <para>Only valid for Win32 controllers using message-based input methods.</para>
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
+    /// </remarks>
+    MouseLockFollow = 4,
 }
 
