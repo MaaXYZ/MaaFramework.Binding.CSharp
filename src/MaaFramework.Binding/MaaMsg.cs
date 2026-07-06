@@ -282,7 +282,7 @@ public static class MaaMsg
             ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, anchor?: string, }</para>
             /// </remarks>
             public const string Starting = "Node.Recognition.Starting";
 
@@ -290,7 +290,7 @@ public static class MaaMsg
             ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, anchor?: string, }</para>
             /// </remarks>
             public const string Prefix = "Node.Recognition";
 
@@ -298,7 +298,7 @@ public static class MaaMsg
             ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, anchor?: string, }</para>
             /// </remarks>
             public const string Succeeded = "Node.Recognition.Succeeded";
 
@@ -306,7 +306,7 @@ public static class MaaMsg
             ///     Message for the recognition list of node.
             /// </summary>
             /// <remarks>
-            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
+            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, anchor?: string, }</para>
             /// </remarks>
             public const string Failed = "Node.Recognition.Failed";
 

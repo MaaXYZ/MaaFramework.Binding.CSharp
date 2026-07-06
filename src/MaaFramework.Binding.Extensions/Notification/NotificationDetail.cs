@@ -33,7 +33,7 @@ public record PipelineNodeDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("node_id")] int NodeId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("focus")] JsonElement? Focus
+    [property: JsonPropertyName("focus")] JsonElement Focus
 );
 
 /// <inheritdoc cref="MaaMsg.Node.RecognitionNode.Prefix"/>
@@ -41,7 +41,7 @@ public record RecognitionNodeDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("node_id")] int NodeId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("focus")] JsonElement? Focus
+    [property: JsonPropertyName("focus")] JsonElement Focus
 );
 
 /// <inheritdoc cref="MaaMsg.Node.ActionNode.Prefix"/>
@@ -49,7 +49,7 @@ public record ActionNodeDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("node_id")] int NodeId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("focus")] JsonElement? Focus
+    [property: JsonPropertyName("focus")] JsonElement Focus
 );
 
 /// <summary>
@@ -66,7 +66,7 @@ public record NodeNextListDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("list")] IReadOnlyList<NodeAttr> NextList,
-    [property: JsonPropertyName("focus")] JsonElement? Focus
+    [property: JsonPropertyName("focus")] JsonElement Focus
 );
 
 /// <inheritdoc cref="MaaMsg.Node.Recognition.Prefix"/>
@@ -74,7 +74,8 @@ public record NodeRecognitionDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("reco_id")] int RecognitionId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("focus")] JsonElement? Focus
+    [property: JsonPropertyName("focus")] JsonElement Focus,
+    [property: JsonPropertyName("anchor")] string? Anchor
 );
 
 /// <inheritdoc cref="MaaMsg.Node.Action.Prefix"/>
@@ -82,5 +83,5 @@ public record NodeActionDetail(
     [property: JsonPropertyName("task_id")] int TaskId,
     [property: JsonPropertyName("action_id")] int ActionId,
     [property: JsonPropertyName("name")] string Name,
-    [property: JsonPropertyName("focus")] JsonElement? Focus
+    [property: JsonPropertyName("focus")] JsonElement Focus
 );
