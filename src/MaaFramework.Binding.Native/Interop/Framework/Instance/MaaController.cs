@@ -45,8 +45,19 @@ public static partial class MaaController
     /// <summary>
     ///     Create an Android native controller.
     /// </summary>
-    /// <param name="configJson">JSON config for the control unit.</param>
+    /// <param name="configJson">
+    ///     <para>JSON config for the control unit. Required fields:</para>
+    ///     <para>- library_path: path to the Android native control unit library</para>
+    ///     <para>- screen_resolution.width / screen_resolution.height: raw screenshot and touch resolution</para>
+    ///     <para>Optional fields:</para>
+    ///     <para>- display_id: target display id, defaults to 0</para>
+    ///     <para>- force_stop: whether to force stop before start_app, defaults to false</para>
+    /// </param>
     /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    /// <remarks>
+    ///     <para>This controller is only available on Android.</para>
+    ///     <para>The configured screen_resolution must match the control unit's raw screenshot/touch coordinate space.</para>
+    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaAndroidNativeControllerCreate(string configJson);
 

@@ -21,12 +21,21 @@ public class MaaAndroidNativeController : MaaController
     /// <summary>
     ///     Creates a <see cref="MaaAndroidNativeController"/> instance.
     /// </summary>
-    /// <param name="configJson">JSON config for the control unit.</param>
+    /// <param name="configJson">
+    ///     <para>JSON config for the control unit.</para>
+    ///     <para>Required fields:
+    ///     <br/>- library_path: path to the Android native control unit library
+    ///     <br/>- screen_resolution.width / screen_resolution.height: raw screenshot and touch resolution</para>
+    ///     <para>Optional fields:
+    ///     <br/>- display_id: target display id, defaults to 0
+    ///     <br/>- force_stop: whether to force stop before start_app, defaults to false</para>
+    /// </param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <remarks>
     ///     Wrapper of <see cref="MaaAndroidNativeControllerCreate"/>.
     ///     <para>This controller is only available on Android.</para>
+    ///     <para>The configured screen_resolution must match the control unit's raw screenshot/touch coordinate space.</para>
     /// </remarks>
     /// <exception cref="ArgumentException"/>
     /// <exception cref="MaaJobStatusException"/>

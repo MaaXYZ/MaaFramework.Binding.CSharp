@@ -90,6 +90,7 @@ IMaaDisposable Derived:
 | MaaAdbController.ctor() | `MaaAdbControllerCreate` <br> `MaaControllerAddSink` |
 | MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` <br> `MaaControllerAddSink` |
 | MaaMacOSController.ctor() | `MaaMacOSControllerCreate` <br> `MaaControllerAddSink` |
+| MaaAndroidNativeController.ctor() | `MaaAndroidNativeControllerCreate` <br> `MaaControllerAddSink` |
 | MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
 | MaaReplayController.ctor() | `MaaReplayControllerCreate` <br> `MaaControllerAddSink` |
