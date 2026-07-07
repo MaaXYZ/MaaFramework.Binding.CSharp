@@ -60,5 +60,16 @@ public enum ControllerOption : System.Int32
     ///     <para>value: int, eg: 3; val_size: sizeof(int)</para>
     /// </remarks>
     ScreenshotResizeMethod = 6,
+
+    /// <summary>
+    ///     Configure background managed key domain for Win32 controllers.
+    /// </summary>
+    /// <remarks>
+    ///     <para>Must be set before connection. After setting, matching ClickKey / LongPressKey / KeyDown / KeyUp
+    ///     <br/>operations automatically route through the background guardian path.</para>
+    ///     <para>Only supported by Win32 controllers; other controllers will fail.</para>
+    ///     <para>value: int32_t array of virtual key codes; val_size: sizeof(int32_t) * count</para>
+    /// </remarks>
+    BackgroundManagedKeys = 7,
 }
 

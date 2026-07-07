@@ -35,6 +35,11 @@ public static class MaaOptionExtensions
     public static bool SetOption_ScreenshotResizeMethod(this IMaaOption<ControllerOption>? opt, int value)
         => opt?.SetOption(ControllerOption.ScreenshotResizeMethod, value) ?? throw new ArgumentNullException(nameof(opt));
 
+    /// <inheritdoc cref="ControllerOption.BackgroundManagedKeys"/>
+    /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
+    public static bool SetOption_BackgroundManagedKeys(this IMaaOption<ControllerOption>? opt, IEnumerable<int> value)
+        => opt?.SetOption(ControllerOption.BackgroundManagedKeys, value) ?? throw new ArgumentNullException(nameof(opt));
+
     /// <inheritdoc cref="GlobalOption.LogDir"/>
     /// <inheritdoc cref="IMaaOption{T}.SetOption{T}"/>
     public static bool SetOption_LogDir(this IMaaOption<GlobalOption>? opt, string value)

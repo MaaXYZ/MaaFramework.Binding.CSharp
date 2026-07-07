@@ -86,6 +86,8 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
             (bool vvv, ControllerOption.ScreenshotUseRawSize
                     or ControllerOption.MouseLockFollow) => vvv.ToMaaOptionValue(),
 
+            (IEnumerable<int> ints, ControllerOption.BackgroundManagedKeys) => ints.ToMaaOptionValue(),
+
             _ => throw new NotSupportedException($"'{nameof(ControllerOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
 
