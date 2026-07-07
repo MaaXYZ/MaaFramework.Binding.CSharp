@@ -104,6 +104,34 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaRecordControllerCreate(MaaControllerHandle inner, string recordingPath);
 
+    /// <summary>
+    /// <para>Create a PlayCover controller for macOS.</para>
+    /// </summary>
+    /// <param name="address">The PlayTools service address in "host:port" format.</param>
+    /// <param name="uuid">The application bundle identifier (e.g., "com.hypergryph.arknights").</param>
+    /// <returns>The controller handle, or nullptr on failure.</returns>
+    /// <remarks>
+    ///     <para>This controller is designed for PlayCover on macOS.</para>
+    ///     <para>Some features are not supported: start_app, input_text, click_key, key_down, key_up, scroll.</para>
+    ///     <para>Only single touch is supported (contact must be 0).</para>
+    /// </remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaPlayCoverControllerCreate(string address, string uuid);
+
+    /// <summary>
+    ///     Create a wlroots controller for Linux.
+    /// </summary>
+    /// <param name="wlrSocketPath">The wayland socket path (e.g., "/run/user/1000/wayland-0").</param>
+    /// <param name="useWin32VkCode">
+    ///     <br/>If true, key codes passed to click_key / key_down / key_up are
+    ///     <br/>interpreted as Win32 Virtual-Key codes (VK_*) and translated to Linux evdev codes
+    ///     <br/>internally. If false, key codes are passed through as raw evdev codes.
+    /// </param>
+    /// <returns>The controller handle, or nullptr on failure.</returns>
+    /// <remarks>This controller is designed for wlroots on Linux.</remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaWlRootsControllerCreate(string wlrSocketPath, [MarshalAs(UnmanagedType.U1)] bool useWin32VkCode);
+
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);
 
@@ -184,12 +212,6 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaControllerGetShellOutput(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
-
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaPlayCoverControllerCreate(string address, string uuid);
-
-    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaWlRootsControllerCreate(string wlr_socket_path);
 
     /// <summary>
     ///     Create a virtual gamepad controller for Windows.
