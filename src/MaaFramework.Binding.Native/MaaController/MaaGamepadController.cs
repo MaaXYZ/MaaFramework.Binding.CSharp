@@ -37,7 +37,7 @@ public class MaaGamepadController : MaaController
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerInfoString => _debugInfo is null
         ? "No Screencap"
-        : $"{nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethod = {_debugInfo.ScreencapMethods}";
+        : $"{nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethods = {_debugInfo.ScreencapMethods}";
 
     /// <summary>
     ///     Creates a <see cref="MaaGamepadController"/> instance.

@@ -16,7 +16,7 @@ public class MaaWin32Controller : MaaController
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ {nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethod = {_debugInfo.ScreencapMethods}, MouseMethod = {_debugInfo.MouseMethod}, KeyboardMethod = {_debugInfo.KeyboardMethod} }}";
+        : $"{GetType().Name} {{ {nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethods = {_debugInfo.ScreencapMethods}, MouseMethod = {_debugInfo.MouseMethod}, KeyboardMethod = {_debugInfo.KeyboardMethod} }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaWin32Controller"/> instance.
