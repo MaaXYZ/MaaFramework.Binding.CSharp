@@ -26,7 +26,9 @@
 | AdbInputMethods | `MaaAdbInputMethod` |
 | Win32ScreencapMethod | `MaaWin32ScreencapMethod` |
 | Win32InputMethod | `MaaWin32InputMethod` |
-| DbgControllerType | `MaaDbgControllerType` |
+| MacOSScreencapMethod | `MaaMacOSScreencapMethod` |
+| MacOSInputMethod | `MaaMacOSInputMethod` |
+| MacOSPermission | `MaaMacOSPermissionEnum` |
 | GamepadType | `MaaGamepadType` |
 | GamepadButton | `MaaGamepadButton` |
 | GamepadTouch | `MaaGamepadTouch` |
@@ -87,8 +89,12 @@ IMaaDisposable Derived:
 | --- | --- |
 | MaaAdbController.ctor() | `MaaAdbControllerCreate` <br> `MaaControllerAddSink` |
 | MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` <br> `MaaControllerAddSink` |
+| MaaMacOSController.ctor() | `MaaMacOSControllerCreate` <br> `MaaControllerAddSink` |
+| MaaAndroidNativeController.ctor() | `MaaAndroidNativeControllerCreate` <br> `MaaControllerAddSink` |
 | MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
+| MaaReplayController.ctor() | `MaaReplayControllerCreate` <br> `MaaControllerAddSink` |
+| MaaRecordController.ctor() | `MaaRecordControllerCreate` <br> `MaaControllerAddSink` |
 | MaaPlayCoverController.ctor() | `MaaPlayCoverControllerCreate` <br> `MaaControllerAddSink` |
 | MaaGamepadController.ctor() | `MaaGamepadControllerCreate` <br> `MaaControllerAddSink` |
 | MaaWlRootsController.ctor() | `MaaWlRootsControllerCreate` <br> `MaaControllerAddSink` |
@@ -104,6 +110,7 @@ IMaaDisposable Derived:
 | IMaaController.TouchDown() | `MaaControllerPostTouchDown` |
 | IMaaController.TouchMove() | `MaaControllerPostTouchMove` |
 | IMaaController.TouchUp() | `MaaControllerPostTouchUp` |
+| IMaaController.RelativeMove() | `MaaControllerPostRelativeMove` |
 | IMaaController.Screencap() | `MaaControllerPostScreencap` |
 | IMaaController.Scroll() | `MaaControllerPostScroll` |
 | IMaaController.Inactive() | `MaaControllerPostInactive` |
@@ -312,6 +319,9 @@ IMaaDisposable Derived:
 | MaaToolkit.ctor() <br> IMaaToolkit.Config.InitOption() | `MaaToolkitConfigInitOption` |
 | IMaaToolkit.AdbDevice.Find() <br> IMaaToolkit.AdbDevice.FindAsync() | `MaaToolkitAdbDeviceFind` <br> `MaaToolkitAdbDeviceFindSpecified` |
 | IMaaToolkit.Desktop.Window.Find() | `MaaToolkitDesktopWindowFindAll` |
+| IMaaToolkit.MacOS.CheckPermission() | `MaaToolkitMacOSCheckPermission` |
+| IMaaToolkit.MacOS.RequestPermission() | `MaaToolkitMacOSRequestPermission` |
+| IMaaToolkit.MacOS.RevealPermissionSettings() | `MaaToolkitMacOSRevealPermissionSettings` |
 
 ## Buffers.AdbDeviceListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
 

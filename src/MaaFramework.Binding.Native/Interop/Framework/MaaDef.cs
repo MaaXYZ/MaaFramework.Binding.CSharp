@@ -19,6 +19,7 @@ global using MaaTaskId = System.Int64;
 global using MaaRecoId = System.Int64;
 global using MaaActId = System.Int64;
 global using MaaNodeId = System.Int64;
+global using MaaWfId = System.Int64;
 global using MaaSinkId = System.Int64;
 global using MaaStringBufferHandle = nint;
 global using MaaImageBufferHandle = nint;
@@ -47,9 +48,10 @@ global using MaaAdbInputMethod = System.UInt64;
 global using MaaWin32ScreencapMethod = System.UInt64;
 // No bitwise OR, just set it
 global using MaaWin32InputMethod = System.UInt64;
-// No bitwise OR, just set it
-global using MaaDbgControllerType = System.UInt64;
 global using MaaControllerFeature = System.UInt64;
+// macOS controller types
+global using MaaMacOSScreencapMethod = System.UInt64;
+global using MaaMacOSInputMethod = System.UInt64;
 // Gamepad types
 global using MaaGamepadType = System.UInt64;
 global using MaaGamepadButton = System.UInt64;

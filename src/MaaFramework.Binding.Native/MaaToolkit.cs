@@ -2,6 +2,7 @@
 using MaaFramework.Binding.Interop.Native;
 using System.Diagnostics.CodeAnalysis;
 using static MaaFramework.Binding.Interop.Native.MaaToolkit;
+using static MaaFramework.Binding.Interop.Native.MaaToolkitMacOS;
 
 namespace MaaFramework.Binding;
 
@@ -37,6 +38,9 @@ public class MaaToolkit : IMaaToolkit
 
     /// <inheritdoc/>
     public IMaaToolkitDesktop Desktop { get; } = new DesktopClass();
+
+    /// <inheritdoc/>
+    public IMaaToolkitMacOS MacOS { get; } = new MacOSClass();
 
     /// <inheritdoc cref="MaaToolkit"/>
     protected internal class ConfigClass : IMaaToolkitConfig
@@ -100,5 +104,30 @@ public class MaaToolkit : IMaaToolkit
             _ = MaaToolkitDesktopWindowFindAll(list.Handle).ThrowIfFalse();
             return list;
         }
+    }
+
+    /// <inheritdoc cref="MaaToolkit"/>
+    protected internal class MacOSClass : IMaaToolkitMacOS
+    {
+        /// <inheritdoc/>
+        /// <remarks>
+        ///     Wrapper of <see cref="MaaToolkitMacOSCheckPermission"/>.
+        /// </remarks>
+        public bool CheckPermission(MacOSPermission permission)
+            => MaaToolkitMacOSCheckPermission((MaaMacOSPermission)permission);
+
+        /// <inheritdoc/>
+        /// <remarks>
+        ///     Wrapper of <see cref="MaaToolkitMacOSRequestPermission"/>.
+        /// </remarks>
+        public bool RequestPermission(MacOSPermission permission)
+            => MaaToolkitMacOSRequestPermission((MaaMacOSPermission)permission);
+
+        /// <inheritdoc/>
+        /// <remarks>
+        ///     Wrapper of <see cref="MaaToolkitMacOSRevealPermissionSettings"/>.
+        /// </remarks>
+        public bool RevealPermissionSettings(MacOSPermission permission)
+            => MaaToolkitMacOSRevealPermissionSettings((MaaMacOSPermission)permission);
     }
 }

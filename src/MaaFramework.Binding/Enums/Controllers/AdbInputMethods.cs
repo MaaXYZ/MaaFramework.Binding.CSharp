@@ -14,16 +14,22 @@ namespace MaaFramework.Binding;
 
 /// <summary>
 ///     Adb input method flags
-/// <para>Use bitwise OR to set the methods you need.</para>
-/// <para>MaaFramework will select the first available method according to priority.</para>
+/// 
+/// <para>Use bitwise OR to set the methods you need.
+/// <br/>MaaFramework will select the first available method according to priority.</para>
+/// 
 /// <para>Priority (high to low): EmulatorExtras > Maatouch > MinitouchAndAdbKey > AdbShell</para>
+/// 
 /// <para>Default: All methods except EmulatorExtras</para>
-/// <code>| Method               | Speed | Compatibility | Notes                                 |</code>
-/// <code>|----------------------|-------|---------------|---------------------------------------|</code>
-/// <code>| AdbShell             | Slow  | High          |                                       |</code>
-/// <code>| MinitouchAndAdbKey   | Fast  | Medium        | Key press still uses AdbShell         |</code>
-/// <code>| Maatouch             | Fast  | Medium        |                                       |</code>
-/// <code>| EmulatorExtras       | Fast  | Low           | Emulators only: MuMu 12               |</code>
+/// 
+/// <code>| Method               | Speed | Compatibility | Notes                                 |
+/// <br/>|----------------------|-------|---------------|---------------------------------------|
+/// <br/>| AdbShell             | Slow  | High          |                                       |
+/// <br/>| MinitouchAndAdbKey   | Fast  | Medium        | Key press still uses AdbShell         |
+/// <br/>| Maatouch             | Fast  | Medium        |                                       |
+/// <br/>| EmulatorExtras       | Fast  | Low           | Emulators only: MuMu 12               |
+/// </code>
+/// 
 /// </summary>
 [Flags]
 public enum AdbInputMethods : System.UInt64

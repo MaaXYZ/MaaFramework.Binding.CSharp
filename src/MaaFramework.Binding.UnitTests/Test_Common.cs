@@ -95,4 +95,5 @@ public static class Common
     internal static NotificationHandler<NodeNextListDetail, IMaaContext> OnNodeNextList = (type, detail, context) => Assert.IsNotNull(context);
     internal static NotificationHandler<NodeRecognitionDetail, IMaaContext> OnNodeRecognition = (type, detail, context) => Assert.IsNotNull(context);
     internal static NotificationHandler<NodeActionDetail, IMaaContext> OnNodeAction = (type, detail, context) => Assert.IsNotNull(context);
+    internal static NotificationHandler<NodeWaitFreezesDetail, IMaaContext> OnNodeWaitFreezes = (type, detail, context) => Assert.IsNotNull(context);
 }
