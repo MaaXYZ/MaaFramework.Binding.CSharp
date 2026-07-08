@@ -19,6 +19,22 @@ public interface IMaaAgentServer : IMaaCommon
     IMaaAgentServer WithIdentifier(string identifier);
 
     /// <summary>
+    ///     Sets the log directory.
+    /// </summary>
+    /// <param name="directory">The log directory.</param>
+    /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="MaaInteroperationException"/>
+    IMaaAgentServer SetLogDirectory(string directory);
+
+    /// <summary>
+    ///     Sets the standard output level.
+    /// </summary>
+    /// <param name="level">The standard output level.</param>
+    /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="MaaInteroperationException"/>
+    IMaaAgentServer SetStdoutLevel(LoggingLevel level);
+
+    /// <summary>
     ///     Registers a <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/> in the <see cref="IMaaAgentServer"/>.
     /// </summary>
     /// <typeparam name="T">The <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/>.</typeparam>
