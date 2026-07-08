@@ -200,12 +200,36 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostScreencap(MaaControllerHandle ctrl);
 
+    /// <summary>
+    /// Post a scroll action to the controller.
+    /// </summary>
+    /// <param name="ctrl">The controller handle.</param>
+    /// <param name="dx">The horizontal scroll delta. Positive values scroll right, negative values scroll left.</param>
+    /// <param name="dy">The vertical scroll delta. Positive values scroll up, negative values scroll down.</param>
+    /// <returns>The control id of the scroll action.</returns>
+    /// <remarks>
+    ///     <para>Not all controllers support scroll. If not supported, the action will fail.</para>
+    ///     <para>Scroll is supported by Win32 controllers and custom controllers that implement scroll.</para>
+    ///     <para>If the controller does not support scroll, the action will fail. Use MaaControllerStatus or<br/>
+    ///         MaaControllerWait to check the result.</para>
+    ///     <para>The dx/dy values are sent directly as scroll increments. Using multiples of 120 (WHEEL_DELTA) is<br/>
+    ///         recommended for best compatibility.</para>
+    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostScroll(MaaControllerHandle ctrl, int dx, int dy);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostInactive(MaaControllerHandle ctrl);
 
+    /// <summary>Post a shell command to the controller.</summary>
+    /// <param name="ctrl">The controller handle.</param>
+    /// <param name="cmd">The shell command to execute.</param>
+    /// <param name="timeout">Timeout in milliseconds. Default is 20000 (20 seconds).</param>
+    /// <returns>The control id of the shell action.</returns>
+    /// <remarks>
+    ///     <para>This is only valid for ADB controllers. If the controller is not an ADB controller, the action will fail.</para>
+    ///     <para>Supported by ADB controllers and custom controllers that implement the shell callback.</para>
+    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostShell(MaaControllerHandle ctrl, string cmd, long timeout);
 

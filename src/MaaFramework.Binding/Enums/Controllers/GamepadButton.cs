@@ -13,42 +13,50 @@
 namespace MaaFramework.Binding;
 
 /// <summary>
-///     Virtual gamepad button codes for click_key/key_down/key_up
-///     <para>Use these values with MaaControllerPostClickKey, MaaControllerPostKeyDown, MaaControllerPostKeyUp.</para>
-///     <para>Values are based on XUSB (Xbox 360) button flags. DS4 face buttons are mapped to Xbox equivalents.</para>
-///     <para>Xbox 360 buttons:</para>
-///     <code>| Value   | Button              | Description            |</code>
-///     <code>|---------|---------------------|------------------------|</code>
-///     <code>| 0x1000  | A                   | A button               |</code>
-///     <code>| 0x2000  | B                   | B button               |</code>
-///     <code>| 0x4000  | X                   | X button               |</code>
-///     <code>| 0x8000  | Y                   | Y button               |</code>
-///     <code>| 0x0100  | LB (Left Shoulder)  | Left bumper            |</code>
-///     <code>| 0x0200  | RB (Right Shoulder) | Right bumper           |</code>
-///     <code>| 0x0040  | L_THUMB             | Left stick click       |</code>
-///     <code>| 0x0080  | R_THUMB             | Right stick click      |</code>
-///     <code>| 0x0010  | START               | Start button           |</code>
-///     <code>| 0x0020  | BACK                | Back button            |</code>
-///     <code>| 0x0400  | GUIDE               | Guide/Home button      |</code>
-///     <code>| 0x0001  | DPAD_UP             | D-pad up               |</code>
-///     <code>| 0x0002  | DPAD_DOWN           | D-pad down             |</code>
-///     <code>| 0x0004  | DPAD_LEFT           | D-pad left             |</code>
-///     <code>| 0x0008  | DPAD_RIGHT          | D-pad right            |</code>
-///     <para>DualShock 4 buttons (aliases to Xbox buttons):</para>
-///     <code>| Value   | Button    | Xbox Equivalent | Description               |</code>
-///     <code>|---------|-----------|-----------------|---------------------------|</code>
-///     <code>| 0x1000  | CROSS     | A                   | Cross (X) button          |</code>
-///     <code>| 0x2000  | CIRCLE    | B                   | Circle button             |</code>
-///     <code>| 0x4000  | SQUARE    | X                   | Square button             |</code>
-///     <code>| 0x8000  | TRIANGLE  | Y                   | Triangle button           |</code>
-///     <code>| 0x0100  | L1        | LB                  | L1 button                 |</code>
-///     <code>| 0x0200  | R1        | RB                  | R1 button                 |</code>
-///     <code>| 0x0040  | L3        | L_THUMB             | Left stick click          |</code>
-///     <code>| 0x0080  | R3        | R_THUMB             | Right stick click         |</code>
-///     <code>| 0x0010  | OPTIONS   | START               | Options button            |</code>
-///     <code>| 0x0020  | SHARE     | BACK                | Share button              |</code>
-///     <code>| 0x10000 | PS        | -                   | PS button (DS4 special)   |</code>
-///     <code>| 0x20000 | TOUCHPAD  | -                   | Touchpad click (DS4 only) |</code>
+///     Virtual gamepad button codes for <see cref="IMaaController.ClickKey(int)"/> / <see cref="IMaaController.KeyDown(int)"/> / <see cref="IMaaController.KeyUp(int)"/>
+///     
+/// <para>Use these values with MaaControllerPostClickKey, MaaControllerPostKeyDown, MaaControllerPostKeyUp.
+/// <br/>Values are based on XUSB (Xbox 360) button flags. DS4 face buttons are mapped to Xbox equivalents.</para>
+/// 
+/// <para>Xbox 360 buttons:</para>
+/// 
+/// <code>| Value   | Button              | Description            |
+/// <br/>|---------|---------------------|------------------------|
+/// <br/>| 0x1000  | A                   | A button               |
+/// <br/>| 0x2000  | B                   | B button               |
+/// <br/>| 0x4000  | X                   | X button               |
+/// <br/>| 0x8000  | Y                   | Y button               |
+/// <br/>| 0x0100  | LB (Left Shoulder)  | Left bumper            |
+/// <br/>| 0x0200  | RB (Right Shoulder) | Right bumper           |
+/// <br/>| 0x0040  | L_THUMB             | Left stick click       |
+/// <br/>| 0x0080  | R_THUMB             | Right stick click      |
+/// <br/>| 0x0010  | START               | Start button           |
+/// <br/>| 0x0020  | BACK                | Back button            |
+/// <br/>| 0x0400  | GUIDE               | Guide/Home button      |
+/// <br/>| 0x0001  | DPAD_UP             | D-pad up               |
+/// <br/>| 0x0002  | DPAD_DOWN           | D-pad down             |
+/// <br/>| 0x0004  | DPAD_LEFT           | D-pad left             |
+/// <br/>| 0x0008  | DPAD_RIGHT          | D-pad right            |
+/// </code>
+/// 
+/// <para>DualShock 4 buttons (aliases to Xbox buttons):</para>
+/// 
+/// <code>| Value   | Button    | Xbox Equivalent | Description               |
+/// <br/>|---------|-----------|-----------------|---------------------------|
+/// <br/>| 0x1000  | CROSS     | A               | Cross (X) button          |
+/// <br/>| 0x2000  | CIRCLE    | B               | Circle button             |
+/// <br/>| 0x4000  | SQUARE    | X               | Square button             |
+/// <br/>| 0x8000  | TRIANGLE  | Y               | Triangle button           |
+/// <br/>| 0x0100  | L1        | LB              | L1 button                 |
+/// <br/>| 0x0200  | R1        | RB              | R1 button                 |
+/// <br/>| 0x0040  | L3        | L_THUMB         | Left stick click          |
+/// <br/>| 0x0080  | R3        | R_THUMB         | Right stick click         |
+/// <br/>| 0x0010  | OPTIONS   | START           | Options button            |
+/// <br/>| 0x0020  | SHARE     | BACK            | Share button              |
+/// <br/>| 0x10000 | PS        | -               | PS button (DS4 special)   |
+/// <br/>| 0x20000 | TOUCHPAD  | -               | Touchpad click (DS4 only) |
+/// </code>
+/// 
 /// </summary>
 [Flags]
 public enum GamepadButton : System.UInt64
