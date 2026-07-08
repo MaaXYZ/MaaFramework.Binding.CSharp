@@ -110,13 +110,8 @@ public class MaaAgentServer : IMaaAgentServer
     private string DebuggerDisplay => $"{GetType().Name} {{ {nameof(CurrentId)} = {CurrentId}, CustomActions = [{string.Join(", ", _actions.Names)}] , CustomRecognitions = [{string.Join(" & ", _recognitions.Names)}] }}";
 
     IMaaAgentServer IMaaAgentServer.WithIdentifier(string identifier) => WithIdentifier(identifier);
-    IMaaAgentServer IMaaAgentServer.Register<T>(string name, T custom) => Register(name, custom);
-    IMaaAgentServer IMaaAgentServer.Register<T>(string? name) => Register<T>(name);
-    IMaaAgentServer IMaaAgentServer.Register<T>(T custom) => Register(custom);
-    IMaaAgentServer IMaaAgentServer.StartUp() => StartUp();
-    IMaaAgentServer IMaaAgentServer.ShutDown() => ShutDown();
-    IMaaAgentServer IMaaAgentServer.Join() => Join();
-    IMaaAgentServer IMaaAgentServer.Detach() => Detach();
+    IMaaAgentServer IMaaAgentServer.SetLogDirectory(string directory) => SetLogDirectory(directory);
+    IMaaAgentServer IMaaAgentServer.SetStdoutLevel(LoggingLevel level) => SetStdoutLevel(level);
 
     /// <inheritdoc cref="IMaaAgentServer.WithIdentifier"/>
     public MaaAgentServer WithIdentifier(string identifier)
@@ -126,6 +121,28 @@ public class MaaAgentServer : IMaaAgentServer
         CurrentId = identifier;
         return this;
     }
+
+    /// <inheritdoc cref="IMaaAgentServer.SetLogDirectory"/>
+    public MaaAgentServer SetLogDirectory(string directory)
+    {
+        _ = MaaGlobal.Shared.SetOption(GlobalOption.LogDir, directory).ThrowIfFalse();
+        return this;
+    }
+
+    /// <inheritdoc cref="IMaaAgentServer.SetStdoutLevel"/>
+    public MaaAgentServer SetStdoutLevel(LoggingLevel level)
+    {
+        _ = MaaGlobal.Shared.SetOption(GlobalOption.StdoutLevel, level).ThrowIfFalse();
+        return this;
+    }
+
+    IMaaAgentServer IMaaAgentServer.Register<T>(string name, T custom) => Register(name, custom);
+    IMaaAgentServer IMaaAgentServer.Register<T>(string? name) => Register<T>(name);
+    IMaaAgentServer IMaaAgentServer.Register<T>(T custom) => Register(custom);
+    IMaaAgentServer IMaaAgentServer.StartUp() => StartUp();
+    IMaaAgentServer IMaaAgentServer.ShutDown() => ShutDown();
+    IMaaAgentServer IMaaAgentServer.Join() => Join();
+    IMaaAgentServer IMaaAgentServer.Detach() => Detach();
 
     /// <inheritdoc cref="IMaaAgentServer.Register{T}(string, T)"/>
     public MaaAgentServer Register<T>(string name, T custom) where T : IMaaCustom
@@ -217,6 +234,7 @@ public static class MaaAgentServerExtensions
 {
     /// <returns></returns>
     /// <inheritdoc cref="IMaaToolkitConfig.InitOption"/>
+    [Obsolete($"Use {nameof(MaaAgentServer.SetLogDirectory)}() or {nameof(MaaAgentServer.SetStdoutLevel)}() instead.", false)]
     public static MaaAgentServer WithToolkitConfig_InitOption(this MaaAgentServer server, string userPath = nameof(Environment.CurrentDirectory), [StringSyntax("Json")] string defaultJson = "{}")
     {
         _ = MaaToolkit.Shared.Config.InitOption(userPath, defaultJson).ThrowIfFalse();

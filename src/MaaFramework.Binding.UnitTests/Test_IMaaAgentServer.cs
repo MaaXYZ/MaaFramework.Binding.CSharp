@@ -27,7 +27,8 @@ internal static class Test_IMaaAgentServer
 
         MaaAgentServer.Current.Callback += OnCallback;
         _ = MaaAgentServer.Current
-            .WithToolkitConfig_InitOption(userPath).WithToolkitConfig_InitOption(userPath)
+            .SetStdoutLevel(LoggingLevel.All)
+            .SetLogDirectory(Path.Combine(userPath, "debug", "server-" + id))
             .Register(Custom.Recognition) // cat not double call from here
             .Register(Custom.Action)
             .StartUp()
