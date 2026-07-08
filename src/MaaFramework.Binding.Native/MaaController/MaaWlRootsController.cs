@@ -12,13 +12,14 @@ public class MaaWlRootsController : MaaController
 {
 #pragma warning disable IDE0032 // 使用自动属性
     private readonly string _debugWlrSocketPath;
+    private readonly bool _debugUseWin32VirtualKeyCodes;
 #pragma warning restore IDE0032 // 使用自动属性
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ WlrSocketPath = {_debugWlrSocketPath} }}";
+        : $"{GetType().Name} {{ WlrSocketPath = {_debugWlrSocketPath}, UseWin32VirtualKeyCodes = {_debugUseWin32VirtualKeyCodes} }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaWlRootsController"/> instance.
@@ -46,6 +47,7 @@ public class MaaWlRootsController : MaaController
         SetHandle(handle, needReleased: true);
 
         _debugWlrSocketPath = wlrSocketPath;
+        _debugUseWin32VirtualKeyCodes = useWin32VirtualKeyCodes;
 
         if (link == LinkOption.Start)
             LinkStartOnConstructed(check, wlrSocketPath);
