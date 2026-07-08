@@ -37,7 +37,7 @@ public class MaaGamepadController : MaaController
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerInfoString => _debugInfo is null
         ? "No Screencap"
-        : $"{nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethod = {_debugInfo.ScreencapMethod}";
+        : $"{nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethod = {_debugInfo.ScreencapMethods}";
 
     /// <summary>
     ///     Creates a <see cref="MaaGamepadController"/> instance.
@@ -54,7 +54,7 @@ public class MaaGamepadController : MaaController
     {
         var handle = info is null
             ? MaaGamepadControllerCreate(nint.Zero, (MaaGamepadType)gamepadType, 0UL)
-            : MaaGamepadControllerCreate(info.Handle, (MaaGamepadType)gamepadType, (MaaWin32ScreencapMethod)info.ScreencapMethod);
+            : MaaGamepadControllerCreate(info.Handle, (MaaGamepadType)gamepadType, (MaaWin32ScreencapMethod)info.ScreencapMethods);
         _ = MaaControllerAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Controller);
         SetHandle(handle, needReleased: true);
 
@@ -67,12 +67,12 @@ public class MaaGamepadController : MaaController
 
     /// <param name="hWnd">Window handle for screencap (optional, can be <see cref="nint.Zero"/> if screencap not needed).</param>
     /// <param name="gamepadType">Type of virtual gamepad (<see cref="GamepadType.Xbox360"/> or <see cref="GamepadType.DualShock4"/>).</param>
-    /// <param name="screencapMethod">Win32 screencap method to use. Ignored if hWnd is <see cref="nint.Zero"/>.</param>
+    /// <param name="screencapMethods">Win32 screencap methods to use. Ignored if hWnd is <see cref="nint.Zero"/>.</param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <inheritdoc cref="Binding.MaaGamepadController(GamepadType, DesktopWindowInfo, LinkOption, CheckStatusOption)"/>
-    public MaaGamepadController(nint hWnd, GamepadType gamepadType, Win32ScreencapMethod screencapMethod, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
-        : this(gamepadType, hWnd == nint.Zero ? null : new(hWnd, string.Empty, string.Empty, screencapMethod, Win32InputMethod.None, Win32InputMethod.None), link, check)
+    public MaaGamepadController(nint hWnd, GamepadType gamepadType, Win32ScreencapMethods screencapMethods, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+        : this(gamepadType, hWnd == nint.Zero ? null : new(hWnd, string.Empty, string.Empty, screencapMethods, Win32InputMethod.None, Win32InputMethod.None), link, check)
     {
     }
 

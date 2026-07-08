@@ -103,7 +103,7 @@ public class Test_IMaaToolkit
         using var maaController = type switch
         {
             MaaTypes.Native => windows[0].ToWin32ControllerWith(
-                screencapMethod: Win32ScreencapMethod.GDI,
+                screencapMethods: Win32ScreencapMethods.GDI,
                 mouseMethod: Win32InputMethod.SendMessage,
                 keyboardMethod: Win32InputMethod.SendMessage,
                 link: LinkOption.None),
@@ -118,7 +118,7 @@ public class Test_IMaaToolkit
         using var optionalArgumentDefaultValuesTest = type switch
         {
             MaaTypes.Native => windows[0].ToWin32ControllerWith(
-                screencapMethod: Win32ScreencapMethod.GDI,
+                screencapMethods: Win32ScreencapMethods.GDI,
                 mouseMethod: Win32InputMethod.SendMessage,
                 keyboardMethod: Win32InputMethod.SendMessage),
             _ => throw new NotImplementedException(),

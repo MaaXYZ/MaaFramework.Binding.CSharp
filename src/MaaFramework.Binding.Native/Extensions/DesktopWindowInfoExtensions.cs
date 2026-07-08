@@ -9,7 +9,7 @@ public static class DesktopWindowInfoExtensions
     ///     Converts a <see cref="DesktopWindowInfo"/> to a <see cref="MaaWin32Controller"/>.
     /// </summary>
     /// <param name="info">The DesktopWindowInfo.</param>
-    /// <param name="screencapMethod">The screencap method.</param>
+    /// <param name="screencapMethods">The screencap methods.</param>
     /// <param name="mouseMethod">The mouse method.</param>
     /// <param name="keyboardMethod">The keyboard method.</param>
     /// <param name="hWnd">The new handle to a win32 window.</param>
@@ -18,7 +18,7 @@ public static class DesktopWindowInfoExtensions
     /// <returns>A MaaWin32Controller.</returns>
     /// <exception cref="ArgumentNullException"/>
     public static MaaWin32Controller ToWin32ControllerWith(this DesktopWindowInfo info,
-        Win32ScreencapMethod? screencapMethod = null,
+        Win32ScreencapMethods? screencapMethods = null,
         Win32InputMethod? mouseMethod = null,
         Win32InputMethod? keyboardMethod = null,
         nint? hWnd = null,
@@ -33,7 +33,7 @@ public static class DesktopWindowInfoExtensions
                 handle,
                 handle == info.Handle ? info.Name : string.Empty,
                 handle == info.Handle ? info.ClassName : string.Empty,
-                screencapMethod ?? info.ScreencapMethod,
+                screencapMethods ?? info.ScreencapMethods,
                 mouseMethod ?? info.MouseMethod,
                 keyboardMethod ?? info.KeyboardMethod
             ),
@@ -42,7 +42,7 @@ public static class DesktopWindowInfoExtensions
         );
     }
 
-    /// <inheritdoc cref="ToWin32ControllerWith(DesktopWindowInfo, Win32ScreencapMethod?, Win32InputMethod?, Win32InputMethod?, nint?, LinkOption, CheckStatusOption)"/>
+    /// <inheritdoc cref="ToWin32ControllerWith(DesktopWindowInfo, Win32ScreencapMethods?, Win32InputMethod?, Win32InputMethod?, nint?, LinkOption, CheckStatusOption)"/>
     public static MaaWin32Controller ToWin32Controller(this DesktopWindowInfo info,
         LinkOption link = LinkOption.Start,
         CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
@@ -57,7 +57,7 @@ public static class DesktopWindowInfoExtensions
     /// </summary>
     /// <param name="info">The DesktopWindowInfo.</param>
     /// <param name="gamepadType">The type of virtual gamepad.</param>
-    /// <param name="screencapMethod">The screencap method.</param>
+    /// <param name="screencapMethods">The screencap methods.</param>
     /// <param name="hWnd">The new handle to a win32 window.</param>
     /// <param name="link">Executes <see cref="MaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
@@ -65,7 +65,7 @@ public static class DesktopWindowInfoExtensions
     /// <exception cref="ArgumentNullException"/>
     public static MaaGamepadController ToGamepadControllerWith(this DesktopWindowInfo info,
         GamepadType gamepadType,
-        Win32ScreencapMethod? screencapMethod = null,
+        Win32ScreencapMethods? screencapMethods = null,
         nint? hWnd = null,
         LinkOption link = LinkOption.Start,
         CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
@@ -82,7 +82,7 @@ public static class DesktopWindowInfoExtensions
                 handle,
                 handle == info.Handle ? info.Name : string.Empty,
                 handle == info.Handle ? info.ClassName : string.Empty,
-                screencapMethod ?? info.ScreencapMethod,
+                screencapMethods ?? info.ScreencapMethods,
                 Win32InputMethod.None,
                 Win32InputMethod.None
             ),
@@ -91,7 +91,7 @@ public static class DesktopWindowInfoExtensions
         );
     }
 
-    /// <inheritdoc cref="ToGamepadControllerWith(DesktopWindowInfo, GamepadType, Win32ScreencapMethod?, nint?, LinkOption, CheckStatusOption)"/>
+    /// <inheritdoc cref="ToGamepadControllerWith(DesktopWindowInfo, GamepadType, Win32ScreencapMethods?, nint?, LinkOption, CheckStatusOption)"/>
     public static MaaGamepadController ToGamepadController(this DesktopWindowInfo info,
         GamepadType gamepadType,
         LinkOption link = LinkOption.Start,

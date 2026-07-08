@@ -16,7 +16,7 @@ public class MaaWin32Controller : MaaController
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ {nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethod = {_debugInfo.ScreencapMethod}, MouseMethod = {_debugInfo.MouseMethod}, KeyboardMethod = {_debugInfo.KeyboardMethod} }}";
+        : $"{GetType().Name} {{ {nameof(_debugInfo.Name)} = {_debugInfo.Name}, {nameof(_debugInfo.ClassName)} = {_debugInfo.ClassName}, ScreencapMethod = {_debugInfo.ScreencapMethods}, MouseMethod = {_debugInfo.MouseMethod}, KeyboardMethod = {_debugInfo.KeyboardMethod} }}";
 
     /// <summary>
     ///     Creates a <see cref="MaaWin32Controller"/> instance.
@@ -34,7 +34,7 @@ public class MaaWin32Controller : MaaController
         ArgumentNullException.ThrowIfNull(info);
         if (info.Handle == nint.Zero) throw new ArgumentException("Value cannot be zero.", "info.Handle");
 
-        var handle = MaaWin32ControllerCreate(info.Handle, (MaaWin32ScreencapMethod)info.ScreencapMethod, (MaaWin32InputMethod)info.MouseMethod, (MaaWin32InputMethod)info.KeyboardMethod);
+        var handle = MaaWin32ControllerCreate(info.Handle, (MaaWin32ScreencapMethod)info.ScreencapMethods, (MaaWin32InputMethod)info.MouseMethod, (MaaWin32InputMethod)info.KeyboardMethod);
         _ = MaaControllerAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Controller);
         SetHandle(handle, needReleased: true);
 
@@ -45,14 +45,14 @@ public class MaaWin32Controller : MaaController
     }
 
     /// <param name="hWnd">The handle to a win32 window.</param>
-    /// <param name="screencapMethod">The screencap method.</param>
+    /// <param name="screencapMethods">The screencap methods.</param>
     /// <param name="mouseMethod">The mouse method.</param>
     /// <param name="keyboardMethod">The keyboard method.</param>
     /// <param name="link">Executes <see cref="IMaaController.LinkStart"/> if <see cref="LinkOption.Start"/>; otherwise, not link.</param>
     /// <param name="check">Checks LinkStart().Wait() status if <see cref="CheckStatusOption.ThrowIfNotSucceeded"/>; otherwise, not check.</param>
     /// <inheritdoc cref="Binding.MaaWin32Controller(DesktopWindowInfo, LinkOption, CheckStatusOption)"/>
-    public MaaWin32Controller(nint hWnd, Win32ScreencapMethod screencapMethod, Win32InputMethod mouseMethod, Win32InputMethod keyboardMethod, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
-        : this(new DesktopWindowInfo(hWnd, string.Empty, string.Empty, screencapMethod, mouseMethod, keyboardMethod), link, check)
+    public MaaWin32Controller(nint hWnd, Win32ScreencapMethods screencapMethods, Win32InputMethod mouseMethod, Win32InputMethod keyboardMethod, LinkOption link = LinkOption.Start, CheckStatusOption check = CheckStatusOption.ThrowIfNotSucceeded)
+        : this(new DesktopWindowInfo(hWnd, string.Empty, string.Empty, screencapMethods, mouseMethod, keyboardMethod), link, check)
     {
     }
 }
