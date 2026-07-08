@@ -81,8 +81,12 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
         var optValue = (value, opt) switch
         {
             (int vvvv, ControllerOption.ScreenshotTargetLongSide
-                    or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValue(),
-            (bool vvv, ControllerOption.ScreenshotUseRawSize) => vvv.ToMaaOptionValue(),
+                    or ControllerOption.ScreenshotTargetShortSide
+                    or ControllerOption.ScreenshotResizeMethod) => vvvv.ToMaaOptionValue(),
+            (bool vvv, ControllerOption.ScreenshotUseRawSize
+                    or ControllerOption.MouseLockFollow) => vvv.ToMaaOptionValue(),
+
+            (IEnumerable<int> ints, ControllerOption.BackgroundManagedKeys) => ints.ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(ControllerOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
@@ -170,6 +174,13 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostRelativeMove"/>.
+    /// </remarks>
+    public MaaJob RelativeMove(int dx, int dy)
+        => CreateJob(MaaControllerPostRelativeMove(Handle, dx, dy));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostKeyDown"/>.
     /// </remarks>
     public MaaJob KeyDown(int keyCode)
@@ -207,8 +218,8 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostShell"/>.
     /// </remarks>
-    public MaaJob Shell(string cmd, long timeout = 20000)
-        => CreateJob(MaaControllerPostShell(Handle, cmd, timeout));
+    public MaaJob Shell(string cmd, long millisecondsTimeout = 20000)
+        => CreateJob(MaaControllerPostShell(Handle, cmd, millisecondsTimeout));
 
     /// <inheritdoc/>
     /// <remarks>

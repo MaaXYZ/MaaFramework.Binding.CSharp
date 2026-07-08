@@ -155,6 +155,23 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     bool GetActionDetail(MaaActId actionId, out string nodeName, out string action, IMaaRectBuffer? box, out bool isSucceeded, out string detailJson);
 
     /// <summary>
+    ///     Gets the wait freezes detail.
+    /// </summary>
+    /// <param name="waitFreezesId">The wait freezes id.</param>
+    /// <param name="nodeName">The node name.</param>
+    /// <param name="phase">The phase (e.g. "pre", "post", "repeat", "context").</param>
+    /// <param name="isSucceeded">A value indicating whether the wait freezes is succeeded.</param>
+    /// <param name="millisecondsElapsed">The total elapsed time in milliseconds.</param>
+    /// <param name="recoIdList">The recognition id array for each frame-to-frame comparison.</param>
+    /// <param name="roi">The actual region of interest used for comparison.</param>
+    /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     Obtained via `wf_id` from the callback.
+    ///     Each `reco_id` can be queried via `MaaTaskerGetRecognitionDetail` to get the drawn images.
+    /// </remarks>
+    bool GetWaitFreezesDetail(MaaWfId waitFreezesId, out string nodeName, out string phase, out bool isSucceeded, out MaaSize millisecondsElapsed, out MaaRecoId[] recoIdList, IMaaRectBuffer? roi);
+
+    /// <summary>
     ///     Gets the node detail.
     /// </summary>
     /// <param name="nodeId">The node id.</param>

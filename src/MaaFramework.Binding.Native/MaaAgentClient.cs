@@ -13,14 +13,14 @@ namespace MaaFramework.Binding;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAgentClient<MaaAgentClientHandle>
 {
-    private long _timeout = -1;
+    private long _millisecondsTimeout = -1;
     private Process? _agentServerProcess;
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ {nameof(Id)} = {Id ?? "<null>"}, {nameof(IsConnected)} = {IsConnected}, {nameof(IsAlive)} = {IsAlive}, Timeout = {_timeout} }}";
+        : $"{GetType().Name} {{ {nameof(Id)} = {Id ?? "<null>"}, {nameof(IsConnected)} = {IsConnected}, {nameof(IsAlive)} = {IsAlive}, Timeout = {_millisecondsTimeout} }}";
 
     internal sealed class NullAgentClient : MaaAgentClient { internal NullAgentClient() : base(MaaAgentClientHandle.Zero) { } }
 
@@ -387,8 +387,8 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// </remarks>
     public bool SetTimeout(long millisecondsDelay)
     {
-        _timeout = millisecondsDelay;
-        return MaaAgentClientSetTimeout(Handle, _timeout);
+        _millisecondsTimeout = millisecondsDelay;
+        return MaaAgentClientSetTimeout(Handle, _millisecondsTimeout);
     }
 
     /// <inheritdoc/>
@@ -439,7 +439,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         finally
         {
             ctr.Dispose();
-            _ = SetTimeout(_timeout).ThrowIfFalse();
+            _ = SetTimeout(_millisecondsTimeout).ThrowIfFalse();
         }
     }
 
@@ -459,7 +459,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         }
         finally
         {
-            _ = SetTimeout(_timeout).ThrowIfFalse();
+            _ = SetTimeout(_millisecondsTimeout).ThrowIfFalse();
         }
     }
 

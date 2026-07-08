@@ -14,20 +14,26 @@ namespace MaaFramework.Binding;
 
 /// <summary>
 ///     Adb screencap method flags.
-/// <para>Use bitwise OR to set the methods you need.</para>
-/// <para>MaaFramework will test all provided methods and use the fastest available one.</para>
+/// 
+/// <para>Use bitwise OR to set the methods you need.
+/// <br/>MaaFramework will test all provided methods and use the fastest available one.</para>
+/// 
 /// <para>Default: All methods except RawByNetcat, MinicapDirect, MinicapStream</para>
-/// <para>Note: MinicapDirect and MinicapStream use lossy JPEG encoding, which may</para>
-/// <para>significantly reduce template matching accuracy. Not recommended.</para>
-/// <code>| Method                | Speed      | Compatibility | Encoding | Notes                               |</code>
-/// <code>|-----------------------|------------|---------------|----------|-------------------------------------|</code>
-/// <code>| EncodeToFileAndPull   | Slow       | High          | Lossless |                                     |</code>
-/// <code>| Encode                | Slow       | High          | Lossless |                                     |</code>
-/// <code>| RawWithGzip           | Medium     | High          | Lossless |                                     |</code>
-/// <code>| RawByNetcat           | Fast       | Low           | Lossless |                                     |</code>
-/// <code>| MinicapDirect         | Fast       | Low           | Lossy    |                                     |</code>
-/// <code>| MinicapStream         | Very Fast  | Low           | Lossy    |                                     |</code>
-/// <code>| EmulatorExtras        | Very Fast  | Low           | Lossless | Emulators only: MuMu 12, LDPlayer 9 |</code>
+/// 
+/// <para>Note: MinicapDirect and MinicapStream use lossy JPEG encoding, which may
+/// <br/>significantly reduce template matching accuracy. Not recommended.</para>
+/// 
+/// <code>| Method                | Speed      | Compatibility | Encoding | Notes                               |
+/// <br/>|-----------------------|------------|---------------|----------|-------------------------------------|
+/// <br/>| EncodeToFileAndPull   | Slow       | High          | Lossless |                                     |
+/// <br/>| Encode                | Slow       | High          | Lossless |                                     |
+/// <br/>| RawWithGzip           | Medium     | High          | Lossless |                                     |
+/// <br/>| RawByNetcat           | Fast       | Low           | Lossless |                                     |
+/// <br/>| MinicapDirect         | Fast       | Low           | Lossy    |                                     |
+/// <br/>| MinicapStream         | Very Fast  | Low           | Lossy    |                                     |
+/// <br/>| EmulatorExtras        | Very Fast  | Low           | Lossless | Emulators only: MuMu 12, LDPlayer 9 |
+/// </code>
+/// 
 /// </summary>
 [Flags]
 public enum AdbScreencapMethods : System.UInt64

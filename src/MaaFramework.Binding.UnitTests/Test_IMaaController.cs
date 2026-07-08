@@ -144,6 +144,9 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 1280)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 720)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotUseRawSize, false)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.MouseLockFollow, false)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotResizeMethod, 0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.BackgroundManagedKeys, new int[] { 0x57, 0x41, 0x53, 0x44 })]
     public void Interface_SetOption(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);
@@ -365,11 +368,11 @@ public class Test_IMaaController
 
     [TestMethod]
     [MaaData(MaaTypes.All, nameof(Data), "echo hello", 20000)]
-    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, string cmd, long timeout)
+    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, string cmd, long millisecondsTimeout)
     {
         Assert.IsNotNull(maaController);
 
-        var job = maaController.Shell(cmd, timeout);
+        var job = maaController.Shell(cmd, millisecondsTimeout);
         if (maaController is MaaAdbController)
         {
             Interface_IMaaPost_Success(job);
@@ -400,6 +403,9 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotUseRawSize, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.MouseLockFollow, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotResizeMethod, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.BackgroundManagedKeys, 0.0)]
     public void Interface_SetOption_InvalidData(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);

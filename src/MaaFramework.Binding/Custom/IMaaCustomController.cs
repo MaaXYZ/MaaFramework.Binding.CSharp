@@ -35,6 +35,12 @@ public interface IMaaCustomController : IMaaCustom, IDisposable
     bool KeyDown(int keycode);
     bool KeyUp(int keycode);
     bool Scroll(int dx, int dy);
+    bool RelativeMove(int dx, int dy);
+
+    /// <summary>
+    ///     Write result to buffer.
+    /// </summary>
+    bool Shell(string cmd, long millisecondsTimeout, IMaaStringBuffer buffer);
     bool Inactive();
 
     /// <remarks>

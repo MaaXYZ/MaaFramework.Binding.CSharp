@@ -22,329 +22,310 @@ public static class MaaMsg
 {
     public static class Resource
     {
+        /// <summary>
+        ///     The message for the resource loading.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         res_id: number,
+        ///         path: string,
+        ///         type: string,  // "Bundle" | "OcrModel" | "Pipeline" | "Image"
+        ///         hash: string,
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class Loading
         {
-            /// <summary>
-            ///     The message for the resource loading.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Resource.Loading"/>
             public const string Starting = "Resource.Loading.Starting";
 
-            /// <summary>
-            ///     The message for the resource loading.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Resource.Loading"/>
             public const string Prefix = "Resource.Loading";
 
-            /// <summary>
-            ///     The message for the resource loading.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Resource.Loading"/>
             public const string Succeeded = "Resource.Loading.Succeeded";
 
-            /// <summary>
-            ///     The message for the resource loading.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { res_id: number, path: string, type: string // "Bundle" | "OcrModel" | "Pipeline" | "Image", hash: string, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Resource.Loading"/>
             public const string Failed = "Resource.Loading.Failed";
-
         }
     }
     public static class Controller
     {
+        /// <summary>
+        ///     Message for the controller actions.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         ctrl_id: number,
+        ///         uuid: string,
+        ///         action: string,
+        ///         param: object,
+        ///         info: object,
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class Action
         {
-            /// <summary>
-            ///     Message for the controller actions.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, info: object, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Controller.Action"/>
             public const string Starting = "Controller.Action.Starting";
 
-            /// <summary>
-            ///     Message for the controller actions.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, info: object, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Controller.Action"/>
             public const string Prefix = "Controller.Action";
 
-            /// <summary>
-            ///     Message for the controller actions.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, info: object, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Controller.Action"/>
             public const string Succeeded = "Controller.Action.Succeeded";
 
-            /// <summary>
-            ///     Message for the controller actions.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { ctrl_id: number, uuid: string, action: string, param: object, info: object, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Controller.Action"/>
             public const string Failed = "Controller.Action.Failed";
-
         }
     }
     public static class Tasker
     {
+        /// <summary>
+        ///     Message for the task.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         task_id: number,
+        ///         entry: string,
+        ///         uuid: string,
+        ///         hash: string
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class Task
         {
-            /// <summary>
-            ///     Message for the task.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, entry: string, uuid: string, hash: string }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Tasker.Task"/>
             public const string Starting = "Tasker.Task.Starting";
 
-            /// <summary>
-            ///     Message for the task.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, entry: string, uuid: string, hash: string }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Tasker.Task"/>
             public const string Prefix = "Tasker.Task";
 
-            /// <summary>
-            ///     Message for the task.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, entry: string, uuid: string, hash: string }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Tasker.Task"/>
             public const string Succeeded = "Tasker.Task.Succeeded";
 
-            /// <summary>
-            ///     Message for the task.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, entry: string, uuid: string, hash: string }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Tasker.Task"/>
             public const string Failed = "Tasker.Task.Failed";
-
         }
     }
     public static class Node
     {
+        /// <summary>
+        ///     Message for the node.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         task_id: number,
+        ///         node_id: number,
+        ///         name: string,
+        ///         focus: any,
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class PipelineNode
         {
-            /// <summary>
-            ///     Message for the pipeline node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.PipelineNode"/>
             public const string Starting = "Node.PipelineNode.Starting";
 
-            /// <summary>
-            ///     Message for the pipeline node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.PipelineNode"/>
             public const string Prefix = "Node.PipelineNode";
 
-            /// <summary>
-            ///     Message for the pipeline node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.PipelineNode"/>
             public const string Succeeded = "Node.PipelineNode.Succeeded";
 
-            /// <summary>
-            ///     Message for the pipeline node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.PipelineNode"/>
             public const string Failed = "Node.PipelineNode.Failed";
-
         }
+
+        /// <summary>
+        ///     Message for the node.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         task_id: number,
+        ///         node_id: number,
+        ///         name: string,
+        ///         focus: any,
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class RecognitionNode
         {
-            /// <summary>
-            ///     Message for the recognition node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.RecognitionNode"/>
             public const string Starting = "Node.RecognitionNode.Starting";
 
-            /// <summary>
-            ///     Message for the recognition node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.RecognitionNode"/>
             public const string Prefix = "Node.RecognitionNode";
 
-            /// <summary>
-            ///     Message for the recognition node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.RecognitionNode"/>
             public const string Succeeded = "Node.RecognitionNode.Succeeded";
 
-            /// <summary>
-            ///     Message for the recognition node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.RecognitionNode"/>
             public const string Failed = "Node.RecognitionNode.Failed";
-
         }
+
+        /// <summary>
+        ///     Message for the node.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         task_id: number,
+        ///         node_id: number,
+        ///         name: string,
+        ///         focus: any,
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class ActionNode
         {
-            /// <summary>
-            ///     Message for the action node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.ActionNode"/>
             public const string Starting = "Node.ActionNode.Starting";
 
-            /// <summary>
-            ///     Message for the action node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.ActionNode"/>
             public const string Prefix = "Node.ActionNode";
 
-            /// <summary>
-            ///     Message for the action node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.ActionNode"/>
             public const string Succeeded = "Node.ActionNode.Succeeded";
 
-            /// <summary>
-            ///     Message for the action node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, node_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.ActionNode"/>
             public const string Failed = "Node.ActionNode.Failed";
-
         }
+
+        /// <summary>
+        ///     Message for the next list of node.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         task_id: number,
+        ///         name: string,
+        ///         list: [
+        ///           {
+        ///             "name": string,
+        ///             "jump_back": boolean,
+        ///             "anchor": boolean,
+        ///           },
+        ///           ...
+        ///         ],
+        ///         focus: any,
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class NextList
         {
-            /// <summary>
-            ///     Message for the next list of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, name: string, list: [{ name: string, jump_back: boolean, anchor: boolean }, ...], focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.NextList"/>
             public const string Starting = "Node.NextList.Starting";
 
-            /// <summary>
-            ///     Message for the next list of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, name: string, list: [{ name: string, jump_back: boolean, anchor: boolean }, ...], focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.NextList"/>
             public const string Prefix = "Node.NextList";
 
-            /// <summary>
-            ///     Message for the next list of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, name: string, list: [{ name: string, jump_back: boolean, anchor: boolean }, ...], focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.NextList"/>
             public const string Succeeded = "Node.NextList.Succeeded";
 
-            /// <summary>
-            ///     Message for the next list of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, name: string, list: [{ name: string, jump_back: boolean, anchor: boolean }, ...], focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.NextList"/>
             public const string Failed = "Node.NextList.Failed";
-
         }
+
+        /// <summary>
+        ///     Message for the recognition list of node.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         task_id: number,
+        ///         reco_id: number,
+        ///         name: string,
+        ///         focus: any,
+        ///         anchor?: string,
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class Recognition
         {
-            /// <summary>
-            ///     Message for the recognition list of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.Recognition"/>
             public const string Starting = "Node.Recognition.Starting";
 
-            /// <summary>
-            ///     Message for the recognition list of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.Recognition"/>
             public const string Prefix = "Node.Recognition";
 
-            /// <summary>
-            ///     Message for the recognition list of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.Recognition"/>
             public const string Succeeded = "Node.Recognition.Succeeded";
 
-            /// <summary>
-            ///     Message for the recognition list of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, reco_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.Recognition"/>
             public const string Failed = "Node.Recognition.Failed";
-
         }
+
+        /// <summary>
+        ///     Message for the action of node.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         task_id: number,
+        ///         action_id: number,
+        ///         name: string,
+        ///         focus: any,
+        ///     }
+        ///     </code>
+        /// </remarks>
         public static class Action
         {
-            /// <summary>
-            ///     Message for the action of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, action_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.Action"/>
             public const string Starting = "Node.Action.Starting";
 
-            /// <summary>
-            ///     Message for the action of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, action_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.Action"/>
             public const string Prefix = "Node.Action";
 
-            /// <summary>
-            ///     Message for the action of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, action_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.Action"/>
             public const string Succeeded = "Node.Action.Succeeded";
 
-            /// <summary>
-            ///     Message for the action of node.
-            /// </summary>
-            /// <remarks>
-            ///     <para>details_json: { task_id: number, action_id: number, name: string, focus: any, }</para>
-            /// </remarks>
+            /// <inheritdoc cref="MaaMsg.Node.Action"/>
             public const string Failed = "Node.Action.Failed";
+        }
 
+        /// <summary>
+        ///     Message for wait freezes.
+        /// </summary>
+        /// <remarks>
+        ///     <code>
+        ///     details_json: {
+        ///         task_id: number,
+        ///         wf_id: number,
+        ///         name: string,
+        ///         phase: string,  // "pre" | "post" | "repeat" | "context"
+        ///         roi: [number, number, number, number],
+        ///         param: {
+        ///             time: number,
+        ///             threshold: number,
+        ///             method: number,
+        ///             rate_limit: number,
+        ///             timeout: number,
+        ///         },
+        ///         reco_ids?: number[],  // Succeeded / Failed only
+        ///         elapsed?: number,     // Succeeded / Failed only
+        ///         focus: any,
+        ///     }
+        ///     </code>
+        /// </remarks>
+        public static class WaitFreezes
+        {
+            /// <inheritdoc cref="MaaMsg.Node.WaitFreezes"/>
+            public const string Starting = "Node.WaitFreezes.Starting";
+
+            /// <inheritdoc cref="MaaMsg.Node.WaitFreezes"/>
+            public const string Prefix = "Node.WaitFreezes";
+
+            /// <inheritdoc cref="MaaMsg.Node.WaitFreezes"/>
+            public const string Succeeded = "Node.WaitFreezes.Succeeded";
+
+            /// <inheritdoc cref="MaaMsg.Node.WaitFreezes"/>
+            public const string Failed = "Node.WaitFreezes.Failed";
         }
     }
 }

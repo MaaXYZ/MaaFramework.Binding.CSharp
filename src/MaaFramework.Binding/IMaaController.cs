@@ -121,6 +121,14 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     MaaJob TouchUp(int contact);
 
     /// <summary>
+    ///     Moves the mouse/pointer relative to its current position.
+    /// </summary>
+    /// <param name="dx">The relative horizontal offset.</param>
+    /// <param name="dy">The relative vertical offset.</param>
+    /// <returns>A relative move <see cref="MaaJob"/>.</returns>
+    MaaJob RelativeMove(int dx, int dy);
+
+    /// <summary>
     ///     Usage: KeyDown -> KeyUp.
     ///     <para>For adb controller, <paramref name="keyCode"/> is from <a href="https://developer.android.com/reference/android/view/KeyEvent">android key event</a>.</para>
     ///     <para>For win32 controller, <paramref name="keyCode"/> is from <a href="https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes">windows virtual key</a>.</para>
@@ -169,13 +177,13 @@ public interface IMaaController : IMaaCommon, IMaaOption<ControllerOption>, IMaa
     ///     Appends a job for shell command action.
     /// </summary>
     /// <param name="cmd">The shell command to execute.</param>
-    /// <param name="timeout">The timeout in milliseconds. Default is 20000 (20 seconds).</param>
+    /// <param name="millisecondsTimeout">The timeout in milliseconds. Default is 20000 (20 seconds).</param>
     /// <returns>A shell <see cref="MaaJob"/>.</returns>
     /// <remarks>
-    ///     <para>This is only valid for ADB controllers. If the controller is not an ADB controller, the action will fail.</para>
+    ///     <para>Supported by ADB controllers and custom controllers that implement the shell callback.</para>
     ///     <para>See also <see cref="GetShellOutput"/>.</para>
     /// </remarks>
-    MaaJob Shell(string cmd, long timeout = 20000);
+    MaaJob Shell(string cmd, long millisecondsTimeout = 20000);
 
     /// <summary>
     ///     Gets the cached shell command output.
