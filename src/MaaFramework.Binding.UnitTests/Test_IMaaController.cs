@@ -118,18 +118,18 @@ public class Test_IMaaController
 
         using var win32Native1 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ScreencapMethod.GDI,
+            Win32ScreencapMethods.GDI,
             Win32InputMethod.SendMessage,
             Win32InputMethod.SendMessage);
         using var win32Native2 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ScreencapMethod.GDI,
+            Win32ScreencapMethods.GDI,
             Win32InputMethod.SendMessage,
             Win32InputMethod.SendMessage,
             LinkOption.None);
         using var win32Native3 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ScreencapMethod.GDI,
+            Win32ScreencapMethods.GDI,
             Win32InputMethod.SendMessage,
             Win32InputMethod.SendMessage,
             LinkOption.Start,

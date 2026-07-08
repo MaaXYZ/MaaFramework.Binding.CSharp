@@ -24,7 +24,7 @@
 | --- | --- |
 | AdbScreencapMethods | `MaaAdbScreencapMethod` |
 | AdbInputMethods | `MaaAdbInputMethod` |
-| Win32ScreencapMethod | `MaaWin32ScreencapMethod` |
+| Win32ScreencapMethods | `MaaWin32ScreencapMethod` |
 | Win32InputMethod | `MaaWin32InputMethod` |
 | MacOSScreencapMethod | `MaaMacOSScreencapMethod` |
 | MacOSInputMethod | `MaaMacOSInputMethod` |
