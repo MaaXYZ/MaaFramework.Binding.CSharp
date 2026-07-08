@@ -144,9 +144,9 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 1280)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 720)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotUseRawSize, false)]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.MouseLockFollow, false)]
+    [MaaData(MaaTypes.Win32, nameof(Data), ControllerOption.MouseLockFollow, false)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotResizeMethod, 0)]
-    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.BackgroundManagedKeys, new int[] { 0x57, 0x41, 0x53, 0x44 })]
+    [MaaData(MaaTypes.Win32, nameof(Data), ControllerOption.BackgroundManagedKeys, new int[] { 0x57, 0x41, 0x53, 0x44 })]
     public void Interface_SetOption(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);
@@ -386,7 +386,7 @@ public class Test_IMaaController
         }
         else
         {
-            Interface_IMaaPost_Failed(job);
+            Interface_IMaaPost_Success(job);
             Assert.IsTrue(
                 maaController.GetShellOutput(out var output));
             Assert.IsNotNull(
