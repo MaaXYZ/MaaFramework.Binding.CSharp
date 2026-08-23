@@ -19,19 +19,35 @@ public interface IMaaAgentServer : IMaaCommon
     IMaaAgentServer WithIdentifier(string identifier);
 
     /// <summary>
+    ///     Sets the log directory.
+    /// </summary>
+    /// <param name="directory">The log directory.</param>
+    /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="MaaInteroperationException"/>
+    IMaaAgentServer SetLogDirectory(string directory);
+
+    /// <summary>
+    ///     Sets the standard output level.
+    /// </summary>
+    /// <param name="level">The standard output level.</param>
+    /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="MaaInteroperationException"/>
+    IMaaAgentServer SetStdoutLevel(LoggingLevel level);
+
+    /// <summary>
     ///     Registers a <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/> in the <see cref="IMaaAgentServer"/>.
     /// </summary>
     /// <typeparam name="T">The <see cref="IMaaCustomAction"/> or <see cref="IMaaCustomRecognition"/>.</typeparam>
     /// <param name="name">The new name that will be used to reference the custom resource.</param>
     /// <param name="custom">The custom resource instance to register.</param>
     /// <exception cref="MaaInteroperationException">Thrown if the registration fails.</exception>
-    IMaaAgentServer Register<T>(string name, T custom) where T : IMaaCustomResource;
+    IMaaAgentServer Register<T>(string name, T custom) where T : IMaaCustom;
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
-    IMaaAgentServer Register<T>(string? name = null) where T : IMaaCustomResource, new();
+    IMaaAgentServer Register<T>(string? name = null) where T : IMaaCustom, new();
 
     /// <inheritdoc cref="Register{T}(string, T)"/>
-    IMaaAgentServer Register<T>(T custom) where T : IMaaCustomResource;
+    IMaaAgentServer Register<T>(T custom) where T : IMaaCustom;
 
     /// <summary>
     ///     Starts up the agent server to prepare for receiving client messages from the specified connection.

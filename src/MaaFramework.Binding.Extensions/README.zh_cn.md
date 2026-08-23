@@ -56,9 +56,13 @@ TDetail 为以下类型：
 - ResourceLoadingDetail
 - ControllerActionDetail
 - TaskerTaskDetail
+- PipelineNodeDetail
+- RecognitionNodeDetail
+- ActionNodeDetail
 - NodeNextListDetail
 - NodeRecognitionDetail
 - NodeActionDetail
+- NodeWaitFreezesDetail
 - string
 
 使用示例：

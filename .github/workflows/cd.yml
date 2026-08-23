@@ -27,12 +27,12 @@ jobs:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: true
           fetch-depth: 0
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             7.0.x
@@ -53,12 +53,12 @@ jobs:
           python3 tools/ChangelogGenerator/changelog_generator.py --tag "${{ steps.build.outputs.tag }}" --latest "$latest"
       - run: ./docs/build.ps1
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: nupkgs
           path: nupkgs
           retention-days: 7
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: docs/_site
     outputs:
@@ -71,12 +71,20 @@ jobs:
     needs: [ build ]
     runs-on: windows-latest
     if: needs.build.outputs.is_release != 'True' && github.event.inputs.Publish != 'NuGet'
+    permissions:
+      id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: nupkgs
-      - name: Publish the package to nugettest.org # need secrets.NUGETTEST_TOKEN
-        run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGETTEST_TOKEN }} --source https://apiint.nugettest.org/v3/index.json
+      - id: login
+        uses: NuGet/login@v1
+        with:
+          user: moomiji
+          token-service-url: https://int.nugettest.org/api/v2/token
+          audience: https://int.nugettest.org
+      - name: Publish the package to int.nugettest.org
+        run: dotnet nuget push *.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://apiint.nugettest.org/v3/index.json
 
   release:
     needs: [ build ]
@@ -85,18 +93,23 @@ jobs:
     permissions:
       contents: write
       pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
 
-      - name: Publish the package to nuget.org # need secrets.NUGET_TOKEN
+      - id: login
+        uses: NuGet/login@v1
+        with:
+          user: moomiji
+
+      - name: Publish the package to nuget.org
         run: |
           cd nupkgs
-          dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json
+          dotnet nuget push *.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       - name: Re-zip docs
         run: |
@@ -105,7 +118,7 @@ jobs:
           7z a docs.zip '${{ needs.build.outputs.version }}'
 
       - if: needs.build.outputs.is_release == 'True'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           body_path: CHANGELOG.md
           tag_name: ${{ needs.build.outputs.tag }}

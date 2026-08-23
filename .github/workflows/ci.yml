@@ -30,12 +30,12 @@ jobs:
     env:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages # NuGet CLI environment variables
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: true
           fetch-depth: 0
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             7.0.x
@@ -50,13 +50,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: dotnet script ./tools/Builder/Build.csx
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: nupkgs
           path: ./nupkgs
           retention-days: 1
 
-      - if: github.ref == 'refs/heads/${{ steps.build.outputs.default_branch }}' && github.repository_owner_id == '161146573'
+      - if: github.ref == format('refs/heads/{0}', steps.build.outputs.default_branch) && github.repository_owner_id == '161146573'
         uses: moomiji/host-nuget-on-github@v1
         with:
           base-uri: https://maaxyz.github.io/pkg/nuget/
@@ -70,8 +70,8 @@ jobs:
   lint:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0
       - run: dotnet tool install -g dotnet-script

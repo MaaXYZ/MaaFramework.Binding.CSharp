@@ -281,8 +281,8 @@ public class Test_Buffers
             CollectionAssert.AreEqual(
                 encodedDataArray, funcArray);
 
-            Assert.IsTrue(img.Buffer.TryGetEncodedData(out encodedDataStream)
-                          && img.Buffer.TryGetEncodedData(out encodedDataSpan));
+            Assert.IsTrue(buffer.TryGetEncodedData(out encodedDataStream)
+                          && buffer.TryGetEncodedData(out encodedDataSpan));
             Assert.IsTrue(
                 MaaImageBuffer.TrySetEncodedData(encodedDataStream, handle
                     => MaaImageBuffer.TryGetEncodedData(handle, out funcArray)));
@@ -1130,6 +1130,7 @@ internal sealed class TestImageBuffer : IMaaImageBuffer
     public int Height => throw new NotImplementedException();
     public int Channels => throw new NotImplementedException();
     public int Type => throw new NotImplementedException();
+    public bool TryResize(int width, int height) => throw new NotImplementedException();
     public bool TryGetEncodedData([MaybeNullWhen(false)] out byte[] data) => throw new NotImplementedException();
     public bool TryGetEncodedData([MaybeNullWhen(false)] out Stream data) => throw new NotImplementedException();
     public bool TryGetEncodedData(out ReadOnlySpan<byte> data) => throw new NotImplementedException();

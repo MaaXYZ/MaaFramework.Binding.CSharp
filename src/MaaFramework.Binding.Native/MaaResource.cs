@@ -21,6 +21,13 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ Paths = [{string.Join(", ", _postedPaths)}], CustomActions = [{string.Join(", ", _actions.Names)}] , CustomRecognitions = [{string.Join(" & ", _recognitions.Names)}] }}";
 
+    internal sealed class NullResource : MaaResource { internal NullResource() : base(MaaResourceHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaResource"/> type.
+    /// </summary>
+    public static MaaResource Null { get; } = new NullResource();
+
     [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
     internal MaaResource(MaaResourceHandle handle)
     {
@@ -36,7 +43,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     public MaaResource()
     {
         var handle = MaaResourceCreate();
-        _ = MaaResourceAddSink(handle, MaaEventCallback, 2);
+        _ = MaaResourceAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Resource);
         SetHandle(handle, needReleased: true);
     }
 
@@ -109,14 +116,14 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
 
     /// <inheritdoc/>
-    public bool Register<T>(string name, T custom) where T : IMaaCustomResource
+    public bool Register<T>(string name, T custom) where T : IMaaCustom
     {
         custom.Name = name;
         return Register(custom);
     }
 
     /// <inheritdoc/>
-    public bool Register<T>(string? name = null) where T : IMaaCustomResource, new()
+    public bool Register<T>(string? name = null) where T : IMaaCustom, new()
     {
         var custom = new T();
         if (name != null)
@@ -128,11 +135,11 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceRegisterCustomAction"/> and <see cref="MaaResourceRegisterCustomRecognition"/>.
     /// </remarks>
-    public bool Register<T>(T custom) where T : IMaaCustomResource => custom switch
+    public bool Register<T>(T custom) where T : IMaaCustom => custom switch
     {
         IMaaCustomAction res
-            => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero)
-            && _actions.Register(res.Name, callback),
+           => MaaResourceRegisterCustomAction(Handle, res.Name, res.Convert(out var callback), nint.Zero)
+           && _actions.Register(res.Name, callback),
         IMaaCustomRecognition res
             => MaaResourceRegisterCustomRecognition(Handle, res.Name, res.Convert(out var callback), nint.Zero)
             && _recognitions.Register(res.Name, callback),
@@ -144,7 +151,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognition"/>.
     /// </remarks>
-    public bool Unregister<T>(string name) where T : IMaaCustomResource
+    public bool Unregister<T>(string name) where T : IMaaCustom
     {
         var t = typeof(T);
         if (typeof(IMaaCustomAction).IsAssignableFrom(t))
@@ -159,7 +166,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceUnregisterCustomAction"/> and <see cref="MaaResourceUnregisterCustomRecognition"/>.
     /// </remarks>
-    public bool Unregister<T>(T custom) where T : IMaaCustomResource => custom switch
+    public bool Unregister<T>(T custom) where T : IMaaCustom => custom switch
     {
         IMaaCustomAction
             => MaaResourceUnregisterCustomAction(Handle, custom.Name)
@@ -175,7 +182,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     /// <remarks>
     ///     Wrapper of <see cref="MaaResourceClearCustomAction"/> and <see cref="MaaResourceClearCustomRecognition"/>.
     /// </remarks>
-    public bool Clear<T>() where T : IMaaCustomResource => typeof(T).Name switch
+    public bool Clear<T>() where T : IMaaCustom => typeof(T).Name switch
     {
         nameof(IMaaCustomAction)
             => MaaResourceClearCustomAction(Handle)
@@ -289,9 +296,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaResourceStatus(handle, id);
+        return (MaaJobStatus)MaaResourceStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -303,9 +308,7 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaResourceWait(handle, id);
+        return (MaaJobStatus)MaaResourceWait(Handle, job.Id);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -400,4 +403,20 @@ public class MaaResource : MaaCommon, IMaaResource<MaaResourceHandle>, IMaaPost
             return list!;
         }
     }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceGetDefaultRecognitionParam"/>.
+    /// </remarks>
+    public bool GetDefaultRecognitionParam(string type, [MaybeNullWhen(false)][StringSyntax("Json")] out string param)
+        => MaaStringBuffer.TryGetValue(out param, buffer
+            => MaaResourceGetDefaultRecognitionParam(Handle, type, buffer));
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaResourceGetDefaultActionParam"/>.
+    /// </remarks>
+    public bool GetDefaultActionParam(string type, [MaybeNullWhen(false)][StringSyntax("Json")] out string param)
+        => MaaStringBuffer.TryGetValue(out param, buffer
+            => MaaResourceGetDefaultActionParam(Handle, type, buffer));
 }

@@ -21,6 +21,13 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ {nameof(IsRunning)} = {IsRunning}, {nameof(IsInitialized)} = {IsInitialized}, {nameof(DisposeOptions)} = {DisposeOptions} }}";
 
+    internal sealed class NullTasker : MaaTasker { [SetsRequiredMembers] internal NullTasker() : base(MaaTaskerHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaTasker"/> type.
+    /// </summary>
+    public static MaaTasker Null { get; } = new NullTasker();
+
     /// <summary>
     ///     Gets all maa tasker instances.
     /// </summary>
@@ -32,10 +39,11 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     /// <inheritdoc/>
     protected override void OnCallback(nint handle, string message, [StringSyntax("Json")] string detailsJson, nint transArg)
     {
-        if (transArg == 8)
-            base.OnContextCallback(handle, message, detailsJson);
-        else
-            base.OnCallback(handle, message, detailsJson, transArg);
+        var type = (MaaHandleType)transArg;
+        object sender = type == MaaHandleType.Context
+            ? new MaaContext(handle, this)
+            : this;
+        InvokeCallback(sender, e: new MaaCallbackEventArgs<nint>(handle, message, detailsJson, type));
     }
 
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
@@ -65,8 +73,8 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         if (!Instances.TryAdd(handle, this))
             // Always returns true, but non-atomic operation may fail to add.
             throw new InvalidOperationException($"This {nameof(MaaTasker)} already added to {nameof(Instances)}.");
-        _ = MaaTaskerAddSink(handle, MaaEventCallback, 1);
-        _ = MaaTaskerAddContextSink(handle, MaaEventCallback, 8);
+        _ = MaaTaskerAddSink(handle, MaaEventCallback, (nint)MaaHandleType.Tasker);
+        _ = MaaTaskerAddContextSink(handle, MaaEventCallback, (nint)MaaHandleType.Context);
         SetHandle(handle, needReleased: true);
 
         Toolkit = MaaToolkit.Shared;
@@ -175,7 +183,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            _ = MaaTaskerBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
+            if (value is not MaaResource.NullResource)
+                _ = MaaTaskerBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
+            else if (_resource is not null and not MaaResource.NullResource)
+                throw new InvalidOperationException("Null instance can only be used for init.");
             _resource = value;
         }
     }
@@ -195,7 +206,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            _ = MaaTaskerBindController(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ControllerBindingFailedMessage);
+            if (value is not MaaController.NullController)
+                _ = MaaTaskerBindController(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ControllerBindingFailedMessage);
+            else if (_controller is not null and not MaaController.NullController)
+                throw new InvalidOperationException("Null instance can only be used for init.");
             _controller = value;
         }
     }
@@ -204,10 +218,10 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     IMaaGlobal IMaaTasker.Global { get; set; } = default!;
 
     /// <inheritdoc cref="IMaaTasker.Toolkit"/>
-    public MaaToolkit Toolkit { get => field; set => ((IMaaTasker)this).Toolkit = field = value; }
+    public MaaToolkit Toolkit { get; set => ((IMaaTasker)this).Toolkit = field = value; }
 
     /// <inheritdoc cref="IMaaTasker.Global"/>
-    public MaaGlobal Global { get => field; set => ((IMaaTasker)this).Global = field = value; }
+    public MaaGlobal Global { get; set => ((IMaaTasker)this).Global = field = value; }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -237,17 +251,29 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     }
 
     /// <inheritdoc/>
-    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer box, [StringSyntax("Json")] string recoDetail)
-        => AppendAction(actionType, actionParam, (MaaRectBuffer)box, recoDetail);
+    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer? box = null, [StringSyntax("Json")] string recoDetail = "{}")
+        => AppendAction(actionType, actionParam, (MaaRectBuffer?)box, recoDetail);
 
     /// <inheritdoc cref="IMaaTasker.AppendAction"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaTaskerPostAction"/>.
     /// </remarks>
-    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, MaaRectBuffer box, [StringSyntax("Json")] string recoDetail)
+    public MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, MaaRectBuffer? box = null, [StringSyntax("Json")] string recoDetail = "{}")
     {
-        ArgumentNullException.ThrowIfNull(box);
-        return CreateJob(MaaTaskerPostAction(Handle, actionType, actionParam, box.Handle, recoDetail));
+        MaaRectBuffer? buffer = null;
+        try
+        {
+            if (box is null)
+            {
+                buffer = new MaaRectBuffer();
+                box = buffer;
+            }
+            return CreateJob(MaaTaskerPostAction(Handle, actionType, actionParam, box.Handle, recoDetail));
+        }
+        finally
+        {
+            buffer?.Dispose();
+        }
     }
 
     /// <inheritdoc/>
@@ -259,9 +285,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaTaskerStatus(handle, id);
+        return (MaaJobStatus)MaaTaskerStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -273,9 +297,7 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaTaskerWait(handle, id);
+        return (MaaJobStatus)MaaTaskerWait(Handle, job.Id);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -323,6 +345,16 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
     /// </remarks>
     public bool ClearCache()
         => MaaTaskerClearCache(Handle);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerOverridePipeline"/>.
+    /// </remarks>
+    public bool OverridePipeline(MaaTaskJob taskJob, [StringSyntax("Json")] string pipelineOverride)
+    {
+        ArgumentNullException.ThrowIfNull(taskJob);
+        return MaaTaskerOverridePipeline(Handle, taskJob.Id, pipelineOverride);
+    }
 
     /// <inheritdoc/>
     public bool GetRecognitionDetail<T>(long recognitionId, out string nodeName, out string algorithm, out bool hit, IMaaRectBuffer? hitBox, out string detailJson, IMaaImageBuffer? raw, IMaaListBuffer<T>? draws)
@@ -373,6 +405,36 @@ public class MaaTasker : MaaCommon, IMaaTasker<MaaTaskerHandle>, IMaaPost
         action = actionBuffer.ToString();
         detailJson = detailJsonBuffer.ToString();
         return ret;
+    }
+
+    /// <inheritdoc/>
+    public bool GetWaitFreezesDetail(MaaWfId waitFreezesId, out string nodeName, out string phase, out bool isSucceeded, out MaaSize millisecondsElapsed, out MaaRecoId[] recoIdList, IMaaRectBuffer? roi)
+        => GetWaitFreezesDetail(waitFreezesId, out nodeName, out phase, out isSucceeded, out millisecondsElapsed, out recoIdList, (MaaRectBuffer?)roi);
+
+    /// <inheritdoc cref="IMaaTasker.GetWaitFreezesDetail(long, out string, out string, out bool, out ulong, out long[], IMaaRectBuffer?)"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaTaskerGetWaitFreezesDetail"/>.
+    /// </remarks>
+    public bool GetWaitFreezesDetail(MaaWfId waitFreezesId, out string nodeName, out string phase, out bool isSucceeded, out MaaSize millisecondsElapsed, out MaaRecoId[] recoIdList, MaaRectBuffer? roi)
+    {
+        var roiHandle = roi?.Handle ?? MaaRectHandle.Zero;
+        MaaSize recoIdListSize = 0;
+
+        using var nodeNameBuffer = new MaaStringBuffer();
+        using var phaseBuffer = new MaaStringBuffer();
+
+        if (!MaaTaskerGetWaitFreezesDetail(Handle, waitFreezesId, nodeNameBuffer.Handle, phaseBuffer.Handle, out isSucceeded, out millisecondsElapsed, null, ref recoIdListSize, roiHandle))
+        {
+            nodeName = string.Empty;
+            phase = string.Empty;
+            recoIdList = [];
+            return false;
+        }
+
+        nodeName = nodeNameBuffer.ToString();
+        phase = phaseBuffer.ToString();
+        recoIdList = recoIdListSize == 0 ? [] : new MaaRecoId[recoIdListSize];
+        return MaaTaskerGetWaitFreezesDetail(Handle, waitFreezesId, nodeNameBuffer.Handle, phaseBuffer.Handle, out isSucceeded, out millisecondsElapsed, recoIdList, ref recoIdListSize, roiHandle);
     }
 
     /// <inheritdoc/>

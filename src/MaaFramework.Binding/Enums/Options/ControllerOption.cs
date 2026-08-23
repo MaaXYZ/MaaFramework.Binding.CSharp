@@ -39,5 +39,37 @@ public enum ControllerOption : System.Int32
     ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
     /// </remarks>
     ScreenshotUseRawSize = 3,
+
+    /// <summary>
+    ///     Enable or disable mouse-lock-follow mode for Win32 controllers.
+    /// </summary>
+    /// <remarks>
+    ///     <para>This is designed for TPS/FPS games that lock the mouse to their window in the background.</para>
+    ///     <para>Only valid for Win32 controllers using message-based input methods.</para>
+    ///     <para>value: bool, eg: true; val_size: sizeof(bool)</para>
+    /// </remarks>
+    MouseLockFollow = 4,
+
+    /// <summary>
+    ///     Set the interpolation method used when resizing screenshots.
+    /// </summary>
+    /// <remarks>
+    ///     <para>Value corresponds to cv::InterpolationFlags:</para>
+    ///     <code>  INTER_NEAREST=0, INTER_LINEAR=1, INTER_CUBIC=2, INTER_AREA=3, INTER_LANCZOS4=4</code>
+    ///     <para>Default is INTER_AREA (3).</para>
+    ///     <para>value: int, eg: 3; val_size: sizeof(int)</para>
+    /// </remarks>
+    ScreenshotResizeMethod = 6,
+
+    /// <summary>
+    ///     Configure background managed key domain for Win32 controllers.
+    /// </summary>
+    /// <remarks>
+    ///     <para>Must be set before connection. After setting, matching ClickKey / LongPressKey / KeyDown / KeyUp
+    ///     <br/>operations automatically route through the background guardian path.</para>
+    ///     <para>Only supported by Win32 controllers; other controllers will fail.</para>
+    ///     <para>value: int32_t array of virtual key codes; val_size: sizeof(int32_t) * count</para>
+    /// </remarks>
+    BackgroundManagedKeys = 7,
 }
 

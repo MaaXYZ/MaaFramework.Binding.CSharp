@@ -14,6 +14,7 @@ global using MaaToolkitAdbDeviceHandle = nint;
 global using MaaToolkitAdbDeviceListHandle = nint;
 global using MaaToolkitDesktopWindowHandle = nint;
 global using MaaToolkitDesktopWindowListHandle = nint;
+global using MaaMacOSPermission = System.Int32;
 
 namespace MaaFramework.Binding.Interop.Native;
 

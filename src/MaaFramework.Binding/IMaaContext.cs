@@ -21,6 +21,12 @@ public interface IMaaContext<T> : IMaaContext
 public interface IMaaContext : ICloneable
 {
     /// <summary>
+    ///     Gets whether cancellation has been requested for this context.
+    /// </summary>
+    /// <returns><see langword="true"/> if cancellation has been requested; otherwise, <see langword="false"/>.</returns>
+    bool IsCancellationRequested { get; }
+
+    /// <summary>
     ///     Runs a task.
     /// </summary>
     /// <param name="entry">The entry name of the task.</param>
@@ -29,7 +35,7 @@ public interface IMaaContext : ICloneable
     TaskDetail? RunTask(string entry, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
-    ///     Run a recognition.
+    ///     Runs a recognition.
     /// </summary>
     /// <param name="entry">The recognition entry name.</param>
     /// <param name="image">The image to be recognized.</param>
@@ -39,7 +45,7 @@ public interface IMaaContext : ICloneable
     RecognitionDetail? RunRecognition(string entry, IMaaImageBuffer image, [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
-    ///     Run an action.
+    ///     Runs an action.
     /// </summary>
     /// <param name="entry">The action entry name.</param>
     /// <param name="recognitionBox">The rect buffer containing current rect in the recognition result.</param>
@@ -47,17 +53,61 @@ public interface IMaaContext : ICloneable
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns><see cref="ActionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
     /// <exception cref="ArgumentNullException"/>
-    ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}");
+    ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail = "", [StringSyntax("Json")] string pipelineOverride = "{}");
 
     /// <summary>
-    ///     Override a pipeline.
+    ///     Runs recognition directly with type and parameters, without requiring a pipeline entry.
+    /// </summary>
+    /// <param name="type">The recognition type.<para>(e.g., "OCR", "TemplateMatch")</para></param>
+    /// <param name="param">The recognition parameters json.</param>
+    /// <param name="image">The image to be recognized.</param>
+    /// <returns><see cref="RecognitionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
+    RecognitionDetail? RunRecognitionDirect(string type, [StringSyntax("Json")] string param, IMaaImageBuffer image);
+
+    /// <summary>
+    ///     Runs action directly with type and parameters, without requiring a pipeline entry.
+    /// </summary>
+    /// <param name="type">The action type.<para>(e.g., "Click", "Swipe")</para></param>
+    /// <param name="param">The action parameters json.</param>
+    /// <param name="recognitionBox">The rect buffer containing current rect in the recognition result.</param>
+    /// <param name="recognitionDetail">The rect detail in the recognition result.</param>
+    /// <returns><see cref="ActionDetail"/> if the operation was executed successfully; otherwise, <see langword="null"/>.</returns>
+    /// <exception cref="ArgumentNullException"/>
+    ActionDetail? RunActionDirect(string type, [StringSyntax("Json")] string param, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail = "");
+
+    /// <summary>
+    ///     Waits for screen to stabilize (freeze).
+    /// </summary>
+    /// <param name="millisecondsTime">The wait time in milliseconds.</param>
+    /// <param name="recognitionBox">The recognition hit box, used when target is Self to calculate ROI.</param>
+    /// <param name="waitFreezesParam">The wait parameters.<para>Supports time, target, target_offset, threshold, method, rate_limit, timeout.</para></param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     <paramref name="millisecondsTime"/> and <paramref name="waitFreezesParam"/>.time are mutually exclusive.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"/>
+    bool WaitFreezes(MaaSize millisecondsTime = 0, IMaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}");
+
+    /// <param name="time">The wait time.</param>
+    /// <param name="recognitionBox">The recognition hit box, used when target is Self to calculate ROI.</param>
+    /// <param name="waitFreezesParam">The wait parameters.<para>Supports time, target, target_offset, threshold, method, rate_limit, timeout.</para></param>
+    /// <remarks>
+    ///     <paramref name="time"/> and <paramref name="waitFreezesParam"/>.time are mutually exclusive.
+    /// </remarks>
+    /// <inheritdoc cref="WaitFreezes(ulong, IMaaRectBuffer, string)"/>
+    /// <exception cref="ArgumentNullException"/>
+    bool WaitFreezes(TimeSpan time = default, IMaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}");
+
+    /// <summary>
+    ///     Overrides a pipeline.
     /// </summary>
     /// <param name="pipelineOverride">The json used to override the pipeline.</param>
     /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
     bool OverridePipeline([StringSyntax("Json")] string pipelineOverride);
 
     /// <summary>
-    ///     Override the property field "next" in a node.
+    ///     Overrides the property field "next" in a node.
     /// </summary>
     /// <param name="nodeName">The node name.</param>
     /// <param name="nextList">The next list.</param>
@@ -65,7 +115,7 @@ public interface IMaaContext : ICloneable
     bool OverrideNext(string nodeName, IEnumerable<string> nextList);
 
     /// <summary>
-    ///     Override the image which name from the value of property field e.g. "template".
+    ///     Overrides the image which name from the value of property field e.g. "template".
     /// </summary>
     /// <param name="imageName">The image name.</param>
     /// <param name="image">An <see cref="IMaaImageBuffer"/> used to set the image.</param>

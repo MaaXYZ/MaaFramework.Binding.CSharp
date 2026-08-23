@@ -232,6 +232,20 @@ public sealed class NotificationHandlerRegistry
                     NotificationDetailContext.Default.NodeActionDetail) ?? throw new InvalidCastException());
         }
 
+        public WaitFreezesRegistry WaitFreezes { get; } = new();
+        public sealed class WaitFreezesRegistry
+        {
+            public event EventHandler<NodeWaitFreezesDetail>? Starting;
+            internal void OnStarting(object? sender, string details) => Starting?.Invoke(sender, JsonSerializer.Deserialize(details,
+                    NotificationDetailContext.Default.NodeWaitFreezesDetail) ?? throw new InvalidCastException());
+            public event EventHandler<NodeWaitFreezesDetail>? Succeeded;
+            internal void OnSucceeded(object? sender, string details) => Succeeded?.Invoke(sender, JsonSerializer.Deserialize(details,
+                    NotificationDetailContext.Default.NodeWaitFreezesDetail) ?? throw new InvalidCastException());
+            public event EventHandler<NodeWaitFreezesDetail>? Failed;
+            internal void OnFailed(object? sender, string details) => Failed?.Invoke(sender, JsonSerializer.Deserialize(details,
+                    NotificationDetailContext.Default.NodeWaitFreezesDetail) ?? throw new InvalidCastException());
+        }
+
     }
 
 }

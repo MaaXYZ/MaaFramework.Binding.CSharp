@@ -30,6 +30,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     ///     Gets or sets a resource that binds to the <see cref="IMaaTasker"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="InvalidOperationException"/>
     /// <exception cref="MaaInteroperationException"/>
     IMaaResource Resource { get; set; }
 
@@ -37,6 +38,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     ///     Gets or sets a controller that binds to the <see cref="IMaaTasker"/>.
     /// </summary>
     /// <exception cref="ArgumentNullException"/>
+    /// <exception cref="InvalidOperationException"/>
     /// <exception cref="MaaInteroperationException"/>
     IMaaController Controller { get; set; }
 
@@ -83,7 +85,7 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     /// <param name="box">The recognition position.</param>
     /// <param name="recoDetail">The recognition details.</param>
     /// <returns>A task job.</returns>
-    MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer box, [StringSyntax("Json")] string recoDetail);
+    MaaTaskJob AppendAction(string actionType, [StringSyntax("Json")] string actionParam, IMaaRectBuffer? box = null, [StringSyntax("Json")] string recoDetail = "{}");
 
     /// <summary>
     ///     Gets whether the <see cref="IMaaTasker"/> is running.
@@ -118,6 +120,14 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     bool ClearCache();
 
     /// <summary>
+    ///     Overrides the pipeline for a specific task.
+    /// </summary>
+    /// <param name="taskJob">The task job to override pipeline for.</param>
+    /// <param name="pipelineOverride">The json used to override the pipeline.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    bool OverridePipeline(MaaTaskJob taskJob, [StringSyntax("Json")] string pipelineOverride);
+
+    /// <summary>
     ///     Gets the recognition detail.
     /// </summary>
     /// <param name="recognitionId">The recognition id.</param>
@@ -143,6 +153,23 @@ public interface IMaaTasker : IMaaCommon, IMaaOption<TaskerOption>, IMaaDisposab
     /// <param name="detailJson">the action detail</param>
     /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
     bool GetActionDetail(MaaActId actionId, out string nodeName, out string action, IMaaRectBuffer? box, out bool isSucceeded, out string detailJson);
+
+    /// <summary>
+    ///     Gets the wait freezes detail.
+    /// </summary>
+    /// <param name="waitFreezesId">The wait freezes id.</param>
+    /// <param name="nodeName">The node name.</param>
+    /// <param name="phase">The phase (e.g. "pre", "post", "repeat", "context").</param>
+    /// <param name="isSucceeded">A value indicating whether the wait freezes is succeeded.</param>
+    /// <param name="millisecondsElapsed">The total elapsed time in milliseconds.</param>
+    /// <param name="recoIdList">The recognition id array for each frame-to-frame comparison.</param>
+    /// <param name="roi">The actual region of interest used for comparison.</param>
+    /// <returns><see langword="true"/> if query was successful; otherwise, <see langword="false"/>.</returns>
+    /// <remarks>
+    ///     Obtained via `wf_id` from the callback.
+    ///     Each `reco_id` can be queried via `MaaTaskerGetRecognitionDetail` to get the drawn images.
+    /// </remarks>
+    bool GetWaitFreezesDetail(MaaWfId waitFreezesId, out string nodeName, out string phase, out bool isSucceeded, out MaaSize millisecondsElapsed, out MaaRecoId[] recoIdList, IMaaRectBuffer? roi);
 
     /// <summary>
     ///     Gets the node detail.

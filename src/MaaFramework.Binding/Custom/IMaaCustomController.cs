@@ -7,27 +7,24 @@ namespace MaaFramework.Binding.Custom;
 /// <summary>
 ///     An interface representing implementation is maa custom controller.
 /// </summary>
-public interface IMaaCustomController : IMaaCustomResource, IDisposable
+public interface IMaaCustomController : IMaaCustom, IDisposable
 {
     bool Connect();
+    bool Connected();
 
     /// <remarks>
     ///     Write result to buffer.
     /// </remarks>
-    bool RequestUuid(in IMaaStringBuffer buffer);
+    bool RequestUuid(IMaaStringBuffer buffer);
     ControllerFeatures GetFeatures();
 
-    /// <remarks>
-    ///     Write result to width and height.
-    /// </remarks>
-    bool RequestResolution(out int width, out int height);
     bool StartApp(string intent);
     bool StopApp(string intent);
 
     /// <remarks>
     ///     Write result to buffer.
     /// </remarks>
-    bool Screencap(in IMaaImageBuffer buffer);
+    bool Screencap(IMaaImageBuffer buffer);
     bool Click(int x, int y);
     bool Swipe(int x1, int y1, int x2, int y2, int duration);
     bool TouchDown(int contact, int x, int y, int pressure);
@@ -38,4 +35,16 @@ public interface IMaaCustomController : IMaaCustomResource, IDisposable
     bool KeyDown(int keycode);
     bool KeyUp(int keycode);
     bool Scroll(int dx, int dy);
+    bool RelativeMove(int dx, int dy);
+
+    /// <summary>
+    ///     Write result to buffer.
+    /// </summary>
+    bool Shell(string cmd, long millisecondsTimeout, IMaaStringBuffer buffer);
+    bool Inactive();
+
+    /// <remarks>
+    ///     Optional, Write result (JSON string) to buffer.
+    /// </remarks>
+    bool GetInfo(IMaaStringBuffer buffer);
 }

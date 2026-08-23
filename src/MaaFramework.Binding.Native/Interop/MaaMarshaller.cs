@@ -1,7 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿using MaaFramework.Binding.Custom;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
-using MaaFramework.Binding.Custom;
 
 namespace MaaFramework.Binding.Interop.Native;
 
@@ -46,6 +47,44 @@ public static class MaaMarshaller
     /// </summary>
     public static byte[] ConvertToMaaOptionValue(string value)
         => Encoding.UTF8.GetBytes(value);
+
+    /// <summary>
+    ///     Converts a <see cref="IEnumerable{T}"/> to a MaaOptionValue (<see cref="byte"/>[]).
+    /// </summary>
+    public static byte[] ConvertToMaaOptionValue(IEnumerable<int> value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        if (value is int[] array)
+        {
+            var result = new byte[array.Length * 4];
+            Span<byte> byteSpan = result;
+            MemoryMarshal.Cast<int, byte>(array).CopyTo(byteSpan);
+            return result;
+        }
+
+        if (value is List<int> list)
+        {
+            var result = new byte[list.Count * 4];
+            Span<byte> byteSpan = result;
+            MemoryMarshal.Cast<int, byte>(CollectionsMarshal.AsSpan(list)).CopyTo(byteSpan);
+            return result;
+        }
+
+        if (value.TryGetNonEnumeratedCount(out var count))
+        {
+            var result = new byte[count * 4];
+            var i = 0;
+            foreach (var item in value)
+            {
+                // 边界检查 MemoryMarshal.Cast<int, byte>(new ReadOnlySpan<int>(in item)).CopyTo(new Span<byte>(result, i++ * 4, 4));
+                Unsafe.WriteUnaligned(ref result[i++ * 4], item);
+            }
+            return result;
+        }
+
+        return [.. value.SelectMany(BitConverter.GetBytes)];
+    }
 }
 
 /// <inheritdoc cref="Utf8StringMarshaller"/>

@@ -23,6 +23,13 @@ public class AdbDeviceListBuffer : MaaListBuffer<MaaToolkitAdbDeviceListHandle, 
         Config: MaaToolkitAdbDeviceGetConfig(InfoHandle)
     );
 
+    internal sealed class NullAdbDeviceListBuffer : AdbDeviceListBuffer { internal NullAdbDeviceListBuffer() : base(MaaToolkitAdbDeviceListHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="AdbDeviceListBuffer"/> type.
+    /// </summary>
+    public static AdbDeviceListBuffer Null { get; } = new NullAdbDeviceListBuffer();
+
     /// <summary>
     ///     Creates a <see cref="AdbDeviceListBuffer"/> instance.
     /// </summary>

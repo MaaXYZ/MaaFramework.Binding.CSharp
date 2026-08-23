@@ -12,12 +12,14 @@ public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaS
 {
     /// <inheritdoc/>
     public override string ToString()
-    {
-        if (IsInvalid)
-            return string.Empty;
+        => TryGetValue(Handle, out var str) ? str : string.Empty;
 
-        return TryGetValue(out var str) ? str : string.Empty;
-    }
+    internal sealed class NullStringBuffer : MaaStringBuffer { internal NullStringBuffer() : base(MaaStringBufferHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaStringBuffer"/> type.
+    /// </summary>
+    public static MaaStringBuffer Null { get; } = new NullStringBuffer();
 
     /// <inheritdoc/>
     public bool TryCopyTo(MaaStringBufferHandle bufferHandle) => MaaStringBufferSetExFromNint(
@@ -38,17 +40,17 @@ public class MaaStringBuffer : MaaDisposableHandle<MaaStringBufferHandle>, IMaaS
     /// </summary>
     /// <param name="handle">The MaaStringBufferHandle.</param>
     public MaaStringBuffer(MaaStringBufferHandle handle)
-        : base(invalidHandleValue: nint.Zero)
+        : base(invalidHandleValue: MaaStringBufferHandle.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
 
-    /// <inheritdoc cref="MaaStringBuffer(nint)"/>
+    /// <inheritdoc cref="MaaStringBuffer(MaaStringBufferHandle)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaStringBufferCreate"/>.
     /// </remarks>
     public MaaStringBuffer()
-        : base(invalidHandleValue: nint.Zero)
+        : base(invalidHandleValue: MaaStringBufferHandle.Zero)
     {
         SetHandle(MaaStringBufferCreate(), needReleased: true);
     }

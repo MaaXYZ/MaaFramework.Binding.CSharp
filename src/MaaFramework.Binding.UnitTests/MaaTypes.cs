@@ -13,4 +13,6 @@ public enum MaaTypes
 
     Native = 1 << 0,
     Custom = 1 << 30,
+
+    Win32 = None,
 }

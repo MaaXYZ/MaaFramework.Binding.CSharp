@@ -1,4 +1,4 @@
-# Overview of Wrapper (v5.1.0) and Api ([v5.1.4](https://github.com/MaaXYZ/MaaFramework/tree/v5.1.4))
+# Overview of Wrapper (v5.10.0) and Api ([v5.10.5](https://github.com/MaaXYZ/MaaFramework/tree/v5.10.5))
 
 ## Enums
 
@@ -17,7 +17,6 @@
 | TaskerOption | `MaaTaskerOptionEnum` |
 | InferenceDevice | `MaaInferenceDeviceEnum` |
 | InferenceExecutionProvider | `MaaInferenceExecutionProviderEnum` |
-| ControllerFeatures | `` |
 
 - Macro Definition
 
@@ -25,9 +24,15 @@
 | --- | --- |
 | AdbScreencapMethods | `MaaAdbScreencapMethod` |
 | AdbInputMethods | `MaaAdbInputMethod` |
-| Win32ScreencapMethod | `MaaWin32ScreencapMethod` |
+| Win32ScreencapMethods | `MaaWin32ScreencapMethod` |
 | Win32InputMethod | `MaaWin32InputMethod` |
-| DbgControllerType | `MaaDbgControllerType` |
+| MacOSScreencapMethod | `MaaMacOSScreencapMethod` |
+| MacOSInputMethod | `MaaMacOSInputMethod` |
+| MacOSPermission | `MaaMacOSPermissionEnum` |
+| GamepadType | `MaaGamepadType` |
+| GamepadButton | `MaaGamepadButton` |
+| GamepadTouch | `MaaGamepadTouch` |
+| ControllerFeatures | `MaaControllerFeature` |
 
 ## MaaTaskJob : MaaJob
 
@@ -37,6 +42,7 @@
 | MaaJob.Status | `MaaControllerStatus` <br> `MaaResourceStatus` <br> `MaaTaskerStatus` |
 | MaaJob.Wait() <br> MaaTaskJob.WaitFor() | `MaaControllerWait` <br> `MaaResourceWait` <br> `MaaTaskerWait` |
 | MaaTaskJob.Tasker | *A property used to simplify design of TaskDetail.Query* |
+| MaaTaskJob.OverridePipeline() | `MaaTaskerOverridePipeline` |
 
 ## IMaaCommon
 
@@ -83,14 +89,20 @@ IMaaDisposable Derived:
 | --- | --- |
 | MaaAdbController.ctor() | `MaaAdbControllerCreate` <br> `MaaControllerAddSink` |
 | MaaWin32Controller.ctor() | `MaaWin32ControllerCreate` <br> `MaaControllerAddSink` |
+| MaaMacOSController.ctor() | `MaaMacOSControllerCreate` <br> `MaaControllerAddSink` |
+| MaaAndroidNativeController.ctor() | `MaaAndroidNativeControllerCreate` <br> `MaaControllerAddSink` |
 | MaaCustomController.ctor() | `MaaCustomControllerCreate` <br> `MaaControllerAddSink` |
 | MaaDbgController.ctor() | `MaaDbgControllerCreate` <br> `MaaControllerAddSink` |
+| MaaReplayController.ctor() | `MaaReplayControllerCreate` <br> `MaaControllerAddSink` |
+| MaaRecordController.ctor() | `MaaRecordControllerCreate` <br> `MaaControllerAddSink` |
 | MaaPlayCoverController.ctor() | `MaaPlayCoverControllerCreate` <br> `MaaControllerAddSink` |
+| MaaGamepadController.ctor() | `MaaGamepadControllerCreate` <br> `MaaControllerAddSink` |
+| MaaWlRootsController.ctor() | `MaaWlRootsControllerCreate` <br> `MaaControllerAddSink` |
 | IDisposable.Dispose() | `MaaControllerDestroy` |
 | IMaaOption.SetOption() | `MaaControllerSetOption` |
 | IMaaController.LinkStart() | `MaaControllerPostConnection` |
-| IMaaController.Click() | `MaaControllerPostClick` |
-| IMaaController.Swipe() | `MaaControllerPostSwipe` |
+| IMaaController.Click() | `MaaControllerPostClickV2` |
+| IMaaController.Swipe() | `MaaControllerPostSwipeV2` |
 | IMaaController.PressKey() | `MaaControllerPostPressKey` |
 | IMaaController.InputText() | `MaaControllerPostInputText` |
 | IMaaController.StartApp() | `MaaControllerPostStartApp` |
@@ -98,8 +110,10 @@ IMaaDisposable Derived:
 | IMaaController.TouchDown() | `MaaControllerPostTouchDown` |
 | IMaaController.TouchMove() | `MaaControllerPostTouchMove` |
 | IMaaController.TouchUp() | `MaaControllerPostTouchUp` |
+| IMaaController.RelativeMove() | `MaaControllerPostRelativeMove` |
 | IMaaController.Screencap() | `MaaControllerPostScreencap` |
 | IMaaController.Scroll() | `MaaControllerPostScroll` |
+| IMaaController.Inactive() | `MaaControllerPostInactive` |
 | IMaaController.Shell() | `MaaControllerPostShell` |
 | IMaaController.GetShellOutput() | `MaaControllerGetShellOutput` |
 | IMaaPost.GetStatus() | `MaaControllerStatus` |
@@ -107,6 +121,8 @@ IMaaDisposable Derived:
 | IMaaController.LinkStop() | `MaaControllerConnected` |
 | IMaaController.GetCachedImage() | `MaaControllerCachedImage` |
 | IMaaController.Uuid | `MaaControllerGetUuid` |
+| IMaaController.GetResolution() | `MaaControllerGetResolution` |
+| IMaaController.Info | `MaaControllerGetInfo` |
 | IMaaDisposableHandle.Handle | *The MaaControllerHandle.* |
 
 ## MaaTasker : IMaaTasker
@@ -130,6 +146,7 @@ IMaaDisposable Derived:
 | IMaaTasker.Stop() | `MaaTaskerPostStop` |
 | IMaaTasker.IsStopping | `MaaTaskerStopping` |
 | IMaaTasker.ClearCache() | `MaaTaskerClearCache` |
+| IMaaTasker.OverridePipeline() <br> MaaTaskJob.OverridePipeline() | `MaaTaskerOverridePipeline` |
 | IMaaTasker.GetRecognitionDetail() <br> RecognitionDetail.Query() <br> NodeDetail.QueryRecognitionDetail() <br> TaskDetail.QueryRecognitionDetail() <br> MaaTaskJob.QueryRecognitionDetail() | `MaaTaskerGetRecognitionDetail` |
 | IMaaTasker.GetActionDetail() <br> ActionDetail.Query() <br> NodeDetail.QueryActionDetail() <br> TaskDetail.QueryActionDetail() <br> MaaTaskJob.QueryActionDetail() | `MaaTaskerGetActionDetail` |
 | IMaaTasker.GetNodeDetail() <br> NodeDetail.Query() <br> TaskDetail.QueryNodeDetail() <br> MaaTaskJob.QueryNodeDetail() | `MaaTaskerGetNodeDetail` |
@@ -163,6 +180,8 @@ IMaaDisposable Derived:
 | IMaaResource.NodeList | `MaaResourceGetNodeList` |
 | IMaaResource.CustomRecognitionList | `MaaResourceGetCustomRecognitionList` |
 | IMaaResource.CustomActionList | `MaaResourceGetCustomActionList` |
+| IMaaResource.GetDefaultRecognitionParam() | `MaaResourceGetDefaultRecognitionParam` |
+| IMaaResource.GetDefaultActionParam() | `MaaResourceGetDefaultActionParam` |
 | IMaaDisposableHandle.Handle | *The MaaResourceHandle.* |
 
 ## MaaContext : IMaaContext
@@ -173,6 +192,9 @@ IMaaDisposable Derived:
 | IMaaContext.RunTask() | `MaaContextRunTask` |
 | IMaaContext.RunRecognition() | `MaaContextRunRecognition` |
 | IMaaContext.RunAction() | `MaaContextRunAction` |
+| IMaaContext.RunRecognitionDirect() | `MaaContextRunRecognitionDirect` |
+| IMaaContext.RunActionDirect() | `MaaContextRunActionDirect` |
+| IMaaContext.WaitFreezes() | `MaaContextWaitFreezes` |
 | IMaaContext.OverridePipeline() | `MaaContextOverridePipeline` |
 | IMaaContext.OverrideNext() | `MaaContextOverrideNext` |
 | IMaaContext.OverrideImage() | `MaaContextOverrideImage` |
@@ -233,6 +255,7 @@ IMaaDisposable Derived:
 | MaaImageBuffer.TryGetRawData() | `MaaImageBufferGetRawData` |
 | MaaImageBuffer.TrySetRawData() | `MaaImageBufferSetRawData` |
 | IMaaImageBuffer.GetInfo() <br> MaaImageBuffer.Width <br> MaaImageBuffer.Height <br> MaaImageBuffer.Channels <br> MaaImageBuffer.Type | `MaaImageBufferWidth` <br> `MaaImageBufferHeight` <br> `MaaImageBufferChannels` <br> `MaaImageBufferType` |
+| IMaaImageBuffer.TryResize() <br> MaaImageBuffer.TryResize() | `MaaImageBufferResize` |
 | IMaaImageBuffer.TryGetEncodedData() <br> MaaImageBuffer.TryGetEncodedData() | `MaaImageBufferGetEncoded` <br> `MaaImageBufferGetEncodedSize` |
 | IMaaImageBuffer.TrySetEncodedData() <br> MaaImageBuffer.TrySetEncodedData() | `MaaImageBufferSetEncoded` |
 | IMaaBuffer.TryCopyTo() | *Optimization method for copying the same type of buffer.* |
@@ -296,6 +319,9 @@ IMaaDisposable Derived:
 | MaaToolkit.ctor() <br> IMaaToolkit.Config.InitOption() | `MaaToolkitConfigInitOption` |
 | IMaaToolkit.AdbDevice.Find() <br> IMaaToolkit.AdbDevice.FindAsync() | `MaaToolkitAdbDeviceFind` <br> `MaaToolkitAdbDeviceFindSpecified` |
 | IMaaToolkit.Desktop.Window.Find() | `MaaToolkitDesktopWindowFindAll` |
+| IMaaToolkit.MacOS.CheckPermission() | `MaaToolkitMacOSCheckPermission` |
+| IMaaToolkit.MacOS.RequestPermission() | `MaaToolkitMacOSRequestPermission` |
+| IMaaToolkit.MacOS.RevealPermissionSettings() | `MaaToolkitMacOSRevealPermissionSettings` |
 
 ## Buffers.AdbDeviceListBuffer : Buffers.MaaListBuffer : Buffers.IMaaListBuffer
 
@@ -336,11 +362,12 @@ IMaaDisposable Derived:
 | Wrapper | Native API |
 | --- | --- |
 | MaaAgentClient.Create() | `MaaAgentClientCreateV2` |
+| MaaAgentClient.CreateTcp() | `MaaAgentClientCreateTcp` |
 | IDisposable.Dispose() | `MaaAgentClientDestroy` |
 | IMaaAgentClient.Id | `MaaAgentClientIdentifier` |
 | IMaaAgentClient.Tasker | `MaaAgentClientRegisterTaskerSink` |
 | IMaaAgentClient.Controller | `MaaAgentClientRegisterControllerSink` |
-| IMaaAgentClient.Resource | `MaaAgentClientRegisterResourceSink` |
+| IMaaAgentClient.Resource | `MaaAgentClientBindResource` <br> `MaaAgentClientRegisterResourceSink` |
 | IMaaAgentClient.LinkStart() <br> IMaaAgentClient.LinkStartUnlessProcessExit() | `MaaAgentClientConnect` |
 | IMaaAgentClient.LinkStop() | `MaaAgentClientDisconnect` |
 | IMaaAgentClient.IsConnected | `MaaAgentClientConnected` |

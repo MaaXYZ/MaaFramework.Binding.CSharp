@@ -12,11 +12,32 @@
 
 namespace MaaFramework.Binding;
 
+/// <summary>
+///     Controller feature flags returned by get_features().
+///     <para>These flags indicate which input methods the controller supports/prefers.</para>
+/// </summary>
 [Flags]
 public enum ControllerFeatures : System.UInt64
 {
+    /// <summary>
+    ///     No special features, controller supports click/swipe/click_key directly.
+    /// </summary>
     None = 0,
-    UseMouseDownAndUpInsteadOfClick = 1,
-    UseKeyboardDownAndUpInsteadOfClick = (1 << 1),
+    /// <summary>
+    ///     Controller prefers touch_down/touch_move/touch_up instead of click/swipe.
+    ///     <para>When set, ControllerAgent will use touch_down/touch_up to simulate click,</para>
+    ///     <para>and touch_down/touch_move/touch_up to simulate swipe.</para>
+    /// </summary>
+    UseMouseDownAndUpInsteadOfClick = 1UL,
+    /// <summary>
+    ///     Controller prefers key_down/key_up instead of click_key.
+    ///     <para>When set, ControllerAgent will use key_down + key_up to simulate click_key.</para>
+    /// </summary>
+    UseKeyboardDownAndUpInsteadOfClick = (1UL << 1),
+    /// <summary>
+    ///     CController does not scale touch points automatically.
+    ///     <para>When set, ControllerAgent will skip coordinate scaling for touch operations.</para>
+    /// </summary>
+    NoScalingTouchPoints = (1UL << 2),
 }
 

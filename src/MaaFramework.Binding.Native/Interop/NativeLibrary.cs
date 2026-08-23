@@ -91,7 +91,7 @@ internal static partial class NativeLibrary
         // to AppContext.BaseDirectory which is the directory containing the single-file executable.
         var assemblyDirectory = string.IsNullOrEmpty(s_assembly.Location)
             ? AppContext.BaseDirectory
-            : Path.GetDirectoryName(s_assembly.Location)!;
+            : Path.GetDirectoryName(s_assembly.Location);
 
         string?[] basePaths =
         [

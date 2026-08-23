@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+#nullable enable
+
 #pragma warning disable CS1573 // 参数在 XML 注释中没有匹配的 param 标记
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
@@ -95,6 +97,10 @@ public static partial class MaaTasker
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerOverridePipeline(MaaTaskerHandle tasker, MaaTaskId taskId, string pipelineOverride);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaTaskerGetRecognitionDetail(MaaTaskerHandle tasker, MaaRecoId recoId, MaaStringBufferHandle nodeName, MaaStringBufferHandle algorithm, [MarshalAs(UnmanagedType.U1)] out bool hit, MaaRectHandle box, MaaStringBufferHandle detailJson, MaaImageBufferHandle raw, MaaImageListBufferHandle draws);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
@@ -107,7 +113,11 @@ public static partial class MaaTasker
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
-    public static partial bool MaaTaskerGetTaskDetail(MaaTaskerHandle tasker, MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[] nodeIdList, ref MaaSize nodeIdListSize, out MaaStatus status);
+    public static partial bool MaaTaskerGetWaitFreezesDetail(MaaTaskerHandle tasker, MaaWfId wfId, MaaStringBufferHandle nodeName, MaaStringBufferHandle phase, [MarshalAs(UnmanagedType.U1)] out bool success, out MaaSize elapsedMs, MaaRecoId[]? recoIdList, ref MaaSize recoIdListSize, MaaRectHandle roi);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaTaskerGetTaskDetail(MaaTaskerHandle tasker, MaaTaskId taskId, MaaStringBufferHandle entry, MaaNodeId[]? nodeIdList, ref MaaSize nodeIdListSize, out MaaStatus status);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]

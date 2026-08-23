@@ -7,10 +7,16 @@ namespace MaaFramework.Binding;
 /// <summary>
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaContext"/>.
 /// </summary>
-public class MaaContext : IMaaContext<MaaContextHandle>
+public class MaaContext : IMaaContext<MaaContextHandle>, IEquatable<MaaContext>, IEqualityComparer<MaaContext>
 {
     /// <inheritdoc/>
     public required MaaContextHandle Handle { get; init; }
+
+    /// <inheritdoc cref="IMaaContext.Tasker"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextGetTasker"/>.
+    /// </remarks>
+    public required MaaTasker Tasker { get; init; }
 
     /// <summary>
     ///     Creates a <see cref="MaaContext"/> instance.
@@ -19,13 +25,58 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     [SetsRequiredMembers]
     public MaaContext(MaaContextHandle contextHandle)
     {
-        if (contextHandle == MaaContextHandle.Zero)
-            throw new ArgumentException($"Value cannot be {MaaContextHandle.Zero}.", nameof(contextHandle));
+        var taskerHandle = MaaContextGetTasker(contextHandle);
         Handle = contextHandle;
-
-        var taskerHandle = MaaContextGetTasker(Handle);
-        Tasker = NativeBindingContext.IsStatelessMode ? new MaaTasker(taskerHandle) : MaaTasker.Instances[taskerHandle];
+        Tasker = (NativeBindingContext.IsStatelessMode
+                || taskerHandle == MaaTaskerHandle.Zero
+                || !MaaTasker.Instances.TryGetValue(taskerHandle, out var tasker))
+            ? new MaaTasker(taskerHandle)
+            : tasker;
     }
+
+    /// <summary>
+    ///     Creates a <see cref="MaaContext"/> instance.
+    /// </summary>
+    /// <param name="contextHandle">The MaaContextHandle.</param>
+    /// <param name="tasker">The MaaTasker.</param>
+    [SetsRequiredMembers]
+    public MaaContext(MaaContextHandle contextHandle, MaaTasker tasker)
+    {
+        ArgumentNullException.ThrowIfNull(tasker);
+
+        Handle = contextHandle;
+        Tasker = tasker;
+    }
+
+    #region Override equality
+    /// <inheritdoc/>
+    public int GetHashCode(MaaContext obj) { ArgumentNullException.ThrowIfNull(obj); return obj.Handle.GetHashCode(); }
+    /// <inheritdoc/>
+    public override int GetHashCode() => Handle.GetHashCode();
+    /// <inheritdoc/>
+    public virtual bool Equals(MaaContext? other) => other is not null && Handle == other.Handle;
+    /// <inheritdoc/>
+    public override bool Equals(object? obj) => obj is MaaContext other && Handle == other.Handle;
+    /// <inheritdoc/>
+    public bool Equals(MaaContext? x, MaaContext? y) => x is null ? y is null : x.Equals(y);
+    /// <summary>
+    ///     Compares two values to determine equality.
+    /// </summary>
+    /// <param name="left">The left value.</param>
+    /// <param name="right">The right value.</param>
+    /// <returns><see langword="true"/> if <paramref name="left"/> is equal to <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
+    public static bool operator ==(MaaContext? left, MaaContext? right) => left is null ? right is null : left.Equals(right);
+    /// <summary>
+    ///     Compares two values to determine inequality.
+    /// </summary>
+    /// <param name="left">The left value.</param>
+    /// <param name="right">The right value.</param>
+    /// <returns><see langword="true"/> if <paramref name="left"/> not equal to <paramref name="right"/>; otherwise, <see langword="false"/>.</returns>
+    public static bool operator !=(MaaContext? left, MaaContext? right) => !(left == right);
+    #endregion
+
+    /// <inheritdoc/>
+    public bool IsCancellationRequested => Tasker.IsStopping;
 
     /// <inheritdoc/>
     /// <remarks>
@@ -57,14 +108,14 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     }
 
     /// <inheritdoc/>
-    public ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
+    public ActionDetail? RunAction(string entry, IMaaRectBuffer recognitionBox, string recognitionDetail = "", [StringSyntax("Json")] string pipelineOverride = "{}")
         => RunAction(entry, (MaaRectBuffer)recognitionBox, recognitionDetail, pipelineOverride);
 
     /// <inheritdoc cref="IMaaContext.RunAction"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextRunAction"/>.
     /// </remarks>
-    public ActionDetail? RunAction(string entry, MaaRectBuffer recognitionBox, string recognitionDetail, [StringSyntax("Json")] string pipelineOverride = "{}")
+    public ActionDetail? RunAction(string entry, MaaRectBuffer recognitionBox, string recognitionDetail = "", [StringSyntax("Json")] string pipelineOverride = "{}")
     {
         ArgumentNullException.ThrowIfNull(recognitionBox);
         var actionId = MaaContextRunAction(Handle, entry, pipelineOverride, recognitionBox.Handle, recognitionDetail);
@@ -72,6 +123,59 @@ public class MaaContext : IMaaContext<MaaContextHandle>
             ? null
             : ActionDetail.Query<MaaRectBuffer>(actionId, Tasker);
     }
+
+    /// <inheritdoc/>
+    public RecognitionDetail? RunRecognitionDirect(string type, [StringSyntax("Json")] string param, IMaaImageBuffer image)
+        => RunRecognitionDirect(type, param, (MaaImageBuffer)image);
+
+    /// <inheritdoc cref="IMaaContext.RunRecognitionDirect"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextRunRecognitionDirect"/>.
+    /// </remarks>
+    public RecognitionDetail? RunRecognitionDirect(string type, [StringSyntax("Json")] string param, MaaImageBuffer image)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        var recognitionId = MaaContextRunRecognitionDirect(Handle, type, param, image.Handle);
+        return recognitionId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : RecognitionDetail.Query<MaaRectBuffer, MaaImageBuffer, MaaImageListBuffer>(recognitionId, Tasker);
+    }
+
+    /// <inheritdoc/>
+    public ActionDetail? RunActionDirect(string type, [StringSyntax("Json")] string param, IMaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail = "")
+        => RunActionDirect(type, param, (MaaRectBuffer)recognitionBox, recognitionDetail);
+
+    /// <inheritdoc cref="IMaaContext.RunActionDirect"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextRunActionDirect"/>.
+    /// </remarks>
+    public ActionDetail? RunActionDirect(string type, [StringSyntax("Json")] string param, MaaRectBuffer recognitionBox, [StringSyntax("Json")] string recognitionDetail = "")
+    {
+        ArgumentNullException.ThrowIfNull(recognitionBox);
+        var actionId = MaaContextRunActionDirect(Handle, type, param, recognitionBox.Handle, recognitionDetail);
+        return actionId == Interop.Native.MaaDef.MaaInvalidId
+            ? null
+            : ActionDetail.Query<MaaRectBuffer>(actionId, Tasker);
+    }
+
+    /// <inheritdoc/>
+    public bool WaitFreezes(TimeSpan time = default, IMaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => WaitFreezes((MaaSize)time.TotalMilliseconds, (MaaRectBuffer?)recognitionBox, waitFreezesParam);
+
+    /// <inheritdoc cref="IMaaContext.WaitFreezes(TimeSpan, IMaaRectBuffer, string)"/>
+    public bool WaitFreezes(TimeSpan time = default, MaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => WaitFreezes((MaaSize)time.TotalMilliseconds, recognitionBox, waitFreezesParam);
+
+    /// <inheritdoc/>
+    public bool WaitFreezes(MaaSize millisecondsTime = 0, IMaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => WaitFreezes(millisecondsTime, (MaaRectBuffer?)recognitionBox, waitFreezesParam);
+
+    /// <inheritdoc cref="IMaaContext.WaitFreezes(MaaSize, IMaaRectBuffer, string)"/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaContextWaitFreezes"/>.
+    /// </remarks>
+    public bool WaitFreezes(MaaSize millisecondsTime = 0, MaaRectBuffer? recognitionBox = default, [StringSyntax("Json")] string waitFreezesParam = "{}")
+        => MaaContextWaitFreezes(Handle, millisecondsTime, recognitionBox?.Handle ?? MaaRectHandle.Zero, waitFreezesParam);
 
     /// <inheritdoc/>
     /// <remarks>
@@ -119,12 +223,6 @@ public class MaaContext : IMaaContext<MaaContextHandle>
 
     IMaaTasker IMaaContext.Tasker => Tasker;
 
-    /// <inheritdoc cref="IMaaContext.Tasker"/>
-    /// <remarks>
-    ///     Wrapper of <see cref="MaaContextGetTasker"/>.
-    /// </remarks>
-    public MaaTasker Tasker { get; }
-
     object ICloneable.Clone()
         => Clone();
     IMaaContext IMaaContext.Clone()
@@ -134,8 +232,8 @@ public class MaaContext : IMaaContext<MaaContextHandle>
     /// <remarks>
     ///     Wrapper of <see cref="MaaContextClone"/>.
     /// </remarks>
-    public MaaContext Clone()
-        => new(MaaContextClone(Handle));
+    public virtual MaaContext Clone()
+        => new(MaaContextClone(Handle), Tasker);
 
     /// <inheritdoc/>
     /// <remarks>

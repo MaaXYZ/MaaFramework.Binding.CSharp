@@ -13,14 +13,28 @@ namespace MaaFramework.Binding;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAgentClient<MaaAgentClientHandle>
 {
-    private long _timeout = -1;
+    private long _millisecondsTimeout = -1;
     private Process? _agentServerProcess;
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => IsInvalid
         ? $"Invalid {GetType().Name}"
-        : $"{GetType().Name} {{ {nameof(Id)} = {Id ?? "<null>"}, {nameof(IsConnected)} = {IsConnected}, {nameof(IsAlive)} = {IsAlive}, Timeout = {_timeout} }}";
+        : $"{GetType().Name} {{ {nameof(Id)} = {Id ?? "<null>"}, {nameof(IsConnected)} = {IsConnected}, {nameof(IsAlive)} = {IsAlive}, Timeout = {_millisecondsTimeout} }}";
+
+    internal sealed class NullAgentClient : MaaAgentClient { internal NullAgentClient() : base(MaaAgentClientHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaAgentClient"/> type.
+    /// </summary>
+    public static MaaAgentClient Null { get; } = new NullAgentClient() { Resource = MaaResource.Null, };
+
+    [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
+    internal MaaAgentClient(MaaAgentClientHandle handle)
+        : base(invalidHandleValue: MaaAgentClientHandle.Zero)
+    {
+        SetHandle(handle, needReleased: false);
+    }
 
     /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
@@ -34,14 +48,37 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     {
         _ = MaaStringBuffer.TrySetValue(identifier, true, buffer =>
         {
-            var handle = MaaAgentClientCreateV2(buffer);
+            var handle = MaaAgentClientCreateV2(buffer).ThrowIfEquals(MaaAgentClientHandle.Zero);
             SetHandle(handle, needReleased: true);
             return true;
         }).ThrowIfFalse();
     }
 
     /// <summary>
+    ///     Creates a <see cref="MaaAgentClient"/> instance with TCP connection.
+    /// </summary>
+    /// <param name="port">The TCP port number (0-65535), 0 means auto-select.</param>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaAgentClientCreateTcp"/>.
+    /// </remarks>
+    protected MaaAgentClient(ushort port = 0)
+        : base(invalidHandleValue: MaaAgentClientHandle.Zero)
+    {
+        var handle = MaaAgentClientCreateTcp(port).ThrowIfEquals(MaaAgentClientHandle.Zero);
+        SetHandle(handle, needReleased: true);
+    }
+
+    /// <inheritdoc cref="Create(string, MaaResource)"/>
+    public static MaaAgentClient Create(MaaResource resource)
+        => Create(string.Empty, resource);
+
+    /// <inheritdoc cref="Create(string, MaaTasker)"/>
+    public static MaaAgentClient Create(MaaTasker maa)
+        => Create(string.Empty, maa);
+
+    /// <summary>
     ///     Creates a <see cref="MaaAgentClient"/> instance.
+    ///     <para>The callback (from resource) will be forwarded to the agent server.</para>
     /// </summary>
     /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
     /// <param name="resource">The resource.</param>
@@ -49,15 +86,12 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     public static MaaAgentClient Create(string identifier, MaaResource resource)
         => new(identifier) { Resource = resource, };
 
-    /// <inheritdoc cref="Create(string, MaaResource)"/>
-    public static MaaAgentClient Create(MaaResource resource)
-        => Create(string.Empty, resource);
-
     /// <summary>
-    ///     Creates a <see cref="MaaAgentClient"/> instance, the callback (from tasker, resource and controller) will be forwarded to the agent server.
+    ///     Creates a <see cref="MaaAgentClient"/> instance.
+    ///     <para>The callback (from tasker, resource and controller) will be forwarded to the agent server.</para>
     /// </summary>
     /// <param name="identifier">The unique identifier used to communicate with the agent server.</param>
-    /// <param name="maa">The tasker inclued resource and controller.</param>
+    /// <param name="maa">The tasker including resource and controller.</param>
     /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
     public static MaaAgentClient Create(string identifier, MaaTasker maa)
     {
@@ -72,9 +106,51 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         return client;
     }
 
-    /// <inheritdoc cref="Create(string, MaaTasker)"/>
-    public static MaaAgentClient Create(MaaTasker maa)
-        => Create(string.Empty, maa);
+    /// <inheritdoc cref="CreateTcp(ushort, MaaResource)"/>
+    public static MaaAgentClient CreateTcp(MaaResource resource)
+        => CreateTcp(0, resource);
+
+    /// <inheritdoc cref="CreateTcp(ushort, MaaTasker)"/>
+    public static MaaAgentClient CreateTcp(MaaTasker maa)
+        => CreateTcp(0, maa);
+
+    /// <summary>
+    ///     Creates a <see cref="MaaAgentClient"/> instance with TCP connection.
+    ///     <para>The callback (from resource) will be forwarded to the agent server.</para>
+    /// </summary>
+    /// <param name="port">The TCP port number (0-65535), 0 means auto-select.</param>
+    /// <param name="resource">The resource.</param>
+    /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
+    /// <remarks>
+    ///     <para>The client listens on 127.0.0.1 at the specified port. If 0 is passed, an available port is automatically selected.</para>
+    ///     <para>AgentServer can use the port number from the identifier property to connect via TCP.</para>
+    /// </remarks>
+    public static MaaAgentClient CreateTcp(ushort port, MaaResource resource)
+        => new(port) { Resource = resource, };
+
+    /// <summary>
+    ///     Creates a <see cref="MaaAgentClient"/> instance with TCP connection.
+    ///     <para>The callback (from resource) will be forwarded to the agent server.</para>
+    /// </summary>
+    /// <param name="port">The TCP port number (0-65535), 0 means auto-select.</param>
+    /// <param name="maa">The tasker including resource and controller.</param>
+    /// <returns>The <see cref="MaaAgentClient"/> instance.</returns>
+    /// <remarks>
+    ///     <para>The client listens on 127.0.0.1 at the specified port. If 0 is passed, an available port is automatically selected.</para>
+    ///     <para>AgentServer can use the port number from the identifier property to connect via TCP.</para>
+    /// </remarks>
+    public static MaaAgentClient CreateTcp(ushort port, MaaTasker maa)
+    {
+        ArgumentNullException.ThrowIfNull(maa);
+
+        var client = new MaaAgentClient(port)
+        {
+            Tasker = maa,
+            Controller = maa.Controller,
+            Resource = maa.Resource,
+        };
+        return client;
+    }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -132,15 +208,17 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <inheritdoc/>
     public MaaTasker? Tasker
     {
-        get => field;
+        get;
         set
         {
             field?.Releasing -= OnReleasing;
-            if (value is not null)
+            if (value is not null and not MaaTasker.NullTasker)
             {
                 _ = MaaAgentClientRegisterTaskerSink(Handle, value.Handle).ThrowIfFalse();
                 value.Releasing += OnReleasing;
             }
+            else if (field is not null and not MaaTasker.NullTasker)
+                throw new InvalidOperationException("Null instance or null can only be used for init.");
             field = value;
         }
     }
@@ -155,15 +233,18 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// <inheritdoc/>
     public MaaController? Controller
     {
-        get => field;
+        get;
         set
         {
             field?.Releasing -= OnReleasing;
-            if (value is not null)
+            if (value is not null and not MaaController.NullController)
             {
                 _ = MaaAgentClientRegisterControllerSink(Handle, value.Handle).ThrowIfFalse();
                 value.Releasing += OnReleasing;
             }
+            else if (field is not null and not MaaController.NullController)
+                throw new InvalidOperationException("Null instance or null can only be used for init.");
+
             field = value;
         }
     }
@@ -181,15 +262,20 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// </remarks>
     public required MaaResource Resource
     {
-        get => field;
+        get;
         set
         {
             ArgumentNullException.ThrowIfNull(value);
 
             field?.Releasing -= OnReleasing;
-            _ = MaaAgentClientBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
-            _ = MaaAgentClientRegisterResourceSink(Handle, value.Handle).ThrowIfFalse();
-            value.Releasing += OnReleasing;
+            if (value is not MaaResource.NullResource)
+            {
+                _ = MaaAgentClientBindResource(Handle, value.Handle).ThrowIfFalse(MaaInteroperationException.ResourceBindingFailedMessage);
+                _ = MaaAgentClientRegisterResourceSink(Handle, value.Handle).ThrowIfFalse();
+                value.Releasing += OnReleasing;
+            }
+            else if (field is not null and not MaaResource.NullResource)
+                throw new InvalidOperationException("Null instance can only be used for init.");
 
             field = value;
         }
@@ -301,8 +387,8 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
     /// </remarks>
     public bool SetTimeout(long millisecondsDelay)
     {
-        _timeout = millisecondsDelay;
-        return MaaAgentClientSetTimeout(Handle, _timeout);
+        _millisecondsTimeout = millisecondsDelay;
+        return MaaAgentClientSetTimeout(Handle, _millisecondsTimeout);
     }
 
     /// <inheritdoc/>
@@ -353,7 +439,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         finally
         {
             ctr.Dispose();
-            _ = SetTimeout(_timeout).ThrowIfFalse();
+            _ = SetTimeout(_millisecondsTimeout).ThrowIfFalse();
         }
     }
 
@@ -373,7 +459,7 @@ public class MaaAgentClient : MaaDisposableHandle<MaaAgentClientHandle>, IMaaAge
         }
         finally
         {
-            _ = SetTimeout(_timeout).ThrowIfFalse();
+            _ = SetTimeout(_millisecondsTimeout).ThrowIfFalse();
         }
     }
 

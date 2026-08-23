@@ -10,9 +10,10 @@
 #pragma warning disable CS1573 // 参数在 XML 注释中没有匹配的 param 标记
 #pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
-global using MaaImageRawData = nint;
 global using MaaImageEncodedData = nint;
+global using MaaImageRawData = nint;
 
+using MaaFramework.Binding.Buffers;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
@@ -109,6 +110,10 @@ public static partial class MaaBuffer
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaImageBufferSetRawData(MaaImageBufferHandle handle, MaaImageRawData data, int width, int height, int type);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaImageBufferResize(MaaImageBufferHandle handle, int width, int height);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaImageEncodedData MaaImageBufferGetEncoded(MaaImageBufferHandle handle);

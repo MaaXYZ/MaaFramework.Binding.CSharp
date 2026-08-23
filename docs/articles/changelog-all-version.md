@@ -1,3 +1,90 @@
+## 5.10.0
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.8.0...v5.10.0
+
+## Breaking changes
+
+- [Breaking change] feat: support Win32ScreencapMethods speed test (#29) @moomiji
+
+### New features
+
+- feat: configure AgentServer logging @moomiji
+- feat: update C API bindings to MaaFramework v5.10.5 (#27) @Copilot @MistEO @moomiji
+
+### Fix
+
+- fix: wlroots use_win32_vk_code method signature (#28) @litwak913
+
+### Other
+
+- chore: update interop to framework v5.10.5 @moomiji
+
+## 5.8.0
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.6.0...5.8.0
+
+### New features
+
+- feat: support IMaaController.Info @moomiji
+- feat: support MaaWlRootsController @moomiji
+- feat: support IMaaController.Inactive() @moomiji
+
+### Other
+
+- RELEASE: v5.8.0 @moomiji
+- chore: update interop to framework v5.8.1 @moomiji
+- chore: update Win32ScreencapMethod document @moomiji
+- chore(UnitTests): fix test cases @moomiji
+
+## v5.6.0
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.4.1...v5.6.0
+
+### New features
+
+- feat: IMaaContext.WaitFreezes() @moomiji
+- feat: MaaAgentClient supports TCP communication @moomiji
+- feat: update C API bindings to MaaFramework v5.5.0 (#24) @MistEO @moomiji
+
+### Other
+
+- chore: update interop to framework v5.6.0 @moomiji
+
+## v5.4.1
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.3.0...v5.4.1
+
+### Breaking changes
+
+- [Breaking change] revert: MaaContext type @moomiji
+- [Breaking change] chore: change callback sender to current instance @moomiji
+- [Breaking change] perf: simple type use struct @moomiji
+
+### Other
+
+- perf: remove empty interface @moomiji
+- chore: update interop to framework v5.4.3 @moomiji
+- Add missing C API bindings for MaaFramework (#22) @Copilot
+
+## v5.3.0
+
+**Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v5.1.0...v5.3.0
+
+### New features
+
+- feat: IMaaContext.IsCancellationRequested @moomiji
+- feat: IMaaTasker.AppendAction() support optional parameter @moomiji
+- feat: support null handle wrapper @moomiji
+- feat: support PlayCover controller @moomiji
+- feat: IMaaResource.Append OcrModel Pipeline Image @moomiji
+- feat: new global option @moomiji
+- feat: IMaaController.Shell & GetShellOutput @moomiji
+- feat: IMaaTasker.AppendRecognition & AppendAction @moomiji
+
+### Other
+
+- chore: update interop to framework v5.3.3 @moomiji
+
 ## v5.1.0
 
 **Full Changelog**: https://github.com/MaaXYZ/MaaFramework.Binding.CSharp/compare/v4.5.0...v5.1.0

@@ -56,9 +56,13 @@ Supported TDetail types:
 - ResourceLoadingDetail
 - ControllerActionDetail
 - TaskerTaskDetail
+- PipelineNodeDetail
+- RecognitionNodeDetail
+- ActionNodeDetail
 - NodeNextListDetail
 - NodeRecognitionDetail
 - NodeActionDetail
+- NodeWaitFreezesDetail
 - string
 
 Usage example:

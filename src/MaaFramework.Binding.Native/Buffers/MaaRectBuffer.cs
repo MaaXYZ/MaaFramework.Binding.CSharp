@@ -15,6 +15,13 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ {nameof(X)} = {X}, {nameof(Y)} = {Y}, {nameof(Width)} = {Width}, {nameof(Height)} = {Height} }}";
 
+    internal sealed class NullRectBuffer : MaaRectBuffer { internal NullRectBuffer() : base(MaaRectHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaRectBuffer"/> type.
+    /// </summary>
+    public static MaaRectBuffer Null { get; } = new NullRectBuffer();
+
     /// <inheritdoc/>
     public bool TryCopyTo(MaaRectHandle bufferHandle) => TrySetValues(
             handle: bufferHandle,
@@ -40,17 +47,17 @@ public class MaaRectBuffer : MaaDisposableHandle<MaaRectHandle>, IMaaRectBuffer<
     /// </summary>
     /// <param name="handle">The MaaRectHandle.</param>
     public MaaRectBuffer(MaaRectHandle handle)
-        : base(invalidHandleValue: nint.Zero)
+        : base(invalidHandleValue: MaaRectHandle.Zero)
     {
         SetHandle(handle, needReleased: false);
     }
 
-    /// <inheritdoc cref="MaaRectBuffer(nint)"/>
+    /// <inheritdoc cref="MaaRectBuffer(MaaRectHandle)"/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaRectCreate"/>.
     /// </remarks>
     public MaaRectBuffer()
-        : base(invalidHandleValue: nint.Zero)
+        : base(invalidHandleValue: MaaRectHandle.Zero)
     {
         SetHandle(MaaRectCreate(), needReleased: true);
     }

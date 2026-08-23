@@ -10,25 +10,35 @@ namespace MaaFramework.Binding;
 ///     A wrapper class providing a reference implementation for <see cref="MaaFramework.Binding.Interop.Native.MaaAgentServer"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public sealed class MaaAgentServer : IMaaAgentServer
+public class MaaAgentServer : IMaaAgentServer
 {
     /// <summary>
     ///     Gets the unique identifier used to communicate with the agent client.
     /// </summary>
-    public static string CurrentId { get; private set; }
+    public static string CurrentId { get; protected set; }
 
     /// <summary>
     ///    Gets the current <see cref="MaaAgentServer"/> instance.
     /// </summary>
-    public static MaaAgentServer Current { get; }
+    public static MaaAgentServer Current { get; protected set; }
 
     /// <summary>
     ///     Creates a <see cref="MaaAgentServer"/> instance.
     /// </summary>
-    private MaaAgentServer()
+    protected MaaAgentServer()
     {
         // DO NOT add any MaaAgentServerAPI.
+        // Due to WithNativeLibrary().
+
+        MaaEventCallbacks = new Dictionary<MaaHandleType, MaaEventCallback>(4)
+        {
+            [MaaHandleType.Tasker] = (handle, message, detailsJson, transArg) => InvokeCallback(new MaaTasker(handle), new MaaCallbackEventArgs<MaaTaskerHandle>(handle, message, detailsJson, (MaaHandleType)transArg)),
+            [MaaHandleType.Resource] = (handle, message, detailsJson, transArg) => InvokeCallback(new MaaResource(handle), new MaaCallbackEventArgs<MaaResourceHandle>(handle, message, detailsJson, (MaaHandleType)transArg)),
+            [MaaHandleType.Controller] = (handle, message, detailsJson, transArg) => InvokeCallback(new MaaController(handle), new MaaCallbackEventArgs<MaaControllerHandle>(handle, message, detailsJson, (MaaHandleType)transArg)),
+            [MaaHandleType.Context] = (handle, message, detailsJson, transArg) => InvokeCallback(new MaaContext(handle), new MaaCallbackEventArgs<MaaContextHandle>(handle, message, detailsJson, (MaaHandleType)transArg)),
+        };
     }
+
     static MaaAgentServer()
     {
         NativeBindingContext.SwitchToAgentServerContext();
@@ -49,38 +59,59 @@ public sealed class MaaAgentServer : IMaaAgentServer
 
     private void EnsureCallbacksRegistered()
     {
-        if (_maaEventCallbacks[0] is not null)
+        if (_isRegistered)
             return;
 
-        _maaEventCallbacks[0] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaTasker(handle), new MaaCallbackEventArgs(message, detailsJson));
-        _maaEventCallbacks[1] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaResource(handle), new MaaCallbackEventArgs(message, detailsJson));
-        _maaEventCallbacks[2] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaController(handle), new MaaCallbackEventArgs(message, detailsJson));
-        _maaEventCallbacks[3] = (handle, message, detailsJson, transArg) => PrivateCallback?.Invoke(new MaaContext(handle), new MaaCallbackEventArgs(message, detailsJson));
-
-        _ = MaaAgentServerAddTaskerSink(_maaEventCallbacks[0], 1).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddResourceSink(_maaEventCallbacks[1], 2).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddControllerSink(_maaEventCallbacks[2], 4).ThrowIfEquals(MaaDef.MaaInvalidId);
-        _ = MaaAgentServerAddContextSink(_maaEventCallbacks[3], 8).ThrowIfEquals(MaaDef.MaaInvalidId);
+        try
+        {
+            _isRegistered = true;
+            _ = MaaAgentServerAddTaskerSink(MaaEventCallbacks[MaaHandleType.Tasker], (nint)MaaHandleType.Tasker).ThrowIfEquals(MaaDef.MaaInvalidId);
+            _ = MaaAgentServerAddResourceSink(MaaEventCallbacks[MaaHandleType.Resource], (nint)MaaHandleType.Resource).ThrowIfEquals(MaaDef.MaaInvalidId);
+            _ = MaaAgentServerAddControllerSink(MaaEventCallbacks[MaaHandleType.Controller], (nint)MaaHandleType.Controller).ThrowIfEquals(MaaDef.MaaInvalidId);
+            _ = MaaAgentServerAddContextSink(MaaEventCallbacks[MaaHandleType.Context], (nint)MaaHandleType.Context).ThrowIfEquals(MaaDef.MaaInvalidId);
+        }
+        catch
+        {
+            _isRegistered = false;
+            throw;
+        }
     }
 
     private bool _isStarted;
+    private bool _isRegistered;
     private event EventHandler<MaaCallbackEventArgs>? PrivateCallback;
-    private readonly MaaEventCallback[] _maaEventCallbacks = new MaaEventCallback[4];
     private readonly MaaMarshaledApiRegistry<MaaCustomActionCallback> _actions = new();
     private readonly MaaMarshaledApiRegistry<MaaCustomRecognitionCallback> _recognitions = new();
+
+    /// <summary>
+    ///     Gets the delegates to avoid garbage collection before MaaFramework calls.
+    /// </summary>
+    protected IReadOnlyDictionary<MaaHandleType, MaaEventCallback> MaaEventCallbacks
+    {
+        get;
+        set
+        {
+            if (_isRegistered)
+                throw new InvalidOperationException("Callbacks are already registered.");
+            field = value;
+        }
+    }
+
+    /// <summary>
+    ///     Raises the Callback event.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">An object that contains the event data.</param>
+    protected void InvokeCallback(object? sender, MaaCallbackEventArgs e)
+        => PrivateCallback?.Invoke(sender, e);
 
     [ExcludeFromCodeCoverage(Justification = "Debugger display.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private string DebuggerDisplay => $"{GetType().Name} {{ {nameof(CurrentId)} = {CurrentId}, CustomActions = [{string.Join(", ", _actions.Names)}] , CustomRecognitions = [{string.Join(" & ", _recognitions.Names)}] }}";
 
     IMaaAgentServer IMaaAgentServer.WithIdentifier(string identifier) => WithIdentifier(identifier);
-    IMaaAgentServer IMaaAgentServer.Register<T>(string name, T custom) => Register(name, custom);
-    IMaaAgentServer IMaaAgentServer.Register<T>(string? name) => Register<T>(name);
-    IMaaAgentServer IMaaAgentServer.Register<T>(T custom) => Register(custom);
-    IMaaAgentServer IMaaAgentServer.StartUp() => StartUp();
-    IMaaAgentServer IMaaAgentServer.ShutDown() => ShutDown();
-    IMaaAgentServer IMaaAgentServer.Join() => Join();
-    IMaaAgentServer IMaaAgentServer.Detach() => Detach();
+    IMaaAgentServer IMaaAgentServer.SetLogDirectory(string directory) => SetLogDirectory(directory);
+    IMaaAgentServer IMaaAgentServer.SetStdoutLevel(LoggingLevel level) => SetStdoutLevel(level);
 
     /// <inheritdoc cref="IMaaAgentServer.WithIdentifier"/>
     public MaaAgentServer WithIdentifier(string identifier)
@@ -91,15 +122,37 @@ public sealed class MaaAgentServer : IMaaAgentServer
         return this;
     }
 
+    /// <inheritdoc cref="IMaaAgentServer.SetLogDirectory"/>
+    public MaaAgentServer SetLogDirectory(string directory)
+    {
+        _ = MaaGlobal.Shared.SetOption(GlobalOption.LogDir, directory).ThrowIfFalse();
+        return this;
+    }
+
+    /// <inheritdoc cref="IMaaAgentServer.SetStdoutLevel"/>
+    public MaaAgentServer SetStdoutLevel(LoggingLevel level)
+    {
+        _ = MaaGlobal.Shared.SetOption(GlobalOption.StdoutLevel, level).ThrowIfFalse();
+        return this;
+    }
+
+    IMaaAgentServer IMaaAgentServer.Register<T>(string name, T custom) => Register(name, custom);
+    IMaaAgentServer IMaaAgentServer.Register<T>(string? name) => Register<T>(name);
+    IMaaAgentServer IMaaAgentServer.Register<T>(T custom) => Register(custom);
+    IMaaAgentServer IMaaAgentServer.StartUp() => StartUp();
+    IMaaAgentServer IMaaAgentServer.ShutDown() => ShutDown();
+    IMaaAgentServer IMaaAgentServer.Join() => Join();
+    IMaaAgentServer IMaaAgentServer.Detach() => Detach();
+
     /// <inheritdoc cref="IMaaAgentServer.Register{T}(string, T)"/>
-    public MaaAgentServer Register<T>(string name, T custom) where T : IMaaCustomResource
+    public MaaAgentServer Register<T>(string name, T custom) where T : IMaaCustom
     {
         custom.Name = name;
         return Register(custom);
     }
 
     /// <inheritdoc/>
-    public MaaAgentServer Register<T>(string? name = null) where T : IMaaCustomResource, new()
+    public MaaAgentServer Register<T>(string? name = null) where T : IMaaCustom, new()
     {
         var custom = new T();
         if (name != null)
@@ -111,7 +164,7 @@ public sealed class MaaAgentServer : IMaaAgentServer
     /// <remarks>
     ///     Wrapper of <see cref="MaaAgentServerRegisterCustomAction"/> and <see cref="MaaAgentServerRegisterCustomRecognition"/>.
     /// </remarks>
-    public MaaAgentServer Register<T>(T custom) where T : IMaaCustomResource
+    public MaaAgentServer Register<T>(T custom) where T : IMaaCustom
     {
         var ret = custom switch
         {
@@ -181,6 +234,7 @@ public static class MaaAgentServerExtensions
 {
     /// <returns></returns>
     /// <inheritdoc cref="IMaaToolkitConfig.InitOption"/>
+    [Obsolete($"Use {nameof(MaaAgentServer.SetLogDirectory)}() or {nameof(MaaAgentServer.SetStdoutLevel)}() instead.", false)]
     public static MaaAgentServer WithToolkitConfig_InitOption(this MaaAgentServer server, string userPath = nameof(Environment.CurrentDirectory), [StringSyntax("Json")] string defaultJson = "{}")
     {
         _ = MaaToolkit.Shared.Config.InitOption(userPath, defaultJson).ThrowIfFalse();

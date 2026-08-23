@@ -20,6 +20,13 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
         ? $"Invalid {GetType().Name}"
         : $"{GetType().Name} {{ }}";
 
+    internal sealed class NullController : MaaController { internal NullController() : base(MaaControllerHandle.Zero) { } }
+
+    /// <summary>
+    ///     Represents a null instance of the <see cref="MaaController"/> type.
+    /// </summary>
+    public static MaaController Null { get; } = new NullController();
+
     [ExcludeFromCodeCoverage(Justification = "Test for stateful mode.")]
     internal MaaController(MaaControllerHandle handle)
     {
@@ -74,8 +81,12 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
         var optValue = (value, opt) switch
         {
             (int vvvv, ControllerOption.ScreenshotTargetLongSide
-                    or ControllerOption.ScreenshotTargetShortSide) => vvvv.ToMaaOptionValue(),
-            (bool vvv, ControllerOption.ScreenshotUseRawSize) => vvv.ToMaaOptionValue(),
+                    or ControllerOption.ScreenshotTargetShortSide
+                    or ControllerOption.ScreenshotResizeMethod) => vvvv.ToMaaOptionValue(),
+            (bool vvv, ControllerOption.ScreenshotUseRawSize
+                    or ControllerOption.MouseLockFollow) => vvv.ToMaaOptionValue(),
+
+            (IEnumerable<int> ints, ControllerOption.BackgroundManagedKeys) => ints.ToMaaOptionValue(),
 
             _ => throw new NotSupportedException($"'{nameof(ControllerOption)}.{opt}' or type '{typeof(T)}' is not supported."),
         };
@@ -92,17 +103,17 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerPostClick"/>.
+    ///     Wrapper of <see cref="MaaControllerPostClickV2"/>.
     /// </remarks>
-    public MaaJob Click(int x, int y)
-        => CreateJob(MaaControllerPostClick(Handle, x, y));
+    public MaaJob Click(int x, int y, int contact = 0, int pressure = 1)
+        => CreateJob(MaaControllerPostClickV2(Handle, x, y, contact, pressure));
 
     /// <inheritdoc/>
     /// <remarks>
-    ///     Wrapper of <see cref="MaaControllerPostSwipe"/>.
+    ///     Wrapper of <see cref="MaaControllerPostSwipeV2"/>.
     /// </remarks>
-    public MaaJob Swipe(int x1, int y1, int x2, int y2, int duration)
-        => CreateJob(MaaControllerPostSwipe(Handle, x1, y1, x2, y2, duration));
+    public MaaJob Swipe(int x1, int y1, int x2, int y2, int duration, int contact = 0, int pressure = 1)
+        => CreateJob(MaaControllerPostSwipeV2(Handle, x1, y1, x2, y2, duration, contact, pressure));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -144,14 +155,14 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchDown"/>.
     /// </remarks>
-    public MaaJob TouchDown(int contact, int x, int y, int pressure)
+    public MaaJob TouchDown(int contact, int x, int y, int pressure = 1)
         => CreateJob(MaaControllerPostTouchDown(Handle, contact, x, y, pressure));
 
     /// <inheritdoc/>
     /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostTouchMove"/>.
     /// </remarks>
-    public MaaJob TouchMove(int contact, int x, int y, int pressure)
+    public MaaJob TouchMove(int contact, int x, int y, int pressure = 1)
         => CreateJob(MaaControllerPostTouchMove(Handle, contact, x, y, pressure));
 
     /// <inheritdoc/>
@@ -160,6 +171,13 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     /// </remarks>
     public MaaJob TouchUp(int contact)
         => CreateJob(MaaControllerPostTouchUp(Handle, contact));
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostRelativeMove"/>.
+    /// </remarks>
+    public MaaJob RelativeMove(int dx, int dy)
+        => CreateJob(MaaControllerPostRelativeMove(Handle, dx, dy));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -191,10 +209,17 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
 
     /// <inheritdoc/>
     /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerPostInactive"/>.
+    /// </remarks>
+    public MaaJob Inactive()
+        => CreateJob(MaaControllerPostInactive(Handle));
+
+    /// <inheritdoc/>
+    /// <remarks>
     ///     Wrapper of <see cref="MaaControllerPostShell"/>.
     /// </remarks>
-    public MaaJob Shell(string cmd, long timeout = 20000)
-        => CreateJob(MaaControllerPostShell(Handle, cmd, timeout));
+    public MaaJob Shell(string cmd, long millisecondsTimeout = 20000)
+        => CreateJob(MaaControllerPostShell(Handle, cmd, millisecondsTimeout));
 
     /// <inheritdoc/>
     /// <remarks>
@@ -212,9 +237,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaControllerStatus(handle, id);
+        return (MaaJobStatus)MaaControllerStatus(Handle, job.Id);
     }
 
     /// <inheritdoc/>
@@ -226,9 +249,7 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
     {
         ArgumentNullException.ThrowIfNull(job);
 
-        var id = job.Id;
-        var handle = Handle;
-        return IsInvalid ? MaaJobStatus.Invalid : (MaaJobStatus)MaaControllerWait(handle, id);
+        return (MaaJobStatus)MaaControllerWait(Handle, job.Id);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -275,6 +296,26 @@ public class MaaController : MaaCommon, IMaaController<MaaControllerHandle>, IMa
         {
             _ = MaaStringBuffer.TryGetValue(out var uuid, h => MaaControllerGetUuid(Handle, h));
             return uuid;
+        }
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerGetResolution"/>.
+    /// </remarks>
+    public bool GetResolution(out int width, out int height)
+        => MaaControllerGetResolution(Handle, out width, out height);
+
+    /// <inheritdoc/>
+    /// <remarks>
+    ///     Wrapper of <see cref="MaaControllerGetInfo"/>.
+    /// </remarks>
+    public string? Info
+    {
+        get
+        {
+            _ = MaaStringBuffer.TryGetValue(out var info, h => MaaControllerGetInfo(Handle, h));
+            return info;
         }
     }
 }

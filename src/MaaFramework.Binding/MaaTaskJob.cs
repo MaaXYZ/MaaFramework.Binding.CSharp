@@ -32,4 +32,12 @@ public class MaaTaskJob(MaaId id, IMaaTasker tasker, IMaaPost maa) : MaaJob(id, 
     /// <returns><see langword="this"/> if it completes with the <paramref name="status"/>; otherwise, <see langword="null"/>.</returns>
     public MaaTaskJob? WaitFor(MaaJobStatus status)
         => Wait() == status ? this : null;
+
+    /// <summary>
+    ///     Overrides pipeline for this task, dynamically modifies pipeline configuration during task execution.
+    /// </summary>
+    /// <param name="pipelineOverride">The json used to override the pipeline.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    public bool OverridePipeline([StringSyntax("Json")] string pipelineOverride)
+        => tasker.OverridePipeline(this, pipelineOverride);
 }

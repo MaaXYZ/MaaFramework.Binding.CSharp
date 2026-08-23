@@ -25,11 +25,112 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaWin32ControllerCreate(nint hWnd, MaaWin32ScreencapMethod screencapMethod, MaaWin32InputMethod mouseMethod, MaaWin32InputMethod keyboardMethod);
 
+    /// <summary>
+    ///     Create a macOS controller for native macOS applications.
+    /// </summary>
+    /// <param name="windowId">The CGWindowID of the target window (0 for desktop).</param>
+    /// <param name="screencapMethod">macOS screencap method to use.</param>
+    /// <param name="inputMethod">macOS input method to use.</param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    /// <remarks>
+    ///     <br/>This controller is designed for native macOS applications.
+    ///     <br/>Requires Screen Recording permission for screencap.
+    ///     <br/>Input simulation requires Accessibility permission.
+    ///     <br/>Some features are not supported: start_app, stop_app, scroll.
+    ///     <br/>Only single touch is supported (contact must be 0).
+    /// </remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaMacOSControllerCreate(uint windowId, MaaMacOSScreencapMethod screencapMethod, MaaMacOSInputMethod inputMethod);
+
+    /// <summary>
+    ///     Create an Android native controller.
+    /// </summary>
+    /// <param name="configJson">
+    ///     <para>JSON config for the control unit. Required fields:</para>
+    ///     <para>- library_path: path to the Android native control unit library</para>
+    ///     <para>- screen_resolution.width / screen_resolution.height: raw screenshot and touch resolution</para>
+    ///     <para>Optional fields:</para>
+    ///     <para>- display_id: target display id, defaults to 0</para>
+    ///     <para>- force_stop: whether to force stop before start_app, defaults to false</para>
+    /// </param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    /// <remarks>
+    ///     <para>This controller is only available on Android.</para>
+    ///     <para>The configured screen_resolution must match the control unit's raw screenshot/touch coordinate space.</para>
+    /// </remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaAndroidNativeControllerCreate(string configJson);
+
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaControllerHandle MaaCustomControllerCreate([MarshalUsing(typeof(MaaMarshaller))] Custom.IMaaCustomController controller, nint controllerArg);
 
+    /// <summary>
+    ///     Create a debug controller that serves images from a directory.
+    /// </summary>
+    /// <param name="readPath">
+    ///     <para>Path to a directory of images (or a single image file).</para>
+    ///     <para>Images are loaded on connect and cycled through on each screencap request.</para>
+    ///     <para>All input operations (click, swipe, etc.) are no-ops that return success.</para>
+    /// </param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath, string writePath, MaaDbgControllerType type, string config);
+    public static partial MaaControllerHandle MaaDbgControllerCreate(string readPath);
+
+    /// <summary>
+    ///     Create a replay controller that replays recorded operations.
+    /// </summary>
+    /// <param name="recordingPath">
+    ///     <para>Path to the recording JSONL file written by MaaRecordControllerCreate.</para>
+    ///     <para>Screenshot image paths in the file are resolved relative to this file's parent directory.</para>
+    /// </param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaReplayControllerCreate(string recordingPath);
+
+    /// <summary>
+    ///     Create a record controller that wraps an existing controller and records all operations.
+    /// </summary>
+    /// <param name="inner">
+    ///     <para>The inner controller to forward all operations to. Must not be null.</para>
+    ///     <para>The record controller does NOT take ownership of the inner controller.</para>
+    /// </param>
+    /// <param name="recordingPath">
+    ///     <para>Path to the recording JSONL file to write.</para>
+    ///     <para>Screenshot images will be saved to a "{stem}-Screenshot" folder</para>
+    ///     <para>in the same directory as this file.</para>
+    ///     <para>The recorded file can be replayed using MaaReplayControllerCreate.</para>
+    /// </param>
+    /// <returns>The record controller handle, or nint.Zero on failure.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaRecordControllerCreate(MaaControllerHandle inner, string recordingPath);
+
+    /// <summary>
+    /// <para>Create a PlayCover controller for macOS.</para>
+    /// </summary>
+    /// <param name="address">The PlayTools service address in "host:port" format.</param>
+    /// <param name="uuid">The application bundle identifier (e.g., "com.hypergryph.arknights").</param>
+    /// <returns>The controller handle, or nullptr on failure.</returns>
+    /// <remarks>
+    ///     <para>This controller is designed for PlayCover on macOS.</para>
+    ///     <para>Some features are not supported: start_app, input_text, click_key, key_down, key_up, scroll.</para>
+    ///     <para>Only single touch is supported (contact must be 0).</para>
+    /// </remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaPlayCoverControllerCreate(string address, string uuid);
+
+    /// <summary>
+    ///     Create a wlroots controller for Linux.
+    /// </summary>
+    /// <param name="wlrSocketPath">The wayland socket path (e.g., "/run/user/1000/wayland-0").</param>
+    /// <param name="useWin32VkCode">
+    ///     <br/>If true, key codes passed to click_key / key_down / key_up are
+    ///     <br/>interpreted as Win32 Virtual-Key codes (VK_*) and translated to Linux evdev codes
+    ///     <br/>internally. If false, key codes are passed through as raw evdev codes.
+    /// </param>
+    /// <returns>The controller handle, or nullptr on failure.</returns>
+    /// <remarks>This controller is designed for wlroots on Linux.</remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaControllerHandle MaaWlRootsControllerCreate(string wlrSocketPath, [MarshalAs(UnmanagedType.U1)] bool useWin32VkCode);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial void MaaControllerDestroy(MaaControllerHandle ctrl);
@@ -53,8 +154,18 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostClick(MaaControllerHandle ctrl, int x, int y);
 
+    // for adb controller, contact means finger id (0 for first finger, 1 for second finger, etc)
+    // for win32 controller, contact means mouse button id (0 for left, 1 for right, 2 for middle)
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostClickV2(MaaControllerHandle ctrl, int x, int y, int contact, int pressure);
+
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostSwipe(MaaControllerHandle ctrl, int x1, int y1, int x2, int y2, int duration);
+
+    // for adb controller, contact means finger id (0 for first finger, 1 for second finger, etc)
+    // for win32 controller, contact means mouse button id (0 for left, 1 for right, 2 for middle)
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostSwipeV2(MaaControllerHandle ctrl, int x1, int y1, int x2, int y2, int duration, int contact, int pressure);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostClickKey(MaaControllerHandle ctrl, int keycode);
@@ -78,6 +189,9 @@ public static partial class MaaController
     public static partial MaaCtrlId MaaControllerPostTouchUp(MaaControllerHandle ctrl, int contact);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostRelativeMove(MaaControllerHandle ctrl, int dx, int dy);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostKeyDown(MaaControllerHandle ctrl, int keycode);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
@@ -86,9 +200,36 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostScreencap(MaaControllerHandle ctrl);
 
+    /// <summary>
+    /// Post a scroll action to the controller.
+    /// </summary>
+    /// <param name="ctrl">The controller handle.</param>
+    /// <param name="dx">The horizontal scroll delta. Positive values scroll right, negative values scroll left.</param>
+    /// <param name="dy">The vertical scroll delta. Positive values scroll up, negative values scroll down.</param>
+    /// <returns>The control id of the scroll action.</returns>
+    /// <remarks>
+    ///     <para>Not all controllers support scroll. If not supported, the action will fail.</para>
+    ///     <para>Scroll is supported by Win32 controllers and custom controllers that implement scroll.</para>
+    ///     <para>If the controller does not support scroll, the action will fail. Use MaaControllerStatus or<br/>
+    ///         MaaControllerWait to check the result.</para>
+    ///     <para>The dx/dy values are sent directly as scroll increments. Using multiples of 120 (WHEEL_DELTA) is<br/>
+    ///         recommended for best compatibility.</para>
+    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostScroll(MaaControllerHandle ctrl, int dx, int dy);
 
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MaaCtrlId MaaControllerPostInactive(MaaControllerHandle ctrl);
+
+    /// <summary>Post a shell command to the controller.</summary>
+    /// <param name="ctrl">The controller handle.</param>
+    /// <param name="cmd">The shell command to execute.</param>
+    /// <param name="timeout">Timeout in milliseconds. Default is 20000 (20 seconds).</param>
+    /// <returns>The control id of the shell action.</returns>
+    /// <remarks>
+    ///     <para>This is only valid for ADB controllers. If the controller is not an ADB controller, the action will fail.</para>
+    ///     <para>Supported by ADB controllers and custom controllers that implement the shell callback.</para>
+    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaCtrlId MaaControllerPostShell(MaaControllerHandle ctrl, string cmd, long timeout);
 
@@ -96,8 +237,18 @@ public static partial class MaaController
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaControllerGetShellOutput(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
 
+    /// <summary>
+    ///     Create a virtual gamepad controller for Windows.
+    /// </summary>
+    /// <param name="hWnd">Window handle for screencap (optional, can be nint.Zero if screencap not needed).</param>
+    /// <param name="gamepadType">Type of virtual gamepad (MaaGamepadType_Xbox360 or MaaGamepadType_DualShock4).</param>
+    /// <param name="screencapMethod">Win32 screencap method to use. Ignored if hWnd is nint.Zero.</param>
+    /// <returns>The controller handle, or nint.Zero on failure.</returns>
+    /// <remarks>
+    ///     <para>Requires ViGEm Bus Driver to be installed on the system.</para>
+    /// </remarks>
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial MaaControllerHandle MaaPlayCoverControllerCreate(string address, string uuid);
+    public static partial MaaControllerHandle MaaGamepadControllerCreate(nint hWnd, MaaGamepadType gamepadType, MaaWin32ScreencapMethod screencapMethod);
 
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     public static partial MaaStatus MaaControllerStatus(MaaControllerHandle ctrl, MaaCtrlId id);
@@ -116,6 +267,24 @@ public static partial class MaaController
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaControllerGetUuid(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
+
+    /// <summary>
+    ///     Get the raw (unscaled) device resolution.
+    /// </summary>
+    /// <param name="ctrl">The controller handle.</param>
+    /// <param name="width">Output parameter for the raw width.</param>
+    /// <param name="height">Output parameter for the raw height.</param>
+    /// <returns>true if the resolution is available, false otherwise.</returns>
+    /// <remarks>
+    ///     <para>This returns the actual device screen resolution before any scaling.</para>
+    /// </remarks>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerGetResolution(MaaControllerHandle ctrl, out int width, out int height);
+
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaControllerGetInfo(MaaControllerHandle ctrl, MaaStringBufferHandle buffer);
 
     [Obsolete]
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]

@@ -94,6 +94,7 @@ public static class MaaCustomControllerMarshaller
     {
         public int Times = 0;
         public ConnectDelegate Connect = (nint transArg) => managed.Connect();
+        public ConnectedDelegate Connected = (nint transArg) => managed.Connected();
         public RequestUuidDelegate RequestUuid = (nint transArg, MaaStringBufferHandle buffer) => managed.RequestUuid(new MaaStringBuffer(buffer));
         public GetFeaturesDelegate GetFeatures = (nint transArg) => (System.UInt64)managed.GetFeatures();
         public StartAppDelegate StartApp = (string intent, nint transArg) => managed.StartApp(intent);
@@ -109,6 +110,10 @@ public static class MaaCustomControllerMarshaller
         public KeyDownDelegate KeyDown = (int keycode, nint transArg) => managed.KeyDown(keycode);
         public KeyUpDelegate KeyUp = (int keycode, nint transArg) => managed.KeyUp(keycode);
         public ScrollDelegate Scroll = (int dx, int dy, nint transArg) => managed.Scroll(dx, dy);
+        public RelativeMoveDelegate RelativeMove = (int dx, int dy, nint transArg) => managed.RelativeMove(dx, dy);
+        public ShellDelegate Shell = (string cmd, long timeout, nint transArg, MaaStringBufferHandle buffer) => managed.Shell(cmd, timeout, new MaaStringBuffer(buffer));
+        public InactiveDelegate Inactive = (nint transArg) => managed.Inactive();
+        public GetInfoDelegate GetInfo = (nint transArg, MaaStringBufferHandle buffer) => managed.GetInfo(new MaaStringBuffer(buffer));
     };
 
     /// <summary>
@@ -122,6 +127,7 @@ public static class MaaCustomControllerMarshaller
     private sealed class Unmanaged(Delegates delegates)
     {
         public nint Connect = Marshal.GetFunctionPointerForDelegate(delegates.Connect);
+        public nint Connected = Marshal.GetFunctionPointerForDelegate(delegates.Connected);
         public nint RequestUuid = Marshal.GetFunctionPointerForDelegate(delegates.RequestUuid);
         public nint GetFeatures = Marshal.GetFunctionPointerForDelegate(delegates.GetFeatures);
         public nint StartApp = Marshal.GetFunctionPointerForDelegate(delegates.StartApp);
@@ -137,11 +143,19 @@ public static class MaaCustomControllerMarshaller
         public nint KeyDown = Marshal.GetFunctionPointerForDelegate(delegates.KeyDown);
         public nint KeyUp = Marshal.GetFunctionPointerForDelegate(delegates.KeyUp);
         public nint Scroll = Marshal.GetFunctionPointerForDelegate(delegates.Scroll);
+        public nint RelativeMove = Marshal.GetFunctionPointerForDelegate(delegates.RelativeMove);
+        public nint Shell = Marshal.GetFunctionPointerForDelegate(delegates.Shell);
+        public nint Inactive = Marshal.GetFunctionPointerForDelegate(delegates.Inactive);
+        public nint GetInfo = Marshal.GetFunctionPointerForDelegate(delegates.GetInfo);
     }
 
     [return: MarshalAs(UnmanagedType.U1)]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool ConnectDelegate(nint transArg);
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool ConnectedDelegate(nint transArg);
 
     /// <summary>
     ///     Write result to buffer.
@@ -207,4 +221,23 @@ public static class MaaCustomControllerMarshaller
     [return: MarshalAs(UnmanagedType.U1)]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate bool ScrollDelegate(int dx, int dy, nint transArg);
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool RelativeMoveDelegate(int dx, int dy, nint transArg);
+
+    /// <summary>
+    ///     Write result to buffer.
+    /// </summary>
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool ShellDelegate(string cmd, long timeout, nint transArg, MaaStringBufferHandle buffer);
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool InactiveDelegate(nint transArg);
+
+    [return: MarshalAs(UnmanagedType.U1)]
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate bool GetInfoDelegate(nint transArg, MaaStringBufferHandle buffer);
 }

@@ -118,18 +118,18 @@ public class Test_IMaaController
 
         using var win32Native1 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ScreencapMethod.GDI,
+            Win32ScreencapMethods.GDI,
             Win32InputMethod.SendMessage,
             Win32InputMethod.SendMessage);
         using var win32Native2 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ScreencapMethod.GDI,
+            Win32ScreencapMethods.GDI,
             Win32InputMethod.SendMessage,
             Win32InputMethod.SendMessage,
             LinkOption.None);
         using var win32Native3 = new MaaWin32Controller(
             windowInfo.Handle,
-            Win32ScreencapMethod.GDI,
+            Win32ScreencapMethods.GDI,
             Win32InputMethod.SendMessage,
             Win32InputMethod.SendMessage,
             LinkOption.Start,
@@ -144,6 +144,9 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 1280)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 720)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotUseRawSize, false)]
+    [MaaData(MaaTypes.Win32, nameof(Data), ControllerOption.MouseLockFollow, false)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotResizeMethod, 0)]
+    [MaaData(MaaTypes.Win32, nameof(Data), ControllerOption.BackgroundManagedKeys, new int[] { 0x57, 0x41, 0x53, 0x44 })]
     public void Interface_SetOption(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);
@@ -364,20 +367,33 @@ public class Test_IMaaController
     }
 
     [TestMethod]
-    [MaaData(MaaTypes.All, nameof(Data), true, "echo hello", 20000)]
-    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, bool assertSuccess, string cmd, long timeout)
+    [MaaData(MaaTypes.All, nameof(Data), "echo hello", 20000)]
+    public void Interface_Shell_ShellOutput(MaaTypes type, IMaaController maaController, string cmd, long millisecondsTimeout)
     {
         Assert.IsNotNull(maaController);
 
-        var job = maaController.Shell(cmd, timeout);
-        Interface_IMaaPost(assertSuccess, job);
+        var job = maaController.Shell(cmd, millisecondsTimeout);
+        if (maaController is MaaAdbController)
+        {
+            Interface_IMaaPost_Success(job);
 
-        Assert.IsTrue(
-            maaController.GetShellOutput(out var output));
-        Assert.IsNotNull(
-            output);
-        Assert.Contains(
-            "hello", output);
+            Assert.IsTrue(
+                maaController.GetShellOutput(out var output));
+            Assert.IsNotNull(
+                output);
+            Assert.Contains(
+                "hello", output);
+        }
+        else
+        {
+            Interface_IMaaPost_Success(job);
+            Assert.IsTrue(
+                maaController.GetShellOutput(out var output));
+            Assert.IsNotNull(
+                output);
+            Assert.AreEqual(
+                string.Empty, output);
+        }
     }
 
     #region Invalid data tests
@@ -387,6 +403,9 @@ public class Test_IMaaController
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetLongSide, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotTargetShortSide, 0.0)]
     [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotUseRawSize, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.MouseLockFollow, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.ScreenshotResizeMethod, 0.0)]
+    [MaaData(MaaTypes.All, nameof(Data), ControllerOption.BackgroundManagedKeys, 0.0)]
     public void Interface_SetOption_InvalidData(MaaTypes type, IMaaController maaController, ControllerOption opt, object arg)
     {
         Assert.IsNotNull(maaController);

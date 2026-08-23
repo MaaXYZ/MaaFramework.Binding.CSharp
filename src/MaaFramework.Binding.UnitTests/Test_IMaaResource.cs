@@ -1,6 +1,7 @@
 ﻿using MaaFramework.Binding.Abstractions;
 using MaaFramework.Binding.Buffers;
 using MaaFramework.Binding.Notification;
+using System.Text.Json;
 
 namespace MaaFramework.Binding.UnitTests;
 
@@ -126,11 +127,22 @@ public class Test_IMaaResource
             maaResource.OverrideNext(DiffEntry, [DiffEntry]));
         Assert.IsTrue(
             maaResource.GetNodeData(DiffEntry, out var data));
+        Assert.IsNotNull(data);
 
-        Assert.IsNotNull(
-            data);
-        Assert.IsTrue(
-            data.Contains($"\"next\":[\"{DiffEntry}\"]"));
+        using var document = JsonDocument.Parse(data);
+        var root = document.RootElement;
+        Assert.IsTrue(root.TryGetProperty("next", out var nextElement),
+            "Expected JSON to contain a 'next' property.");
+        Assert.AreEqual(JsonValueKind.Array, nextElement.ValueKind,
+            "Expected 'next' to be a JSON array.");
+        var containsDiffEntry = nextElement
+            .EnumerateArray()
+            .Any(element =>
+                element.ValueKind == JsonValueKind.Object &&
+                element.TryGetProperty("name", out var nameProperty) &&
+                nameProperty.GetString() == DiffEntry);
+        Assert.IsTrue(containsDiffEntry,
+            $"Expected 'next' array to contain an element with name '{DiffEntry}'.");
     }
 
     [TestMethod]

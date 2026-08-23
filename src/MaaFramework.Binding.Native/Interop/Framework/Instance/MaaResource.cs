@@ -117,4 +117,26 @@ public static partial class MaaResource
     [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
     [return: MarshalAs(UnmanagedType.U1)]
     public static partial bool MaaResourceGetCustomActionList(MaaResourceHandle res, MaaStringListBufferHandle buffer);
+
+    /// <summary>
+    ///     Get default recognition parameters for the specified type from DefaultPipelineMgr.
+    /// </summary>
+    /// <param name="res">The resource handle.</param>
+    /// <param name="recoType">Recognition type string (e.g., "OCR", "TemplateMatch").</param>
+    /// <param name="buffer">Output buffer for the JSON string of recognition parameters.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceGetDefaultRecognitionParam(MaaResourceHandle res, string recoType, MaaStringBufferHandle buffer);
+
+    /// <summary>
+    ///     Get default action parameters for the specified type from DefaultPipelineMgr.
+    /// </summary>
+    /// <param name="res">The resource handle.</param>
+    /// <param name="actionType">Action type string (e.g., "Click", "Swipe").</param>
+    /// <param name="buffer">Output buffer for the JSON string of action parameters.</param>
+    /// <returns><see langword="true"/> if the operation was executed successfully; otherwise, <see langword="false"/>.</returns>
+    [LibraryImport("MaaFramework", StringMarshalling = StringMarshalling.Utf8)]
+    [return: MarshalAs(UnmanagedType.U1)]
+    public static partial bool MaaResourceGetDefaultActionParam(MaaResourceHandle res, string actionType, MaaStringBufferHandle buffer);
 }
