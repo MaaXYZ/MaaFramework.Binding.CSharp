@@ -32,6 +32,7 @@ namespace MaaFramework.Binding;
 /// <br/>| PostMessageWithCursorPos | Medium        | Maybe         | Briefly      | Yes | Moves cursor to target position, then restores          |
 /// <br/>| SendMessageWithWindowPos | Medium        | Maybe         | No           | Yes | Moves window to align target with cursor, then restores |
 /// <br/>| PostMessageWithWindowPos | Medium        | Maybe         | No           | Yes | Moves window to align target with cursor, then restores |
+/// <br/>| AnchoredTouch            | Medium        | Maybe         | No           | Yes | Injects synthetic touch points, mouse only              |
 /// </code>
 /// 
 /// <para>Note:
@@ -40,8 +41,9 @@ namespace MaaFramework.Binding;
 /// <br/>- "WithCursorPos" methods briefly move the cursor to target position, send message,
 /// <br/>  then restore cursor position. This "briefly" seizes the mouse but won't block user operations.
 /// <br/>- "WithWindowPos" methods briefly move the window so the target aligns with the current cursor
-/// <br/>  position, send message, then restore the window position. The cursor is not moved.</para>
-/// 
+/// <br/>  position, send message, then restore the window position. The cursor is not moved.
+/// <br/>- "AnchoredTouch" injects synthetic touch points through <c>InjectSyntheticPointerInput</c>.
+/// <br/>  The cursor and foreground window are not changed. It only implements mouse operations.</para>
 /// </summary>
 public enum Win32InputMethod : System.UInt64
 {
@@ -56,5 +58,6 @@ public enum Win32InputMethod : System.UInt64
     PostMessageWithCursorPos = (1 << 6),
     SendMessageWithWindowPos = (1 << 7),
     PostMessageWithWindowPos = (1 << 8),
+    AnchoredTouch = (1 << 10),
 }
 
