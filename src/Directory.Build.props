@@ -30,7 +30,7 @@
 
   <!-- Analyzer Properties -->
   <PropertyGroup>
-    <AnalysisLevel>preview</AnalysisLevel>
+    <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>All</AnalysisMode>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
